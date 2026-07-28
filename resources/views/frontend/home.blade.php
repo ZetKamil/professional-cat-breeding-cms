@@ -186,9 +186,9 @@
                 @foreach($latestPosts->take(3) as $post)
                     <x-frontend.card hoverable href="#">
                         <x-slot:image>
-                            @if($post->media->first())
+                            @if($post->media)
                                 <img
-                                    src="{{ $post->media->first()->getUrl() }}"
+                                    src="{{ $post->media->url() }}"
                                     alt="{{ $post->title }}"
                                     loading="lazy"
                                 >
