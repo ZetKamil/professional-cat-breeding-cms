@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\Route;
 
 // frontend routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::view('/contact', 'frontend.contact')->name('contact');
+Route::get('/contact', [ContactController::class, 'create'])->name('contact');
+Route::post('/contact', [ContactController::class, 'store'])->name('frontend.contact.store');
 Route::view('/about', 'frontend.about')->name('about');
 // backend dashboard
 Route::get('/backend', function () {
