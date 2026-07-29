@@ -5,8 +5,8 @@
 --}}
 
 <header class="site-header" role="banner">
-    {{-- Global Nav Bar — Black --}}
-    <nav class="global-nav tile-black" aria-label="Główna nawigacja">
+    {{-- Global Nav Bar — Glassmorphism Apple-inspired --}}
+    <nav class="global-nav" aria-label="Główna nawigacja" id="globalNav">
         <div class="global-nav__inner section-inner">
             {{-- Logo --}}
             <a href="{{ route('home') }}" class="global-nav__logo" aria-label="{{ config('app.name') }} — strona główna">
@@ -23,13 +23,13 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#nasze-koty"
+                    <a href="{{ route('home') }}#nasze-koty"
                        class="global-nav__link">
                         Nasze Koty
                     </a>
                 </li>
                 <li>
-                    <a href="#o-nas"
+                    <a href="{{ route('home') }}#o-nas"
                        class="global-nav__link">
                         O Hodowli
                     </a>
@@ -86,12 +86,12 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#nasze-koty" class="mobile-menu__link">
+                    <a href="{{ route('home') }}#nasze-koty" class="mobile-menu__link" onclick="document.querySelector('.global-nav__hamburger').click()">
                         Nasze Koty
                     </a>
                 </li>
                 <li>
-                    <a href="#o-nas" class="mobile-menu__link">
+                    <a href="{{ route('home') }}#o-nas" class="mobile-menu__link" onclick="document.querySelector('.global-nav__hamburger').click()">
                         O Hodowli
                     </a>
                 </li>
@@ -117,9 +117,28 @@
     </div>
 </header>
 
+<script>
+    // Premium scroll effect for navigation
+    document.addEventListener('DOMContentLoaded', () => {
+        const nav = document.getElementById('globalNav');
+        if (!nav) return;
+
+        const handleScroll = () => {
+            if (window.scrollY > 10) {
+                nav.classList.add('is-scrolled');
+            } else {
+                nav.classList.remove('is-scrolled');
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        handleScroll(); // Init
+    });
+</script>
+
 <style>
     /* ==========================================================================
-       GLOBAL NAV — Black bar, Apple-inspired
+       GLOBAL NAV — Glassmorphism Apple-inspired
        ========================================================================== */
 
     .global-nav {
@@ -127,13 +146,25 @@
         top: 0;
         z-index: var(--z-sticky);
         padding: 0 var(--content-padding-x);
+        background-color: rgba(0, 0, 0, 0.6);
+        backdrop-filter: saturate(180%) blur(20px);
+        -webkit-backdrop-filter: saturate(180%) blur(20px);
+        border-bottom: 1px solid transparent;
+        transition: background-color var(--duration-base) var(--ease-out),
+                    border-bottom-color var(--duration-base) var(--ease-out);
+    }
+    
+    .global-nav.is-scrolled {
+        background-color: rgba(0, 0, 0, 0.85);
+        border-bottom-color: rgba(255, 255, 255, 0.1);
     }
 
     .global-nav__inner {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        height: 44px;
+        height: 48px; /* Slightly taller for breathing room */
+        transition: height var(--duration-base) var(--ease-out);
     }
 
     /* Logo */
