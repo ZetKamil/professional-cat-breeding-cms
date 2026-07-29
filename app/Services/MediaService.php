@@ -8,12 +8,10 @@ use Illuminate\Support\Facades\Storage;
 
 class MediaService
 {
-
-
     /**
      * Upload een nieuwe afbeelding en koppel deze aan een model
      */
-    public function upload($model, UploadedFile $file, string $directory = null): Media
+    public function upload($model, UploadedFile $file, ?string $directory = null): Media
     {
         $disk = 'public';
 
@@ -39,7 +37,7 @@ class MediaService
     /**
      * Vervang een bestaande afbeelding
      */
-    public function replace($model, UploadedFile $file, string $directory = null): Media
+    public function replace($model, UploadedFile $file, ?string $directory = null): Media
     {
         if ($model->media) {
             $this->deleteFile($model->media);

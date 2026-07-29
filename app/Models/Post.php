@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Models;
 
@@ -13,8 +15,8 @@ use Illuminate\Support\Str;
 
 class Post extends Model
 {
-    use SoftDeletes;
     use RecordUserActivity;
+    use SoftDeletes;
 
     /**
      * Velden die via mass assignment ingevuld mogen worden.
@@ -195,6 +197,7 @@ class Post extends Model
 
         return $query->orderBy($sort, $dir);
     }
+
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');

@@ -28,8 +28,8 @@ class ContactMessageNotification extends Notification implements ShouldQueue
         return (new MailMessage)
             ->subject('Nieuw contactbericht')
             ->greeting('Er is een nieuw contactbericht binnengekomen.')
-            ->line('Naam: ' . $this->data['name'])
-            ->line('E-mail: ' . $this->data['email'])
+            ->line('Naam: '.$this->data['name'])
+            ->line('E-mail: '.$this->data['email'])
             ->line('Bericht:')
             ->line($this->data['message']);
     }

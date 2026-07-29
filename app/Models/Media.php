@@ -27,7 +27,7 @@ class Media extends Model
     public function path(): string
     {
         if ($this->directory) {
-            return $this->directory . '/' . $this->filename;
+            return $this->directory.'/'.$this->filename;
         }
 
         return $this->filename;
@@ -35,11 +35,12 @@ class Media extends Model
 
     public function url(): string
     {
-        return asset('storage/' . $this->path());
+        return asset('storage/'.$this->path());
     }
+
     public function isImage(): bool
     {
-        if (!$this->mime_type) {
+        if (! $this->mime_type) {
             return false;
         }
 
