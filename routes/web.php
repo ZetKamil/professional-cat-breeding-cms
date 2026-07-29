@@ -52,6 +52,12 @@ Route::middleware(['auth', 'verified', 'active'])
         Route::delete('posts/{id}/force-delete', [PostController::class, 'forceDelete'])
             ->name('posts.forceDelete');
 
+        Route::resource('animals', \App\Http\Controllers\Backend\AnimalController::class);
+        Route::patch('animals/{id}/restore', [\App\Http\Controllers\Backend\AnimalController::class, 'restore'])
+            ->name('animals.restore');
+        Route::delete('animals/{id}/force-delete', [\App\Http\Controllers\Backend\AnimalController::class, 'forceDelete'])
+            ->name('animals.forceDelete');
+
         Route::resource('media', MediaController::class);
     });
 

@@ -15,6 +15,16 @@
 
             <div class="sb-sidenav-menu-heading">Content</div>
 
+            @can('viewAny', \App\Models\Animal::class)
+                <a class="nav-link {{ request()->routeIs('backend.animals.*') ? 'active' : '' }}"
+                   href="{{ route('backend.animals.index') }}">
+                    <div class="sb-nav-link-icon">
+                        <i class="fas fa-paw"></i>
+                    </div>
+                    Animals
+                </a>
+            @endcan
+
             @can('viewAny', \App\Models\Post::class)
                 <a class="nav-link {{ request()->routeIs('backend.posts.*') ? 'active' : '' }}"
                    href="{{ route('backend.posts.index') }}">
