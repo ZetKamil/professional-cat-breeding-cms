@@ -138,7 +138,7 @@
 
 <style>
     /* ==========================================================================
-       GLOBAL NAV — Glassmorphism Apple-inspired
+       GLOBAL NAV — Glassmorphism Apple-inspired (Light Mode)
        ========================================================================== */
 
     .global-nav {
@@ -146,7 +146,7 @@
         top: 0;
         z-index: var(--z-sticky);
         padding: 0 var(--content-padding-x);
-        background-color: rgba(0, 0, 0, 0.6);
+        background-color: rgba(255, 255, 255, 0.72);
         backdrop-filter: saturate(180%) blur(20px);
         -webkit-backdrop-filter: saturate(180%) blur(20px);
         border-bottom: 1px solid transparent;
@@ -155,8 +155,8 @@
     }
     
     .global-nav.is-scrolled {
-        background-color: rgba(0, 0, 0, 0.85);
-        border-bottom-color: rgba(255, 255, 255, 0.1);
+        background-color: rgba(255, 255, 255, 0.85);
+        border-bottom-color: rgba(0, 0, 0, 0.08);
     }
 
     .global-nav__inner {
@@ -180,7 +180,7 @@
         font-size: var(--text-tagline-size);
         font-weight: 600;
         letter-spacing: var(--text-tagline-ls);
-        color: var(--color-canvas);
+        color: var(--color-ink);
         white-space: nowrap;
     }
 
@@ -199,7 +199,7 @@
         font-weight: var(--text-nav-weight);
         letter-spacing: var(--text-nav-ls);
         line-height: var(--text-nav-lh);
-        color: var(--color-body-muted);
+        color: var(--color-ink-muted-80);
         text-decoration: none;
         padding: var(--sp-xs) 0;
         transition: color var(--duration-fast) var(--ease-out);
@@ -208,7 +208,7 @@
 
     .global-nav__link:hover,
     .global-nav__link.is-active {
-        color: var(--color-canvas);
+        color: var(--color-ink);
     }
 
     /* Utils */
@@ -237,7 +237,7 @@
         display: block;
         width: 18px;
         height: 1.5px;
-        background-color: var(--color-canvas);
+        background-color: var(--color-ink);
         border-radius: 1px;
         transition: transform var(--duration-base) var(--ease-out),
                     opacity var(--duration-fast) var(--ease-out);
