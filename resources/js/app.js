@@ -3,7 +3,7 @@
 // resources/js/app.js
 
 // Laadt Bootstrap JS (incl. Alert plugin + data-bs-dismiss support)
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+// import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 // // Alpine
 // import Alpine from 'alpinejs'
 // window.Alpine = Alpine
