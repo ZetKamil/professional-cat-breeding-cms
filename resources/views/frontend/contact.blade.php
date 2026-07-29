@@ -52,6 +52,12 @@
                 <p class="contact-method__value">Polska</p>
             </div>
         </div>
+
+        {{-- Google Maps Placeholder --}}
+        <div class="contact-map-placeholder reveal-up">
+            <i data-lucide="map" class="contact-map__icon" aria-hidden="true"></i>
+            <span class="contact-map__text text-tagline">Mapa dojazdu (Integracja Google Maps)</span>
+        </div>
     </x-frontend.section>
 
     {{-- ============================================================
@@ -316,6 +322,46 @@
         font-size: var(--text-btn-util-size);
         color: var(--color-ink-muted-48);
         margin-top: var(--sp-xxs);
+    }
+
+    /* Google Maps Placeholder */
+    .contact-map-placeholder {
+        margin-top: var(--sp-2xl);
+        border-radius: var(--r-lg);
+        overflow: hidden;
+        aspect-ratio: 21 / 9;
+        background-color: var(--color-canvas-parchment);
+        border: 1px solid var(--color-hairline);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: var(--sp-sm);
+        color: var(--color-ink-muted-48);
+        position: relative;
+    }
+
+    .contact-map-placeholder::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(var(--color-hairline) 1px, transparent 1px);
+        background-size: 24px 24px;
+        opacity: 0.6;
+    }
+
+    .contact-map__icon {
+        width: 32px;
+        height: 32px;
+        color: var(--color-primary);
+        position: relative;
+        z-index: 1;
+    }
+
+    .contact-map__text {
+        position: relative;
+        z-index: 1;
+        color: var(--color-ink-muted-80);
     }
 
     /* ==========================================================================
