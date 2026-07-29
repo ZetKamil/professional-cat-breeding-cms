@@ -12,11 +12,13 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 // SB Admin core script
 import './sb-admin/scripts'
 
-// SB Admin plugins
-import './sb-admin/datatables-simple-demo'
-import './sb-admin/chart-area-demo'
-import './sb-admin/chart-bar-demo'
-import './sb-admin/chart-pie-demo'
+// SB Admin plugins (conditionally load to prevent Chart.js ReferenceError on frontend)
+if (document.querySelector('.sb-nav-fixed')) {
+    import('./sb-admin/datatables-simple-demo').catch(() => {});
+    import('./sb-admin/chart-area-demo').catch(() => {});
+    import('./sb-admin/chart-bar-demo').catch(() => {});
+    import('./sb-admin/chart-pie-demo').catch(() => {});
+}
 
 // ==========================================================================
 // SCROLL REVEAL ANIMATIONS
