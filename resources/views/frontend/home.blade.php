@@ -45,26 +45,41 @@
         />
 
         <div class="animals-grid">
-            {{-- Placeholder cards — will be replaced with real data --}}
-            @for($i = 1; $i <= 3; $i++)
+            @forelse($featuredAnimals as $animal)
                 <x-frontend.card hoverable>
                     <x-slot:image>
-                        <div class="placeholder-image placeholder-image--cat">
-                            <i data-lucide="cat" aria-hidden="true"></i>
-                            <span>Zdjęcie kota</span>
-                        </div>
+                        @if($animal->media)
+                            <img
+                                src="{{ $animal->media->url() }}"
+                                alt="{{ $animal->name }}"
+                                loading="lazy"
+                            >
+                        @else
+                            <div class="placeholder-image placeholder-image--cat">
+                                <i data-lucide="cat" aria-hidden="true"></i>
+                                <span>{{ $animal->name }}</span>
+                            </div>
+                        @endif
                     </x-slot:image>
                     <div class="animal-card__body">
                         <div class="animal-card__meta">
-                            <x-frontend.badge variant="success">Dostępny</x-frontend.badge>
-                            <span class="animal-card__gender">♀ Kotka</span>
+                            <x-frontend.badge :variant="$animal->status->badgeVariant()">
+                                {{ $animal->status->label() }}
+                            </x-frontend.badge>
+                            <span class="animal-card__gender">{{ $animal->gender->symbol() }} {{ $animal->gender->label() }}</span>
                         </div>
-                        <h3 class="animal-card__name text-tagline">Luna #{{ $i }}</h3>
-                        <p class="animal-card__breed text-body">Kot Brytyjski Krótkowłosy</p>
-                        <p class="animal-card__age">Ur. {{ now()->subMonths(3)->format('d.m.Y') }}</p>
+                        <h3 class="animal-card__name text-tagline">{{ $animal->name }}</h3>
+                        <p class="animal-card__breed text-body">{{ $animal->breed }}</p>
+                        @if($animal->date_of_birth)
+                            <p class="animal-card__age">Ur. {{ $animal->date_of_birth->format('d.m.Y') }}</p>
+                        @endif
                     </div>
                 </x-frontend.card>
-            @endfor
+            @empty
+                <p class="text-body" style="grid-column: 1 / -1; text-align: center; color: var(--color-ink-muted-48);">
+                    Aktualnie brak dostępnych kociąt. Zapraszamy wkrótce!
+                </p>
+            @endforelse
         </div>
 
         <div class="section-action">
