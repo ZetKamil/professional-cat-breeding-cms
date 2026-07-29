@@ -37,7 +37,7 @@
          AVAILABLE ANIMALS — Card grid
          „Które kocięta są dostępne?"
          ============================================================ --}}
-    <x-frontend.section id="nasze-koty">
+    <x-frontend.section id="nasze-koty" class="reveal-up">
         <x-frontend.section-header
             eyebrow="Dostępne"
             headline="Nasze Kocięta"
@@ -93,7 +93,7 @@
          WHY CHOOSE US — Trust builders (dark tile)
          „Dlaczego akurat ta hodowla?"
          ============================================================ --}}
-    <x-frontend.section tile="dark" id="dlaczego-my">
+    <x-frontend.section tile="dark" id="dlaczego-my" class="reveal-up">
         <x-frontend.section-header
             eyebrow="Dlaczego my"
             headline="Hodowla z certyfikatem"
@@ -147,7 +147,7 @@
          TESTIMONIALS — Social proof (parchment tile)
          „Czy mogę zaufać tej hodowli?"
          ============================================================ --}}
-    <x-frontend.section tile="parchment" id="opinie">
+    <x-frontend.section tile="parchment" id="opinie" class="reveal-up">
         <x-frontend.section-header
             eyebrow="Opinie"
             headline="Co mówią nasi klienci"
@@ -190,7 +190,7 @@
          LATEST ARTICLES — Blog preview (light tile)
          ============================================================ --}}
     @if(isset($latestPosts) && $latestPosts->count() > 0)
-        <x-frontend.section id="blog">
+        <x-frontend.section id="blog" class="reveal-up">
             <x-frontend.section-header
                 eyebrow="Blog"
                 headline="Najnowsze Artykuły"
@@ -237,13 +237,15 @@
          CONTACT CTA — Final conversion point
          „Jak mogę się skontaktować?"
          ============================================================ --}}
-    <x-frontend.cta
-        tile="dark"
-        headline="Zainteresowany naszymi kociętami?"
-        description="Napisz do nas — chętnie odpowiemy na wszystkie pytania i umówimy wizytę."
-        buttonText="Skontaktuj się"
-        buttonHref="{{ route('contact') }}"
-    />
+    <div class="reveal-up">
+        <x-frontend.cta
+            tile="dark"
+            headline="Zainteresowany naszymi kociętami?"
+            description="Napisz do nas — chętnie odpowiemy na wszystkie pytania i umówimy wizytę."
+            buttonText="Skontaktuj się"
+            buttonHref="{{ route('contact') }}"
+        />
+    </div>
 
 </x-frontend.shell>
 
