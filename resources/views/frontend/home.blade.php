@@ -3,13 +3,19 @@
     meta-description="Profesjonalna hodowla kotów rasowych — zdrowie, piękno, transparentność. Poznaj nasze kocięta i dorosłe koty."
 >
     {{-- ============================================================
+         1. WHO ARE YOU?
          HERO SECTION — Full viewport, photography-first
-         One message. One CTA. Photography dominates.
          ============================================================ --}}
     <section class="hero" aria-label="Powitanie">
         <div class="hero__bg">
-            {{-- Placeholder gradient — replace with real photography --}}
-            <div class="hero__bg-placeholder"></div>
+            <img 
+                src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=2000&q=80" 
+                alt="Piękny kot rasowy"
+                class="hero__image"
+                loading="eager"
+                fetchpriority="high"
+            >
+            <div class="hero__overlay"></div>
         </div>
         <div class="hero__content">
             <div class="hero__inner section-inner">
@@ -22,11 +28,11 @@
                     Każdy kot jest wyjątkowy.
                 </p>
                 <div class="hero__actions">
-                    <x-frontend.button href="#nasze-koty" icon="arrow-down">
-                        Poznaj nasze koty
+                    <x-frontend.button href="#o-nas" icon="arrow-down">
+                        Poznaj nas
                     </x-frontend.button>
-                    <x-frontend.button variant="secondary" href="{{ route('contact') }}">
-                        Kontakt
+                    <x-frontend.button variant="secondary" href="#nasze-koty">
+                        Nasze koty
                     </x-frontend.button>
                 </div>
             </div>
@@ -34,14 +40,95 @@
     </section>
 
     {{-- ============================================================
+         2. CAN I TRUST YOU?
+         ABOUT PREVIEW — Storytelling, clean layout
+         ============================================================ --}}
+    <x-frontend.section id="o-nas" class="reveal-up">
+        <div class="about-preview">
+            <div class="about-preview__text">
+                <x-frontend.section-header
+                    align="left"
+                    eyebrow="O Hodowli"
+                    headline="Z miłości do doskonałości"
+                />
+                <div class="about-preview__body">
+                    <p class="text-body text-ink-muted-80">
+                        Nie jesteśmy fabryką. Jesteśmy kameralną, domową hodowlą, w której
+                        każde narodziny to święto. Nasze koty żyją z nami na co dzień, śpią 
+                        w naszych łóżkach i uczestniczą w życiu rodzinnym.
+                    </p>
+                    <p class="text-body text-ink-muted-80">
+                        Dzięki temu są perfekcyjnie zsocjalizowane, ufne i otwarte na 
+                        człowieka. Kładziemy ogromny nacisk na zdrowie genetyczne i
+                        zgodność ze standardem rasy.
+                    </p>
+                    <div class="about-preview__action">
+                        <x-frontend.button variant="secondary" href="{{ route('about') }}" icon="arrow-right">
+                            Poznaj naszą historię
+                        </x-frontend.button>
+                    </div>
+                </div>
+            </div>
+            <div class="about-preview__image-wrapper">
+                <img 
+                    src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=1000&q=80" 
+                    alt="Kot relaksujący się w domowym zaciszu"
+                    class="about-preview__image"
+                    loading="lazy"
+                >
+            </div>
+        </div>
+    </x-frontend.section>
+
+    {{-- TESTIMONIALS (Part of "Can I trust you?") --}}
+    <x-frontend.section tile="parchment" id="opinie" class="reveal-up">
+        <x-frontend.section-header
+            eyebrow="Opinie"
+            headline="Co mówią nasi klienci"
+        />
+
+        <div class="testimonials-grid">
+            <blockquote class="testimonial">
+                <p class="testimonial__quote text-lead-airy">
+                    „Luna jest cudowna — zdrowa, zadbana, piękna. Hodowla godna polecenia z całego serca."
+                </p>
+                <footer class="testimonial__author">
+                    <span class="testimonial__name text-body-strong">Anna K.</span>
+                    <span class="testimonial__detail">Właścicielka Luny</span>
+                </footer>
+            </blockquote>
+
+            <blockquote class="testimonial">
+                <p class="testimonial__quote text-lead-airy">
+                    „Profesjonalne podejście, pełna dokumentacja, cierpliwe odpowiadanie na pytania. Polecam!"
+                </p>
+                <footer class="testimonial__author">
+                    <span class="testimonial__name text-body-strong">Marek W.</span>
+                    <span class="testimonial__detail">Właściciel Simby</span>
+                </footer>
+            </blockquote>
+
+            <blockquote class="testimonial">
+                <p class="testimonial__quote text-lead-airy">
+                    „Widać, że koty są kochane. Nasz Mruczek był od razu oswojony i szczęśliwy."
+                </p>
+                <footer class="testimonial__author">
+                    <span class="testimonial__name text-body-strong">Katarzyna M.</span>
+                    <span class="testimonial__detail">Właścicielka Mruczka</span>
+                </footer>
+            </blockquote>
+        </div>
+    </x-frontend.section>
+
+    {{-- ============================================================
+         3. WHICH ANIMALS ARE AVAILABLE?
          AVAILABLE ANIMALS — Card grid
-         „Które kocięta są dostępne?"
          ============================================================ --}}
     <x-frontend.section id="nasze-koty" class="reveal-up">
         <x-frontend.section-header
             eyebrow="Dostępne"
             headline="Nasze Kocięta"
-            description="Każde kocię opuszcza hodowlę zaszczepione, odrobaczone, z książeczką zdrowia i rodowodem."
+            description="Poznaj nasze aktualnie dostępne mioty. Każde kocię opuszcza hodowlę z pełną dokumentacją medyczną."
         />
 
         <div class="animals-grid">
@@ -55,10 +142,11 @@
                                 loading="lazy"
                             >
                         @else
-                            <div class="placeholder-image placeholder-image--cat">
-                                <i data-lucide="cat" aria-hidden="true"></i>
-                                <span>{{ $animal->name }}</span>
-                            </div>
+                            <img 
+                                src="https://images.unsplash.com/photo-1543852786-1cf6624b9987?auto=format&fit=crop&w=800&q=80" 
+                                alt="Kociak (Zdjęcie poglądowe)" 
+                                loading="lazy"
+                            >
                         @endif
                     </x-slot:image>
                     <div class="animal-card__body">
@@ -76,22 +164,31 @@
                     </div>
                 </x-frontend.card>
             @empty
-                <p class="text-body" style="grid-column: 1 / -1; text-align: center; color: var(--color-ink-muted-48);">
-                    Aktualnie brak dostępnych kociąt. Zapraszamy wkrótce!
-                </p>
+                <div class="empty-state">
+                    <i data-lucide="cat" aria-hidden="true" class="empty-state__icon"></i>
+                    <h3 class="text-body-strong">Aktualnie brak dostępnych kociąt</h3>
+                    <p class="text-body empty-state__desc">
+                        Planujemy nowe mioty w nadchodzącym sezonie. Zachęcamy do kontaktu w celu rezerwacji.
+                    </p>
+                    <x-frontend.button variant="secondary" href="{{ route('contact') }}">
+                        Zapytaj o plany hodowlane
+                    </x-frontend.button>
+                </div>
             @endforelse
         </div>
 
-        <div class="section-action">
-            <x-frontend.button variant="secondary" href="#wszystkie-koty" icon="arrow-right">
-                Zobacz wszystkie koty
-            </x-frontend.button>
-        </div>
+        @if(count($featuredAnimals) > 0)
+            <div class="section-action">
+                <x-frontend.button variant="secondary" href="#wszystkie-koty" icon="arrow-right">
+                    Zobacz wszystkie koty
+                </x-frontend.button>
+            </div>
+        @endif
     </x-frontend.section>
 
     {{-- ============================================================
-         WHY CHOOSE US — Trust builders (dark tile)
-         „Dlaczego akurat ta hodowla?"
+         4. WHY CHOOSE THIS BREEDING?
+         TRUST BUILDERS — Dark tile
          ============================================================ --}}
     <x-frontend.section tile="dark" id="dlaczego-my" class="reveal-up">
         <x-frontend.section-header
@@ -144,50 +241,7 @@
     </x-frontend.section>
 
     {{-- ============================================================
-         TESTIMONIALS — Social proof (parchment tile)
-         „Czy mogę zaufać tej hodowli?"
-         ============================================================ --}}
-    <x-frontend.section tile="parchment" id="opinie" class="reveal-up">
-        <x-frontend.section-header
-            eyebrow="Opinie"
-            headline="Co mówią nasi klienci"
-        />
-
-        <div class="testimonials-grid">
-            <blockquote class="testimonial">
-                <p class="testimonial__quote text-lead-airy">
-                    „Luna jest cudowna — zdrowa, zadbana, piękna. Hodowla godna polecenia z całego serca."
-                </p>
-                <footer class="testimonial__author">
-                    <span class="testimonial__name text-body-strong">Anna K.</span>
-                    <span class="testimonial__detail">Właścicielka Luny</span>
-                </footer>
-            </blockquote>
-
-            <blockquote class="testimonial">
-                <p class="testimonial__quote text-lead-airy">
-                    „Profesjonalne podejście, pełna dokumentacja, cierpliwe odpowiadanie na pytania. Polecam!"
-                </p>
-                <footer class="testimonial__author">
-                    <span class="testimonial__name text-body-strong">Marek W.</span>
-                    <span class="testimonial__detail">Właściciel Simby</span>
-                </footer>
-            </blockquote>
-
-            <blockquote class="testimonial">
-                <p class="testimonial__quote text-lead-airy">
-                    „Widać, że koty są kochane. Nasz Mruczek był od razu oswojony i szczęśliwy."
-                </p>
-                <footer class="testimonial__author">
-                    <span class="testimonial__name text-body-strong">Katarzyna M.</span>
-                    <span class="testimonial__detail">Właścicielka Mruczka</span>
-                </footer>
-            </blockquote>
-        </div>
-    </x-frontend.section>
-
-    {{-- ============================================================
-         LATEST ARTICLES — Blog preview (light tile)
+         LATEST ARTICLES — Blog preview
          ============================================================ --}}
     @if(isset($latestPosts) && $latestPosts->count() > 0)
         <x-frontend.section id="blog" class="reveal-up">
@@ -208,9 +262,11 @@
                                     loading="lazy"
                                 >
                             @else
-                                <div class="placeholder-image">
-                                    <i data-lucide="image" aria-hidden="true"></i>
-                                </div>
+                                <img 
+                                    src="https://images.unsplash.com/photo-1495360010541-f48722b34f7d?auto=format&fit=crop&w=800&q=80" 
+                                    alt="Artykuł" 
+                                    loading="lazy"
+                                >
                             @endif
                         </x-slot:image>
                         <div class="article-card__body">
@@ -234,8 +290,8 @@
     @endif
 
     {{-- ============================================================
+         5. CONTACT US
          CONTACT CTA — Final conversion point
-         „Jak mogę się skontaktować?"
          ============================================================ --}}
     <div class="reveal-up">
         <x-frontend.cta
@@ -267,16 +323,25 @@
         position: absolute;
         inset: 0;
         z-index: 0;
+        background-color: var(--color-surface-black);
     }
 
-    .hero__bg-placeholder {
+    .hero__image {
         width: 100%;
         height: 100%;
+        object-fit: cover;
+        object-position: center 30%;
+        transform: scale(1.05);
+        animation: heroZoom var(--duration-slow) cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+
+    .hero__overlay {
+        position: absolute;
+        inset: 0;
         background: linear-gradient(
-            135deg,
-            var(--color-surface-tile-1) 0%,
-            var(--color-surface-tile-3) 50%,
-            var(--color-surface-black) 100%
+            to bottom,
+            rgba(0, 0, 0, 0.2) 0%,
+            rgba(0, 0, 0, 0.7) 100%
         );
     }
 
@@ -337,6 +402,12 @@
         }
     }
 
+    @keyframes heroZoom {
+        to {
+            transform: scale(1);
+        }
+    }
+
     /* Hero secondary button on dark */
     .hero .btn-secondary {
         border-color: rgba(255, 255, 255, 0.3);
@@ -350,13 +421,85 @@
     }
 
     /* ==========================================================================
-       ANIMALS GRID
+       ABOUT PREVIEW — Split Layout
+       ========================================================================== */
+       
+    .about-preview {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--sp-3xl);
+        align-items: center;
+    }
+
+    .about-preview__body {
+        display: flex;
+        flex-direction: column;
+        gap: var(--sp-md);
+        margin-top: var(--sp-xl);
+    }
+
+    .text-ink-muted-80 {
+        color: var(--color-ink-muted-80);
+    }
+
+    .about-preview__action {
+        margin-top: var(--sp-md);
+    }
+
+    .about-preview__image-wrapper {
+        border-radius: var(--r-lg);
+        overflow: hidden;
+        aspect-ratio: 4 / 5;
+        box-shadow: var(--shadow-product);
+    }
+
+    .about-preview__image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 10s ease-out;
+    }
+
+    .about-preview:hover .about-preview__image {
+        transform: scale(1.05);
+    }
+
+    /* ==========================================================================
+       ANIMALS GRID & EMPTY STATE
        ========================================================================== */
 
     .animals-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: var(--sp-lg);
+    }
+
+    .empty-state {
+        grid-column: 1 / -1;
+        background-color: var(--color-canvas-parchment);
+        border-radius: var(--r-lg);
+        padding: var(--sp-3xl) var(--sp-lg);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        gap: var(--sp-sm);
+        border: 1px dashed var(--color-hairline);
+    }
+
+    .empty-state__icon {
+        width: 48px;
+        height: 48px;
+        color: var(--color-ink-muted-48);
+        margin-bottom: var(--sp-sm);
+        opacity: 0.5;
+    }
+
+    .empty-state__desc {
+        color: var(--color-ink-muted-80);
+        max-width: 480px;
+        margin-bottom: var(--sp-md);
     }
 
     .animal-card__body {
@@ -419,6 +562,11 @@
         border-radius: var(--r-lg);
         background-color: rgba(255, 255, 255, 0.06);
         color: var(--color-primary-on-dark);
+        transition: transform var(--duration-fast) var(--ease-out);
+    }
+    
+    .trust-item:hover .trust-item__icon {
+        transform: translateY(-4px);
     }
 
     .trust-item__icon svg {
@@ -455,6 +603,12 @@
         display: flex;
         flex-direction: column;
         gap: var(--sp-lg);
+        transition: transform var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
+    }
+
+    .testimonial:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.04);
     }
 
     .testimonial__quote {
@@ -507,41 +661,6 @@
     }
 
     /* ==========================================================================
-       PLACEHOLDER IMAGES
-       ========================================================================== */
-
-    .placeholder-image {
-        width: 100%;
-        aspect-ratio: 4 / 3;
-        background-color: var(--color-canvas-parchment);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: var(--sp-xs);
-        color: var(--color-ink-muted-48);
-    }
-
-    .placeholder-image svg {
-        width: 32px;
-        height: 32px;
-        opacity: 0.4;
-    }
-
-    .placeholder-image span {
-        font-size: var(--text-nav-size);
-        opacity: 0.5;
-    }
-
-    .placeholder-image--cat {
-        background: linear-gradient(
-            135deg,
-            var(--color-canvas-parchment) 0%,
-            var(--color-divider-soft) 100%
-        );
-    }
-
-    /* ==========================================================================
        RESPONSIVE
        ========================================================================== */
 
@@ -552,6 +671,15 @@
     }
 
     @media (max-width: 834px) {
+        .about-preview {
+            grid-template-columns: 1fr;
+        }
+
+        .about-preview__image-wrapper {
+            order: -1;
+            aspect-ratio: 16 / 9;
+        }
+
         .animals-grid,
         .testimonials-grid,
         .articles-grid {
@@ -590,6 +718,13 @@
         .hero__actions {
             opacity: 1;
             animation: none;
+        }
+        .hero__image, .about-preview__image {
+            animation: none;
+            transition: none;
+        }
+        .trust-item:hover .trust-item__icon, .testimonial:hover {
+            transform: none;
         }
     }
 </style>
