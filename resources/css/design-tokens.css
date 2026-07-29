@@ -634,9 +634,7 @@
     text-rendering: optimizeLegibility;
 }
 
-.frontend-shell *,
-.frontend-shell *::before,
-.frontend-shell *::after {
+:where(.frontend-shell *, .frontend-shell *::before, .frontend-shell *::after) {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
