@@ -204,3 +204,177 @@
 .tile-black .cta-block__description {
     color: rgba(255, 255, 255, 0.75);
 }
+
+/* ==========================================================================
+   5. UNIVERSAL MICROINTERACTIONS & ACCESSIBILITY FOCUS STATES
+   Replaces generic Bootstrap-like interactions with Apple/Aesop tactile polish
+   ========================================================================== */
+
+/* Universal Focus Visibility — Crisp Apple primary ring */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[role="button"]:focus-visible,
+[tabindex]:focus-visible {
+    outline: 2px solid var(--color-primary, #0071e3) !important;
+    outline-offset: 3px !important;
+    box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.16) !important;
+}
+
+/* Button Microinteractions — Smooth lift & icon glide */
+.btn {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                background-color 0.25s ease,
+                color 0.25s ease,
+                border-color 0.25s ease !important;
+}
+
+.btn:hover:not(:disabled):not([aria-disabled="true"]) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.btn:active:not(:disabled):not([aria-disabled="true"]) {
+    transform: translateY(0) scale(0.975);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.btn:hover svg,
+.btn:hover i {
+    transform: translateX(3px);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Forms & Inputs — Apple Editorial Form Controls */
+.form-input,
+.form-select,
+.form-textarea,
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+input[type="search"],
+select,
+textarea {
+    font-family: var(--font-sans, sans-serif);
+    font-size: var(--text-body-size, 1rem);
+    color: var(--color-ink);
+    background-color: var(--color-canvas);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--r-sm, 8px);
+    padding: var(--sp-sm) var(--sp-md);
+    min-height: var(--touch-target-min, 44px);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+}
+
+.form-input:hover,
+.form-select:hover,
+.form-textarea:hover,
+input[type="text"]:hover,
+input[type="email"]:hover,
+input[type="tel"]:hover,
+select:hover,
+textarea:hover {
+    border-color: var(--color-ink-muted-48);
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus,
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.15);
+    outline: none;
+}
+
+/* Disabled controls */
+.btn:disabled,
+.btn[aria-disabled="true"],
+input:disabled,
+select:disabled,
+textarea:disabled {
+    opacity: 0.55;
+    cursor: not-allowed !important;
+    pointer-events: none;
+    filter: grayscale(15%);
+}
+
+/* Editorial Tables & Lists */
+.table-editorial {
+    width: 100%;
+    border-collapse: collapse;
+    margin: var(--sp-lg) 0;
+}
+
+.table-editorial th {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.785rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted-80);
+    padding: var(--sp-sm) var(--sp-md);
+    border-bottom: 1px solid var(--color-ink);
+    text-align: left;
+}
+
+.table-editorial td {
+    padding: var(--sp-md);
+    border-bottom: 1px solid var(--color-hairline);
+    font-size: 0.95rem;
+    color: var(--color-ink);
+    transition: background-color 0.25s ease;
+}
+
+.table-editorial tr:hover td {
+    background-color: var(--color-canvas-parchment);
+}
+
+/* Pagination — Apple Pill Navigation */
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sp-xs);
+    list-style: none;
+    padding: 0;
+    margin: var(--sp-2xl) 0 0 0;
+}
+
+.pagination .page-item .page-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    padding: 0 var(--sp-sm);
+    border-radius: var(--r-pill, 999px);
+    border: 1px solid var(--color-hairline);
+    background-color: var(--color-canvas);
+    color: var(--color-ink-muted-80);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.25s var(--ease-out);
+}
+
+.pagination .page-item .page-link:hover {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--color-ink);
+    color: var(--color-canvas);
+    border-color: var(--color-ink);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}

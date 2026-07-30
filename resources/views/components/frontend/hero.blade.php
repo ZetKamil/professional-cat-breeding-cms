@@ -34,6 +34,9 @@
             src="{{ $imageUrl }}" 
             alt="{{ $imageAlt }}"
             class="hero__image"
+            width="2000"
+            height="1200"
+            decoding="async"
             loading="eager"
             fetchpriority="high"
         >

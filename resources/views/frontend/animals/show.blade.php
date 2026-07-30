@@ -27,6 +27,9 @@
                                 src="{{ $animal->media->url() }}"
                                 alt="{{ $animal->name }} - {{ $animal->breed }}"
                                 class="animal-profile__main-image"
+                                width="1000"
+                                height="750"
+                                decoding="async"
                                 loading="eager"
                                 fetchpriority="high"
                             >
@@ -35,6 +38,9 @@
                                 src="https://images.unsplash.com/photo-1543852786-1cf6624b9987?auto=format&fit=crop&w=1200&q=80" 
                                 alt="{{ $animal->name }} (Zdjęcie poglądowe)"
                                 class="animal-profile__main-image"
+                                width="1000"
+                                height="750"
+                                decoding="async"
                                 loading="eager"
                                 fetchpriority="high"
                             >
@@ -45,7 +51,7 @@
                         <div class="animal-profile__thumbs">
                             @foreach($animal->gallery as $img)
                                 <div class="animal-profile__thumb">
-                                    <img src="{{ $img->url() }}" alt="{{ $animal->name }}" loading="lazy">
+                                    <img src="{{ $img->url() }}" alt="{{ $animal->name }}" width="200" height="200" decoding="async" loading="lazy">
                                 </div>
                             @endforeach
                         </div>

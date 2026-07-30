@@ -72,6 +72,9 @@
                     src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=1000&q=80" 
                     alt="Kot relaksujący się w domowym zaciszu"
                     class="about-preview__image"
+                    width="1000"
+                    height="750"
+                    decoding="async"
                     loading="lazy"
                 >
                 <div class="about-preview__badge-overlap">

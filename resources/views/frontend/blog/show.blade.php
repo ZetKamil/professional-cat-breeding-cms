@@ -57,6 +57,10 @@
                 src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?q=80&w=1600&auto=format&fit=crop" 
                 alt="{{ $post->title }}" 
                 class="article-cover__img"
+                width="1600"
+                height="900"
+                decoding="async"
+                fetchpriority="high"
             >
         </div>
     </div>
