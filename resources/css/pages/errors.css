@@ -21,7 +21,8 @@
     font-weight: 700;
     line-height: 1;
     letter-spacing: -0.04em;
-    color: var(--color-canvas-parchment);
+    color: var(--color-ink);
+    opacity: 0.12;
     margin-bottom: var(--sp-lg);
 }
 

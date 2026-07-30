@@ -7,13 +7,13 @@
          ============================================================ --}}
     <section class="animals-catalog-hero" aria-label="Nasze koty">
         <div class="section-inner">
-            <span class="text-eyebrow" style="color: var(--color-primary); display: block; margin-bottom: var(--sp-xs);">
+            <span class="text-eyebrow animals-catalog-hero__eyebrow">
                 Hodowla & Oferta
             </span>
-            <h1 class="text-hero-display" style="margin-bottom: var(--sp-sm);">
+            <h1 class="text-hero-display animals-catalog-hero__title">
                 Nasze Koty
             </h1>
-            <p class="text-lead-airy" style="max-width: 640px; margin: 0 auto; color: var(--color-ink-muted-80);">
+            <p class="text-lead-airy animals-catalog-hero__lead">
                 Poznaj nasze koty hodowlane i dostępne kocięta. Hodujemy trzy wyjątkowe rasy:
                 Bengalskie, Brytyjskie oraz Syjamskie — z dbałością o najwyższe standardy zdrowotne.
             </p>
@@ -23,7 +23,7 @@
     {{-- ============================================================
          2. FILTER BAR (Breeds + Statuses)
          ============================================================ --}}
-    <section class="section" aria-label="Filtrowanie kotów" style="padding-top: 0;">
+    <section class="section section--no-pt" aria-label="Filtrowanie kotów">
         <div class="section-inner">
             <div class="animals-filter-bar">
                 {{-- Breed Filter --}}
@@ -66,8 +66,7 @@
                     @if(request()->hasAny(['breed', 'status', 'gender', 'q']))
                         <a
                             href="{{ route('frontend.animals.index') }}"
-                            class="text-nav"
-                            style="color: var(--color-primary); display: inline-flex; align-items: center; gap: 4px;"
+                            class="text-nav animals-filter-clear"
                         >
                             <i data-lucide="x-circle" style="width: 16px; height: 16px;"></i>
                             Wyczyść filtry
@@ -83,7 +82,7 @@
                 @forelse($animals as $animal)
                     <x-frontend.animal-card :animal="$animal" />
                 @empty
-                    <div class="empty-state" style="grid-column: 1 / -1;">
+                    <div class="empty-state animals-grid__empty">
                         <i data-lucide="cat" aria-hidden="true" class="empty-state__icon"></i>
                         <h3 class="empty-state__title text-tagline">
                             Brak kotów spełniających kryteria
@@ -92,7 +91,7 @@
                             Obecnie nie mamy kotów o wybranej rasie lub statusie.
                             Spróbuj zmienić filtry lub skontaktuj się z nami, aby zapytać o planowane mioty.
                         </p>
-                        <div style="margin-top: var(--sp-lg);">
+                        <div class="empty-state__action">
                             <x-frontend.button href="{{ route('frontend.animals.index') }}" variant="secondary" icon="refresh-cw">
                                 Pokaż wszystkie koty
                             </x-frontend.button>
@@ -103,7 +102,7 @@
 
             {{-- Pagination --}}
             @if($animals->hasPages())
-                <div style="margin-top: var(--sp-2xl);">
+                <div class="animals-catalog__pagination">
                     {{ $animals->links() }}
                 </div>
             @endif

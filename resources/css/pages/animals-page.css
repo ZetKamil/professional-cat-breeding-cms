@@ -13,6 +13,47 @@
     text-align: center;
 }
 
+.animals-catalog-hero__eyebrow {
+    color: var(--color-primary);
+    display: block;
+    margin-bottom: var(--sp-xs);
+}
+
+.animals-catalog-hero__title {
+    margin-bottom: var(--sp-sm);
+}
+
+.animals-catalog-hero__lead {
+    max-width: 640px;
+    margin: 0 auto;
+    color: var(--color-ink-muted-80);
+}
+
+.animals-filter-clear {
+    color: var(--color-primary);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+}
+
+.animals-filter-clear:hover {
+    opacity: 0.8;
+}
+
+.animals-grid__empty {
+    grid-column: 1 / -1;
+}
+
+.empty-state__action {
+    margin-top: var(--sp-lg);
+}
+
+.animals-catalog__pagination {
+    margin-top: var(--sp-2xl);
+}
+
 .animals-filter-bar {
     display: flex;
     flex-direction: column;

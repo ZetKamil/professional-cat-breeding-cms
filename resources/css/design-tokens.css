@@ -139,6 +139,19 @@
     --sp-5xl: 8rem;      /* 128px */
     --sp-section: 5rem;  /* 80px — standard section padding */
 
+    /* Spacing aliases for blog and components */
+    --space-1: var(--sp-xxs);
+    --space-2: var(--sp-xs);
+    --space-3: var(--sp-sm);
+    --space-4: 1rem;
+    --space-6: var(--sp-lg);
+    --space-8: var(--sp-xl);
+    --space-10: 2.5rem;
+    --space-12: var(--sp-2xl);
+    --space-16: var(--sp-3xl);
+    --space-20: var(--sp-section);
+    --space-24: var(--sp-4xl);
+
     /* --------------------------------------------------------------------------
        4. BORDER RADIUS SCALE
        0 (tiles) → 8 (utility) → 11 (pearl) → 18 (cards) → 9999 (pills)
@@ -591,6 +604,14 @@
 .section--none {
     padding-top: 0;
     padding-bottom: 0;
+}
+
+.section--no-pt {
+    padding-top: 0 !important;
+}
+
+.section--no-pb {
+    padding-bottom: 0 !important;
 }
 
 /* --------------------------------------------------------------------------

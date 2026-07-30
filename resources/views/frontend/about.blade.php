@@ -48,6 +48,9 @@
                     src="https://images.unsplash.com/photo-1533743983669-94fa5c4338ec?auto=format&fit=crop&w=1000&q=80" 
                     alt="Kot i właściciel"
                     class="about-story__image"
+                    width="1000"
+                    height="1250"
+                    decoding="async"
                     loading="lazy"
                 >
             </div>
@@ -185,16 +188,16 @@
 
         <div class="gallery-grid">
             <div class="gallery-item gallery-item--large">
-                <img src="https://images.unsplash.com/photo-1548247416-ec66f4900b2e?auto=format&fit=crop&w=800&q=80" alt="Kot" loading="lazy">
+                <img src="https://images.unsplash.com/photo-1548247416-ec66f4900b2e?auto=format&fit=crop&w=800&q=80" alt="Kot" width="800" height="800" decoding="async" loading="lazy">
             </div>
             <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?auto=format&fit=crop&w=600&q=80" alt="Kociak" loading="lazy">
+                <img src="https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?auto=format&fit=crop&w=600&q=80" alt="Kociak" width="600" height="600" decoding="async" loading="lazy">
             </div>
             <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?auto=format&fit=crop&w=600&q=80" alt="Bawiący się kot" loading="lazy">
+                <img src="https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?auto=format&fit=crop&w=600&q=80" alt="Bawiący się kot" width="600" height="600" decoding="async" loading="lazy">
             </div>
             <div class="gallery-item gallery-item--wide">
-                <img src="https://images.unsplash.com/photo-1533738363-b7f9aef128ce?auto=format&fit=crop&w=800&q=80" alt="Odpoczywający kot" loading="lazy">
+                <img src="https://images.unsplash.com/photo-1533738363-b7f9aef128ce?auto=format&fit=crop&w=800&q=80" alt="Odpoczywający kot" width="800" height="400" decoding="async" loading="lazy">
             </div>
         </div>
     </x-frontend.section>
