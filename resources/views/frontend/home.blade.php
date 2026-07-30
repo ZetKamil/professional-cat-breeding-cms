@@ -309,10 +309,11 @@
          ============================================================ --}}
     <div class="reveal-up">
         <x-frontend.cta
-            tile="dark"
+            tile="parchment"
+            eyebrow="Adopcja i Kontakt"
             headline="Zainteresowany naszymi kociętami?"
-            description="Napisz do nas — chętnie odpowiemy na wszystkie pytania i umówimy wizytę."
-            buttonText="Skontaktuj się"
+            description="Napisz do nas — chętnie odpowiemy na wszystkie pytania, doradzimy w wyborze rasy i umówimy kameralne spotkanie w naszej hodowli."
+            buttonText="Skontaktuj się z nami"
             buttonHref="{{ route('contact') }}"
         />
     </div>

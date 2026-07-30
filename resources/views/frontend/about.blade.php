@@ -247,10 +247,11 @@
          ============================================================ --}}
     <div class="reveal-up">
         <x-frontend.cta
-            tile="dark"
+            tile="parchment"
+            eyebrow="Rozmowa i Adopcja"
             headline="Chcesz poznać nas bliżej?"
-            description="Zapraszamy do kontaktu — chętnie opowiemy więcej o naszej hodowli i odpowiemy na pytania."
-            buttonText="Skontaktuj się"
+            description="Zapraszamy do kontaktu — chętnie opowiemy więcej o naszej hodowli, doradzimy i odpowiemy na wszystkie pytania."
+            buttonText="Skontaktuj się z nami"
             buttonHref="{{ route('contact') }}"
         />
     </div>

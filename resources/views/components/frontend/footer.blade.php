@@ -18,10 +18,29 @@
                     <p class="footer-brand__tagline text-body">
                         Profesjonalna hodowla kotów rasowych z pasją, troską i pełną transparentnością.
                     </p>
-                    <div class="footer-contact-info">
-                        <a href="mailto:kontakt@example.com" class="footer-link">kontakt@example.com</a><br>
-                        <a href="tel:+48000000000" class="footer-link">+48 000 000 000</a>
+
+                    <div class="footer-trust-badges">
+                        <span class="footer-trust-badge">
+                            <i data-lucide="shield-check" aria-hidden="true"></i>
+                            <span>FIFe & FPL</span>
+                        </span>
+                        <span class="footer-trust-badge">
+                            <i data-lucide="award" aria-hidden="true"></i>
+                            <span>100% Zdrowia i Badań</span>
+                        </span>
                     </div>
+
+                    <div class="footer-contact-info">
+                        <div class="footer-contact-item">
+                            <i data-lucide="mail" aria-hidden="true" class="footer-contact-icon"></i>
+                            <a href="mailto:kontakt@example.com" class="footer-link">kontakt@example.com</a>
+                        </div>
+                        <div class="footer-contact-item">
+                            <i data-lucide="phone" aria-hidden="true" class="footer-contact-icon"></i>
+                            <a href="tel:+48000000000" class="footer-link">+48 000 000 000</a>
+                        </div>
+                    </div>
+
                     {{-- Social Links --}}
                     <div class="footer-social">
                         <a href="https://facebook.com" class="footer-social__link" aria-label="Facebook" target="_blank" rel="noopener">
@@ -60,7 +79,7 @@
                 {{-- Newsletter --}}
                 <div class="footer-col footer-col--newsletter">
                     <h3 class="footer-heading">Bądź na bieżąco</h3>
-                    <p class="footer-link" style="margin-bottom: var(--sp-sm);">
+                    <p class="footer-newsletter__desc text-body">
                         Zapisz się do newslettera, aby otrzymywać informacje o nowych miotach jako pierwszy.
                     </p>
                     <form action="#" method="POST" class="newsletter-form" onsubmit="event.preventDefault();">
@@ -70,6 +89,10 @@
                             <i data-lucide="arrow-right" aria-hidden="true"></i>
                         </button>
                     </form>
+                    <p class="newsletter-privacy">
+                        <i data-lucide="lock" aria-hidden="true" class="newsletter-privacy__icon"></i>
+                        <span>Zero spamu. Rezygnacja w każdej chwili.</span>
+                    </p>
                 </div>
             </div>
 
