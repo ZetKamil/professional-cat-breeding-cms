@@ -73,32 +73,80 @@
 
         <div class="testimonials-grid">
             <blockquote class="testimonial">
-                <p class="testimonial__quote text-lead-airy">
-                    „Luna jest cudowna — zdrowa, zadbana, piękna. Hodowla godna polecenia z całego serca."
+                <div class="testimonial__header">
+                    <div class="testimonial__rating" aria-label="Ocena: 5 na 5 gwiazdek">
+                        <i data-lucide="star" class="testimonial__star" aria-hidden="true"></i>
+                        <i data-lucide="star" class="testimonial__star" aria-hidden="true"></i>
+                        <i data-lucide="star" class="testimonial__star" aria-hidden="true"></i>
+                        <i data-lucide="star" class="testimonial__star" aria-hidden="true"></i>
+                        <i data-lucide="star" class="testimonial__star" aria-hidden="true"></i>
+                    </div>
+                    <span class="testimonial__verified">
+                        <i data-lucide="check-circle" aria-hidden="true"></i>
+                        Zweryfikowana adopcja
+                    </span>
+                </div>
+                <p class="testimonial__quote">
+                    „Luna jest cudowna — zdrowa, zadbana i przepiękna. Od pierwszych dni widać, że wyrosła w kochającym domowym otoczeniu. Hodowla godna polecenia z całego serca."
                 </p>
                 <footer class="testimonial__author">
-                    <span class="testimonial__name text-body-strong">Anna K.</span>
-                    <span class="testimonial__detail">Właścicielka Luny</span>
+                    <div class="testimonial__avatar" aria-hidden="true">AK</div>
+                    <div class="testimonial__author-meta">
+                        <span class="testimonial__name">Anna K.</span>
+                        <span class="testimonial__detail">Właścicielka Luny · Brytyjczyk</span>
+                    </div>
                 </footer>
             </blockquote>
 
             <blockquote class="testimonial">
-                <p class="testimonial__quote text-lead-airy">
-                    „Profesjonalne podejście, pełna dokumentacja, cierpliwe odpowiadanie na pytania. Polecam!"
+                <div class="testimonial__header">
+                    <div class="testimonial__rating" aria-label="Ocena: 5 na 5 gwiazdek">
+                        <i data-lucide="star" class="testimonial__star" aria-hidden="true"></i>
+                        <i data-lucide="star" class="testimonial__star" aria-hidden="true"></i>
+                        <i data-lucide="star" class="testimonial__star" aria-hidden="true"></i>
+                        <i data-lucide="star" class="testimonial__star" aria-hidden="true"></i>
+                        <i data-lucide="star" class="testimonial__star" aria-hidden="true"></i>
+                    </div>
+                    <span class="testimonial__verified">
+                        <i data-lucide="check-circle" aria-hidden="true"></i>
+                        Zweryfikowana adopcja
+                    </span>
+                </div>
+                <p class="testimonial__quote">
+                    „Profesjonalne podejście na każdym etapie, pełna dokumentacja medyczna oraz cierpliwe odpowiadanie na wszystkie nasze pytania. Polecam bez wahania!"
                 </p>
                 <footer class="testimonial__author">
-                    <span class="testimonial__name text-body-strong">Marek W.</span>
-                    <span class="testimonial__detail">Właściciel Simby</span>
+                    <div class="testimonial__avatar" aria-hidden="true">MW</div>
+                    <div class="testimonial__author-meta">
+                        <span class="testimonial__name">Marek W.</span>
+                        <span class="testimonial__detail">Właściciel Simby · Kot Bengalski</span>
+                    </div>
                 </footer>
             </blockquote>
 
             <blockquote class="testimonial">
-                <p class="testimonial__quote text-lead-airy">
-                    „Widać, że koty są kochane. Nasz Mruczek był od razu oswojony i szczęśliwy."
+                <div class="testimonial__header">
+                    <div class="testimonial__rating" aria-label="Ocena: 5 na 5 gwiazdek">
+                        <i data-lucide="star" class="testimonial__star" aria-hidden="true"></i>
+                        <i data-lucide="star" class="testimonial__star" aria-hidden="true"></i>
+                        <i data-lucide="star" class="testimonial__star" aria-hidden="true"></i>
+                        <i data-lucide="star" class="testimonial__star" aria-hidden="true"></i>
+                        <i data-lucide="star" class="testimonial__star" aria-hidden="true"></i>
+                    </div>
+                    <span class="testimonial__verified">
+                        <i data-lucide="check-circle" aria-hidden="true"></i>
+                        Zweryfikowana adopcja
+                    </span>
+                </div>
+                <p class="testimonial__quote">
+                    „Widać, że koty w tej hodowli są prawdziwie kochane. Nasz Mruczek był natychmiast oswojony, ufny i szczęśliwy w nowym domu od pierwszego dnia."
                 </p>
                 <footer class="testimonial__author">
-                    <span class="testimonial__name text-body-strong">Katarzyna M.</span>
-                    <span class="testimonial__detail">Właścicielka Mruczka</span>
+                    <div class="testimonial__avatar" aria-hidden="true">KM</div>
+                    <div class="testimonial__author-meta">
+                        <span class="testimonial__name">Katarzyna M.</span>
+                        <span class="testimonial__detail">Właścicielka Mruczka · Kot Syjamski</span>
+                    </div>
                 </footer>
             </blockquote>
         </div>
