@@ -1,252 +1,246 @@
 <x-frontend.shell
-    title="{{ config('app.name') }} — Profesjonalna Hodowla Kotów Rasowych"
-    meta-description="Profesjonalna hodowla kotów rasowych — zdrowie, piękno, transparentność. Poznaj nasze kocięta i dorosłe koty."
+    title="{{ config('app.name') }} — Etyczna Hodowla Kotów Rasowych FIFe / FPL"
+    meta-description="Hodowla kotów rasowych oparta na czystości genetycznej, spokoju i bezkompromisowych standardach etycznych FIFe / FPL."
 >
     {{-- ============================================================
-         1. WHO ARE YOU?
-         HERO SECTION — Full viewport, photography-first
+         1. CINEMATIC ASYMMETRIC HERO — ROLLS ROYCE / APPLE STYLE
          ============================================================ --}}
-    <x-frontend.hero
-        eyebrow="Etyczna Hodowla Kotów Rasowych · FIFe / FPL"
-        title="Piękno. Zdrowie.<br>Zaufanie."
-        lead="Hodujemy z pasją, troską o zdrowie i pełną transparentnością. Każdy kot jest wyjątkowy."
-        image-url="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=2000&q=80"
-        image-alt="Piękny kot rasowy"
-        scroll-target="#o-nas"
-        size="full"
-    >
-        <x-frontend.button href="#o-nas" icon="arrow-down">
-            Poznaj nas
-        </x-frontend.button>
-        <x-frontend.button variant="secondary" href="#nasze-koty">
-            Nasze koty
-        </x-frontend.button>
-
-        <div class="hero__trust-bar" role="list" aria-label="Nasze certyfikaty i standardy">
-            <div class="hero__trust-item" role="listitem">
-                <i data-lucide="shield-check" class="hero__trust-icon" aria-hidden="true"></i>
-                <span>Certyfikat FIFe / FPL</span>
-            </div>
-            <div class="hero__trust-item" role="listitem">
-                <i data-lucide="dna" class="hero__trust-icon" aria-hidden="true"></i>
-                <span>100% Badania Genetyczne</span>
-            </div>
-            <div class="hero__trust-item" role="listitem">
-                <i data-lucide="heart-handshake" class="hero__trust-icon" aria-hidden="true"></i>
-                <span>Domowa Socjalizacja</span>
-            </div>
+    <section class="hero hero--dark" aria-label="Wprowadzenie i filozofia hodowli">
+        <div class="hero__bg" aria-hidden="true">
+            <img 
+                src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=2000&q=80" 
+                alt="Kot bengalski w naturalnym oświetleniu"
+                width="2000"
+                height="1200"
+                decoding="async"
+                loading="eager"
+                fetchpriority="high"
+                class="opacity-20"
+            >
+            <div class="hero__overlay"></div>
         </div>
-    </x-frontend.hero>
 
-    {{-- ============================================================
-         1.1 BREED SHOWCASE STRIP — Editorial Category Navigation
-         ============================================================ --}}
-    <section class="breed-showcase-strip reveal-up" aria-label="Specjalizacje hodowlane">
-        <div class="section-inner">
-            <div class="breed-showcase__header">
-                <span class="breed-showcase__eyebrow">Nasze Specjalizacje Rasy</span>
-                <span class="text-nav-link text-ink-muted-48">Wszystkie koty z pełnym rodowodem FPL / FIFe</span>
+        <div class="section-inner relative z-10 pt-16 pb-24">
+            {{-- Editorial Monospace Masthead Bar --}}
+            <div class="hero-masthead">
+                <span>[ 01 — ETHICAL BREEDING ]</span>
+                <span>[ FIFE / FPL CERTIFIED ]</span>
+                <span>[ WARSAW, POLAND ]</span>
+                <span>[ EST. 2011 ]</span>
             </div>
-            <div class="breed-showcase__grid">
-                <a href="{{ route('frontend.animals.index', ['breed' => 'bengal']) }}" class="breed-card">
-                    <div class="breed-card__top">
-                        <span class="breed-card__index">01</span>
-                        <i data-lucide="arrow-up-right" class="breed-card__arrow" aria-hidden="true"></i>
+
+            {{-- Split-Screen Editorial Opening --}}
+            <div class="hero-split-grid">
+                <div class="hero-split__left">
+                    <span class="text-caption font-mono text-primary uppercase tracking-widest">
+                        Etyczna Hodowla Kotów Rasowych · FIFe / FPL
+                    </span>
+                    <h1 class="hero-split__title">
+                        Czystość Rasy.<br>
+                        Spokój Genetyki.<br>
+                        Rodowód FIFe / FPL.
+                    </h1>
+                    <p class="hero-split__lead">
+                        Nie traktujemy hodowli jak komercji. Tworzymy domowe sanktuarium, 
+                        w którym selekcja genetyczna, spokój socjalizacji i bezkompromisowe 
+                        standardy medyczne wyznaczają każdy etap życia naszych kotów.
+                    </p>
+                    <div class="hero-split__actions">
+                        <x-frontend.button href="{{ route('contact') }}" icon="arrow-right">
+                            Zaplanuj rozmowę adopcyjną
+                        </x-frontend.button>
+                        <x-frontend.button variant="secondary" href="#kodeks">
+                            Poznaj standard genetyczny
+                        </x-frontend.button>
                     </div>
-                    <div>
-                        <h3 class="breed-card__name">Koty Bengalskie</h3>
-                        <p class="breed-card__desc">Dzikie spojrzenie, atłasowa rozeta i niezwykłe przywiązanie do opiekuna.</p>
+
+                    {{-- Hero Trust Strip --}}
+                    <div class="hero__trust-bar" role="list" aria-label="Nasze certyfikaty i standardy">
+                        <div class="hero__trust-item" role="listitem">
+                            <i data-lucide="shield-check" class="hero__trust-icon" aria-hidden="true"></i>
+                            <span>Certyfikat FIFe / FPL</span>
+                        </div>
+                        <div class="hero__trust-item" role="listitem">
+                            <i data-lucide="dna" class="hero__trust-icon" aria-hidden="true"></i>
+                            <span>100% Badania Genetyczne</span>
+                        </div>
+                        <div class="hero__trust-item" role="listitem">
+                            <i data-lucide="heart-handshake" class="hero__trust-icon" aria-hidden="true"></i>
+                            <span>Domowa Socjalizacja</span>
+                        </div>
                     </div>
-                </a>
-                <a href="{{ route('frontend.animals.index', ['breed' => 'british']) }}" class="breed-card">
-                    <div class="breed-card__top">
-                        <span class="breed-card__index">02</span>
-                        <i data-lucide="arrow-up-right" class="breed-card__arrow" aria-hidden="true"></i>
+                </div>
+
+                <div class="hero-split__right">
+                    <div class="hero-split__frame">
+                        <img 
+                            src="https://images.unsplash.com/photo-1543852786-1cf6624b9987?auto=format&fit=crop&w=1200&q=80" 
+                            alt="Doskonałość rasy - kot bengalski"
+                            class="hero-split__image"
+                            width="1000"
+                            height="750"
+                            decoding="async"
+                            loading="eager"
+                        >
                     </div>
-                    <div>
-                        <h3 class="breed-card__name">Brytyjczyki</h3>
-                        <p class="breed-card__desc">Aksamitne futro, spokój i niezwykła elegancja domowego towarzysza.</p>
+                    <div class="hero-split__seal" role="status" aria-label="Gwarancja genetyki">
+                        <i data-lucide="award" class="w-5 h-5 text-primary" aria-hidden="true"></i>
+                        <div>
+                            <span class="block font-semibold">100% HCM / PKD n/n</span>
+                            <span class="text-white/70 text-xs">Weryfikowane linie 5 pokoleń</span>
+                        </div>
                     </div>
-                </a>
-                <a href="{{ route('frontend.animals.index', ['breed' => 'siamese']) }}" class="breed-card">
-                    <div class="breed-card__top">
-                        <span class="breed-card__index">03</span>
-                        <i data-lucide="arrow-up-right" class="breed-card__arrow" aria-hidden="true"></i>
-                    </div>
-                    <div>
-                        <h3 class="breed-card__name">Koty Syjamskie</h3>
-                        <p class="breed-card__desc">Szafirowe spojrzenie, wysoka inteligencja i żywiołowy kontakt z człowiekiem.</p>
-                    </div>
-                </a>
+                </div>
             </div>
         </div>
     </section>
 
     {{-- ============================================================
-         2. CAN I TRUST YOU?
-         ABOUT PREVIEW — Storytelling, clean layout
+         2. BREEDING PHILOSOPHY — DOUBLE-SPREAD LUXURY MANIFESTO
          ============================================================ --}}
-    <x-frontend.section id="o-nas" class="reveal-up">
-        <div class="about-preview">
-            <div class="about-preview__text">
-                <x-frontend.section-header
-                    align="left"
-                    eyebrow="O Hodowli"
-                    headline="Z miłości do doskonałości"
-                />
-                <div class="about-preview__body">
-                    <p class="text-body text-ink-muted-80">
-                        Nie jesteśmy fabryką. Jesteśmy kameralną, domową hodowlą, w której
-                        każde narodziny to święto. Nasze koty żyją z nami na co dzień, śpią 
-                        w naszych łóżkach i uczestniczą w życiu rodzinnym.
-                    </p>
-                    <p class="text-body text-ink-muted-80">
-                        Dzięki temu są perfekcyjnie zsocjalizowane, ufne i otwarte na 
-                        człowieka. Kładziemy ogromny nacisk na zdrowie genetyczne i
-                        zgodność ze standardem rasy.
-                    </p>
-                    <div class="about-preview__stats">
-                        <div class="about-preview__stat">
-                            <div class="about-preview__stat-number">15+</div>
-                            <div class="about-preview__stat-label">Lat pasji i doświadczenia</div>
-                        </div>
-                        <div class="about-preview__stat">
-                            <div class="about-preview__stat-number">100%</div>
-                            <div class="about-preview__stat-label">Zdrowia i badań genetycznych</div>
-                        </div>
-                        <div class="about-preview__stat">
-                            <div class="about-preview__stat-number">FIFe</div>
-                            <div class="about-preview__stat-label">Międzynarodowy certyfikat</div>
+    <section class="manifesto-section reveal-up" aria-label="Manifest hodowlany">
+        <div class="section-inner">
+            <div class="manifesto__quote-box">
+                <span class="manifesto__attribution block mb-4">Filozofia Naszej Hodowli</span>
+                <blockquote class="manifesto__quote">
+                    „Nie hodujemy kotów dla mas. Hodujemy dla tych, którzy poszukują 
+                    bezkompromisowego zdrowia, harmonii i autentycznego piękna w swoim domu.”
+                </blockquote>
+                <span class="text-caption font-mono text-ink-muted-48">ZetKamil Cattery · Międzynarodowa Rejestracja FIFe</span>
+            </div>
+
+            <div class="manifesto__grid">
+                <div class="manifesto__tenets" role="list" aria-label="Filary etyczne">
+                    <div class="manifesto-tenet" role="listitem">
+                        <span class="manifesto-tenet__num">01</span>
+                        <div>
+                            <h3 class="manifesto-tenet__title">Standard Bez Kompromisów</h3>
+                            <p class="manifesto-tenet__desc">
+                                Każda decyzja hodowlana poparta jest wieloletnią analizą ksiąg rodowodowych, 
+                                co gwarantuje zachowanie wzorca rasy, idealnych proporcji oraz stabilnej psychiki.
+                            </p>
                         </div>
                     </div>
-                    <div class="about-preview__action">
-                        <x-frontend.button variant="secondary" href="{{ route('about') }}" icon="arrow-right">
-                            Poznaj naszą historię
-                        </x-frontend.button>
+                    <div class="manifesto-tenet" role="listitem">
+                        <span class="manifesto-tenet__num">02</span>
+                        <div>
+                            <h3 class="manifesto-tenet__title">Czystość Genetyczna i Profilaktyka</h3>
+                            <p class="manifesto-tenet__desc">
+                                Nie uznajemy półśrodków w medycynie weterynaryjnej. Wszystkie nasze koty hodowlane 
+                                posiadają kompletne badania genetyczne w kierunku HCM, PKD, SMA oraz ujemny profil FIV/FeLV.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="manifesto-tenet" role="listitem">
+                        <span class="manifesto-tenet__num">03</span>
+                        <div>
+                            <h3 class="manifesto-tenet__title">Wychowanie w Sercu Domu</h3>
+                            <p class="manifesto-tenet__desc">
+                                Kocięta od pierwszych minut życia dorastają w domowej przestrzeni, z codziennym odgłosem 
+                                życia rodzinnego, co przekłada się na ich wyjątkową ufność i otwartość na człowieka.
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="about-preview__image-wrapper">
-                <img 
-                    src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=1000&q=80" 
-                    alt="Kot relaksujący się w domowym zaciszu"
-                    class="about-preview__image"
-                    width="1000"
-                    height="750"
-                    decoding="async"
-                    loading="lazy"
-                >
-                <div class="about-preview__badge-overlap">
-                    <div class="about-preview__badge-content">
-                        <div class="about-preview__badge-title">Certyfikowany Członek FIFe / FPL</div>
-                        <div class="about-preview__badge-desc">Hodowla pod stałą opieką weterynaryjną</div>
+
+                <div class="manifesto__visual">
+                    <div class="manifesto__portrait">
+                        <img 
+                            src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=800&q=80" 
+                            alt="Kot w domowym otoczeniu"
+                            width="800"
+                            height="1066"
+                            decoding="async"
+                            loading="lazy"
+                        >
                     </div>
-                    <div class="about-preview__badge-icon" aria-hidden="true">
-                        <i data-lucide="award" aria-hidden="true"></i>
+                    <div class="manifesto__stat-card" aria-label="15 lat doświadczenia">
+                        <div class="manifesto__stat-number">15+</div>
+                        <div class="manifesto__stat-label">Lat selekcji rodowodowej FPL</div>
                     </div>
                 </div>
             </div>
         </div>
-    </x-frontend.section>
+    </section>
 
-    {{-- TESTIMONIALS (Part of "Can I trust you?") --}}
-    <x-frontend.section tile="parchment" id="opinie" class="reveal-up">
+    {{-- ============================================================
+         3. IMMERSIVE BREED SHOWCASE — THE THREE COLLECTIONS
+         ============================================================ --}}
+    <x-frontend.section id="specjalizacje" class="reveal-up">
         <x-frontend.section-header
-            eyebrow="Opinie"
-            headline="Co mówią nasi klienci"
-            description="4.9/5 Średnia ocena z 50+ zweryfikowanych adopcji w całej Polsce i Europie."
+            eyebrow="Kolekcje Hodowlane"
+            headline="Nasze Specjalizacje Rasy"
+            description="Trzy wybitne linie felinologiczne, prowadzone według rygorystycznych standardów Międzynarodowej Federacji Felinologicznej (FIFe)."
         />
 
-        <div class="testimonials-grid">
-            <blockquote class="testimonial">
-                <div class="testimonial__header">
-                    <div class="testimonial__rating" aria-label="Ocena: 5 na 5 gwiazdek">
-                        <i data-lucide="star" class="testimonial__star" aria-hidden="true"></i>
-                        <i data-lucide="star" class="testimonial__star" aria-hidden="true"></i>
-                        <i data-lucide="star" class="testimonial__star" aria-hidden="true"></i>
-                        <i data-lucide="star" class="testimonial__star" aria-hidden="true"></i>
-                        <i data-lucide="star" class="testimonial__star" aria-hidden="true"></i>
+        <div class="collection-grid" role="list" aria-label="Specjalizacje rasy">
+            <a href="{{ route('frontend.animals.index', ['breed' => 'bengal']) }}" class="collection-card" role="listitem">
+                <div>
+                    <span class="collection-card__index">Collection 01 / Bengal</span>
+                    <h3 class="collection-card__title">Koty Bengalskie</h3>
+                    <p class="collection-card__quote">
+                        Dzikie spojrzenie, wyraźna atłasowa rozeta i niezwykle inteligentny, aktywny temperament.
+                    </p>
+                    <div class="collection-card__tags">
+                        <span class="collection-tag">Aktywność: Wysoka</span>
+                        <span class="collection-tag">Rozeta na złocie</span>
+                        <span class="collection-tag">FIFe Lineage</span>
                     </div>
-                    <span class="testimonial__verified">
-                        <i data-lucide="check-circle" aria-hidden="true"></i>
-                        Zweryfikowana adopcja
-                    </span>
                 </div>
-                <p class="testimonial__quote">
-                    „Luna jest cudowna — zdrowa, zadbana i przepiękna. Od pierwszych dni widać, że wyrosła w kochającym domowym otoczeniu. Hodowla godna polecenia z całego serca."
-                </p>
-                <footer class="testimonial__author">
-                    <div class="testimonial__avatar" aria-hidden="true">AK</div>
-                    <div class="testimonial__author-meta">
-                        <span class="testimonial__name">Anna K.</span>
-                        <span class="testimonial__detail">Właścicielka Luny · Kot Brytyjski Krótkowłosy</span>
-                    </div>
-                </footer>
-            </blockquote>
+                <span class="collection-card__cta">
+                    Poznaj kolekcję bengalską
+                    <i data-lucide="arrow-up-right" class="w-4 h-4 text-primary" aria-hidden="true"></i>
+                </span>
+            </a>
 
-            <blockquote class="testimonial">
-                <div class="testimonial__header">
-                    <div class="testimonial__rating" aria-label="Ocena: 5 na 5 gwiazdek">
-                        <i data-lucide="star" class="testimonial__star" aria-hidden="true"></i>
-                        <i data-lucide="star" class="testimonial__star" aria-hidden="true"></i>
-                        <i data-lucide="star" class="testimonial__star" aria-hidden="true"></i>
-                        <i data-lucide="star" class="testimonial__star" aria-hidden="true"></i>
-                        <i data-lucide="star" class="testimonial__star" aria-hidden="true"></i>
+            <a href="{{ route('frontend.animals.index', ['breed' => 'british']) }}" class="collection-card" role="listitem">
+                <div>
+                    <span class="collection-card__index">Collection 02 / British Shorthair</span>
+                    <h3 class="collection-card__title">Brytyjczyki</h3>
+                    <p class="collection-card__quote">
+                        Aksamitne futro, zrównoważony spokój i klasyczna, brytyjska elegancja w każdym ruchu.
+                    </p>
+                    <div class="collection-card__tags">
+                        <span class="collection-tag">Temperament: Spokojny</span>
+                        <span class="collection-tag">Pluszowa okrywa</span>
+                        <span class="collection-tag">FPL Rodowód</span>
                     </div>
-                    <span class="testimonial__verified">
-                        <i data-lucide="check-circle" aria-hidden="true"></i>
-                        Zweryfikowana adopcja
-                    </span>
                 </div>
-                <p class="testimonial__quote">
-                    „Profesjonalne podejście na każdym etapie, pełna dokumentacja medyczna oraz cierpliwe odpowiadanie na wszystkie nasze pytania. Polecam bez wahania!"
-                </p>
-                <footer class="testimonial__author">
-                    <div class="testimonial__avatar" aria-hidden="true">MW</div>
-                    <div class="testimonial__author-meta">
-                        <span class="testimonial__name">Marek W.</span>
-                        <span class="testimonial__detail">Właściciel Simby · Kot Bengalski</span>
-                    </div>
-                </footer>
-            </blockquote>
+                <span class="collection-card__cta">
+                    Poznaj kolekcję brytyjską
+                    <i data-lucide="arrow-up-right" class="w-4 h-4 text-primary" aria-hidden="true"></i>
+                </span>
+            </a>
 
-            <blockquote class="testimonial">
-                <div class="testimonial__header">
-                    <div class="testimonial__rating" aria-label="Ocena: 5 na 5 gwiazdek">
-                        <i data-lucide="star" class="testimonial__star" aria-hidden="true"></i>
-                        <i data-lucide="star" class="testimonial__star" aria-hidden="true"></i>
-                        <i data-lucide="star" class="testimonial__star" aria-hidden="true"></i>
-                        <i data-lucide="star" class="testimonial__star" aria-hidden="true"></i>
-                        <i data-lucide="star" class="testimonial__star" aria-hidden="true"></i>
+            <a href="{{ route('frontend.animals.index', ['breed' => 'siamese']) }}" class="collection-card" role="listitem">
+                <div>
+                    <span class="collection-card__index">Collection 03 / Siamese</span>
+                    <h3 class="collection-card__title">Koty Syjamskie</h3>
+                    <p class="collection-card__quote">
+                        Szafirowe spojrzenie, smukła sylwetka oraz wyjątkowe przywiązanie i komunikatywność z człowiekiem.
+                    </p>
+                    <div class="collection-card__tags">
+                        <span class="collection-tag">Wysoka inteligencja</span>
+                        <span class="collection-tag">Oczy szafirowe</span>
+                        <span class="collection-tag">Linie europejskie</span>
                     </div>
-                    <span class="testimonial__verified">
-                        <i data-lucide="check-circle" aria-hidden="true"></i>
-                        Zweryfikowana adopcja
-                    </span>
                 </div>
-                <p class="testimonial__quote">
-                    „Widać, że koty w tej hodowli są prawdziwie kochane. Nasz Mruczek był natychmiast oswojony, ufny i szczęśliwy w nowym domu od pierwszego dnia."
-                </p>
-                <footer class="testimonial__author">
-                    <div class="testimonial__avatar" aria-hidden="true">KM</div>
-                    <div class="testimonial__author-meta">
-                        <span class="testimonial__name">Katarzyna M.</span>
-                        <span class="testimonial__detail">Właścicielka Mruczka · Kot Syjamski</span>
-                    </div>
-                </footer>
-            </blockquote>
+                <span class="collection-card__cta">
+                    Poznaj kolekcję syjamską
+                    <i data-lucide="arrow-up-right" class="w-4 h-4 text-primary" aria-hidden="true"></i>
+                </span>
+            </a>
         </div>
     </x-frontend.section>
 
     {{-- ============================================================
-         3. WHICH ANIMALS ARE AVAILABLE?
-         AVAILABLE ANIMALS — Card grid
+         4. CURATED KITTENS & SELECTION ASSURANCE
          ============================================================ --}}
-    <x-frontend.section id="nasze-koty" class="reveal-up">
+    <x-frontend.section id="nasze-koty" tile="parchment" class="reveal-up">
         <x-frontend.section-header
-            eyebrow="Dostępne"
-            headline="Nasze Kocięta"
-            description="Aktualnie dostępne mioty w naszej hodowli. Każde kocię opuszcza nas ze szczepieniami, odrobaczeniem i rodowodem FPL."
+            eyebrow="Selekcja 2026"
+            headline="Dostępne Kocięta i Mioty"
+            description="Aktualna selekcja kociąt gotowych do rezerwacji. Każde kocię opuszcza nas ze szczepieniami, odrobaczeniem i 5-pokoleniowym rodowodem."
         />
 
         <div class="animals-grid">
@@ -259,7 +253,7 @@
                     <p class="editorial-empty-box__desc">
                         Planujemy nowe mioty w nadchodzącym sezonie hodowlanym. Zachęcamy do niezobowiązującego kontaktu w celu wpisu na naszą listę oczekujących.
                     </p>
-                    <div class="mt-4">
+                    <div class="mt-6">
                         <x-frontend.button variant="secondary" href="{{ route('contact') }}">
                             Zapytaj o plany na sezon 2026/2027
                         </x-frontend.button>
@@ -271,25 +265,77 @@
         @if(count($featuredAnimals) > 0)
             <div class="section-action">
                 <x-frontend.button variant="secondary" href="{{ route('frontend.animals.index') }}" icon="arrow-right">
-                    Zobacz wszystkie koty
+                    Zobacz wszystkie koty w katalogu
                 </x-frontend.button>
             </div>
         @endif
     </x-frontend.section>
 
     {{-- ============================================================
-         3.1 HOW DOES ADOPTION WORK?
-         ADOPTION JOURNEY PREVIEW — 3 Aesop-inspired editorial steps
+         5. ARCHITECTURAL HEALTH MATRIX (4-PILLAR CODE OF TRUST)
+         ============================================================ --}}
+    <x-frontend.section tile="dark" id="kodeks" class="reveal-up">
+        <x-frontend.section-header
+            eyebrow="Standard Medyczny i Etyka"
+            headline="Czworoczęściowy Kodeks Zaufania"
+            description="Standardy, które wyznaczają jakość każdego miotu w naszej hodowli."
+        />
+
+        <div class="kodeks-matrix" role="list" aria-label="Kodeks zaufania">
+            <div class="kodeks-column" role="listitem">
+                <div>
+                    <span class="kodeks-column__num">01 / GENETICS</span>
+                    <h3 class="kodeks-column__title mt-4">Badania Genetyczne</h3>
+                </div>
+                <p class="kodeks-column__desc">
+                    Weryfikowane certyfikaty HCM, PKD oraz SMA n/n dla każdego rodzica w naszej hodowli.
+                </p>
+            </div>
+
+            <div class="kodeks-column" role="listitem">
+                <div>
+                    <span class="kodeks-column__num">02 / VETERINARY</span>
+                    <h3 class="kodeks-column__title mt-4">Nadzór Kliniczny</h3>
+                </div>
+                <p class="kodeks-column__desc">
+                    Hodowla wolna od wirusów FIV oraz FeLV. Regularne echokardiografie serca i badania krwi.
+                </p>
+            </div>
+
+            <div class="kodeks-column" role="listitem">
+                <div>
+                    <span class="kodeks-column__num">03 / FEDERATION</span>
+                    <h3 class="kodeks-column__title mt-4">Rodowód FIFe / FPL</h3>
+                </div>
+                <p class="kodeks-column__desc">
+                    Oryginalne, pięciopokoleniowe rodowody Międzynarodowej Federacji Felinologicznej dla każdego kota.
+                </p>
+            </div>
+
+            <div class="kodeks-column" role="listitem">
+                <div>
+                    <span class="kodeks-column__num">04 / BEHAVIOR</span>
+                    <h3 class="kodeks-column__title mt-4">Domowa Socjalizacja</h3>
+                </div>
+                <p class="kodeks-column__desc">
+                    Wychowanie w pełnym kontakcie z domownikami, kształtujące pewność siebie, delikatność i otwartość.
+                </p>
+            </div>
+        </div>
+    </x-frontend.section>
+
+    {{-- ============================================================
+         6. THE ADOPTION JOURNEY — LUXURY CONCIERGE TIMELINE
          ============================================================ --}}
     <x-frontend.section id="adopcja-krok-po-kroku" class="reveal-up">
         <x-frontend.section-header
-            eyebrow="Adopcja"
+            eyebrow="Concierge Adopcyjny"
             headline="Jak wygląda proces adopcji?"
             description="Troszczymy się o przyszłość naszych kotów, dlatego każdy etap adopcji jest jasny, spokojny i przejrzysty."
         />
 
-        <div class="adoption-journey-grid">
-            <div class="adoption-journey-pillar">
+        <div class="adoption-journey-grid" role="list" aria-label="Proces adopcji krok po kroku">
+            <div class="adoption-journey-pillar" role="listitem">
                 <div class="adoption-journey__header">
                     <span class="adoption-journey__number">KROK 01</span>
                     <i data-lucide="message-circle-heart" class="text-ink-muted-48" width="20" height="20" aria-hidden="true"></i>
@@ -300,7 +346,7 @@
                 </p>
             </div>
 
-            <div class="adoption-journey-pillar">
+            <div class="adoption-journey-pillar" role="listitem">
                 <div class="adoption-journey__header">
                     <span class="adoption-journey__number">KROK 02</span>
                     <i data-lucide="home-heart" class="text-ink-muted-48" width="20" height="20" aria-hidden="true"></i>
@@ -311,7 +357,7 @@
                 </p>
             </div>
 
-            <div class="adoption-journey-pillar">
+            <div class="adoption-journey-pillar" role="listitem">
                 <div class="adoption-journey__header">
                     <span class="adoption-journey__number">KROK 03</span>
                     <i data-lucide="file-check-2" class="text-ink-muted-48" width="20" height="20" aria-hidden="true"></i>
@@ -331,78 +377,73 @@
     </x-frontend.section>
 
     {{-- ============================================================
-         4. WHY CHOOSE THIS BREEDING?
-         TRUST BUILDERS — Dark tile
+         7. VERIFIED PATRON STORIES — EDITORIAL QUOTE MONOLITHS
          ============================================================ --}}
-    <x-frontend.section tile="dark" id="dlaczego-my" class="reveal-up">
+    <x-frontend.section tile="parchment" id="opinie" class="reveal-up">
         <x-frontend.section-header
-            eyebrow="Dlaczego my"
-            headline="Hodowla z certyfikatem"
-            description="Stawiamy na zdrowie, genetykę i profesjonalizm. Każdy kot ma pełną dokumentację."
+            eyebrow="Rekomendacje i Zaufanie"
+            headline="Historie Naszych Wychowanków"
+            description="4.9/5 Średnia ocena z 50+ zweryfikowanych adopcji w całej Polsce i Europie."
         />
 
-        <div class="trust-grid">
-            <div class="trust-item">
-                <div class="trust-item__header">
-                    <span class="trust-item__index">01</span>
-                    <div class="trust-item__icon">
-                        <i data-lucide="shield-check" aria-hidden="true"></i>
-                    </div>
-                </div>
-                <h3 class="trust-item__title">Zdrowie Gwarantowane</h3>
-                <p class="trust-item__desc">
-                    Pełne badania genetyczne, regularne kontrole weterynaryjne, szczepienia i odrobaczanie z dbałością o każdy detal.
+        <div class="patrons-grid" role="list" aria-label="Rekomendacje opiekunów">
+            <div class="patron-monolith" role="listitem">
+                <p class="patron-monolith__quote">
+                    „Luna jest cudowna — zdrowa, zadbana i przepiękna. Od pierwszych dni widać, że wyrosła w kochającym domowym otoczeniu. Hodowla godna polecenia z całego serca.”
                 </p>
+                <div class="patron-monolith__author">
+                    <div>
+                        <strong class="block text-ink">Anna K.</strong>
+                        <span class="text-xs text-ink-muted-48">Właścicielka Luny · Kot Brytyjski</span>
+                    </div>
+                    <span class="patron-monolith__badge">
+                        <i data-lucide="check-circle-2" class="w-4 h-4" aria-hidden="true"></i>
+                        FIFe Verified
+                    </span>
+                </div>
             </div>
 
-            <div class="trust-item">
-                <div class="trust-item__header">
-                    <span class="trust-item__index">02</span>
-                    <div class="trust-item__icon">
-                        <i data-lucide="award" aria-hidden="true"></i>
-                    </div>
-                </div>
-                <h3 class="trust-item__title">Rodowody FPL / FIFe</h3>
-                <p class="trust-item__desc">
-                    Każdy kot posiada pełny, pięciopokoleniowy rodowód zarejestrowany w międzynarodowej organizacji felinologicznej.
+            <div class="patron-monolith" role="listitem">
+                <p class="patron-monolith__quote">
+                    „Profesjonalne podejście na każdym etapie, pełna dokumentacja medyczna oraz cierpliwe odpowiadanie na wszystkie nasze pytania. Polecam bez wahania!”
                 </p>
+                <div class="patron-monolith__author">
+                    <div>
+                        <strong class="block text-ink">Marek W.</strong>
+                        <span class="text-xs text-ink-muted-48">Właściciel Simby · Kot Bengalski</span>
+                    </div>
+                    <span class="patron-monolith__badge">
+                        <i data-lucide="check-circle-2" class="w-4 h-4" aria-hidden="true"></i>
+                        FIFe Verified
+                    </span>
+                </div>
             </div>
 
-            <div class="trust-item">
-                <div class="trust-item__header">
-                    <span class="trust-item__index">03</span>
-                    <div class="trust-item__icon">
-                        <i data-lucide="heart-handshake" aria-hidden="true"></i>
-                    </div>
-                </div>
-                <h3 class="trust-item__title">Wsparcie Po Adopcji</h3>
-                <p class="trust-item__desc">
-                    Nie zostawiamy Cię samego — pomagamy w adaptacji, doradzamy żywieniowo i odpowiadamy na pytania przez cały okres.
+            <div class="patron-monolith" role="listitem">
+                <p class="patron-monolith__quote">
+                    „Widać, że koty w tej hodowli są prawdziwie kochane. Nasz Mruczek był natychmiast oswojony, ufny i szczęśliwy w nowym domu od pierwszego dnia.”
                 </p>
-            </div>
-
-            <div class="trust-item">
-                <div class="trust-item__header">
-                    <span class="trust-item__index">04</span>
-                    <div class="trust-item__icon">
-                        <i data-lucide="home" aria-hidden="true"></i>
+                <div class="patron-monolith__author">
+                    <div>
+                        <strong class="block text-ink">Katarzyna M.</strong>
+                        <span class="text-xs text-ink-muted-48">Właścicielka Mruczka · Kot Syjamski</span>
                     </div>
+                    <span class="patron-monolith__badge">
+                        <i data-lucide="check-circle-2" class="w-4 h-4" aria-hidden="true"></i>
+                        FIFe Verified
+                    </span>
                 </div>
-                <h3 class="trust-item__title">Domowa Atmosfera</h3>
-                <p class="trust-item__desc">
-                    Koty rosną z nami w domowym środowisku, są doskonale socjalizowane i naturalnie przyzwyczajone do obecności ludzi.
-                </p>
             </div>
         </div>
     </x-frontend.section>
 
     {{-- ============================================================
-         LATEST ARTICLES — Blog preview
+         8. READING ROOM — EDITORIAL KNOWLEDGE
          ============================================================ --}}
     <x-frontend.section id="blog" class="reveal-up">
         <x-frontend.section-header
-            eyebrow="Blog"
-            headline="Najnowsze Artykuły"
+            eyebrow="Czytelnia Hodowlana"
+            headline="Wiedza i Felinologia"
             description="Edukujemy, dzielimy się wiedzą i pomagamy zrozumieć świat kotów rasowych."
         />
 
@@ -415,7 +456,7 @@
 
             <div class="section-action">
                 <x-frontend.button variant="secondary" href="{{ route('frontend.blog.index') }}" icon="arrow-right">
-                    Zobacz wszystkie artykuły
+                    Zobacz wszystkie artykuły w czytelni
                 </x-frontend.button>
             </div>
         @else
@@ -430,15 +471,14 @@
     </x-frontend.section>
 
     {{-- ============================================================
-         5. CONTACT US
-         CONTACT CTA — Final conversion point
+         9. FINAL INVITATION — LUXURY CONCIERGE CTA MONOLITH
          ============================================================ --}}
     <div class="reveal-up">
         <x-frontend.cta
             tile="parchment"
-            eyebrow="Adopcja i Kontakt"
-            headline="Zainteresowany naszymi kociętami?"
-            description="Napisz do nas — chętnie odpowiemy na wszystkie pytania, doradzimy w wyborze rasy i umówimy kameralne spotkanie w naszej hodowli."
+            eyebrow="Zaproszenie do Kontaktu"
+            headline="Zaplanuj Rozmowę Adopcyjną"
+            description="Napisz do nas — chętnie odpowiemy na wszystkie pytania, doradzimy w wyborze linii genetycznej i umówimy kameralne spotkanie w naszej hodowli."
             buttonText="Skontaktuj się z nami"
             buttonHref="{{ route('contact') }}"
         />
