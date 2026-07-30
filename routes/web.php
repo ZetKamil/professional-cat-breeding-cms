@@ -70,6 +70,7 @@ Route::middleware(['auth', 'verified', 'active'])
         Route::delete('animals/{id}/force-delete', [\App\Http\Controllers\Backend\AnimalController::class, 'forceDelete'])
             ->name('animals.forceDelete');
 
+        Route::get('media-api', [MediaController::class, 'api'])->name('media.api');
         Route::resource('media', MediaController::class);
     });
 
