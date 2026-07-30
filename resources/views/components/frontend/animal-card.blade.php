@@ -11,12 +11,18 @@
                     src="{{ $animal->media->url() }}"
                     alt="{{ $animal->name }}"
                     loading="lazy"
+                    decoding="async"
+                    width="800"
+                    height="600"
                 >
             @else
                 <img 
                     src="https://images.unsplash.com/photo-1543852786-1cf6624b9987?auto=format&fit=crop&w=800&q=80" 
                     alt="Kociak (Zdjęcie poglądowe)" 
                     loading="lazy"
+                    decoding="async"
+                    width="800"
+                    height="600"
                 >
             @endif
 
