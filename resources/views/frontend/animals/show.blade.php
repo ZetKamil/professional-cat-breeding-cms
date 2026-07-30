@@ -8,13 +8,12 @@
     <section class="animal-profile" aria-label="Profil kota: {{ $animal->name }}">
         <div class="section-inner">
             {{-- Back Navigation --}}
-            <div style="margin-bottom: var(--sp-xl);">
+            <div class="animal-profile__back">
                 <a
                     href="{{ route('frontend.animals.index') }}"
-                    class="text-nav"
-                    style="display: inline-flex; align-items: center; gap: 6px; color: var(--color-ink-muted-80);"
+                    class="text-nav animal-profile__back-link"
                 >
-                    <i data-lucide="arrow-left" style="width: 18px; height: 18px;"></i>
+                    <i data-lucide="arrow-left" aria-hidden="true"></i>
                     Wróć do listy kotów
                 </a>
             </div>
@@ -60,7 +59,7 @@
                             <x-frontend.badge :variant="$animal->status->badgeVariant()">
                                 {{ $animal->status->label() }}
                             </x-frontend.badge>
-                            <span class="text-nav text-ink-muted-48" style="display: inline-flex; align-items: center; gap: 4px;">
+                            <span class="text-nav text-ink-muted-48 animal-profile__badge-gender">
                                 {{ $animal->gender->symbol() }} {{ $animal->gender->label() }}
                             </span>
                         </div>
@@ -133,99 +132,12 @@
     {{-- ============================================================
          2. PEDIGREE & GENEALOGY (If parents present)
          ============================================================ --}}
-    @if($animal->mother || $animal->father)
-        <x-frontend.section tile="parchment" id="rodowod" class="reveal-up">
-            <x-frontend.section-header
-                eyebrow="Genealogia"
-                headline="Rodzice i Rodowód"
-                description="Nasza linia hodowlana opiera się na wyselekcjonowanych, wielopokoleniowych rodowodach FIFe/FPL."
-            />
-
-            <div class="pedigree-grid">
-                @if($animal->mother)
-                    <a
-                        href="{{ route('frontend.animals.show', $animal->mother) }}"
-                        class="pedigree-card"
-                    >
-                        <div class="pedigree-card__icon">
-                            <i data-lucide="heart" aria-hidden="true"></i>
-                        </div>
-                        <div class="pedigree-card__info">
-                            <span class="pedigree-card__role">Matka (Queen)</span>
-                            <span class="pedigree-card__name">{{ $animal->mother->name }}</span>
-                            <span class="pedigree-card__breed">{{ $animal->mother->breed }} • {{ $animal->mother->color }}</span>
-                        </div>
-                    </a>
-                @endif
-
-                @if($animal->father)
-                    <a
-                        href="{{ route('frontend.animals.show', $animal->father) }}"
-                        class="pedigree-card"
-                    >
-                        <div class="pedigree-card__icon">
-                            <i data-lucide="shield" aria-hidden="true"></i>
-                        </div>
-                        <div class="pedigree-card__info">
-                            <span class="pedigree-card__role">Ojciec (Stud)</span>
-                            <span class="pedigree-card__name">{{ $animal->father->name }}</span>
-                            <span class="pedigree-card__breed">{{ $animal->father->breed }} • {{ $animal->father->color }}</span>
-                        </div>
-                    </a>
-                @endif
-            </div>
-        </x-frontend.section>
-    @endif
+    <x-frontend.animal-pedigree :mother="$animal->mother" :father="$animal->father" />
 
     {{-- ============================================================
          3. HEALTH & STANDARD TRUST
          ============================================================ --}}
-    <x-frontend.section tile="dark" id="zdrowie" class="reveal-up">
-        <x-frontend.section-header
-            eyebrow="Zaufanie"
-            headline="Standard Zdrowotny"
-            description="Każdy kot w naszej hodowli posiada kompletne badania i certyfikaty."
-        />
-
-        <div class="trust-grid">
-            <div class="trust-pillar">
-                <div class="trust-pillar__icon">
-                    <i data-lucide="dna" aria-hidden="true"></i>
-                </div>
-                <h3 class="trust-pillar__title text-body-strong">Badania Genetyczne</h3>
-                <p class="trust-pillar__desc text-body">
-                    Rodzice są wolni od chorób genetycznych właściwych dla rasy (HCM, PKD, SMA n/n).
-                </p>
-            </div>
-            <div class="trust-pillar">
-                <div class="trust-pillar__icon">
-                    <i data-lucide="shield-check" aria-hidden="true"></i>
-                </div>
-                <h3 class="trust-pillar__title text-body-strong">FIV / FeLV Negatywny</h3>
-                <p class="trust-pillar__desc text-body">
-                    Hodowla jest pod stałą opieką weterynaryjną. Wolni od wirusa niedoboru odporności i białaczki.
-                </p>
-            </div>
-            <div class="trust-pillar">
-                <div class="trust-pillar__icon">
-                    <i data-lucide="scroll-text" aria-hidden="true"></i>
-                </div>
-                <h3 class="trust-pillar__title text-body-strong">Rodowód FIFe</h3>
-                <p class="trust-pillar__desc text-body">
-                    Pełna dokumentacja, książeczka zdrowia, mikroczip oraz pięciopokoleniowy rodowód FPL/FIFe.
-                </p>
-            </div>
-            <div class="trust-pillar">
-                <div class="trust-pillar__icon">
-                    <i data-lucide="home" aria-hidden="true"></i>
-                </div>
-                <h3 class="trust-pillar__title text-body-strong">Domowa Socjalizacja</h3>
-                <p class="trust-pillar__desc text-body">
-                    Koty wychowują się w domowym zaciszu, przyzwyczajone do codziennych odgłosów i miłości człowieka.
-                </p>
-            </div>
-        </div>
-    </x-frontend.section>
+    <x-frontend.animal-health-panel />
 
     {{-- ============================================================
          4. RELATED ANIMALS (Same breed / available)

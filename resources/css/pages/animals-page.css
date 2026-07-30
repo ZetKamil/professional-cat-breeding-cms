@@ -100,6 +100,28 @@
     padding-bottom: var(--sp-4xl);
 }
 
+.animal-profile__back {
+    margin-bottom: var(--sp-xl);
+}
+
+.animal-profile__back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--color-ink-muted-80);
+    transition: color var(--duration-fast) var(--ease-out);
+}
+
+.animal-profile__back-link:hover {
+    color: var(--color-ink);
+}
+
+.animal-profile__badge-gender {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
 .animal-profile__grid {
     display: grid;
     grid-template-columns: 1fr;
