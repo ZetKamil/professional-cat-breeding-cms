@@ -18,6 +18,7 @@
 @import './pages/errors.css';
 @import './pages/animals-page.css';
 @import './pages/blog-page.css';
+@import './pages/home-page.css';
 
 @import 'tailwindcss';
 @import '../../vendor/livewire/flux/dist/flux.css';

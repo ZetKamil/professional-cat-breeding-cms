@@ -1,0 +1,262 @@
+/* ==========================================================================
+   HOME PAGE MODULE — Apple / Aesop / Polène Luxury Editorial Experience
+   Specific UI patterns and trust-building sections for the homepage
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. HERO TRUST STRIP (Editorial assurance below hero CTA buttons)
+   -------------------------------------------------------------------------- */
+
+.hero__trust-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-lg);
+    margin-top: var(--sp-xl);
+    padding-top: var(--sp-lg);
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.hero__trust-item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-xs);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.82);
+    letter-spacing: 0.01em;
+}
+
+.hero__trust-icon {
+    width: 15px;
+    height: 15px;
+    color: #d1ab58; /* Muted editorial gold accent */
+    flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+   2. EDITORIAL BREED SHOWCASE STRIP (Minimalist horizontal category navigation)
+   -------------------------------------------------------------------------- */
+
+.breed-showcase-strip {
+    background-color: var(--color-canvas);
+    border-bottom: 1px solid var(--color-hairline);
+    padding: var(--sp-xl) 0;
+}
+
+.breed-showcase__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: var(--sp-lg);
+}
+
+.breed-showcase__eyebrow {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-ink-muted-48);
+}
+
+.breed-showcase__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-lg);
+}
+
+.breed-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: var(--sp-xl);
+    border-radius: var(--r-xl);
+    background-color: var(--color-canvas-parchment);
+    border: 1px solid var(--color-hairline);
+    text-decoration: none;
+    transition: transform var(--duration-normal) var(--ease-out),
+                box-shadow var(--duration-normal) var(--ease-out),
+                border-color var(--duration-normal) var(--ease-out);
+    min-height: 140px;
+}
+
+.breed-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.08);
+    border-color: var(--color-primary);
+}
+
+.breed-card:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 3px;
+}
+
+.breed-card__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.breed-card__index {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.75rem;
+    color: var(--color-ink-muted-48);
+    font-weight: 500;
+}
+
+.breed-card__arrow {
+    width: 18px;
+    height: 18px;
+    color: var(--color-ink-muted-48);
+    transition: transform var(--duration-fast) var(--ease-out),
+                color var(--duration-fast) var(--ease-out);
+}
+
+.breed-card:hover .breed-card__arrow {
+    transform: translateX(4px);
+    color: var(--color-primary);
+}
+
+.breed-card__name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-ink);
+    letter-spacing: -0.02em;
+    margin-top: var(--sp-md);
+    line-height: 1.2;
+}
+
+.breed-card__desc {
+    font-size: 0.875rem;
+    color: var(--color-ink-muted-80);
+    margin-top: var(--sp-xs);
+    line-height: 1.4;
+}
+
+/* --------------------------------------------------------------------------
+   3. 3-STEP ADOPTION JOURNEY PREVIEW (Aesop-inspired process pillars)
+   -------------------------------------------------------------------------- */
+
+.adoption-journey-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-2xl);
+    margin-top: var(--sp-xl);
+}
+
+.adoption-journey-pillar {
+    display: flex;
+    flex-direction: column;
+    padding-top: var(--sp-xl);
+    border-top: 1px solid var(--color-hairline);
+    transition: border-color var(--duration-fast) var(--ease-out);
+}
+
+.adoption-journey-pillar:hover {
+    border-color: var(--color-ink);
+}
+
+.adoption-journey__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--sp-md);
+}
+
+.adoption-journey__number {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--color-primary);
+}
+
+.adoption-journey__title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-ink);
+    letter-spacing: -0.02em;
+    margin-bottom: var(--sp-sm);
+    line-height: 1.3;
+}
+
+.adoption-journey__desc {
+    font-size: 0.9375rem;
+    color: var(--color-ink-muted-80);
+    line-height: 1.6;
+}
+
+/* --------------------------------------------------------------------------
+   4. EDITORIAL EMPTY STATES (Calm placeholder when no items exist)
+   -------------------------------------------------------------------------- */
+
+.editorial-empty-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--sp-4xl) var(--sp-2xl);
+    border-radius: var(--r-xl);
+    background-color: var(--color-canvas-parchment);
+    border: 1px dashed var(--color-hairline);
+    margin: var(--sp-xl) 0;
+}
+
+.editorial-empty-box__icon {
+    width: 36px;
+    height: 36px;
+    color: var(--color-ink-muted-48);
+    margin-bottom: var(--sp-md);
+}
+
+.editorial-empty-box__title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-ink);
+    letter-spacing: -0.01em;
+    margin-bottom: var(--sp-xs);
+}
+
+.editorial-empty-box__desc {
+    font-size: 0.9375rem;
+    color: var(--color-ink-muted-80);
+    max-width: 480px;
+    line-height: 1.6;
+}
+
+/* --------------------------------------------------------------------------
+   5. RESPONSIVE BREAKPOINTS & ACCESSIBILITY
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 1024px) {
+    .breed-showcase__grid,
+    .adoption-journey-grid {
+        grid-template-columns: 1fr;
+        gap: var(--sp-lg);
+    }
+}
+
+@media (max-width: 768px) {
+    .hero__trust-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--sp-sm);
+    }
+
+    .breed-card {
+        padding: var(--sp-lg);
+        min-height: auto;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .breed-card,
+    .breed-card__arrow,
+    .adoption-journey-pillar {
+        transition: none !important;
+        transform: none !important;
+    }
+}

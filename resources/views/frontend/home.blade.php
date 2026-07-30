@@ -7,7 +7,7 @@
          HERO SECTION — Full viewport, photography-first
          ============================================================ --}}
     <x-frontend.hero
-        eyebrow="Profesjonalna Hodowla"
+        eyebrow="Etyczna Hodowla Kotów Rasowych · FIFe / FPL"
         title="Piękno. Zdrowie.<br>Zaufanie."
         lead="Hodujemy z pasją, troską o zdrowie i pełną transparentnością. Każdy kot jest wyjątkowy."
         image-url="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=2000&q=80"
@@ -21,7 +21,66 @@
         <x-frontend.button variant="secondary" href="#nasze-koty">
             Nasze koty
         </x-frontend.button>
+
+        <div class="hero__trust-bar" role="list" aria-label="Nasze certyfikaty i standardy">
+            <div class="hero__trust-item" role="listitem">
+                <i data-lucide="shield-check" class="hero__trust-icon" aria-hidden="true"></i>
+                <span>Certyfikat FIFe / FPL</span>
+            </div>
+            <div class="hero__trust-item" role="listitem">
+                <i data-lucide="dna" class="hero__trust-icon" aria-hidden="true"></i>
+                <span>100% Badania Genetyczne</span>
+            </div>
+            <div class="hero__trust-item" role="listitem">
+                <i data-lucide="heart-handshake" class="hero__trust-icon" aria-hidden="true"></i>
+                <span>Domowa Socjalizacja</span>
+            </div>
+        </div>
     </x-frontend.hero>
+
+    {{-- ============================================================
+         1.1 BREED SHOWCASE STRIP — Editorial Category Navigation
+         ============================================================ --}}
+    <section class="breed-showcase-strip reveal-up" aria-label="Specjalizacje hodowlane">
+        <div class="section-inner">
+            <div class="breed-showcase__header">
+                <span class="breed-showcase__eyebrow">Nasze Specjalizacje Rasy</span>
+                <span class="text-nav-link text-ink-muted-48">Wszystkie koty z pełnym rodowodem FPL / FIFe</span>
+            </div>
+            <div class="breed-showcase__grid">
+                <a href="{{ route('frontend.animals.index', ['breed' => 'bengal']) }}" class="breed-card">
+                    <div class="breed-card__top">
+                        <span class="breed-card__index">01</span>
+                        <i data-lucide="arrow-up-right" class="breed-card__arrow" aria-hidden="true"></i>
+                    </div>
+                    <div>
+                        <h3 class="breed-card__name">Koty Bengalskie</h3>
+                        <p class="breed-card__desc">Dzikie spojrzenie, atłasowa rozeta i niezwykłe przywiązanie do opiekuna.</p>
+                    </div>
+                </a>
+                <a href="{{ route('frontend.animals.index', ['breed' => 'british']) }}" class="breed-card">
+                    <div class="breed-card__top">
+                        <span class="breed-card__index">02</span>
+                        <i data-lucide="arrow-up-right" class="breed-card__arrow" aria-hidden="true"></i>
+                    </div>
+                    <div>
+                        <h3 class="breed-card__name">Brytyjczyki</h3>
+                        <p class="breed-card__desc">Aksamitne futro, spokój i niezwykła elegancja domowego towarzysza.</p>
+                    </div>
+                </a>
+                <a href="{{ route('frontend.animals.index', ['breed' => 'siamese']) }}" class="breed-card">
+                    <div class="breed-card__top">
+                        <span class="breed-card__index">03</span>
+                        <i data-lucide="arrow-up-right" class="breed-card__arrow" aria-hidden="true"></i>
+                    </div>
+                    <div>
+                        <h3 class="breed-card__name">Koty Syjamskie</h3>
+                        <p class="breed-card__desc">Szafirowe spojrzenie, wysoka inteligencja i żywiołowy kontakt z człowiekiem.</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
 
     {{-- ============================================================
          2. CAN I TRUST YOU?
@@ -79,8 +138,8 @@
                 >
                 <div class="about-preview__badge-overlap">
                     <div class="about-preview__badge-content">
-                        <div class="about-preview__badge-title">Certyfikowana Hodowla FIFe / FPL</div>
-                        <div class="about-preview__badge-desc">Etyczne standardy miłości i dbałości</div>
+                        <div class="about-preview__badge-title">Certyfikowany Członek FIFe / FPL</div>
+                        <div class="about-preview__badge-desc">Hodowla pod stałą opieką weterynaryjną</div>
                     </div>
                     <div class="about-preview__badge-icon" aria-hidden="true">
                         <i data-lucide="award" aria-hidden="true"></i>
@@ -95,6 +154,7 @@
         <x-frontend.section-header
             eyebrow="Opinie"
             headline="Co mówią nasi klienci"
+            description="4.9/5 Średnia ocena z 50+ zweryfikowanych adopcji w całej Polsce i Europie."
         />
 
         <div class="testimonials-grid">
@@ -119,7 +179,7 @@
                     <div class="testimonial__avatar" aria-hidden="true">AK</div>
                     <div class="testimonial__author-meta">
                         <span class="testimonial__name">Anna K.</span>
-                        <span class="testimonial__detail">Właścicielka Luny · Brytyjczyk</span>
+                        <span class="testimonial__detail">Właścicielka Luny · Kot Brytyjski Krótkowłosy</span>
                     </div>
                 </footer>
             </blockquote>
@@ -186,22 +246,24 @@
         <x-frontend.section-header
             eyebrow="Dostępne"
             headline="Nasze Kocięta"
-            description="Poznaj nasze aktualnie dostępne mioty. Każde kocię opuszcza hodowlę z pełną dokumentacją medyczną."
+            description="Aktualnie dostępne mioty w naszej hodowli. Każde kocię opuszcza nas ze szczepieniami, odrobaczeniem i rodowodem FPL."
         />
 
         <div class="animals-grid">
             @forelse($featuredAnimals as $animal)
                 <x-frontend.animal-card :animal="$animal" />
             @empty
-                <div class="empty-state">
-                    <i data-lucide="cat" aria-hidden="true" class="empty-state__icon"></i>
-                    <h3 class="text-body-strong">Aktualnie brak dostępnych kociąt</h3>
-                    <p class="text-body empty-state__desc">
-                        Planujemy nowe mioty w nadchodzącym sezonie. Zachęcamy do kontaktu w celu rezerwacji.
+                <div class="editorial-empty-box">
+                    <i data-lucide="calendar-heart" aria-hidden="true" class="editorial-empty-box__icon"></i>
+                    <h3 class="editorial-empty-box__title">Aktualnie wszystkie kocięta znalazły nowe domy</h3>
+                    <p class="editorial-empty-box__desc">
+                        Planujemy nowe mioty w nadchodzącym sezonie hodowlanym. Zachęcamy do niezobowiązującego kontaktu w celu wpisu na naszą listę oczekujących.
                     </p>
-                    <x-frontend.button variant="secondary" href="{{ route('contact') }}">
-                        Zapytaj o plany hodowlane
-                    </x-frontend.button>
+                    <div class="mt-4">
+                        <x-frontend.button variant="secondary" href="{{ route('contact') }}">
+                            Zapytaj o plany na sezon 2026/2027
+                        </x-frontend.button>
+                    </div>
                 </div>
             @endforelse
         </div>
@@ -213,6 +275,59 @@
                 </x-frontend.button>
             </div>
         @endif
+    </x-frontend.section>
+
+    {{-- ============================================================
+         3.1 HOW DOES ADOPTION WORK?
+         ADOPTION JOURNEY PREVIEW — 3 Aesop-inspired editorial steps
+         ============================================================ --}}
+    <x-frontend.section id="adopcja-krok-po-kroku" class="reveal-up">
+        <x-frontend.section-header
+            eyebrow="Adopcja"
+            headline="Jak wygląda proces adopcji?"
+            description="Troszczymy się o przyszłość naszych kotów, dlatego każdy etap adopcji jest jasny, spokojny i przejrzysty."
+        />
+
+        <div class="adoption-journey-grid">
+            <div class="adoption-journey-pillar">
+                <div class="adoption-journey__header">
+                    <span class="adoption-journey__number">KROK 01</span>
+                    <i data-lucide="message-circle-heart" class="text-ink-muted-48" width="20" height="20" aria-hidden="true"></i>
+                </div>
+                <h3 class="adoption-journey__title">Rozmowa i Dobór</h3>
+                <p class="adoption-journey__desc">
+                    Poznajemy Twoje oczekiwania i styl życia, aby pomóc Ci dobrać kota o charakterze idealnie pasującym do Twojego domu.
+                </p>
+            </div>
+
+            <div class="adoption-journey-pillar">
+                <div class="adoption-journey__header">
+                    <span class="adoption-journey__number">KROK 02</span>
+                    <i data-lucide="home-heart" class="text-ink-muted-48" width="20" height="20" aria-hidden="true"></i>
+                </div>
+                <h3 class="adoption-journey__title">Rezerwacja i Wizyta</h3>
+                <p class="adoption-journey__desc">
+                    Po podjęciu decyzji podpisujemy umowę przedwstępną. Zapraszamy na wizytę osobistą lub spotkanie wideo z maluchem.
+                </p>
+            </div>
+
+            <div class="adoption-journey-pillar">
+                <div class="adoption-journey__header">
+                    <span class="adoption-journey__number">KROK 03</span>
+                    <i data-lucide="file-check-2" class="text-ink-muted-48" width="20" height="20" aria-hidden="true"></i>
+                </div>
+                <h3 class="adoption-journey__title">Odbiór i Wyprawka</h3>
+                <p class="adoption-journey__desc">
+                    Kot opuszcza hodowlę w wieku 14-16 tygodni z pięciopokoleniowym rodowodem FPL, badaniami zdrowia oraz pakietem startowym.
+                </p>
+            </div>
+        </div>
+
+        <div class="section-action">
+            <x-frontend.button variant="secondary" href="{{ route('contact') }}" icon="arrow-right">
+                Zapytaj o proces adopcji
+            </x-frontend.button>
+        </div>
     </x-frontend.section>
 
     {{-- ============================================================
@@ -284,14 +399,14 @@
     {{-- ============================================================
          LATEST ARTICLES — Blog preview
          ============================================================ --}}
-    @if(isset($latestPosts) && $latestPosts->count() > 0)
-        <x-frontend.section id="blog" class="reveal-up">
-            <x-frontend.section-header
-                eyebrow="Blog"
-                headline="Najnowsze Artykuły"
-                description="Edukujemy, dzielimy się wiedzą i pomagamy zrozumieć świat kotów rasowych."
-            />
+    <x-frontend.section id="blog" class="reveal-up">
+        <x-frontend.section-header
+            eyebrow="Blog"
+            headline="Najnowsze Artykuły"
+            description="Edukujemy, dzielimy się wiedzą i pomagamy zrozumieć świat kotów rasowych."
+        />
 
+        @if(isset($latestPosts) && $latestPosts->count() > 0)
             <div class="articles-grid">
                 @foreach($latestPosts->take(3) as $post)
                     <x-frontend.blog-card :post="$post" />
@@ -303,8 +418,16 @@
                     Zobacz wszystkie artykuły
                 </x-frontend.button>
             </div>
-        </x-frontend.section>
-    @endif
+        @else
+            <div class="editorial-empty-box">
+                <i data-lucide="book-open" aria-hidden="true" class="editorial-empty-box__icon"></i>
+                <h3 class="editorial-empty-box__title">Nasza czytelnia — wkrótce nowe publikacje</h3>
+                <p class="editorial-empty-box__desc">
+                    Przygotowujemy dla Państwa rzetelne poradniki na temat pielęgnacji, żywienia oraz psychologii kotów rasowych.
+                </p>
+            </div>
+        @endif
+    </x-frontend.section>
 
     {{-- ============================================================
          5. CONTACT US
@@ -322,5 +445,3 @@
     </div>
 
 </x-frontend.shell>
-
-
