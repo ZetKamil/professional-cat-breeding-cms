@@ -1,4 +1,20 @@
 @import './design-tokens.css';
+
+/* Frontend component modules */
+@import './components/hero.css';
+@import './components/animals.css';
+@import './components/testimonials.css';
+@import './components/trust.css';
+@import './components/articles.css';
+@import './components/skeleton.css';
+
+/* Frontend page modules */
+@import './pages/about.css';
+@import './pages/contact.css';
+@import './pages/errors.css';
+@import './pages/animals-page.css';
+@import './pages/blog-page.css';
+
 @import 'tailwindcss';
 @import '../../vendor/livewire/flux/dist/flux.css';
 

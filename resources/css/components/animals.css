@@ -1,0 +1,94 @@
+/* ==========================================================================
+   ANIMAL CARDS & GRID
+   Reusable across homepage and /koty listing
+   ========================================================================== */
+
+.animals-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-lg);
+}
+
+.animal-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-xs);
+}
+
+.animal-card__meta {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-sm);
+}
+
+.animal-card__gender {
+    font-size: var(--text-nav-size);
+    color: var(--color-ink-muted-48);
+}
+
+.animal-card__name {
+    margin-top: var(--sp-xxs);
+}
+
+.animal-card__breed {
+    color: var(--color-ink-muted-80);
+}
+
+.animal-card__age {
+    font-size: var(--text-nav-size);
+    color: var(--color-ink-muted-48);
+}
+
+.section-action {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--sp-xl);
+}
+
+/* ==========================================================================
+   EMPTY STATE — Graceful fallback when no data
+   ========================================================================== */
+
+.empty-state {
+    grid-column: 1 / -1;
+    background-color: var(--color-canvas-parchment);
+    border-radius: var(--r-lg);
+    padding: var(--sp-3xl) var(--sp-lg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: var(--sp-sm);
+    border: 1px dashed var(--color-hairline);
+}
+
+.empty-state__icon {
+    width: 48px;
+    height: 48px;
+    color: var(--color-ink-muted-48);
+    margin-bottom: var(--sp-sm);
+    opacity: 0.5;
+}
+
+.empty-state__desc {
+    color: var(--color-ink-muted-80);
+    max-width: 480px;
+    margin-bottom: var(--sp-md);
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 834px) {
+    .animals-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .animals-grid {
+        grid-template-columns: 1fr;
+    }
+}

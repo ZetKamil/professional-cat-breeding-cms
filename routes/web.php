@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\Frontend\AnimalController as FrontendAnimalController;
+use App\Http\Controllers\Frontend\BlogController as FrontendBlogController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\PostController;
@@ -12,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 
 // frontend routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/koty', [FrontendAnimalController::class, 'index'])->name('frontend.animals.index');
+Route::get('/koty/{animal}', [FrontendAnimalController::class, 'show'])->name('frontend.animals.show');
+Route::get('/blog', [FrontendBlogController::class, 'index'])->name('frontend.blog.index');
+Route::get('/blog/{post}', [FrontendBlogController::class, 'show'])->name('frontend.blog.show');
 Route::get('/contact', [ContactController::class, 'create'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('frontend.contact.store');
 Route::view('/about', 'frontend.about')->name('about');
@@ -21,6 +27,12 @@ Route::get('/backend', function () {
 
     return view('backend.dashboard');
 })->middleware(['auth', 'verified', 'active'])->name('backend.dashboard');
+
+Route::get('/dashboard', function () {
+    Gate::authorize('view-backend-dashboard');
+
+    return view('backend.dashboard');
+})->middleware(['auth', 'verified', 'active'])->name('dashboard');
 
 // backend routes
 Route::middleware(['auth', 'verified', 'active'])

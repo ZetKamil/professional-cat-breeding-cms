@@ -1,0 +1,44 @@
+/* ==========================================================================
+   ARTICLES / BLOG CARD GRID
+   Reusable on homepage blog preview and /blog listing
+   ========================================================================== */
+
+.articles-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-lg);
+}
+
+.article-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-xs);
+}
+
+.article-card__excerpt {
+    color: var(--color-ink-muted-80);
+    font-size: var(--text-btn-util-size);
+    line-height: 1.5;
+}
+
+.article-card__date {
+    font-size: var(--text-nav-size);
+    color: var(--color-ink-muted-48);
+    margin-top: var(--sp-xs);
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 834px) {
+    .articles-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .articles-grid {
+        grid-template-columns: 1fr;
+    }
+}

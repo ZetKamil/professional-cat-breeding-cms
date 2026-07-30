@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Concerns\RecordUserActivity;
 use App\Services\MediaService;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -15,6 +16,7 @@ use Illuminate\Support\Str;
 
 class Post extends Model
 {
+    use HasFactory;
     use RecordUserActivity;
     use SoftDeletes;
 
@@ -150,6 +152,14 @@ class Post extends Model
             'draft' => $query->where('is_published', false),
             default => $query,
         };
+    }
+
+    public function scopePublished(Builder $query): Builder
+    {
+        return $query
+            ->where('is_published', true)
+            ->whereNotNull('published_at')
+            ->where('published_at', '<=', now());
     }
 
     /**

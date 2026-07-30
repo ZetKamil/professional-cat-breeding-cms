@@ -33,12 +33,22 @@ class AnimalFactory extends Factory
     ];
 
     /**
-     * Realistic coat colors for British Shorthair cats.
+     * Breeds in our cattery (Bengalski, Brytyjski, Syjamski).
+     */
+    private const BREEDS = [
+        'Kot Bengalski',
+        'Kot Brytyjski',
+        'Kot Syjamski',
+    ];
+
+    /**
+     * Realistic coat colors for Bengal, British, and Siamese cats.
      */
     private const COLORS = [
         'Niebieski', 'Liliowy', 'Czekoladowy', 'Czarny',
         'Kremowy', 'Biały', 'Cynamonowy', 'Srebrny tabby',
-        'Złoty', 'Blue point', 'Lilac point',
+        'Złoty', 'Blue point', 'Lilac point', 'Seal point',
+        'Brązowy cętkowany (Brown Spotted)', 'Snow Marbled',
     ];
 
     public function definition(): array
@@ -48,7 +58,7 @@ class AnimalFactory extends Factory
         return [
             'name' => $name,
             'slug' => Str::slug($name),
-            'breed' => 'Kot Brytyjski Krótkowłosy',
+            'breed' => fake()->randomElement(self::BREEDS),
             'color' => fake()->randomElement(self::COLORS),
             'gender' => fake()->randomElement(AnimalGender::cases()),
             'status' => AnimalStatus::Available,

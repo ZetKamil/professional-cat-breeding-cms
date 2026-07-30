@@ -18,6 +18,9 @@ class AnimalSeeder extends Seeder
 {
     public function run(): void
     {
+        // Clean existing records (including soft-deleted) before seeding to prevent unique slug collisions
+        \Illuminate\Support\Facades\DB::table('animals')->delete();
+
         // ── Featured Available Kittens (shown on homepage) ────────────
         Animal::factory()
             ->available()
@@ -27,8 +30,9 @@ class AnimalSeeder extends Seeder
             ->create([
                 'name' => 'Luna',
                 'slug' => 'luna',
-                'color' => 'Niebieski',
-                'short_description' => 'Czuła, spokojna koteczka o pięknych oczach. Gotowa do adopcji.',
+                'breed' => 'Kot Bengalski',
+                'color' => 'Brązowy cętkowany (Brown Spotted)',
+                'short_description' => 'Czuła, energiczna koteczka bengalska o przepięknych cętkach. Gotowa do adopcji.',
                 'sort_order' => 1,
             ]);
 
@@ -40,8 +44,9 @@ class AnimalSeeder extends Seeder
             ->create([
                 'name' => 'Simba',
                 'slug' => 'simba',
-                'color' => 'Liliowy',
-                'short_description' => 'Energiczny kocurek z silnym rodowodem. Uwielbia zabawę.',
+                'breed' => 'Kot Brytyjski',
+                'color' => 'Niebieski',
+                'short_description' => 'Spokojny, pluszowy kocurek brytyjski z silnym rodowodem. Uwielbia zabawę i przytulanie.',
                 'sort_order' => 2,
             ]);
 
@@ -53,8 +58,9 @@ class AnimalSeeder extends Seeder
             ->create([
                 'name' => 'Mia',
                 'slug' => 'mia',
-                'color' => 'Kremowy',
-                'short_description' => 'Delikatna i towarzyska. Idealna towarzyszka dla rodziny.',
+                'breed' => 'Kot Syjamski',
+                'color' => 'Seal point',
+                'short_description' => 'Elegancka, towarzyska koteczka syjamska o szafirowych oczach. Idealna dla rodziny.',
                 'sort_order' => 3,
             ]);
 
@@ -65,6 +71,7 @@ class AnimalSeeder extends Seeder
             ->create([
                 'name' => 'Bella',
                 'slug' => 'bella',
+                'breed' => 'Kot Brytyjski',
                 'color' => 'Niebieski',
                 'date_of_birth' => now()->subYears(3)->subMonths(2),
                 'short_description' => 'Nasza piękna królowa hodowlana. Matka wielu wspaniałych miotów.',
@@ -77,6 +84,7 @@ class AnimalSeeder extends Seeder
             ->create([
                 'name' => 'Oliver',
                 'slug' => 'oliver',
+                'breed' => 'Kot Brytyjski',
                 'color' => 'Czekoladowy',
                 'date_of_birth' => now()->subYears(4),
                 'short_description' => 'Champion FIFe. Silny, zdrowy reproduktor z doskonałym rodowodem.',
@@ -91,6 +99,7 @@ class AnimalSeeder extends Seeder
             ->create([
                 'name' => 'Cleo',
                 'slug' => 'cleo',
+                'breed' => 'Kot Bengalski',
                 'color' => 'Srebrny tabby',
                 'short_description' => 'Zarezerwowana dla nowej rodziny. Przeprowadzka wkrótce.',
                 'sort_order' => 4,
@@ -103,6 +112,7 @@ class AnimalSeeder extends Seeder
             ->create([
                 'name' => 'Felix',
                 'slug' => 'felix',
+                'breed' => 'Kot Brytyjski',
                 'color' => 'Czarny',
                 'short_description' => 'Szczęśliwie zamieszkał w Warszawie.',
                 'sort_order' => 20,
@@ -117,6 +127,7 @@ class AnimalSeeder extends Seeder
             ->create([
                 'name' => 'Zuzia',
                 'slug' => 'zuzia',
+                'breed' => 'Kot Syjamski',
                 'color' => 'Liliowy',
                 'date_of_birth' => now()->subYears(7),
                 'short_description' => 'Nasza emerytka. Cieszy się zasłużonym odpoczynkiem w domu.',

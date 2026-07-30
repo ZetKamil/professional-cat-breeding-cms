@@ -1,0 +1,305 @@
+/* ==========================================================================
+   ANIMALS PAGE — Luxury Catalog & Profile Styling
+   Catalog (/koty) and Animal Detail (/koty/{slug})
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. CATALOG HERO & FILTER BAR
+   -------------------------------------------------------------------------- */
+
+.animals-catalog-hero {
+    padding-top: var(--sp-3xl);
+    padding-bottom: var(--sp-2xl);
+    text-align: center;
+}
+
+.animals-filter-bar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-md);
+    margin-bottom: var(--sp-2xl);
+    padding-bottom: var(--sp-lg);
+    border-bottom: 1px solid var(--color-hairline);
+}
+
+.animals-filter-breeds {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sp-sm);
+}
+
+.breed-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--sp-sm) var(--sp-lg);
+    border-radius: var(--r-full);
+    font-size: var(--text-btn-util-size);
+    font-weight: 500;
+    color: var(--color-ink-muted-80);
+    background-color: var(--color-canvas-parchment);
+    border: 1px solid transparent;
+    transition: all var(--duration-fast) var(--ease-out);
+}
+
+.breed-pill:hover {
+    color: var(--color-ink);
+    background-color: var(--color-hairline);
+}
+
+.breed-pill--active {
+    color: var(--color-canvas);
+    background-color: var(--color-ink);
+    border-color: var(--color-ink);
+}
+
+.animals-filter-secondary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-md);
+}
+
+.animals-filter-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-xs);
+}
+
+.filter-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 14px;
+    border-radius: var(--r-full);
+    font-size: 13px;
+    color: var(--color-ink-muted-80);
+    background-color: var(--color-canvas);
+    border: 1px solid var(--color-hairline);
+    transition: all var(--duration-fast) var(--ease-out);
+}
+
+.filter-chip:hover {
+    border-color: var(--color-ink-muted-48);
+}
+
+.filter-chip--active {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+    background-color: rgba(0, 102, 204, 0.05);
+}
+
+/* --------------------------------------------------------------------------
+   2. ANIMAL PROFILE HERO (/koty/{slug})
+   -------------------------------------------------------------------------- */
+
+.animal-profile {
+    padding-top: var(--sp-2xl);
+    padding-bottom: var(--sp-4xl);
+}
+
+.animal-profile__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--sp-2xl);
+}
+
+@media (min-width: 992px) {
+    .animal-profile__grid {
+        grid-template-columns: 1.1fr 0.9fr;
+        align-items: start;
+    }
+}
+
+/* Gallery column */
+.animal-profile__gallery {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-md);
+}
+
+.animal-profile__main-image-wrap {
+    position: relative;
+    border-radius: var(--r-xl);
+    overflow: hidden;
+    background-color: var(--color-canvas-parchment);
+    aspect-ratio: 4 / 3;
+}
+
+.animal-profile__main-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow) var(--ease-out);
+}
+
+.animal-profile__main-image-wrap:hover .animal-profile__main-image {
+    transform: scale(1.02);
+}
+
+.animal-profile__thumbs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: var(--sp-sm);
+}
+
+.animal-profile__thumb {
+    border-radius: var(--r-md);
+    overflow: hidden;
+    aspect-ratio: 1;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border-color var(--duration-fast) var(--ease-out);
+}
+
+.animal-profile__thumb:hover,
+.animal-profile__thumb--active {
+    border-color: var(--color-primary);
+}
+
+.animal-profile__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Details column */
+.animal-profile__info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-lg);
+}
+
+.animal-profile__header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-xs);
+}
+
+.animal-profile__badges {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-sm);
+}
+
+.animal-profile__name {
+    margin-top: var(--sp-xs);
+    color: var(--color-ink);
+}
+
+.animal-profile__breed {
+    color: var(--color-ink-muted-48);
+    font-size: var(--text-lead-size);
+}
+
+.animal-profile__specs {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--sp-md);
+    padding: var(--sp-lg);
+    background-color: var(--color-canvas-parchment);
+    border-radius: var(--r-lg);
+    border: 1px solid var(--color-hairline);
+}
+
+.animal-spec {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.animal-spec__label {
+    font-size: 13px;
+    color: var(--color-ink-muted-48);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.animal-spec__value {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-ink);
+}
+
+.animal-profile__description {
+    color: var(--color-ink-muted-80);
+    line-height: 1.7;
+}
+
+.animal-profile__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-md);
+    padding-top: var(--sp-sm);
+}
+
+/* --------------------------------------------------------------------------
+   3. PEDIGREE & GENEALOGY (Family Tree)
+   -------------------------------------------------------------------------- */
+
+.pedigree-card {
+    background-color: var(--color-canvas);
+    border-radius: var(--r-lg);
+    border: 1px solid var(--color-hairline);
+    padding: var(--sp-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--sp-md);
+    transition: border-color var(--duration-fast) var(--ease-out);
+}
+
+.pedigree-card:hover {
+    border-color: var(--color-ink-muted-48);
+}
+
+.pedigree-card__icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--r-full);
+    background-color: var(--color-canvas-parchment);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
+    flex-shrink: 0;
+}
+
+.pedigree-card__info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.pedigree-card__role {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-ink-muted-48);
+}
+
+.pedigree-card__name {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--color-ink);
+}
+
+.pedigree-card__breed {
+    font-size: 14px;
+    color: var(--color-ink-muted-80);
+}
+
+.pedigree-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--sp-md);
+    margin-top: var(--sp-lg);
+}
+
+@media (min-width: 640px) {
+    .pedigree-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

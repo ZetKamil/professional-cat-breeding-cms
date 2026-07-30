@@ -33,8 +33,8 @@ class UserFactory extends Factory
             'two_factor_secret' => null,
             'two_factor_recovery_codes' => null,
             'two_factor_confirmed_at' => null,
-            'role_id' => Role::inRandomOrder()->first()->id ?? 1,
-            'is_active' => fake()->boolean(),
+            'role_id' => Role::inRandomOrder()->first()?->id ?? Role::firstOrCreate(['name' => 'user', 'description' => 'Default user role'])->id,
+            'is_active' => true,
 
         ];
     }

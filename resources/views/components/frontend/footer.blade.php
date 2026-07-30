@@ -24,10 +24,10 @@
                     </div>
                     {{-- Social Links --}}
                     <div class="footer-social">
-                        <a href="#" class="footer-social__link" aria-label="Facebook" target="_blank" rel="noopener">
+                        <a href="https://facebook.com" class="footer-social__link" aria-label="Facebook" target="_blank" rel="noopener">
                             <i data-lucide="facebook" aria-hidden="true"></i>
                         </a>
-                        <a href="#" class="footer-social__link" aria-label="Instagram" target="_blank" rel="noopener">
+                        <a href="https://instagram.com" class="footer-social__link" aria-label="Instagram" target="_blank" rel="noopener">
                             <i data-lucide="instagram" aria-hidden="true"></i>
                         </a>
                     </div>
@@ -38,9 +38,10 @@
                     <h3 class="footer-heading">Szybka Nawigacja</h3>
                     <ul class="footer-links" role="list">
                         <li><a href="{{ route('home') }}" class="footer-link">Strona Główna</a></li>
-                        <li><a href="{{ route('home') }}#nasze-koty" class="footer-link">Dostępne Mioty</a></li>
+                        <li><a href="{{ route('frontend.animals.index') }}" class="footer-link">Nasze Koty</a></li>
                         <li><a href="{{ route('home') }}#o-nas" class="footer-link">Nasza Historia</a></li>
                         <li><a href="{{ route('about') }}" class="footer-link">O Hodowli</a></li>
+                        <li><a href="{{ route('frontend.blog.index') }}" class="footer-link">Baza Wiedzy</a></li>
                         <li><a href="{{ route('contact') }}" class="footer-link">Kontakt</a></li>
                     </ul>
                 </div>
@@ -52,7 +53,7 @@
                         <li><a href="{{ route('about') }}#zdrowie" class="footer-link">Zdrowie & Certyfikaty</a></li>
                         <li><a href="{{ route('about') }}#co-otrzymujesz" class="footer-link">Wyprawka i Rodowód</a></li>
                         <li><a href="{{ route('contact') }}#faq" class="footer-link">Częste pytania (FAQ)</a></li>
-                        <li><a href="#" class="footer-link">Regulamin adopcji</a></li>
+                        <li><a href="{{ route('about') }}#certyfikaty" class="footer-link">Regulamin adopcji</a></li>
                     </ul>
                 </div>
 
@@ -78,9 +79,9 @@
                     &copy; {{ now()->year }} {{ config('app.name', 'Cattery') }}. Wszelkie prawa zastrzeżone.
                 </p>
                 <p class="footer-legal">
-                    <a href="#polityka-prywatnosci" class="footer-link">Polityka prywatności</a>
+                    <a href="{{ route('about') }}#filozofia" class="footer-link">Polityka prywatności</a>
                     <span class="footer-legal__sep" aria-hidden="true">·</span>
-                    <a href="#regulamin" class="footer-link">Regulamin strony</a>
+                    <a href="{{ route('about') }}#standardy" class="footer-link">Regulamin strony</a>
                 </p>
             </div>
 

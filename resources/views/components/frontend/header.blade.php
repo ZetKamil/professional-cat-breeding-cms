@@ -23,8 +23,9 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('home') }}#nasze-koty"
-                       class="global-nav__link">
+                    <a href="{{ route('frontend.animals.index') }}"
+                       class="global-nav__link {{ request()->routeIs('frontend.animals.*') ? 'is-active' : '' }}"
+                       {{ request()->routeIs('frontend.animals.*') ? 'aria-current=page' : '' }}>
                         Nasze Koty
                     </a>
                 </li>
@@ -39,6 +40,13 @@
                        class="global-nav__link {{ request()->routeIs('about') ? 'is-active' : '' }}"
                        {{ request()->routeIs('about') ? 'aria-current=page' : '' }}>
                         O Nas
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('frontend.blog.index') }}"
+                       class="global-nav__link {{ request()->routeIs('frontend.blog.*') ? 'is-active' : '' }}"
+                       {{ request()->routeIs('frontend.blog.*') ? 'aria-current=page' : '' }}>
+                        Baza Wiedzy
                     </a>
                 </li>
                 <li>
@@ -86,7 +94,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('home') }}#nasze-koty" class="mobile-menu__link" onclick="document.querySelector('.global-nav__hamburger').click()">
+                    <a href="{{ route('frontend.animals.index') }}" class="mobile-menu__link {{ request()->routeIs('frontend.animals.*') ? 'is-active' : '' }}">
                         Nasze Koty
                     </a>
                 </li>
@@ -98,6 +106,11 @@
                 <li>
                     <a href="{{ route('about') }}" class="mobile-menu__link {{ request()->routeIs('about') ? 'is-active' : '' }}">
                         O Nas
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('frontend.blog.index') }}" class="mobile-menu__link {{ request()->routeIs('frontend.blog.*') ? 'is-active' : '' }}">
+                        Baza Wiedzy
                     </a>
                 </li>
                 <li>

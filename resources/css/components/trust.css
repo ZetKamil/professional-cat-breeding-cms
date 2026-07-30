@@ -1,0 +1,68 @@
+/* ==========================================================================
+   TRUST GRID — Dark tile
+   ========================================================================== */
+
+.trust-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--sp-xl);
+}
+
+.trust-item {
+    text-align: center;
+}
+
+.trust-item__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    margin: 0 auto var(--sp-lg);
+    border-radius: var(--r-lg);
+    background-color: rgba(255, 255, 255, 0.06);
+    color: var(--color-primary-on-dark);
+    transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.trust-item:hover .trust-item__icon {
+    transform: translateY(-4px);
+}
+
+.trust-item__icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.trust-item__title {
+    color: var(--color-canvas);
+    margin-bottom: var(--sp-sm);
+}
+
+.trust-item__desc {
+    color: var(--color-body-muted);
+    font-size: var(--text-btn-util-size);
+    line-height: 1.5;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 1068px) {
+    .trust-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .trust-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .trust-item:hover .trust-item__icon {
+        transform: none;
+    }
+}
