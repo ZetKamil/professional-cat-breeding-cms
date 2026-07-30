@@ -55,37 +55,3 @@
     </div>
 @endif
 
-<style>
-    .card--linked {
-        text-decoration: none;
-        display: block;
-    }
-
-    .card--hoverable {
-        transition: border-color var(--duration-fast) var(--ease-out),
-                    transform var(--duration-base) var(--ease-out);
-    }
-
-    .card--hoverable:hover {
-        border-color: var(--color-ink-muted-48);
-        transform: translateY(-2px);
-    }
-
-    .card-media {
-        overflow: hidden;
-    }
-
-    .card-media img,
-    .card-media video {
-        width: 100%;
-        aspect-ratio: 4 / 3;
-        object-fit: cover;
-        display: block;
-        transition: transform var(--duration-slow) var(--ease-out);
-    }
-
-    .card--hoverable:hover .card-media img,
-    .card--hoverable:hover .card-media video {
-        transform: scale(1.03);
-    }
-</style>

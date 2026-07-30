@@ -1,6 +1,7 @@
 @import './design-tokens.css';
 
 /* Frontend component modules */
+@import './components/ui-core.css';
 @import './components/hero.css';
 @import './components/animals.css';
 @import './components/testimonials.css';

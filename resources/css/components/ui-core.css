@@ -1,0 +1,115 @@
+/* ==========================================================================
+   UI CORE COMPONENTS — LUXURY DESIGN SYSTEM (Apple / Aesop / Airbnb style)
+   Replaces inline <style> across Blade components with single-source-of-truth CSS
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. CARDS (Base & Linked Hover States)
+   -------------------------------------------------------------------------- */
+
+.card {
+    background-color: var(--color-canvas);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card--linked {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.card--hoverable:hover {
+    border-color: var(--color-ink-muted-48);
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.07);
+}
+
+.card-media {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--color-canvas-parchment);
+}
+
+.card-media img,
+.card-media video {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card--hoverable:hover .card-media img,
+.card--hoverable:hover .card-media video {
+    transform: scale(1.035);
+}
+
+.card-body {
+    padding: var(--sp-lg);
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+/* --------------------------------------------------------------------------
+   2. BADGES (Calm, pill-shaped status indicators)
+   -------------------------------------------------------------------------- */
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25em 0.75em;
+    font-size: var(--text-nav-size);
+    font-weight: 500;
+    letter-spacing: var(--text-nav-ls);
+    line-height: 1.3;
+    border-radius: var(--r-pill);
+    white-space: nowrap;
+    backdrop-filter: blur(8px);
+}
+
+.badge--default {
+    background-color: var(--color-primary);
+    color: var(--color-canvas);
+}
+
+.badge--muted {
+    background-color: var(--color-canvas-parchment);
+    color: var(--color-ink-muted-80);
+}
+
+.badge--success {
+    background-color: rgba(52, 199, 89, 0.14);
+    color: #1e8e3e;
+}
+
+.badge--warning {
+    background-color: rgba(255, 159, 10, 0.14);
+    color: #b46b00;
+}
+
+.badge--error {
+    background-color: rgba(255, 59, 48, 0.14);
+    color: #d70015;
+}
+
+.dark .badge--success {
+    color: #34c759;
+}
+
+.dark .badge--warning {
+    color: #ff9f0a;
+}
+
+.dark .badge--error {
+    color: #ff3b30;
+}
