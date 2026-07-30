@@ -154,42 +154,54 @@
 
         <div class="trust-grid">
             <div class="trust-item">
-                <div class="trust-item__icon">
-                    <i data-lucide="shield-check" aria-hidden="true"></i>
+                <div class="trust-item__header">
+                    <span class="trust-item__index">01</span>
+                    <div class="trust-item__icon">
+                        <i data-lucide="shield-check" aria-hidden="true"></i>
+                    </div>
                 </div>
-                <h3 class="trust-item__title text-tagline">Zdrowie Gwarantowane</h3>
-                <p class="trust-item__desc text-body">
-                    Pełne badania genetyczne, regularne kontrole weterynaryjne, szczepienia i odrobaczanie.
+                <h3 class="trust-item__title">Zdrowie Gwarantowane</h3>
+                <p class="trust-item__desc">
+                    Pełne badania genetyczne, regularne kontrole weterynaryjne, szczepienia i odrobaczanie z dbałością o każdy detal.
                 </p>
             </div>
 
             <div class="trust-item">
-                <div class="trust-item__icon">
-                    <i data-lucide="award" aria-hidden="true"></i>
+                <div class="trust-item__header">
+                    <span class="trust-item__index">02</span>
+                    <div class="trust-item__icon">
+                        <i data-lucide="award" aria-hidden="true"></i>
+                    </div>
                 </div>
-                <h3 class="trust-item__title text-tagline">Rodowody FPL/FIFe</h3>
-                <p class="trust-item__desc text-body">
-                    Każdy kot posiada pełny rodowód zarejestrowany w międzynarodowej organizacji felinologicznej.
+                <h3 class="trust-item__title">Rodowody FPL / FIFe</h3>
+                <p class="trust-item__desc">
+                    Każdy kot posiada pełny, pięciopokoleniowy rodowód zarejestrowany w międzynarodowej organizacji felinologicznej.
                 </p>
             </div>
 
             <div class="trust-item">
-                <div class="trust-item__icon">
-                    <i data-lucide="heart-handshake" aria-hidden="true"></i>
+                <div class="trust-item__header">
+                    <span class="trust-item__index">03</span>
+                    <div class="trust-item__icon">
+                        <i data-lucide="heart-handshake" aria-hidden="true"></i>
+                    </div>
                 </div>
-                <h3 class="trust-item__title text-tagline">Wsparcie Po Adopcji</h3>
-                <p class="trust-item__desc text-body">
-                    Nie zostawiamy Cię samego — pomagamy w adaptacji i odpowiadamy na pytania przez cały okres.
+                <h3 class="trust-item__title">Wsparcie Po Adopcji</h3>
+                <p class="trust-item__desc">
+                    Nie zostawiamy Cię samego — pomagamy w adaptacji, doradzamy żywieniowo i odpowiadamy na pytania przez cały okres.
                 </p>
             </div>
 
             <div class="trust-item">
-                <div class="trust-item__icon">
-                    <i data-lucide="home" aria-hidden="true"></i>
+                <div class="trust-item__header">
+                    <span class="trust-item__index">04</span>
+                    <div class="trust-item__icon">
+                        <i data-lucide="home" aria-hidden="true"></i>
+                    </div>
                 </div>
-                <h3 class="trust-item__title text-tagline">Domowa Atmosfera</h3>
-                <p class="trust-item__desc text-body">
-                    Koty rosną w domowym środowisku, są socjalizowane i przyzwyczajone do kontaktu z ludźmi.
+                <h3 class="trust-item__title">Domowa Atmosfera</h3>
+                <p class="trust-item__desc">
+                    Koty rosną z nami w domowym środowisku, są doskonale socjalizowane i naturalnie przyzwyczajone do obecności ludzi.
                 </p>
             </div>
         </div>

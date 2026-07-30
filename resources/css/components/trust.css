@@ -1,68 +1,114 @@
 /* ==========================================================================
-   TRUST GRID — Dark tile
+   EDITORIAL TRUST & HEALTH STANDARDS — Luxury Brand Storytelling
+   Replaces generic 4-column centered boxes with a spacious editorial grid
    ========================================================================== */
 
 .trust-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--sp-xl);
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: var(--sp-3xl);
+    row-gap: var(--sp-2xl);
+    margin-top: var(--sp-lg);
 }
 
-.trust-item {
-    text-align: center;
+/* --------------------------------------------------------------------------
+   1. EDITORIAL TRUST ITEM (2-column editorial storytelling)
+   -------------------------------------------------------------------------- */
+
+.trust-item,
+.trust-pillar {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    padding-top: var(--sp-xl);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    transition: border-color var(--duration-fast) var(--ease-out);
 }
 
-.trust-item__icon {
+.trust-item:hover,
+.trust-pillar:hover {
+    border-color: rgba(255, 255, 255, 0.36);
+}
+
+/* Header row containing index number (01) and premium SVG icon */
+.trust-item__header,
+.trust-pillar__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--sp-lg);
+}
+
+.trust-item__index,
+.trust-pillar__index {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    color: var(--color-primary-on-dark);
+    opacity: 0.85;
+}
+
+.trust-item__icon,
+.trust-pillar__icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 56px;
-    height: 56px;
-    margin: 0 auto var(--sp-lg);
-    border-radius: var(--r-lg);
-    background-color: rgba(255, 255, 255, 0.06);
+    width: 48px;
+    height: 48px;
+    border-radius: var(--r-md);
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.14);
     color: var(--color-primary-on-dark);
-    transition: transform var(--duration-fast) var(--ease-out);
+    transition: transform var(--duration-fast) var(--ease-out),
+                background-color var(--duration-fast) var(--ease-out),
+                border-color var(--duration-fast) var(--ease-out);
 }
 
-.trust-item:hover .trust-item__icon {
-    transform: translateY(-4px);
+.trust-item:hover .trust-item__icon,
+.trust-pillar:hover .trust-pillar__icon {
+    transform: translateY(-3px);
+    background-color: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.28);
 }
 
-.trust-item__icon svg {
-    width: 24px;
-    height: 24px;
+.trust-item__icon svg,
+.trust-pillar__icon svg {
+    width: 22px;
+    height: 22px;
+    stroke-width: 1.75;
 }
 
-.trust-item__title {
+/* --------------------------------------------------------------------------
+   2. TYPOGRAPHY & BREATHING ROOM
+   -------------------------------------------------------------------------- */
+
+.trust-item__title,
+.trust-pillar__title {
     color: var(--color-canvas);
+    font-size: 1.4rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
     margin-bottom: var(--sp-sm);
 }
 
-.trust-item__desc {
-    color: var(--color-body-muted);
-    font-size: var(--text-btn-util-size);
-    line-height: 1.5;
+.trust-item__desc,
+.trust-pillar__desc {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 1.05rem;
+    line-height: 1.65;
+    max-width: 480px;
 }
 
 /* ==========================================================================
-   RESPONSIVE
+   3. RESPONSIVE
    ========================================================================== */
 
-@media (max-width: 1068px) {
-    .trust-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 640px) {
+@media (max-width: 834px) {
     .trust-grid {
         grid-template-columns: 1fr;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .trust-item:hover .trust-item__icon {
-        transform: none;
+        column-gap: 0;
+        row-gap: var(--sp-xl);
     }
 }
