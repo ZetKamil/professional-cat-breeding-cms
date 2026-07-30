@@ -1,0 +1,224 @@
+/* ==========================================================================
+   GLOBAL NAVIGATION HEADER — Apple / Airbnb Luxury Glassmorphism
+   Sticky navigation bar with smooth scroll state & mobile menu
+   ========================================================================== */
+
+.global-nav {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+    padding: 0 var(--content-padding-x);
+    background-color: rgba(255, 255, 255, 0.72);
+    backdrop-filter: saturate(180%) blur(24px);
+    -webkit-backdrop-filter: saturate(180%) blur(24px);
+    border-bottom: 1px solid transparent;
+    transition: background-color var(--duration-base) var(--ease-out),
+                border-bottom-color var(--duration-base) var(--ease-out),
+                box-shadow var(--duration-base) var(--ease-out);
+}
+
+.global-nav.is-scrolled {
+    background-color: rgba(255, 255, 255, 0.88);
+    border-bottom-color: var(--color-hairline);
+    box-shadow: 0 4px 20px -2px rgba(18, 18, 18, 0.04);
+}
+
+.global-nav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    transition: height var(--duration-base) var(--ease-out);
+}
+
+.global-nav.is-scrolled .global-nav__inner {
+    height: 48px;
+}
+
+/* --------------------------------------------------------------------------
+   LOGO
+   -------------------------------------------------------------------------- */
+
+.global-nav__logo {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-xs);
+    text-decoration: none;
+    flex-shrink: 0;
+    border-radius: var(--r-sm);
+}
+
+.global-nav__logo:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 4px;
+}
+
+.global-nav__logo-text {
+    font-size: var(--text-tagline-size);
+    font-weight: 600;
+    letter-spacing: var(--text-tagline-ls);
+    color: var(--color-ink);
+    white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   DESKTOP LINKS
+   -------------------------------------------------------------------------- */
+
+.global-nav__links {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-lg);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.global-nav__link {
+    font-size: var(--text-nav-size);
+    font-weight: var(--text-nav-weight);
+    letter-spacing: var(--text-nav-ls);
+    line-height: var(--text-nav-lh);
+    color: var(--color-ink-muted-80);
+    text-decoration: none;
+    padding: var(--sp-xs) 4px;
+    border-radius: var(--r-sm);
+    transition: color var(--duration-fast) var(--ease-out);
+    white-space: nowrap;
+}
+
+.global-nav__link:hover,
+.global-nav__link.is-active {
+    color: var(--color-ink);
+}
+
+.global-nav__link:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   UTILITIES & HAMBURGER
+   -------------------------------------------------------------------------- */
+
+.global-nav__utils {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-md);
+}
+
+.global-nav__hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: var(--touch-target-min);
+    height: var(--touch-target-min);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    border-radius: var(--r-sm);
+}
+
+.global-nav__hamburger:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.hamburger-line {
+    display: block;
+    width: 18px;
+    height: 1.5px;
+    background-color: var(--color-ink);
+    border-radius: 1px;
+    transition: transform var(--duration-base) var(--ease-out),
+                opacity var(--duration-fast) var(--ease-out);
+}
+
+.global-nav__hamburger[aria-expanded="true"] .hamburger-line:first-child {
+    transform: translateY(3.25px) rotate(45deg);
+}
+
+.global-nav__hamburger[aria-expanded="true"] .hamburger-line:last-child {
+    transform: translateY(-3.25px) rotate(-45deg);
+}
+
+/* --------------------------------------------------------------------------
+   MOBILE MENU OVERLAY
+   -------------------------------------------------------------------------- */
+
+.mobile-menu {
+    position: fixed;
+    inset: 56px 0 0 0;
+    z-index: var(--z-overlay);
+    background-color: rgba(18, 18, 18, 0.94);
+    backdrop-filter: saturate(180%) blur(28px);
+    -webkit-backdrop-filter: saturate(180%) blur(28px);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: opacity var(--duration-base) var(--ease-out),
+                visibility var(--duration-base) var(--ease-out),
+                transform var(--duration-base) var(--ease-out);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.mobile-menu.is-open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.mobile-menu__nav {
+    padding: var(--sp-2xl) var(--content-padding-x);
+}
+
+.mobile-menu__links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.mobile-menu__link {
+    display: block;
+    padding: var(--sp-md) 0;
+    font-size: var(--text-lead-size);
+    font-weight: 600;
+    color: var(--color-canvas);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    transition: color var(--duration-fast) var(--ease-out);
+}
+
+.mobile-menu__link:hover,
+.mobile-menu__link.is-active {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+body.menu-open {
+    overflow: hidden;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 834px) {
+    .global-nav__links {
+        display: none;
+    }
+
+    .global-nav__hamburger {
+        display: flex;
+    }
+
+    .global-nav__utils .global-nav__link {
+        display: none;
+    }
+}

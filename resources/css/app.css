@@ -2,6 +2,8 @@
 
 /* Frontend component modules */
 @import './components/ui-core.css';
+@import './components/header.css';
+@import './components/footer.css';
 @import './components/hero.css';
 @import './components/animals.css';
 @import './components/testimonials.css';

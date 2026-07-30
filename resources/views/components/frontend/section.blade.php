@@ -46,20 +46,3 @@
         {{ $slot }}
     </div>
 </section>
-
-<style>
-    .section--sm {
-        padding-top: var(--sp-xl);
-        padding-bottom: var(--sp-xl);
-    }
-
-    .section--lg {
-        padding-top: var(--sp-4xl);
-        padding-bottom: var(--sp-4xl);
-    }
-
-    .section--none {
-        padding-top: 0;
-        padding-bottom: 0;
-    }
-</style>

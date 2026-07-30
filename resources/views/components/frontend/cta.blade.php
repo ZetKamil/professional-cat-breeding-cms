@@ -48,38 +48,3 @@
         </div>
     </div>
 </x-frontend.section>
-
-<style>
-    .cta-block {
-        text-align: center;
-        max-width: 640px;
-        margin: 0 auto;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: var(--sp-lg);
-    }
-
-    .cta-block__headline {
-        text-wrap: balance;
-    }
-
-    .cta-block__description {
-        text-wrap: balance;
-    }
-
-    .cta-block__action {
-        margin-top: var(--sp-sm);
-    }
-
-    /* Dark tile text override */
-    .tile-dark .cta-block__headline,
-    .tile-black .cta-block__headline {
-        color: var(--color-canvas);
-    }
-
-    .tile-dark .cta-block__description,
-    .tile-black .cta-block__description {
-        color: var(--color-body-muted);
-    }
-</style>
