@@ -6,38 +6,22 @@
          1. WHO ARE YOU?
          HERO SECTION — Full viewport, photography-first
          ============================================================ --}}
-    <section class="hero" aria-label="Powitanie">
-        <div class="hero__bg">
-            <img 
-                src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=2000&q=80" 
-                alt="Piękny kot rasowy"
-                class="hero__image"
-                loading="eager"
-                fetchpriority="high"
-            >
-            <div class="hero__overlay"></div>
-        </div>
-        <div class="hero__content">
-            <div class="hero__inner section-inner">
-                <span class="hero__eyebrow">Profesjonalna Hodowla</span>
-                <h1 class="hero__headline text-hero-display">
-                    Piękno. Zdrowie.<br>Zaufanie.
-                </h1>
-                <p class="hero__lead text-lead-airy">
-                    Hodujemy z pasją, troską o zdrowie i pełną transparentnością.
-                    Każdy kot jest wyjątkowy.
-                </p>
-                <div class="hero__actions">
-                    <x-frontend.button href="#o-nas" icon="arrow-down">
-                        Poznaj nas
-                    </x-frontend.button>
-                    <x-frontend.button variant="secondary" href="#nasze-koty">
-                        Nasze koty
-                    </x-frontend.button>
-                </div>
-            </div>
-        </div>
-    </section>
+    <x-frontend.hero
+        eyebrow="Profesjonalna Hodowla"
+        title="Piękno. Zdrowie.<br>Zaufanie."
+        lead="Hodujemy z pasją, troską o zdrowie i pełną transparentnością. Każdy kot jest wyjątkowy."
+        image-url="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=2000&q=80"
+        image-alt="Piękny kot rasowy"
+        scroll-target="#o-nas"
+        size="full"
+    >
+        <x-frontend.button href="#o-nas" icon="arrow-down">
+            Poznaj nas
+        </x-frontend.button>
+        <x-frontend.button variant="secondary" href="#nasze-koty">
+            Nasze koty
+        </x-frontend.button>
+    </x-frontend.hero>
 
     {{-- ============================================================
          2. CAN I TRUST YOU?

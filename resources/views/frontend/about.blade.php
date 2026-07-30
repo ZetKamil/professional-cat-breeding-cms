@@ -5,30 +5,15 @@
     {{-- ============================================================
          1. HERO — Editorial, photography-first
          ============================================================ --}}
-    <section class="hero hero--about" aria-label="O nas">
-        <div class="hero__bg">
-            <img 
-                src="https://images.unsplash.com/photo-1599839619722-39751411ea63?auto=format&fit=crop&w=2000&q=80" 
-                alt="Spokojny kot w promieniach słońca"
-                class="hero__image"
-                loading="eager"
-                fetchpriority="high"
-            >
-            <div class="hero__overlay"></div>
-        </div>
-        <div class="hero__content">
-            <div class="hero__inner section-inner">
-                <span class="hero__eyebrow">Nasza Historia</span>
-                <h1 class="text-hero-display hero__headline">
-                    Hodowla z pasją<br>od pokoleń.
-                </h1>
-                <p class="text-lead-airy hero__lead">
-                    Każdy kot, który opuszcza naszą hodowlę, niesie ze sobą lata doświadczenia,
-                    miłości i bezkompromisowej troski o zdrowie.
-                </p>
-            </div>
-        </div>
-    </section>
+    <x-frontend.hero
+        eyebrow="Nasza Historia"
+        title="Hodowla z pasją<br>od pokoleń."
+        lead="Każdy kot, który opuszcza naszą hodowlę, niesie ze sobą lata doświadczenia, miłości i bezkompromisowej troski o zdrowie."
+        image-url="https://images.unsplash.com/photo-1599839619722-39751411ea63?auto=format&fit=crop&w=2000&q=80"
+        image-alt="Spokojny kot w promieniach słońca"
+        scroll-target="#nasza-filozofia"
+        size="large"
+    />
 
     {{-- ============================================================
          2. STORY — Two-column editorial
