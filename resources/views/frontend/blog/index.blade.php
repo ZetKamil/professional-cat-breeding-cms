@@ -64,55 +64,9 @@
          ============================================================ --}}
     <x-frontend.section class="blog-grid-section">
         @if ($posts->count() > 0)
-            <div class="blog-grid">
+            <div class="articles-grid">
                 @foreach ($posts as $post)
-                    @php
-                        $wordCount = str_word_count(strip_tags($post->body));
-                        $readTime = max(1, (int) ceil($wordCount / 200));
-                        $category = $post->categories->first();
-                    @endphp
-                    <article class="blog-card reveal-up" style="--delay: {{ $loop->index * 0.1 }}s;">
-                        <a href="{{ route('frontend.blog.show', $post) }}" class="blog-card__media">
-                            <div class="blog-card__img-wrapper">
-                                <img 
-                                    src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?q=80&w=800&auto=format&fit=crop" 
-                                    alt="{{ $post->title }}" 
-                                    class="blog-card__img"
-                                    loading="lazy"
-                                >
-                            </div>
-                            @if ($category)
-                                <span class="blog-card__badge">{{ $category->name }}</span>
-                            @endif
-                        </a>
-
-                        <div class="blog-card__content">
-                            <div class="blog-card__meta">
-                                <time datetime="{{ $post->published_at?->toIso8601String() }}">
-                                    {{ $post->published_at?->format('d.m.Y') }}
-                                </time>
-                                <span class="blog-card__dot" aria-hidden="true">•</span>
-                                <span>{{ $readTime }} min czytania</span>
-                            </div>
-
-                            <h2 class="blog-card__title">
-                                <a href="{{ route('frontend.blog.show', $post) }}">
-                                    {{ $post->title }}
-                                </a>
-                            </h2>
-
-                            <p class="blog-card__excerpt">
-                                {{ Str::limit($post->excerpt, 120) }}
-                            </p>
-
-                            <div class="blog-card__footer">
-                                <a href="{{ route('frontend.blog.show', $post) }}" class="blog-card__link">
-                                    <span>Czytaj artykuł</span>
-                                    <i data-lucide="arrow-right" aria-hidden="true"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </article>
+                    <x-frontend.blog-card :post="$post" />
                 @endforeach
             </div>
 

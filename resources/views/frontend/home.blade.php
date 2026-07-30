@@ -224,37 +224,7 @@
 
             <div class="articles-grid">
                 @foreach($latestPosts->take(3) as $post)
-                    <x-frontend.card hoverable :href="route('frontend.blog.show', $post)">
-                        <x-slot:image>
-                            @if($post->media)
-                                <img
-                                    src="{{ $post->media->url() }}"
-                                    alt="{{ $post->title }}"
-                                    loading="lazy"
-                                >
-                            @else
-                                <img 
-                                    src="https://images.unsplash.com/photo-1495360010541-f48722b34f7d?auto=format&fit=crop&w=800&q=80" 
-                                    alt="Artykuł" 
-                                    loading="lazy"
-                                >
-                            @endif
-                        </x-slot:image>
-                        <div class="article-card__body">
-                            @if($post->categories->first())
-                                <x-frontend.badge variant="muted">
-                                    {{ $post->categories->first()->name }}
-                                </x-frontend.badge>
-                            @endif
-                            <h3 class="text-tagline">{{ $post->title }}</h3>
-                            <p class="article-card__excerpt text-body">
-                                {{ Str::limit(strip_tags($post->body), 120) }}
-                            </p>
-                            <time class="article-card__date" datetime="{{ $post->published_at?->toIso8601String() }}">
-                                {{ $post->published_at?->format('d.m.Y') }}
-                            </time>
-                        </div>
-                    </x-frontend.card>
+                    <x-frontend.blog-card :post="$post" />
                 @endforeach
             </div>
 
