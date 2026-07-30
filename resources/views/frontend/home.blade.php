@@ -20,7 +20,7 @@
             <div class="hero__overlay"></div>
         </div>
 
-        <div class="section-inner relative z-10 pt-16 pb-24">
+        <div class="section-inner relative z-10 py-20 lg:py-24">
             {{-- Editorial Monospace Masthead Bar --}}
             <div class="hero-masthead">
                 <span>[ 01 — ETHICAL BREEDING ]</span>
@@ -285,7 +285,7 @@
             <div class="kodeks-column" role="listitem">
                 <div>
                     <span class="kodeks-column__num">01 / GENETICS</span>
-                    <h3 class="kodeks-column__title mt-4">Badania Genetyczne</h3>
+                    <h3 class="kodeks-column__title">Badania Genetyczne</h3>
                 </div>
                 <p class="kodeks-column__desc">
                     Weryfikowane certyfikaty HCM, PKD oraz SMA n/n dla każdego rodzica w naszej hodowli.
@@ -295,7 +295,7 @@
             <div class="kodeks-column" role="listitem">
                 <div>
                     <span class="kodeks-column__num">02 / VETERINARY</span>
-                    <h3 class="kodeks-column__title mt-4">Nadzór Kliniczny</h3>
+                    <h3 class="kodeks-column__title">Nadzór Kliniczny</h3>
                 </div>
                 <p class="kodeks-column__desc">
                     Hodowla wolna od wirusów FIV oraz FeLV. Regularne echokardiografie serca i badania krwi.
@@ -305,7 +305,7 @@
             <div class="kodeks-column" role="listitem">
                 <div>
                     <span class="kodeks-column__num">03 / FEDERATION</span>
-                    <h3 class="kodeks-column__title mt-4">Rodowód FIFe / FPL</h3>
+                    <h3 class="kodeks-column__title">Rodowód FIFe / FPL</h3>
                 </div>
                 <p class="kodeks-column__desc">
                     Oryginalne, pięciopokoleniowe rodowody Międzynarodowej Federacji Felinologicznej dla każdego kota.
@@ -315,7 +315,7 @@
             <div class="kodeks-column" role="listitem">
                 <div>
                     <span class="kodeks-column__num">04 / BEHAVIOR</span>
-                    <h3 class="kodeks-column__title mt-4">Domowa Socjalizacja</h3>
+                    <h3 class="kodeks-column__title">Domowa Socjalizacja</h3>
                 </div>
                 <p class="kodeks-column__desc">
                     Wychowanie w pełnym kontakcie z domownikami, kształtujące pewność siebie, delikatność i otwartość.
@@ -367,12 +367,6 @@
                     Kot opuszcza hodowlę w wieku 14-16 tygodni z pięciopokoleniowym rodowodem FPL, badaniami zdrowia oraz pakietem startowym.
                 </p>
             </div>
-        </div>
-
-        <div class="section-action">
-            <x-frontend.button variant="secondary" href="{{ route('contact') }}" icon="arrow-right">
-                Zapytaj o proces adopcji
-            </x-frontend.button>
         </div>
     </x-frontend.section>
 
