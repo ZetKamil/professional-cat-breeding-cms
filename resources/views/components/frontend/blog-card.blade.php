@@ -20,13 +20,19 @@
                 <img
                     src="{{ $post->media->url() }}"
                     alt="{{ $post->title }}"
+                    width="800"
+                    height="500"
                     loading="lazy"
+                    decoding="async"
                 >
             @else
                 <img 
                     src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?q=80&w=800&auto=format&fit=crop" 
                     alt="{{ $post->title }} (Zdjęcie poglądowe)"
+                    width="800"
+                    height="500"
                     loading="lazy"
+                    decoding="async"
                 >
             @endif
 
@@ -54,5 +60,10 @@
         <p class="blog-card__excerpt">
             {{ Str::limit(strip_tags($post->body ?? ''), 115) }}
         </p>
+
+        <div class="blog-card__read-more">
+            <span>Czytaj artykuł</span>
+            <i data-lucide="arrow-right" aria-hidden="true"></i>
+        </div>
     </div>
 </x-frontend.card>

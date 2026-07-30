@@ -46,6 +46,20 @@
                         człowieka. Kładziemy ogromny nacisk na zdrowie genetyczne i
                         zgodność ze standardem rasy.
                     </p>
+                    <div class="about-preview__stats">
+                        <div class="about-preview__stat">
+                            <div class="about-preview__stat-number">15+</div>
+                            <div class="about-preview__stat-label">Lat pasji i doświadczenia</div>
+                        </div>
+                        <div class="about-preview__stat">
+                            <div class="about-preview__stat-number">100%</div>
+                            <div class="about-preview__stat-label">Zdrowia i badań genetycznych</div>
+                        </div>
+                        <div class="about-preview__stat">
+                            <div class="about-preview__stat-number">FIFe</div>
+                            <div class="about-preview__stat-label">Międzynarodowy certyfikat</div>
+                        </div>
+                    </div>
                     <div class="about-preview__action">
                         <x-frontend.button variant="secondary" href="{{ route('about') }}" icon="arrow-right">
                             Poznaj naszą historię
@@ -60,6 +74,15 @@
                     class="about-preview__image"
                     loading="lazy"
                 >
+                <div class="about-preview__badge-overlap">
+                    <div class="about-preview__badge-content">
+                        <div class="about-preview__badge-title">Certyfikowana Hodowla FIFe / FPL</div>
+                        <div class="about-preview__badge-desc">Etyczne standardy miłości i dbałości</div>
+                    </div>
+                    <div class="about-preview__badge-icon" aria-hidden="true">
+                        <i data-lucide="award" aria-hidden="true"></i>
+                    </div>
+                </div>
             </div>
         </div>
     </x-frontend.section>
