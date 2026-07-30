@@ -100,26 +100,54 @@
     padding-bottom: var(--sp-4xl);
 }
 
-.animal-profile__back {
+/* Editorial Breadcrumbs */
+.animal-profile__breadcrumbs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-sm);
+    font-size: var(--text-caption-size);
+    font-family: var(--font-mono);
+    color: var(--color-ink-muted-48);
     margin-bottom: var(--sp-xl);
+    letter-spacing: 0.03em;
 }
 
-.animal-profile__back-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+.animal-profile__breadcrumb-link {
     color: var(--color-ink-muted-80);
+    text-decoration: none;
     transition: color var(--duration-fast) var(--ease-out);
 }
 
-.animal-profile__back-link:hover {
+.animal-profile__breadcrumb-link:hover {
     color: var(--color-ink);
+}
+
+.animal-profile__breadcrumb-sep {
+    color: var(--color-ink-muted-48);
+    user-select: none;
+}
+
+.animal-profile__badge-pedigree {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: var(--r-full);
+    font-size: var(--text-caption-size);
+    font-family: var(--font-mono);
+    color: var(--color-ink);
+    background-color: var(--color-canvas-parchment);
+    border: 1px solid var(--color-hairline);
+    font-weight: 500;
 }
 
 .animal-profile__badge-gender {
     display: inline-flex;
     align-items: center;
     gap: 4px;
+    font-size: var(--text-caption-size);
+    font-weight: 600;
 }
 
 .animal-profile__grid {
@@ -148,6 +176,7 @@
     overflow: hidden;
     background-color: var(--color-canvas-parchment);
     aspect-ratio: 4 / 3;
+    border: 1px solid var(--color-hairline);
 }
 
 .animal-profile__main-image {
@@ -163,22 +192,31 @@
 
 .animal-profile__thumbs {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
     gap: var(--sp-sm);
 }
 
 .animal-profile__thumb {
+    position: relative;
     border-radius: var(--r-md);
     overflow: hidden;
     aspect-ratio: 1;
     border: 2px solid transparent;
     cursor: pointer;
-    transition: border-color var(--duration-fast) var(--ease-out);
+    transition: all var(--duration-fast) var(--ease-out);
+    background-color: var(--color-canvas-parchment);
 }
 
 .animal-profile__thumb:hover,
+.animal-profile__thumb:focus-visible,
 .animal-profile__thumb--active {
     border-color: var(--color-primary);
+    transform: translateY(-2px);
+}
+
+.animal-profile__thumb:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
 }
 
 .animal-profile__thumb img {
@@ -198,6 +236,8 @@
     display: flex;
     flex-direction: column;
     gap: var(--sp-xs);
+    padding-bottom: var(--sp-md);
+    border-bottom: 1px solid var(--color-hairline);
 }
 
 .animal-profile__badges {
@@ -217,30 +257,67 @@
     font-size: var(--text-lead-size);
 }
 
-.animal-profile__specs {
+.animal-profile__meta-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-md);
+    font-size: 14px;
+    color: var(--color-ink-muted-80);
+    font-family: var(--font-mono);
+}
+
+/* Editorial Spec Cards Grid */
+.animal-profile__specs-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: var(--sp-md);
+}
+
+@media (min-width: 640px) {
+    .animal-profile__specs-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.animal-spec-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-xs);
     padding: var(--sp-lg);
     background-color: var(--color-canvas-parchment);
     border-radius: var(--r-lg);
     border: 1px solid var(--color-hairline);
+    transition: all var(--duration-fast) var(--ease-out);
 }
 
-.animal-spec {
+.animal-spec-card:hover {
+    border-color: var(--color-ink-muted-48);
+    transform: translateY(-2px);
+}
+
+.animal-spec-card__top {
     display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.animal-spec__label {
-    font-size: 13px;
+    align-items: center;
+    justify-content: space-between;
     color: var(--color-ink-muted-48);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
 }
 
-.animal-spec__value {
+.animal-spec-card__label {
+    font-size: 11px;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-ink-muted-48);
+}
+
+.animal-spec-card__icon {
+    width: 16px;
+    height: 16px;
+    color: var(--color-ink-muted-48);
+}
+
+.animal-spec-card__value {
     font-size: 16px;
     font-weight: 600;
     color: var(--color-ink);
@@ -248,19 +325,64 @@
 
 .animal-profile__description {
     color: var(--color-ink-muted-80);
-    line-height: 1.7;
+    line-height: 1.8;
+    max-width: 65ch;
+    font-size: var(--text-lead-size);
+}
+
+.animal-profile__description p {
+    margin-bottom: var(--sp-lg);
+}
+
+.animal-profile__description blockquote {
+    margin: var(--sp-lg) 0;
+    padding: var(--sp-md) var(--sp-lg);
+    border-left: 3px solid #d1ab58;
+    background-color: var(--color-canvas-parchment);
+    border-radius: 0 var(--r-md) var(--r-md) 0;
+    color: var(--color-ink);
+    font-style: italic;
 }
 
 .animal-profile__actions {
     display: flex;
     flex-wrap: wrap;
     gap: var(--sp-md);
-    padding-top: var(--sp-sm);
+    padding-top: var(--sp-md);
+    border-top: 1px solid var(--color-hairline);
 }
 
 /* --------------------------------------------------------------------------
-   3. PEDIGREE & GENEALOGY (Family Tree)
+   3. PEDIGREE & GENEALOGY (Family Tree & Lineage Guarantee)
    -------------------------------------------------------------------------- */
+
+.pedigree-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-md);
+}
+
+.pedigree-section__header {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-md);
+    padding-bottom: var(--sp-sm);
+    border-bottom: 1px solid var(--color-hairline);
+}
+
+.pedigree-section__badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: var(--r-full);
+    font-size: 11px;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background-color: rgba(209, 171, 88, 0.15);
+    color: #b58d3d;
+    font-weight: 600;
+}
 
 .pedigree-card {
     background-color: var(--color-canvas);
@@ -270,16 +392,29 @@
     display: flex;
     align-items: center;
     gap: var(--sp-md);
-    transition: border-color var(--duration-fast) var(--ease-out);
+    transition: all var(--duration-fast) var(--ease-out);
+    text-decoration: none;
 }
 
 .pedigree-card:hover {
     border-color: var(--color-ink-muted-48);
+    transform: translateY(-3px);
+}
+
+.pedigree-card--placeholder {
+    cursor: default;
+    background-color: var(--color-canvas-parchment);
+    opacity: 0.85;
+}
+
+.pedigree-card--placeholder:hover {
+    transform: none;
+    border-color: var(--color-hairline);
 }
 
 .pedigree-card__icon {
-    width: 44px;
-    height: 44px;
+    width: 48px;
+    height: 48px;
     border-radius: var(--r-full);
     background-color: var(--color-canvas-parchment);
     display: flex;
@@ -292,18 +427,20 @@
 .pedigree-card__info {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 4px;
 }
 
 .pedigree-card__role {
-    font-size: 12px;
+    font-size: 11px;
+    font-family: var(--font-mono);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--color-ink-muted-48);
+    letter-spacing: 0.06em;
+    color: #d1ab58;
+    font-weight: 600;
 }
 
 .pedigree-card__name {
-    font-size: 17px;
+    font-size: 18px;
     font-weight: 600;
     color: var(--color-ink);
 }
@@ -316,12 +453,68 @@
 .pedigree-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--sp-md);
-    margin-top: var(--sp-lg);
+    gap: var(--sp-lg);
 }
 
 @media (min-width: 640px) {
     .pedigree-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+}
+
+.pedigree-lineage-strip {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-lg);
+    padding-top: var(--sp-2xl);
+    border-top: 1px solid var(--color-hairline);
+}
+
+.pedigree-lineage__header {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-md);
+}
+
+.pedigree-lineage__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--sp-md);
+}
+
+@media (min-width: 768px) {
+    .pedigree-lineage__grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.pedigree-lineage-card {
+    background-color: var(--color-canvas);
+    border-radius: var(--r-md);
+    border: 1px solid var(--color-hairline);
+    padding: var(--sp-lg);
+    display: flex;
+    align-items: flex-start;
+    gap: var(--sp-md);
+}
+
+.pedigree-lineage__icon {
+    width: 20px;
+    height: 20px;
+    color: #d1ab58;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.pedigree-lineage__title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-ink);
+    margin-bottom: 4px;
+}
+
+.pedigree-lineage__desc {
+    font-size: 13px;
+    color: var(--color-ink-muted-80);
+    line-height: 1.6;
 }

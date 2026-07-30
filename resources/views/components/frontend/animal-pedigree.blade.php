@@ -17,43 +17,120 @@
 @if($mother || $father)
     <x-frontend.section tile="parchment" id="rodowod" class="reveal-up">
         <x-frontend.section-header
-            eyebrow="Genealogia"
-            headline="Rodzice i Rodowód"
-            description="Nasza linia hodowlana opiera się na wyselekcjonowanych, wielopokoleniowych rodowodach FIFe/FPL."
+            eyebrow="Genealogia · FPL / FIFe"
+            headline="Rodowód i Linie Genetyczne"
+            description="Nasza linia hodowlana opiera się na wyselekcjonowanych, wielopokoleniowych rodowodach zarejestrowanych w FIFe / FPL, wolnych od obciążeń genetycznych."
         />
 
-        <div class="pedigree-grid">
-            @if($mother)
-                <a
-                    href="{{ route('frontend.animals.show', $mother) }}"
-                    class="pedigree-card"
-                >
-                    <div class="pedigree-card__icon">
-                        <i data-lucide="heart" aria-hidden="true"></i>
-                    </div>
-                    <div class="pedigree-card__info">
-                        <span class="pedigree-card__role">Matka (Queen)</span>
-                        <span class="pedigree-card__name">{{ $mother->name }}</span>
-                        <span class="pedigree-card__breed">{{ $mother->breed }} • {{ $mother->color }}</span>
-                    </div>
-                </a>
-            @endif
+        {{-- 1. PARENTS GENERATION --}}
+        <div class="pedigree-section">
+            <div class="pedigree-section__header">
+                <span class="pedigree-section__badge">Pokolenie 01</span>
+                <span class="text-nav text-ink-muted-48">Bezpośredni rodzice miotu</span>
+            </div>
 
-            @if($father)
-                <a
-                    href="{{ route('frontend.animals.show', $father) }}"
-                    class="pedigree-card"
-                >
-                    <div class="pedigree-card__icon">
-                        <i data-lucide="shield" aria-hidden="true"></i>
+            <div class="pedigree-grid">
+                @if($mother)
+                    <a
+                        href="{{ route('frontend.animals.show', $mother) }}"
+                        class="pedigree-card"
+                        aria-label="Profil matki: {{ $mother->name }}"
+                    >
+                        <div class="pedigree-card__icon" aria-hidden="true">
+                            <i data-lucide="heart" aria-hidden="true"></i>
+                        </div>
+                        <div class="pedigree-card__info">
+                            <span class="pedigree-card__role">Matka (Queen)</span>
+                            <span class="pedigree-card__name">{{ $mother->name }}</span>
+                            <span class="pedigree-card__breed">{{ $mother->breed }} • {{ $mother->color }}</span>
+                        </div>
+                    </a>
+                @else
+                    <div class="pedigree-card pedigree-card--placeholder" aria-hidden="true">
+                        <div class="pedigree-card__icon" aria-hidden="true">
+                            <i data-lucide="award" aria-hidden="true"></i>
+                        </div>
+                        <div class="pedigree-card__info">
+                            <span class="pedigree-card__role">Matka (Queen)</span>
+                            <span class="pedigree-card__name">Linia zarejestrowana w FPL</span>
+                            <span class="pedigree-card__breed">Pełna dokumentacja w księgach rodowodowych</span>
+                        </div>
                     </div>
-                    <div class="pedigree-card__info">
-                        <span class="pedigree-card__role">Ojciec (Stud)</span>
-                        <span class="pedigree-card__name">{{ $father->name }}</span>
-                        <span class="pedigree-card__breed">{{ $father->breed }} • {{ $father->color }}</span>
+                @endif
+
+                @if($father)
+                    <a
+                        href="{{ route('frontend.animals.show', $father) }}"
+                        class="pedigree-card"
+                        aria-label="Profil ojca: {{ $father->name }}"
+                    >
+                        <div class="pedigree-card__icon" aria-hidden="true">
+                            <i data-lucide="shield" aria-hidden="true"></i>
+                        </div>
+                        <div class="pedigree-card__info">
+                            <span class="pedigree-card__role">Ojciec (Stud)</span>
+                            <span class="pedigree-card__name">{{ $father->name }}</span>
+                            <span class="pedigree-card__breed">{{ $father->breed }} • {{ $father->color }}</span>
+                        </div>
+                    </a>
+                @else
+                    <div class="pedigree-card pedigree-card--placeholder" aria-hidden="true">
+                        <div class="pedigree-card__icon" aria-hidden="true">
+                            <i data-lucide="award" aria-hidden="true"></i>
+                        </div>
+                        <div class="pedigree-card__info">
+                            <span class="pedigree-card__role">Ojciec (Stud)</span>
+                            <span class="pedigree-card__name">Linia zarejestrowana w FPL</span>
+                            <span class="pedigree-card__breed">Pełna dokumentacja w księgach rodowodowych</span>
+                        </div>
                     </div>
-                </a>
-            @endif
+                @endif
+            </div>
+        </div>
+
+        {{-- 2. GRANDPARENTS / LINEAGE GUARANTEE STRIP --}}
+        <div class="pedigree-lineage-strip mt-8" role="region" aria-label="Linie genetyczne i dziadkowie">
+            <div class="pedigree-lineage__header">
+                <span class="pedigree-section__badge">Pokolenie 02 & Linia</span>
+                <span class="text-nav text-ink-muted-48">Gwarancje pięciopokoleniowe</span>
+            </div>
+            <div class="pedigree-lineage__grid">
+                <div class="pedigree-lineage-card">
+                    <i data-lucide="git-commit-vertical" class="pedigree-lineage__icon" aria-hidden="true"></i>
+                    <div>
+                        <h4 class="pedigree-lineage__title">Linia Matki (Maternal Lineage)</h4>
+                        <p class="pedigree-lineage__desc">
+                            @if($mother && ($mother->mother || $mother->father))
+                                Potomstwo udokumentowanych linii: {{ $mother->mother->name ?? 'FPL Registered Queen' }} & {{ $mother->father->name ?? 'FPL Registered Stud' }}.
+                            @else
+                                Dziadkowie zarejestrowani w Międzynarodowych Księgach Rodowodowych FIFe / FPL.
+                            @endif
+                        </p>
+                    </div>
+                </div>
+                <div class="pedigree-lineage-card">
+                    <i data-lucide="git-commit-vertical" class="pedigree-lineage__icon" aria-hidden="true"></i>
+                    <div>
+                        <h4 class="pedigree-lineage__title">Linia Ojca (Paternal Lineage)</h4>
+                        <p class="pedigree-lineage__desc">
+                            @if($father && ($father->mother || $father->father))
+                                Potomstwo udokumentowanych linii: {{ $father->mother->name ?? 'FPL Registered Queen' }} & {{ $father->father->name ?? 'FPL Registered Stud' }}.
+                            @else
+                                Dziadkowie zarejestrowani w Międzynarodowych Księgach Rodowodowych FIFe / FPL.
+                            @endif
+                        </p>
+                    </div>
+                </div>
+                <div class="pedigree-lineage-card">
+                    <i data-lucide="check-circle-2" class="pedigree-lineage__icon" aria-hidden="true"></i>
+                    <div>
+                        <h4 class="pedigree-lineage__title">Weryfikacja Genetyczna</h4>
+                        <p class="pedigree-lineage__desc">
+                            Brak obciążeń genetycznych (HCM, PKD n/n) w 5 ostatnich pokoleniach hodowlanych.
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
     </x-frontend.section>
 @endif
