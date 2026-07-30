@@ -32,9 +32,6 @@
             {{-- Split-Screen Editorial Opening --}}
             <div class="hero-split-grid">
                 <div class="hero-split__left">
-                    <span class="text-caption font-mono text-primary uppercase tracking-widest">
-                        Etyczna Hodowla Kotów Rasowych · FIFe / FPL
-                    </span>
                     <h1 class="hero-split__title">
                         Czystość Rasy.<br>
                         Spokój Genetyki.<br>
@@ -48,9 +45,6 @@
                     <div class="hero-split__actions">
                         <x-frontend.button href="{{ route('contact') }}" icon="arrow-right">
                             Zaplanuj rozmowę adopcyjną
-                        </x-frontend.button>
-                        <x-frontend.button variant="secondary" href="#kodeks">
-                            Poznaj standard genetyczny
                         </x-frontend.button>
                     </div>
 
@@ -106,7 +100,6 @@
                     „Nie hodujemy kotów dla mas. Hodujemy dla tych, którzy poszukują 
                     bezkompromisowego zdrowia, harmonii i autentycznego piękna w swoim domu.”
                 </blockquote>
-                <span class="text-caption font-mono text-ink-muted-48">ZetKamil Cattery · Międzynarodowa Rejestracja FIFe</span>
             </div>
 
             <div class="manifesto__grid">
