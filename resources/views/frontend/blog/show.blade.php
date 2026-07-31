@@ -54,21 +54,6 @@
             <article class="article-editorial">
                 {!! nl2br(e($post->body)) !!}
             </article>
-
-            {{-- Tags & Categories Footer --}}
-            <div class="article-footer">
-                <div class="article-footer__share">
-                    <span class="article-footer__label">Udostępnij:</span>
-                    <div class="article-share-links">
-                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->fullUrl()) }}" target="_blank" rel="noopener" class="article-share-btn" aria-label="Udostępnij na Facebooku">
-                            <i data-lucide="facebook" aria-hidden="true"></i>
-                        </a>
-                        <a href="mailto:?subject={{ urlencode($post->title) }}&body={{ urlencode(request()->fullUrl()) }}" class="article-share-btn" aria-label="Wyślij e-mailem">
-                            <i data-lucide="mail" aria-hidden="true"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
         </div>
     </x-frontend.section>
 
