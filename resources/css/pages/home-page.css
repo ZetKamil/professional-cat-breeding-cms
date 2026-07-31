@@ -701,10 +701,10 @@
 .daily-life__badge {
     font-family: var(--font-mono);
     font-size: 11px;
-    font-weight: 500;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--color-ink-muted, #64748b);
+    letter-spacing: 0.14em;
+    color: var(--color-ink, #1d1d1f);
     position: relative;
     padding-left: 14px;
 }
@@ -719,6 +719,24 @@
     height: 6px;
     border-radius: var(--r-full, 9999px);
     background-color: var(--color-primary, #c8a04a);
+}
+
+.daily-life__frequency {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 16px;
+    margin-bottom: 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--color-hairline, rgba(0, 0, 0, 0.08));
+}
+
+.daily-life__subtext {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--color-ink-muted, #64748b);
 }
 
 .daily-life__headline {
@@ -736,7 +754,7 @@
     font-size: clamp(1.05rem, 1.4vw, 1.15rem);
     line-height: 1.7;
     color: var(--color-ink-muted-80, #515154);
-    margin-bottom: var(--sp-xl, 40px);
+    margin-bottom: 20px;
     max-width: 52ch;
     text-wrap: pretty;
 }
@@ -766,6 +784,7 @@
     overflow: hidden;
     background-color: var(--color-surface, #f4f3f0);
     box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--color-hairline, rgba(0, 0, 0, 0.08));
 }
 
 .daily-life__image-wrap img {
@@ -783,38 +802,34 @@
 .daily-life__image-wrap--main {
     grid-column: 1 / 2;
     grid-row: 1 / 3;
-    aspect-ratio: 4 / 5;
+    height: 100%;
 }
 
 .daily-life__image-wrap--sub1 {
     grid-column: 2 / 3;
     grid-row: 1 / 2;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 4 / 3;
 }
 
 .daily-life__image-wrap--sub2 {
     grid-column: 2 / 3;
     grid-row: 2 / 3;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 4 / 3;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 640px) {
     .daily-life__gallery {
         grid-template-columns: 1fr;
         grid-template-rows: auto auto auto;
     }
 
-    .daily-life__image-wrap--main {
-        grid-column: 1 / -1;
-        grid-row: auto;
-        aspect-ratio: 16 / 10;
-    }
-
+    .daily-life__image-wrap--main,
     .daily-life__image-wrap--sub1,
     .daily-life__image-wrap--sub2 {
         grid-column: 1 / -1;
         grid-row: auto;
         aspect-ratio: 16 / 10;
+        height: auto;
     }
 }
 
@@ -827,4 +842,82 @@
     justify-content: center;
     align-items: center;
     margin-top: 56px;
+}
+
+/* --------------------------------------------------------------------------
+   10. HOMEPAGE OPTICAL SPACING & EDITORIAL RHYTHM (SPRINT 6.5 POLISH)
+   Handcrafted transitions between sections to feel like a cohesive book
+   -------------------------------------------------------------------------- */
+
+/* Section 2: Specjalizacje rasy -> Dostępne Kocięta */
+.home-section--specjalizacje {
+    padding-bottom: var(--sp-2xl, 48px);
+}
+
+/* Section 3: Dostępne Kocięta -> Historie */
+.home-section--nasze-koty {
+    padding-top: 56px;
+    padding-bottom: 56px;
+}
+
+/* Section 4: Historie -> Codzienność */
+.home-section--opinie {
+    padding-top: 56px;
+    padding-bottom: 72px;
+}
+
+/* Section 5: Codzienność (Facebook) -> Wiedza i Felinologia
+   Controlled editorial breathing space between daily life & knowledge reading room */
+.home-section--codziennosc {
+    padding-top: 72px;
+    padding-bottom: 36px;
+}
+
+/* Section 6: Wiedza i Felinologia -> Final CTA */
+.home-section--blog {
+    padding-top: 44px;
+    padding-bottom: 40px;
+}
+
+/* Section 7: Final CTA -> Footer separation */
+.home-section--cta .cta-section {
+    padding-top: 56px;
+    padding-bottom: 72px;
+}
+
+/* Mobile Responsive Adjustments — Compact Premium Rhythm */
+@media (max-width: 640px) {
+    .home-section--specjalizacje {
+        padding-top: 48px;
+        padding-bottom: 32px;
+    }
+
+    .home-section--nasze-koty {
+        padding-top: 40px;
+        padding-bottom: 40px;
+    }
+
+    .home-section--opinie {
+        padding-top: 40px;
+        padding-bottom: 48px;
+    }
+
+    .home-section--codziennosc {
+        padding-top: 48px;
+        padding-bottom: 24px;
+    }
+
+    .home-section--blog {
+        padding-top: 32px;
+        padding-bottom: 28px;
+    }
+
+    .home-section--cta .cta-section {
+        padding-top: 40px;
+        padding-bottom: 48px;
+    }
+
+    .section-action {
+        margin-top: 36px;
+    }
 }

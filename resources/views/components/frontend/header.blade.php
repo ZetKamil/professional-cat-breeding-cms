@@ -30,8 +30,9 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('home') }}#o-nas"
-                       class="global-nav__link">
+                    <a href="{{ route('cattery') }}"
+                       class="global-nav__link {{ request()->routeIs('cattery') ? 'is-active' : '' }}"
+                       {{ request()->routeIs('cattery') ? 'aria-current=page' : '' }}>
                         O Hodowli
                     </a>
                 </li>
@@ -112,7 +113,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('home') }}#o-nas" class="mobile-menu__link">
+                    <a href="{{ route('cattery') }}" class="mobile-menu__link {{ request()->routeIs('cattery') ? 'is-active' : '' }}">
                         O Hodowli
                     </a>
                 </li>

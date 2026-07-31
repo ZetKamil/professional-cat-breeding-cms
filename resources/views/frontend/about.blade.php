@@ -13,6 +13,7 @@
         image-alt="Spokojny kot w promieniach słońca"
         scroll-target="#nasza-filozofia"
         size="large"
+        data-nav-theme="dark"
     />
 
     {{-- ============================================================

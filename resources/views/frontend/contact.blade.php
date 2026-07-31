@@ -6,7 +6,7 @@
          HERO — Calm, inviting
          „Jak mogę się skontaktować?"
          ============================================================ --}}
-    <section class="contact-hero tile-dark" aria-label="Kontakt">
+    <section class="contact-hero tile-parchment" aria-label="Kontakt">
         <div class="section">
             <div class="section-inner">
                 <div class="contact-hero__content">
@@ -28,20 +28,20 @@
          ============================================================ --}}
     <x-frontend.section>
         <div class="contact-methods">
-            <a href="mailto:kontakt@example.com" class="contact-method">
+            <a href="mailto:hodowla.z.mazowieckiej.szwajcarii@gmail.com" class="contact-method">
                 <div class="contact-method__icon">
                     <i data-lucide="mail" aria-hidden="true"></i>
                 </div>
                 <h3 class="contact-method__title text-body-strong">E-mail</h3>
-                <p class="contact-method__value">kontakt@example.com</p>
+                <p class="contact-method__value">hodowla.z.mazowieckiej.szwajcarii@gmail.com</p>
             </a>
 
-            <a href="tel:+48000000000" class="contact-method">
+            <a href="tel:+48514153204" class="contact-method">
                 <div class="contact-method__icon">
                     <i data-lucide="phone" aria-hidden="true"></i>
                 </div>
                 <h3 class="contact-method__title text-body-strong">Telefon</h3>
-                <p class="contact-method__value">+48 000 000 000</p>
+                <p class="contact-method__value">+48 514 153 204</p>
             </a>
 
             <div class="contact-method">
@@ -49,14 +49,22 @@
                     <i data-lucide="map-pin" aria-hidden="true"></i>
                 </div>
                 <h3 class="contact-method__title text-body-strong">Lokalizacja</h3>
-                <p class="contact-method__value">Polska</p>
+                <p class="contact-method__value">Warszawa / Mazowsze, Polska</p>
             </div>
         </div>
 
-        {{-- Google Maps Placeholder --}}
-        <div class="contact-map-placeholder reveal-up">
-            <i data-lucide="map" class="contact-map__icon" aria-hidden="true"></i>
-            <span class="contact-map__text text-tagline">Mapa dojazdu (Integracja Google Maps)</span>
+        {{-- Google Maps Interactive Embed --}}
+        <div class="contact-map-embed reveal-up">
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d312781.0827289524!2d20.7810058!3d52.2330653!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471ecc669a869f01%3A0x72f0be2a88ead3fc!2sWarszawa!5e0!3m2!1spl!2spl!4v1710000000000!5m2!1spl!2spl"
+                width="100%"
+                height="420"
+                style="border:0;"
+                allowfullscreen=""
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                title="Lokalizacja Hodowla Kotów z Mazowieckiej Szwajcarii - Warszawa / Mazowsze"
+            ></iframe>
         </div>
     </x-frontend.section>
 

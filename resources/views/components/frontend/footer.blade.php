@@ -48,8 +48,8 @@
                     <ul class="footer-links" role="list">
                         <li><a href="{{ route('home') }}" class="footer-link">Strona Główna</a></li>
                         <li><a href="{{ route('frontend.animals.index') }}" class="footer-link">Nasze Koty</a></li>
-                        <li><a href="{{ route('home') }}#o-nas" class="footer-link">Nasza Historia</a></li>
-                        <li><a href="{{ route('about') }}" class="footer-link">O Hodowli</a></li>
+                        <li><a href="{{ route('cattery') }}" class="footer-link">O Hodowli</a></li>
+                        <li><a href="{{ route('about') }}" class="footer-link">O Nas</a></li>
                         <li><a href="{{ route('frontend.blog.index') }}" class="footer-link">Baza Wiedzy</a></li>
                         <li><a href="{{ route('contact') }}" class="footer-link">Kontakt</a></li>
                     </ul>

@@ -23,11 +23,22 @@ class HomepageTest extends TestCase
         $response->assertSee('Koty Bengalskie');
         $response->assertSee('Brytyjczyki');
         $response->assertSee('Koty Syjamskie');
+        $response->assertSee('Historie Naszych Wychowanków');
+        $response->assertSee('Codzienność w hodowli');
+        $response->assertSee('Nasza czytelnia — wkrótce nowe publikacje');
+    }
+
+    public function test_cattery_page_renders_successfully_with_philosophy_code_and_adoption_journey(): void
+    {
+        $response = $this->get(route('cattery'));
+
+        $response->assertOk();
+        $response->assertSee('Filozofia Naszej Hodowli');
+        $response->assertSee('Czworoczęściowy Kodeks Zaufania');
         $response->assertSee('Jak wygląda proces adopcji?');
         $response->assertSee('Rozmowa i Dobór');
         $response->assertSee('Rezerwacja i Wizyta');
         $response->assertSee('Odbiór i Wyprawka');
-        $response->assertSee('Nasza czytelnia — wkrótce nowe publikacje');
     }
 
     public function test_homepage_renders_featured_animals_when_available(): void

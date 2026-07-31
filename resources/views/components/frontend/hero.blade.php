@@ -27,7 +27,7 @@
     $sizeClass = $size === 'large' ? 'hero--large' : 'hero--full';
 @endphp
 
-<section {{ $attributes->merge(['class' => "hero {$alignClass} {$sizeClass}"]) }} aria-label="Powitanie">
+<section {{ $attributes->merge(['class' => "hero {$alignClass} {$sizeClass}", 'data-nav-theme' => 'dark']) }} aria-label="Powitanie">
     {{-- Background Photography --}}
     <div class="hero__bg">
         <img 
