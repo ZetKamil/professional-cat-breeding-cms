@@ -93,15 +93,13 @@
     background-color: var(--color-hairline);
 }
 
-.breed-pill.breed-pill--active {
-    color: var(--color-canvas);
-    background-color: var(--color-ink);
-    border-color: var(--color-ink);
-}
-
+.breed-pill.breed-pill--active,
 .breed-pill.breed-pill--active:hover {
-    color: var(--color-canvas);
-    background-color: var(--color-ink);
+    color: var(--color-primary);
+    background-color: var(--color-canvas);
+    border-color: var(--color-primary);
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 102, 204, 0.12);
 }
 
 .animals-filter-secondary {

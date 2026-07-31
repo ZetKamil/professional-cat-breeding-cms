@@ -65,11 +65,13 @@
     transform: translateY(-1px);
 }
 
-.blog-category-pill--active {
-    color: var(--color-canvas);
-    background-color: var(--color-ink);
-    border-color: var(--color-ink);
-    box-shadow: 0 4px 12px rgba(18, 18, 18, 0.12);
+.blog-category-pill.blog-category-pill--active,
+.blog-category-pill.blog-category-pill--active:hover {
+    color: var(--color-primary);
+    background-color: var(--color-canvas);
+    border-color: var(--color-primary);
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 102, 204, 0.12);
 }
 
 /* Search Field */
