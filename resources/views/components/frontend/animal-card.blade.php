@@ -43,8 +43,14 @@
 
         <h3 class="animal-card__name">{{ $animal->name }}</h3>
 
-        @if($showAge && $animal->date_of_birth)
-            <p class="animal-card__age">Ur. {{ $animal->date_of_birth->format('d.m.Y') }}</p>
-        @endif
+        <div class="animal-card__footer">
+            @if($showAge && $animal->date_of_birth)
+                <span class="animal-card__age">Ur. {{ $animal->date_of_birth->format('d.m.Y') }}</span>
+            @endif
+            <span class="animal-card__cta">
+                Zobacz profil
+                <i data-lucide="arrow-up-right" class="w-4 h-4 text-primary" aria-hidden="true"></i>
+            </span>
+        </div>
     </div>
 </x-frontend.card>

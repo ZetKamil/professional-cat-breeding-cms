@@ -15,11 +15,11 @@
    -------------------------------------------------------------------------- */
 
 :root {
-    /* Brand & Accent */
-    --color-primary: #0066cc;
-    --color-primary-focus: #0071e3;
-    --color-primary-on-dark: #2997ff;
-    --color-primary-hover: #0077ed;
+    /* Brand & Accent — Luxury Gold / Amber */
+    --color-primary: #d1ab58;
+    --color-primary-focus: #e2c275;
+    --color-primary-on-dark: #e2c275;
+    --color-primary-hover: #b89345;
 
     /* Surfaces */
     --color-canvas: #ffffff;
@@ -163,7 +163,8 @@
     --r-md: 0.6875rem;   /* 11px */
     --r-lg: 1.125rem;    /* 18px */
     --r-pill: 9999px;
-    --r-full: 50%;
+    --r-full: 9999px;
+    --r-circle: 50%;
 
     /* --------------------------------------------------------------------------
        5. ELEVATION & DEPTH

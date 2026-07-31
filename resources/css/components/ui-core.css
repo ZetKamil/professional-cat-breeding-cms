@@ -141,7 +141,7 @@
 
 .section-header__eyebrow {
     display: inline-block;
-    font-family: var(--font-mono);
+    font-family: var(--font-sans);
     font-size: 12px;
     font-weight: 600;
     letter-spacing: 0.14em;
@@ -321,7 +321,7 @@ textarea:disabled {
 }
 
 .table-editorial th {
-    font-family: var(--font-mono, monospace);
+    font-family: var(--font-sans);
     font-size: 0.785rem;
     font-weight: 600;
     letter-spacing: 0.08em;

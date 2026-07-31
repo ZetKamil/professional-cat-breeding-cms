@@ -41,7 +41,7 @@
 
 .trust-item__index,
 .trust-pillar__index {
-    font-family: var(--font-mono, monospace);
+    font-family: var(--font-sans);
     font-size: 0.8125rem;
     font-weight: 500;
     letter-spacing: 0.12em;
@@ -102,7 +102,72 @@
 }
 
 /* ==========================================================================
-   3. RESPONSIVE
+   3. GUARANTEE BANNER (Standalone luxury trust banner below pillars)
+   ========================================================================== */
+
+.trust-guarantee-banner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-lg);
+    margin-top: var(--sp-3xl);
+    padding: var(--sp-xl) var(--sp-2xl);
+    background-color: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--r-xl);
+}
+
+.trust-guarantee-banner__content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.trust-guarantee-banner__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--r-md);
+    background-color: rgba(226, 194, 117, 0.12);
+    border: 1px solid rgba(226, 194, 117, 0.28);
+    color: var(--color-primary);
+    flex-shrink: 0;
+}
+
+.trust-guarantee-banner__title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-canvas);
+    margin-bottom: 4px;
+}
+
+.trust-guarantee-banner__desc {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.65);
+    line-height: 1.5;
+}
+
+.trust-guarantee-banner__link {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: opacity var(--duration-fast) var(--ease-out);
+    white-space: nowrap;
+}
+
+.trust-guarantee-banner__link:hover {
+    opacity: 0.8;
+}
+
+/* ==========================================================================
+   4. RESPONSIVE
    ========================================================================== */
 
 @media (max-width: 834px) {
@@ -110,5 +175,11 @@
         grid-template-columns: 1fr;
         column-gap: 0;
         row-gap: var(--sp-xl);
+    }
+
+    .trust-guarantee-banner {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: var(--sp-lg);
     }
 }

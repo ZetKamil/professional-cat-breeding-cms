@@ -5,20 +5,21 @@
 
 .hero {
     position: relative;
-    min-height: 82vh;
-    min-height: 82dvh;
+    min-height: 85vh;
+    min-height: 85dvh;
     display: flex;
     align-items: center;
     overflow: hidden;
     background-color: var(--color-surface-black);
-    padding-top: var(--nav-height, 64px);
+    padding-top: clamp(140px, 16vh, 180px);
+    padding-bottom: clamp(32px, 5vh, 48px);
 }
 
 @media (min-width: 1024px) {
     .hero {
-        min-height: calc(100vh - 120px);
-        min-height: calc(100dvh - 120px);
-        max-height: 860px;
+        min-height: calc(100vh - 80px);
+        min-height: calc(100dvh - 80px);
+        max-height: none;
     }
 }
 

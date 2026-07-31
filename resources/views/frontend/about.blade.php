@@ -197,9 +197,6 @@
             <div class="gallery-item">
                 <img src="https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?auto=format&fit=crop&w=600&q=80" alt="Bawiący się kot" width="600" height="600" decoding="async" loading="lazy">
             </div>
-            <div class="gallery-item gallery-item--wide">
-                <img src="https://images.unsplash.com/photo-1533738363-b7f9aef128ce?auto=format&fit=crop&w=800&q=80" alt="Odpoczywający kot" width="800" height="400" decoding="async" loading="lazy">
-            </div>
         </div>
     </x-frontend.section>
 

@@ -65,16 +65,18 @@
         </div>
     </div>
 
-    {{-- Premium Editorial Separator & Guarantee Banner --}}
-    <div class="mt-12 pt-8 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
-        <div class="flex items-center gap-3">
-            <i data-lucide="award" class="text-primary w-6 h-6" aria-hidden="true"></i>
+    {{-- Premium Editorial Guarantee Banner --}}
+    <div class="trust-guarantee-banner">
+        <div class="trust-guarantee-banner__content">
+            <div class="trust-guarantee-banner__icon">
+                <i data-lucide="award" class="w-5 h-5" aria-hidden="true"></i>
+            </div>
             <div>
-                <span class="text-sm font-semibold text-white block">Certyfikat Zaufania FIFe / FPL</span>
-                <span class="text-xs text-white/60">Hodowla zarejestrowana i monitorowana według najwyższych standardów etycznych</span>
+                <span class="trust-guarantee-banner__title block">Certyfikat Zaufania FIFe / FPL</span>
+                <span class="trust-guarantee-banner__desc block">Hodowla zarejestrowana i monitorowana według najwyższych standardów etycznych</span>
             </div>
         </div>
-        <a href="{{ route('about') }}#certyfikaty" class="text-xs uppercase font-mono tracking-wider text-primary hover:underline">
+        <a href="{{ route('about') }}#certyfikaty" class="trust-guarantee-banner__link">
             Poznaj naszą dokumentację →
         </a>
     </div>

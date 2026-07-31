@@ -7,7 +7,7 @@
         <div class="hero__bg" aria-hidden="true">
             <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=2000&q=80"
                 alt="Kot bengalski w naturalnym oświetleniu" width="2000" height="1200" decoding="async" loading="eager"
-                fetchpriority="high" class="opacity-20">
+                fetchpriority="high" class="hero__image opacity-25">
             <div class="hero__overlay"></div>
         </div>
 
@@ -33,22 +33,6 @@
                             Codzienne życie hodowli na Facebooku →
                         </a>
                     </div>
-
-                    {{-- Hero Trust Strip --}}
-                    <div class="hero__trust-bar" role="list" aria-label="Nasze certyfikaty i standardy">
-                        <div class="hero__trust-item" role="listitem">
-                            <i data-lucide="shield-check" class="hero__trust-icon" aria-hidden="true"></i>
-                            <span>Certyfikat FIFe / FPL</span>
-                        </div>
-                        <div class="hero__trust-item" role="listitem">
-                            <i data-lucide="dna" class="hero__trust-icon" aria-hidden="true"></i>
-                            <span>100% Badania Genetyczne</span>
-                        </div>
-                        <div class="hero__trust-item" role="listitem">
-                            <i data-lucide="heart-handshake" class="hero__trust-icon" aria-hidden="true"></i>
-                            <span>Domowa Socjalizacja</span>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="hero-split__right">
@@ -64,6 +48,22 @@
                             <span class="text-white/70 text-xs">Weryfikowane linie 5 pokoleń</span>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            {{-- Hero Trust Strip --}}
+            <div class="hero__trust-bar" role="list" aria-label="Nasze certyfikaty i standardy">
+                <div class="hero__trust-item" role="listitem">
+                    <i data-lucide="shield-check" class="hero__trust-icon" aria-hidden="true"></i>
+                    <span>Certyfikat FIFe / FPL</span>
+                </div>
+                <div class="hero__trust-item" role="listitem">
+                    <i data-lucide="dna" class="hero__trust-icon" aria-hidden="true"></i>
+                    <span>100% Badania Genetyczne</span>
+                </div>
+                <div class="hero__trust-item" role="listitem">
+                    <i data-lucide="heart-handshake" class="hero__trust-icon" aria-hidden="true"></i>
+                    <span>Domowa Socjalizacja</span>
                 </div>
             </div>
         </div>

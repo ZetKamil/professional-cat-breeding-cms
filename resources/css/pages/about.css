@@ -139,7 +139,10 @@
     border-radius: var(--r-lg);
     overflow: hidden;
     width: 100%;
+    max-width: 480px;
     height: 550px;
+    aspect-ratio: 4 / 5;
+    margin-left: auto;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
 }
 
@@ -297,6 +300,10 @@
 .gallery-item--large {
     grid-row: span 2;
     grid-column: span 2;
+}
+
+.gallery-item--large img {
+    object-position: center 20%;
 }
 
 .gallery-item--wide {

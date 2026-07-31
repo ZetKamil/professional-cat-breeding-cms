@@ -42,25 +42,37 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-if (revealElements.length > 0) {
-    // Use IntersectionObserver for performant scroll reveals
+function initReveal() {
+    const revealElements = document.querySelectorAll('.reveal-up');
+    if (revealElements.length === 0) return;
+
     const revealObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                // Add class to trigger CSS transition
                 entry.target.classList.add('is-revealed');
-                // Stop observing once revealed
                 observer.unobserve(entry.target);
             }
         });
     }, {
         root: null,
-        rootMargin: '0px 0px -10% 0px', // Trigger slightly before element comes into view
-        threshold: 0.1 // 10% of element must be visible
+        rootMargin: '0px 0px 100px 0px', // Trigger before element enters viewport
+        threshold: 0.01 // Trigger as soon as 1% is visible
     });
 
     revealElements.forEach(element => {
-        revealObserver.observe(element);
+        const rect = element.getBoundingClientRect();
+        // Immediately reveal if element is already within or close to viewport
+        if (rect.top < window.innerHeight + 100) {
+            element.classList.add('is-revealed');
+        } else {
+            revealObserver.observe(element);
+        }
     });
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initReveal);
+} else {
+    initReveal();
 }
 

@@ -20,7 +20,7 @@
          2. PHILOSOPHY — EDITORIAL 3-COLUMN ROLLS ROYCE PILLARS
          ============================================================ --}}
     <x-frontend.section id="filozofia" class="reveal-up">
-        <div class="manifesto-grid">
+        <div class="manifesto__grid">
             <div class="manifesto__heading">
                 <x-frontend.section-header align="left" eyebrow="Filozofia Naszej Hodowli"
                     headline="Nie budujemy po prostu hodowli. Tworzymy nowe standardy w felinologii."
