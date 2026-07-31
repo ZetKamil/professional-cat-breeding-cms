@@ -156,36 +156,39 @@
 }
 
 .footer-social__link {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: var(--r-full);
-    background-color: var(--color-ink);
-    border: 1px solid var(--color-ink);
-    color: #ffffff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 42px;
+    height: 42px;
+    border-radius: var(--r-full, 9999px);
+    background-color: transparent;
+    border: 1.5px solid #c8a04a;
+    color: #1d1d1f;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
     transition: all 0.25s var(--ease-out);
+    text-decoration: none;
 }
 
 .footer-social__link:hover {
-    background-color: var(--color-primary);
-    border-color: var(--color-primary);
-    color: #ffffff;
+    background-color: rgba(200, 160, 74, 0.15);
+    border-color: #a47e2a;
+    color: #a47e2a;
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(209, 171, 88, 0.35);
+    box-shadow: 0 4px 12px rgba(200, 160, 74, 0.2);
 }
 
 .footer-social__link:focus-visible {
-    outline: 2px solid var(--color-primary);
+    outline: 2px solid #c8a04a;
     outline-offset: 2px;
 }
 
 .footer-social__link svg {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     stroke: currentColor;
+    stroke-width: 2px;
+    fill: none !important;
 }
 
 /* --------------------------------------------------------------------------
