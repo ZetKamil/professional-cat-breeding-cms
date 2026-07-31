@@ -44,35 +44,7 @@
                     @endforeach
                 </div>
 
-                {{-- Status Filter --}}
-                <div class="animals-filter-secondary">
-                    <div class="animals-filter-group" role="navigation" aria-label="Filtruj po statusie">
-                        <a
-                            href="{{ route('frontend.animals.index', request()->except('status', 'page')) }}"
-                            class="filter-chip {{ empty($currentStatus) ? 'filter-chip--active' : '' }}"
-                        >
-                            Wszystkie statusy
-                        </a>
-                        @foreach($statuses as $statusEnum)
-                            <a
-                                href="{{ route('frontend.animals.index', array_merge(request()->except('page'), ['status' => $statusEnum->value])) }}"
-                                class="filter-chip {{ $currentStatus === $statusEnum->value ? 'filter-chip--active' : '' }}"
-                            >
-                                {{ $statusEnum->label() }}
-                            </a>
-                        @endforeach
-                    </div>
 
-                    @if(request()->hasAny(['breed', 'status', 'gender', 'q']))
-                        <a
-                            href="{{ route('frontend.animals.index') }}"
-                            class="text-nav animals-filter-clear"
-                        >
-                            <i data-lucide="x-circle" style="width: 16px; height: 16px;"></i>
-                            Wyczyść filtry
-                        </a>
-                    @endif
-                </div>
             </div>
 
             {{-- ============================================================

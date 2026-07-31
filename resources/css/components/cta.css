@@ -14,8 +14,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--sp-lg);
-    padding: var(--sp-3xl) var(--sp-xl);
+    gap: var(--sp-md);
+    padding: var(--sp-xl) var(--sp-lg);
 }
 
 .cta-block__eyebrow {
@@ -23,7 +23,7 @@
     align-items: center;
     justify-content: center;
     font-family: var(--font-mono, monospace);
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
     letter-spacing: 0.14em;
     text-transform: uppercase;

@@ -19,16 +19,7 @@
                         Profesjonalna hodowla kotów rasowych z pasją, troską i pełną transparentnością.
                     </p>
 
-                    <div class="footer-trust-badges">
-                        <span class="footer-trust-badge">
-                            <i data-lucide="shield-check" aria-hidden="true"></i>
-                            <span>FIFe & FPL</span>
-                        </span>
-                        <span class="footer-trust-badge">
-                            <i data-lucide="award" aria-hidden="true"></i>
-                            <span>100% Zdrowia i Badań</span>
-                        </span>
-                    </div>
+
 
                     <div class="footer-contact-info">
                         <div class="footer-contact-item">
@@ -91,7 +82,7 @@
                     </form>
                     <p class="newsletter-privacy">
                         <i data-lucide="lock" aria-hidden="true" class="newsletter-privacy__icon"></i>
-                        <span>Zero spamu. Rezygnacja w każdej chwili.</span>
+                        <span>Zapisując się, akceptujesz <a href="{{ route('privacy') }}" style="text-decoration: underline; color: inherit;">Politykę prywatności</a>.</span>
                     </p>
                 </div>
             </div>
@@ -102,9 +93,9 @@
                     &copy; {{ now()->year }} {{ config('app.name', 'Cattery') }}. Wszelkie prawa zastrzeżone.
                 </p>
                 <p class="footer-legal">
-                    <a href="{{ route('about') }}#filozofia" class="footer-link">Polityka prywatności</a>
+                    <a href="{{ route('privacy') }}" class="footer-link">Polityka prywatności</a>
                     <span class="footer-legal__sep" aria-hidden="true">·</span>
-                    <a href="{{ route('about') }}#standardy" class="footer-link">Regulamin strony</a>
+                    <a href="{{ route('terms') }}" class="footer-link">Regulamin strony</a>
                 </p>
             </div>
 

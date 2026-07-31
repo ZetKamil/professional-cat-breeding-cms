@@ -71,13 +71,5 @@
         </div>
     </div>
 
-    {{-- Cinematic Scroll Indicator --}}
-    @if($scrollTarget)
-        <a href="{{ $scrollTarget }}" class="hero__scroll-indicator" aria-label="Przewiń w dół, aby dowiedzieć się więcej">
-            <span class="hero__scroll-mouse">
-                <span class="hero__scroll-wheel"></span>
-            </span>
-            <span class="hero__scroll-label">Odkryj więcej</span>
-        </a>
-    @endif
+
 </section>

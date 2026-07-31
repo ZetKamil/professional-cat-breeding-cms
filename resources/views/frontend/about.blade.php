@@ -45,7 +45,7 @@
             </div>
             <div class="about-story__image-wrapper">
                 <img 
-                    src="https://images.unsplash.com/photo-1533743983669-94fa5c4338ec?auto=format&fit=crop&w=1000&q=80" 
+                    src="https://images.unsplash.com/photo-1543852786-1cf6624b9987?auto=format&fit=crop&w=1000&q=80" 
                     alt="Kot i właściciel"
                     class="about-story__image"
                     width="1000"

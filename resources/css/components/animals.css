@@ -15,7 +15,7 @@
 
 .animal-card {
     background-color: var(--color-canvas);
-    border: 1px solid var(--color-hairline);
+    border: 1px solid rgba(0, 0, 0, 0.04);
     border-radius: var(--r-lg);
     overflow: hidden;
     display: flex;
@@ -66,7 +66,7 @@
 .animal-card__badge-overlay .badge {
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.65);
     border: 1px solid rgba(255, 255, 255, 0.6);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
     color: var(--color-ink);
@@ -90,9 +90,9 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 6px;
-    font-size: 0.8125rem;
+    font-size: 12px;
     font-weight: 500;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--color-ink-muted-80);
     line-height: 1.4;

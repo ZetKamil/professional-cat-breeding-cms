@@ -21,6 +21,8 @@ Route::get('/blog/{post}', [FrontendBlogController::class, 'show'])->name('front
 Route::get('/contact', [ContactController::class, 'create'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('frontend.contact.store');
 Route::view('/about', 'frontend.about')->name('about');
+Route::view('/polityka-prywatnosci', 'frontend.privacy')->name('privacy');
+Route::view('/regulamin', 'frontend.terms')->name('terms');
 // backend dashboard
 Route::get('/backend', function () {
     Gate::authorize('view-backend-dashboard');

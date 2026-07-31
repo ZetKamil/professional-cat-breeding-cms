@@ -22,7 +22,7 @@
     'note' => 'Odpowiadamy zazwyczaj w ciągu 24 godzin · Pełne doradztwo przed i po adopcji',
 ])
 
-<x-frontend.section :tile="$tile" padding="lg" class="cta-section">
+<x-frontend.section :tile="$tile" padding="default" class="cta-section">
     <div class="cta-block">
         @if($eyebrow)
             <div class="cta-block__eyebrow">
