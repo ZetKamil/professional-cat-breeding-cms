@@ -1,16 +1,16 @@
 <x-frontend.shell
-    title="Regulamin — {{ config('app.name') }}"
+    title="Regulamin — Hodowla Kotów z Mazowieckiej Szwajcarii"
     meta-description="Regulamin adopcji i korzystania z naszej strony."
 >
-    <div class="section tile-canvas">
-        <div class="section-inner" style="max-width: 800px; margin: 0 auto; padding-top: var(--sp-4xl); padding-bottom: var(--sp-4xl); text-align: center;">
+    <div class="section tile-canvas legal-page">
+        <div class="section-inner legal-page__inner" style="text-align: center;">
             
-            <header style="margin-bottom: var(--sp-3xl);">
-                <i data-lucide="file-text" style="width: 48px; height: 48px; color: var(--color-ink-muted-48); margin-bottom: var(--sp-lg); display: inline-block;"></i>
-                <h1 class="text-hero-display" style="margin-top: var(--sp-xs); margin-bottom: var(--sp-md);">Regulamin Adopcji</h1>
+            <header class="legal-page__header">
+                <i data-lucide="file-text" class="legal-page__icon"></i>
+                <h1 class="text-hero-display legal-page__title">Regulamin Adopcji</h1>
                 <p class="text-lead-airy text-ink-muted-80">
-                    Dokument jest obecnie w przygotowaniu przez nasz zespół prawny. 
-                    Pełny, transparentny regulamin adopcji i korzystania z witryny pojawi się tutaj wkrótce.
+                    Regulamin strony i procedur adopcyjnych jest w trakcie redagowania. 
+                    Pełny, transparentny dokument pojawi się tutaj wkrótce.
                 </p>
                 <div style="margin-top: var(--sp-2xl);">
                     <a href="{{ route('home') }}" class="btn btn--primary">Wróć na stronę główną</a>

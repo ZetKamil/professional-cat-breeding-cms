@@ -22,6 +22,7 @@
 @import './pages/animals-page.css';
 @import './pages/blog-page.css';
 @import './pages/home-page.css';
+@import './pages/legal-page.css';
 
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';

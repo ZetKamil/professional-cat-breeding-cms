@@ -12,8 +12,8 @@
 
                 {{-- Brand & Contact Column --}}
                 <div class="footer-col footer-col--brand">
-                    <a href="{{ route('home') }}" class="footer-brand" aria-label="{{ config('app.name') }}">
-                        <span class="footer-brand__name">{{ config('app.name', 'Cattery') }}</span>
+                    <a href="{{ route('home') }}" class="footer-brand" aria-label="Hodowla Kotów z Mazowieckiej Szwajcarii">
+                        <span class="footer-brand__name">Hodowla Kotów z Mazowieckiej Szwajcarii</span>
                     </a>
                     <p class="footer-brand__tagline text-body">
                         Profesjonalna hodowla kotów rasowych z pasją, troską i pełną transparentnością.
@@ -24,21 +24,18 @@
                     <div class="footer-contact-info">
                         <div class="footer-contact-item">
                             <i data-lucide="mail" aria-hidden="true" class="footer-contact-icon"></i>
-                            <a href="mailto:kontakt@example.com" class="footer-link">kontakt@example.com</a>
+                            <a href="mailto:hodowla.z.mazowieckiej.szwajcarii@gmail.com" class="footer-link">hodowla.z.mazowieckiej.szwajcarii@gmail.com</a>
                         </div>
                         <div class="footer-contact-item">
                             <i data-lucide="phone" aria-hidden="true" class="footer-contact-icon"></i>
-                            <a href="tel:+48000000000" class="footer-link">+48 000 000 000</a>
+                            <a href="tel:+48514153204" class="footer-link">+48 514 153 204</a>
                         </div>
                     </div>
 
                     {{-- Social Links --}}
                     <div class="footer-social">
-                        <a href="https://facebook.com" class="footer-social__link" aria-label="Facebook" target="_blank" rel="noopener">
+                        <a href="https://www.facebook.com/profile.php?id=61580668026948" class="footer-social__link" aria-label="Facebook" target="_blank" rel="noopener">
                             <i data-lucide="facebook" aria-hidden="true"></i>
-                        </a>
-                        <a href="https://instagram.com" class="footer-social__link" aria-label="Instagram" target="_blank" rel="noopener">
-                            <i data-lucide="instagram" aria-hidden="true"></i>
                         </a>
                     </div>
                 </div>
@@ -90,7 +87,7 @@
             {{-- Bottom Bar --}}
             <div class="footer-bottom">
                 <p class="footer-copyright">
-                    &copy; {{ now()->year }} {{ config('app.name', 'Cattery') }}. Wszelkie prawa zastrzeżone.
+                    &copy; {{ now()->year }} Hodowla Kotów z Mazowieckiej Szwajcarii. Wszelkie prawa zastrzeżone.
                 </p>
                 <p class="footer-legal">
                     <a href="{{ route('privacy') }}" class="footer-link">Polityka prywatności</a>

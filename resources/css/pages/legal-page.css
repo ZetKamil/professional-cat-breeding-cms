@@ -1,0 +1,60 @@
+/* --- Legal Page (Privacy Policy, Terms) --- */
+
+.legal-page__inner {
+    max-width: 800px;
+    margin: 0 auto;
+    padding-top: var(--sp-4xl);
+    padding-bottom: var(--sp-4xl);
+}
+
+.legal-page__header {
+    margin-bottom: var(--sp-3xl);
+}
+
+.legal-page__version {
+    color: var(--color-primary);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.legal-page__title {
+    margin-top: var(--sp-xs);
+    margin-bottom: var(--sp-md);
+}
+
+.legal-page__icon {
+    width: 48px;
+    height: 48px;
+    color: var(--color-ink-muted-48);
+    margin-bottom: var(--sp-lg);
+    display: inline-block;
+}
+
+.legal-page__article {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2xl);
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--color-ink-muted-80);
+}
+
+.legal-page__section-title {
+    color: var(--color-ink);
+    font-size: 1.5rem;
+    margin-bottom: var(--sp-md);
+}
+
+.legal-page__list {
+    margin-top: var(--sp-sm);
+    padding-left: var(--sp-xl);
+    list-style-type: disc;
+}
+
+.legal-page__footer {
+    margin-top: var(--sp-4xl);
+    padding-top: var(--sp-xl);
+    border-top: 1px solid var(--color-hairline);
+    text-align: center;
+}
