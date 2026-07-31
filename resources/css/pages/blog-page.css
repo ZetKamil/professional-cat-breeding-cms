@@ -129,8 +129,8 @@
 
 /* Articles Grid */
 .blog-grid-section {
-    padding-top: var(--space-12);
-    padding-bottom: var(--space-20);
+    padding-top: var(--sp-xl);
+    padding-bottom: var(--sp-lg);
 }
 
 .blog-grid {
