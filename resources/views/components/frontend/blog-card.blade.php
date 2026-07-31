@@ -36,13 +36,13 @@
                 >
             @endif
 
-            @if($category)
+            {{-- @if($category)
                 <div class="blog-card__badge-overlay">
                     <x-frontend.badge variant="muted">
                         {{ $category->name }}
                     </x-frontend.badge>
                 </div>
-            @endif
+            @endif --}}
         </div>
     </x-slot:image>
 
