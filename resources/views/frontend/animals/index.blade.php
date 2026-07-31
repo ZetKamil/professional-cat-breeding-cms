@@ -23,7 +23,7 @@
     {{-- ============================================================
          2. FILTER BAR (Breeds + Statuses)
          ============================================================ --}}
-    <section class="section section--no-pt" aria-label="Filtrowanie kotów">
+    <section class="section section--no-pt animals-catalog-section" aria-label="Filtrowanie kotów">
         <div class="section-inner">
             <div class="animals-filter-bar">
                 {{-- Breed Filter --}}
