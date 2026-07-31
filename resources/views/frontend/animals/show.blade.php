@@ -218,6 +218,14 @@
                             </x-frontend.button>
                         @endif
                     </div>
+
+                    {{-- Contextual Facebook Daily Life Discovery --}}
+                    <div class="animal-profile__social-note">
+                        <span class="animal-profile__social-text">Chcesz zobaczyć więcej codziennych zdjęć i filmów?</span>
+                        <a href="https://www.facebook.com/profile.php?id=61580668026948" target="_blank" rel="noopener" class="animal-profile__social-link">
+                            Zobacz nas na Facebooku →
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

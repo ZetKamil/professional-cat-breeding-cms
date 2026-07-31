@@ -401,6 +401,32 @@
     border-top: 1px solid var(--color-hairline);
 }
 
+.animal-profile__social-note {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: var(--sp-lg, 32px);
+    padding-top: var(--sp-md, 24px);
+    border-top: 1px dashed var(--color-hairline, rgba(0, 0, 0, 0.08));
+}
+
+.animal-profile__social-text {
+    font-size: var(--text-sm, 14px);
+    color: var(--color-ink-muted-80, #515154);
+}
+
+.animal-profile__social-link {
+    font-size: var(--text-sm, 14px);
+    font-weight: 600;
+    color: var(--color-ink, #1d1d1f);
+    text-decoration: none;
+    transition: color 0.25s var(--ease-out);
+}
+
+.animal-profile__social-link:hover {
+    color: var(--color-primary, #c8a04a);
+}
+
 /* --------------------------------------------------------------------------
    3. PEDIGREE & GENEALOGY (Family Tree & Lineage Guarantee)
    -------------------------------------------------------------------------- */
