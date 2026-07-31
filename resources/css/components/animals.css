@@ -15,8 +15,9 @@
 
 .animal-card {
     background-color: var(--color-canvas);
-    border: 1px solid rgba(0, 0, 0, 0.04);
+    border: 1px solid var(--color-hairline);
     border-radius: var(--r-lg);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -29,8 +30,8 @@
 
 .animal-card:hover {
     transform: translateY(-6px) scale(1.004);
-    box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.08);
-    border-color: var(--color-ink-muted-48);
+    box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.12);
+    border-color: var(--color-primary);
 }
 
 .animal-card__media-wrapper {
