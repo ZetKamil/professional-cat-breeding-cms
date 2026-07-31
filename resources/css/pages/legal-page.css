@@ -58,3 +58,11 @@
     border-top: 1px solid var(--color-hairline);
     text-align: center;
 }
+
+.legal-page__inner--center {
+    text-align: center;
+}
+
+.legal-page__actions {
+    margin-top: var(--sp-2xl);
+}

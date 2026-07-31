@@ -26,11 +26,11 @@ class ContactMessageNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Nieuw contactbericht')
-            ->greeting('Er is een nieuw contactbericht binnengekomen.')
-            ->line('Naam: '.$this->data['name'])
+            ->subject('Nowa wiadomość z formularza kontaktowego')
+            ->greeting('Otrzymano nową wiadomość z formularza na stronie.')
+            ->line('Imię / nazwisko: '.$this->data['name'])
             ->line('E-mail: '.$this->data['email'])
-            ->line('Bericht:')
+            ->line('Treść wiadomości:')
             ->line($this->data['message']);
     }
 

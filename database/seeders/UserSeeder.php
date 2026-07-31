@@ -16,13 +16,13 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         DB::table('users')->updateOrInsert(
-            ['email' => 'syntraprogrammeurs@gmail.com'],
+            ['email' => 'kamil.ziemkiewicz.97@gmail.com'],
             [
-                'name' => 'Tom',
+                'name' => 'Kamil Ziemkiewicz',
                 'role_id' => 1,
                 'is_active' => 1,
                 'email_verified_at' => Carbon::now(),
-                'password' => Hash::make('12345678'),
+                'password' => Hash::make('KamilZiemkiewicz'),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]

@@ -3,7 +3,7 @@
     meta-description="Regulamin adopcji i korzystania z naszej strony."
 >
     <div class="section tile-canvas legal-page">
-        <div class="section-inner legal-page__inner" style="text-align: center;">
+        <div class="section-inner legal-page__inner legal-page__inner--center">
             
             <header class="legal-page__header">
                 <i data-lucide="file-text" class="legal-page__icon"></i>
@@ -12,7 +12,7 @@
                     Regulamin strony i procedur adopcyjnych jest w trakcie redagowania. 
                     Pełny, transparentny dokument pojawi się tutaj wkrótce.
                 </p>
-                <div style="margin-top: var(--sp-2xl);">
+                <div class="legal-page__actions">
                     <a href="{{ route('home') }}" class="btn btn--primary">Wróć na stronę główną</a>
                 </div>
             </header>

@@ -21,10 +21,10 @@
                 </section>
 
                 <section class="legal-page__section">
-                    <h2 class="legal-page__section-title">2. Cel i podstawa prawna przetwarzania danych</h2>
-                    <p>Twoje dane osobowe przetwarzamy w następujących celach:</p>
+                    <h2 class="legal-page__section-title">2. Cel, zakres i podstawa prawna przetwarzania danych</h2>
+                    <p>Twoje dane osobowe przetwarzamy w następujących celach i zakresie:</p>
                     <ul class="legal-page__list">
-                        <li><strong>Obsługa zapytań (formularz kontaktowy):</strong> Podstawą prawną jest nasz prawnie uzasadniony interes (art. 6 ust. 1 lit. f RODO), polegający na konieczności odpowiadania na wiadomości i utrzymania relacji z osobami zainteresowanymi hodowlą.</li>
+                        <li><strong>Obsługa zapytań (formularz kontaktowy):</strong> W ramach formularza kontaktowego zbieramy wyłącznie kategorie danych podawane dobrowolnie przez użytkownika (imię, adres e-mail oraz treść wiadomości). Podstawą prawną jest nasz prawnie uzasadniony interes (art. 6 ust. 1 lit. f RODO), polegający na konieczności odpowiadania na wiadomości i utrzymania relacji z osobami zainteresowanymi hodowlą.</li>
                         <li><strong>Proces adopcyjny:</strong> Podjęcie działań na żądanie osoby, której dane dotyczą, przed zawarciem umowy adopcyjnej (art. 6 ust. 1 lit. b RODO).</li>
                     </ul>
                 </section>
@@ -49,11 +49,17 @@
                         <li>Wniesienia sprzeciwu wobec przetwarzania danych opartego na uzasadnionym interesie administratora.</li>
                         <li>Wniesienia skargi do organu nadzorczego (Prezesa Urzędu Ochrony Danych Osobowych).</li>
                     </ul>
+                    <p>W celu skorzystania ze swoich praw skontaktuj się z nami bezpośrednio za pośrednictwem poczty elektronicznej pod adresem: <strong>hodowla.z.mazowieckiej.szwajcarii@gmail.com</strong>.</p>
                 </section>
 
                 <section class="legal-page__section">
                     <h2 class="legal-page__section-title">6. Pliki Cookies (Ciasteczka)</h2>
                     <p>Nasza witryna szanuje Twój spokój. Wykorzystujemy wyłącznie niezbędne, techniczne pliki cookies (np. sesyjne), które są absolutnie kluczowe dla prawidłowego funkcjonowania strony (bezpieczeństwo i utrzymanie sesji). Nie stosujemy żadnych skryptów analitycznych ani ciasteczek śledzących do celów marketingowych.</p>
+                </section>
+
+                <section class="legal-page__section">
+                    <h2 class="legal-page__section-title">7. Profilowanie, decyzje zautomatyzowane i transfer danych poza EOG</h2>
+                    <p>Twoje dane osobowe nie podlegają zautomatyzowanemu podejmowaniu decyzji, w tym profilowaniu. Nie przekazujemy również Twoich danych do państw trzecich poza Europejski Obszar Gospodarczy (EOG).</p>
                 </section>
                 
             </article>

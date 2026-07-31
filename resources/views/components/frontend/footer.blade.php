@@ -60,7 +60,7 @@
                         <li><a href="{{ route('about') }}#zdrowie" class="footer-link">Zdrowie & Certyfikaty</a></li>
                         <li><a href="{{ route('about') }}#co-otrzymujesz" class="footer-link">Wyprawka i Rodowód</a></li>
                         <li><a href="{{ route('contact') }}#faq" class="footer-link">Częste pytania (FAQ)</a></li>
-                        <li><a href="{{ route('about') }}#certyfikaty" class="footer-link">Regulamin adopcji</a></li>
+                        <li><a href="{{ route('terms') }}" class="footer-link">Regulamin adopcji</a></li>
                     </ul>
                 </div>
 
@@ -79,7 +79,7 @@
                     </form>
                     <p class="newsletter-privacy">
                         <i data-lucide="lock" aria-hidden="true" class="newsletter-privacy__icon"></i>
-                        <span>Zapisując się, akceptujesz <a href="{{ route('privacy') }}" style="text-decoration: underline; color: inherit;">Politykę prywatności</a>.</span>
+                        <span>Zapisując się, akceptujesz <a href="{{ route('privacy') }}">Politykę prywatności</a>.</span>
                     </p>
                 </div>
             </div>
