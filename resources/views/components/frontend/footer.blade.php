@@ -3,7 +3,7 @@
     Calm, minimal, trust-building
 --}}
 
-<footer class="site-footer tile-parchment" role="contentinfo">
+<footer class="site-footer tile-parchment" role="contentinfo" data-nav-theme="cream">
     <div class="section">
         <div class="section-inner">
 
@@ -35,7 +35,8 @@
                     {{-- Social Links --}}
                     <div class="footer-social">
                         <a href="https://www.facebook.com/profile.php?id=61580668026948" class="footer-social__link" aria-label="Facebook" target="_blank" rel="noopener">
-                            <i data-lucide="facebook" aria-hidden="true"></i>
+                            <i data-lucide="facebook" class="footer-contact-icon" aria-hidden="true"></i>
+                            <span>Facebook</span>
                         </a>
                     </div>
                 </div>

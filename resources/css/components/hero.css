@@ -11,6 +11,7 @@
     align-items: center;
     overflow: hidden;
     background-color: var(--color-surface-black);
+    padding-top: var(--nav-height, 64px);
 }
 
 .hero--large,

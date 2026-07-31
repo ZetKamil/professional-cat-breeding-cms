@@ -36,11 +36,18 @@
         'none'    => 'section--none',
         default   => '',
     };
+
+    $navTheme = match($tile) {
+        'dark', 'dark-2', 'dark-3', 'black' => 'dark',
+        'parchment'                         => 'cream',
+        default                             => 'light',
+    };
 @endphp
 
 <section
     {{ $attributes->merge(['class' => "section {$tileClass} {$paddingClass}"]) }}
     @if($id) id="{{ $id }}" @endif
+    data-nav-theme="{{ $navTheme }}"
 >
     <div class="section-inner">
         {{ $slot }}
