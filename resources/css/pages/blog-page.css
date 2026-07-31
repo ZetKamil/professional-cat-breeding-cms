@@ -4,20 +4,25 @@
 
 /* Hero Section */
 .blog-hero {
-    padding-top: var(--space-20);
-    padding-bottom: var(--space-12);
+    padding-top: var(--sp-3xl);
+    padding-bottom: var(--sp-2xl);
     text-align: center;
-    border-bottom: 1px solid var(--color-border-subtle);
 }
 
-.blog-hero__content {
-    max-width: 800px;
+.blog-hero__eyebrow {
+    color: var(--color-primary);
+    display: block;
+    margin-bottom: var(--sp-xs);
+}
+
+.blog-hero__title {
+    margin-bottom: var(--sp-sm);
+}
+
+.blog-hero__lead {
+    max-width: 680px;
     margin: 0 auto;
-}
-
-.blog-hero__intro {
-    color: var(--color-text-muted);
-    margin-top: var(--space-4);
+    color: var(--color-ink-muted-80);
 }
 
 /* Toolbar (Category Pills + Search) */

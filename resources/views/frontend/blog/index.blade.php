@@ -3,16 +3,20 @@
     {{-- ============================================================
     1. EDITORIAL HERO HEADER
     ============================================================ --}}
-    <x-frontend.section class="blog-hero reveal-up">
-        <div class="blog-hero__content">
-            <h1 class="text-display">Baza Wiedzy</h1>
-            <p class="text-intro blog-hero__intro">
+    <section class="blog-hero" aria-label="Baza Wiedzy">
+        <div class="section-inner">
+            <span class="text-eyebrow blog-hero__eyebrow">
+                Wiedza & Poradniki
+            </span>
+            <h1 class="text-hero-display blog-hero__title">
+                Baza Wiedzy
+            </h1>
+            <p class="text-lead-airy blog-hero__lead">
                 Dzielimy się naszą pasją, doświadczeniem weterynaryjnym oraz wieloletnią praktyką w wychowaniu kotów
                 bengalskich, brytyjskich i syjamskich.
             </p>
         </div>
-
-    </x-frontend.section>
+    </section>
 
     {{-- ============================================================
     3. ARTICLES GRID
