@@ -12,41 +12,6 @@
             </p>
         </div>
 
-        {{-- ============================================================
-        2. CATEGORY PILLS & SEARCH BAR
-        ============================================================ --}}
-        <div class="blog-toolbar">
-            <nav class="blog-categories" aria-label="Kategorie artykułów">
-                <a href="{{ route('frontend.blog.index') }}"
-                    class="blog-category-pill {{ !$selectedCategory ? 'blog-category-pill--active' : '' }}">
-                    Wszystkie ({{ $categories->sum('posts_count') }})
-                </a>
-                @foreach ($categories as $category)
-                    <a href="{{ route('frontend.blog.index', ['category' => $category->slug]) }}"
-                        class="blog-category-pill {{ $selectedCategory === $category->slug ? 'blog-category-pill--active' : '' }}">
-                        {{ $category->name }} ({{ $category->posts_count }})
-                    </a>
-                @endforeach
-            </nav>
-
-            <form action="{{ route('frontend.blog.index') }}" method="GET" class="blog-search" role="search">
-                @if ($selectedCategory)
-                    <input type="hidden" name="category" value="{{ $selectedCategory }}">
-                @endif
-                <div class="blog-search__field">
-                    <i data-lucide="search" aria-hidden="true" class="blog-search__icon"></i>
-                    <input type="search" name="q" value="{{ $searchQuery ?? '' }}"
-                        placeholder="Szukaj w bazie wiedzy..." class="blog-search__input"
-                        aria-label="Szukaj w bazie wiedzy">
-                    @if ($searchQuery)
-                        <a href="{{ route('frontend.blog.index', ['category' => $selectedCategory]) }}"
-                            class="blog-search__clear" aria-label="Wyczyść wyszukiwanie">
-                            <i data-lucide="x" aria-hidden="true"></i>
-                        </a>
-                    @endif
-                </div>
-            </form>
-        </div>
     </x-frontend.section>
 
     {{-- ============================================================

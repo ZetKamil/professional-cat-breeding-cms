@@ -12,7 +12,7 @@
 
 .blog-hero__content {
     max-width: 800px;
-    margin: 0 auto var(--space-10);
+    margin: 0 auto;
 }
 
 .blog-hero__intro {
