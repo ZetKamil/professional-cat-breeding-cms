@@ -49,7 +49,15 @@ class Media extends Model
 
     public function url(): string
     {
-        return asset('storage/'.$this->path());
+        if (str_starts_with($this->filename, 'http://') || str_starts_with($this->filename, 'https://')) {
+            return $this->filename;
+        }
+
+        if ($this->directory) {
+            return asset('storage/'.$this->directory.'/'.$this->filename);
+        }
+
+        return asset('storage/'.$this->filename);
     }
 
     public function isImage(): bool

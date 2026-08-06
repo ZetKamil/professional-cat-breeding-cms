@@ -217,4 +217,42 @@ class Post extends Model
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
+
+    /**
+     * Pobiera URL okładki artykułu dopasowany do tematyki posta.
+     */
+    public function coverImageUrl(): string
+    {
+        if ($this->media) {
+            return $this->media->url();
+        }
+
+        $slug = $this->slug ?? Str::slug($this->title ?? '');
+
+        if (str_contains($slug, 'badania-genetyczne') || str_contains($slug, 'zdrowie')) {
+            return 'https://images.unsplash.com/photo-1576201836106-db1758fd1c97?q=80&w=1200&auto=format&fit=crop';
+        }
+
+        if (str_contains($slug, 'wyprawka')) {
+            return 'https://images.unsplash.com/photo-1533738363-b7f9aef128ce?q=80&w=1200&auto=format&fit=crop';
+        }
+
+        if (str_contains($slug, 'bengalski') || str_contains($slug, 'bengal')) {
+            return 'https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?q=80&w=1200&auto=format&fit=crop';
+        }
+
+        if (str_contains($slug, 'brytyjczyk') || str_contains($slug, 'brytyjski')) {
+            return 'https://images.unsplash.com/photo-1573865526739-10659fec78a5?q=80&w=1200&auto=format&fit=crop';
+        }
+
+        if (str_contains($slug, 'syjamsk') || str_contains($slug, 'syjam')) {
+            return 'https://images.unsplash.com/photo-1513245543132-31f507417b26?q=80&w=1200&auto=format&fit=crop';
+        }
+
+        if (str_contains($slug, 'dieta') || str_contains($slug, 'zywienie') || str_contains($slug, 'barf')) {
+            return 'https://images.unsplash.com/photo-1589924691995-400dc9ecc119?q=80&w=1200&auto=format&fit=crop';
+        }
+
+        return 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?q=80&w=1200&auto=format&fit=crop';
+    }
 }

@@ -16,25 +16,14 @@
 <x-frontend.card :href="route('frontend.blog.show', $post)" hoverable class="blog-card">
     <x-slot:image>
         <div class="blog-card__media-wrapper">
-            @if($post->media)
-                <img
-                    src="{{ $post->media->url() }}"
-                    alt="{{ $post->title }}"
-                    width="800"
-                    height="500"
-                    loading="lazy"
-                    decoding="async"
-                >
-            @else
-                <img 
-                    src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?q=80&w=800&auto=format&fit=crop" 
-                    alt="{{ $post->title }} (Zdjęcie poglądowe)"
-                    width="800"
-                    height="500"
-                    loading="lazy"
-                    decoding="async"
-                >
-            @endif
+            <img
+                src="{{ $post->coverImageUrl() }}"
+                alt="{{ $post->title }}"
+                width="800"
+                height="500"
+                loading="lazy"
+                decoding="async"
+            >
 
             {{-- @if($category)
                 <div class="blog-card__badge-overlay">

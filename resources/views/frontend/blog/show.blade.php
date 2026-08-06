@@ -11,7 +11,7 @@
     {{-- ============================================================
          1. EDITORIAL ARTICLE COVER HERO (Title over Image)
          ============================================================ --}}
-    <section class="article-cover-hero" style="background-image: url('{{ $post->media?->url() ?? 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?q=80&w=1600&auto=format&fit=crop' }}');" aria-label="Nagłówek artykułu">
+    <section class="article-cover-hero" style="background-image: url('{{ $post->coverImageUrl() }}');" aria-label="Nagłówek artykułu">
         <div class="article-cover-hero__overlay"></div>
         <div class="section-inner article-cover-hero__inner">
             <nav class="article-breadcrumb" aria-label="Nawigacja okruszkowa">
