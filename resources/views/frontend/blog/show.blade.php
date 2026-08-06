@@ -52,7 +52,7 @@
     <x-frontend.section class="article-body-section">
         <div class="article-layout">
             <article class="article-editorial">
-                {!! nl2br(e($post->body)) !!}
+                {!! Str::markdown($post->body) !!}
             </article>
         </div>
     </x-frontend.section>
