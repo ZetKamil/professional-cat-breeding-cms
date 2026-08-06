@@ -82,6 +82,24 @@ class Animal extends Model
         return 'slug';
     }
 
+    /**
+     * Get professional status label for frontend badges.
+     */
+    public function statusLabel(): string
+    {
+        if ($this->status === AnimalStatus::Breeding) {
+            if ($this->gender === AnimalGender::Female) {
+                return 'Kotka Hodowlana';
+            }
+            if ($this->gender === AnimalGender::Male) {
+                return 'Reproduktor';
+            }
+            return 'Kot Hodowlany';
+        }
+
+        return $this->status->label();
+    }
+
     // ─── Relationships ──────────────────────────────────────────────
 
     /**
@@ -142,7 +160,8 @@ class Animal extends Model
     {
         return $query
             ->where('is_published', true)
-            ->whereNotNull('published_at');
+            ->whereNotNull('published_at')
+            ->whereIn('status', [AnimalStatus::Available, AnimalStatus::Reserved, AnimalStatus::Breeding]);
     }
 
     /**

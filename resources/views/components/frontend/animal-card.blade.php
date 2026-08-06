@@ -28,7 +28,7 @@
 
             <div class="animal-card__badge-overlay">
                 <x-frontend.badge :variant="$animal->status->badgeVariant()">
-                    {{ $animal->status->label() }}
+                    {{ $animal->statusLabel() }}
                 </x-frontend.badge>
             </div>
         </div>

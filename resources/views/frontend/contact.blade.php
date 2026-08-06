@@ -1,11 +1,9 @@
-<x-frontend.shell
-    title="Kontakt — {{ config('app.name') }}"
-    meta-description="Skontaktuj się z naszą hodowlą — formularz kontaktowy, telefon, e-mail. Chętnie odpowiemy na Twoje pytania."
->
+<x-frontend.shell title="Kontakt — {{ config('app.name') }}"
+    meta-description="Skontaktuj się z naszą hodowlą — formularz kontaktowy, telefon, e-mail. Chętnie odpowiemy na Twoje pytania.">
     {{-- ============================================================
-         HERO — Calm, inviting
-         „Jak mogę się skontaktować?"
-         ============================================================ --}}
+    HERO — Calm, inviting
+    „Jak mogę się skontaktować?"
+    ============================================================ --}}
     <section class="contact-hero tile-parchment" aria-label="Kontakt">
         <div class="section">
             <div class="section-inner">
@@ -24,8 +22,8 @@
     </section>
 
     {{-- ============================================================
-         CONTACT METHODS — Quick access
-         ============================================================ --}}
+    CONTACT METHODS — Quick access
+    ============================================================ --}}
     <x-frontend.section>
         <div class="contact-methods">
             <a href="mailto:hodowla.z.mazowieckiej.szwajcarii@gmail.com" class="contact-method">
@@ -49,23 +47,19 @@
                     <i data-lucide="map-pin" aria-hidden="true"></i>
                 </div>
                 <h3 class="contact-method__title text-body-strong">Lokalizacja</h3>
-                <p class="contact-method__value">Warszawa / Mazowsze, Polska</p>
+                <p class="contact-method__value">Sikórz, woj. mazowieckie, Polska</p>
             </div>
         </div>
     </x-frontend.section>
 
     {{-- ============================================================
-         INQUIRY FORM — Reduce friction, friendly labels
-         ============================================================ --}}
+    INQUIRY FORM — Reduce friction, friendly labels
+    ============================================================ --}}
     <x-frontend.section tile="parchment" id="formularz">
         <div class="contact-form-layout">
             <div class="contact-form-info">
-                <x-frontend.section-header
-                    align="left"
-                    eyebrow="Formularz"
-                    headline="Wyślij zapytanie"
-                    description="Wypełnij formularz, a skontaktujemy się z Tobą tak szybko, jak to możliwe."
-                />
+                <x-frontend.section-header align="left" eyebrow="Formularz" headline="Wyślij zapytanie"
+                    description="Wypełnij formularz, a skontaktujemy się z Tobą tak szybko, jak to możliwe." />
 
                 <div class="contact-form-info__details">
                     <p class="text-body">
@@ -83,25 +77,13 @@
                     </div>
                 @endif
 
-                <form
-                    action="{{ route('frontend.contact.store') }}"
-                    method="POST"
-                    class="contact-form"
-                    novalidate
-                >
+                <form action="{{ route('frontend.contact.store') }}" method="POST" class="contact-form" novalidate>
                     @csrf
 
                     <div class="form-group">
                         <label for="name" class="form-label">Imię i nazwisko</label>
-                        <input
-                            type="text"
-                            name="name"
-                            id="name"
-                            value="{{ old('name') }}"
-                            class="form-input @error('name') form-input--error @enderror"
-                            autocomplete="name"
-                            required
-                        >
+                        <input type="text" name="name" id="name" value="{{ old('name') }}"
+                            class="form-input @error('name') form-input--error @enderror" autocomplete="name" required>
                         @error('name')
                             <p class="form-error" role="alert">{{ $message }}</p>
                         @enderror
@@ -109,15 +91,9 @@
 
                     <div class="form-group">
                         <label for="email" class="form-label">Adres e-mail</label>
-                        <input
-                            type="email"
-                            name="email"
-                            id="email"
-                            value="{{ old('email') }}"
-                            class="form-input @error('email') form-input--error @enderror"
-                            autocomplete="email"
-                            required
-                        >
+                        <input type="email" name="email" id="email" value="{{ old('email') }}"
+                            class="form-input @error('email') form-input--error @enderror" autocomplete="email"
+                            required>
                         @error('email')
                             <p class="form-error" role="alert">{{ $message }}</p>
                         @enderror
@@ -128,25 +104,15 @@
                             Telefon
                             <span class="form-label__optional">(opcjonalnie)</span>
                         </label>
-                        <input
-                            type="tel"
-                            name="phone"
-                            id="phone"
-                            value="{{ old('phone') }}"
-                            class="form-input"
-                            autocomplete="tel"
-                        >
+                        <input type="tel" name="phone" id="phone" value="{{ old('phone') }}" class="form-input"
+                            autocomplete="tel">
                     </div>
 
                     <div class="form-group">
                         <label for="message" class="form-label">Wiadomość</label>
-                        <textarea
-                            name="message"
-                            id="message"
-                            rows="6"
+                        <textarea name="message" id="message" rows="6"
                             class="form-input form-textarea @error('message') form-input--error @enderror"
-                            required
-                        >{{ old('message') }}</textarea>
+                            required>{{ old('message') }}</textarea>
                         @error('message')
                             <p class="form-error" role="alert">{{ $message }}</p>
                         @enderror
@@ -163,31 +129,23 @@
     </x-frontend.section>
 
     {{-- ============================================================
-         GOOGLE MAPS EMBED
-         ============================================================ --}}
+    GOOGLE MAPS EMBED
+    ============================================================ --}}
     <x-frontend.section>
         <div class="contact-map-embed reveal-up">
             <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d312781.0827289524!2d20.7810058!3d52.2330653!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471ecc669a869f01%3A0x72f0be2a88ead3fc!2sWarszawa!5e0!3m2!1spl!2spl!4v1710000000000!5m2!1spl!2spl"
-                width="100%"
-                height="420"
-                style="border:0;"
-                allowfullscreen=""
-                loading="lazy"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d19561.42857416954!2d19.571424!3d52.618641!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471c4c1a5d625cdb%3A0x8e82110c73291fb2!2sSik%C3%B3rz%2C%2009-413!5e0!3m2!1spl!2spl!4v1710000000000!5m2!1spl!2spl"
+                width="100%" height="420" style="border:0;" allowfullscreen="" loading="lazy"
                 referrerpolicy="no-referrer-when-downgrade"
-                title="Lokalizacja Hodowla Kotów z Mazowieckiej Szwajcarii - Warszawa / Mazowsze"
-            ></iframe>
+                title="Lokalizacja Hodowla Kotów z Mazowieckiej Szwajcarii — Sikórz"></iframe>
         </div>
     </x-frontend.section>
 
     {{-- ============================================================
-         FAQ — Common questions
-         ============================================================ --}}
+    FAQ — Common questions
+    ============================================================ --}}
     <x-frontend.section id="faq">
-        <x-frontend.section-header
-            eyebrow="FAQ"
-            headline="Najczęstsze pytania"
-        />
+        <x-frontend.section-header eyebrow="FAQ" headline="Najczęstsze pytania" />
 
         <div class="faq-list">
             <details class="faq-item">
@@ -197,7 +155,7 @@
                 <p class="faq-item__answer text-body">
                     Proces rozpoczyna się od kontaktu — odpowiadamy na pytania, przedstawiamy
                     dostępne kocięta i umawiamy wizytę w hodowli. Po podjęciu decyzji
-                    podpisujemy umowę adopcyjną i ustalamy termin odbioru.
+                    podpisujemy umowę i ustalamy termin odbioru.
                 </p>
             </details>
 
@@ -216,9 +174,9 @@
                     Jakie dokumenty otrzymuję?
                 </summary>
                 <p class="faq-item__answer text-body">
-                    Każdy kot otrzymuje: rodowód FPL/FIFe, książeczkę zdrowia z historią
-                    szczepień, wyniki badań genetycznych rodziców, umowę adopcyjną
-                    oraz starter pack z karmą i zabawkami.
+                    Każdy kot otrzymuje: książeczkę zdrowia z historią
+                    szczepień, wyniki badań genetycznych rodziców, umowę
+                    oraz starter pack z karmą i zabawkami(jeśli są na daną chwilę dostępne).
                 </p>
             </details>
 

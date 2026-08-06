@@ -18,7 +18,6 @@
                     <h1 class="hero-split__title">
                         Czystość Rasy.<br>
                         Spokój Genetyki.<br>
-                        Rodowód FIFe / FPL.
                     </h1>
                     <p class="hero-split__lead">
                         Nie traktujemy hodowli jak komercji. Tworzymy domowe sanktuarium,
@@ -27,9 +26,10 @@
                     </p>
                     <div class="hero-split__actions">
                         <x-frontend.button href="{{ route('contact') }}" icon="arrow-right">
-                            Zaplanuj rozmowę adopcyjną
+                            Zaplanuj rozmowę
                         </x-frontend.button>
-                        <a href="https://www.facebook.com/profile.php?id=61580668026948" target="_blank" rel="noopener" class="hero-split__secondary-link">
+                        <a href="https://www.facebook.com/profile.php?id=61580668026948" target="_blank" rel="noopener"
+                            class="hero-split__secondary-link">
                             Codzienne życie hodowli na Facebooku →
                         </a>
                     </div>
@@ -101,7 +101,7 @@
                 role="listitem">
                 <div>
                     <span class="collection-card__index">Collection 02 / British Shorthair</span>
-                    <h3 class="collection-card__title">Brytyjczyki</h3>
+                    <h3 class="collection-card__title">Koty Brytyjskie</h3>
                     <p class="collection-card__quote">
                         Aksamitne futro, zrównoważony spokój i klasyczna, brytyjska elegancja w każdym ruchu.
                     </p>
@@ -249,14 +249,16 @@
                 <h2 class="daily-life__headline">Codzienność w hodowli</h2>
                 <p class="daily-life__desc">
                     Nie pokazujemy tylko efektu końcowego.
-                    Dzielimy się również codziennym życiem naszych kotów — zdjęciami, filmami, rozwojem kociąt i chwilami zza kulis.
+                    Dzielimy się również codziennym życiem naszych kotów — zdjęciami, filmami, rozwojem kociąt i
+                    chwilami zza kulis.
                 </p>
                 <div class="daily-life__frequency">
                     <span class="daily-life__badge">Nowe relacje praktycznie codziennie</span>
                     <span class="daily-life__subtext">Zdjęcia • Filmy • Kulisy hodowli</span>
                 </div>
                 <div class="daily-life__cta">
-                    <x-frontend.button variant="secondary" href="https://www.facebook.com/profile.php?id=61580668026948" target="_blank" rel="noopener">
+                    <x-frontend.button variant="secondary" href="https://www.facebook.com/profile.php?id=61580668026948"
+                        target="_blank" rel="noopener">
                         Obserwuj nas na Facebooku →
                     </x-frontend.button>
                 </div>
@@ -265,34 +267,18 @@
             <div class="daily-life__right">
                 <div class="daily-life__gallery" role="group" aria-label="Codzienne życie hodowli">
                     <div class="daily-life__image-wrap daily-life__image-wrap--main">
-                        <img 
-                            src="https://images.unsplash.com/photo-1548247416-ec66f4900b2e?auto=format&fit=crop&w=800&q=80" 
-                            alt="Codzienna socjalizacja w hodowli"
-                            width="800"
-                            height="800"
-                            decoding="async"
-                            loading="lazy"
-                        >
+                        <img src="https://images.unsplash.com/photo-1548247416-ec66f4900b2e?auto=format&fit=crop&w=800&q=80"
+                            alt="Codzienna socjalizacja w hodowli" width="800" height="800" decoding="async"
+                            loading="lazy">
                     </div>
                     <div class="daily-life__image-wrap daily-life__image-wrap--sub1">
-                        <img 
-                            src="https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?auto=format&fit=crop&w=600&q=80" 
-                            alt="Rozwój kociąt w domowym otoczeniu"
-                            width="600"
-                            height="600"
-                            decoding="async"
-                            loading="lazy"
-                        >
+                        <img src="https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?auto=format&fit=crop&w=600&q=80"
+                            alt="Rozwój kociąt w domowym otoczeniu" width="600" height="600" decoding="async"
+                            loading="lazy">
                     </div>
                     <div class="daily-life__image-wrap daily-life__image-wrap--sub2">
-                        <img 
-                            src="https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?auto=format&fit=crop&w=600&q=80" 
-                            alt="Zabawa i relacje z kotami"
-                            width="600"
-                            height="600"
-                            decoding="async"
-                            loading="lazy"
-                        >
+                        <img src="https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?auto=format&fit=crop&w=600&q=80"
+                            alt="Zabawa i relacje z kotami" width="600" height="600" decoding="async" loading="lazy">
                     </div>
                 </div>
             </div>
@@ -334,7 +320,7 @@
     7. FINAL INVITATION — LUXURY CONCIERGE CTA MONOLITH
     ============================================================ --}}
     <div class="reveal-up home-section--cta">
-        <x-frontend.cta tile="parchment" eyebrow="Zaproszenie do Kontaktu" headline="Zaplanuj Rozmowę Adopcyjną"
+        <x-frontend.cta tile="parchment" eyebrow="Zaproszenie do Kontaktu" headline="Zaplanuj Rozmowę"
             description="Napisz do nas — chętnie odpowiemy na wszystkie pytania, doradzimy w wyborze linii genetycznej i umówimy kameralne spotkanie w naszej hodowli."
             buttonText="Skontaktuj się z nami" buttonHref="{{ route('contact') }}" />
     </div>

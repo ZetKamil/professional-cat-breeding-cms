@@ -17,9 +17,9 @@
 @if($mother || $father)
     <x-frontend.section tile="parchment" id="rodowod" class="reveal-up">
         <x-frontend.section-header
-            eyebrow="Genealogia · FPL / FIFe"
+            eyebrow="Genealogia"
             headline="Rodowód i Linie Genetyczne"
-            description="Nasza linia hodowlana opiera się na wyselekcjonowanych, wielopokoleniowych rodowodach zarejestrowanych w FIFe / FPL, wolnych od obciążeń genetycznych."
+            description="Nasza linia hodowlana opiera się na wyselekcjonowanych, wielopokoleniowych rodowodach wolnych od obciążeń genetycznych."
         />
 
         {{-- 1. PARENTS GENERATION --}}
@@ -37,7 +37,11 @@
                         aria-label="Profil matki: {{ $mother->name }}"
                     >
                         <div class="pedigree-card__icon" aria-hidden="true">
-                            <i data-lucide="heart" aria-hidden="true"></i>
+                            @if($mother->media)
+                                <img src="{{ $mother->media->url() }}" alt="{{ $mother->name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 9999px;">
+                            @else
+                                <i data-lucide="heart" aria-hidden="true"></i>
+                            @endif
                         </div>
                         <div class="pedigree-card__info">
                             <span class="pedigree-card__role">Matka (Queen)</span>
@@ -52,8 +56,8 @@
                         </div>
                         <div class="pedigree-card__info">
                             <span class="pedigree-card__role">Matka (Queen)</span>
-                            <span class="pedigree-card__name">Linia zarejestrowana w FPL</span>
-                            <span class="pedigree-card__breed">Pełna dokumentacja w księgach rodowodowych</span>
+                            <span class="pedigree-card__name">Linia rodowodowa</span>
+                            <span class="pedigree-card__breed">Pełna dokumentacja w księgach</span>
                         </div>
                     </div>
                 @endif
@@ -65,7 +69,11 @@
                         aria-label="Profil ojca: {{ $father->name }}"
                     >
                         <div class="pedigree-card__icon" aria-hidden="true">
-                            <i data-lucide="shield" aria-hidden="true"></i>
+                            @if($father->media)
+                                <img src="{{ $father->media->url() }}" alt="{{ $father->name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 9999px;">
+                            @else
+                                <i data-lucide="shield" aria-hidden="true"></i>
+                            @endif
                         </div>
                         <div class="pedigree-card__info">
                             <span class="pedigree-card__role">Ojciec (Stud)</span>
@@ -80,8 +88,8 @@
                         </div>
                         <div class="pedigree-card__info">
                             <span class="pedigree-card__role">Ojciec (Stud)</span>
-                            <span class="pedigree-card__name">Linia zarejestrowana w FPL</span>
-                            <span class="pedigree-card__breed">Pełna dokumentacja w księgach rodowodowych</span>
+                            <span class="pedigree-card__name">Linia rodowodowa</span>
+                            <span class="pedigree-card__breed">Pełna dokumentacja w księgach</span>
                         </div>
                     </div>
                 @endif

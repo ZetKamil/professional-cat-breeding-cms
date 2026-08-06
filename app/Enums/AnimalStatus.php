@@ -12,9 +12,9 @@ namespace App\Enums;
  */
 enum AnimalStatus: string
 {
-    case Breeding = 'breeding';
     case Available = 'available';
     case Reserved = 'reserved';
+    case Breeding = 'breeding';
     case Sold = 'sold';
     case Retired = 'retired';
 
@@ -24,11 +24,25 @@ enum AnimalStatus: string
     public function label(): string
     {
         return match ($this) {
-            self::Breeding => 'Hodowlany',
             self::Available => 'Dostępny',
             self::Reserved => 'Zarezerwowany',
+            self::Breeding => 'Kot Hodowlany',
             self::Sold => 'W nowym domu',
-            self::Retired => 'Na emeryturze',
+            self::Retired => 'Emeryt',
+        };
+    }
+
+    /**
+     * Polish label for filter navigation.
+     */
+    public function filterLabel(): string
+    {
+        return match ($this) {
+            self::Available => 'Dostępne',
+            self::Reserved => 'Zarezerwowane',
+            self::Breeding => 'Koty Hodowlane (Rodzice)',
+            self::Sold => 'W nowym domu',
+            self::Retired => 'Emeryci',
         };
     }
 
@@ -39,11 +53,10 @@ enum AnimalStatus: string
     public function badgeVariant(): string
     {
         return match ($this) {
-            self::Breeding => 'info',
             self::Available => 'success',
             self::Reserved => 'warning',
-            self::Sold => 'muted',
-            self::Retired => 'muted',
+            self::Breeding => 'info',
+            self::Sold, self::Retired => 'muted',
         };
     }
 
@@ -53,7 +66,7 @@ enum AnimalStatus: string
     public function isPubliclyVisible(): bool
     {
         return match ($this) {
-            self::Breeding, self::Available, self::Reserved => true,
+            self::Available, self::Reserved, self::Breeding => true,
             self::Sold, self::Retired => false,
         };
     }

@@ -75,7 +75,7 @@
             {{-- Pagination --}}
             @if($animals->hasPages())
                 <div class="animals-catalog__pagination">
-                    {{ $animals->links() }}
+                    {{ $animals->links('components.frontend.pagination') }}
                 </div>
             @endif
         </div>

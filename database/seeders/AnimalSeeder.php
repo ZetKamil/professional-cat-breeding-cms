@@ -120,18 +120,5 @@ class AnimalSeeder extends Seeder
                 'father_id' => $stud->id,
             ]);
 
-        // ── Retired ──────────────────────────────────────────────────
-        Animal::factory()
-            ->retired()
-            ->female()
-            ->create([
-                'name' => 'Zuzia',
-                'slug' => 'zuzia',
-                'breed' => 'Kot Syjamski',
-                'color' => 'Liliowy',
-                'date_of_birth' => now()->subYears(7),
-                'short_description' => 'Nasza emerytka. Cieszy się zasłużonym odpoczynkiem w domu.',
-                'sort_order' => 30,
-            ]);
     }
 }

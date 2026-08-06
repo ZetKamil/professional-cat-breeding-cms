@@ -69,8 +69,8 @@
                     @endif
                 @endauth
 
-                <a href="{{ route('contact') }}" class="global-nav__cta" aria-label="Zapytaj o adopcję kota">
-                    Zapytaj o adopcję
+                <a href="{{ route('contact') }}" class="global-nav__cta" aria-label="Zapytaj o kocięta">
+                    Zapytaj o kocięta
                 </a>
 
                 {{-- Mobile hamburger --}}
@@ -145,7 +145,7 @@
         </nav>
         <div class="mobile-menu__footer">
             <a href="{{ route('contact') }}" class="mobile-menu__cta">
-                Zapytaj o adopcję
+                Zapytaj o kocięta
             </a>
         </div>
     </div>

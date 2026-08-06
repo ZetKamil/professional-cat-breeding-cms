@@ -19,7 +19,9 @@ Route::get('/koty/{animal}', [FrontendAnimalController::class, 'show'])->name('f
 Route::get('/blog', [FrontendBlogController::class, 'index'])->name('frontend.blog.index');
 Route::get('/blog/{post}', [FrontendBlogController::class, 'show'])->name('frontend.blog.show');
 Route::get('/contact', [ContactController::class, 'create'])->name('contact');
-Route::post('/contact', [ContactController::class, 'store'])->name('frontend.contact.store');
+Route::post('/contact', [ContactController::class, 'store'])
+    ->middleware('throttle:5,1')
+    ->name('frontend.contact.store');
 Route::view('/about', 'frontend.about')->name('about');
 Route::view('/o-hodowli', 'frontend.cattery')->name('cattery');
 Route::view('/polityka-prywatnosci', 'frontend.privacy')->name('privacy');

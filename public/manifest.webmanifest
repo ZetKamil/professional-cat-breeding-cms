@@ -1,0 +1,14 @@
+{
+    "name": "Katten — Hodowla Kotów Rasowych",
+    "short_name": "Katten",
+    "icons": [
+        {
+            "src": "/apple-touch-icon.png",
+            "sizes": "180x180",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#0d0d0d",
+    "background_color": "#fbf9f5",
+    "display": "standalone"
+}

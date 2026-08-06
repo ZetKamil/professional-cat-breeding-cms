@@ -5,7 +5,7 @@
 
 .trust-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     column-gap: var(--sp-3xl);
     row-gap: var(--sp-2xl);
     margin-top: var(--sp-lg);

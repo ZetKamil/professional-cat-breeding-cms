@@ -1,6 +1,7 @@
 @props([
     'title' => config('app.name', 'Hodowla Kotów'),
     'metaDescription' => 'Profesjonalna hodowla kotów rasowych — zdrowie, piękno, zaufanie.',
+    'ogImage' => null,
 ])
 
 <!DOCTYPE html>
@@ -10,17 +11,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="{{ $metaDescription }}">
+    <meta name="theme-color" content="#0d0d0d">
+
+    {{-- Canonical URL --}}
+    <link rel="canonical" href="{{ url()->current() }}">
+
+    {{-- Favicons & Web Manifest --}}
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
+    <link rel="manifest" href="{{ asset('manifest.webmanifest') }}">
 
     {{-- Open Graph --}}
     <meta property="og:title" content="{{ $title }}">
     <meta property="og:description" content="{{ $metaDescription }}">
     <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:locale" content="pl_PL">
+    @if($ogImage)
+        <meta property="og:image" content="{{ $ogImage }}">
+    @endif
 
     {{-- Twitter Cards --}}
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ $title }}">
     <meta name="twitter:description" content="{{ $metaDescription }}">
+    @if($ogImage)
+        <meta name="twitter:image" content="{{ $ogImage }}">
+    @endif
 
     <title>{{ $title }}</title>
 

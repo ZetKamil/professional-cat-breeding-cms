@@ -37,7 +37,18 @@ class AnimalController extends Controller
             ->published()
             ->with('media')
             ->when($request->filled('breed'), function ($q) use ($request) {
-                $q->where('breed', '=', $request->string('breed')->toString());
+                $breedInput = $request->string('breed')->toString();
+                $breedMap = [
+                    'bengal' => 'Kot Bengalski',
+                    'bengalskie' => 'Kot Bengalski',
+                    'british' => 'Kot Brytyjski',
+                    'brytyjskie' => 'Kot Brytyjski',
+                    'brytyjczyki' => 'Kot Brytyjski',
+                    'siamese' => 'Kot Syjamski',
+                    'syjamskie' => 'Kot Syjamski',
+                ];
+                $breed = $breedMap[$breedInput] ?? $breedInput;
+                $q->where('breed', '=', $breed);
             })
             ->when($request->filled('status'), function ($q) use ($request) {
                 $q->statusFilter($request->string('status')->toString());

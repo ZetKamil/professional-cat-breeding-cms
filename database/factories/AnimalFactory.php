@@ -113,7 +113,7 @@ class AnimalFactory extends Factory
     public function retired(): static
     {
         return $this->state(fn () => [
-            'status' => AnimalStatus::Retired,
+            'status' => AnimalStatus::Breeding,
         ]);
     }
 

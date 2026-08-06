@@ -21,7 +21,7 @@ class HomepageTest extends TestCase
         $response->assertSee('100% Badania Genetyczne');
         $response->assertSee('Nasze Specjalizacje Rasy');
         $response->assertSee('Koty Bengalskie');
-        $response->assertSee('Brytyjczyki');
+        $response->assertSee('Koty Brytyjskie');
         $response->assertSee('Koty Syjamskie');
         $response->assertSee('Historie Naszych Wychowanków');
         $response->assertSee('Codzienność w hodowli');
@@ -34,7 +34,7 @@ class HomepageTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('Filozofia Naszej Hodowli');
-        $response->assertSee('Czworoczęściowy Kodeks Zaufania');
+        $response->assertSee('Kodeks Zaufania');
         $response->assertSee('Jak wygląda proces adopcji?');
         $response->assertSee('Rozmowa i Dobór');
         $response->assertSee('Rezerwacja i Wizyta');

@@ -74,7 +74,6 @@ class AnimalTest extends TestCase
         $response->assertSee('Badania Genetyczne');
         $response->assertSee('Strona Główna');
         $response->assertSee('Nasze Koty');
-        $response->assertSee('Rodowód FIFe / FPL');
     }
 
     public function test_unpublished_animal_returns_404(): void

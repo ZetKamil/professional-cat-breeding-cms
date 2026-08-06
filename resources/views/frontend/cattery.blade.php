@@ -1,24 +1,17 @@
-<x-frontend.shell 
-    title="O Hodowli — {{ config('app.name') }}"
-    meta-description="Poznaj nasze standardy felinologiczne FIFe / FPL, czworoczęściowy kodeks zaufania oraz jasny, spokojny proces adopcji kota rasowego."
->
+<x-frontend.shell title="O Hodowli — {{ config('app.name') }}"
+    meta-description="Poznaj nasze standardy felinologiczne, Trzyfilarowy Kodeks Zaufania oraz jasny, spokojny proces adopcji kota rasowego.">
     {{-- ============================================================
-         1. HERO — Editorial, photography-first
-         ============================================================ --}}
-    <x-frontend.hero
-        eyebrow="Felinologia i Standardy"
-        title="O Hodowli.<br>Bezkompromisowa Etyka."
-        lead="Poznaj naszą filozofię genetyki, czworoczęściowy kodeks zaufania oraz jasny, spokojny proces adopcji każdego kota."
+    1. HERO — Editorial, photography-first
+    ============================================================ --}}
+    <x-frontend.hero eyebrow="Felinologia i Standardy" title="O Hodowli.<br>Bezkompromisowa Etyka."
+        lead="Poznaj naszą filozofię genetyki, Trzyfilarowy Kodeks Zaufania oraz jasny, spokojny proces adopcji każdego kota."
         image-url="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=2000&q=80"
-        image-alt="Kot bengalski w naturalnym oświetleniu"
-        scroll-target="#filozofia"
-        size="large"
-        data-nav-theme="dark"
-    />
+        image-alt="Kot bengalski w naturalnym oświetleniu" scroll-target="#filozofia" size="large"
+        data-nav-theme="dark" />
 
     {{-- ============================================================
-         2. PHILOSOPHY — EDITORIAL 3-COLUMN ROLLS ROYCE PILLARS
-         ============================================================ --}}
+    2. PHILOSOPHY — EDITORIAL 3-COLUMN ROLLS ROYCE PILLARS
+    ============================================================ --}}
     <x-frontend.section id="filozofia" class="reveal-up">
         <div class="manifesto__grid">
             <div class="manifesto__heading">
@@ -77,10 +70,10 @@
     </x-frontend.section>
 
     {{-- ============================================================
-         3. ARCHITECTURAL HEALTH MATRIX (4-PILLAR CODE OF TRUST)
-         ============================================================ --}}
+    3. ARCHITECTURAL HEALTH MATRIX (4-PILLAR CODE OF TRUST)
+    ============================================================ --}}
     <x-frontend.section tile="dark" id="kodeks" class="reveal-up" data-nav-theme="dark">
-        <x-frontend.section-header eyebrow="Standard Medyczny i Etyka" headline="Czworoczęściowy Kodeks Zaufania"
+        <x-frontend.section-header eyebrow="Standard Medyczny i Etyka" headline="Kodeks Zaufania"
             description="Standardy, które wyznaczają jakość każdego miotu w naszej hodowli." />
 
         <div class="kodeks-matrix" role="list" aria-label="Kodeks zaufania">
@@ -104,19 +97,10 @@
                 </p>
             </div>
 
-            <div class="kodeks-column" role="listitem">
-                <div>
-                    <span class="kodeks-column__num">03 / FEDERATION</span>
-                    <h3 class="kodeks-column__title">Rodowód FIFe / FPL</h3>
-                </div>
-                <p class="kodeks-column__desc">
-                    Oryginalne, pięciopokoleniowe rodowody Międzynarodowej Federacji Felinologicznej dla każdego kota.
-                </p>
-            </div>
 
             <div class="kodeks-column" role="listitem">
                 <div>
-                    <span class="kodeks-column__num">04 / BEHAVIOR</span>
+                    <span class="kodeks-column__num">03 / BEHAVIOR</span>
                     <h3 class="kodeks-column__title">Domowa Socjalizacja</h3>
                 </div>
                 <p class="kodeks-column__desc">
@@ -127,8 +111,8 @@
     </x-frontend.section>
 
     {{-- ============================================================
-         4. THE ADOPTION JOURNEY — LUXURY CONCIERGE TIMELINE
-         ============================================================ --}}
+    4. THE ADOPTION JOURNEY — LUXURY CONCIERGE TIMELINE
+    ============================================================ --}}
     <x-frontend.section id="adopcja-krok-po-kroku" class="reveal-up">
         <x-frontend.section-header eyebrow="Concierge Adopcyjny" headline="Jak wygląda proces adopcji?"
             description="Troszczymy się o przyszłość naszych kotów, dlatego każdy etap adopcji jest jasny, spokojny i przejrzysty." />
@@ -175,10 +159,10 @@
     </x-frontend.section>
 
     {{-- ============================================================
-         5. FINAL INVITATION — LUXURY CONCIERGE CTA MONOLITH
-         ============================================================ --}}
+    5. FINAL INVITATION — LUXURY CONCIERGE CTA MONOLITH
+    ============================================================ --}}
     <div class="reveal-up">
-        <x-frontend.cta tile="parchment" eyebrow="Zaproszenie do Kontaktu" headline="Zaplanuj Rozmowę Adopcyjną"
+        <x-frontend.cta tile="parchment" eyebrow="Zaproszenie do Kontaktu" headline="Zaplanuj Rozmowę"
             description="Napisz do nas — chętnie odpowiemy na wszystkie pytania, doradzimy w wyborze linii genetycznej i umówimy kameralne spotkanie w naszej hodowli."
             buttonText="Skontaktuj się z nami" buttonHref="{{ route('contact') }}" />
     </div>

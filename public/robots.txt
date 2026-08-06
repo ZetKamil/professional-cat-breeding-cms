@@ -1,2 +1,7 @@
 User-agent: *
-Disallow:
+Disallow: /login
+Disallow: /register
+Disallow: /dashboard
+Disallow: /backend/
+
+Sitemap: http://katten.test/sitemap.xml

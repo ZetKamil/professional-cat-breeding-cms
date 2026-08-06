@@ -32,7 +32,7 @@
             {{-- Pagination --}}
             @if ($posts->hasPages())
                 <div class="blog-pagination">
-                    {{ $posts->links() }}
+                    {{ $posts->links('components.frontend.pagination') }}
                 </div>
             @endif
         @else
