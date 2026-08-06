@@ -25,7 +25,7 @@
 .global-nav {
     /* Default / Light theme tokens */
     --nav-fg: #1d1d1f;
-    --nav-bg: rgba(255, 255, 255, 0.78);
+    --nav-bg: rgba(255, 255, 255, 0.95);
     --nav-border: rgba(0, 0, 0, 0.08);
     --nav-muted: #555555;
 
@@ -36,8 +36,8 @@
     padding: 0 var(--content-padding-x);
     color: var(--nav-fg);
     background-color: var(--nav-bg);
-    backdrop-filter: saturate(130%) blur(20px);
-    -webkit-backdrop-filter: saturate(130%) blur(20px);
+    backdrop-filter: saturate(180%) blur(24px);
+    -webkit-backdrop-filter: saturate(180%) blur(24px);
     border-bottom: 1px solid var(--nav-border);
     transition: background-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
                 border-bottom-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
@@ -53,7 +53,7 @@
 /* Theme: Light (over white/light surfaces) */
 .global-nav--light {
     --nav-fg: #1d1d1f;
-    --nav-bg: rgba(255, 255, 255, 0.78);
+    --nav-bg: rgba(255, 255, 255, 0.95);
     --nav-border: rgba(0, 0, 0, 0.08);
     --nav-muted: #555555;
 }
@@ -61,7 +61,7 @@
 /* Theme: Cream (over parchment / #f5f5f7 surfaces) */
 .global-nav--cream {
     --nav-fg: #1d1d1f;
-    --nav-bg: rgba(245, 245, 247, 0.82);
+    --nav-bg: rgba(247, 245, 240, 0.96);
     --nav-border: rgba(0, 0, 0, 0.08);
     --nav-muted: #555555;
 }
@@ -69,7 +69,7 @@
 /* Theme: Dark (over dark hero or dark sections / #181816) */
 .global-nav--dark {
     --nav-fg: #ffffff;
-    --nav-bg: rgba(24, 24, 22, 0.78);
+    --nav-bg: rgba(18, 18, 16, 0.94);
     --nav-border: rgba(255, 255, 255, 0.12);
     --nav-muted: rgba(255, 255, 255, 0.78);
 }
@@ -80,10 +80,10 @@
 }
 
 .global-nav--top.global-nav--dark {
-    background-color: rgba(18, 18, 18, 0.14) !important;
+    background-color: rgba(18, 18, 18, 0.35) !important;
     border-bottom-color: rgba(255, 255, 255, 0.08) !important;
-    backdrop-filter: blur(8px) saturate(120%) !important;
-    -webkit-backdrop-filter: blur(8px) saturate(120%) !important;
+    backdrop-filter: blur(12px) saturate(140%) !important;
+    -webkit-backdrop-filter: blur(12px) saturate(140%) !important;
     --nav-fg: #ffffff;
     --nav-muted: rgba(255, 255, 255, 0.82);
 }
@@ -91,17 +91,31 @@
 .global-nav--top.global-nav--light,
 .global-nav--top.global-nav--cream,
 .global-nav--top:not(.global-nav--dark) {
-    background-color: rgba(255, 255, 255, 0.15) !important;
+    background-color: rgba(255, 255, 255, 0.45) !important;
     border-bottom-color: rgba(0, 0, 0, 0.06) !important;
-    backdrop-filter: blur(8px) saturate(120%) !important;
-    -webkit-backdrop-filter: blur(8px) saturate(120%) !important;
+    backdrop-filter: blur(12px) saturate(140%) !important;
+    -webkit-backdrop-filter: blur(12px) saturate(140%) !important;
     --nav-fg: #1d1d1f;
     --nav-muted: #555555;
 }
 
-/* State: SCROLLED */
+/* State: SCROLLED — High opacity & blur for 100% text readability over long scroll */
 .global-nav.is-scrolled {
-    box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    backdrop-filter: saturate(180%) blur(28px) !important;
+    -webkit-backdrop-filter: saturate(180%) blur(28px) !important;
+}
+
+.global-nav.is-scrolled.global-nav--light {
+    --nav-bg: rgba(255, 255, 255, 0.96);
+}
+
+.global-nav.is-scrolled.global-nav--cream {
+    --nav-bg: rgba(247, 245, 240, 0.96);
+}
+
+.global-nav.is-scrolled.global-nav--dark {
+    --nav-bg: rgba(18, 18, 16, 0.95);
 }
 
 /* --------------------------------------------------------------------------
