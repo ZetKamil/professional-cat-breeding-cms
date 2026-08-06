@@ -100,6 +100,14 @@ a.contact-method:hover {
     box-shadow: var(--shadow-sm);
 }
 
+/* Reduce map height on mobile — saves precious vertical space */
+@media (max-width: 640px) {
+    .contact-map-embed {
+        height: 260px;
+        border-radius: var(--r-lg);
+    }
+}
+
 .contact-map-embed iframe {
     width: 100%;
     height: 100%;
@@ -200,6 +208,18 @@ a.contact-method:hover {
     padding-top: var(--sp-xs);
 }
 
+/* Full-width submit button on mobile — better thumb reach */
+@media (max-width: 640px) {
+    .form-actions {
+        justify-content: stretch;
+    }
+
+    .form-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
 /* --- Success Alert --- */
 
 .form-alert {
@@ -283,6 +303,13 @@ a.contact-method:hover {
 /* ==========================================================================
    RESPONSIVE — Contact page
    ========================================================================== */
+
+/* 2-column layout for contact methods on mid-range screens */
+@media (min-width: 640px) and (max-width: 834px) {
+    .contact-methods {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
 
 @media (max-width: 834px) {
     .contact-methods {

@@ -412,6 +412,27 @@
         grid-template-columns: 1fr;
     }
 
+    /* Fix gallery grid on mobile — auto rows instead of fixed 240px */
+    .gallery-grid {
+        grid-template-rows: auto;
+    }
+
+    .gallery-item {
+        aspect-ratio: 16 / 9;
+    }
+
+    .gallery-item--large,
+    .gallery-item--wide {
+        grid-column: span 1;
+        grid-row: span 1;
+    }
+
+    /* Reduce badge overlap padding on small screens */
+    .about-preview__badge-overlap {
+        padding: var(--sp-sm) var(--sp-md);
+        gap: var(--sp-sm);
+    }
+
     .timeline::before {
         left: 20px;
     }

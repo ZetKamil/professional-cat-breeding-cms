@@ -280,11 +280,25 @@
     .hero {
         min-height: 90vh;
         min-height: 90dvh;
+        /* Reduce padding-top so headline lands in the first fold */
+        padding-top: clamp(90px, 14vh, 120px);
+    }
+
+    .hero__lead {
+        font-size: clamp(1rem, 3.2vw, 1.125rem);
+        line-height: 1.6;
+        margin-bottom: var(--sp-xl);
     }
 
     .hero__actions {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
+    }
+
+    /* Full-width CTA buttons in hero on mobile */
+    .hero .btn {
+        width: 100%;
+        justify-content: center;
     }
 
     .hero__scroll-indicator {

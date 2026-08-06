@@ -17,6 +17,8 @@
     z-index: var(--z-sticky, 200);
     margin: 0 !important;
     padding: 0 !important;
+    /* Safe area: push header down on iPhone with notch/Dynamic Island */
+    padding-top: env(safe-area-inset-top) !important;
     pointer-events: none;
 }
 
@@ -269,8 +271,8 @@
 
 .hamburger-line {
     display: block;
-    width: 18px;
-    height: 1.5px;
+    width: 20px;
+    height: 2px;
     background-color: var(--nav-fg);
     border-radius: 1px;
     transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
@@ -278,11 +280,11 @@
 }
 
 .global-nav__hamburger[aria-expanded="true"] .hamburger-line:first-child {
-    transform: translateY(3.25px) rotate(45deg);
+    transform: translateY(4px) rotate(45deg);
 }
 
 .global-nav__hamburger[aria-expanded="true"] .hamburger-line:last-child {
-    transform: translateY(-3.25px) rotate(-45deg);
+    transform: translateY(-4px) rotate(-45deg);
 }
 
 /* --------------------------------------------------------------------------
@@ -410,6 +412,24 @@
 
 body.menu-open {
     overflow: hidden;
+}
+
+/* Mobile menu safe-area-inset-bottom — gesture bar iOS / Android */
+.mobile-menu__footer {
+    padding-bottom: calc(var(--sp-xl) + env(safe-area-inset-bottom));
+}
+
+/* Compact nav links on very small viewports */
+@media (max-width: 400px) {
+    .mobile-menu__nav {
+        padding-top: 28px;
+        padding-bottom: 28px;
+    }
+
+    .mobile-menu__link {
+        padding: 14px 0;
+        font-size: 22px;
+    }
 }
 
 /* --------------------------------------------------------------------------

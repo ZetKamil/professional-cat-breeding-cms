@@ -88,6 +88,14 @@
     transition: all var(--duration-fast) var(--ease-out);
 }
 
+/* Smaller pill padding on tiny screens */
+@media (max-width: 480px) {
+    .breed-pill {
+        padding: var(--sp-xs) var(--sp-md);
+        font-size: 0.8125rem;
+    }
+}
+
 .breed-pill:hover {
     color: var(--color-ink);
     background-color: var(--color-hairline);
@@ -147,6 +155,14 @@
 .animal-profile {
     padding-top: clamp(130px, 15vh, 160px);
     padding-bottom: var(--sp-4xl);
+}
+
+/* Reduce top offset on mobile — keep content in view */
+@media (max-width: 640px) {
+    .animal-profile {
+        padding-top: clamp(90px, 14vh, 120px);
+        padding-bottom: var(--sp-2xl);
+    }
 }
 
 .animal-profile .section-inner {
@@ -307,6 +323,18 @@
     outline-offset: 2px;
 }
 
+/* Smaller thumbs on mobile for better layout */
+@media (max-width: 640px) {
+    .animal-profile__thumb {
+        width: 68px;
+        height: 68px;
+    }
+
+    .animal-profile__thumbs {
+        gap: 8px;
+    }
+}
+
 .animal-profile__thumb img {
     width: 100%;
     height: 100%;
@@ -377,6 +405,13 @@
     border-radius: var(--r-lg);
     border: 1px solid var(--color-hairline);
     transition: all var(--duration-fast) var(--ease-out);
+}
+
+/* Compact spec cards on mobile */
+@media (max-width: 640px) {
+    .animal-spec-card {
+        padding: var(--sp-md);
+    }
 }
 
 .animal-spec-card:hover {

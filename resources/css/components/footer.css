@@ -159,8 +159,9 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    /* Minimum 44x44px touch target — Apple HIG */
+    width: 44px;
+    height: 44px;
     border-radius: var(--r-full, 9999px);
     background-color: rgba(255, 255, 255, 0.08);
     color: var(--color-primary, #d1ab58) !important;
@@ -338,15 +339,41 @@
     }
 }
 
+@media (max-width: 768px) {
+    .footer-grid {
+        gap: var(--sp-xl);
+    }
+}
+
 @media (max-width: 640px) {
     .footer-grid {
         grid-template-columns: 1fr;
         gap: var(--sp-xl);
     }
 
+    /* Stack newsletter form vertically on tiny screens */
+    .newsletter-form {
+        flex-direction: column;
+        padding: var(--sp-xs);
+        gap: var(--sp-xs);
+    }
+
+    .newsletter-input {
+        height: 48px;
+        padding: 0 var(--sp-md);
+    }
+
+    .newsletter-submit {
+        width: 100%;
+        height: 44px;
+        border-radius: var(--r-sm);
+    }
+
     .footer-bottom {
         flex-direction: column;
         align-items: flex-start;
         gap: var(--sp-xs);
+        /* Safe area: keep copyright above gesture bar on iOS */
+        padding-bottom: max(var(--sp-md), env(safe-area-inset-bottom));
     }
 }

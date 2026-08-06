@@ -240,6 +240,8 @@
         --text-display-lg-size: 1.5rem;     /* 24px */
         --text-display-md-size: 1.3125rem;  /* 21px */
         --text-lead-size: 1.125rem;         /* 18px */
+        --text-lead-airy-size: 1.25rem;     /* 20px — scaled down from 24px */
+        --text-tagline-size: 1.125rem;      /* 18px — scaled down from 21px */
         --sp-section: 3rem;                 /* 48px — tighter on mobile */
     }
 }
@@ -669,6 +671,13 @@ body.frontend-shell {
     width: 100%;
 }
 
+/* Prevent horizontal scroll on mobile — global protection */
+@media (max-width: 1023px) {
+    body.frontend-shell {
+        overflow-x: hidden;
+    }
+}
+
 .frontend-shell {
     font-family: var(--font-sans);
     font-size: var(--text-body-size);
@@ -723,4 +732,9 @@ body.frontend-shell {
 
 .skip-to-content:focus {
     top: var(--sp-md);
+}
+
+/* iOS scroll-chain prevention when mobile menu is open */
+body.menu-open {
+    overscroll-behavior: none;
 }
