@@ -463,6 +463,15 @@ body.menu-open {
     .global-nav__utils .global-nav__cta {
         display: none;
     }
+
+    /* Prevent long brand name from pushing hamburger off-screen on small phones.
+       clamp: minimum 160px (e.g. 320px phone), preferred 50vw, max 280px.
+       text-overflow: ellipsis keeps the brand name readable without overflow. */
+    .global-nav__logo-text {
+        max-width: clamp(160px, 50vw, 280px);
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }
 
 /* --------------------------------------------------------------------------

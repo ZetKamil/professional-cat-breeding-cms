@@ -136,6 +136,9 @@
     border-radius: var(--r-sm);
     display: inline-block;
     width: fit-content;
+    /* Prevent long email addresses from overflowing on mobile */
+    overflow-wrap: break-word;
+    word-break: break-all;
 }
 
 .footer-link:hover {

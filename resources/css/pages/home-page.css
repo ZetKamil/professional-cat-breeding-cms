@@ -1015,3 +1015,22 @@
         margin-top: var(--sp-xl);
     }
 }
+
+/* Tablet / Large phone mid-range (641px–834px) — Intermediate Editorial Rhythm */
+@media (min-width: 641px) and (max-width: 834px) {
+    .home-section--nasze-koty,
+    .home-section--opinie {
+        padding-top: 48px;
+        padding-bottom: 48px;
+    }
+
+    .home-section--codziennosc {
+        padding-top: 56px;
+        padding-bottom: 32px;
+    }
+
+    .home-section--blog {
+        padding-top: 40px;
+        padding-bottom: 36px;
+    }
+}

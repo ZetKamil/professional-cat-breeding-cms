@@ -54,6 +54,12 @@
     --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
                  Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans',
                  'Helvetica Neue', sans-serif;
+    --font-serif: Georgia, 'Times New Roman', serif;
+    --font-mono: 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono',
+                 'Courier New', Courier, monospace;
+
+    /* Layout tokens */
+    --nav-height: 64px; /* Height of the fixed global navigation bar */
 
     /* hero-display — 56px / 600 / 1.07 / -0.28px */
     --text-hero-display-size: 3.5rem;
@@ -719,6 +725,14 @@ body.frontend-shell {
     max-width: 100%;
     height: auto;
     display: block;
+}
+
+/* Prevent long unbroken strings (emails, URLs) from causing horizontal overflow */
+.frontend-shell p,
+.frontend-shell li,
+.frontend-shell td,
+.frontend-shell th {
+    overflow-wrap: break-word;
 }
 
 .frontend-shell a:not([class*="btn"]):not([class*="chip"]):not([class*="cta"]):not([class*="pill"]):not([class*="link"]):not([class*="logo"]):not([class*="nav"]) {

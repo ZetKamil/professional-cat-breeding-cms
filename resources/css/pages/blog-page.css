@@ -11,7 +11,8 @@
 
 @media (max-width: 640px) {
     .blog-hero {
-        padding-top: var(--sp-xl);
+        /* Add navbar height offset so headline is never hidden under the fixed nav */
+        padding-top: calc(var(--nav-height, 64px) + var(--sp-xl));
         padding-bottom: var(--sp-lg);
     }
 }
@@ -392,6 +393,14 @@
     margin-right: 0.85rem;
     margin-bottom: 0.25rem;
     color: var(--color-accent, #d1ab58);
+}
+
+/* Reduce drop cap size on small phones to prevent layout issues with float */
+@media (max-width: 480px) {
+    .article-editorial>p:first-of-type::first-letter {
+        font-size: 3rem;
+        margin-right: 0.6rem;
+    }
 }
 
 /* Article Footer (Tags & Share) */

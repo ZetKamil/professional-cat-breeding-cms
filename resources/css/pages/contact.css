@@ -5,7 +5,8 @@
 /* --- Contact Hero (Dark, text-only) --- */
 
 .contact-hero {
-    padding-top: 44px;
+    /* Offset for fixed navbar (64px height) so hero content starts below it */
+    padding-top: 64px;
 }
 
 .contact-hero .section {
@@ -85,6 +86,9 @@ a.contact-method:hover {
     font-size: var(--text-btn-util-size);
     color: var(--color-ink-muted-48);
     margin-top: var(--sp-xxs);
+    /* Prevent long email addresses from causing horizontal overflow on mobile */
+    overflow-wrap: break-word;
+    word-break: break-all;
 }
 
 /* --- Google Maps Interactive Embed --- */
@@ -304,14 +308,15 @@ a.contact-method:hover {
    RESPONSIVE — Contact page
    ========================================================================== */
 
-/* 2-column layout for contact methods on mid-range screens */
-@media (min-width: 640px) and (max-width: 834px) {
+/* 2-column layout for contact methods on mid-range screens (tablet) */
+@media (min-width: 641px) and (max-width: 834px) {
     .contact-methods {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
-@media (max-width: 834px) {
+/* Single column on mobile */
+@media (max-width: 640px) {
     .contact-methods {
         grid-template-columns: 1fr;
     }
