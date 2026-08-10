@@ -1,5 +1,5 @@
-<x-frontend.shell title="{{ config('app.name') }} — Etyczna Hodowla Kotów Rasowych FIFe / FPL"
-    meta-description="Hodowla kotów rasowych oparta na czystości genetycznej, spokoju i bezkompromisowych standardach etycznych FIFe / FPL.">
+<x-frontend.shell title="{{ config('app.name') }} — Etyczna Hodowla Kotów Rasowych z Rodowodem Stowarzyszenia"
+    meta-description="Hodowla kotów rasowych oparta na czystości genetycznej, spokoju i bezkompromisowych standardach etycznych oraz rodowodzie stowarzyszenia.">
     {{-- ============================================================
     1. CINEMATIC ASYMMETRIC HERO — ROLLS ROYCE / APPLE STYLE
     ============================================================ --}}
@@ -55,7 +55,7 @@
             <div class="hero__trust-bar" role="list" aria-label="Nasze certyfikaty i standardy">
                 <div class="hero__trust-item" role="listitem">
                     <i data-lucide="shield-check" class="hero__trust-icon" aria-hidden="true"></i>
-                    <span>Certyfikat FIFe / FPL</span>
+                    <span>Certyfikat Stowarzyszenia</span>
                 </div>
                 <div class="hero__trust-item" role="listitem">
                     <i data-lucide="dna" class="hero__trust-icon" aria-hidden="true"></i>
@@ -74,7 +74,7 @@
     ============================================================ --}}
     <x-frontend.section id="specjalizacje" class="reveal-up home-section--specjalizacje">
         <x-frontend.section-header eyebrow="Kolekcje Hodowlane" headline="Nasze Specjalizacje Rasy"
-            description="Trzy wybitne linie felinologiczne, prowadzone według rygorystycznych standardów Międzynarodowej Federacji Felinologicznej (FIFe)." />
+            description="Trzy wybitne linie felinologiczne, prowadzone według rygorystycznych standardów stowarzyszenia felinologicznego." />
 
         <div class="collection-grid" role="list" aria-label="Specjalizacje rasy">
             <a href="{{ route('frontend.animals.index', ['breed' => 'bengal']) }}" class="collection-card"
@@ -88,7 +88,7 @@
                     <div class="collection-card__tags">
                         <span class="collection-tag">Aktywność: Wysoka</span>
                         <span class="collection-tag">Rozeta na złocie</span>
-                        <span class="collection-tag">FIFe Lineage</span>
+                        <span class="collection-tag">Rodowód Stowarzyszenia</span>
                     </div>
                 </div>
                 <span class="collection-card__cta">
@@ -108,7 +108,7 @@
                     <div class="collection-card__tags">
                         <span class="collection-tag">Temperament: Spokojny</span>
                         <span class="collection-tag">Pluszowa okrywa</span>
-                        <span class="collection-tag">FPL Rodowód</span>
+                        <span class="collection-tag">Rodowód Stowarzyszenia</span>
                     </div>
                 </div>
                 <span class="collection-card__cta">
@@ -196,7 +196,7 @@
                     </div>
                     <span class="patron-monolith__badge">
                         <i data-lucide="check-circle-2" class="w-4 h-4" aria-hidden="true"></i>
-                        FIFe Verified
+                        Rodowód Stowarzyszenia
                     </span>
                 </div>
             </div>
@@ -213,7 +213,7 @@
                     </div>
                     <span class="patron-monolith__badge">
                         <i data-lucide="check-circle-2" class="w-4 h-4" aria-hidden="true"></i>
-                        FIFe Verified
+                        Rodowód Stowarzyszenia
                     </span>
                 </div>
             </div>
@@ -230,7 +230,7 @@
                     </div>
                     <span class="patron-monolith__badge">
                         <i data-lucide="check-circle-2" class="w-4 h-4" aria-hidden="true"></i>
-                        FIFe Verified
+                        Rodowód Stowarzyszenia
                     </span>
                 </div>
             </div>
@@ -324,5 +324,25 @@
             description="Napisz do nas — chętnie odpowiemy na wszystkie pytania, doradzimy w wyborze linii genetycznej i umówimy kameralne spotkanie w naszej hodowli."
             buttonText="Skontaktuj się z nami" buttonHref="{{ route('contact') }}" />
     </div>
+
+    @push('schema')
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "LocalBusiness",
+      "name": "{{ config('app.name') }}",
+      "image": "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=1200&q=80",
+      "url": "{{ url('/') }}",
+      "telephone": "+48500000000",
+      "address": {
+        "@@type": "PostalAddress",
+        "streetAddress": "ul. Przykładowa 1",
+        "addressLocality": "Warszawa",
+        "postalCode": "00-001",
+        "addressCountry": "PL"
+      }
+    }
+    </script>
+    @endpush
 
 </x-frontend.shell>

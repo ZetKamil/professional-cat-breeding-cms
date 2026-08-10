@@ -109,9 +109,9 @@
                         <h4 class="pedigree-lineage__title">Linia Matki (Maternal Lineage)</h4>
                         <p class="pedigree-lineage__desc">
                             @if($mother && ($mother->mother || $mother->father))
-                                Potomstwo udokumentowanych linii: {{ $mother->mother->name ?? 'FPL Registered Queen' }} & {{ $mother->father->name ?? 'FPL Registered Stud' }}.
+                                Potomstwo udokumentowanych linii: {{ $mother->mother->name ?? 'Rodowodowa Kotka Stowarzyszenia' }} & {{ $mother->father->name ?? 'Rodowodowy Kocur Stowarzyszenia' }}.
                             @else
-                                Dziadkowie zarejestrowani w Międzynarodowych Księgach Rodowodowych FIFe / FPL.
+                                Dziadkowie zarejestrowani w księgach rodowodowych stowarzyszenia.
                             @endif
                         </p>
                     </div>
@@ -122,9 +122,9 @@
                         <h4 class="pedigree-lineage__title">Linia Ojca (Paternal Lineage)</h4>
                         <p class="pedigree-lineage__desc">
                             @if($father && ($father->mother || $father->father))
-                                Potomstwo udokumentowanych linii: {{ $father->mother->name ?? 'FPL Registered Queen' }} & {{ $father->father->name ?? 'FPL Registered Stud' }}.
+                                Potomstwo udokumentowanych linii: {{ $father->mother->name ?? 'Rodowodowa Kotka Stowarzyszenia' }} & {{ $father->father->name ?? 'Rodowodowy Kocur Stowarzyszenia' }}.
                             @else
-                                Dziadkowie zarejestrowani w Międzynarodowych Księgach Rodowodowych FIFe / FPL.
+                                Dziadkowie zarejestrowani w księgach rodowodowych stowarzyszenia.
                             @endif
                         </p>
                     </div>

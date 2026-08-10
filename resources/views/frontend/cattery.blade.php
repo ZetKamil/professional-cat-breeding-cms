@@ -62,7 +62,7 @@
                     </div>
                     <div class="manifesto__stat-card" aria-label="15 lat doświadczenia">
                         <div class="manifesto__stat-number">15+</div>
-                        <div class="manifesto__stat-label">Lat selekcji rodowodowej FPL</div>
+                        <div class="manifesto__stat-label">Lat selekcji rodowodowej</div>
                     </div>
                 </div>
             </div>
@@ -151,7 +151,7 @@
                 </div>
                 <h3 class="adoption-journey__title">Odbiór i Wyprawka</h3>
                 <p class="adoption-journey__desc">
-                    Kot opuszcza hodowlę w wieku 14-16 tygodni z pięciopokoleniowym rodowodem FPL, badaniami zdrowia
+                    Kot opuszcza hodowlę w wieku 14-16 tygodni z certyfikatem rodowodowym stowarzyszenia, badaniami zdrowia
                     oraz pakietem startowym.
                 </p>
             </div>

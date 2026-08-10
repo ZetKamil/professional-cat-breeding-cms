@@ -1,7 +1,7 @@
 @props([
     'title' => config('app.name', 'Hodowla Kotów'),
     'metaDescription' => 'Profesjonalna hodowla kotów rasowych — zdrowie, piękno, zaufanie.',
-    'ogImage' => null,
+    'ogImage' => 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=1200&q=80',
 ])
 
 <!DOCTYPE html>
@@ -55,6 +55,9 @@
 
     {{-- Head slot for page-specific meta --}}
     {{ $head ?? '' }}
+
+    {{-- JSON-LD Schema.org Data --}}
+    @stack('schema')
 </head>
 <body class="frontend-shell">
 

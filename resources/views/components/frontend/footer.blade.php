@@ -70,18 +70,9 @@
                 <div class="footer-col footer-col--newsletter">
                     <h3 class="footer-heading">Bądź na bieżąco</h3>
                     <p class="footer-newsletter__desc text-body">
-                        Zapisz się do newslettera, aby otrzymywać informacje o nowych miotach jako pierwszy.
-                    </p>
-                    <form action="#" method="POST" class="newsletter-form" onsubmit="event.preventDefault();">
-                        <label for="newsletter-email" class="sr-only">Adres e-mail</label>
-                        <input type="email" id="newsletter-email" placeholder="Twój adres e-mail" class="newsletter-input" required>
-                        <button type="submit" class="newsletter-submit" aria-label="Zapisz się">
-                            <i data-lucide="arrow-right" aria-hidden="true"></i>
-                        </button>
-                    </form>
-                    <p class="newsletter-privacy">
-                        <i data-lucide="lock" aria-hidden="true" class="newsletter-privacy__icon"></i>
-                        <span>Zapisując się, akceptujesz <a href="{{ route('privacy') }}">Politykę prywatności</a>.</span>
+                        Funkcja zapisu do newslettera jest obecnie w przygotowaniu. 
+                        <br><br>
+                        Zapraszamy wkrótce!
                     </p>
                 </div>
             </div>

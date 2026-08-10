@@ -1,4 +1,4 @@
-<x-frontend.shell title="Baza Wiedzy & Poradniki — ZetKamil Hodowla Kotów"
+<x-frontend.shell title="Baza Wiedzy & Poradniki — {{ config('app.name') }}"
     meta-description="Eksperckie artykuły dotyczące zdrowia, genetyki, wyprawki, diety BARF i socjalizacji kotów bengalskich, brytyjskich i syjamskich.">
     {{-- ============================================================
     1. EDITORIAL HERO HEADER

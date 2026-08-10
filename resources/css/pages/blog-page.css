@@ -194,12 +194,10 @@
 .article-cover-hero__overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-        to top,
-        rgba(10, 10, 10, 0.90) 0%,
-        rgba(10, 10, 10, 0.55) 55%,
-        rgba(10, 10, 10, 0.35) 100%
-    );
+    background: linear-gradient(to top,
+            rgba(10, 10, 10, 0.90) 0%,
+            rgba(10, 10, 10, 0.55) 55%,
+            rgba(10, 10, 10, 0.35) 100%);
     z-index: 1;
 }
 
@@ -385,7 +383,7 @@
 }
 
 /* Drop Cap on first paragraph */
-.article-editorial > p:first-of-type::first-letter {
+.article-editorial>p:first-of-type::first-letter {
     float: left;
     font-family: var(--font-serif);
     font-size: 4.25rem;

@@ -58,50 +58,6 @@
         </div>
     </x-frontend.section>
 
-    {{-- ============================================================
-         3. TIMELINE — Milestones of the cattery
-         ============================================================ --}}
-    <x-frontend.section tile="parchment" id="historia" class="reveal-up">
-        <x-frontend.section-header
-            eyebrow="Kamienie milowe"
-            headline="Nasza Droga"
-            description="Historia budowania zaufania krok po kroku."
-        />
-
-        <div class="timeline">
-            <div class="timeline__item">
-                <div class="timeline__year text-display-md">2015</div>
-                <div class="timeline__content">
-                    <h3 class="text-tagline">Początki naszej pasji</h3>
-                    <p class="text-body text-ink-muted-80">Pierwszy kot rasowy zamieszkał w naszym domu, zmieniając nasze życie na zawsze. Rozpoczęliśmy intensywną naukę o genetyce i behawiorystyce.</p>
-                </div>
-            </div>
-            
-            <div class="timeline__item">
-                <div class="timeline__year text-display-md">2017</div>
-                <div class="timeline__content">
-                    <h3 class="text-tagline">Rejestracja hodowli (FIFe)</h3>
-                    <p class="text-body text-ink-muted-80">Oficjalnie dołączyliśmy do Międzynarodowej Federacji Felinologicznej, przyjmując najwyższe światowe standardy etyczne i hodowlane.</p>
-                </div>
-            </div>
-
-            <div class="timeline__item">
-                <div class="timeline__year text-display-md">2019</div>
-                <div class="timeline__content">
-                    <h3 class="text-tagline">Pierwszy prestiżowy miot</h3>
-                    <p class="text-body text-ink-muted-80">Na świat przyszedł miot "A". Pięć zdrowych, silnych i wspaniale zsocjalizowanych kociąt trafiło do kochających domów w całej Europie.</p>
-                </div>
-            </div>
-
-            <div class="timeline__item">
-                <div class="timeline__year text-display-md">2024</div>
-                <div class="timeline__content">
-                    <h3 class="text-tagline">Grand International Champion</h3>
-                    <p class="text-body text-ink-muted-80">Nasz wspaniały kocur zdobył zaszczytny tytuł na międzynarodowej wystawie, potwierdzając wybitną zgodność naszej linii ze wzorcem rasy.</p>
-                </div>
-            </div>
-        </div>
-    </x-frontend.section>
 
     {{-- ============================================================
          4. VALUES — Dark tile
@@ -161,8 +117,8 @@
         <div class="awards-grid">
             <div class="award-card">
                 <i data-lucide="award" class="award-card__icon"></i>
-                <h3 class="text-body-strong">Certyfikowana Hodowla FIFe</h3>
-                <p class="text-nav text-ink-muted-48">Federation Internationale Feline</p>
+                <h3 class="text-body-strong">Certyfikowana Hodowla Stowarzyszenia</h3>
+                <p class="text-nav text-ink-muted-48">Zarejestrowana w oficjalnym stowarzyszeniu felinologicznym</p>
             </div>
             <div class="award-card">
                 <i data-lucide="shield-check" class="award-card__icon"></i>
@@ -189,13 +145,13 @@
 
         <div class="gallery-grid">
             <div class="gallery-item gallery-item--large">
-                <img src="https://images.unsplash.com/photo-1548247416-ec66f4900b2e?auto=format&fit=crop&w=800&q=80" alt="Kot" width="800" height="800" decoding="async" loading="lazy">
+                <img src="https://images.unsplash.com/photo-1548247416-ec66f4900b2e?auto=format&fit=crop&w=800&q=80" alt="Spokojny kot rasowy odpoczywający w domowym zaciszu hodowli ZetKamil" width="800" height="800" decoding="async" loading="lazy">
             </div>
             <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?auto=format&fit=crop&w=600&q=80" alt="Kociak" width="600" height="600" decoding="async" loading="lazy">
+                <img src="https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?auto=format&fit=crop&w=600&q=80" alt="Młody kociak poznający otoczenie podczas procesu wczesnej socjalizacji w hodowli" width="600" height="600" decoding="async" loading="lazy">
             </div>
             <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?auto=format&fit=crop&w=600&q=80" alt="Bawiący się kot" width="600" height="600" decoding="async" loading="lazy">
+                <img src="https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?auto=format&fit=crop&w=600&q=80" alt="Bawiący się dorosły kot w trakcie stymulacji behawioralnej zapewniającej zrównoważony rozwój" width="600" height="600" decoding="async" loading="lazy">
             </div>
         </div>
     </x-frontend.section>
@@ -217,8 +173,8 @@
             </div>
             <div class="benefit-item">
                 <i data-lucide="scroll-text" aria-hidden="true" class="benefit-item__icon"></i>
-                <h3 class="benefit-item__title text-body-strong">Rodowód FPL/FIFe</h3>
-                <p class="benefit-item__desc">Zarejestrowany rodowód z pełną genealogią</p>
+                <h3 class="benefit-item__title text-body-strong">Rodowód Stowarzyszenia</h3>
+                <p class="benefit-item__desc">Certyfikat rodowodowy wydany przez stowarzyszenie z pełną genealogią</p>
             </div>
             <div class="benefit-item">
                 <i data-lucide="dna" aria-hidden="true" class="benefit-item__icon"></i>

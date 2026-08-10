@@ -1,6 +1,7 @@
 <x-frontend.shell
-    title="{{ $post->title }} — ZetKamil Hodowla Kotów"
+    title="{{ $post->title }} — {{ config('app.name') }}"
     meta-description="{{ Str::limit($post->excerpt, 160) }}"
+    ogImage="{{ $post->coverImageUrl() }}"
 >
     @php
         $wordCount = str_word_count(strip_tags($post->body));
@@ -32,7 +33,7 @@
 
             <div class="article-author-bar">
                 <div class="article-author-bar__info">
-                    <span class="article-author-bar__name">ZetKamil Hodowla Kotów</span>
+                    <span class="article-author-bar__name">{{ config('app.name') }}</span>
                     <span class="article-author-bar__role">Certyfikowana Hodowla Kotów Rasowych</span>
                 </div>
                 <div class="article-author-bar__meta">
@@ -97,4 +98,34 @@
             </div>
         </div>
     </x-frontend.section>
+
+    @push('schema')
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "BlogPosting",
+      "mainEntityOfPage": {
+        "@@type": "WebPage",
+        "@@id": "{{ route('frontend.blog.show', $post) }}"
+      },
+      "headline": "{{ $post->title }}",
+      "description": "{{ Str::limit($post->excerpt, 160) }}",
+      "image": "{{ $post->coverImageUrl() }}",
+      "author": {
+        "@@type": "Organization",
+        "name": "{{ config('app.name') }}"
+      },
+      "publisher": {
+        "@@type": "Organization",
+        "name": "{{ config('app.name') }}",
+        "logo": {
+          "@@type": "ImageObject",
+          "url": "{{ asset('apple-touch-icon.png') }}"
+        }
+      },
+      "datePublished": "{{ $post->published_at ? $post->published_at->toIso8601String() : $post->created_at->toIso8601String() }}",
+      "dateModified": "{{ $post->updated_at->toIso8601String() }}"
+    }
+    </script>
+    @endpush
 </x-frontend.shell>
