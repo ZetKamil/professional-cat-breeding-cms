@@ -87,7 +87,7 @@ class AnimalSeeder extends Seeder
                 'breed' => 'Kot Brytyjski',
                 'color' => 'Czekoladowy',
                 'date_of_birth' => now()->subYears(4),
-                'short_description' => 'Champion FIFe. Silny, zdrowy reproduktor z doskonałym rodowodem.',
+                'short_description' => 'Utytułowany reproduktor z doskonałym rodowodem stowarzyszenia.',
                 'sort_order' => 11,
             ]);
 

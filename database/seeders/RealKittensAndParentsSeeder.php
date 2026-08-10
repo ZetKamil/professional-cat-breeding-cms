@@ -182,12 +182,24 @@ class RealKittensAndParentsSeeder extends Seeder
 
             $photoIndex = 0;
             foreach ($data['photos'] as $sourcePath) {
-                if (File::exists($sourcePath)) {
-                    $ext = strtolower(pathinfo($sourcePath, PATHINFO_EXTENSION)) ?: 'jpg';
+                $resolvedPath = $this->resolveSourceFile($sourcePath);
+                if ($resolvedPath) {
+                    $ext = strtolower(pathinfo($resolvedPath, PATHINFO_EXTENSION)) ?: 'jpg';
                     $targetFilename = "parent_{$data['slug']}_" . ($photoIndex + 1) . ".{$ext}";
                     $targetPath = storage_path("app/public/media/{$targetFilename}");
 
-                    File::copy($sourcePath, $targetPath);
+                    File::copy($resolvedPath, $targetPath);
+                    @chmod($targetPath, 0644);
+
+                    // Duplicate copy directly to public/storage/media for hosting environments without symlink support
+                    $publicMediaDir = public_path('storage/media');
+                    if (! File::isDirectory($publicMediaDir)) {
+                        File::makeDirectory($publicMediaDir, 0755, true, true);
+                        @chmod($publicMediaDir, 0755);
+                    }
+                    $pubTarget = $publicMediaDir . '/' . $targetFilename;
+                    File::copy($resolvedPath, $pubTarget);
+                    @chmod($pubTarget, 0644);
 
                     Media::create([
                         'disk' => 'public',
@@ -336,12 +348,24 @@ class RealKittensAndParentsSeeder extends Seeder
 
             $photoIndex = 0;
             foreach ($kData['photos'] as $sourcePath) {
-                if (File::exists($sourcePath)) {
-                    $ext = strtolower(pathinfo($sourcePath, PATHINFO_EXTENSION)) ?: 'jpg';
+                $resolvedPath = $this->resolveSourceFile($sourcePath);
+                if ($resolvedPath) {
+                    $ext = strtolower(pathinfo($resolvedPath, PATHINFO_EXTENSION)) ?: 'jpg';
                     $targetFilename = "kitten_{$kData['slug']}_" . ($photoIndex + 1) . ".{$ext}";
                     $targetPath = storage_path("app/public/media/{$targetFilename}");
 
-                    File::copy($sourcePath, $targetPath);
+                    File::copy($resolvedPath, $targetPath);
+                    @chmod($targetPath, 0644);
+
+                    // Duplicate copy directly to public/storage/media for hosting environments without symlink support
+                    $publicMediaDir = public_path('storage/media');
+                    if (! File::isDirectory($publicMediaDir)) {
+                        File::makeDirectory($publicMediaDir, 0755, true, true);
+                        @chmod($publicMediaDir, 0755);
+                    }
+                    $pubTarget = $publicMediaDir . '/' . $targetFilename;
+                    File::copy($resolvedPath, $pubTarget);
+                    @chmod($pubTarget, 0644);
 
                     Media::create([
                         'disk' => 'public',
@@ -361,5 +385,38 @@ class RealKittensAndParentsSeeder extends Seeder
                 }
             }
         }
+    }
+
+    /**
+     * Resolves source file case-insensitively, handles trailing spaces, and folder typos on Linux filesystems.
+     */
+    protected function resolveSourceFile(string $sourcePath): ?string
+    {
+        if (File::exists($sourcePath)) {
+            return $sourcePath;
+        }
+
+        // Try removing space before extension (e.g. 'Bella .jpg' -> 'Bella.jpg')
+        $trimmed = preg_replace('/\s+\./', '.', $sourcePath);
+        if ($trimmed && File::exists($trimmed)) {
+            return $trimmed;
+        }
+
+        $targetFilename = strtolower(basename($sourcePath));
+        $targetFilenameTrimmed = strtolower(basename($trimmed ?? $sourcePath));
+
+        // Global recursive scan in base_path('image') for matching filename
+        $baseImageDir = base_path('image');
+        if (File::isDirectory($baseImageDir)) {
+            $allFiles = File::allFiles($baseImageDir);
+            foreach ($allFiles as $f) {
+                $fName = strtolower($f->getFilename());
+                if ($fName === $targetFilename || $fName === $targetFilenameTrimmed) {
+                    return $f->getPathname();
+                }
+            }
+        }
+
+        return null;
     }
 }
