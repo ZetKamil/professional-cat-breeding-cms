@@ -17,7 +17,7 @@ class HomepageTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('Etyczna Hodowla Kotów Rasowych');
-        $response->assertSee('Certyfikat FIFe / FPL');
+        $response->assertSee('Certyfikat Stowarzyszenia');
         $response->assertSee('100% Badania Genetyczne');
         $response->assertSee('Nasze Specjalizacje Rasy');
         $response->assertSee('Koty Bengalskie');
