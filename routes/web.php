@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Frontend\AnimalController as FrontendAnimalController;
 use App\Http\Controllers\Frontend\BlogController as FrontendBlogController;
 use App\Http\Controllers\Frontend\HomeController;
@@ -185,11 +186,9 @@ Route::get('/fix-storage', function () {
     }
 })->middleware(['auth', 'verified', 'active']);
 // backend dashboard
-Route::get('/dashboard', function () {
-    Gate::authorize('view-backend-dashboard');
-
-    return view('backend.dashboard');
-})->middleware(['auth', 'verified', 'active'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified', 'active'])
+    ->name('dashboard');
 
 
 // backend routes
