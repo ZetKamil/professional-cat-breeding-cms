@@ -62,7 +62,7 @@
                         <li><a href="{{ route('about') }}#zdrowie" class="footer-link">Zdrowie & Certyfikaty</a></li>
                         <li><a href="{{ route('about') }}#co-otrzymujesz" class="footer-link">Wyprawka i Rodowód</a></li>
                         <li><a href="{{ route('contact') }}#faq" class="footer-link">Częste pytania (FAQ)</a></li>
-                        <li><a href="{{ route('terms') }}" class="footer-link">Regulamin adopcji</a></li>
+                        <li><a href="{{ route('terms') }}" class="footer-link">Regulamin świadczenia usług</a></li>
                     </ul>
                 </div>
 
@@ -85,7 +85,7 @@
                 <p class="footer-legal">
                     <a href="{{ route('privacy') }}" class="footer-link">Polityka prywatności</a>
                     <span class="footer-legal__sep" aria-hidden="true">·</span>
-                    <a href="{{ route('terms') }}" class="footer-link">Regulamin strony</a>
+                    <a href="{{ route('terms') }}" class="footer-link">Regulamin świadczenia usług</a>
                 </p>
             </div>
 
