@@ -28,7 +28,7 @@ class UserSeeder extends Seeder
             ]
         );
 
-        if (User::count() < 10) {
+        if (app()->environment('local') && User::count() < 10) {
             User::factory()->count(10)->create();
         }
     }
