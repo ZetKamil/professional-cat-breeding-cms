@@ -28,7 +28,7 @@
             <div class="animal-profile__grid">
                 {{-- LEFT COLUMN: Photo & Gallery --}}
                 <div class="animal-profile__gallery">
-                    <div class="animal-profile__main-image-wrap" id="animal-gallery-main">
+                    <div class="animal-profile__main-image-wrap" id="animal-gallery-main" onclick="openAnimalLightbox()" title="Kliknij, aby powiększyć zdjęcie na pełnym ekranie">
                         @if($animal->media)
                             <img src="{{ $animal->media->url() }}" alt="{{ $animal->name }} — {{ $animal->breed }}"
                                 class="animal-profile__main-image" id="animal-main-photo" width="1000" height="750"
@@ -39,6 +39,9 @@
                                 id="animal-main-photo" width="1000" height="750" decoding="async" loading="eager"
                                 fetchpriority="high">
                         @endif
+                        <div class="position-absolute bottom-0 end-0 m-3 px-3 py-1 bg-dark text-white rounded-pill small opacity-75 d-flex align-items-center gap-1" style="pointer-events: none;">
+                            <i data-lucide="maximize-2" class="w-4 h-4"></i> Powiększ
+                        </div>
                     </div>
 
                     @if($animal->gallery && $animal->gallery->isNotEmpty())
@@ -81,6 +84,28 @@
                                 }
                                 document.querySelectorAll('.animal-profile__thumb').forEach(t => t.classList.remove('animal-profile__thumb--active'));
                                 el.classList.add('animal-profile__thumb--active');
+                            }
+
+                            function openAnimalLightbox() {
+                                const mainImg = document.getElementById('animal-main-photo');
+                                if (!mainImg || !mainImg.src) return;
+                                
+                                let modal = document.getElementById('animal-lightbox-modal');
+                                if (!modal) {
+                                    modal = document.createElement('div');
+                                    modal.id = 'animal-lightbox-modal';
+                                    modal.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.92);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;cursor:pointer;';
+                                    modal.onclick = function() { modal.style.display = 'none'; };
+                                    modal.innerHTML = `
+                                        <div style="position:relative;max-width:95vw;max-height:95vh;">
+                                            <img id="animal-lightbox-img" src="" style="max-width:95vw;max-height:92vh;object-fit:contain;border-radius:8px;box-shadow:0 20px 40px rgba(0,0,0,0.8);">
+                                            <button onclick="document.getElementById('animal-lightbox-modal').style.display='none'" style="position:absolute;top:-15px;right:-15px;background:#fff;border:none;border-radius:50%;width:36px;height:36px;font-size:20px;font-weight:bold;cursor:pointer;box-shadow:0 4px 10px rgba(0,0,0,0.3);">&times;</button>
+                                        </div>
+                                    `;
+                                    document.body.appendChild(modal);
+                                }
+                                document.getElementById('animal-lightbox-img').src = mainImg.src;
+                                modal.style.display = 'flex';
                             }
                         </script>
                     @endif
