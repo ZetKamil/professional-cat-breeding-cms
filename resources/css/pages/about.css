@@ -298,6 +298,14 @@
     transform: scale(1.05);
 }
 
+.gallery-cta {
+    margin-top: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
 .gallery-item--large {
     grid-row: span 2;
     grid-column: span 2;

@@ -155,7 +155,7 @@
             </div>
         </div>
 
-        <div class="mt-12 text-center">
+        <div class="gallery-cta">
             <x-frontend.button variant="secondary" href="https://www.facebook.com/profile.php?id=61580668026948"
                 target="_blank" rel="noopener">
                 Obserwuj nas na Facebooku →
