@@ -109,13 +109,7 @@ php artisan test
 
 ---
 
-## 🔐 Default Admin Credentials (Local Development)
 
-- **URL**: `http://127.0.0.1:8000/login`
-- **Email**: `kamil.ziemkiewicz.97@gmail.com`
-- **Password**: `KamilZiemkiewicz`
-
----
 
 ## 📄 License
 
