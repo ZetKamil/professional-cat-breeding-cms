@@ -134,7 +134,7 @@ test('admin can delete media and physical file is removed from disk', function (
     $path = $media->path();
     Storage::disk('public')->assertExists($path);
 
-    $response = $this->delete(route('backend.media.destroy', $media));
+    $response = $this->from(route('backend.media.index'))->delete(route('backend.media.destroy', $media));
     $response->assertRedirect(route('backend.media.index'));
 
     expect(Media::find($media->id))->toBeNull();
