@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 
 Route::middleware(['auth'])->group(function () {
-    Route::redirect('settings', 'settings/profile');
+    Route::get('settings', function () {
+        return redirect()->route('backend.users.edit', auth()->id());
+    });
 
     Route::livewire('settings/profile', Profile::class)->name('profile.edit');
 });

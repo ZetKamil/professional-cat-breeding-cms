@@ -66,8 +66,8 @@
 
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                 <li>
-                    <a class="dropdown-item" href="{{ route('profile.edit') }}">
-                        Settings
+                    <a class="dropdown-item" href="{{ route('backend.users.edit', auth()->id()) }}">
+                        <i class="fas fa-user-gear me-2"></i>Edytuj profil / Ustawienia
                     </a>
                 </li>
 
