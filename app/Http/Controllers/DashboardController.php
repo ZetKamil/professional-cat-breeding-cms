@@ -42,7 +42,7 @@ class DashboardController extends Controller
             ->take(6)
             ->get();
 
-        $recentPosts = Post::with('category')
+        $recentPosts = Post::with('categories')
             ->latest()
             ->take(5)
             ->get();

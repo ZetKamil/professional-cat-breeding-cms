@@ -230,7 +230,7 @@
                                                     {{ $post->title }}
                                                 </div>
                                                 <div class="small text-muted">
-                                                    {{ $post->category?->name ?? 'Bez kategorii' }}
+                                                    {{ $post->categories->first()?->name ?? 'Bez kategorii' }}
                                                 </div>
                                             </td>
                                             <td>
