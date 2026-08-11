@@ -123,6 +123,10 @@
                             Wyślij wiadomość
                         </x-frontend.button>
                     </div>
+
+                    <p class="form-rodo-info text-caption text-ink-muted-60" style="margin-top: 16px; font-size: 0.85rem; line-height: 1.5;">
+                        Wysyłając formularz, przekazujesz nam swoje dane osobowe, które przetwarzamy w celu obsługi Twojego zapytania i udzielenia odpowiedzi. Podanie danych jest dobrowolne, przy czym dane oznaczone jako wymagane są niezbędne do obsługi zapytania. Podanie numeru telefonu jest dobrowolne. Szczegółowe informacje dotyczące przetwarzania danych osobowych znajdziesz w <a href="{{ route('privacy') }}" class="text-primary" style="text-decoration: underline;">Polityce Prywatności</a>.
+                    </p>
                 </form>
             </div>
         </div>

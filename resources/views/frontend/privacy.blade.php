@@ -78,6 +78,11 @@
                     <h3 style="font-size: 1.15rem; font-weight: 700; margin-top: 24px; margin-bottom: 8px; color: var(--color-ink);">2.3. Rezerwacja, nabycie lub zawarcie umowy dotyczącej kota</h3>
                     <p>Jeżeli w następstwie kontaktu dochodzi do rezerwacji lub zawarcia umowy dotyczącej kota, dane niezbędne do przygotowania, zawarcia i wykonania umowy są przetwarzane na podstawie <strong>art. 6 ust. 1 lit. b RODO</strong>.</p>
                     <p style="margin-top: 8px;">Jeżeli przepisy prawa wymagają przetwarzania określonych danych, podstawą przetwarzania może być również <strong>art. 6 ust. 1 lit. c RODO</strong>.</p>
+
+                    <h3 style="font-size: 1.15rem; font-weight: 700; margin-top: 24px; margin-bottom: 8px; color: var(--color-ink);">2.4. Dane techniczne i bezpieczeństwo</h3>
+                    <p>W związku z korzystaniem ze strony internetowej mogą być przetwarzane dane techniczne niezbędne do zapewnienia jej prawidłowego działania i bezpieczeństwa, w szczególności informacje dotyczące adresu IP, daty i czasu połączenia, rodzaju przeglądarki internetowej, systemu operacyjnego oraz informacje zawarte w logach serwera lub aplikacji.</p>
+                    <p style="margin-top: 12px;">Dane te mogą być przetwarzane w celu zapewnienia bezpieczeństwa strony, wykrywania prób nieuprawnionego dostępu, zapobiegania nadużyciom, diagnozowania błędów oraz zapewnienia prawidłowego działania usług.</p>
+                    <p style="margin-top: 12px;">Podstawą prawną przetwarzania jest <strong>art. 6 ust. 1 lit. f RODO</strong> – prawnie uzasadniony interes Administratora polegający na zapewnieniu bezpieczeństwa i prawidłowego funkcjonowania strony internetowej oraz ochronie przed nadużyciami.</p>
                 </section>
 
                 {{-- Sekcja 3 --}}
@@ -129,6 +134,34 @@
                 <section class="legal-page__section">
                     <h2 class="legal-page__section-title">6. Pliki cookies</h2>
                     <p>Strona wykorzystuje wyłącznie pliki cookies niezbędne do jej prawidłowego działania, w szczególności do utrzymania sesji użytkownika oraz zapewnienia bezpieczeństwa formularzy i aplikacji.</p>
+
+                    <div style="overflow-x: auto; margin-top: 16px; margin-bottom: 16px;">
+                        <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                            <thead>
+                                <tr style="background-color: var(--color-canvas-parchment); text-align: left;">
+                                    <th style="padding: 10px; border: 1px solid var(--color-hairline);">Nazwa</th>
+                                    <th style="padding: 10px; border: 1px solid var(--color-hairline);">Cel</th>
+                                    <th style="padding: 10px; border: 1px solid var(--color-hairline);">Rodzaj</th>
+                                    <th style="padding: 10px; border: 1px solid var(--color-hairline);">Czas przechowywania</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding: 10px; border: 1px solid var(--color-hairline);"><code>hodowla-kotow-z-mazowieckiej-szwajcarii-session</code></td>
+                                    <td style="padding: 10px; border: 1px solid var(--color-hairline);">utrzymanie sesji użytkownika i prawidłowe działanie aplikacji</td>
+                                    <td style="padding: 10px; border: 1px solid var(--color-hairline);">niezbędny techniczny</td>
+                                    <td style="padding: 10px; border: 1px solid var(--color-hairline);">zgodnie z konfiguracją sesji Laravel (domyślnie 120 minut)</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px; border: 1px solid var(--color-hairline);"><code>XSRF-TOKEN</code></td>
+                                    <td style="padding: 10px; border: 1px solid var(--color-hairline);">ochrona aplikacji przed atakami typu CSRF (Cross-Site Request Forgery)</td>
+                                    <td style="padding: 10px; border: 1px solid var(--color-hairline);">niezbędny techniczny</td>
+                                    <td style="padding: 10px; border: 1px solid var(--color-hairline);">zgodnie z konfiguracją aplikacji (sesyjny)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
                     <p style="margin-top: 12px;">Nie wykorzystujemy obecnie plików cookies ani innych technologii śledzących w celu prowadzenia profilowania, reklamy behawioralnej lub analizy aktywności użytkowników.</p>
                     <p style="margin-top: 12px;">Jeżeli w przyszłości na stronie zostaną zastosowane dodatkowe technologie wymagające zgody użytkownika, odpowiednie informacje oraz mechanizm uzyskania zgody zostaną wdrożone przed rozpoczęciem takiego przetwarzania.</p>
                 </section>
