@@ -52,6 +52,20 @@
     list-style-type: disc;
 }
 
+.legal-page__list--numbered {
+    list-style-type: decimal;
+}
+
+.legal-page__list--sub {
+    list-style-type: decimal;
+    margin-top: var(--sp-xs);
+    padding-left: var(--sp-lg);
+}
+
+.legal-page__list li {
+    margin-bottom: var(--sp-xs);
+}
+
 .legal-page__footer {
     margin-top: var(--sp-4xl);
     padding-top: var(--sp-xl);
