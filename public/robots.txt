@@ -3,5 +3,6 @@ Disallow: /login
 Disallow: /register
 Disallow: /dashboard
 Disallow: /backend/
+Disallow: /storage/
 
-Sitemap: https://katten.pl/sitemap.xml
+Sitemap: https://kotyzmazowieckiejszwajcarii.pl/sitemap.xml

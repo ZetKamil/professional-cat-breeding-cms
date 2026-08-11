@@ -9,7 +9,7 @@
     }
 
     $brandUrl = $user && $user->can('view-backend-dashboard')
-        ? route('backend.dashboard')
+        ? route('dashboard')
         : route('backend.posts.index');
 @endphp
 

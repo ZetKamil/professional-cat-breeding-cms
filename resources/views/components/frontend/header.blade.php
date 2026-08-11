@@ -62,8 +62,8 @@
             {{-- Zone 3: Right side utilities --}}
             <div class="global-nav__utils">
                 @auth
-                    @if(Route::has('backend.dashboard'))
-                        <a href="{{ route('backend.dashboard') }}" class="global-nav__link">
+                    @if(Route::has('dashboard'))
+                        <a href="{{ route('dashboard') }}" class="global-nav__link">
                             Panel
                         </a>
                     @endif
@@ -133,9 +133,9 @@
                     </a>
                 </li>
                 @auth
-                    @if(Route::has('backend.dashboard'))
+                    @if(Route::has('dashboard'))
                         <li>
-                            <a href="{{ route('backend.dashboard') }}" class="mobile-menu__link">
+                            <a href="{{ route('dashboard') }}" class="mobile-menu__link">
                                 Panel Administracyjny
                             </a>
                         </li>

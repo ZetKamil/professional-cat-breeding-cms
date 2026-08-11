@@ -14,11 +14,11 @@ class ContactFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'min:2', 'max:120'],
-            'email' => ['required', 'string', 'email', 'max:255'],
-            'subject' => ['nullable', 'string', 'max:200'],
-            'phone' => ['nullable', 'string', 'min:6', 'max:40'],
-            'message' => ['required', 'string', 'min:10', 'max:3000'],
+            'name'    => ['required', 'string', 'min:2', 'max:120'],
+            'email'   => ['required', 'string', 'email:rfc', 'max:254'],
+            'subject' => ['nullable', 'string', 'min:2', 'max:200'],
+            'phone'   => ['nullable', 'string', 'min:6', 'max:40'],
+            'message' => ['required', 'string', 'min:15', 'max:3000'],
         ];
     }
 }

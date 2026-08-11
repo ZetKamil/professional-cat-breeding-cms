@@ -185,17 +185,12 @@ Route::get('/fix-storage', function () {
     }
 })->middleware(['auth', 'verified', 'active']);
 // backend dashboard
-Route::get('/backend', function () {
-    Gate::authorize('view-backend-dashboard');
-
-    return view('backend.dashboard');
-})->middleware(['auth', 'verified', 'active'])->name('backend.dashboard');
-
 Route::get('/dashboard', function () {
     Gate::authorize('view-backend-dashboard');
 
     return view('backend.dashboard');
 })->middleware(['auth', 'verified', 'active'])->name('dashboard');
+
 
 // backend routes
 Route::middleware(['auth', 'verified', 'active'])
