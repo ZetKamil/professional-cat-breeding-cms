@@ -55,6 +55,9 @@
                             @endif
 
                             @foreach($animal->gallery as $index => $img)
+                                @if($animal->media && $img->id === $animal->media->id)
+                                    @continue
+                                @endif
                                 <div class="animal-profile__thumb" role="button" tabindex="0"
                                     aria-label="Wyświetl zdjęcie {{ $index + 1 }} z galerii" data-image-src="{{ $img->url() }}"
                                     data-image-alt="{{ $animal->name }} — {{ $animal->breed }} (zdjęcie {{ $index + 1 }})"
