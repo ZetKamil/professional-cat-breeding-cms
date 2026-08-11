@@ -182,8 +182,7 @@ class MediaController extends Controller
         $name = $medium->filename;
         $this->deleteMediaAction->handle($medium);
 
-        return redirect()
-            ->route('backend.media.index')
-            ->with('success', "Media '{$name}' deleted successfully.");
+        return back()
+            ->with('success', "Zdjęcie '{$name}' zostało pomyślnie usunięte.");
     }
 }

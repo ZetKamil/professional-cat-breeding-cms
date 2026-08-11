@@ -27,6 +27,24 @@
                         </button>
                     </div>
                 </form>
+
+                {{-- Hidden Delete Form for Main Featured Image --}}
+                @if($animal->media)
+                    <form id="delete-main-photo-form" action="{{ route('backend.media.destroy', $animal->media) }}" method="POST" class="d-none" onsubmit="return confirm('Czy na pewno chcesz usunąć zdjęcie główne?');">
+                        @csrf
+                        @method('DELETE')
+                    </form>
+                @endif
+
+                {{-- Hidden Delete Forms for Gallery Images --}}
+                @if($animal->gallery)
+                    @foreach($animal->gallery as $img)
+                        <form id="delete-media-{{ $img->id }}" action="{{ route('backend.media.destroy', $img) }}" method="POST" class="d-none" onsubmit="return confirm('Usuń to zdjęcie z galerii?');">
+                            @csrf
+                            @method('DELETE')
+                        </form>
+                    @endforeach
+                @endif
             </div>
         </x-backend.card>
 

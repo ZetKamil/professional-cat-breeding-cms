@@ -166,7 +166,14 @@
 
         {{-- Featured Image --}}
         <div class="card mb-4">
-            <div class="card-header bg-light fw-bold"><i class="fas fa-image me-1 text-warning"></i> Featured Image (Zdjęcie główne)</div>
+            <div class="card-header bg-light fw-bold d-flex justify-content-between align-items-center">
+                <span><i class="fas fa-image me-1 text-warning"></i> Zdjęcie główne</span>
+                @if($animal->media)
+                    <button type="submit" form="delete-main-photo-form" class="btn btn-outline-danger btn-sm py-0 px-2 small">
+                        <i class="fas fa-trash-alt me-1"></i>Usuń główne
+                    </button>
+                @endif
+            </div>
             <div class="card-body">
                 @if($animal->media)
                     <div class="mb-3">
@@ -189,11 +196,16 @@
             <div class="card-body">
                 @if($animal->gallery && $animal->gallery->isNotEmpty())
                     <div class="mb-3">
-                        <label class="form-label small text-muted">Obecne zdjęcia w galerii:</label>
+                        <label class="form-label small text-muted">Obecne zdjęcia w galerii (kliknij Usuń aby usunąć):</label>
                         <div class="row g-2">
                             @foreach($animal->gallery as $img)
-                                <div class="col-4">
-                                    <img src="{{ $img->url() }}" alt="Galeria" class="img-thumbnail w-100" style="height: 70px; object-fit: cover;">
+                                <div class="col-4 text-center">
+                                    <div class="position-relative border rounded p-1 bg-light">
+                                        <img src="{{ $img->url() }}" alt="Galeria" class="img-thumbnail w-100 mb-1" style="height: 70px; object-fit: cover;">
+                                        <button type="submit" form="delete-media-{{ $img->id }}" class="btn btn-danger btn-sm w-100 py-0 small" style="font-size: 11px;">
+                                            <i class="fas fa-trash me-1"></i>Usuń
+                                        </button>
+                                    </div>
                                 </div>
                             @endforeach
                         </div>

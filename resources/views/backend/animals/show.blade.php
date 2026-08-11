@@ -15,8 +15,17 @@
             <div class="col-md-4">
                 {{-- Primary Image --}}
                 <x-backend.card class="mb-4">
-                    <div class="card-header fw-bold">
-                        <i class="fas fa-image me-1 text-warning"></i> Featured Image (Zdjęcie główne)
+                    <div class="card-header fw-bold d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-image me-1 text-warning"></i> Zdjęcie główne</span>
+                        @if($animal->media)
+                            <form method="POST" action="{{ route('backend.media.destroy', $animal->media) }}" class="d-inline" onsubmit="return confirm('Czy na pewno chcesz usunąć zdjęcie główne?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-outline-danger btn-sm py-0 px-2 small" title="Usuń zdjęcie główne">
+                                    <i class="fas fa-trash-alt me-1"></i>Usuń
+                                </button>
+                            </form>
+                        @endif
                     </div>
                     <div class="card-body text-center">
                         @if($animal->media)
@@ -37,18 +46,51 @@
                     </div>
                     <div class="card-body">
                         @if($animal->gallery && $animal->gallery->isNotEmpty())
-                            <div class="row g-2">
+                            <div class="row g-2 mb-3">
                                 @foreach($animal->gallery as $img)
-                                    <div class="col-4">
-                                        <a href="{{ $img->url() }}" target="_blank" title="Otwórz zdjęcie">
-                                            <img src="{{ $img->url() }}" alt="{{ $animal->name }}" class="img-thumbnail w-100" style="height: 75px; object-fit: cover;">
-                                        </a>
+                                    <div class="col-6 col-md-4 text-center">
+                                        <div class="position-relative border rounded p-1 bg-light">
+                                            <a href="{{ $img->url() }}" target="_blank" title="Powiększ zdjęcie">
+                                                <img src="{{ $img->url() }}" alt="{{ $animal->name }}" class="img-fluid rounded" style="height: 80px; width: 100%; object-fit: cover;">
+                                            </a>
+                                            <form method="POST" action="{{ route('backend.media.destroy', $img) }}" class="mt-1" onsubmit="return confirm('Usuń to zdjęcie z galerii?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm w-100 py-0 small" style="font-size: 11px;">
+                                                    <i class="fas fa-trash me-1"></i>Usuń
+                                                </button>
+                                            </form>
+                                        </div>
                                     </div>
                                 @endforeach
                             </div>
                         @else
-                            <p class="text-muted small mb-0 text-center py-3">Brak dodatkowych zdjęć w galerii.</p>
+                            <p class="text-muted small mb-3 text-center py-2">Brak dodatkowych zdjęć w galerii.</p>
                         @endif
+
+                        {{-- Quick Upload Form directly on Show Page --}}
+                        <div class="border-top pt-3">
+                            <form method="POST" action="{{ route('backend.animals.update', $animal) }}" enctype="multipart/form-data">
+                                @csrf
+                                @method('PATCH')
+                                {{-- Pass existing fields to prevent overwriting --}}
+                                <input type="hidden" name="name" value="{{ $animal->name }}">
+                                <input type="hidden" name="breed" value="{{ $animal->breed }}">
+                                <input type="hidden" name="gender" value="{{ $animal->gender->value }}">
+                                <input type="hidden" name="status" value="{{ $animal->status->value }}">
+                                <input type="hidden" name="type" value="{{ $animal->type->value }}">
+                                <input type="hidden" name="is_published" value="{{ $animal->is_published ? '1' : '0' }}">
+                                <input type="hidden" name="is_featured" value="{{ $animal->is_featured ? '1' : '0' }}">
+
+                                <label class="form-label small fw-bold text-muted mb-1">➕ Dodaj nowe zdjęcia do galerii</label>
+                                <div class="input-group input-group-sm">
+                                    <input type="file" name="gallery[]" class="form-control" accept="image/*" multiple required>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-upload me-1"></i>Wgraj
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </x-backend.card>
 
