@@ -154,6 +154,13 @@
                 <img src="https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?auto=format&fit=crop&w=600&q=80" alt="Bawiący się dorosły kot w trakcie stymulacji behawioralnej zapewniającej zrównoważony rozwój" width="600" height="600" decoding="async" loading="lazy">
             </div>
         </div>
+
+        <div class="mt-12 text-center">
+            <x-frontend.button variant="secondary" href="https://www.facebook.com/profile.php?id=61580668026948"
+                target="_blank" rel="noopener">
+                Obserwuj nas na Facebooku →
+            </x-frontend.button>
+        </div>
     </x-frontend.section>
 
     {{-- ============================================================
