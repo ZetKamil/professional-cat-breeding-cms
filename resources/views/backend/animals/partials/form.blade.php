@@ -166,19 +166,45 @@
 
         {{-- Featured Image --}}
         <div class="card mb-4">
-            <div class="card-header bg-light">Featured Image</div>
+            <div class="card-header bg-light fw-bold"><i class="fas fa-image me-1 text-warning"></i> Featured Image (Zdjęcie główne)</div>
             <div class="card-body">
                 @if($animal->media)
                     <div class="mb-3">
-                        <img src="{{ $animal->media->url() }}" class="img-fluid rounded mb-2" alt="Current image">
-                        <div class="form-text">Uploading a new image will replace this one.</div>
+                        <img src="{{ $animal->media->url() }}" class="img-fluid rounded mb-2" alt="Current image" style="max-height: 180px; object-fit: cover;">
+                        <div class="form-text">Wgranie nowego zdjęcia zastąpi obecne zdjęcie główne.</div>
                     </div>
                 @endif
                 
                 <div class="mb-3">
-                    <label for="image" class="form-label">Upload Image</label>
+                    <label for="image" class="form-label">Zmień / Wgraj zdjęcie główne</label>
                     <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image" accept="image/*">
                     @error('image') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                </div>
+            </div>
+        </div>
+
+        {{-- Gallery Images --}}
+        <div class="card mb-4">
+            <div class="card-header bg-light fw-bold"><i class="fas fa-images me-1 text-primary"></i> Galeria zdjęć kota</div>
+            <div class="card-body">
+                @if($animal->gallery && $animal->gallery->isNotEmpty())
+                    <div class="mb-3">
+                        <label class="form-label small text-muted">Obecne zdjęcia w galerii:</label>
+                        <div class="row g-2">
+                            @foreach($animal->gallery as $img)
+                                <div class="col-4">
+                                    <img src="{{ $img->url() }}" alt="Galeria" class="img-thumbnail w-100" style="height: 70px; object-fit: cover;">
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+
+                <div class="mb-3">
+                    <label for="gallery" class="form-label">Dodaj zdjęcia do galerii (wielokrotny wybór)</label>
+                    <input class="form-control @error('gallery.*') is-invalid @enderror" type="file" id="gallery" name="gallery[]" accept="image/*" multiple>
+                    <div class="form-text">Możesz zaznaczyć kilka zdjęć naraz.</div>
+                    @error('gallery.*') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
             </div>
         </div>

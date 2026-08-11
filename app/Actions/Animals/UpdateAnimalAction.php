@@ -48,6 +48,14 @@ class UpdateAnimalAction
                 );
             }
 
+            if (!empty($data['gallery']) && is_array($data['gallery'])) {
+                foreach ($data['gallery'] as $galleryFile) {
+                    if ($galleryFile instanceof UploadedFile) {
+                        $this->mediaService->upload($animal, $galleryFile, 'animals');
+                    }
+                }
+            }
+
             return $animal;
         });
     }

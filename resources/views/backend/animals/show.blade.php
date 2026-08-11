@@ -15,17 +15,39 @@
             <div class="col-md-4">
                 {{-- Primary Image --}}
                 <x-backend.card class="mb-4">
-                    <div class="card-header">
-                        <i class="fas fa-image me-1"></i> Featured Image
+                    <div class="card-header fw-bold">
+                        <i class="fas fa-image me-1 text-warning"></i> Featured Image (Zdjęcie główne)
                     </div>
                     <div class="card-body text-center">
                         @if($animal->media)
                             <img src="{{ $animal->media->url() }}" alt="{{ $animal->name }}" class="img-fluid rounded shadow-sm">
                         @else
-                            <div class="text-muted p-5 bg-light rounded border">
-                                <i class="fas fa-camera fa-3x mb-2 text-secondary"></i>
-                                <p class="mb-0">No image uploaded</p>
+                            <div class="text-muted p-4 bg-light rounded border">
+                                <i class="fas fa-camera fa-2x mb-2 text-secondary"></i>
+                                <p class="mb-0 small">Brak zdjęcia głównego</p>
                             </div>
+                        @endif
+                    </div>
+                </x-backend.card>
+
+                {{-- Gallery Images --}}
+                <x-backend.card class="mb-4">
+                    <div class="card-header fw-bold d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-images me-1 text-primary"></i> Galeria zdjęć ({{ $animal->gallery?->count() ?? 0 }})</span>
+                    </div>
+                    <div class="card-body">
+                        @if($animal->gallery && $animal->gallery->isNotEmpty())
+                            <div class="row g-2">
+                                @foreach($animal->gallery as $img)
+                                    <div class="col-4">
+                                        <a href="{{ $img->url() }}" target="_blank" title="Otwórz zdjęcie">
+                                            <img src="{{ $img->url() }}" alt="{{ $animal->name }}" class="img-thumbnail w-100" style="height: 75px; object-fit: cover;">
+                                        </a>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <p class="text-muted small mb-0 text-center py-3">Brak dodatkowych zdjęć w galerii.</p>
                         @endif
                     </div>
                 </x-backend.card>

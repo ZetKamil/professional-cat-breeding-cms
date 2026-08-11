@@ -80,7 +80,7 @@ class AnimalController extends Controller
     {
         $this->authorize('view', $animal);
 
-        $animal->load(['media', 'mother', 'father', 'childrenAsMother', 'childrenAsFather']);
+        $animal->load(['media', 'gallery', 'mother', 'father', 'childrenAsMother', 'childrenAsFather']);
 
         return view('backend.animals.show', [
             'animal' => $animal,
@@ -91,7 +91,7 @@ class AnimalController extends Controller
     {
         $this->authorize('update', $animal);
 
-        $animal->load(['media']);
+        $animal->load(['media', 'gallery']);
 
         $potentialParents = Animal::query()
             ->where('id', '!=', $animal->id)

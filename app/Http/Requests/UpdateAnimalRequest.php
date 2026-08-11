@@ -61,6 +61,8 @@ class UpdateAnimalRequest extends FormRequest
             'meta_description' => ['nullable', 'string', 'max:255'],
 
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+            'gallery' => ['nullable', 'array'],
+            'gallery.*' => ['image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
         ];
     }
 }
