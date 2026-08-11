@@ -297,6 +297,31 @@
     transform: scale(1.02);
 }
 
+.animal-profile__zoom-hint {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #ffffff;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    pointer-events: none;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition: background var(--duration-fast) var(--ease-out);
+    z-index: 5;
+}
+
+.animal-profile__main-image-wrap:hover .animal-profile__zoom-hint {
+    background: rgba(15, 23, 42, 0.95);
+}
+
 /* Product Gallery Thumbs */
 .animal-profile__thumbs {
     display: flex;

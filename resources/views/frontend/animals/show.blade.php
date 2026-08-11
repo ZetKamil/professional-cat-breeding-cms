@@ -39,8 +39,9 @@
                                 id="animal-main-photo" width="1000" height="750" decoding="async" loading="eager"
                                 fetchpriority="high">
                         @endif
-                        <div class="position-absolute bottom-0 end-0 m-3 px-3 py-1 bg-dark text-white rounded-pill small opacity-75 d-flex align-items-center gap-1" style="pointer-events: none;">
-                            <i data-lucide="maximize-2" class="w-4 h-4"></i> Powiększ
+                        <div class="animal-profile__zoom-hint">
+                            <i data-lucide="maximize-2" class="w-3.5 h-3.5" aria-hidden="true"></i>
+                            <span>Powiększ</span>
                         </div>
                     </div>
 
