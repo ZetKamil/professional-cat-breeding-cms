@@ -109,9 +109,9 @@
                         <h4 class="pedigree-lineage__title">Linia Matki (Maternal Lineage)</h4>
                         <p class="pedigree-lineage__desc">
                             @if($mother && ($mother->mother || $mother->father))
-                                Potomstwo udokumentowanych linii: {{ $mother->mother->name ?? 'Rodowodowa Kotka Stowarzyszenia' }} & {{ $mother->father->name ?? 'Rodowodowy Kocur Stowarzyszenia' }}.
+                                Potomstwo udokumentowanych linii: {{ $mother->mother->name ?? 'Rodowodowa Kotka SHiOZ ZOOLANDIA' }} & {{ $mother->father->name ?? 'Rodowodowy Kocur SHiOZ ZOOLANDIA' }}.
                             @else
-                                Dziadkowie zarejestrowani w księgach rodowodowych stowarzyszenia.
+                                Dziadkowie zarejestrowani w oficjalnych księgach rodowodowych SHiOZ ZOOLANDIA.
                             @endif
                         </p>
                     </div>
@@ -122,9 +122,9 @@
                         <h4 class="pedigree-lineage__title">Linia Ojca (Paternal Lineage)</h4>
                         <p class="pedigree-lineage__desc">
                             @if($father && ($father->mother || $father->father))
-                                Potomstwo udokumentowanych linii: {{ $father->mother->name ?? 'Rodowodowa Kotka Stowarzyszenia' }} & {{ $father->father->name ?? 'Rodowodowy Kocur Stowarzyszenia' }}.
+                                Potomstwo udokumentowanych linii: {{ $father->mother->name ?? 'Rodowodowa Kotka SHiOZ ZOOLANDIA' }} & {{ $father->father->name ?? 'Rodowodowy Kocur SHiOZ ZOOLANDIA' }}.
                             @else
-                                Dziadkowie zarejestrowani w księgach rodowodowych stowarzyszenia.
+                                Dziadkowie zarejestrowani w oficjalnych księgach rodowodowych SHiOZ ZOOLANDIA.
                             @endif
                         </p>
                     </div>

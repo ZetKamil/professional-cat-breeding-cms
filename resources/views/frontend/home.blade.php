@@ -1,5 +1,5 @@
-<x-frontend.shell title="Hodowla Kotów z Mazowieckiej Szwajcarii — Etyczna Hodowla Kotów Rasowych | Koty Bengalskie, Brytyjskie i Syjamskie"
-    meta-description="Certyfikowana domowa hodowla kotów rasowych z Mazowieckiej Szwajcarii (Sikórz k. Płocka). Koty bengalskie, brytyjskie i syjamskie z rodowodem stowarzyszenia oraz badaniami genetycznymi."
+<x-frontend.shell title="Hodowla Kotów Rasowych z Rodowodem – Bengalskie, Brytyjskie, Syjamskie | Mazowiecka Szwajcaria"
+    meta-description="Domowa hodowla kotów rasowych z rodowodem SHiOZ ZOOLANDIA (Certyfikat 58/CW/2025, Rej. 58/P/2025). Koty bengalskie, brytyjskie i syjamskie w Sikorzu k. Płocka (Mazowsze). Sprawdź dostępne kocięta!"
     og-image="{{ asset('storage/media/parent_bella_1.jpg') }}">
     {{-- ============================================================
     1. CINEMATIC ASYMMETRIC HERO — ROLLS ROYCE / APPLE STYLE
@@ -17,23 +17,22 @@
             <div class="hero-split-grid">
                 <div class="hero-split__left">
                     <span class="hero-split__eyebrow" style="display: inline-block; color: var(--color-gold, #c89d5c); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 12px;">
-                        Hodowla Kotów Rasowych • Sikórz k. Płocka (woj. mazowieckie)
+                        Hodowla Kotów Rasowych • SHiOZ ZOOLANDIA • Sikórz k. Płocka
                     </span>
                     <h1 class="hero-split__title">
-                        Czystość Rasy.<br>
-                        Spokój Genetyki.<br>
+                        Hodowla Kotów Rasowych z Rodowodem.<br>
+                        Bengalskie, Brytyjskie i Syjamskie.
                     </h1>
                     <p class="hero-split__lead">
-                        Certyfikowana domowa hodowla kotów bengalskich, brytyjskich i syjamskich.
-                        Tworzymy bezpieczne sanktuarium, w którym selekcja genetyczna (100% HCM/PKD n/n),
-                        spokój socjalizacji i rodowód stowarzyszenia wyznaczają każdy etap życia naszych kotów.
+                        Domowa hodowla kotów z Mazowieckiej Szwajcarii, oficjalny członek <strong>SHiOZ ZOOLANDIA</strong> (Certyfikat: 58/CW/2025, Rejestracja: 58/P/2025). 
+                        Nasze koty rozwijają się w bezpiecznych, pełnych miłości warunkach domowych, z regularną kontrolą kardiologiczną (echo serca) i badaniami genetycznymi rodziców.
                     </p>
                     <div class="hero-split__actions" style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
                         <x-frontend.button href="{{ route('frontend.animals.index') }}" icon="arrow-right">
-                            Zobacz nasze koty
+                            Zobacz dostępne kocięta
                         </x-frontend.button>
                         <x-frontend.button href="{{ route('contact') }}" variant="secondary" icon="mail">
-                            Zapytaj o kocięta
+                            Skontaktuj się z nami
                         </x-frontend.button>
                     </div>
                     <div style="margin-top: 14px;">
@@ -50,11 +49,11 @@
                             alt="Doskonałość rasy - kot bengalski" class="hero-split__image" width="1000" height="750"
                             decoding="async" loading="eager">
                     </div>
-                    <div class="hero-split__seal" role="status" aria-label="Gwarancja genetyki">
+                    <div class="hero-split__seal" role="status" aria-label="Gwarancja zdrowia i genetyki">
                         <i data-lucide="award" class="w-5 h-5 text-primary" aria-hidden="true"></i>
                         <div>
-                            <span class="block font-semibold">100% HCM / PKD n/n</span>
-                            <span class="text-white/70 text-xs">Weryfikowane linie 5 pokoleń</span>
+                            <span class="block font-semibold">SHiOZ ZOOLANDIA</span>
+                            <span class="text-white/70 text-xs">Certyfikat: 58/CW/2025 · Rej. 58/P/2025</span>
                         </div>
                     </div>
                 </div>
@@ -64,11 +63,11 @@
             <div class="hero__trust-bar" role="list" aria-label="Nasze certyfikaty i standardy">
                 <div class="hero__trust-item" role="listitem">
                     <i data-lucide="shield-check" class="hero__trust-icon" aria-hidden="true"></i>
-                    <span>Certyfikat Stowarzyszenia</span>
+                    <span>Certyfikat SHiOZ ZOOLANDIA (58/CW/2025)</span>
                 </div>
                 <div class="hero__trust-item" role="listitem">
                     <i data-lucide="dna" class="hero__trust-icon" aria-hidden="true"></i>
-                    <span>100% Badania Genetyczne</span>
+                    <span>Badania Genetyczne i Echo Serca</span>
                 </div>
                 <div class="hero__trust-item" role="listitem">
                     <i data-lucide="heart-handshake" class="hero__trust-icon" aria-hidden="true"></i>
@@ -83,7 +82,7 @@
     ============================================================ --}}
     <x-frontend.section id="specjalizacje" class="reveal-up home-section--specjalizacje">
         <x-frontend.section-header eyebrow="Kolekcje Hodowlane" headline="Nasze Specjalizacje Rasy"
-            description="Trzy wybitne linie felinologiczne, prowadzone według rygorystycznych standardów stowarzyszenia felinologicznego." />
+            description="Wyselekcjonowane linie felinologiczne prowadzone zgodnie ze standardami stowarzyszenia SHiOZ ZOOLANDIA." />
 
         <div class="collection-grid" role="list" aria-label="Specjalizacje rasy">
             <a href="{{ route('frontend.animals.index', ['breed' => 'bengal']) }}" class="collection-card"
@@ -97,7 +96,7 @@
                     <div class="collection-card__tags">
                         <span class="collection-tag">Aktywność: Wysoka</span>
                         <span class="collection-tag">Rozeta na złocie</span>
-                        <span class="collection-tag">Rodowód Stowarzyszenia</span>
+                        <span class="collection-tag">Rodowód SHiOZ ZOOLANDIA</span>
                     </div>
                 </div>
                 <span class="collection-card__cta">
@@ -117,7 +116,7 @@
                     <div class="collection-card__tags">
                         <span class="collection-tag">Temperament: Spokojny</span>
                         <span class="collection-tag">Pluszowa okrywa</span>
-                        <span class="collection-tag">Rodowód Stowarzyszenia</span>
+                        <span class="collection-tag">Rodowód SHiOZ ZOOLANDIA</span>
                     </div>
                 </div>
                 <span class="collection-card__cta">
@@ -189,8 +188,8 @@
     4. VERIFIED PATRON STORIES — EDITORIAL QUOTE MONOLITHS
     ============================================================ --}}
     <x-frontend.section tile="parchment" id="opinie" class="reveal-up home-section--opinie">
-        <x-frontend.section-header eyebrow="Rekomendacje i Zaufanie" headline="Historie Naszych Wychowanków"
-            description="4.9/5 Średnia ocena od zadowolonych opiekunów naszych kotów w całej Polsce i Europie." />
+        <x-frontend.section-header eyebrow="Rekomendacje i Zaufanie" headline="Historie Opiekunów Naszych Kotów"
+            description="Opinie i wrażenia nowych opiekunów kotów pochodzących z naszej hodowli." />
 
         <div class="patrons-grid" role="list" aria-label="Rekomendacje opiekunów">
             <div class="patron-monolith" role="listitem">
@@ -201,11 +200,11 @@
                 <div class="patron-monolith__author">
                     <div>
                         <strong class="block text-ink">Anna K.</strong>
-                        <span class="text-xs text-ink-muted-48">Właścicielka Luny · Kot Brytyjski</span>
+                        <span class="text-xs text-ink-muted-48">Opiekunka Luny · Kot Brytyjski</span>
                     </div>
                     <span class="patron-monolith__badge">
                         <i data-lucide="check-circle-2" class="w-4 h-4" aria-hidden="true"></i>
-                        Rodowód Stowarzyszenia
+                        Rodowód SHiOZ ZOOLANDIA
                     </span>
                 </div>
             </div>
@@ -218,11 +217,11 @@
                 <div class="patron-monolith__author">
                     <div>
                         <strong class="block text-ink">Marek W.</strong>
-                        <span class="text-xs text-ink-muted-48">Właściciel Simby · Kot Bengalski</span>
+                        <span class="text-xs text-ink-muted-48">Opiekun Simby · Kot Bengalski</span>
                     </div>
                     <span class="patron-monolith__badge">
                         <i data-lucide="check-circle-2" class="w-4 h-4" aria-hidden="true"></i>
-                        Rodowód Stowarzyszenia
+                        Rodowód SHiOZ ZOOLANDIA
                     </span>
                 </div>
             </div>
@@ -235,11 +234,11 @@
                 <div class="patron-monolith__author">
                     <div>
                         <strong class="block text-ink">Katarzyna M.</strong>
-                        <span class="text-xs text-ink-muted-48">Właścicielka Mruczka · Kot Syjamski</span>
+                        <span class="text-xs text-ink-muted-48">Opiekunka Mruczka · Kot Syjamski</span>
                     </div>
                     <span class="patron-monolith__badge">
                         <i data-lucide="check-circle-2" class="w-4 h-4" aria-hidden="true"></i>
-                        Rodowód Stowarzyszenia
+                        Rodowód SHiOZ ZOOLANDIA
                     </span>
                 </div>
             </div>
@@ -340,7 +339,7 @@
       "@@context": "https://schema.org",
       "@@type": "LocalBusiness",
       "name": "Hodowla Kotów z Mazowieckiej Szwajcarii",
-      "description": "Certyfikowana domowa hodowla kotów rasowych z Mazowieckiej Szwajcarii (Sikórz). Koty bengalskie, brytyjskie i syjamskie z rodowodem stowarzyszenia oraz badaniami genetycznymi.",
+      "description": "Domowa hodowla kotów rasowych z Mazowieckiej Szwajcarii (Sikórz k. Płocka). Członek SHiOZ ZOOLANDIA (Certyfikat: 58/CW/2025, Rejestracja: 58/P/2025). Koty bengalskie, brytyjskie i syjamskie z rodowodem i badaniami.",
       "image": "{{ asset('storage/media/parent_bella_1.jpg') }}",
       "url": "https://kotyzmazowieckiejszwajcarii.pl/",
       "telephone": "+48514153204",

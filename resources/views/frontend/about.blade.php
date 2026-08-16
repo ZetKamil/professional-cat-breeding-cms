@@ -1,6 +1,6 @@
 <x-frontend.shell
     title="O Nas — Pasja, Certyfikaty i Domowa Socjalizacja | Hodowla Kotów z Mazowieckiej Szwajcarii"
-    meta-description="Poznaj historię naszej hodowli, standardy opieki weterynaryjnej, certyfikaty stowarzyszenia felinologicznego i zasady domowej socjalizacji kotów w Mazowieckiej Szwajcarii."
+    meta-description="Poznaj naszą hodowlę kotów rasowych w Sikorzu k. Płocka. Członek SHiOZ ZOOLANDIA (Certyfikat 58/CW/2025, Rej. 58/P/2025). Opieka weterynaryjna, badania rodziców i domowa socjalizacja."
     og-image="{{ asset('storage/media/parent_bella_1.jpg') }}"
 >
     {{-- ============================================================
@@ -8,8 +8,8 @@
          ============================================================ --}}
     <x-frontend.hero
         eyebrow="Nasza Historia"
-        title="Hodowla z pasją<br>od pokoleń."
-        lead="Każdy kot, który opuszcza naszą hodowlę, niesie ze sobą lata doświadczenia, miłości i bezkompromisowej troski o zdrowie."
+        title="Hodowla z pasją<br>i pełną troską."
+        lead="Każdy kot, który opuszcza naszą hodowlę, niesie ze sobą doświadczenie, miłość i bezkompromisową troskę o zdrowie i rozwój."
         image-url="https://images.unsplash.com/photo-1599839619722-39751411ea63?auto=format&fit=crop&w=2000&q=80"
         image-alt="Spokojny kot w promieniach słońca"
         scroll-target="#nasza-filozofia"
@@ -35,13 +35,13 @@
                         hodowlę, w której dobrostan zwierząt stoi na bezwzględnym pierwszym miejscu.
                     </p>
                     <p class="text-body text-ink-muted-80">
-                        Wierzymy, że profesjonalna hodowla to nie tylko piękne koty — to przede
-                        wszystkim gigantyczna odpowiedzialność. Każdy kot jest regularnie badany genetycznie
-                        i kardiologicznie, kontrolowany przez zaufanego weterynarza i wychowywany w naszej sypialni.
+                        Wierzymy, że odpowiedzialna hodowla to nie tylko piękne koty — to przede
+                        wszystkim gigantyczna odpowiedzialność. Każdy kot jest objęty badaniami genetycznymi
+                        i regularną kontrolą kardiologiczną (echo serca), kontrolowany przez zaufanego lekarza weterynarii i wychowywany w naszym domu.
                     </p>
                     <p class="text-body text-ink-muted-80">
-                        Nie jesteśmy wielką fermą. Mamy zaledwie kilka miotów rocznie, co pozwala nam
-                        poświęcić każdemu kociakowi maksimum uwagi.
+                        Prowadzimy kameralną hodowlę domową, co pozwala nam
+                        poświęcić każdemu kociakowi maksimum uwagi, czułości i bezpiecznej stymulacji.
                     </p>
                 </div>
             </div>
@@ -76,28 +76,26 @@
                 <h3 class="value-item__title text-tagline">Transparentność</h3>
                 <p class="value-item__desc text-body">
                     Pełna dokumentacja zdrowotna, rodowody, wyniki badań genetycznych —
-                    wszystko jest dostępne dla przyszłych właścicieli.
+                    wszystko jest jawne i dostępne dla przyszłych opiekunów.
                 </p>
             </div>
             <div class="value-item">
                 <div class="value-item__number">02</div>
                 <h3 class="value-item__title text-tagline">Zdrowie</h3>
                 <p class="value-item__desc text-body">
-                    Badania genetyczne, regularne kontrole weterynaryjne, odpowiedzialny
-                    dobór par hodowlanych — zdrowie jest priorytetem numer jeden.
+                    Badania genetyczne, kontrola kardiologiczna (echo serca), stały nadzór weterynaryjny — zdrowie jest priorytetem numer jeden.
                 </p>
             </div>
             <div class="value-item">
                 <div class="value-item__number">03</div>
                 <h3 class="value-item__title text-tagline">Socjalizacja</h3>
                 <p class="value-item__desc text-body">
-                    Koty rosną w domowym środowisku, w kontakcie z ludźmi i innymi
-                    zwierzętami. Są doskonale przyzwyczajone do codziennego życia.
+                    Koty rosną w domowym środowisku, w ciągłym kontakcie z ludźmi. Są doskonale przyzwyczajone do codziennego życia rodzinnego.
                 </p>
             </div>
             <div class="value-item">
                 <div class="value-item__number">04</div>
-                <h3 class="value-item__title text-tagline">Wsparcie</h3>
+                <h3 class="value-item__title text-tagline">Wsparcie po zakupie</h3>
                 <p class="value-item__desc text-body">
                     Nie kończymy relacji w momencie przekazania kota. Pomagamy w adaptacji,
                     doradzamy w kwestiach żywienia, zdrowia i wychowania przez całe życie kota.
@@ -111,15 +109,15 @@
          ============================================================ --}}
     <x-frontend.section id="nagrody" class="reveal-up">
         <x-frontend.section-header
-            eyebrow="Prestiż"
-            headline="Nasze Certyfikaty"
+            eyebrow="Certyfikacja i Bezpieczeństwo"
+            headline="Oficjalne Certyfikaty"
         />
 
         <div class="awards-grid">
             <div class="award-card">
                 <i data-lucide="award" class="award-card__icon"></i>
-                <h3 class="text-body-strong">Certyfikowana Hodowla Stowarzyszenia</h3>
-                <p class="text-nav text-ink-muted-48">Zarejestrowana w oficjalnym stowarzyszeniu felinologicznym</p>
+                <h3 class="text-body-strong">SHiOZ ZOOLANDIA</h3>
+                <p class="text-nav text-ink-muted-48">Certyfikat Członkowski: 58/CW/2025 · Rejestracja Hodowli: 58/P/2025</p>
             </div>
             <div class="award-card">
                 <i data-lucide="shield-check" class="award-card__icon"></i>
@@ -128,8 +126,8 @@
             </div>
             <div class="award-card">
                 <i data-lucide="dna" class="award-card__icon"></i>
-                <h3 class="text-body-strong">Certyfikat Badań Genetycznych</h3>
-                <p class="text-nav text-ink-muted-48">HCM, PKD, SMA n/n</p>
+                <h3 class="text-body-strong">Badania Genetyczne & Echo Serca</h3>
+                <p class="text-nav text-ink-muted-48">HCM, PKD, PRA oraz regularna kontrola kardiologiczna</p>
             </div>
         </div>
     </x-frontend.section>
@@ -146,7 +144,7 @@
 
         <div class="gallery-grid">
             <div class="gallery-item gallery-item--large">
-                <img src="https://images.unsplash.com/photo-1548247416-ec66f4900b2e?auto=format&fit=crop&w=800&q=80" alt="Spokojny kot rasowy odpoczywający w domowym zaciszu hodowli ZetKamil" width="800" height="800" decoding="async" loading="lazy">
+                <img src="https://images.unsplash.com/photo-1548247416-ec66f4900b2e?auto=format&fit=crop&w=800&q=80" alt="Spokojny kot rasowy odpoczywający w domowym zaciszu hodowli" width="800" height="800" decoding="async" loading="lazy">
             </div>
             <div class="gallery-item">
                 <img src="https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?auto=format&fit=crop&w=600&q=80" alt="Młody kociak poznający otoczenie podczas procesu wczesnej socjalizacji w hodowli" width="600" height="600" decoding="async" loading="lazy">
@@ -181,18 +179,18 @@
             </div>
             <div class="benefit-item">
                 <i data-lucide="scroll-text" aria-hidden="true" class="benefit-item__icon"></i>
-                <h3 class="benefit-item__title text-body-strong">Rodowód Stowarzyszenia</h3>
-                <p class="benefit-item__desc">Certyfikat rodowodowy wydany przez stowarzyszenie z pełną genealogią</p>
+                <h3 class="benefit-item__title text-body-strong">Rodowód SHiOZ ZOOLANDIA</h3>
+                <p class="benefit-item__desc">Wielopokoleniowy certyfikat rodowodowy wydany przez SHiOZ ZOOLANDIA</p>
             </div>
             <div class="benefit-item">
                 <i data-lucide="dna" aria-hidden="true" class="benefit-item__icon"></i>
                 <h3 class="benefit-item__title text-body-strong">Badania genetyczne</h3>
-                <p class="benefit-item__desc">Wyniki testów DNA obojga rodziców</p>
+                <p class="benefit-item__desc">Wyniki testów DNA i badań kardiologicznych rodziców</p>
             </div>
             <div class="benefit-item">
                 <i data-lucide="syringe" aria-hidden="true" class="benefit-item__icon"></i>
-                <h3 class="benefit-item__title text-body-strong">Szczepienia</h3>
-                <p class="benefit-item__desc">Kompletny cykl szczepień adekwatny do wieku</p>
+                <h3 class="benefit-item__title text-body-strong">Szczepienia i Chip</h3>
+                <p class="benefit-item__desc">Kompletny cykl szczepień oraz zarejestrowany mikrochip</p>
             </div>
             <div class="benefit-item">
                 <i data-lucide="bug-off" aria-hidden="true" class="benefit-item__icon"></i>
@@ -201,8 +199,8 @@
             </div>
             <div class="benefit-item">
                 <i data-lucide="phone" aria-hidden="true" class="benefit-item__icon"></i>
-                <h3 class="benefit-item__title text-body-strong">Wsparcie dożywotnie</h3>
-                <p class="benefit-item__desc">Bezpłatna pomoc i doradztwo przez całe życie</p>
+                <h3 class="benefit-item__title text-body-strong">Wsparcie po zakupie</h3>
+                <p class="benefit-item__desc">Bezpłatna pomoc, stały kontakt i doradztwo przez całe życie kota</p>
             </div>
         </div>
     </x-frontend.section>

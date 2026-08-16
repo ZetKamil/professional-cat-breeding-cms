@@ -1,6 +1,6 @@
 @props([
-    'title' => 'Hodowla Kotów z Mazowieckiej Szwajcarii | Koty Bengalskie, Brytyjskie i Syjamskie',
-    'metaDescription' => 'Certyfikowana domowa hodowla kotów rasowych z Mazowieckiej Szwajcarii (Sikórz). Koty bengalskie, brytyjskie i syjamskie z rodowodem stowarzyszenia oraz badaniami genetycznymi.',
+    'title' => 'Hodowla Kotów Rasowych z Rodowodem – Bengalskie, Brytyjskie i Syjamskie | Mazowiecka Szwajcaria',
+    'metaDescription' => 'Domowa hodowla kotów rasowych z rodowodem SHiOZ ZOOLANDIA (Certyfikat 58/CW/2025, Rej. 58/P/2025). Koty bengalskie, brytyjskie i syjamskie w Sikorzu k. Płocka (Mazowsze).',
     'ogImage' => null,
     'ogType' => 'website',
     'canonical' => null,

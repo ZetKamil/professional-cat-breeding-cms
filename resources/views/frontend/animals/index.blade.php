@@ -1,6 +1,6 @@
 <x-frontend.shell
     title="Nasze Koty — Koty Bengalskie, Brytyjskie i Syjamskie | Hodowla Kotów z Mazowieckiej Szwajcarii"
-    meta-description="Przeglądaj koty hodowlane i dostępne kocięta w naszej hodowli. Zdrowe linie genetyczne, komplet badań, rodowód stowarzyszenia i pełna socjalizacja."
+    meta-description="Przeglądaj koty hodowlane i dostępne kocięta w naszej hodowli. Zdrowe linie genetyczne, komplet badań, rodowód SHiOZ ZOOLANDIA i domowa socjalizacja."
     og-image="{{ asset('storage/media/parent_bella_1.jpg') }}"
 >
     {{-- ============================================================

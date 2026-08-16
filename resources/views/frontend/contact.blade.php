@@ -176,12 +176,12 @@
         <div class="faq-list">
             <details class="faq-item">
                 <summary class="faq-item__question text-body-strong">
-                    Jak wygląda proces rezerwacji i dołączenia kota do nowego domu?
+                    Jak wygląda proces zakupu kocięcia?
                 </summary>
                 <p class="faq-item__answer text-body">
                     Proces rozpoczyna się od kontaktu — odpowiadamy na pytania, przedstawiamy
                     dostępne kocięta i umawiamy wizytę w hodowli. Po podjęciu decyzji
-                    podpisujemy umowę i ustalamy termin odbioru.
+                    podpisujemy umowę i ustalamy dogodny termin odbioru.
                 </p>
             </details>
 
@@ -191,7 +191,7 @@
                 </summary>
                 <p class="faq-item__answer text-body">
                     Kocięta opuszczają hodowlę nie wcześniej niż w 14. tygodniu życia,
-                    po ukończeniu pełnego cyklu szczepień i socjalizacji.
+                    po ukończeniu pełnego cyklu szczepień, odrobaczeń i domowej socjalizacji.
                 </p>
             </details>
 
@@ -201,8 +201,8 @@
                 </summary>
                 <p class="faq-item__answer text-body">
                     Każdy kot otrzymuje komplet dokumentów: książeczkę zdrowia z udokumentowaną historią
-                    szczepień i odrobaczeń, certyfikat rodowodowy wydany przez stowarzyszenie,
-                    wyniki badań genetycznych obojga rodziców oraz formalną umowę przekazania kota.
+                    szczepień i odrobaczeń, certyfikat rodowodowy wydany przez SHiOZ ZOOLANDIA,
+                    wyniki badań genetycznych i kardiologicznych obojga rodziców oraz formalną umowę.
                 </p>
             </details>
 
@@ -211,15 +211,15 @@
                     Czy mogę odwiedzić hodowlę przed podjęciem decyzji?
                 </summary>
                 <p class="faq-item__answer text-body">
-                    Tak, zachęcamy do odwiedzin! Umawiamy wizyty po wcześniejszym kontakcie
-                    telefonicznym lub mailowym. Chcemy, abyś zobaczył warunki, w jakich
+                    Tak, gorąco zachęcamy do odwiedzin! Umawiamy wizyty po wcześniejszym kontakcie
+                    telefonicznym lub mailowym. Chcemy, abyś zobaczył domowe warunki, w jakich
                     rosną nasze koty.
                 </p>
             </details>
 
             <details class="faq-item">
                 <summary class="faq-item__question text-body-strong">
-                    Czy oferujecie wsparcie po przekazaniu kota?
+                    Czy oferujecie wsparcie po zakupie kocięcia?
                 </summary>
                 <p class="faq-item__answer text-body">
                     Absolutnie tak. Jesteśmy dostępni przez telefon i e-mail przez

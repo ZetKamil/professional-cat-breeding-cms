@@ -16,14 +16,14 @@ class HomepageTest extends TestCase
         $response = $this->get(route('home'));
 
         $response->assertOk();
-        $response->assertSee('Etyczna Hodowla Kotów Rasowych');
-        $response->assertSee('Certyfikat Stowarzyszenia');
-        $response->assertSee('100% Badania Genetyczne');
+        $response->assertSee('Hodowla Kotów Rasowych z Rodowodem');
+        $response->assertSee('SHiOZ ZOOLANDIA');
+        $response->assertSee('Badania Genetyczne i Echo Serca');
         $response->assertSee('Nasze Specjalizacje Rasy');
         $response->assertSee('Koty Bengalskie');
         $response->assertSee('Koty Brytyjskie');
         $response->assertSee('Koty Syjamskie');
-        $response->assertSee('Historie Naszych Wychowanków');
+        $response->assertSee('Historie Opiekunów Naszych Kotów');
         $response->assertSee('Codzienność w hodowli');
         $response->assertSee('Nasza czytelnia — wkrótce nowe publikacje');
     }
@@ -35,9 +35,9 @@ class HomepageTest extends TestCase
         $response->assertOk();
         $response->assertSee('Filozofia Naszej Hodowli');
         $response->assertSee('Kodeks Zaufania');
-        $response->assertSee('Jak wygląda proces wyboru i odbioru kota?');
+        $response->assertSee('Jak wygląda proces zakupu kocięcia?');
         $response->assertSee('Proces rozpoczyna się od kontaktu');
-        $response->assertSee('Kontakt i Kocięta');
+        $response->assertSee('Kontakt i Wybór Kocięcia');
         $response->assertSee('Wizyta w Hodowli');
         $response->assertSee('Umowa i Odbiór');
     }

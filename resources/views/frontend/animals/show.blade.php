@@ -1,6 +1,6 @@
 <x-frontend.shell
     title="{{ $animal->meta_title ?: ($animal->name . ' — ' . $animal->breed . ' | Hodowla Kotów z Mazowieckiej Szwajcarii') }}"
-    meta-description="{{ $animal->meta_description ?: ($animal->short_description ?: ('Poznaj kota ' . $animal->name . ' (' . $animal->breed . ', ' . $animal->color . '). Rodowód stowarzyszenia, badania genetyczne i zrównoważony charakter.')) }}"
+    meta-description="{{ $animal->meta_description ?: ($animal->short_description ?: ('Poznaj kota ' . $animal->name . ' (' . $animal->breed . ', ' . $animal->color . '). Rodowód SHiOZ ZOOLANDIA, badania genetyczne i zrównoważony charakter.')) }}"
     og-image="{{ $animal->media ? $animal->media->url() : asset('storage/media/parent_bella_1.jpg') }}"
     og-type="profile"
 >

@@ -1,11 +1,11 @@
 <x-frontend.shell title="O Hodowli — Standardy, Filozofia i Kodeks Zaufania | Hodowla Kotów z Mazowieckiej Szwajcarii"
-    meta-description="Standardy felinologiczne, 100% badania genetyczne HCM/PKD n/n, profilaktyka FIV/FeLV oraz przejrzysty proces wyboru i odbioru kota rasowego w naszej hodowli."
+    meta-description="Poznaj standardy hodowli kotów z Mazowieckiej Szwajcarii (SHiOZ ZOOLANDIA). Badania kardiologiczne i genetyczne rodziców, etyczna domowa socjalizacja i jasny proces zakupu kocięcia."
     og-image="{{ asset('storage/media/parent_luki_1.jpg') }}">
     {{-- ============================================================
     1. HERO — Editorial, photography-first
     ============================================================ --}}
     <x-frontend.hero eyebrow="Felinologia i Standardy" title="O Hodowli.<br>Bezkompromisowa Etyka."
-        lead="Poznaj naszą filozofię genetyki, Trzyfilarowy Kodeks Zaufania oraz jasny, spokojny proces dołączenia kota do Twojego domu."
+        lead="Poznaj naszą filozofię opieki, Kodeks Zaufania oraz jasny, przejrzysty proces zakupu i dołączenia kocięcia do Twojego domu."
         image-url="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=2000&q=80"
         image-alt="Kot bengalski w naturalnym oświetleniu" scroll-target="#filozofia" size="large"
         data-nav-theme="dark" />
@@ -39,7 +39,7 @@
                             <h3 class="manifesto-tenet__title">Czystość Genetyczna i Profilaktyka</h3>
                             <p class="manifesto-tenet__desc">
                                 Nie uznajemy półśrodków w medycynie weterynaryjnej. Wszystkie nasze koty hodowlane
-                                posiadają kompletne badania genetyczne w kierunku HCM, PKD, SMA oraz ujemny profil
+                                są objęte badaniami genetycznymi i kardiologicznymi (HCM, PKD, PRA) oraz posiadają ujemny profil
                                 FIV/FeLV.
                             </p>
                         </div>
@@ -61,9 +61,9 @@
                         <img src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=800&q=80"
                             alt="Kot w domowym otoczeniu" width="800" height="1066" decoding="async" loading="lazy">
                     </div>
-                    <div class="manifesto__stat-card" aria-label="15 lat doświadczenia">
-                        <div class="manifesto__stat-number">15+</div>
-                        <div class="manifesto__stat-label">Lat selekcji rodowodowej</div>
+                    <div class="manifesto__stat-card" aria-label="Certyfikacja SHiOZ ZOOLANDIA">
+                        <div class="manifesto__stat-number" style="font-size: 1.5rem; letter-spacing: 0.05em;">SHiOZ</div>
+                        <div class="manifesto__stat-label">Certyfikat 58/CW/2025 · Rej. 58/P/2025</div>
                     </div>
                 </div>
             </div>
@@ -75,29 +75,28 @@
     ============================================================ --}}
     <x-frontend.section tile="dark" id="kodeks" class="reveal-up" data-nav-theme="dark">
         <x-frontend.section-header eyebrow="Standard Medyczny i Etyka" headline="Kodeks Zaufania"
-            description="Standardy, które wyznaczają jakość każdego miotu w naszej hodowli." />
+            description="Standardy, które wyznaczają jakość i bezpieczeństwo w naszej hodowli." />
 
         <div class="kodeks-matrix" role="list" aria-label="Kodeks zaufania">
             <div class="kodeks-column" role="listitem">
                 <div>
-                    <span class="kodeks-column__num">01 / GENETICS</span>
-                    <h3 class="kodeks-column__title">Badania Genetyczne</h3>
+                    <span class="kodeks-column__num">01 / GENETICS & HEART</span>
+                    <h3 class="kodeks-column__title">Genetyka i Kardiologia</h3>
                 </div>
                 <p class="kodeks-column__desc">
-                    Weryfikowane certyfikaty HCM, PKD oraz SMA n/n dla każdego rodzica w naszej hodowli.
+                    Systematyczne badania genetyczne rodziców oraz regularna kontrola kardiologiczna (echo serca) pod kątem HCM i PKD.
                 </p>
             </div>
 
             <div class="kodeks-column" role="listitem">
                 <div>
-                    <span class="kodeks-column__num">02 / VETERINARY</span>
-                    <h3 class="kodeks-column__title">Nadzór Kliniczny</h3>
+                    <span class="kodeks-column__num">02 / CERTIFICATION & VET</span>
+                    <h3 class="kodeks-column__title">SHiOZ ZOOLANDIA</h3>
                 </div>
                 <p class="kodeks-column__desc">
-                    Hodowla wolna od wirusów FIV oraz FeLV. Regularne echokardiografie serca i badania krwi.
+                    Oficjalne członkostwo 58/CW/2025, rejestracja 58/P/2025. Stały nadzór weterynaryjny, hodowla wolna od FIV oraz FeLV.
                 </p>
             </div>
-
 
             <div class="kodeks-column" role="listitem">
                 <div>
@@ -105,7 +104,7 @@
                     <h3 class="kodeks-column__title">Domowa Socjalizacja</h3>
                 </div>
                 <p class="kodeks-column__desc">
-                    Wychowanie w pełnym kontakcie z domownikami, kształtujące pewność siebie, delikatność i otwartość.
+                    Wychowanie w pełnym kontakcie z domownikami, kształtujące pewność siebie, delikatność i otwartość na człowieka.
                 </p>
             </div>
         </div>
@@ -115,19 +114,19 @@
     4. THE ADOPTION JOURNEY — LUXURY CONCIERGE TIMELINE
     ============================================================ --}}
     <x-frontend.section id="proces-krok-po-kroku" class="reveal-up">
-        <x-frontend.section-header eyebrow="Standardy Hodowli" headline="Jak wygląda proces wyboru i odbioru kota?"
-            description="Proces rozpoczyna się od kontaktu — odpowiadamy na pytania, przedstawiamy dostępne kocięta i umawiamy wizytę w hodowli. Po podjęciu decyzji podpisujemy umowę i ustalamy termin odbioru." />
+        <x-frontend.section-header eyebrow="Standardy Hodowli" headline="Jak wygląda proces zakupu kocięcia?"
+            description="Proces rozpoczyna się od kontaktu — odpowiadamy na pytania, przedstawiamy dostępne kocięta i umawiamy wizytę w hodowli. Po podjęciu decyzji podpisujemy umowę i ustalamy dogodny termin odbioru." />
 
-        <div class="adoption-journey-grid" role="list" aria-label="Proces wyboru i odbioru kota krok po kroku">
+        <div class="adoption-journey-grid" role="list" aria-label="Proces zakupu kocięcia krok po kroku">
             <div class="adoption-journey-pillar" role="listitem">
                 <div class="adoption-journey__header">
                     <span class="adoption-journey__number">KROK 01</span>
                     <i data-lucide="message-circle-heart" class="text-ink-muted-48" width="20" height="20"
                         aria-hidden="true"></i>
                 </div>
-                <h3 class="adoption-journey__title">Kontakt i Kocięta</h3>
+                <h3 class="adoption-journey__title">Kontakt i Wybór Kocięcia</h3>
                 <p class="adoption-journey__desc">
-                    Rozpoczynamy od rozmowy — odpowiadamy na pytania, przedstawiamy dostępne kocięta i doradzamy w wyborze malucha.
+                    Rozpoczynamy od kontaktu — odpowiadamy na wszystkie pytania, przedstawiamy dostępne kocięta i doradzamy w wyborze malucha.
                 </p>
             </div>
 
@@ -138,7 +137,7 @@
                 </div>
                 <h3 class="adoption-journey__title">Wizyta w Hodowli</h3>
                 <p class="adoption-journey__desc">
-                    Umawiamy wizytę osobistą w hodowli, aby poznać malucha, jego rodziców oraz warunki, w jakich dorasta.
+                    Umawiamy wizytę osobistą w hodowli, aby poznać malucha, jego rodziców oraz domowe warunki, w jakich dorasta.
                 </p>
             </div>
 
