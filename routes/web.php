@@ -181,16 +181,19 @@ Route::get('/fix-storage', function () {
                 @chmod($d, 0755);
             }
         }
-        $filesToFix = array_merge(
-            \Illuminate\Support\Facades\File::files(storage_path('app/public/media')) ?? [],
-            \Illuminate\Support\Facades\File::files(public_path('storage/media')) ?? []
-        );
+        $storageFiles = \Illuminate\Support\Facades\File::isDirectory(storage_path('app/public/media'))
+            ? \Illuminate\Support\Facades\File::files(storage_path('app/public/media'))
+            : [];
+        $publicFiles = \Illuminate\Support\Facades\File::isDirectory(public_path('storage/media'))
+            ? \Illuminate\Support\Facades\File::files(public_path('storage/media'))
+            : [];
+        $filesToFix = array_merge($storageFiles, $publicFiles);
         foreach ($filesToFix as $f) {
             @chmod($f->getPathname(), 0644);
         }
 
         $mediaCount = \App\Models\Media::where('mediable_type', \App\Models\Animal::class)->count();
-        $publicMediaCount = count(\Illuminate\Support\Facades\File::files(public_path('storage/media')) ?? []);
+        $publicMediaCount = count($publicFiles);
         $seederStatus = $seederRan
             ? 'Seeder uruchomiony - zaimportowano dane kotow.'
             : "Seeder pominieto - baza zawiera juz {$existingAnimalsCount} rekordow kotow (idempotent, bezpieczne).";
