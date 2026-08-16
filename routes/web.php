@@ -11,6 +11,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 // frontend routes
@@ -56,6 +57,12 @@ Route::get('/sitemap.xml', function () {
 Route::get('/storage/media/{filename}', function ($filename) {
     $filename = basename($filename);
 
+    $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp', 'svg', 'gif', 'ico', 'pdf', 'mp4', 'webm'];
+    $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+    if (! in_array($ext, $allowedExtensions, true)) {
+        abort(404);
+    }
+
     $possiblePaths = [
         public_path('storage/media/' . $filename),
         storage_path('app/public/media/' . $filename),
@@ -97,14 +104,14 @@ Route::get('/storage/media/{filename}', function ($filename) {
 Route::get('/check-media', function () {
     $animals = \App\Models\Animal::with('media')->get();
     $output = "<div style='font-family:sans-serif; padding:30px; max-width:800px; margin:0 auto;'>";
-    $output .= "<h2>🔍 Diagnostyka Bazy i Plików Zdjęć Kotów</h2>";
+    $output .= "<h2>Diagnostyka Bazy i Plikow Zdjec Kotow</h2>";
     $output .= "<table border='1' cellpadding='8' cellspacing='0' style='border-collapse:collapse; width:100%;'>";
     $output .= "<tr style='background:#f3f4f6;'><th>Kot</th><th>Rasa</th><th>Plik na serwerze?</th><th>Wygenerowany URL</th></tr>";
 
     foreach ($animals as $a) {
         $media = $a->media;
         if (! $media) {
-            $output .= "<tr><td>{$a->name}</td><td>{$a->breed}</td><td style='color:red;'>BRAK MEDIA W BAZIE</td><td>-</td></tr>";
+            $output .= "<tr><td>" . e($a->name) . "</td><td>" . e($a->breed) . "</td><td style='color:red;'>BRAK MEDIA W BAZIE</td><td>-</td></tr>";
             continue;
         }
 
@@ -115,26 +122,31 @@ Route::get('/check-media', function () {
         $url = $media->url();
 
         $output .= "<tr>"
-            . "<td><strong>{$a->name}</strong></td>"
-            . "<td>{$a->breed}</td>"
+            . "<td><strong>" . e($a->name) . "</strong></td>"
+            . "<td>" . e($a->breed) . "</td>"
             . "<td style='color:{$statusColor}; font-weight:bold;'>{$statusText}</td>"
-            . "<td><a href='{$url}' target='_blank'>Otwórz zdjęcie</a></td>"
+            . "<td><a href='" . e($url) . "' target='_blank'>Otworz zdjecie</a></td>"
             . "</tr>";
     }
 
     $output .= "</table>";
-    $output .= "<p style='margin-top:20px;'><a href='" . url('/fix-storage') . "' style='background:#2563eb; color:#fff; padding:10px 15px; border-radius:6px; text-decoration:none; font-weight:bold;'>Uruchom Naprawę (/fix-storage)</a></p>";
+    $output .= "<p style='margin-top:20px;'><a href='" . url('/fix-storage') . "' style='background:#2563eb; color:#fff; padding:10px 15px; border-radius:6px; text-decoration:none; font-weight:bold;'>Uruchom Naprawe (/fix-storage)</a></p>";
     $output .= "</div>";
 
     return $output;
 })->middleware(['auth', 'verified', 'active']);
 
-// Utility route to trigger storage link & seed real cat images on hosting without SSH (auth required)
+// Utility route to trigger storage link & seed real cat images on hosting without SSH (admin only)
 Route::get('/fix-storage', function () {
+    // SECURITY: Restrict to admin role only — this route seeds data and must not be accessible to editors/users
+    if (auth()->user()?->role?->name !== 'admin') {
+        abort(403, 'Tylko administrator moze uruchomic te operacje.');
+    }
+
     try {
         // Clean broken symlink if exists on hosting
         $pubStorage = public_path('storage');
-        if (is_link($pubStorage) || (file_exists($pubStorage) && !is_dir($pubStorage))) {
+        if (is_link($pubStorage) || (file_exists($pubStorage) && ! is_dir($pubStorage))) {
             @unlink($pubStorage);
         }
 
@@ -146,13 +158,24 @@ Route::get('/fix-storage', function () {
             \Illuminate\Support\Facades\File::makeDirectory($pubStorageMedia, 0755, true, true);
         }
 
-        \Illuminate\Support\Facades\Artisan::call('db:seed', [
-            '--class' => 'Database\\Seeders\\RealKittensAndParentsSeeder',
-            '--force' => true,
-        ]);
+        // IDEMPOTENT: Only run seeder if animals table is empty — prevents data overwrite on re-runs
+        $seederRan = false;
+        $existingAnimalsCount = \App\Models\Animal::withTrashed()->count();
+        if ($existingAnimalsCount === 0) {
+            \Illuminate\Support\Facades\Artisan::call('db:seed', [
+                '--class' => 'Database\\Seeders\\RealKittensAndParentsSeeder',
+                '--force' => true,
+            ]);
+            $seederRan = true;
+        }
 
         // Fix Linux permissions for Web Server (Apache/Nginx)
-        $dirsToFix = [storage_path('app/public'), storage_path('app/public/media'), public_path('storage'), public_path('storage/media')];
+        $dirsToFix = [
+            storage_path('app/public'),
+            storage_path('app/public/media'),
+            public_path('storage'),
+            public_path('storage/media'),
+        ];
         foreach ($dirsToFix as $d) {
             if (\Illuminate\Support\Facades\File::isDirectory($d)) {
                 @chmod($d, 0755);
@@ -168,23 +191,29 @@ Route::get('/fix-storage', function () {
 
         $mediaCount = \App\Models\Media::where('mediable_type', \App\Models\Animal::class)->count();
         $publicMediaCount = count(\Illuminate\Support\Facades\File::files(public_path('storage/media')) ?? []);
+        $seederStatus = $seederRan
+            ? 'Seeder uruchomiony - zaimportowano dane kotow.'
+            : "Seeder pominieto - baza zawiera juz {$existingAnimalsCount} rekordow kotow (idempotent, bezpieczne).";
 
         return "<div style='font-family: sans-serif; padding: 30px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; color: #166534; max-width: 600px; margin: 40px auto;'>"
-            . "<h1 style='margin-top:0;'>✅ Sukces Naprawy Zdjęć!</h1>"
-            . "<p><strong>1. Utworzono dowiązanie public/storage.</strong></p>"
-            . "<p><strong>2. Przekopiowano zdjęcia z folderu <code>image/</code>:</strong> Pomyślnie zapisano {$publicMediaCount} plików w produkcyjnym katalogu <code>public/storage/media/</code> na serwerze.</p>"
-            . "<p><strong>3. Połączono w bazie danych:</strong> Przypisano {$mediaCount} rekordów zdjęć do kotów w bazie SQL.</p>"
+            . "<h1 style='margin-top:0;'>Sukces Naprawy Zdjec!</h1>"
+            . "<p><strong>1. Utworzono dowiazanie public/storage.</strong></p>"
+            . "<p><strong>2. Przekopiowano zdjecia z folderu image/:</strong> Pomyslnie zapisano {$publicMediaCount} plikow w produkcyjnym katalogu public/storage/media/ na serwerze.</p>"
+            . "<p><strong>3. Polaczono w bazie danych:</strong> Przypisano {$mediaCount} rekordow zdjec do kotow w bazie SQL.</p>"
+            . "<p><strong>4. Status seedera:</strong> {$seederStatus}</p>"
             . "<hr style='border: 0; border-top: 1px solid #bbf7d0; margin: 20px 0;'>"
-            . "<p style='margin-bottom:0;'><a href='" . url('/') . "' style='display: inline-block; padding: 10px 20px; background: #166534; color: #fff; text-decoration: none; border-radius: 6px; font-weight: bold;'>Wróć na stronę główną i sprawdź zdjęcia →</a></p>"
+            . "<p style='margin-bottom:0;'><a href='" . url('/') . "' style='display: inline-block; padding: 10px 20px; background: #166534; color: #fff; text-decoration: none; border-radius: 6px; font-weight: bold;'>Wróć na stronę główną i sprawdź zdjęcia</a></p>"
             . "</div>";
     } catch (\Throwable $e) {
+        Log::error('Fix-storage execution error: ' . $e->getMessage(), ['exception' => $e]);
+
         return "<div style='font-family: sans-serif; padding: 30px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 12px; color: #991b1b; max-width: 600px; margin: 40px auto;'>"
-            . "<h1 style='margin-top:0;'>❌ Błąd Wykonania</h1>"
-            . "<p>" . e($e->getMessage()) . "</p>"
-            . "<p><small>" . e($e->getFile()) . " (linia " . $e->getLine() . ")</small></p>"
+            . "<h1 style='margin-top:0;'>Blad Wykonania</h1>"
+            . "<p>Wystąpił błąd podczas wykonywania operacji inicjalizacji storage. Szczegóły zostały zapisane w dzienniku zdarzeń (logach).</p>"
             . "</div>";
     }
 })->middleware(['auth', 'verified', 'active']);
+
 // backend dashboard
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified', 'active'])
