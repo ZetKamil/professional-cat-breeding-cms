@@ -3,6 +3,8 @@ Disallow: /login
 Disallow: /register
 Disallow: /dashboard
 Disallow: /backend/
-Disallow: /storage/
+Disallow: /check-media
+Disallow: /fix-storage
+Allow: /storage/media/
 
 Sitemap: https://kotyzmazowieckiejszwajcarii.pl/sitemap.xml
