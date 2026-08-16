@@ -34,7 +34,8 @@ Calm, minimal, trust-building
                         </div>
                         <div class="footer-contact-item">
                             <i data-lucide="map-pin" aria-hidden="true" class="footer-contact-icon"></i>
-                            <span class="footer-link" style="color: var(--color-ink-muted-80);">Sikórz 56A, 09-413 Sikórz</span>
+                            <span class="footer-link" style="color: var(--color-ink-muted-80);">Sikórz 56A, 09-413
+                                Sikórz</span>
                         </div>
                     </div>
 
@@ -68,7 +69,8 @@ Calm, minimal, trust-building
                     <h3 class="footer-heading">Informacje</h3>
                     <ul class="footer-links" role="list">
                         <li><a href="{{ route('about') }}#zdrowie" class="footer-link">Zdrowie & Certyfikaty</a></li>
-                        <li><a href="{{ route('about') }}#co-otrzymujesz" class="footer-link">Dokumentacja i standard</a>
+                        <li><a href="{{ route('about') }}#co-otrzymujesz" class="footer-link">Dokumentacja i
+                                standard</a>
                         </li>
                         <li><a href="{{ route('contact') }}#faq" class="footer-link">Częste pytania (FAQ)</a></li>
                         <li><a href="{{ route('terms') }}" class="footer-link">Regulamin świadczenia usług</a></li>
@@ -82,10 +84,11 @@ Calm, minimal, trust-building
                         <strong>Sikórz k. Płocka</strong><br>
                         woj. mazowieckie<br><br>
                         Wizyty w hodowli po wcześniejszym uzgodnieniu terminu.<br>
-                        Kontakt tel.: <strong>9:00 – 20:00</strong>
+                        <strong>9:00 – 20:00</strong>
                     </p>
                     <div style="margin-top: 12px;">
-                        <a href="{{ route('contact') }}" class="footer-link" style="color: var(--color-primary); font-weight: 600;">
+                        <a href="{{ route('contact') }}" class="footer-link"
+                            style="color: var(--color-primary); font-weight: 600;">
                             Umów spotkanie w hodowli →
                         </a>
                     </div>

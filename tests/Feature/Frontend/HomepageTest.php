@@ -36,9 +36,10 @@ class HomepageTest extends TestCase
         $response->assertSee('Filozofia Naszej Hodowli');
         $response->assertSee('Kodeks Zaufania');
         $response->assertSee('Jak wygląda proces adopcji?');
-        $response->assertSee('Rozmowa i Dobór');
-        $response->assertSee('Rezerwacja i Wizyta');
-        $response->assertSee('Odbiór i Wyprawka');
+        $response->assertSee('Proces rozpoczyna się od kontaktu');
+        $response->assertSee('Kontakt i Kocięta');
+        $response->assertSee('Wizyta w Hodowli');
+        $response->assertSee('Umowa i Odbiór');
     }
 
     public function test_homepage_renders_featured_animals_when_available(): void

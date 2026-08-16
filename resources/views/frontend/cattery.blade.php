@@ -116,7 +116,7 @@
     ============================================================ --}}
     <x-frontend.section id="adopcja-krok-po-kroku" class="reveal-up">
         <x-frontend.section-header eyebrow="Concierge Adopcyjny" headline="Jak wygląda proces adopcji?"
-            description="Troszczymy się o przyszłość naszych kotów, dlatego każdy etap adopcji jest jasny, spokojny i przejrzysty." />
+            description="Proces rozpoczyna się od kontaktu — odpowiadamy na pytania, przedstawiamy dostępne kocięta i umawiamy wizytę w hodowli. Po podjęciu decyzji podpisujemy umowę i ustalamy termin odbioru." />
 
         <div class="adoption-journey-grid" role="list" aria-label="Proces adopcji krok po kroku">
             <div class="adoption-journey-pillar" role="listitem">
@@ -125,10 +125,9 @@
                     <i data-lucide="message-circle-heart" class="text-ink-muted-48" width="20" height="20"
                         aria-hidden="true"></i>
                 </div>
-                <h3 class="adoption-journey__title">Rozmowa i Dobór</h3>
+                <h3 class="adoption-journey__title">Kontakt i Kocięta</h3>
                 <p class="adoption-journey__desc">
-                    Poznajemy Twoje oczekiwania i styl życia, aby pomóc Ci dobrać kota o charakterze idealnie pasującym
-                    do Twojego domu.
+                    Rozpoczynamy od rozmowy — odpowiadamy na pytania, przedstawiamy dostępne kocięta i doradzamy w wyborze malucha.
                 </p>
             </div>
 
@@ -137,10 +136,9 @@
                     <span class="adoption-journey__number">KROK 02</span>
                     <i data-lucide="home-heart" class="text-ink-muted-48" width="20" height="20" aria-hidden="true"></i>
                 </div>
-                <h3 class="adoption-journey__title">Rezerwacja i Wizyta</h3>
+                <h3 class="adoption-journey__title">Wizyta w Hodowli</h3>
                 <p class="adoption-journey__desc">
-                    Po podjęciu decyzji podpisujemy umowę przedwstępną. Zapraszamy na wizytę osobistą lub spotkanie
-                    wideo z maluchem.
+                    Umawiamy wizytę osobistą w hodowli, aby poznać malucha, jego rodziców oraz warunki, w jakich dorasta.
                 </p>
             </div>
 
@@ -150,10 +148,9 @@
                     <i data-lucide="file-check-2" class="text-ink-muted-48" width="20" height="20"
                         aria-hidden="true"></i>
                 </div>
-                <h3 class="adoption-journey__title">Odbiór i Wyprawka</h3>
+                <h3 class="adoption-journey__title">Umowa i Odbiór</h3>
                 <p class="adoption-journey__desc">
-                    Kot opuszcza hodowlę w wieku 14-16 tygodni z kompletem dokumentów: certyfikatem rodowodowym stowarzyszenia,
-                    książeczką zdrowia oraz badaniami genetycznymi rodziców.
+                    Po podjęciu decyzji podpisujemy umowę, ustalamy dogodny termin odbioru oraz przekazujemy kota z kompletem dokumentów i badań.
                 </p>
             </div>
         </div>
