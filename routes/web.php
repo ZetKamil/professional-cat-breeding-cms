@@ -144,30 +144,33 @@ Route::get('/fix-storage', function () {
     }
 
     try {
-        // Clean broken symlink if exists on hosting
+        // Remove symlink if exists on hosting (symlinks to parent dirs cause Apache 403 on OVH)
         $pubStorage = public_path('storage');
-        if (is_link($pubStorage) || (file_exists($pubStorage) && ! is_dir($pubStorage))) {
+        if (is_link($pubStorage)) {
+            @unlink($pubStorage);
+        } elseif (file_exists($pubStorage) && ! is_dir($pubStorage)) {
             @unlink($pubStorage);
         }
 
-        @\Illuminate\Support\Facades\Artisan::call('storage:link');
-
-        // Ensure physical directory public/storage/media exists if symlinks are blocked by Apache
+        // Ensure physical directory public/storage/media exists directly on disk
         $pubStorageMedia = public_path('storage/media');
         if (! \Illuminate\Support\Facades\File::isDirectory($pubStorageMedia)) {
             \Illuminate\Support\Facades\File::makeDirectory($pubStorageMedia, 0755, true, true);
         }
 
-        // IDEMPOTENT: Only run seeder if animals table is empty — prevents data overwrite on re-runs
-        $seederRan = false;
-        $existingAnimalsCount = \App\Models\Animal::withTrashed()->count();
-        if ($existingAnimalsCount === 0) {
-            \Illuminate\Support\Facades\Artisan::call('db:seed', [
-                '--class' => 'Database\\Seeders\\RealKittensAndParentsSeeder',
-                '--force' => true,
-            ]);
-            $seederRan = true;
+        // Ensure storage/app/public/media exists
+        $storageAppMedia = storage_path('app/public/media');
+        if (! \Illuminate\Support\Facades\File::isDirectory($storageAppMedia)) {
+            \Illuminate\Support\Facades\File::makeDirectory($storageAppMedia, 0755, true, true);
         }
+
+        // Run seeder to import real cat data and photos
+        $seederRan = false;
+        \Illuminate\Support\Facades\Artisan::call('db:seed', [
+            '--class' => 'Database\\Seeders\\RealKittensAndParentsSeeder',
+            '--force' => true,
+        ]);
+        $seederRan = true;
 
         // Fix Linux permissions for Web Server (Apache/Nginx)
         $dirsToFix = [
