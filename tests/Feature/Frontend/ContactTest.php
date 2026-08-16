@@ -205,4 +205,53 @@ class ContactTest extends TestCase
         $response = $this->post('/contact', $payload);
         $response->assertStatus(429);
     }
+
+    // ─── POST /contact — Polish validation error messages ──────────────────────
+
+    public function test_validation_errors_are_in_polish(): void
+    {
+        $response = $this->post('/contact', [
+            'name'    => '',
+            'email'   => 'niepoprawny-email',
+            'message' => 'Krótka',
+        ]);
+
+        $response->assertSessionHasErrors([
+            'name'    => 'Prosimy o podanie imienia i nazwiska.',
+            'email'   => 'Prosimy o podanie poprawnego adresu e-mail (np. jan@example.com).',
+            'message' => 'Treść wiadomości musi zawierać co najmniej 15 znaków.',
+        ]);
+    }
+
+    // ─── POST /contact — Honeypot spam protection ──────────────────────────────
+
+    public function test_honeypot_field_blocks_spam_bots(): void
+    {
+        $response = $this->post('/contact', [
+            'name'        => 'Bot Name',
+            'email'       => 'bot@example.com',
+            'message'     => 'Wiadomość wysłana przez automatycznego bota spamującego.',
+            '_hp_website' => 'http://spam-link.com',
+        ]);
+
+        $response->assertSessionHasErrors('_hp_website');
+    }
+
+    // ─── Notification — Header sanitization (CRLF protection) ─────────────────
+
+    public function test_notification_sanitizes_crlf_headers(): void
+    {
+        $notification = new \App\Notifications\ContactMessageNotification([
+            'name'    => "Jan Kowalski\r\nBcc: hacker@evil.com",
+            'email'   => "jan@example.com\r\nBcc: hacker@evil.com",
+            'subject' => "Kot Bengalski\r\nBcc: hacker@evil.com",
+            'message' => "Dzień dobry, proszę o kontakt.",
+        ]);
+
+        $mail = $notification->toMail(new \stdClass());
+
+        $this->assertStringNotContainsString("\r", $mail->subject);
+        $this->assertStringNotContainsString("\n", $mail->subject);
+        $this->assertStringContainsString('Kot Bengalski', $mail->subject);
+    }
 }

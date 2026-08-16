@@ -32,6 +32,10 @@ Calm, minimal, trust-building
                             <i data-lucide="phone" aria-hidden="true" class="footer-contact-icon"></i>
                             <a href="tel:+48514153204" class="footer-link">+48 514 153 204</a>
                         </div>
+                        <div class="footer-contact-item">
+                            <i data-lucide="map-pin" aria-hidden="true" class="footer-contact-icon"></i>
+                            <span class="footer-link" style="color: var(--color-ink-muted-80);">Sikórz 56A, 09-413 Sikórz</span>
+                        </div>
                     </div>
 
                     {{-- Social Links --}}
@@ -71,14 +75,20 @@ Calm, minimal, trust-building
                     </ul>
                 </div>
 
-                {{-- Newsletter --}}
+                {{-- Location & Visits --}}
                 <div class="footer-col footer-col--newsletter">
-                    <h3 class="footer-heading">Bądź na bieżąco</h3>
-                    <p class="footer-newsletter__desc text-body">
-                        Funkcja zapisu do newslettera jest obecnie w przygotowaniu.
-                        <br><br>
-                        Zapraszamy wkrótce!
+                    <h3 class="footer-heading">Lokalizacja & Wizyty</h3>
+                    <p class="footer-newsletter__desc text-body" style="line-height: 1.6;">
+                        <strong>Sikórz k. Płocka</strong><br>
+                        woj. mazowieckie<br><br>
+                        Wizyty w hodowli po wcześniejszym uzgodnieniu terminu.<br>
+                        Kontakt tel.: <strong>9:00 – 20:00</strong>
                     </p>
+                    <div style="margin-top: 12px;">
+                        <a href="{{ route('contact') }}" class="footer-link" style="color: var(--color-primary); font-weight: 600;">
+                            Umów spotkanie w hodowli →
+                        </a>
+                    </div>
                 </div>
             </div>
 

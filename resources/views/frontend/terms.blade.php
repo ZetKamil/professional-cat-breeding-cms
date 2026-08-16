@@ -1,5 +1,5 @@
-<x-frontend.shell title="Regulamin Świadczenia Usług Drogą Elektroniczną — Hodowla Kotów z Mazowieckiej Szwajcarii"
-    meta-description="Krótki i przejrzysty Regulamin świadczenia usług drogą elektroniczną za pośrednictwem strony internetowej Hodowli Kotów z Mazowieckiej Szwajcarii.">
+<x-frontend.shell title="Regulamin Świadczenia Usług Drogą Elektroniczną | Hodowla Kotów z Mazowieckiej Szwajcarii"
+    meta-description="Regulamin korzystania ze strony internetowej oraz formularza kontaktowego Hodowli Kotów z Mazowieckiej Szwajcarii w Sikorzu.">
     <div class="section tile-canvas legal-page">
         <div class="section-inner legal-page__inner">
 

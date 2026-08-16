@@ -18,10 +18,21 @@ class ContactController extends Controller
     {
         $data = $request->validated();
 
-        ContactMessageSent::dispatch($data);
+        try {
+            ContactMessageSent::dispatch($data);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Błąd wysyłki formularza kontaktowego: ' . $e->getMessage(), [
+                'exception' => $e,
+            ]);
+
+            return redirect()
+                ->route('contact')
+                ->withInput()
+                ->with('error', 'Wystąpił nieoczekiwany problem podczas wysyłania formularza. Prosimy o kontakt telefoniczny pod numerem +48 514 153 204.');
+        }
 
         return redirect()
             ->route('contact')
-            ->with('status', 'Dziękujemy za wiadomość! Odpowiemy tak szybko, jak to możliwe.');
+            ->with('status', 'Dziękujemy za wiadomość! Odpowiemy tak szybko, jak to możliwe (zwykle w ciągu 24 godzin).');
     }
 }

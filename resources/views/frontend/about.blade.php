@@ -1,6 +1,7 @@
 <x-frontend.shell
-    title="O Nas — {{ config('app.name') }}"
-    meta-description="Poznaj naszą hodowlę kotów rasowych — naszą historię, filozofię i standardy, które wyróżniają nas na tle innych."
+    title="O Nas — Pasja, Certyfikaty i Domowa Socjalizacja | Hodowla Kotów z Mazowieckiej Szwajcarii"
+    meta-description="Poznaj historię naszej hodowli, standardy opieki weterynaryjnej, certyfikaty stowarzyszenia felinologicznego i zasady domowej socjalizacji kotów w Mazowieckiej Szwajcarii."
+    og-image="{{ asset('storage/media/parent_bella_1.jpg') }}"
 >
     {{-- ============================================================
          1. HERO — Editorial, photography-first

@@ -1,8 +1,19 @@
 @props([
-    'title' => config('app.name', 'Hodowla Kotów'),
-    'metaDescription' => 'Profesjonalna hodowla kotów rasowych — zdrowie, piękno, zaufanie.',
-    'ogImage' => 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=1200&q=80',
+    'title' => 'Hodowla Kotów z Mazowieckiej Szwajcarii | Koty Bengalskie, Brytyjskie i Syjamskie',
+    'metaDescription' => 'Certyfikowana domowa hodowla kotów rasowych z Mazowieckiej Szwajcarii (Sikórz). Koty bengalskie, brytyjskie i syjamskie z rodowodem stowarzyszenia oraz badaniami genetycznymi.',
+    'ogImage' => null,
+    'ogType' => 'website',
+    'canonical' => null,
+    'robots' => 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
 ])
+
+@php
+    $canonicalUrl = $canonical ?? (
+        app()->isProduction() || config('app.url') === 'https://kotyzmazowieckiejszwajcarii.pl'
+            ? 'https://kotyzmazowieckiejszwajcarii.pl' . (request()->getPathInfo() === '/' ? '/' : request()->getPathInfo())
+            : url()->current()
+    );
+@endphp
 
 <!DOCTYPE html>
 <html lang="pl">
@@ -11,10 +22,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="{{ $metaDescription }}">
+    <meta name="robots" content="{{ $robots }}">
     <meta name="theme-color" content="#0d0d0d">
 
     {{-- Canonical URL --}}
-    <link rel="canonical" href="{{ url()->current() }}">
+    <link rel="canonical" href="{{ $canonicalUrl }}">
 
     {{-- Favicons & Web Manifest --}}
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
@@ -23,17 +35,18 @@
     <link rel="manifest" href="{{ asset('manifest.webmanifest') }}">
 
     {{-- Open Graph --}}
+    <meta property="og:site_name" content="Hodowla Kotów z Mazowieckiej Szwajcarii">
     <meta property="og:title" content="{{ $title }}">
     <meta property="og:description" content="{{ $metaDescription }}">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:type" content="{{ $ogType }}">
+    <meta property="og:url" content="{{ $canonicalUrl }}">
     <meta property="og:locale" content="pl_PL">
     @if($ogImage)
         <meta property="og:image" content="{{ $ogImage }}">
     @endif
 
     {{-- Twitter Cards --}}
-    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:card" content="{{ $ogImage ? 'summary_large_image' : 'summary' }}">
     <meta name="twitter:title" content="{{ $title }}">
     <meta name="twitter:description" content="{{ $metaDescription }}">
     @if($ogImage)

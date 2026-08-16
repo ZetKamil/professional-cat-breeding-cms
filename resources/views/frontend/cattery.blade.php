@@ -1,5 +1,6 @@
-<x-frontend.shell title="O Hodowli — {{ config('app.name') }}"
-    meta-description="Poznaj nasze standardy felinologiczne, Trzyfilarowy Kodeks Zaufania oraz jasny, spokojny proces adopcji kota rasowego.">
+<x-frontend.shell title="O Hodowli — Standardy, Filozofia i Kodeks Zaufania | Hodowla Kotów z Mazowieckiej Szwajcarii"
+    meta-description="Standardy felinologiczne, 100% badania genetyczne HCM/PKD n/n, profilaktyka FIV/FeLV oraz spokojny proces adopcji kota rasowego w naszej hodowli."
+    og-image="{{ asset('storage/media/parent_luki_1.jpg') }}">
     {{-- ============================================================
     1. HERO — Editorial, photography-first
     ============================================================ --}}
@@ -149,7 +150,7 @@
                     <i data-lucide="file-check-2" class="text-ink-muted-48" width="20" height="20"
                         aria-hidden="true"></i>
                 </div>
-                <h3 class="adoption-journey__title">Odbiór i Dokumentacja</h3>
+                <h3 class="adoption-journey__title">Odbiór i Wyprawka</h3>
                 <p class="adoption-journey__desc">
                     Kot opuszcza hodowlę w wieku 14-16 tygodni z kompletem dokumentów: certyfikatem rodowodowym stowarzyszenia,
                     książeczką zdrowia oraz badaniami genetycznymi rodziców.

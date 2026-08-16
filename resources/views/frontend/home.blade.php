@@ -1,5 +1,6 @@
-<x-frontend.shell title="{{ config('app.name') }} — Etyczna Hodowla Kotów Rasowych z Rodowodem Stowarzyszenia"
-    meta-description="Hodowla kotów rasowych oparta na czystości genetycznej, spokoju i bezkompromisowych standardach etycznych oraz rodowodzie stowarzyszenia.">
+<x-frontend.shell title="Hodowla Kotów z Mazowieckiej Szwajcarii — Etyczna Hodowla Kotów Rasowych | Koty Bengalskie, Brytyjskie i Syjamskie"
+    meta-description="Certyfikowana domowa hodowla kotów rasowych z Mazowieckiej Szwajcarii (Sikórz k. Płocka). Koty bengalskie, brytyjskie i syjamskie z rodowodem stowarzyszenia oraz badaniami genetycznymi."
+    og-image="{{ asset('storage/media/parent_bella_1.jpg') }}">
     {{-- ============================================================
     1. CINEMATIC ASYMMETRIC HERO — ROLLS ROYCE / APPLE STYLE
     ============================================================ --}}
@@ -15,19 +16,27 @@
             {{-- Split-Screen Editorial Opening --}}
             <div class="hero-split-grid">
                 <div class="hero-split__left">
+                    <span class="hero-split__eyebrow" style="display: inline-block; color: var(--color-gold, #c89d5c); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 12px;">
+                        Hodowla Kotów Rasowych • Sikórz k. Płocka (woj. mazowieckie)
+                    </span>
                     <h1 class="hero-split__title">
                         Czystość Rasy.<br>
                         Spokój Genetyki.<br>
                     </h1>
                     <p class="hero-split__lead">
-                        Nie traktujemy hodowli jak komercji. Tworzymy domowe sanktuarium,
-                        w którym selekcja genetyczna, spokój socjalizacji i bezkompromisowe
-                        standardy medyczne wyznaczają każdy etap życia naszych kotów.
+                        Certyfikowana domowa hodowla kotów bengalskich, brytyjskich i syjamskich.
+                        Tworzymy bezpieczne sanktuarium, w którym selekcja genetyczna (100% HCM/PKD n/n),
+                        spokój socjalizacji i rodowód stowarzyszenia wyznaczają każdy etap życia naszych kotów.
                     </p>
-                    <div class="hero-split__actions">
-                        <x-frontend.button href="{{ route('contact') }}" icon="arrow-right">
-                            Zaplanuj rozmowę
+                    <div class="hero-split__actions" style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+                        <x-frontend.button href="{{ route('frontend.animals.index') }}" icon="arrow-right">
+                            Zobacz nasze koty
                         </x-frontend.button>
+                        <x-frontend.button href="{{ route('contact') }}" variant="secondary" icon="mail">
+                            Zapytaj o kocięta
+                        </x-frontend.button>
+                    </div>
+                    <div style="margin-top: 14px;">
                         <a href="https://www.facebook.com/profile.php?id=61580668026948" target="_blank" rel="noopener"
                             class="hero-split__secondary-link">
                             Codzienne życie hodowli na Facebooku →
@@ -330,17 +339,23 @@
     {
       "@@context": "https://schema.org",
       "@@type": "LocalBusiness",
-      "name": "{{ config('app.name') }}",
-      "image": "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=1200&q=80",
-      "url": "{{ url('/') }}",
-      "telephone": "+48500000000",
+      "name": "Hodowla Kotów z Mazowieckiej Szwajcarii",
+      "description": "Certyfikowana domowa hodowla kotów rasowych z Mazowieckiej Szwajcarii (Sikórz). Koty bengalskie, brytyjskie i syjamskie z rodowodem stowarzyszenia oraz badaniami genetycznymi.",
+      "image": "{{ asset('storage/media/parent_bella_1.jpg') }}",
+      "url": "https://kotyzmazowieckiejszwajcarii.pl/",
+      "telephone": "+48514153204",
+      "email": "hodowla.z.mazowieckiej.szwajcarii@gmail.com",
       "address": {
         "@@type": "PostalAddress",
-        "streetAddress": "ul. Przykładowa 1",
-        "addressLocality": "Warszawa",
-        "postalCode": "00-001",
+        "streetAddress": "Sikórz 56A",
+        "addressLocality": "Sikórz",
+        "postalCode": "09-413",
+        "addressRegion": "mazowieckie",
         "addressCountry": "PL"
-      }
+      },
+      "sameAs": [
+        "https://www.facebook.com/profile.php?id=61580668026948"
+      ]
     }
     </script>
     @endpush

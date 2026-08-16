@@ -1,25 +1,89 @@
-<IfModule mod_rewrite.c>
-    <IfModule mod_negotiation.c>
-        Options -MultiViews -Indexes +FollowSymLinks +SymLinksIfOwnerMatch
-    </IfModule>
+# ============================================================
+# HODOWLA KOTÓW Z MAZOWIECKIEJ SZWAJCARII
+# Public .htaccess — Apache 2.4 / Laravel 12
+# ============================================================
 
+# Disable directory listing globally
+Options -Indexes -MultiViews +FollowSymLinks
+
+<IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # Handle Authorization Header
+    # 1. Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
-    # Handle X-XSRF-Token Header
+    # 2. Handle X-XSRF-Token Header
     RewriteCond %{HTTP:x-xsrf-token} .
     RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
 
-    # Redirect Trailing Slashes If Not A Folder...
+    # 3. Block sensitive hidden files (.env, .git, etc.)
+    RewriteRule ^\.env(\..*)?$ - [F,L]
+    RewriteRule ^\.git(/.*)?$ - [F,L]
+    RewriteRule ^\.gitignore$ - [F,L]
+    RewriteRule ^\.gitattributes$ - [F,L]
+    RewriteRule ^\.editorconfig$ - [F,L]
+
+    # 4. Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
-    # Send Requests To Front Controller...
+    # 5. Send Requests To Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+</IfModule>
+
+# ============================================================
+# SECURITY: Block sensitive file types by extension
+# ============================================================
+<FilesMatch "\.(env|sqlite|sqlite3|log|bak|backup|sql|key|pem|cert|crt|p12|pfx|sh|bash)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# ============================================================
+# SECURITY: Block .php execution in upload/storage directories
+# ============================================================
+<FilesMatch "\.(php|phtml|phar)$">
+    <If "%{REQUEST_URI} =~ m#^/storage/#">
+        <IfModule mod_authz_core.c>
+            Require all denied
+        </IfModule>
+        <IfModule !mod_authz_core.c>
+            Order allow,deny
+            Deny from all
+        </IfModule>
+    </If>
+</FilesMatch>
+
+# ============================================================
+# SECURITY HEADERS
+# ============================================================
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+</IfModule>
+
+# ============================================================
+# PERFORMANCE: Cache static assets
+# ============================================================
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/webp "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 month"
+    ExpiresByType image/x-icon "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
 </IfModule>

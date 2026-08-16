@@ -33,24 +33,27 @@ Route::view('/regulamin', 'frontend.terms')->name('terms');
 Route::get('/sitemap.xml', function () {
     $posts = \App\Models\Post::where('is_published', true)
         ->whereNotNull('published_at')
+        ->where('published_at', '<=', now())
         ->latest('published_at')
         ->get();
 
     $animals = \App\Models\Animal::published()->get();
 
+    $baseUrl = rtrim(config('app.url', 'https://kotyzmazowieckiejszwajcarii.pl'), '/');
+
     $staticPages = [
-        ['url' => route('home'),                    'priority' => '1.0', 'changefreq' => 'weekly'],
-        ['url' => route('frontend.animals.index'),  'priority' => '0.9', 'changefreq' => 'weekly'],
-        ['url' => route('frontend.blog.index'),     'priority' => '0.8', 'changefreq' => 'weekly'],
-        ['url' => route('cattery'),                 'priority' => '0.7', 'changefreq' => 'monthly'],
-        ['url' => route('about'),                   'priority' => '0.7', 'changefreq' => 'monthly'],
-        ['url' => route('contact'),                 'priority' => '0.6', 'changefreq' => 'monthly'],
-        ['url' => route('privacy'),                 'priority' => '0.3', 'changefreq' => 'yearly'],
-        ['url' => route('terms'),                   'priority' => '0.3', 'changefreq' => 'yearly'],
+        ['url' => $baseUrl . '/',                    'priority' => '1.0', 'changefreq' => 'weekly',  'lastmod' => now()->toDateString()],
+        ['url' => $baseUrl . '/koty',                'priority' => '0.9', 'changefreq' => 'weekly',  'lastmod' => now()->toDateString()],
+        ['url' => $baseUrl . '/o-hodowli',           'priority' => '0.8', 'changefreq' => 'monthly', 'lastmod' => '2026-08-11'],
+        ['url' => $baseUrl . '/about',               'priority' => '0.8', 'changefreq' => 'monthly', 'lastmod' => '2026-08-11'],
+        ['url' => $baseUrl . '/blog',                'priority' => '0.8', 'changefreq' => 'weekly',  'lastmod' => now()->toDateString()],
+        ['url' => $baseUrl . '/contact',             'priority' => '0.7', 'changefreq' => 'monthly', 'lastmod' => '2026-08-11'],
+        ['url' => $baseUrl . '/polityka-prywatnosci', 'priority' => '0.3', 'changefreq' => 'yearly',  'lastmod' => '2026-08-11'],
+        ['url' => $baseUrl . '/regulamin',           'priority' => '0.3', 'changefreq' => 'yearly',  'lastmod' => '2026-08-11'],
     ];
 
-    return response()->view('sitemap', compact('staticPages', 'animals', 'posts'))
-        ->header('Content-Type', 'application/xml');
+    return response()->view('sitemap', compact('staticPages', 'animals', 'posts', 'baseUrl'))
+        ->header('Content-Type', 'application/xml; charset=utf-8');
 })->name('sitemap');
 
 // Direct media streaming route to bypass Apache 403 Forbidden symlink restrictions on shared hosting

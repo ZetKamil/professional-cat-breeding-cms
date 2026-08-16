@@ -1,5 +1,6 @@
-<x-frontend.shell title="Kontakt — {{ config('app.name') }}"
-    meta-description="Skontaktuj się z naszą hodowlą — formularz kontaktowy, telefon, e-mail. Chętnie odpowiemy na Twoje pytania.">
+<x-frontend.shell title="Kontakt i Rezerwacja Kociąt | Hodowla Kotów z Mazowieckiej Szwajcarii"
+    meta-description="Skontaktuj się z naszą hodowlą w Sikorzu (woj. mazowieckie). Zadzwoń: +48 514 153 204 lub napisz przez formularz kontaktowy. Odpowiadamy w ciągu 24h."
+    og-image="{{ asset('storage/media/parent_bella_1.jpg') }}">
     {{-- ============================================================
     HERO — Calm, inviting
     „Jak mogę się skontaktować?"
@@ -77,8 +78,18 @@
                     </div>
                 @endif
 
-                <form action="{{ route('frontend.contact.store') }}" method="POST" class="contact-form" novalidate>
+                @if(session('error'))
+                    <div class="form-alert form-alert--error" role="alert" style="background: rgba(220, 38, 38, 0.08); border-left: 4px solid #dc2626; padding: 14px 18px; border-radius: 8px; margin-bottom: 20px; color: #991b1b; display: flex; align-items: center; gap: 10px;">
+                        <i data-lucide="alert-circle" aria-hidden="true"></i>
+                        <p>{{ session('error') }}</p>
+                    </div>
+                @endif
+
+                <form action="{{ route('frontend.contact.store') }}" method="POST" class="contact-form" id="contactForm" novalidate onsubmit="const btn = this.querySelector('button[type=submit]'); if (btn) { btn.disabled = true; btn.style.opacity = '0.7'; btn.style.pointerEvents = 'none'; btn.innerText = 'Wysyłanie wiadomości...'; }">
                     @csrf
+
+                    {{-- Invisible anti-spam honeypot --}}
+                    <input type="text" name="_hp_website" style="display:none !important; position:absolute; left:-9999px;" tabindex="-1" autocomplete="off" aria-hidden="true">
 
                     @if(request('subject') || old('subject'))
                         <input type="hidden" name="subject" value="{{ old('subject', request('subject')) }}">
@@ -90,6 +101,7 @@
                     <div class="form-group">
                         <label for="name" class="form-label">Imię i nazwisko</label>
                         <input type="text" name="name" id="name" value="{{ old('name') }}"
+                            placeholder="np. Anna Kowalska"
                             class="form-input @error('name') form-input--error @enderror" autocomplete="name" required>
                         @error('name')
                             <p class="form-error" role="alert">{{ $message }}</p>
@@ -99,6 +111,7 @@
                     <div class="form-group">
                         <label for="email" class="form-label">Adres e-mail</label>
                         <input type="email" name="email" id="email" value="{{ old('email') }}"
+                            placeholder="np. anna.kowalska@example.com"
                             class="form-input @error('email') form-input--error @enderror" autocomplete="email"
                             required>
                         @error('email')
@@ -108,16 +121,18 @@
 
                     <div class="form-group">
                         <label for="phone" class="form-label">
-                            Telefon
-                            <span class="form-label__optional">(opcjonalnie)</span>
+                            Numer telefonu
+                            <span class="form-label__optional">(opcjonalnie — ułatwia szybki kontakt)</span>
                         </label>
                         <input type="tel" name="phone" id="phone" value="{{ old('phone') }}" class="form-input"
+                            placeholder="np. +48 500 123 456"
                             autocomplete="tel">
                     </div>
 
                     <div class="form-group">
                         <label for="message" class="form-label">Wiadomość</label>
                         <textarea name="message" id="message" rows="6"
+                            placeholder="Napisz, jaka rasa lub kot Cię interesuje, czy masz pytania o warunki adopcji i kiedy planujesz powiększenie rodziny..."
                             class="form-input form-textarea @error('message') form-input--error @enderror"
                             required>{{ old('message') }}</textarea>
                         @error('message')
@@ -214,5 +229,36 @@
             </details>
         </div>
     </x-frontend.section>
+
+    @push('schema')
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "ContactPage",
+      "name": "Kontakt — Hodowla Kotów z Mazowieckiej Szwajcarii",
+      "url": "{{ route('contact') }}",
+      "mainEntity": {
+        "@@type": "LocalBusiness",
+        "name": "Hodowla Kotów z Mazowieckiej Szwajcarii",
+        "image": "{{ asset('storage/media/parent_bella_1.jpg') }}",
+        "telephone": "+48514153204",
+        "email": "hodowla.z.mazowieckiej.szwajcarii@gmail.com",
+        "address": {
+          "@@type": "PostalAddress",
+          "streetAddress": "Sikórz 56A",
+          "addressLocality": "Sikórz",
+          "postalCode": "09-413",
+          "addressRegion": "mazowieckie",
+          "addressCountry": "PL"
+        },
+        "geo": {
+          "@@type": "GeoCoordinates",
+          "latitude": "52.618641",
+          "longitude": "19.571424"
+        }
+      }
+    }
+    </script>
+    @endpush
 
 </x-frontend.shell>

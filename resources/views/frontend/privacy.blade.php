@@ -1,5 +1,5 @@
-<x-frontend.shell title="Polityka Prywatności — Hodowla Kotów z Mazowieckiej Szwajcarii"
-    meta-description="Dowiedz się, w jaki sposób dbamy o Twoje dane osobowe, jak je przetwarzamy i jakie masz prawa zgodnie z RODO.">
+<x-frontend.shell title="Polityka Prywatności i Plików Cookies | Hodowla Kotów z Mazowieckiej Szwajcarii"
+    meta-description="Informacje o zasadach przetwarzania danych osobowych (RODO), prawach użytkowników i plikach cookies w serwisie Hodowli Kotów z Mazowieckiej Szwajcarii.">
     <div class="section tile-canvas legal-page">
         <div class="section-inner legal-page__inner">
 

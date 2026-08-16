@@ -1,7 +1,6 @@
 # ============================================================
 # HODOWLA KOTÓW Z MAZOWIECKIEJ SZWAJCARII
-# Production .htaccess — OVH Shared Hosting
-# PHP 8.2 / Apache 2.4 / Laravel 12
+# Production .htaccess — Apache 2.4 / Laravel 12
 # ============================================================
 
 <IfModule mod_rewrite.c>
@@ -32,19 +31,19 @@
     RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
 
     # --------------------------------------------------------
-    # 5. BLOCK: sensitive hidden files (.env, .git, etc.)
+    # 5. BLOCK: all dotfiles & hidden directories (.env, .git, etc.)
     # --------------------------------------------------------
-    RewriteRule ^\.env(\..*)?$ - [F,L]
-    RewriteRule ^\.git(/.*)?$ - [F,L]
-    RewriteRule ^\.gitignore$ - [F,L]
-    RewriteRule ^\.gitattributes$ - [F,L]
-    RewriteRule ^\.editorconfig$ - [F,L]
-    RewriteRule ^\.phpunit\.cache(/.*)?$ - [F,L]
+    RewriteRule ^\. - [F,L]
 
     # --------------------------------------------------------
-    # 6. BLOCK: sensitive project directories
+    # 6. BLOCK: sensitive root configuration & build files
+    # --------------------------------------------------------
+    RewriteRule ^(composer\.(json|lock)|package(-lock)?\.json|phpunit\.xml|pint\.json|rector\.php|artisan|vite\.config\.(js|ts)|README\.md)$ - [F,L]
+
+    # --------------------------------------------------------
+    # 7. BLOCK: sensitive project directories
     #    (app, bootstrap, config, database, resources,
-    #     routes, storage private logs/framework, tests, vendor, image)
+    #     routes, storage private logs/framework, tests, vendor, image, AI)
     # --------------------------------------------------------
     RewriteRule ^app(/.*)?$ - [F,L]
     RewriteRule ^bootstrap(/.*)?$ - [F,L]
@@ -52,7 +51,7 @@
     RewriteRule ^database(/.*)?$ - [F,L]
     RewriteRule ^resources(/.*)?$ - [F,L]
     RewriteRule ^routes(/.*)?$ - [F,L]
-    RewriteRule ^storage/(framework|logs)(/.*)?$ - [F,L]
+    RewriteRule ^storage/(app|framework|logs)(/.*)?$ - [F,L]
     RewriteRule ^tests(/.*)?$ - [F,L]
     RewriteRule ^vendor(/.*)?$ - [F,L]
     RewriteRule ^image(/.*)?$ - [F,L]
@@ -60,20 +59,20 @@
     RewriteRule ^AI(/.*)?$ - [F,L]
 
     # --------------------------------------------------------
-    # 7. ALLOW: public/ subdirectories (assets, images, etc.)
+    # 8. ALLOW: public/ subdirectories (assets, images, etc.)
     # --------------------------------------------------------
     RewriteCond %{REQUEST_URI} ^/public/ [NC]
     RewriteRule ^ - [L]
 
     # --------------------------------------------------------
-    # 8. Redirect Trailing Slashes (not a folder)
+    # 9. Redirect Trailing Slashes (not a folder)
     # --------------------------------------------------------
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
     # --------------------------------------------------------
-    # 9. Laravel front controller
+    # 10. Laravel front controller
     # --------------------------------------------------------
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
@@ -84,12 +83,12 @@
 # ============================================================
 # SECURITY: Disable directory listing globally
 # ============================================================
-Options -Indexes +FollowSymLinks
+Options -Indexes -MultiViews +FollowSymLinks
 
 # ============================================================
-# SECURITY: Block sensitive file types by extension (Apache 2.4 + 2.2 compatible)
+# SECURITY: Block sensitive file types by extension
 # ============================================================
-<FilesMatch "\.(env|sqlite|sqlite3|log|bak|backup|sql|key|pem|cert|crt|p12|pfx)$">
+<FilesMatch "\.(env|sqlite|sqlite3|log|bak|backup|sql|key|pem|cert|crt|p12|pfx|sh|bash|py|pl|cgi)$">
     <IfModule mod_authz_core.c>
         Require all denied
     </IfModule>
@@ -102,7 +101,7 @@ Options -Indexes +FollowSymLinks
 # ============================================================
 # SECURITY: Block sensitive config/build files in root
 # ============================================================
-<FilesMatch "^(composer\.(json|lock)|package(-lock)?\.json|phpunit\.xml|pint\.json|rector\.php|artisan|vite\.config\.(js|ts)|\.env.*)$">
+<FilesMatch "^(composer\.(json|lock)|package(-lock)?\.json|phpunit\.xml|pint\.json|rector\.php|artisan|vite\.config\.(js|ts)|README\.md|\.env.*)$">
     <IfModule mod_authz_core.c>
         Require all denied
     </IfModule>
@@ -113,10 +112,10 @@ Options -Indexes +FollowSymLinks
 </FilesMatch>
 
 # ============================================================
-# SECURITY: Block .php execution in upload directories
+# SECURITY: Block script execution in upload directories
 # ============================================================
-<FilesMatch "\.php$">
-    <If "%{REQUEST_URI} =~ m#^/public/storage/#">
+<FilesMatch "\.(php|phtml|phar|sh|bash|py|pl|cgi)$">
+    <If "%{REQUEST_URI} =~ m#^/(public/)?storage/#">
         <IfModule mod_authz_core.c>
             Require all denied
         </IfModule>

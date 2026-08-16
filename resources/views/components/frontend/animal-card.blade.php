@@ -3,13 +3,13 @@
     'showAge' => true,
 ])
 
-<x-frontend.card :href="route('frontend.animals.show', $animal)" hoverable class="animal-card">
+<x-frontend.card :href="route('frontend.animals.show', $animal)" hoverable class="animal-card" aria-label="Profil kota: {{ $animal->name }} ({{ $animal->breed }})">
     <x-slot:image>
         <div class="animal-card__media-wrapper">
             @if($animal->media)
                 <img
                     src="{{ $animal->media->url() }}"
-                    alt="{{ $animal->name }}"
+                    alt="{{ $animal->name }} — {{ $animal->breed }}"
                     loading="lazy"
                     decoding="async"
                     width="800"
@@ -18,7 +18,7 @@
             @else
                 <img 
                     src="https://images.unsplash.com/photo-1543852786-1cf6624b9987?auto=format&fit=crop&w=800&q=80" 
-                    alt="Kociak (Zdjęcie poglądowe)" 
+                    alt="{{ $animal->name }} — {{ $animal->breed }} (zdjęcie poglądowe)" 
                     loading="lazy"
                     decoding="async"
                     width="800"

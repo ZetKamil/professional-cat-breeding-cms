@@ -1,7 +1,8 @@
 <x-frontend.shell
-    title="{{ $post->title }} — {{ config('app.name') }}"
-    meta-description="{{ Str::limit($post->excerpt, 160) }}"
-    ogImage="{{ $post->coverImageUrl() }}"
+    title="{{ $post->title }} | Baza Wiedzy — Hodowla Kotów z Mazowieckiej Szwajcarii"
+    meta-description="{{ Str::limit($post->excerpt ?: strip_tags($post->body), 160) }}"
+    og-image="{{ $post->coverImageUrl() }}"
+    og-type="article"
 >
     @php
         $wordCount = str_word_count(strip_tags($post->body));
@@ -109,15 +110,15 @@
         "@@id": "{{ route('frontend.blog.show', $post) }}"
       },
       "headline": "{{ $post->title }}",
-      "description": "{{ Str::limit($post->excerpt, 160) }}",
+      "description": "{{ Str::limit($post->excerpt ?: strip_tags($post->body), 160) }}",
       "image": "{{ $post->coverImageUrl() }}",
       "author": {
         "@@type": "Organization",
-        "name": "{{ config('app.name') }}"
+        "name": "Hodowla Kotów z Mazowieckiej Szwajcarii"
       },
       "publisher": {
         "@@type": "Organization",
-        "name": "{{ config('app.name') }}",
+        "name": "Hodowla Kotów z Mazowieckiej Szwajcarii",
         "logo": {
           "@@type": "ImageObject",
           "url": "{{ asset('apple-touch-icon.png') }}"

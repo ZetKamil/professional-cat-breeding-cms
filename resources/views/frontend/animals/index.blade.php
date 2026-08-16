@@ -1,6 +1,7 @@
 <x-frontend.shell
-    title="Nasze Koty — {{ config('app.name') }}"
-    meta-description="Poznaj nasze wybitne koty rasowe — Bengalskie, Brytyjskie Krótkowłosy i Syjamskie. Zdrowie, doskonały rodowód i cudowny charakter."
+    title="Nasze Koty — Koty Bengalskie, Brytyjskie i Syjamskie | Hodowla Kotów z Mazowieckiej Szwajcarii"
+    meta-description="Przeglądaj koty hodowlane i dostępne kocięta w naszej hodowli. Zdrowe linie genetyczne, komplet badań, rodowód stowarzyszenia i pełna socjalizacja."
+    og-image="{{ asset('storage/media/parent_bella_1.jpg') }}"
 >
     {{-- ============================================================
          1. CATALOG HERO

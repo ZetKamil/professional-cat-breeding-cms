@@ -13,7 +13,7 @@
     $category = $post->categories->first();
 @endphp
 
-<x-frontend.card :href="route('frontend.blog.show', $post)" hoverable class="blog-card">
+<x-frontend.card :href="route('frontend.blog.show', $post)" hoverable class="blog-card" aria-label="Artykuł: {{ $post->title }}">
     <x-slot:image>
         <div class="blog-card__media-wrapper">
             <img

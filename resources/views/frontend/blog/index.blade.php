@@ -1,5 +1,6 @@
-<x-frontend.shell title="Baza Wiedzy & Poradniki — {{ config('app.name') }}"
-    meta-description="Eksperckie artykuły dotyczące zdrowia, genetyki, wyprawki, diety BARF i socjalizacji kotów bengalskich, brytyjskich i syjamskich.">
+<x-frontend.shell title="Baza Wiedzy i Poradniki o Kotach Rasowych | Hodowla Kotów z Mazowieckiej Szwajcarii"
+    meta-description="Eksperckie poradniki felinologiczne: zdrowie, żywienie BARF, wyprawka dla kociaka, badania genetyczne i socjalizacja kotów bengalskich, brytyjskich i syjamskich."
+    og-image="{{ asset('storage/media/parent_bella_1.jpg') }}">
     {{-- ============================================================
     1. EDITORIAL HERO HEADER
     ============================================================ --}}

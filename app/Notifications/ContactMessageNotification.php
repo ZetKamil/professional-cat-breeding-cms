@@ -25,29 +25,35 @@ class ContactMessageNotification extends Notification implements ShouldQueue
 
     public function toMail(object $notifiable): MailMessage
     {
-        $subject = ! empty($this->data['subject'])
+        $rawSubject = ! empty($this->data['subject'])
             ? 'Zapytanie: ' . $this->data['subject']
             : 'Nowa wiadomość z formularza kontaktowego';
 
-        $mail = (new MailMessage)
-            ->subject($subject)
-            ->greeting('Otrzymano nową wiadomość z formularza na stronie.')
-            ->line('Imię i nazwisko: ' . ($this->data['name'] ?? '—'))
-            ->line('Adres e-mail: ' . ($this->data['email'] ?? '—'));
+        // Strip CRLF to prevent mail header injection
+        $sanitizedSubject = str_replace(["\r", "\n", "\t"], ' ', strip_tags($rawSubject));
+        $sanitizedName = ! empty($this->data['name']) ? str_replace(["\r", "\n", "\t"], ' ', strip_tags($this->data['name'])) : null;
+        $sanitizedEmail = ! empty($this->data['email']) ? str_replace(["\r", "\n", "\t"], '', strip_tags($this->data['email'])) : null;
+        $sanitizedPhone = ! empty($this->data['phone']) ? str_replace(["\r", "\n", "\t"], ' ', strip_tags($this->data['phone'])) : null;
 
-        if (! empty($this->data['phone'])) {
-            $mail->line('Numer telefonu: ' . $this->data['phone']);
+        $mail = (new MailMessage)
+            ->subject($sanitizedSubject)
+            ->greeting('Otrzymano nową wiadomość z formularza na stronie.')
+            ->line('Imię i nazwisko: ' . ($sanitizedName ?? '—'))
+            ->line('Adres e-mail: ' . ($sanitizedEmail ?? '—'));
+
+        if (! empty($sanitizedPhone)) {
+            $mail->line('Numer telefonu: ' . $sanitizedPhone);
         }
 
         if (! empty($this->data['subject'])) {
-            $mail->line('Temat: ' . $this->data['subject']);
+            $mail->line('Temat: ' . $sanitizedSubject);
         }
 
         $mail->line('Treść wiadomości:')
             ->line($this->data['message']);
 
-        if (! empty($this->data['email'])) {
-            $mail->replyTo($this->data['email'], $this->data['name'] ?? null);
+        if (! empty($sanitizedEmail)) {
+            $mail->replyTo($sanitizedEmail, $sanitizedName);
         }
 
         return $mail;

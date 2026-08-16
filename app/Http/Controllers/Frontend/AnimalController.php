@@ -89,10 +89,14 @@ class AnimalController extends Controller
         $animal->load([
             'media',
             'gallery',
-            'mother',
-            'father',
-            'childrenAsMother',
-            'childrenAsFather',
+            'mother.media',
+            'mother.mother',
+            'mother.father',
+            'father.media',
+            'father.mother',
+            'father.father',
+            'childrenAsMother.media',
+            'childrenAsFather.media',
         ]);
 
         $relatedAnimals = Animal::query()

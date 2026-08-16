@@ -1,5 +1,9 @@
-<x-frontend.shell title="{{ $animal->name }} — {{ $animal->breed }} | {{ config('app.name') }}"
-    meta-description="{{ $animal->short_description ?: 'Poznaj kota ' . $animal->name . ' (' . $animal->breed . ', ' . $animal->color . '). Doskonały rodowód i zdrowie.' }}">
+<x-frontend.shell
+    title="{{ $animal->meta_title ?: ($animal->name . ' — ' . $animal->breed . ' | Hodowla Kotów z Mazowieckiej Szwajcarii') }}"
+    meta-description="{{ $animal->meta_description ?: ($animal->short_description ?: ('Poznaj kota ' . $animal->name . ' (' . $animal->breed . ', ' . $animal->color . '). Rodowód stowarzyszenia, badania genetyczne i zrównoważony charakter.')) }}"
+    og-image="{{ $animal->media ? $animal->media->url() : asset('storage/media/parent_bella_1.jpg') }}"
+    og-type="profile"
+>
     {{-- ============================================================
     1. PROFILE DETAIL SECTION
     ============================================================ --}}
@@ -28,7 +32,11 @@
             <div class="animal-profile__grid">
                 {{-- LEFT COLUMN: Photo & Gallery --}}
                 <div class="animal-profile__gallery">
-                    <div class="animal-profile__main-image-wrap" id="animal-gallery-main" onclick="openAnimalLightbox()" title="Kliknij, aby powiększyć zdjęcie na pełnym ekranie">
+                    <div class="animal-profile__main-image-wrap" id="animal-gallery-main" role="button" tabindex="0"
+                        aria-label="Powiększ zdjęcie kota {{ $animal->name }}"
+                        onclick="openAnimalLightbox()"
+                        onkeydown="if(event.key === 'Enter' || event.key === ' '){ openAnimalLightbox(); event.preventDefault(); }"
+                        title="Kliknij lub naciśnij Enter, aby powiększyć zdjęcie na pełnym ekranie">
                         @if($animal->media)
                             <img src="{{ $animal->media->url() }}" alt="{{ $animal->name }} — {{ $animal->breed }}"
                                 class="animal-profile__main-image" id="animal-main-photo" width="1000" height="750"
@@ -39,7 +47,7 @@
                                 id="animal-main-photo" width="1000" height="750" decoding="async" loading="eager"
                                 fetchpriority="high">
                         @endif
-                        <div class="animal-profile__zoom-hint">
+                        <div class="animal-profile__zoom-hint" aria-hidden="true">
                             <i data-lucide="maximize-2" class="w-3.5 h-3.5" aria-hidden="true"></i>
                             <span>Powiększ</span>
                         </div>
@@ -95,18 +103,42 @@
                                 if (!modal) {
                                     modal = document.createElement('div');
                                     modal.id = 'animal-lightbox-modal';
-                                    modal.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.92);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;cursor:pointer;';
-                                    modal.onclick = function() { modal.style.display = 'none'; };
+                                    modal.setAttribute('role', 'dialog');
+                                    modal.setAttribute('aria-modal', 'true');
+                                    modal.setAttribute('aria-label', 'Powiększone zdjęcie kota');
+                                    modal.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.92);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
                                     modal.innerHTML = `
                                         <div style="position:relative;max-width:95vw;max-height:95vh;">
-                                            <img id="animal-lightbox-img" src="" style="max-width:95vw;max-height:92vh;object-fit:contain;border-radius:8px;box-shadow:0 20px 40px rgba(0,0,0,0.8);">
-                                            <button onclick="document.getElementById('animal-lightbox-modal').style.display='none'" style="position:absolute;top:-15px;right:-15px;background:#fff;border:none;border-radius:50%;width:36px;height:36px;font-size:20px;font-weight:bold;cursor:pointer;box-shadow:0 4px 10px rgba(0,0,0,0.3);">&times;</button>
+                                            <img id="animal-lightbox-img" src="" alt="Powiększone zdjęcie" style="max-width:95vw;max-height:92vh;object-fit:contain;border-radius:8px;box-shadow:0 20px 40px rgba(0,0,0,0.8);">
+                                            <button id="animal-lightbox-close" type="button" aria-label="Zamknij powiększenie zdjęcia" style="position:absolute;top:-15px;right:-15px;background:#fff;border:none;border-radius:50%;width:40px;height:40px;font-size:22px;font-weight:bold;cursor:pointer;box-shadow:0 4px 10px rgba(0,0,0,0.3);">&times;</button>
                                         </div>
                                     `;
+                                    modal.onclick = function(e) {
+                                        if (e.target === modal || e.target.id === 'animal-lightbox-close') {
+                                            closeAnimalLightbox();
+                                        }
+                                    };
                                     document.body.appendChild(modal);
+
+                                    document.addEventListener('keydown', function(e) {
+                                        if (e.key === 'Escape' && modal.style.display === 'flex') {
+                                            closeAnimalLightbox();
+                                        }
+                                    });
                                 }
                                 document.getElementById('animal-lightbox-img').src = mainImg.src;
                                 modal.style.display = 'flex';
+                                const closeBtn = document.getElementById('animal-lightbox-close');
+                                if (closeBtn) closeBtn.focus();
+                            }
+
+                            function closeAnimalLightbox() {
+                                const modal = document.getElementById('animal-lightbox-modal');
+                                if (modal) {
+                                    modal.style.display = 'none';
+                                    const trigger = document.getElementById('animal-gallery-main');
+                                    if (trigger) trigger.focus();
+                                }
                             }
                         </script>
                     @endif
@@ -257,5 +289,32 @@
             buttonText="Zapytaj o {{ $animal->name }}"
             buttonHref="{{ route('contact', ['subject' => 'Zapytanie o kota: ' . $animal->name]) }}" />
     </div>
+
+    @push('schema')
+    @php
+        $animalSchema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'ItemPage',
+            'name' => $animal->name . ($animal->breed ? ' — ' . $animal->breed : ''),
+            'url' => route('frontend.animals.show', $animal),
+            'isPartOf' => [
+                '@type' => 'WebSite',
+                'name' => config('app.name', 'Hodowla Kotów z Mazowieckiej Szwajcarii'),
+                'url' => url('/'),
+            ],
+            'mainEntity' => array_filter([
+                '@type' => 'Animal',
+                'name' => $animal->name,
+                'breed' => $animal->breed ?: null,
+                'description' => $animal->short_description ?: ($animal->description ?: null),
+                'image' => $animal->media ? $animal->media->url() : null,
+                'url' => route('frontend.animals.show', $animal),
+            ]),
+        ];
+    @endphp
+    <script type="application/ld+json">
+    {!! json_encode($animalSchema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}
+    </script>
+    @endpush
 
 </x-frontend.shell>
