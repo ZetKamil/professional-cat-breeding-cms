@@ -25,13 +25,32 @@ class ContactMessageNotification extends Notification implements ShouldQueue
 
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)
-            ->subject('Nowa wiadomość z formularza kontaktowego')
+        $subject = ! empty($this->data['subject'])
+            ? 'Zapytanie: ' . $this->data['subject']
+            : 'Nowa wiadomość z formularza kontaktowego';
+
+        $mail = (new MailMessage)
+            ->subject($subject)
             ->greeting('Otrzymano nową wiadomość z formularza na stronie.')
-            ->line('Imię / nazwisko: '.$this->data['name'])
-            ->line('E-mail: '.$this->data['email'])
-            ->line('Treść wiadomości:')
+            ->line('Imię i nazwisko: ' . ($this->data['name'] ?? '—'))
+            ->line('Adres e-mail: ' . ($this->data['email'] ?? '—'));
+
+        if (! empty($this->data['phone'])) {
+            $mail->line('Numer telefonu: ' . $this->data['phone']);
+        }
+
+        if (! empty($this->data['subject'])) {
+            $mail->line('Temat: ' . $this->data['subject']);
+        }
+
+        $mail->line('Treść wiadomości:')
             ->line($this->data['message']);
+
+        if (! empty($this->data['email'])) {
+            $mail->replyTo($this->data['email'], $this->data['name'] ?? null);
+        }
+
+        return $mail;
     }
 
     public function toArray(object $notifiable): array

@@ -80,6 +80,13 @@
                 <form action="{{ route('frontend.contact.store') }}" method="POST" class="contact-form" novalidate>
                     @csrf
 
+                    @if(request('subject') || old('subject'))
+                        <input type="hidden" name="subject" value="{{ old('subject', request('subject')) }}">
+                        <div class="form-subject-badge" style="margin-bottom: 18px; padding: 10px 14px; background: rgba(184, 134, 11, 0.08); border-left: 3px solid var(--color-gold, #b8860b); border-radius: 6px; font-size: 0.9rem; color: #78350f;">
+                            <strong style="color: #92400e;">Dotyczy:</strong> {{ old('subject', request('subject')) }}
+                        </div>
+                    @endif
+
                     <div class="form-group">
                         <label for="name" class="form-label">Imię i nazwisko</label>
                         <input type="text" name="name" id="name" value="{{ old('name') }}"
