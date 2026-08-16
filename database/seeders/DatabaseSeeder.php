@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             CategorySeeder::class,
             PostSeeder::class,
-            AnimalSeeder::class,
+            RealKittensAndParentsSeeder::class,
         ]);
     }
 }
