@@ -28,7 +28,7 @@ class HomepageTest extends TestCase
         $response->assertSee('Nasza czytelnia — wkrótce nowe publikacje');
     }
 
-    public function test_cattery_page_renders_successfully_with_philosophy_code_and_adoption_journey(): void
+    public function test_cattery_page_renders_successfully_with_philosophy_code_and_process_journey(): void
     {
         $response = $this->get(route('cattery'));
 

@@ -232,7 +232,7 @@ class RealKittensAndParentsSeeder extends Seeder
                 'status' => AnimalStatus::Available,
                 'type' => AnimalType::Cat,
                 'date_of_birth' => now()->subMonths(3),
-                'short_description' => 'Cudowny, ciekawy świata kocurek bengalski o kontraście ciemnych cętek. Gotowy do adopcji.',
+                'short_description' => 'Cudowny, ciekawy świata kocurek bengalski o kontraście ciemnych cętek. Gotowy do rezerwacji i odbioru.',
                 'description' => 'Adam to mały wulkan energii o wyjątkowej urodzie. Od pierwszych dni socjalizowany z ludźmi, nauczony korzystania z kuwety i drapaka. Syn Belli i Lukiego.',
                 'mother_id' => $parentModels['bella']->id,
                 'father_id' => $parentModels['luki']->id,

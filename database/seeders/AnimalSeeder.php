@@ -32,7 +32,7 @@ class AnimalSeeder extends Seeder
                 'slug' => 'luna',
                 'breed' => 'Kot Bengalski',
                 'color' => 'Brązowy cętkowany (Brown Spotted)',
-                'short_description' => 'Czuła, energiczna koteczka bengalska o przepięknych cętkach. Gotowa do adopcji.',
+                'short_description' => 'Czuła, energiczna koteczka bengalska o przepięknych cętkach. Gotowa do rezerwacji i odbioru.',
                 'sort_order' => 1,
             ]);
 
