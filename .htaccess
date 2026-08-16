@@ -44,7 +44,7 @@
     # --------------------------------------------------------
     # 6. BLOCK: sensitive project directories
     #    (app, bootstrap, config, database, resources,
-    #     routes, storage, tests, vendor, image)
+    #     routes, storage private logs/framework, tests, vendor, image)
     # --------------------------------------------------------
     RewriteRule ^app(/.*)?$ - [F,L]
     RewriteRule ^bootstrap(/.*)?$ - [F,L]
@@ -52,7 +52,7 @@
     RewriteRule ^database(/.*)?$ - [F,L]
     RewriteRule ^resources(/.*)?$ - [F,L]
     RewriteRule ^routes(/.*)?$ - [F,L]
-    RewriteRule ^storage(/.*)?$ - [F,L]
+    RewriteRule ^storage/(framework|logs)(/.*)?$ - [F,L]
     RewriteRule ^tests(/.*)?$ - [F,L]
     RewriteRule ^vendor(/.*)?$ - [F,L]
     RewriteRule ^image(/.*)?$ - [F,L]
