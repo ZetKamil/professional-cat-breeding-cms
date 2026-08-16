@@ -1,0 +1,415 @@
+# PROJECT.md
+
+> Project: Luxury Cattery Website & CMS
+> Status: Active Development
+> Framework: Laravel 12/13 + Livewire 4 + Flux UI
+> Architecture: Domain-Oriented Architecture
+> Language: Polish (Frontend) / English (Codebase)
+
+---
+
+# 1. Project Overview
+
+This project is a premium website and content management system (CMS) for a professional cat breeder.
+
+It is not a simple company website.
+
+It is a long-term digital platform designed to:
+
+- build trust
+- showcase breeding quality
+- educate visitors
+- generate inquiries
+- improve SEO
+- support future ecommerce
+- simplify daily work for the breeder
+
+The frontend represents the public brand.
+
+The backend is a simple, elegant CMS for non-technical users.
+
+Every technical decision should support these goals.
+
+---
+
+# 2. Product Vision
+
+The website should feel like a premium lifestyle brand.
+
+It should communicate:
+
+- professionalism
+- transparency
+- responsibility
+- craftsmanship
+- elegance
+- authenticity
+
+The visitor should immediately understand that this is a responsible, ethical breeder.
+
+The interface should never feel commercial or aggressive.
+
+Trust comes before selling.
+
+---
+
+# 3. Target Audience
+
+Primary audience:
+
+- Families looking for a kitten
+- Experienced cat owners
+- People researching the breed
+- Returning customers
+
+Secondary audience:
+
+- Veterinarians
+- Breeders
+- Judges
+- Cat enthusiasts
+
+The website should be understandable even for users with very limited technical knowledge.
+
+---
+
+# 4. Business Goals
+
+The application should achieve the following objectives.
+
+## Generate inquiries
+
+The main conversion is an inquiry about a kitten.
+
+Not an online purchase.
+
+---
+
+## Build trust
+
+Visitors should understand:
+
+- breeding philosophy
+- health standards
+- pedigree quality
+- socialization
+- living conditions
+
+---
+
+## Educate
+
+The blog should become an authoritative source about the breed.
+
+SEO should be achieved naturally through valuable educational content.
+
+---
+
+## Simplify administration
+
+The breeder should manage the website without technical knowledge.
+
+Common tasks should require minimal training.
+
+---
+
+## Prepare for future growth
+
+The architecture should support future modules without major refactoring.
+
+---
+
+# 5. Product Modules
+
+Current modules
+
+- Homepage
+- Animals
+- Blog
+- Categories
+- Media Library
+- Contact
+- Administration
+- Authentication
+- User Management
+- Roles
+
+Future modules
+
+- Litters
+- Shop
+- Wishlist
+- Reservations
+- Customer Accounts
+- Newsletter
+- Gallery
+- Events
+- Testimonials
+- Pedigree Generator
+- Health Records
+- Certificates
+- Payments
+- CRM
+- Analytics
+- API
+
+---
+
+# 6. Domain Model
+
+The application is divided into independent business domains.
+
+Current domains:
+
+Authentication
+
+Animals
+
+Blog
+
+Media
+
+SEO
+
+Inquiry
+
+Administration
+
+Future domains:
+
+Litters
+
+Products
+
+Orders
+
+Reservations
+
+Customers
+
+Newsletter
+
+Payments
+
+Events
+
+Analytics
+
+Each domain owns its business logic.
+
+Business logic must never leak into unrelated domains.
+
+---
+
+# 7. Animal Domain
+
+Animals are the heart of the application.
+
+The system intentionally uses the generic term "Animal" instead of "Cat" to keep the architecture reusable.
+
+Every animal may contain:
+
+- basic information
+- gallery
+- pedigree
+- achievements
+- health information
+- breeding status
+- inquiry form
+
+Possible statuses:
+
+- Breeding
+- Available
+- Reserved
+- Sold
+- Retired
+
+Future support:
+
+- medical history
+- genetic tests
+- vaccinations
+- certificates
+- litter assignment
+
+---
+
+# 8. Blog
+
+The blog is one of the most important marketing tools.
+
+Its purpose is to:
+
+- improve SEO
+- answer common questions
+- educate visitors
+- build trust
+- increase inquiries
+
+The blog is not used for advertising.
+
+Every article should solve a real user problem.
+
+---
+
+# 9. Media Library
+
+The Media module is shared by the entire application.
+
+It should support:
+
+- animals
+- blog posts
+- products
+- pages
+- galleries
+
+Future features:
+
+- responsive images
+- automatic WebP
+- AVIF
+- focal points
+- cropping
+- metadata
+- image optimization
+
+---
+
+# 10. Administration
+
+The administration panel should be simple.
+
+The client is not a developer.
+
+The interface should:
+
+- reduce mistakes
+- provide sensible defaults
+- explain validation errors
+- avoid unnecessary options
+
+Every common task should require as few clicks as possible.
+
+---
+
+# 11. Frontend
+
+The frontend is a premium marketing website.
+
+It should prioritize:
+
+- storytelling
+- photography
+- typography
+- whitespace
+- trust
+- calm interactions
+
+The animals are the heroes.
+
+The interface should remain visually quiet.
+
+---
+
+# 12. SEO Strategy
+
+SEO is a first-class feature.
+
+The strategy is based on:
+
+- educational articles
+- semantic HTML
+- structured data
+- fast loading
+- internal linking
+- clean URLs
+- image optimization
+- accessibility
+
+Traffic should be generated by high-quality content rather than aggressive keyword stuffing.
+
+---
+
+# 13. Future Ecommerce
+
+The future shop is intended for breeder-related products.
+
+Examples:
+
+- food
+- toys
+- accessories
+- scratching posts
+- breeder merchandise
+
+The shop should integrate naturally into the existing CMS.
+
+No architectural rewrite should be necessary.
+
+---
+
+# 14. Future CRM
+
+The application should eventually become a lightweight CRM.
+
+Possible future features:
+
+- customer history
+- inquiries
+- reservations
+- communication log
+- documents
+- invoices
+- reminders
+
+These modules should integrate with the existing architecture.
+
+---
+
+# 15. Non-Goals
+
+This project is NOT intended to become:
+
+- a generic blog
+- a WordPress clone
+- a marketplace
+- a social network
+- a pet adoption platform
+
+Every feature should reinforce the core business.
+
+---
+
+# 16. Success Criteria
+
+The project is successful when:
+
+- visitors trust the breeder
+- inquiries increase
+- SEO traffic grows
+- the breeder enjoys using the CMS
+- future modules integrate naturally
+- the codebase remains maintainable
+- new developers understand the architecture quickly
+
+---
+
+# 17. Project Principles
+
+Always prioritize:
+
+1. User trust
+2. Simplicity
+3. Maintainability
+4. Performance
+5. Accessibility
+6. SEO
+7. Scalability
+
+Technology serves the business.
+
+The business serves the user.
+
+The user experience is always the highest priority.
