@@ -132,7 +132,7 @@
                     <div class="form-group">
                         <label for="message" class="form-label">Wiadomość</label>
                         <textarea name="message" id="message" rows="6"
-                            placeholder="Napisz, jaka rasa lub kot Cię interesuje, czy masz pytania o warunki adopcji i kiedy planujesz powiększenie rodziny..."
+                            placeholder="Napisz, jaka rasa lub kot Cię interesuje, czy masz pytania o warunki rezerwacji i kiedy planujesz powiększenie rodziny..."
                             class="form-input form-textarea @error('message') form-input--error @enderror"
                             required>{{ old('message') }}</textarea>
                         @error('message')
@@ -176,7 +176,7 @@
         <div class="faq-list">
             <details class="faq-item">
                 <summary class="faq-item__question text-body-strong">
-                    Jak wygląda proces adopcji kota?
+                    Jak wygląda proces rezerwacji i dołączenia kota do nowego domu?
                 </summary>
                 <p class="faq-item__answer text-body">
                     Proces rozpoczyna się od kontaktu — odpowiadamy na pytania, przedstawiamy
@@ -219,7 +219,7 @@
 
             <details class="faq-item">
                 <summary class="faq-item__question text-body-strong">
-                    Czy oferujecie wsparcie po adopcji?
+                    Czy oferujecie wsparcie po przekazaniu kota?
                 </summary>
                 <p class="faq-item__answer text-body">
                     Absolutnie tak. Jesteśmy dostępni przez telefon i e-mail przez

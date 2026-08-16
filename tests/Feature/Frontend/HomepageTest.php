@@ -35,7 +35,7 @@ class HomepageTest extends TestCase
         $response->assertOk();
         $response->assertSee('Filozofia Naszej Hodowli');
         $response->assertSee('Kodeks Zaufania');
-        $response->assertSee('Jak wygląda proces adopcji?');
+        $response->assertSee('Jak wygląda proces wyboru i odbioru kota?');
         $response->assertSee('Proces rozpoczyna się od kontaktu');
         $response->assertSee('Kontakt i Kocięta');
         $response->assertSee('Wizyta w Hodowli');

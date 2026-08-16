@@ -190,7 +190,7 @@
     ============================================================ --}}
     <x-frontend.section tile="parchment" id="opinie" class="reveal-up home-section--opinie">
         <x-frontend.section-header eyebrow="Rekomendacje i Zaufanie" headline="Historie Naszych Wychowanków"
-            description="4.9/5 Średnia ocena z 50+ zweryfikowanych adopcji w całej Polsce i Europie." />
+            description="4.9/5 Średnia ocena od zadowolonych opiekunów naszych kotów w całej Polsce i Europie." />
 
         <div class="patrons-grid" role="list" aria-label="Rekomendacje opiekunów">
             <div class="patron-monolith" role="listitem">

@@ -88,7 +88,7 @@
     <div class="reveal-up">
         <x-frontend.cta
             tile="parchment"
-            eyebrow="Adopcja i Doradztwo"
+            eyebrow="Kontakt i Doradztwo"
             headline="Szukasz wymarzonego kociaka?"
             description="Napisz do nas — chętnie opowiemy o naszych rasach i doradzimy, który kot najlepiej pasuje do Twojego domu."
             buttonText="Zapytaj o kocięta"

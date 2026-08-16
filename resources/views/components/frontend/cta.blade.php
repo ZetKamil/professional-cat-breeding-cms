@@ -3,7 +3,7 @@
     
     Usage:
     <x-frontend.cta
-        eyebrow="Adopcja i Kontakt"
+        eyebrow="Kontakt i Rezerwacja"
         headline="Zainteresowany naszymi kociętami?"
         description="Skontaktuj się z nami — chętnie odpowiemy na Twoje pytania."
         buttonText="Napisz do nas"
@@ -12,14 +12,14 @@
 --}}
 
 @props([
-    'eyebrow' => 'Adopcja i Kontakt',
+    'eyebrow' => 'Kontakt i Rezerwacja',
     'headline',
     'description' => null,
     'buttonText',
     'buttonHref' => '#',
     'buttonVariant' => 'primary',
     'tile' => 'parchment',
-    'note' => 'Odpowiadamy zazwyczaj w ciągu 24 godzin · Pełne doradztwo przed i po adopcji',
+    'note' => 'Odpowiadamy zazwyczaj w ciągu 24 godzin · Pełne doradztwo przed i po przekazaniu kota',
 ])
 
 <x-frontend.section :tile="$tile" padding="default" class="cta-section">

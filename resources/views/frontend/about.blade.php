@@ -99,7 +99,7 @@
                 <div class="value-item__number">04</div>
                 <h3 class="value-item__title text-tagline">Wsparcie</h3>
                 <p class="value-item__desc text-body">
-                    Nie kończymy relacji w momencie adopcji. Pomagamy w adaptacji,
+                    Nie kończymy relacji w momencie przekazania kota. Pomagamy w adaptacji,
                     doradzamy w kwestiach żywienia, zdrowia i wychowania przez całe życie kota.
                 </p>
             </div>
@@ -213,7 +213,7 @@
     <div class="reveal-up">
         <x-frontend.cta
             tile="parchment"
-            eyebrow="Rozmowa i Adopcja"
+            eyebrow="Rozmowa i Kontakt"
             headline="Chcesz poznać nas bliżej?"
             description="Zapraszamy do kontaktu — chętnie opowiemy więcej o naszej hodowli, doradzimy i odpowiemy na wszystkie pytania."
             buttonText="Skontaktuj się z nami"

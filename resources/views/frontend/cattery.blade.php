@@ -1,11 +1,11 @@
 <x-frontend.shell title="O Hodowli — Standardy, Filozofia i Kodeks Zaufania | Hodowla Kotów z Mazowieckiej Szwajcarii"
-    meta-description="Standardy felinologiczne, 100% badania genetyczne HCM/PKD n/n, profilaktyka FIV/FeLV oraz spokojny proces adopcji kota rasowego w naszej hodowli."
+    meta-description="Standardy felinologiczne, 100% badania genetyczne HCM/PKD n/n, profilaktyka FIV/FeLV oraz przejrzysty proces wyboru i odbioru kota rasowego w naszej hodowli."
     og-image="{{ asset('storage/media/parent_luki_1.jpg') }}">
     {{-- ============================================================
     1. HERO — Editorial, photography-first
     ============================================================ --}}
     <x-frontend.hero eyebrow="Felinologia i Standardy" title="O Hodowli.<br>Bezkompromisowa Etyka."
-        lead="Poznaj naszą filozofię genetyki, Trzyfilarowy Kodeks Zaufania oraz jasny, spokojny proces adopcji każdego kota."
+        lead="Poznaj naszą filozofię genetyki, Trzyfilarowy Kodeks Zaufania oraz jasny, spokojny proces dołączenia kota do Twojego domu."
         image-url="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=2000&q=80"
         image-alt="Kot bengalski w naturalnym oświetleniu" scroll-target="#filozofia" size="large"
         data-nav-theme="dark" />
@@ -114,11 +114,11 @@
     {{-- ============================================================
     4. THE ADOPTION JOURNEY — LUXURY CONCIERGE TIMELINE
     ============================================================ --}}
-    <x-frontend.section id="adopcja-krok-po-kroku" class="reveal-up">
-        <x-frontend.section-header eyebrow="Concierge Adopcyjny" headline="Jak wygląda proces adopcji?"
+    <x-frontend.section id="proces-krok-po-kroku" class="reveal-up">
+        <x-frontend.section-header eyebrow="Standardy Hodowli" headline="Jak wygląda proces wyboru i odbioru kota?"
             description="Proces rozpoczyna się od kontaktu — odpowiadamy na pytania, przedstawiamy dostępne kocięta i umawiamy wizytę w hodowli. Po podjęciu decyzji podpisujemy umowę i ustalamy termin odbioru." />
 
-        <div class="adoption-journey-grid" role="list" aria-label="Proces adopcji krok po kroku">
+        <div class="adoption-journey-grid" role="list" aria-label="Proces wyboru i odbioru kota krok po kroku">
             <div class="adoption-journey-pillar" role="listitem">
                 <div class="adoption-journey__header">
                     <span class="adoption-journey__number">KROK 01</span>

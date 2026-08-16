@@ -283,8 +283,8 @@
     5. FINAL CTA
     ============================================================ --}}
     <div class="reveal-up">
-        <x-frontend.cta tile="parchment" eyebrow="Adopcja i Kontakt"
-            headline="Zainteresowany adopcją {{ $animal->name }}?"
+        <x-frontend.cta tile="parchment" eyebrow="Kontakt i Rezerwacja"
+            headline="Zainteresowany kotem {{ $animal->name }}?"
             description="Napisz do nas — z przyjemnością odpowiemy na wszystkie pytania na temat wybranego kota, przedstawimy certyfikaty zdrowia rodziców i zaprosimy Cię na spotkanie."
             buttonText="Zapytaj o {{ $animal->name }}"
             buttonHref="{{ route('contact', ['subject' => 'Zapytanie o kota: ' . $animal->name]) }}" />
