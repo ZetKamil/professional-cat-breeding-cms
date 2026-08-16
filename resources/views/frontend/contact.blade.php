@@ -185,9 +185,9 @@
                     Jakie dokumenty otrzymuję?
                 </summary>
                 <p class="faq-item__answer text-body">
-                    Każdy kot otrzymuje: książeczkę zdrowia z historią
-                    szczepień, wyniki badań genetycznych rodziców, umowę
-                    oraz starter pack z karmą i zabawkami(jeśli są na daną chwilę dostępne).
+                    Każdy kot otrzymuje komplet dokumentów: książeczkę zdrowia z udokumentowaną historią
+                    szczepień i odrobaczeń, certyfikat rodowodowy wydany przez stowarzyszenie,
+                    wyniki badań genetycznych obojga rodziców oraz formalną umowę przekazania kota.
                 </p>
             </details>
 

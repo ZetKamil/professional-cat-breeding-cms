@@ -64,7 +64,7 @@ Calm, minimal, trust-building
                     <h3 class="footer-heading">Informacje</h3>
                     <ul class="footer-links" role="list">
                         <li><a href="{{ route('about') }}#zdrowie" class="footer-link">Zdrowie & Certyfikaty</a></li>
-                        <li><a href="{{ route('about') }}#co-otrzymujesz" class="footer-link">Wyprawka i Rodowód</a>
+                        <li><a href="{{ route('about') }}#co-otrzymujesz" class="footer-link">Dokumentacja i standard</a>
                         </li>
                         <li><a href="{{ route('contact') }}#faq" class="footer-link">Częste pytania (FAQ)</a></li>
                         <li><a href="{{ route('terms') }}" class="footer-link">Regulamin świadczenia usług</a></li>

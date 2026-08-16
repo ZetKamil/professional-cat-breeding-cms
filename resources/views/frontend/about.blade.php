@@ -169,7 +169,7 @@
     <x-frontend.section tile="parchment" id="co-otrzymujesz" class="reveal-up">
         <x-frontend.section-header
             eyebrow="Standard"
-            headline="Wyprawka i dokumentacja"
+            headline="Dokumentacja i standard"
         />
 
         <div class="benefits-grid">

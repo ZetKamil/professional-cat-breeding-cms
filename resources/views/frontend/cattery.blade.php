@@ -149,10 +149,10 @@
                     <i data-lucide="file-check-2" class="text-ink-muted-48" width="20" height="20"
                         aria-hidden="true"></i>
                 </div>
-                <h3 class="adoption-journey__title">Odbiór i Wyprawka</h3>
+                <h3 class="adoption-journey__title">Odbiór i Dokumentacja</h3>
                 <p class="adoption-journey__desc">
-                    Kot opuszcza hodowlę w wieku 14-16 tygodni z certyfikatem rodowodowym stowarzyszenia, badaniami zdrowia
-                    oraz pakietem startowym.
+                    Kot opuszcza hodowlę w wieku 14-16 tygodni z kompletem dokumentów: certyfikatem rodowodowym stowarzyszenia,
+                    książeczką zdrowia oraz badaniami genetycznymi rodziców.
                 </p>
             </div>
         </div>
