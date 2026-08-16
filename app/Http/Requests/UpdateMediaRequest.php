@@ -2,16 +2,19 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Animal;
+use App\Models\Media;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class UpdateMediaRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        $media = $this->route('medium') ?: $this->route('media');
+
+        return $this->user()?->can('update', $media instanceof Media ? $media : Media::findOrFail($media)) ?? true;
     }
 
     protected function prepareForValidation(): void
@@ -22,6 +25,7 @@ class UpdateMediaRequest extends FormRequest
         $mediableType = match ($parentType) {
             'post' => Post::class,
             'user' => User::class,
+            'animal' => Animal::class,
             default => null,
         };
 
@@ -36,18 +40,20 @@ class UpdateMediaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'parent_type' => ['nullable', Rule::in(['post', 'user'])],
+            'parent_type' => ['nullable', 'string'],
             'parent_id' => ['nullable', 'integer', 'min:1'],
 
             'mediable_type' => ['nullable', 'string'],
             'mediable_id' => ['nullable', 'integer', 'min:1'],
 
-            'upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,gif,svg', 'max:5120'],
+            'upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,gif,svg', 'max:10240'],
 
+            'title' => ['nullable', 'string', 'max:255'],
             'alt_text' => ['nullable', 'string', 'max:255'],
             'caption' => ['nullable', 'string', 'max:2000'],
-            'sort_order' => ['required', 'integer', 'min:0'],
-            'is_featured' => ['required', 'boolean'],
+            'copyright' => ['nullable', 'string', 'max:255'],
+            'sort_order' => ['nullable', 'integer', 'min:0'],
+            'is_featured' => ['nullable', 'boolean'],
         ];
     }
 
@@ -58,16 +64,17 @@ class UpdateMediaRequest extends FormRequest
             $parentId = $this->input('parent_id');
 
             if ($parentType === 'post' && $parentId && ! Post::query()->whereKey($parentId)->exists()) {
-                $validator->errors()->add('parent_id', 'De geselecteerde post bestaat niet.');
+                $validator->errors()->add('parent_id', 'Wybrany wpis (Post) nie istnieje.');
             }
 
             if ($parentType === 'user' && $parentId && ! User::query()->whereKey($parentId)->exists()) {
-                $validator->errors()->add('parent_id', 'De geselecteerde user bestaat niet.');
+                $validator->errors()->add('parent_id', 'Wybrany użytkownik (User) nie istnieje.');
             }
 
-            if (($parentType && ! $parentId) || (! $parentType && $parentId)) {
-                $validator->errors()->add('parent_id', 'Kies zowel een parent type als een parent record, of laat beide leeg.');
+            if ($parentType === 'animal' && $parentId && ! Animal::query()->whereKey($parentId)->exists()) {
+                $validator->errors()->add('parent_id', 'Wybrane zwierzę (Animal) nie istnieje.');
             }
         });
     }
 }
+

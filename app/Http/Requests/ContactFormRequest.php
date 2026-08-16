@@ -14,9 +14,11 @@ class ContactFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required'],
-            'email' => ['required', 'email'],
-            'message' => ['required'],
+            'name'    => ['required', 'string', 'min:2', 'max:120'],
+            'email'   => ['required', 'string', 'email:rfc', 'max:254'],
+            'subject' => ['nullable', 'string', 'min:2', 'max:200'],
+            'phone'   => ['nullable', 'string', 'min:6', 'max:40'],
+            'message' => ['required', 'string', 'min:15', 'max:3000'],
         ];
     }
 }

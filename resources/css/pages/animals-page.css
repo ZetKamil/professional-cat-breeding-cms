@@ -1,0 +1,718 @@
+/* ==========================================================================
+   ANIMALS PAGE — Luxury Catalog & Profile Styling
+   Catalog (/koty) and Animal Detail (/koty/{slug})
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. CATALOG HERO & FILTER BAR
+   -------------------------------------------------------------------------- */
+
+.animals-catalog-hero {
+    padding-top: calc(var(--nav-height, 64px) + var(--sp-2xl, 48px));
+    padding-bottom: var(--sp-2xl);
+    text-align: center;
+}
+
+.animals-catalog-hero__eyebrow {
+    color: var(--color-primary);
+    display: block;
+    margin-bottom: var(--sp-xs);
+}
+
+.animals-catalog-hero__title {
+    margin-bottom: var(--sp-sm);
+}
+
+.animals-catalog-hero__lead {
+    max-width: 640px;
+    margin: 0 auto;
+    color: var(--color-ink-muted-80);
+}
+
+.animals-filter-clear {
+    color: var(--color-primary);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+}
+
+.animals-filter-clear:hover {
+    opacity: 0.8;
+}
+
+.animals-grid__empty {
+    grid-column: 1 / -1;
+}
+
+.empty-state__action {
+    margin-top: var(--sp-lg);
+}
+
+.animals-catalog-section {
+    padding-bottom: var(--sp-lg);
+}
+
+.animals-catalog__pagination {
+    margin-top: var(--sp-lg);
+}
+
+.animals-filter-bar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-md);
+    margin-bottom: var(--sp-xl);
+    padding-bottom: var(--sp-lg);
+    border-bottom: 1px solid var(--color-hairline);
+}
+
+.animals-filter-breeds {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sp-sm);
+}
+
+.breed-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--sp-sm) var(--sp-lg);
+    border-radius: var(--r-full);
+    font-size: var(--text-btn-util-size);
+    font-weight: 500;
+    color: var(--color-ink-muted-80);
+    background-color: var(--color-canvas-parchment);
+    border: 1px solid transparent;
+    transition: all var(--duration-fast) var(--ease-out);
+}
+
+/* Smaller pill padding on tiny screens */
+@media (max-width: 480px) {
+    .breed-pill {
+        padding: var(--sp-xs) var(--sp-md);
+        font-size: 0.8125rem;
+    }
+}
+
+.breed-pill:hover {
+    color: var(--color-ink);
+    background-color: var(--color-hairline);
+}
+
+.breed-pill.breed-pill--active,
+.breed-pill.breed-pill--active:hover {
+    color: var(--color-primary);
+    background-color: var(--color-canvas);
+    border-color: var(--color-primary);
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 102, 204, 0.12);
+}
+
+.animals-filter-secondary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-md);
+}
+
+.animals-filter-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-xs);
+}
+
+.filter-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 14px;
+    border-radius: var(--r-full);
+    font-size: 13px;
+    color: var(--color-ink-muted-80) !important;
+    background-color: var(--color-canvas);
+    border: 1px solid var(--color-hairline);
+    transition: all var(--duration-fast) var(--ease-out);
+}
+
+.filter-chip:hover {
+    border-color: var(--color-ink-muted-48);
+    color: var(--color-ink) !important;
+}
+
+.filter-chip--active {
+    color: var(--color-primary) !important;
+    border-color: var(--color-primary);
+    background-color: rgba(0, 102, 204, 0.05);
+}
+
+/* --------------------------------------------------------------------------
+   2. ANIMAL PROFILE HERO (/koty/{slug})
+   -------------------------------------------------------------------------- */
+
+.animal-profile {
+    padding-top: clamp(130px, 15vh, 160px);
+    padding-bottom: var(--sp-4xl);
+}
+
+/* Reduce top offset on mobile — keep content in view */
+@media (max-width: 640px) {
+    .animal-profile {
+        padding-top: clamp(90px, 14vh, 120px);
+        padding-bottom: var(--sp-2xl);
+    }
+}
+
+.animal-profile .section-inner {
+    max-width: 1160px;
+    padding-left: clamp(24px, 5vw, 48px);
+    padding-right: clamp(24px, 5vw, 48px);
+}
+
+/* Editorial Breadcrumbs */
+.animal-profile__breadcrumbs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-sm);
+    font-size: var(--text-caption-size);
+    font-family: var(--font-mono);
+    color: var(--color-ink-muted-48);
+    margin-bottom: var(--sp-xl);
+    letter-spacing: 0.03em;
+}
+
+.animal-profile__breadcrumb-link {
+    color: var(--color-ink-muted-80);
+    text-decoration: none;
+    transition: color var(--duration-fast) var(--ease-out);
+}
+
+.animal-profile__breadcrumb-link:hover {
+    color: var(--color-ink);
+}
+
+.animal-profile__breadcrumb-sep {
+    color: var(--color-ink-muted-48);
+    user-select: none;
+}
+
+/* Back Link */
+.animal-profile__back {
+    margin-bottom: var(--sp-xl);
+}
+
+.animal-profile__back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-ink-muted-80);
+    text-decoration: none;
+    transition: color var(--duration-fast) var(--ease-out);
+}
+
+.animal-profile__back-link:hover {
+    color: var(--color-primary);
+}
+
+.animal-profile__badge-pedigree {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: var(--r-full);
+    font-size: var(--text-caption-size);
+    font-family: var(--font-mono);
+    color: var(--color-ink);
+    background-color: var(--color-canvas-parchment);
+    border: 1px solid var(--color-hairline);
+    font-weight: 500;
+}
+
+.animal-profile__badge-gender {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: var(--text-caption-size);
+    font-weight: 600;
+}
+
+.animal-profile__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+}
+
+@media (min-width: 992px) {
+    .animal-profile__grid {
+        grid-template-columns: 440px 1fr;
+        gap: clamp(48px, 5vw, 72px);
+        align-items: start;
+    }
+
+    .animal-profile__gallery {
+        position: sticky;
+        top: 110px;
+        align-self: start;
+    }
+}
+
+/* Gallery column */
+.animal-profile__gallery {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-md);
+    position: relative;
+}
+
+.animal-profile__main-image-wrap {
+    position: relative;
+    border-radius: var(--r-xl);
+    overflow: hidden;
+    background-color: #0f172a; /* Luxury dark editorial frame backdrop */
+    aspect-ratio: 4 / 3;
+    max-height: 520px;
+    width: 100%;
+    border: 1px solid var(--color-hairline);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-in;
+}
+
+.animal-profile__main-image {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    transition: transform var(--duration-slow) var(--ease-out);
+}
+
+.animal-profile__main-image-wrap:hover .animal-profile__main-image {
+    transform: scale(1.02);
+}
+
+.animal-profile__zoom-hint {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #ffffff;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    pointer-events: none;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition: background var(--duration-fast) var(--ease-out);
+    z-index: 5;
+}
+
+.animal-profile__main-image-wrap:hover .animal-profile__zoom-hint {
+    background: rgba(15, 23, 42, 0.95);
+}
+
+/* Product Gallery Thumbs */
+.animal-profile__thumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.animal-profile__thumb {
+    position: relative;
+    border-radius: var(--r-md);
+    overflow: hidden;
+    width: 80px;
+    height: 80px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+    background-color: var(--color-canvas-parchment);
+    flex-shrink: 0;
+}
+
+.animal-profile__thumb:hover,
+.animal-profile__thumb:focus-visible,
+.animal-profile__thumb--active {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+}
+
+.animal-profile__thumb:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Smaller thumbs on mobile for better layout */
+@media (max-width: 640px) {
+    .animal-profile__thumb {
+        width: 68px;
+        height: 68px;
+    }
+
+    .animal-profile__thumbs {
+        gap: 8px;
+    }
+}
+
+.animal-profile__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Details column */
+.animal-profile__info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-lg);
+}
+
+.animal-profile__header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-xs);
+    padding-bottom: var(--sp-md);
+    border-bottom: 1px solid var(--color-hairline);
+}
+
+.animal-profile__badges {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-sm);
+}
+
+.animal-profile__name {
+    margin-top: var(--sp-xs);
+    color: var(--color-ink);
+}
+
+.animal-profile__breed {
+    color: var(--color-ink-muted-48);
+    font-size: var(--text-lead-size);
+}
+
+.animal-profile__meta-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-md);
+    font-size: 14px;
+    color: var(--color-ink-muted-80);
+    font-family: var(--font-mono);
+}
+
+/* Editorial Spec Cards Grid — Balanced 3-column architecture */
+.animal-profile__specs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--sp-md);
+    align-items: stretch;
+}
+
+@media (min-width: 640px) {
+    .animal-profile__specs-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .animal-spec-card--wide {
+        grid-column: span 2;
+    }
+}
+
+.animal-spec-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--sp-xs);
+    padding: var(--sp-md) var(--sp-lg);
+    background-color: var(--color-canvas-parchment);
+    border-radius: var(--r-xl);
+    border: 1px solid var(--color-hairline);
+    min-height: 96px;
+    height: 100%;
+    transition: all var(--duration-base) var(--ease-out);
+}
+
+/* Compact spec cards on mobile */
+@media (max-width: 640px) {
+    .animal-spec-card {
+        padding: var(--sp-md);
+    }
+}
+
+.animal-spec-card:hover {
+    border-color: var(--color-ink-muted-48);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card-hover);
+}
+
+.animal-spec-card__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    color: var(--color-ink-muted-48);
+}
+
+.animal-spec-card__label {
+    font-size: 11px;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-ink-muted-48);
+    white-space: nowrap;
+}
+
+.animal-spec-card__icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    color: var(--color-ink-muted-48);
+}
+
+.animal-spec-card__value {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--color-ink);
+    word-break: normal;
+    overflow-wrap: break-word;
+    margin-top: var(--sp-2xs);
+}
+
+.animal-profile__description {
+    color: var(--color-ink-muted-80);
+    line-height: 1.8;
+    max-width: 65ch;
+    font-size: var(--text-lead-size);
+}
+
+.animal-profile__description p {
+    margin-bottom: var(--sp-lg);
+}
+
+.animal-profile__description blockquote {
+    margin: var(--sp-lg) 0;
+    padding: var(--sp-md) var(--sp-lg);
+    border-left: 3px solid #d1ab58;
+    background-color: var(--color-canvas-parchment);
+    border-radius: 0 var(--r-md) var(--r-md) 0;
+    color: var(--color-ink);
+    font-style: italic;
+}
+
+.animal-profile__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-md);
+    padding-top: var(--sp-md);
+    border-top: 1px solid var(--color-hairline);
+}
+
+.animal-profile__social-note {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: var(--sp-lg, 32px);
+    padding-top: var(--sp-md, 24px);
+    border-top: 1px dashed var(--color-hairline, rgba(0, 0, 0, 0.08));
+}
+
+.animal-profile__social-text {
+    font-size: var(--text-sm, 14px);
+    color: var(--color-ink-muted-80, #515154);
+}
+
+.animal-profile__social-link {
+    font-size: var(--text-sm, 14px);
+    font-weight: 600;
+    color: var(--color-ink, #1d1d1f);
+    text-decoration: none;
+    transition: color 0.25s var(--ease-out);
+}
+
+.animal-profile__social-link:hover {
+    color: var(--color-primary, #c8a04a);
+}
+
+/* --------------------------------------------------------------------------
+   3. PEDIGREE & GENEALOGY (Family Tree & Lineage Guarantee)
+   -------------------------------------------------------------------------- */
+
+.pedigree-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-md);
+}
+
+.pedigree-section__header {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-md);
+    padding-bottom: var(--sp-sm);
+    border-bottom: 1px solid var(--color-hairline);
+}
+
+.pedigree-section__badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: var(--r-full);
+    font-size: 11px;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background-color: rgba(209, 171, 88, 0.15);
+    color: #b58d3d;
+    font-weight: 600;
+}
+
+.pedigree-card {
+    background-color: var(--color-canvas);
+    border-radius: var(--r-xl);
+    border: 1px solid var(--color-hairline);
+    padding: var(--sp-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--sp-md);
+    transition: all var(--duration-base) var(--ease-out);
+    text-decoration: none;
+}
+
+.pedigree-card:hover {
+    border-color: var(--color-ink-muted-48);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card-hover);
+}
+
+.pedigree-card--placeholder {
+    cursor: default;
+    background-color: var(--color-canvas-parchment);
+    opacity: 0.85;
+}
+
+.pedigree-card--placeholder:hover {
+    transform: none;
+    border-color: var(--color-hairline);
+    box-shadow: none;
+}
+
+.pedigree-card__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--r-full);
+    background-color: var(--color-canvas-parchment);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
+    flex-shrink: 0;
+}
+
+.pedigree-card__info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.pedigree-card__role {
+    font-size: 11px;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #d1ab58;
+    font-weight: 600;
+}
+
+.pedigree-card__name {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-ink);
+}
+
+.pedigree-card__breed {
+    font-size: 14px;
+    color: var(--color-ink-muted-80);
+}
+
+.pedigree-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--sp-lg);
+}
+
+@media (min-width: 640px) {
+    .pedigree-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.pedigree-lineage-strip {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-lg);
+    padding-top: var(--sp-2xl);
+    border-top: 1px solid var(--color-hairline);
+}
+
+.pedigree-lineage__header {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-md);
+}
+
+.pedigree-lineage__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--sp-md);
+}
+
+@media (min-width: 768px) {
+    .pedigree-lineage__grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.pedigree-lineage-card {
+    background-color: var(--color-canvas);
+    border-radius: var(--r-md);
+    border: 1px solid var(--color-hairline);
+    padding: var(--sp-lg);
+    display: flex;
+    align-items: flex-start;
+    gap: var(--sp-md);
+}
+
+.pedigree-lineage__icon {
+    width: 20px;
+    height: 20px;
+    color: #d1ab58;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.pedigree-lineage__title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-ink);
+    margin-bottom: 4px;
+}
+
+.pedigree-lineage__desc {
+    font-size: 13px;
+    color: var(--color-ink-muted-80);
+    line-height: 1.6;
+}

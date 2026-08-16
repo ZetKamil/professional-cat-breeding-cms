@@ -1,0 +1,153 @@
+# ============================================================
+# HODOWLA KOTÓW Z MAZOWIECKIEJ SZWAJCARII
+# Production .htaccess — OVH Shared Hosting
+# PHP 8.2 / Apache 2.4 / Laravel 12
+# ============================================================
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # --------------------------------------------------------
+    # 1. HTTPS redirect (before everything else)
+    # --------------------------------------------------------
+    RewriteCond %{HTTPS} off
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+    # --------------------------------------------------------
+    # 2. www → non-www canonical redirect
+    # --------------------------------------------------------
+    RewriteCond %{HTTP_HOST} ^www\.kotyzmazowieckiejszwajcarii\.pl$ [NC]
+    RewriteRule ^ https://kotyzmazowieckiejszwajcarii.pl%{REQUEST_URI} [R=301,L]
+
+    # --------------------------------------------------------
+    # 3. Handle Authorization Header (for API / Bearer tokens)
+    # --------------------------------------------------------
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # --------------------------------------------------------
+    # 4. Handle X-XSRF-Token Header (for Livewire / AJAX)
+    # --------------------------------------------------------
+    RewriteCond %{HTTP:x-xsrf-token} .
+    RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
+
+    # --------------------------------------------------------
+    # 5. BLOCK: sensitive hidden files (.env, .git, etc.)
+    # --------------------------------------------------------
+    RewriteRule ^\.env(\..*)?$ - [F,L]
+    RewriteRule ^\.git(/.*)?$ - [F,L]
+    RewriteRule ^\.gitignore$ - [F,L]
+    RewriteRule ^\.gitattributes$ - [F,L]
+    RewriteRule ^\.editorconfig$ - [F,L]
+    RewriteRule ^\.phpunit\.cache(/.*)?$ - [F,L]
+
+    # --------------------------------------------------------
+    # 6. BLOCK: sensitive project directories
+    #    (app, bootstrap, config, database, resources,
+    #     routes, storage, tests, vendor, image)
+    # --------------------------------------------------------
+    RewriteRule ^app(/.*)?$ - [F,L]
+    RewriteRule ^bootstrap(/.*)?$ - [F,L]
+    RewriteRule ^config(/.*)?$ - [F,L]
+    RewriteRule ^database(/.*)?$ - [F,L]
+    RewriteRule ^resources(/.*)?$ - [F,L]
+    RewriteRule ^routes(/.*)?$ - [F,L]
+    RewriteRule ^storage(/.*)?$ - [F,L]
+    RewriteRule ^tests(/.*)?$ - [F,L]
+    RewriteRule ^vendor(/.*)?$ - [F,L]
+    RewriteRule ^image(/.*)?$ - [F,L]
+    RewriteRule ^node_modules(/.*)?$ - [F,L]
+    RewriteRule ^AI(/.*)?$ - [F,L]
+
+    # --------------------------------------------------------
+    # 7. ALLOW: public/ subdirectories (assets, images, etc.)
+    # --------------------------------------------------------
+    RewriteCond %{REQUEST_URI} ^/public/ [NC]
+    RewriteRule ^ - [L]
+
+    # --------------------------------------------------------
+    # 8. Redirect Trailing Slashes (not a folder)
+    # --------------------------------------------------------
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # --------------------------------------------------------
+    # 9. Laravel front controller
+    # --------------------------------------------------------
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+
+</IfModule>
+
+# ============================================================
+# SECURITY: Disable directory listing globally
+# ============================================================
+Options -Indexes +FollowSymLinks
+
+# ============================================================
+# SECURITY: Block sensitive file types by extension (Apache 2.4 + 2.2 compatible)
+# ============================================================
+<FilesMatch "\.(env|sqlite|sqlite3|log|bak|backup|sql|key|pem|cert|crt|p12|pfx)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# ============================================================
+# SECURITY: Block sensitive config/build files in root
+# ============================================================
+<FilesMatch "^(composer\.(json|lock)|package(-lock)?\.json|phpunit\.xml|pint\.json|rector\.php|artisan|vite\.config\.(js|ts)|\.env.*)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# ============================================================
+# SECURITY: Block .php execution in upload directories
+# ============================================================
+<FilesMatch "\.php$">
+    <If "%{REQUEST_URI} =~ m#^/public/storage/#">
+        <IfModule mod_authz_core.c>
+            Require all denied
+        </IfModule>
+        <IfModule !mod_authz_core.c>
+            Order allow,deny
+            Deny from all
+        </IfModule>
+    </If>
+</FilesMatch>
+
+# ============================================================
+# PERFORMANCE: Cache static assets aggressively
+# ============================================================
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/webp "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 month"
+    ExpiresByType image/x-icon "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>
+
+# ============================================================
+# SECURITY HEADERS (modern, robust)
+# ============================================================
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+</IfModule>

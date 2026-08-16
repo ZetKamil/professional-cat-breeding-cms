@@ -1,18 +1,348 @@
-<x-frontend.shell
-    title="Home"
-    meta-description="Ontdek de nieuwste artikels en categorieën op onze blog."
->
-    <x-frontend.home.welcome-slider :featured-posts="$featuredPosts" />
+<x-frontend.shell title="{{ config('app.name') }} — Etyczna Hodowla Kotów Rasowych z Rodowodem Stowarzyszenia"
+    meta-description="Hodowla kotów rasowych oparta na czystości genetycznej, spokoju i bezkompromisowych standardach etycznych oraz rodowodzie stowarzyszenia.">
+    {{-- ============================================================
+    1. CINEMATIC ASYMMETRIC HERO — ROLLS ROYCE / APPLE STYLE
+    ============================================================ --}}
+    <section class="hero hero--dark" aria-label="Wprowadzenie i filozofia hodowli" data-nav-theme="dark">
+        <div class="hero__bg" aria-hidden="true">
+            <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=2000&q=80"
+                alt="Kot bengalski w naturalnym oświetleniu" width="2000" height="1200" decoding="async" loading="eager"
+                fetchpriority="high" class="hero__image opacity-25">
+            <div class="hero__overlay"></div>
+        </div>
 
-    <x-frontend.home.latest-news-marquee :latest-posts="$latestPosts" />
+        <div class="section-inner relative z-10 py-20 lg:py-24">
+            {{-- Split-Screen Editorial Opening --}}
+            <div class="hero-split-grid">
+                <div class="hero-split__left">
+                    <h1 class="hero-split__title">
+                        Czystość Rasy.<br>
+                        Spokój Genetyki.<br>
+                    </h1>
+                    <p class="hero-split__lead">
+                        Nie traktujemy hodowli jak komercji. Tworzymy domowe sanktuarium,
+                        w którym selekcja genetyczna, spokój socjalizacji i bezkompromisowe
+                        standardy medyczne wyznaczają każdy etap życia naszych kotów.
+                    </p>
+                    <div class="hero-split__actions">
+                        <x-frontend.button href="{{ route('contact') }}" icon="arrow-right">
+                            Zaplanuj rozmowę
+                        </x-frontend.button>
+                        <a href="https://www.facebook.com/profile.php?id=61580668026948" target="_blank" rel="noopener"
+                            class="hero-split__secondary-link">
+                            Codzienne życie hodowli na Facebooku →
+                        </a>
+                    </div>
+                </div>
 
-    <x-frontend.home.main-content
-        :latest-posts="$latestPosts"
-        :category-posts="$categoryPosts"
-        :categories="$categories"
-    />
+                <div class="hero-split__right">
+                    <div class="hero-split__frame">
+                        <img src="https://images.unsplash.com/photo-1543852786-1cf6624b9987?auto=format&fit=crop&w=1200&q=80"
+                            alt="Doskonałość rasy - kot bengalski" class="hero-split__image" width="1000" height="750"
+                            decoding="async" loading="eager">
+                    </div>
+                    <div class="hero-split__seal" role="status" aria-label="Gwarancja genetyki">
+                        <i data-lucide="award" class="w-5 h-5 text-primary" aria-hidden="true"></i>
+                        <div>
+                            <span class="block font-semibold">100% HCM / PKD n/n</span>
+                            <span class="text-white/70 text-xs">Weryfikowane linie 5 pokoleń</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    <x-frontend.home.video-post-area :video-posts="$videoPosts" />
+            {{-- Hero Trust Strip --}}
+            <div class="hero__trust-bar" role="list" aria-label="Nasze certyfikaty i standardy">
+                <div class="hero__trust-item" role="listitem">
+                    <i data-lucide="shield-check" class="hero__trust-icon" aria-hidden="true"></i>
+                    <span>Certyfikat Stowarzyszenia</span>
+                </div>
+                <div class="hero__trust-item" role="listitem">
+                    <i data-lucide="dna" class="hero__trust-icon" aria-hidden="true"></i>
+                    <span>100% Badania Genetyczne</span>
+                </div>
+                <div class="hero__trust-item" role="listitem">
+                    <i data-lucide="heart-handshake" class="hero__trust-icon" aria-hidden="true"></i>
+                    <span>Domowa Socjalizacja</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <x-frontend.home.editorial-area :editorial-posts="$editorialPosts" />
+    {{-- ============================================================
+    2. IMMERSIVE BREED SHOWCASE — THE THREE COLLECTIONS
+    ============================================================ --}}
+    <x-frontend.section id="specjalizacje" class="reveal-up home-section--specjalizacje">
+        <x-frontend.section-header eyebrow="Kolekcje Hodowlane" headline="Nasze Specjalizacje Rasy"
+            description="Trzy wybitne linie felinologiczne, prowadzone według rygorystycznych standardów stowarzyszenia felinologicznego." />
+
+        <div class="collection-grid" role="list" aria-label="Specjalizacje rasy">
+            <a href="{{ route('frontend.animals.index', ['breed' => 'bengal']) }}" class="collection-card"
+                role="listitem">
+                <div>
+                    <span class="collection-card__index">Collection 01 / Bengal</span>
+                    <h3 class="collection-card__title">Koty Bengalskie</h3>
+                    <p class="collection-card__quote">
+                        Dzikie spojrzenie, wyraźna atłasowa rozeta i niezwykle inteligentny, aktywny temperament.
+                    </p>
+                    <div class="collection-card__tags">
+                        <span class="collection-tag">Aktywność: Wysoka</span>
+                        <span class="collection-tag">Rozeta na złocie</span>
+                        <span class="collection-tag">Rodowód Stowarzyszenia</span>
+                    </div>
+                </div>
+                <span class="collection-card__cta">
+                    Poznaj kolekcję bengalską
+                    <i data-lucide="arrow-up-right" class="w-4 h-4 text-primary" aria-hidden="true"></i>
+                </span>
+            </a>
+
+            <a href="{{ route('frontend.animals.index', ['breed' => 'british']) }}" class="collection-card"
+                role="listitem">
+                <div>
+                    <span class="collection-card__index">Collection 02 / British Shorthair</span>
+                    <h3 class="collection-card__title">Koty Brytyjskie</h3>
+                    <p class="collection-card__quote">
+                        Aksamitne futro, zrównoważony spokój i klasyczna, brytyjska elegancja w każdym ruchu.
+                    </p>
+                    <div class="collection-card__tags">
+                        <span class="collection-tag">Temperament: Spokojny</span>
+                        <span class="collection-tag">Pluszowa okrywa</span>
+                        <span class="collection-tag">Rodowód Stowarzyszenia</span>
+                    </div>
+                </div>
+                <span class="collection-card__cta">
+                    Poznaj kolekcję brytyjską
+                    <i data-lucide="arrow-up-right" class="w-4 h-4 text-primary" aria-hidden="true"></i>
+                </span>
+            </a>
+
+            <a href="{{ route('frontend.animals.index', ['breed' => 'siamese']) }}" class="collection-card"
+                role="listitem">
+                <div>
+                    <span class="collection-card__index">Collection 03 / Siamese</span>
+                    <h3 class="collection-card__title">Koty Syjamskie</h3>
+                    <p class="collection-card__quote">
+                        Szafirowe spojrzenie, smukła sylwetka oraz wyjątkowe przywiązanie i komunikatywność z
+                        człowiekiem.
+                    </p>
+                    <div class="collection-card__tags">
+                        <span class="collection-tag">Wysoka inteligencja</span>
+                        <span class="collection-tag">Oczy szafirowe</span>
+                        <span class="collection-tag">Linie europejskie</span>
+                    </div>
+                </div>
+                <span class="collection-card__cta">
+                    Poznaj kolekcję syjamską
+                    <i data-lucide="arrow-up-right" class="w-4 h-4 text-primary" aria-hidden="true"></i>
+                </span>
+            </a>
+        </div>
+    </x-frontend.section>
+
+    {{-- ============================================================
+    3. CURATED KITTENS & SELECTION ASSURANCE
+    ============================================================ --}}
+    <x-frontend.section id="nasze-koty" tile="parchment" class="reveal-up home-section--nasze-koty">
+        <x-frontend.section-header eyebrow="Selekcja 2026" headline="Dostępne Kocięta i Mioty"
+            description="Aktualna selekcja kociąt gotowych do rezerwacji. Każde kocię opuszcza nas ze szczepieniami, odrobaczeniem i 5-pokoleniowym rodowodem." />
+
+        <div class="animals-grid">
+            @forelse($featuredAnimals as $animal)
+                <x-frontend.animal-card :animal="$animal" />
+            @empty
+                <div class="editorial-empty-box">
+                    <i data-lucide="calendar-heart" aria-hidden="true" class="editorial-empty-box__icon"></i>
+                    <h3 class="editorial-empty-box__title">Aktualnie wszystkie kocięta znalazły nowe domy</h3>
+                    <p class="editorial-empty-box__desc">
+                        Planujemy nowe mioty w nadchodzącym sezonie hodowlanym. Zachęcamy do niezobowiązującego kontaktu w
+                        celu wpisu na naszą listę oczekujących.
+                    </p>
+                    <div class="mt-6">
+                        <x-frontend.button variant="secondary" href="{{ route('contact') }}">
+                            Zapytaj o plany na sezon 2026/2027
+                        </x-frontend.button>
+                    </div>
+                </div>
+            @endforelse
+        </div>
+
+        @if(count($featuredAnimals) > 0)
+            <div class="section-action">
+                <x-frontend.button variant="secondary" href="{{ route('frontend.animals.index') }}" icon="arrow-right">
+                    Zobacz wszystkie koty w katalogu
+                </x-frontend.button>
+            </div>
+        @endif
+    </x-frontend.section>
+
+    {{-- ============================================================
+    4. VERIFIED PATRON STORIES — EDITORIAL QUOTE MONOLITHS
+    ============================================================ --}}
+    <x-frontend.section tile="parchment" id="opinie" class="reveal-up home-section--opinie">
+        <x-frontend.section-header eyebrow="Rekomendacje i Zaufanie" headline="Historie Naszych Wychowanków"
+            description="4.9/5 Średnia ocena z 50+ zweryfikowanych adopcji w całej Polsce i Europie." />
+
+        <div class="patrons-grid" role="list" aria-label="Rekomendacje opiekunów">
+            <div class="patron-monolith" role="listitem">
+                <p class="patron-monolith__quote">
+                    „Luna jest cudowna — zdrowa, zadbana i przepiękna. Od pierwszych dni widać, że wyrosła w kochającym
+                    domowym otoczeniu. Hodowla godna polecenia z całego serca.”
+                </p>
+                <div class="patron-monolith__author">
+                    <div>
+                        <strong class="block text-ink">Anna K.</strong>
+                        <span class="text-xs text-ink-muted-48">Właścicielka Luny · Kot Brytyjski</span>
+                    </div>
+                    <span class="patron-monolith__badge">
+                        <i data-lucide="check-circle-2" class="w-4 h-4" aria-hidden="true"></i>
+                        Rodowód Stowarzyszenia
+                    </span>
+                </div>
+            </div>
+
+            <div class="patron-monolith" role="listitem">
+                <p class="patron-monolith__quote">
+                    „Profesjonalne podejście na każdym etapie, pełna dokumentacja medyczna oraz cierpliwe odpowiadanie
+                    na wszystkie nasze pytania. Polecam bez wahania!”
+                </p>
+                <div class="patron-monolith__author">
+                    <div>
+                        <strong class="block text-ink">Marek W.</strong>
+                        <span class="text-xs text-ink-muted-48">Właściciel Simby · Kot Bengalski</span>
+                    </div>
+                    <span class="patron-monolith__badge">
+                        <i data-lucide="check-circle-2" class="w-4 h-4" aria-hidden="true"></i>
+                        Rodowód Stowarzyszenia
+                    </span>
+                </div>
+            </div>
+
+            <div class="patron-monolith" role="listitem">
+                <p class="patron-monolith__quote">
+                    „Widać, że koty w tej hodowli są prawdziwie kochane. Nasz Mruczek był natychmiast oswojony, ufny i
+                    szczęśliwy w nowym domu od pierwszego dnia.”
+                </p>
+                <div class="patron-monolith__author">
+                    <div>
+                        <strong class="block text-ink">Katarzyna M.</strong>
+                        <span class="text-xs text-ink-muted-48">Właścicielka Mruczka · Kot Syjamski</span>
+                    </div>
+                    <span class="patron-monolith__badge">
+                        <i data-lucide="check-circle-2" class="w-4 h-4" aria-hidden="true"></i>
+                        Rodowód Stowarzyszenia
+                    </span>
+                </div>
+            </div>
+        </div>
+    </x-frontend.section>
+
+    {{-- ============================================================
+    5. DAILY LIFE IN THE CATTERY — EDITORIAL FACEBOOK DISCOVERY
+    ============================================================ --}}
+    <x-frontend.section id="codziennosc" class="reveal-up home-section--codziennosc">
+        <div class="daily-life-grid">
+            <div class="daily-life__left">
+                <div class="daily-life__meta">
+                    <span class="daily-life__eyebrow">01 — DAILY LIFE & TRANSPARENCY</span>
+                </div>
+                <h2 class="daily-life__headline">Codzienność w hodowli</h2>
+                <p class="daily-life__desc">
+                    Nie pokazujemy tylko efektu końcowego.
+                    Dzielimy się również codziennym życiem naszych kotów — zdjęciami, filmami, rozwojem kociąt i
+                    chwilami zza kulis.
+                </p>
+                <div class="daily-life__frequency">
+                    <span class="daily-life__badge">Nowe relacje praktycznie codziennie</span>
+                    <span class="daily-life__subtext">Zdjęcia • Filmy • Kulisy hodowli</span>
+                </div>
+                <div class="daily-life__cta">
+                    <x-frontend.button variant="secondary" href="https://www.facebook.com/profile.php?id=61580668026948"
+                        target="_blank" rel="noopener">
+                        Obserwuj nas na Facebooku →
+                    </x-frontend.button>
+                </div>
+            </div>
+
+            <div class="daily-life__right">
+                <div class="daily-life__gallery" role="group" aria-label="Codzienne życie hodowli">
+                    <div class="daily-life__image-wrap daily-life__image-wrap--main">
+                        <img src="https://images.unsplash.com/photo-1548247416-ec66f4900b2e?auto=format&fit=crop&w=800&q=80"
+                            alt="Codzienna socjalizacja w hodowli" width="800" height="800" decoding="async"
+                            loading="lazy">
+                    </div>
+                    <div class="daily-life__image-wrap daily-life__image-wrap--sub1">
+                        <img src="https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?auto=format&fit=crop&w=600&q=80"
+                            alt="Rozwój kociąt w domowym otoczeniu" width="600" height="600" decoding="async"
+                            loading="lazy">
+                    </div>
+                    <div class="daily-life__image-wrap daily-life__image-wrap--sub2">
+                        <img src="https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?auto=format&fit=crop&w=600&q=80"
+                            alt="Zabawa i relacje z kotami" width="600" height="600" decoding="async" loading="lazy">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </x-frontend.section>
+
+    {{-- ============================================================
+    6. READING ROOM — EDITORIAL KNOWLEDGE
+    ============================================================ --}}
+    <x-frontend.section id="blog" class="reveal-up home-section--blog">
+        <x-frontend.section-header eyebrow="Czytelnia Hodowlana" headline="Wiedza i Felinologia"
+            description="Edukujemy, dzielimy się wiedzą i pomagamy zrozumieć świat kotów rasowych." />
+
+        @if(isset($latestPosts) && $latestPosts->count() > 0)
+            <div class="articles-grid">
+                @foreach($latestPosts->take(3) as $post)
+                    <x-frontend.blog-card :post="$post" />
+                @endforeach
+            </div>
+
+            <div class="section-action">
+                <x-frontend.button variant="secondary" href="{{ route('frontend.blog.index') }}" icon="arrow-right">
+                    Zobacz wszystkie artykuły w czytelni
+                </x-frontend.button>
+            </div>
+        @else
+            <div class="editorial-empty-box">
+                <i data-lucide="book-open" aria-hidden="true" class="editorial-empty-box__icon"></i>
+                <h3 class="editorial-empty-box__title">Nasza czytelnia — wkrótce nowe publikacje</h3>
+                <p class="editorial-empty-box__desc">
+                    Przygotowujemy dla Państwa rzetelne poradniki na temat pielęgnacji, żywienia oraz psychologii kotów
+                    rasowych.
+                </p>
+            </div>
+        @endif
+    </x-frontend.section>
+
+    {{-- ============================================================
+    7. FINAL INVITATION — LUXURY CONCIERGE CTA MONOLITH
+    ============================================================ --}}
+    <div class="reveal-up home-section--cta">
+        <x-frontend.cta tile="parchment" eyebrow="Zaproszenie do Kontaktu" headline="Zaplanuj Rozmowę"
+            description="Napisz do nas — chętnie odpowiemy na wszystkie pytania, doradzimy w wyborze linii genetycznej i umówimy kameralne spotkanie w naszej hodowli."
+            buttonText="Skontaktuj się z nami" buttonHref="{{ route('contact') }}" />
+    </div>
+
+    @push('schema')
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "LocalBusiness",
+      "name": "{{ config('app.name') }}",
+      "image": "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=1200&q=80",
+      "url": "{{ url('/') }}",
+      "telephone": "+48500000000",
+      "address": {
+        "@@type": "PostalAddress",
+        "streetAddress": "ul. Przykładowa 1",
+        "addressLocality": "Warszawa",
+        "postalCode": "00-001",
+        "addressCountry": "PL"
+      }
+    }
+    </script>
+    @endpush
+
 </x-frontend.shell>

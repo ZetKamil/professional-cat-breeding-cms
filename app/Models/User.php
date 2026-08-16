@@ -10,7 +10,6 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -21,7 +20,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, TwoFactorAuthenticatable, SoftDeletes;
+    use HasFactory, Notifiable, SoftDeletes, TwoFactorAuthenticatable;
 
     /**
      * The attributes that are mass assignable.
@@ -85,6 +84,7 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Role::class);
     }
+
     /**
      * Relatie: één user kan meerdere posts schrijven.
      */
@@ -92,10 +92,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Post::class);
     }
+
     public function media(): MorphOne
     {
         return $this->morphOne(Media::class, 'mediable');
     }
+
     public function scopeSearch(Builder $query, string $q): Builder
     {
         $q = trim($q);
@@ -144,6 +146,7 @@ class User extends Authenticatable
             default => $query,
         };
     }
+
     public function scopeTrashedFilter(Builder $query, ?string $trashed): Builder
     {
         if (! $trashed) {
@@ -156,6 +159,7 @@ class User extends Authenticatable
             default => $query,
         };
     }
+
     public function scopeSortBySafe(Builder $query, string $sort, string $dir): Builder
     {
         // Extra defensief, zelfs al valideert de FormRequest dit al
@@ -169,6 +173,7 @@ class User extends Authenticatable
 
         return $query->orderBy($sort, $dir);
     }
+
     protected static function booted()
     {
         static::forceDeleted(function ($user) {
@@ -183,7 +188,4 @@ class User extends Authenticatable
 
         });
     }
-
-
-
 }

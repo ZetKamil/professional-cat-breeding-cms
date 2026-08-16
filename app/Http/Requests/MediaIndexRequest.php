@@ -16,12 +16,13 @@ class MediaIndexRequest extends FormRequest
     {
         return [
             'q' => ['nullable', 'string', 'max:100'],
-            'type' => ['nullable', Rule::in(['post', 'user', 'unattached'])],
+            'type' => ['nullable', Rule::in(['post', 'user', 'animal', 'unattached'])],
             'featured' => ['nullable', Rule::in(['yes', 'no'])],
             'trashed' => ['nullable', Rule::in(['with', 'only'])],
-            'sort' => ['nullable', Rule::in(['id', 'file_name', 'sort_order', 'created_at', 'is_featured'])],
+            'sort' => ['nullable', Rule::in(['id', 'file_name', 'filename', 'size', 'file_size', 'sort_order', 'created_at', 'is_featured'])],
             'dir' => ['nullable', Rule::in(['asc', 'desc'])],
-            'per_page' => ['nullable', Rule::in([10, 25, 50, 100])],
+            'per_page' => ['nullable', Rule::in([10, 24, 25, 48, 50, 100])],
+            'view' => ['nullable', Rule::in(['grid', 'list'])],
         ];
     }
 
@@ -36,7 +37,9 @@ class MediaIndexRequest extends FormRequest
             'trashed' => $this->input('trashed', ''),
             'sort' => (string) ($v['sort'] ?? 'created_at'),
             'dir' => (string) ($v['dir'] ?? 'desc'),
-            'per_page' => (int) ($v['per_page'] ?? 10),
+            'per_page' => (int) ($v['per_page'] ?? 24),
+            'view' => (string) ($v['view'] ?? 'grid'),
         ];
     }
 }
+

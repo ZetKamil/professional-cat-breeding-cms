@@ -1,0 +1,473 @@
+/* ==========================================================================
+   ABOUT PAGE — Specific sections
+   ========================================================================== */
+
+/* --- About Preview (Split layout, used on homepage too) --- */
+
+.about-preview {
+    display: grid;
+    grid-template-columns: 1fr 1.08fr;
+    gap: var(--sp-4xl);
+    align-items: center;
+}
+
+.about-preview__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-md);
+    margin-top: var(--sp-lg);
+}
+
+.about-preview__stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-md);
+    padding-top: var(--sp-lg);
+    margin-top: var(--sp-sm);
+    border-top: 1px solid var(--color-hairline);
+}
+
+.about-preview__stat-number {
+    font-family: var(--font-mono, monospace);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-ink);
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+}
+
+.about-preview__stat-label {
+    font-size: 0.8125rem;
+    color: var(--color-ink-muted-80);
+    line-height: 1.35;
+    margin-top: 4px;
+}
+
+.about-preview__action {
+    margin-top: var(--sp-md);
+}
+
+.about-preview__image-wrapper {
+    position: relative;
+    border-radius: var(--r-xl);
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    box-shadow: 0 24px 64px -12px rgba(0, 0, 0, 0.12);
+}
+
+.about-preview__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 10s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.about-preview:hover .about-preview__image {
+    transform: scale(1.06);
+}
+
+.about-preview__badge-overlap {
+    position: absolute;
+    bottom: var(--sp-lg);
+    left: var(--sp-lg);
+    right: var(--sp-lg);
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.65);
+    border-radius: var(--r-lg);
+    padding: var(--sp-md) var(--sp-lg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-md);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
+}
+
+.about-preview__badge-title {
+    font-weight: 600;
+    color: var(--color-ink);
+    font-size: 0.9375rem;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+}
+
+.about-preview__badge-desc {
+    font-size: var(--text-nav-size);
+    color: var(--color-ink-muted-80);
+    line-height: 1.35;
+}
+
+.about-preview__badge-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background-color: var(--color-canvas-elevated);
+    border: 1px solid var(--color-hairline);
+    color: var(--color-primary);
+    flex-shrink: 0;
+}
+
+@media (max-width: 980px) {
+    .about-preview {
+        grid-template-columns: 1fr;
+        gap: var(--sp-2xl);
+    }
+}
+
+/* --- Story (Two-column editorial — About page) --- */
+
+.about-story {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-4xl);
+    align-items: flex-start;
+}
+
+.about-story__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-lg);
+    margin-top: var(--sp-xl);
+}
+
+.about-story__image-wrapper {
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    width: 100%;
+    max-width: 480px;
+    /* height: removed — aspect-ratio handles proportions correctly on all screens.
+       Fixed height conflicted with aspect-ratio on tablets (aspect-ratio was ignored). */
+    aspect-ratio: 4 / 5;
+    margin-left: auto;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+.about-story__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 10s ease-out;
+}
+
+.about-story:hover .about-story__image {
+    transform: scale(1.05);
+}
+
+/* --- Timeline --- */
+
+.timeline {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3xl);
+    margin-top: var(--sp-2xl);
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 1px;
+    background-color: var(--color-hairline);
+}
+
+.timeline__item {
+    position: relative;
+    padding-left: var(--sp-2xl);
+}
+
+.timeline__item::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: -4px;
+    width: 9px;
+    height: 9px;
+    border-radius: var(--r-full);
+    background-color: var(--color-primary);
+    box-shadow: 0 0 0 4px var(--color-canvas-parchment);
+}
+
+.timeline__year {
+    color: var(--color-ink);
+    margin-bottom: var(--sp-xs);
+    letter-spacing: -0.02em;
+}
+
+/* --- Values Grid (Dark tile, numbered) --- */
+
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--sp-xl);
+}
+
+.value-item {
+    padding: var(--sp-lg) 0;
+}
+
+.value-item__number {
+    font-size: var(--text-display-md-size);
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.08);
+    line-height: 1;
+    margin-bottom: var(--sp-md);
+    letter-spacing: -0.04em;
+}
+
+.value-item__title {
+    color: var(--color-canvas);
+    margin-bottom: var(--sp-sm);
+}
+
+.value-item__desc {
+    color: var(--color-body-muted);
+    font-size: var(--text-body-size);
+    line-height: 1.5;
+}
+
+/* --- Awards --- */
+
+.awards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-lg);
+    margin-top: var(--sp-xl);
+}
+
+.award-card {
+    background-color: var(--color-canvas-parchment);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--r-lg);
+    padding: var(--sp-xl);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--sp-sm);
+    transition: transform var(--duration-fast) var(--ease-out),
+                box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.award-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.04);
+}
+
+.award-card__icon {
+    width: 32px;
+    height: 32px;
+    color: var(--color-primary);
+    margin-bottom: var(--sp-xs);
+}
+
+/* --- Gallery (Masonry-like grid) --- */
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 240px 240px;
+    gap: var(--sp-sm);
+    margin-top: var(--sp-xl);
+}
+
+.gallery-item {
+    border-radius: var(--r-sm);
+    overflow: hidden;
+    position: relative;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 5s ease-out;
+}
+
+.gallery-item:hover img {
+    transform: scale(1.05);
+}
+
+.gallery-cta {
+    margin-top: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.gallery-item--large {
+    grid-row: span 2;
+    grid-column: span 2;
+}
+
+.gallery-item--large img {
+    object-position: center 20%;
+}
+
+.gallery-item--wide {
+    grid-column: span 2;
+}
+
+/* --- Benefits (What you get) --- */
+
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-lg);
+}
+
+.benefit-item {
+    background-color: var(--color-canvas);
+    border-radius: var(--r-lg);
+    padding: var(--sp-xl);
+    border: 1px solid var(--color-hairline);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-sm);
+}
+
+.benefit-item__icon {
+    width: 24px;
+    height: 24px;
+    color: var(--color-primary);
+    margin-bottom: var(--sp-xs);
+}
+
+.benefit-item__desc {
+    font-size: var(--text-body-size);
+    color: var(--color-ink-muted-48);
+    line-height: 1.5;
+}
+
+/* ==========================================================================
+   UTILITIES (shared text helpers)
+   ========================================================================== */
+
+.text-ink-muted-80 {
+    color: var(--color-ink-muted-80);
+}
+
+.text-ink-muted-48 {
+    color: var(--color-ink-muted-48);
+}
+
+/* ==========================================================================
+   RESPONSIVE — About page
+   ========================================================================== */
+
+@media (max-width: 1068px) {
+    .values-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .awards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 834px) {
+    .about-preview {
+        grid-template-columns: 1fr;
+    }
+
+    .about-preview__image-wrapper {
+        order: -1;
+        aspect-ratio: 16 / 9;
+    }
+
+    .about-story {
+        grid-template-columns: 1fr;
+        gap: var(--sp-xl);
+    }
+
+    .about-story__image-wrapper {
+        order: -1;
+        aspect-ratio: 16 / 9;
+    }
+
+    .benefits-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: auto;
+        grid-auto-rows: 240px;
+    }
+
+    .gallery-item--large,
+    .gallery-item--wide {
+        grid-column: span 1;
+        grid-row: span 1;
+    }
+}
+
+@media (max-width: 640px) {
+    .values-grid,
+    .benefits-grid,
+    .awards-grid,
+    .gallery-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Fix gallery grid on mobile — auto rows instead of fixed 240px */
+    .gallery-grid {
+        grid-template-rows: auto;
+    }
+
+    .gallery-item {
+        aspect-ratio: 16 / 9;
+    }
+
+    .gallery-item--large,
+    .gallery-item--wide {
+        grid-column: span 1;
+        grid-row: span 1;
+    }
+
+    /* Reduce badge overlap padding on small screens */
+    .about-preview__badge-overlap {
+        padding: var(--sp-sm) var(--sp-md);
+        gap: var(--sp-sm);
+    }
+
+    .timeline::before {
+        left: 20px;
+    }
+
+    .timeline__item {
+        padding-left: 48px;
+    }
+
+    .timeline__item::before {
+        left: 16px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .about-preview:hover .about-preview__image,
+    .about-story:hover .about-story__image,
+    .gallery-item:hover img {
+        transform: none;
+    }
+
+    .about-preview__image,
+    .about-story__image {
+        transition: none;
+    }
+
+    .award-card:hover {
+        transform: none;
+    }
+}

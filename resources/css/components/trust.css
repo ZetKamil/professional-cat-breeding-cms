@@ -1,0 +1,185 @@
+/* ==========================================================================
+   EDITORIAL TRUST & HEALTH STANDARDS — Luxury Brand Storytelling
+   Replaces generic 4-column centered boxes with a spacious editorial grid
+   ========================================================================== */
+
+.trust-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: var(--sp-3xl);
+    row-gap: var(--sp-2xl);
+    margin-top: var(--sp-lg);
+}
+
+/* --------------------------------------------------------------------------
+   1. EDITORIAL TRUST ITEM (2-column editorial storytelling)
+   -------------------------------------------------------------------------- */
+
+.trust-item,
+.trust-pillar {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    padding-top: var(--sp-xl);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    transition: border-color var(--duration-fast) var(--ease-out);
+}
+
+.trust-item:hover,
+.trust-pillar:hover {
+    border-color: rgba(255, 255, 255, 0.36);
+}
+
+/* Header row containing index number (01) and premium SVG icon */
+.trust-item__header,
+.trust-pillar__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--sp-lg);
+}
+
+.trust-item__index,
+.trust-pillar__index {
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    color: var(--color-primary-on-dark);
+    opacity: 0.85;
+}
+
+.trust-item__icon,
+.trust-pillar__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--r-md);
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: var(--color-primary-on-dark);
+    transition: transform var(--duration-fast) var(--ease-out),
+                background-color var(--duration-fast) var(--ease-out),
+                border-color var(--duration-fast) var(--ease-out);
+}
+
+.trust-item:hover .trust-item__icon,
+.trust-pillar:hover .trust-pillar__icon {
+    transform: translateY(-3px);
+    background-color: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.28);
+}
+
+.trust-item__icon svg,
+.trust-pillar__icon svg {
+    width: 22px;
+    height: 22px;
+    stroke-width: 1.75;
+}
+
+/* --------------------------------------------------------------------------
+   2. TYPOGRAPHY & BREATHING ROOM
+   -------------------------------------------------------------------------- */
+
+.trust-item__title,
+.trust-pillar__title {
+    color: var(--color-canvas);
+    font-size: 1.4rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+    margin-bottom: var(--sp-sm);
+}
+
+.trust-item__desc,
+.trust-pillar__desc {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 1.05rem;
+    line-height: 1.65;
+    max-width: 480px;
+}
+
+/* ==========================================================================
+   3. GUARANTEE BANNER (Standalone luxury trust banner below pillars)
+   ========================================================================== */
+
+.trust-guarantee-banner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-lg);
+    margin-top: var(--sp-3xl);
+    padding: var(--sp-xl) var(--sp-2xl);
+    background-color: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--r-xl);
+}
+
+.trust-guarantee-banner__content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.trust-guarantee-banner__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--r-md);
+    background-color: rgba(226, 194, 117, 0.12);
+    border: 1px solid rgba(226, 194, 117, 0.28);
+    color: var(--color-primary);
+    flex-shrink: 0;
+}
+
+.trust-guarantee-banner__title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-canvas);
+    margin-bottom: 4px;
+}
+
+.trust-guarantee-banner__desc {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.65);
+    line-height: 1.5;
+}
+
+.trust-guarantee-banner__link {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: opacity var(--duration-fast) var(--ease-out);
+    white-space: nowrap;
+}
+
+.trust-guarantee-banner__link:hover {
+    opacity: 0.8;
+}
+
+/* ==========================================================================
+   4. RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 834px) {
+    .trust-grid {
+        grid-template-columns: 1fr;
+        column-gap: 0;
+        row-gap: var(--sp-xl);
+    }
+
+    .trust-guarantee-banner {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: var(--sp-lg);
+    }
+}

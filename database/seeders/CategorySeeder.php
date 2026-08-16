@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
@@ -11,58 +13,45 @@ class CategorySeeder extends Seeder
     /**
      * Run the database seeds.
      *
-     * We maken hier een vaste basisset categories aan
-     * zodat:
-     * - de category module meteen testdata heeft
-     * - posts later aan categories gekoppeld kunnen worden
+     * Katedra kategorii dla hodowli kotów rasowych ZetKamil.
      */
     public function run(): void
     {
+        // Czyść tabele przed ponownym seedowaniem (idempotentność)
+        DB::table('category_post')->delete();
+        DB::table('categories')->delete();
+
         $categories = [
             [
-                'name' => 'Laravel',
-                'description' => 'Artikels over het Laravel framework, routing, controllers, Blade, Eloquent en meer.',
+                'name' => 'Zdrowie i Genetyka',
+                'description' => 'Badania genetyczne (HCM, PKD, PRA), certyfikaty weterynaryjne i najwyższe standardy profilaktyki zdrowotnej.',
             ],
             [
-                'name' => 'PHP',
-                'description' => 'Artikels over PHP, objectgeoriënteerd programmeren, syntax en best practices.',
+                'name' => 'Wyprawka i Pielęgnacja',
+                'description' => 'Kompletne poradniki dotyczące przygotowania domu na przyjęcie kocięcia oraz doboru akcesoriów premium.',
             ],
             [
-                'name' => 'JavaScript',
-                'description' => 'Artikels over JavaScript, frontend interactie en moderne webontwikkeling.',
+                'name' => 'Odmiany i Rasy',
+                'description' => 'Szczegółowe charakterystyki naszych ras: Kot Bengalski, Kot Brytyjski oraz Kot Syjamski.',
             ],
             [
-                'name' => 'Vue.js',
-                'description' => 'Artikels over Vue.js componenten, state en frontend architectuur.',
+                'name' => 'Socjalizacja i Wychowanie',
+                'description' => 'Rozwój emocjonalny kociąt w pierwszych 12 tygodniach życia, adaptacja oraz behawiorystyka.',
             ],
             [
-                'name' => 'Livewire',
-                'description' => 'Artikels over Laravel Livewire, interactieve componenten en server-driven UI.',
-            ],
-            [
-                'name' => 'MySQL',
-                'description' => 'Artikels over relationele databases, query optimalisatie en datamodellering.',
-            ],
-            [
-                'name' => 'AI',
-                'description' => 'Artikels over artificiële intelligentie, automatisatie en slimme workflows.',
-            ],
-            [
-                'name' => 'SEO',
-                'description' => 'Artikels over zoekmachineoptimalisatie, contentstructuur en online zichtbaarheid.',
+                'name' => 'Żywienie Holistyczne',
+                'description' => 'Dieta BARF, najwyższej jakości karmy mokre oraz zasady optymalnego żywienia kotów rasowych.',
             ],
         ];
 
         foreach ($categories as $category) {
-            DB::table('categories')->updateOrInsert(
-                ['name' => $category['name']],
-                [
-                    'slug' => Str::slug($category['name']),
-                    'description' => $category['description'],
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]
-            );
+            DB::table('categories')->insert([
+                'name' => $category['name'],
+                'slug' => Str::slug($category['name']),
+                'description' => $category['description'],
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
         }
     }
 }

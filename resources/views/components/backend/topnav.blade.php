@@ -9,12 +9,12 @@
     }
 
     $brandUrl = $user && $user->can('view-backend-dashboard')
-        ? route('backend.dashboard')
+        ? route('dashboard')
         : route('backend.posts.index');
 @endphp
 
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-    <a class="navbar-brand ps-3" href="{{ $brandUrl }}">Start Bootstrap</a>
+    <a class="navbar-brand ps-3 fw-bold text-warning" href="{{ $brandUrl }}">Hodowla Kotów</a>
 
     <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" type="button">
         <i class="fas fa-bars"></i>
@@ -66,8 +66,8 @@
 
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                 <li>
-                    <a class="dropdown-item" href="{{ route('profile.edit') }}">
-                        Settings
+                    <a class="dropdown-item" href="{{ route('backend.users.edit', auth()->id()) }}">
+                        <i class="fas fa-user-gear me-2"></i>Edytuj profil / Ustawienia
                     </a>
                 </li>
 

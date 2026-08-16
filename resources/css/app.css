@@ -1,6 +1,28 @@
-@import "bootstrap/dist/css/bootstrap.min.css";
 @import 'tailwindcss';
 @import '../../vendor/livewire/flux/dist/flux.css';
+
+@import './design-tokens.css';
+
+/* Frontend component modules */
+@import './components/ui-core.css';
+@import './components/cta.css';
+@import './components/header.css';
+@import './components/footer.css';
+@import './components/hero.css';
+@import './components/animals.css';
+@import './components/testimonials.css';
+@import './components/trust.css';
+@import './components/articles.css';
+@import './components/skeleton.css';
+
+/* Frontend page modules */
+@import './pages/about.css';
+@import './pages/contact.css';
+@import './pages/errors.css';
+@import './pages/animals-page.css';
+@import './pages/blog-page.css';
+@import './pages/home-page.css';
+@import './pages/legal-page.css';
 
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
@@ -65,3 +87,28 @@ select:focus[data-flux-control] {
 /* \[:where(&)\]:size-4 {
     @apply size-4;
 } */
+
+/* ==========================================================================
+   SCROLL REVEAL ANIMATIONS
+   ========================================================================== */
+
+.reveal-up {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity var(--duration-slow) var(--ease-out),
+                transform var(--duration-slow) var(--ease-out);
+    will-change: opacity, transform;
+}
+
+.reveal-up.is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal-up {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+}

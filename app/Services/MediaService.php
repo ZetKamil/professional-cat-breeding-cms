@@ -2,55 +2,50 @@
 
 namespace App\Services;
 
+use App\Actions\Media\DeleteMediaAction;
+use App\Actions\Media\ReplaceMediaAction;
+use App\Actions\Media\UploadMediaAction;
 use App\Models\Media;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 class MediaService
 {
-
+    public function __construct(
+        protected UploadMediaAction $uploadAction,
+        protected ReplaceMediaAction $replaceAction,
+        protected DeleteMediaAction $deleteAction,
+    ) {}
 
     /**
-     * Upload een nieuwe afbeelding en koppel deze aan een model
+     * Upload a new media file and optionally attach to a model.
      */
-    public function upload($model, UploadedFile $file, string $directory = null): Media
+    public function upload($model, UploadedFile $file, ?string $directory = null): Media
     {
-        $disk = 'public';
+        $data = [
+            'mediable_type' => $model ? $model::class : null,
+            'mediable_id' => $model ? $model->getKey() : null,
+        ];
 
-        $path = $file->store($directory, $disk);
+        $media = $this->uploadAction->handle($data, $file);
 
-        $filename = basename($path);
-
-        $directory = dirname($path) === '.' ? null : dirname($path);
-
-        $media = new Media([
-            'disk' => $disk,
-            'directory' => $directory,
-            'filename' => $filename,
-            'mime_type' => $file->getClientMimeType(),
-            'size' => $file->getSize(),
-        ]);
-
-        $model->media()->save($media);
-
-        return $media;
+        return is_array($media) ? $media[0] : $media;
     }
 
     /**
-     * Vervang een bestaande afbeelding
+     * Replace an existing media file for a model.
      */
-    public function replace($model, UploadedFile $file, string $directory = null): Media
+    public function replace($model, UploadedFile $file, ?string $directory = null): Media
     {
         if ($model->media) {
-            $this->deleteFile($model->media);
-            $model->media->delete();
+            return $this->replaceAction->handle($model->media, $file);
         }
 
         return $this->upload($model, $file, $directory);
     }
 
     /**
-     * Verwijder enkel de fysieke file
+     * Delete only the physical file from disk.
      */
     public function deleteFile(Media $media): void
     {
@@ -62,12 +57,11 @@ class MediaService
     }
 
     /**
-     * Verwijder file en media record
+     * Delete physical file and DB record.
      */
     public function delete(Media $media): void
     {
-        $this->deleteFile($media);
-
-        $media->delete();
+        $this->deleteAction->handle($media);
     }
 }
+

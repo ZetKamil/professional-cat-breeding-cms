@@ -9,7 +9,7 @@
             </div>
 
             <div class="card-body">
-                <form method="POST" action="{{ route('backend.media.update', $media) }}">
+                <form method="POST" action="{{ route('backend.media.update', $media) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PATCH')
 
@@ -17,6 +17,7 @@
                         'media' => $media,
                         'posts' => $posts,
                         'users' => $users,
+                        'animals' => $animals,
                         'submitLabel' => 'Save changes',
                     ])
                 </form>

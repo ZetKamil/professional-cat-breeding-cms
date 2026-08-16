@@ -76,7 +76,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-//        $category->loadCount('posts');
+        //        $category->loadCount('posts');
 
         return view('backend.categories.show', [
             'category' => $category,

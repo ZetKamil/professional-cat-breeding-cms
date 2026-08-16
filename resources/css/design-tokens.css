@@ -1,0 +1,768 @@
+/* ==========================================================================
+   Design Tokens — Luxury Cattery Brand
+   Source: DESIGN_SYSTEM.md
+   Version: 1.0
+
+   These CSS custom properties are the single source of truth for all
+   frontend styling decisions. Every component, layout, and page must
+   reference these tokens — never hardcode values.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. COLOR TOKENS
+   One accent. Neutral surfaces. No gradients.
+   The cat is always the visual hero.
+   -------------------------------------------------------------------------- */
+
+:root {
+    /* Brand & Accent — Luxury Gold / Amber */
+    --color-primary: #d1ab58;
+    --color-primary-focus: #e2c275;
+    --color-primary-on-dark: #e2c275;
+    --color-primary-hover: #b89345;
+
+    /* Surfaces */
+    --color-canvas: #ffffff;
+    --color-canvas-parchment: #f5f5f7;
+    --color-surface-pearl: #fafafc;
+    --color-surface-tile-1: #272729;
+    --color-surface-tile-2: #2a2a2c;
+    --color-surface-tile-3: #252527;
+    --color-surface-black: #000000;
+
+    /* Text & Hairlines */
+    --color-ink: #1d1d1f;
+    --color-ink-muted-80: #333333;
+    --color-ink-muted-48: #7a7a7a;
+    --color-body-muted: #cccccc;
+    --color-hairline: #e0e0e0;
+    --color-divider-soft: #f0f0f0;
+
+    /* Semantic */
+    --color-success: #34c759;
+    --color-warning: #ff9f0a;
+    --color-error: #ff3b30;
+
+    /* --------------------------------------------------------------------------
+       2. TYPOGRAPHY TOKENS
+       Font: Inter (Google Fonts)
+       Body runs at 17px, not 16px — unmistakable "reading, not scanning" pace.
+       Weight 500 is deliberately absent.
+       -------------------------------------------------------------------------- */
+
+    /* Font family */
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+                 Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans',
+                 'Helvetica Neue', sans-serif;
+    --font-serif: Georgia, 'Times New Roman', serif;
+    --font-mono: 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono',
+                 'Courier New', Courier, monospace;
+
+    /* Layout tokens */
+    --nav-height: 64px; /* Height of the fixed global navigation bar */
+
+    /* hero-display — 56px / 600 / 1.07 / -0.28px */
+    --text-hero-display-size: 3.5rem;
+    --text-hero-display-weight: 600;
+    --text-hero-display-lh: 1.07;
+    --text-hero-display-ls: -0.28px;
+
+    /* display-lg — 40px / 600 / 1.10 / 0 */
+    --text-display-lg-size: 2.5rem;
+    --text-display-lg-weight: 600;
+    --text-display-lg-lh: 1.10;
+    --text-display-lg-ls: 0;
+
+    /* display-md — 34px / 600 / 1.47 / -0.374px */
+    --text-display-md-size: 2.125rem;
+    --text-display-md-weight: 600;
+    --text-display-md-lh: 1.47;
+    --text-display-md-ls: -0.374px;
+
+    /* lead — 28px / 400 / 1.14 / 0.196px */
+    --text-lead-size: 1.75rem;
+    --text-lead-weight: 400;
+    --text-lead-lh: 1.14;
+    --text-lead-ls: 0.196px;
+
+    /* lead-airy — 24px / 300 / 1.5 / 0 */
+    --text-lead-airy-size: 1.5rem;
+    --text-lead-airy-weight: 300;
+    --text-lead-airy-lh: 1.5;
+    --text-lead-airy-ls: 0;
+
+    /* tagline — 21px / 600 / 1.19 / 0.231px */
+    --text-tagline-size: 1.3125rem;
+    --text-tagline-weight: 600;
+    --text-tagline-lh: 1.19;
+    --text-tagline-ls: 0.231px;
+
+    /* body-strong — 17px / 600 / 1.24 / -0.374px */
+    --text-body-strong-size: 1.0625rem;
+    --text-body-strong-weight: 600;
+    --text-body-strong-lh: 1.24;
+    --text-body-strong-ls: -0.374px;
+
+    /* body — 17px / 400 / 1.47 / -0.374px */
+    --text-body-size: 1.0625rem;
+    --text-body-weight: 400;
+    --text-body-lh: 1.47;
+    --text-body-ls: -0.374px;
+
+    /* button-large — 18px / 300 / 1.0 / 0 */
+    --text-btn-lg-size: 1.125rem;
+    --text-btn-lg-weight: 300;
+    --text-btn-lg-lh: 1.0;
+    --text-btn-lg-ls: 0;
+
+    /* button-utility — 14px / 400 / 1.29 / -0.224px */
+    --text-btn-util-size: 0.875rem;
+    --text-btn-util-weight: 400;
+    --text-btn-util-lh: 1.29;
+    --text-btn-util-ls: -0.224px;
+
+    /* nav-link — 12px / 400 / 1.0 / -0.12px */
+    --text-nav-size: 0.75rem;
+    --text-nav-weight: 400;
+    --text-nav-lh: 1.0;
+    --text-nav-ls: -0.12px;
+
+    /* --------------------------------------------------------------------------
+       3. SPACING SCALE
+       Base: 8px grid.
+       Universal rhythm constants: 17px and 21px.
+       -------------------------------------------------------------------------- */
+
+    --sp-xxs: 0.25rem;   /* 4px  */
+    --sp-xs: 0.5rem;     /* 8px  */
+    --sp-sm: 0.75rem;    /* 12px */
+    --sp-md: 1.0625rem;  /* 17px — body rhythm */
+    --sp-lg: 1.5rem;     /* 24px */
+    --sp-xl: 2rem;       /* 32px */
+    --sp-2xl: 3rem;      /* 48px */
+    --sp-3xl: 4rem;      /* 64px */
+    --sp-4xl: 6rem;      /* 96px */
+    --sp-5xl: 8rem;      /* 128px */
+    --sp-section: 5rem;  /* 80px — standard section padding */
+
+    /* Spacing aliases for blog and components */
+    --space-1: var(--sp-xxs);
+    --space-2: var(--sp-xs);
+    --space-3: var(--sp-sm);
+    --space-4: 1rem;
+    --space-6: var(--sp-lg);
+    --space-8: var(--sp-xl);
+    --space-10: 2.5rem;
+    --space-12: var(--sp-2xl);
+    --space-16: var(--sp-3xl);
+    --space-20: var(--sp-section);
+    --space-24: var(--sp-4xl);
+
+    /* --------------------------------------------------------------------------
+       4. BORDER RADIUS SCALE
+       0 (tiles) → 8 (utility) → 11 (pearl) → 18 (cards) → 9999 (pills)
+       -------------------------------------------------------------------------- */
+
+    --r-none: 0;
+    --r-xs: 0.3125rem;   /* 5px  */
+    --r-sm: 0.5rem;      /* 8px  */
+    --r-md: 0.6875rem;   /* 11px */
+    --r-lg: 1.125rem;    /* 18px */
+    --r-pill: 9999px;
+    --r-full: 9999px;
+    --r-circle: 50%;
+
+    /* --------------------------------------------------------------------------
+       5. ELEVATION & DEPTH
+       Exactly one drop-shadow in the entire system — product imagery only.
+       -------------------------------------------------------------------------- */
+
+    --shadow-none: none;
+    --shadow-hairline: 0 0 0 1px rgba(0, 0, 0, 0.08);
+    --shadow-product: 0 20px 40px rgba(0, 0, 0, 0.15);
+    --shadow-card-hover: 0 16px 40px -12px rgba(0, 0, 0, 0.08);
+
+    --blur-backdrop: blur(20px);
+    --backdrop-parchment: rgba(245, 245, 247, 0.8);
+
+    /* --------------------------------------------------------------------------
+       6. ANIMATION & MOTION
+       Motion improves understanding. Never distracts.
+       -------------------------------------------------------------------------- */
+
+    --duration-fast: 150ms;
+    --duration-base: 250ms;
+    --duration-slow: 400ms;
+
+    --ease-out: cubic-bezier(0.25, 0, 0.2, 1);
+    --ease-in-out: cubic-bezier(0.42, 0, 0.58, 1);
+
+    /* --------------------------------------------------------------------------
+       7. LAYOUT
+       Content locks at 1440px.
+       -------------------------------------------------------------------------- */
+
+    --content-max-width: 1440px;
+    --content-padding-x: clamp(1rem, 4vw, 2rem);
+
+    /* Touch targets */
+    --touch-target-min: 44px;
+    --touch-target-nav: 32px;
+
+    /* Z-index scale */
+    --z-base: 0;
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-overlay: 300;
+    --z-modal: 400;
+    --z-toast: 500;
+}
+
+/* --------------------------------------------------------------------------
+   8. RESPONSIVE TYPOGRAPHY ADJUSTMENTS
+   Hero: 56px → 40px → 34px → 28px
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 1068px) {
+    :root {
+        --text-hero-display-size: 2.5rem;   /* 40px */
+        --text-display-lg-size: 2.125rem;   /* 34px */
+        --text-display-md-size: 1.75rem;    /* 28px */
+        --text-lead-size: 1.5rem;           /* 24px */
+    }
+}
+
+@media (max-width: 834px) {
+    :root {
+        --text-hero-display-size: 2.125rem; /* 34px */
+        --text-display-lg-size: 1.75rem;    /* 28px */
+        --text-display-md-size: 1.5rem;     /* 24px */
+        --text-lead-size: 1.3125rem;        /* 21px */
+    }
+}
+
+@media (max-width: 640px) {
+    :root {
+        --text-hero-display-size: 1.75rem;  /* 28px */
+        --text-display-lg-size: 1.5rem;     /* 24px */
+        --text-display-md-size: 1.3125rem;  /* 21px */
+        --text-lead-size: 1.125rem;         /* 18px */
+        --text-lead-airy-size: 1.25rem;     /* 20px — scaled down from 24px */
+        --text-tagline-size: 1.125rem;      /* 18px — scaled down from 21px */
+        --sp-section: 3rem;                 /* 48px — tighter on mobile */
+    }
+}
+
+/* --------------------------------------------------------------------------
+   9. REDUCED MOTION
+   Always respect user preferences.
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --duration-fast: 0ms;
+        --duration-base: 0ms;
+        --duration-slow: 0ms;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   10. UTILITY CLASSES
+   Typography preset classes for direct use in Blade templates.
+   -------------------------------------------------------------------------- */
+
+.text-hero-display {
+    font-size: var(--text-hero-display-size);
+    font-weight: var(--text-hero-display-weight);
+    line-height: var(--text-hero-display-lh);
+    letter-spacing: var(--text-hero-display-ls);
+    color: var(--color-ink);
+    text-wrap: balance;
+}
+
+.text-display-lg {
+    font-size: var(--text-display-lg-size);
+    font-weight: var(--text-display-lg-weight);
+    line-height: var(--text-display-lg-lh);
+    letter-spacing: var(--text-display-lg-ls);
+    color: var(--color-ink);
+    text-wrap: balance;
+}
+
+.text-display-md {
+    font-size: var(--text-display-md-size);
+    font-weight: var(--text-display-md-weight);
+    line-height: var(--text-display-md-lh);
+    letter-spacing: var(--text-display-md-ls);
+    color: var(--color-ink);
+    text-wrap: balance;
+}
+
+.text-lead {
+    font-size: var(--text-lead-size);
+    font-weight: var(--text-lead-weight);
+    line-height: var(--text-lead-lh);
+    letter-spacing: var(--text-lead-ls);
+    color: var(--color-ink);
+    text-wrap: pretty;
+}
+
+.text-lead-airy {
+    font-size: var(--text-lead-airy-size);
+    font-weight: var(--text-lead-airy-weight);
+    line-height: var(--text-lead-airy-lh);
+    letter-spacing: var(--text-lead-airy-ls);
+    color: var(--color-ink-muted-80);
+    text-wrap: pretty;
+}
+
+.text-tagline {
+    font-size: var(--text-tagline-size);
+    font-weight: var(--text-tagline-weight);
+    line-height: var(--text-tagline-lh);
+    letter-spacing: var(--text-tagline-ls);
+    color: var(--color-ink);
+    text-wrap: balance;
+}
+
+.text-body-strong {
+    font-size: var(--text-body-strong-size);
+    font-weight: var(--text-body-strong-weight);
+    line-height: var(--text-body-strong-lh);
+    letter-spacing: var(--text-body-strong-ls);
+    color: var(--color-ink);
+}
+
+.text-body {
+    font-size: var(--text-body-size);
+    font-weight: var(--text-body-weight);
+    line-height: var(--text-body-lh);
+    letter-spacing: var(--text-body-ls);
+    color: var(--color-ink);
+}
+
+/* Dark tile text overrides */
+.tile-dark .text-hero-display,
+.tile-dark .text-display-lg,
+.tile-dark .text-display-md,
+.tile-dark .text-tagline,
+.tile-dark .text-body-strong {
+    color: var(--color-canvas);
+}
+
+.tile-dark .text-lead,
+.tile-dark .text-lead-airy,
+.tile-dark .text-body {
+    color: var(--color-body-muted);
+}
+
+/* --------------------------------------------------------------------------
+   11. BUTTON CLASSES
+   Two grammars: pills for actions, rectangles for utility.
+   The pill IS the brand action signal.
+   -------------------------------------------------------------------------- */
+
+.btn {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sp-xs);
+    font-family: var(--font-sans);
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    transition: transform var(--duration-base) var(--ease-out),
+                box-shadow var(--duration-base) var(--ease-out),
+                background-color var(--duration-fast) var(--ease-out),
+                color var(--duration-fast) var(--ease-out),
+                border-color var(--duration-fast) var(--ease-out);
+}
+
+.btn:hover:not(:disabled):not([aria-disabled="true"]) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.btn:active:not(:disabled):not([aria-disabled="true"]) {
+    transform: translateY(0) scale(0.975);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.btn:focus-visible {
+    outline: 2px solid var(--color-primary-focus);
+    outline-offset: 2px;
+}
+
+.btn:disabled,
+.btn[aria-disabled="true"] {
+    color: var(--color-ink-muted-48);
+    cursor: not-allowed;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+/* Primary — pill CTA */
+.btn-primary {
+    background-color: var(--color-primary);
+    color: var(--color-canvas) !important;
+    border-radius: var(--r-pill);
+    padding: var(--sp-sm) var(--sp-lg);
+    font-size: var(--text-body-size);
+    font-weight: 400;
+    min-height: var(--touch-target-min);
+    min-width: 100px;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-primary-hover);
+    color: var(--color-canvas) !important;
+}
+
+/* Secondary — ghost pill */
+.btn-secondary {
+    background-color: transparent;
+    color: var(--color-primary) !important;
+    border: 1px solid var(--color-primary);
+    border-radius: var(--r-pill);
+    padding: var(--sp-sm) var(--sp-lg);
+    font-size: var(--text-body-size);
+    font-weight: 400;
+    min-height: var(--touch-target-min);
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-primary);
+    color: var(--color-canvas) !important;
+}
+
+/* Dark utility — luxury gold rectangle */
+.btn-dark-utility {
+    background-color: #d1ab58 !important;
+    color: #1d1d1f !important;
+    border-radius: var(--r-sm);
+    padding: var(--sp-xs) var(--sp-md);
+    font-size: var(--text-btn-util-size);
+    font-weight: 600;
+    letter-spacing: var(--text-btn-util-ls);
+}
+
+.btn-dark-utility:hover {
+    background-color: #dfb966 !important;
+    color: #1d1d1f !important;
+}
+
+/* Pearl capsule */
+.btn-pearl {
+    background-color: var(--color-surface-pearl);
+    color: var(--color-ink-muted-80);
+    border-radius: var(--r-md);
+    padding: var(--sp-xs) var(--sp-md);
+    font-size: var(--text-btn-util-size);
+    font-weight: var(--text-btn-util-weight);
+    box-shadow: 0 0 0 3px var(--color-divider-soft);
+}
+
+.btn-pearl:hover {
+    background-color: var(--color-canvas);
+    box-shadow: 0 0 0 3px var(--color-hairline);
+}
+
+/* Store hero — airy weight */
+.btn-store-hero {
+    background-color: transparent;
+    color: var(--color-primary);
+    border-radius: var(--r-pill);
+    padding: var(--sp-sm) var(--sp-lg);
+    font-size: var(--text-btn-lg-size);
+    font-weight: var(--text-btn-lg-weight);
+    letter-spacing: var(--text-btn-lg-ls);
+}
+
+.btn-store-hero:hover {
+    text-decoration: underline;
+}
+
+/* Icon circular */
+.btn-icon {
+    width: var(--touch-target-min);
+    height: var(--touch-target-min);
+    border-radius: var(--r-full);
+    background-color: rgba(0, 0, 0, 0.06);
+    color: var(--color-ink);
+    padding: 0;
+    font-size: 1.25rem;
+}
+
+.btn-icon:hover:not(:disabled):not([aria-disabled="true"]) {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Ghost — text only */
+.btn-ghost {
+    background-color: transparent;
+    color: var(--color-ink);
+    border-radius: var(--r-sm);
+    padding: var(--sp-xs) var(--sp-sm);
+    font-size: var(--text-body-size);
+    font-weight: 400;
+}
+
+.btn-ghost:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+}
+
+/* Destructive */
+.btn-destructive {
+    background-color: var(--color-error);
+    color: var(--color-canvas);
+    border-radius: var(--r-pill);
+    padding: var(--sp-sm) var(--sp-lg);
+    font-size: var(--text-body-size);
+    font-weight: 400;
+}
+
+.btn-destructive:hover {
+    opacity: 0.9;
+}
+
+/* Dark tile button variants */
+.tile-dark .btn-secondary {
+    border-color: var(--color-primary-on-dark);
+    color: var(--color-primary-on-dark);
+}
+
+.tile-dark .btn-store-hero {
+    color: var(--color-primary-on-dark);
+}
+
+/* Text link (inline) */
+.text-link {
+    color: var(--color-primary);
+    text-decoration: none;
+    cursor: pointer;
+    transition: color var(--duration-fast) var(--ease-out);
+}
+
+.text-link:hover {
+    text-decoration: underline;
+}
+
+.text-link::after {
+    content: ' ›';
+}
+
+.tile-dark .text-link {
+    color: var(--color-primary-on-dark);
+}
+
+/* --------------------------------------------------------------------------
+   12. SURFACE / TILE CLASSES
+   Edge-to-edge alternation. The color change IS the divider.
+   -------------------------------------------------------------------------- */
+
+.tile-light {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+}
+
+.tile-parchment {
+    background-color: var(--color-canvas-parchment);
+    color: var(--color-ink);
+}
+
+.tile-dark {
+    background-color: var(--color-surface-tile-1);
+    color: var(--color-canvas);
+}
+
+.tile-dark-2 {
+    background-color: var(--color-surface-tile-2);
+    color: var(--color-canvas);
+}
+
+.tile-dark-3 {
+    background-color: var(--color-surface-tile-3);
+    color: var(--color-canvas);
+}
+
+.tile-black {
+    background-color: var(--color-surface-black);
+    color: var(--color-canvas);
+}
+
+/* --------------------------------------------------------------------------
+   13. SECTION LAYOUT
+   Standard section padding and content constraint.
+   -------------------------------------------------------------------------- */
+
+.section {
+    padding-top: var(--sp-section);
+    padding-bottom: var(--sp-section);
+    padding-left: var(--content-padding-x);
+    padding-right: var(--content-padding-x);
+}
+
+.section-inner {
+    max-width: var(--content-max-width);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.section--sm {
+    padding-top: var(--sp-xl);
+    padding-bottom: var(--sp-xl);
+}
+
+.section--lg {
+    padding-top: var(--sp-4xl);
+    padding-bottom: var(--sp-4xl);
+}
+
+.section--none {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.section--no-pt {
+    padding-top: 0 !important;
+}
+
+.section--no-pb {
+    padding-bottom: 0 !important;
+}
+
+/* --------------------------------------------------------------------------
+   14. CARD
+   White background, 18px radius, 1px hairline border, no shadows.
+   -------------------------------------------------------------------------- */
+
+.card {
+    background-color: var(--color-canvas);
+    border-radius: var(--r-lg);
+    border: 1px solid var(--color-hairline);
+    overflow: hidden;
+    transition: border-color var(--duration-fast) var(--ease-out);
+}
+
+.card:hover {
+    border-color: var(--color-ink-muted-48);
+}
+
+.card-body {
+    padding: var(--sp-lg);
+}
+
+.card-image {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    display: block;
+}
+
+/* --------------------------------------------------------------------------
+   15. BACKDROP BLUR (Sticky bar, sub-nav)
+   -------------------------------------------------------------------------- */
+
+.backdrop-blur {
+    background-color: var(--backdrop-parchment);
+    backdrop-filter: var(--blur-backdrop);
+    -webkit-backdrop-filter: var(--blur-backdrop);
+}
+
+/* --------------------------------------------------------------------------
+   16. BASE RESET & DEFAULTS
+   Applied to the frontend shell only.
+   -------------------------------------------------------------------------- */
+
+html,
+body.frontend-shell {
+    margin: 0 !important;
+    padding: 0 !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100%;
+}
+
+/* Prevent horizontal scroll on mobile — global protection */
+@media (max-width: 1023px) {
+    body.frontend-shell {
+        overflow-x: hidden;
+    }
+}
+
+.frontend-shell {
+    font-family: var(--font-sans);
+    font-size: var(--text-body-size);
+    font-weight: var(--text-body-weight);
+    line-height: var(--text-body-lh);
+    letter-spacing: var(--text-body-ls);
+    color: var(--color-ink);
+    background-color: var(--color-canvas);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+:where(.frontend-shell *, .frontend-shell *::before, .frontend-shell *::after) {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.frontend-shell img,
+.frontend-shell video {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Prevent long unbroken strings (emails, URLs) from causing horizontal overflow */
+.frontend-shell p,
+.frontend-shell li,
+.frontend-shell td,
+.frontend-shell th {
+    overflow-wrap: break-word;
+}
+
+.frontend-shell a:not([class*="btn"]):not([class*="chip"]):not([class*="cta"]):not([class*="pill"]):not([class*="link"]):not([class*="logo"]):not([class*="nav"]) {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* Focus visible for keyboard users */
+/* Removed duplicate global :focus-visible */
+
+/* Skip to content link (accessibility) */
+.skip-to-content {
+    position: absolute;
+    top: -100%;
+    left: var(--sp-md);
+    z-index: var(--z-modal);
+    background-color: var(--color-primary);
+    color: var(--color-canvas);
+    padding: var(--sp-sm) var(--sp-lg);
+    border-radius: var(--r-sm);
+    font-size: var(--text-btn-util-size);
+    font-weight: 600;
+    transition: top var(--duration-fast) var(--ease-out);
+}
+
+.skip-to-content:focus {
+    top: var(--sp-md);
+}
+
+/* iOS scroll-chain prevention when mobile menu is open */
+body.menu-open {
+    overscroll-behavior: none;
+}

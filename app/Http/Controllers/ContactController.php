@@ -21,7 +21,7 @@ class ContactController extends Controller
         ContactMessageSent::dispatch($data);
 
         return redirect()
-            ->route('frontend.contact')
-            ->with('status', 'Bericht succesvol verzonden.');
+            ->route('contact')
+            ->with('status', 'Dziękujemy za wiadomość! Odpowiemy tak szybko, jak to możliwe.');
     }
 }

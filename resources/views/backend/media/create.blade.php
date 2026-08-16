@@ -16,9 +16,10 @@
                         'media' => null,
                         'posts' => $posts,
                         'users' => $users,
+                        'animals' => $animals,
                         'prefillType' => $prefillType,
                         'prefillId' => $prefillId,
-                        'submitLabel' => 'Create media',
+                        'submitLabel' => 'Upload Media',
                     ])
                 </form>
             </div>

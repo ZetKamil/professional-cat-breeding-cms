@@ -1,0 +1,511 @@
+/* ==========================================================================
+   GLOBAL NAVIGATION HEADER — Apple / Aesop Luxury Glassmorphism
+   Sticky adaptive navbar with smooth scroll states, theme detection,
+   and full-screen frosted mobile overlay.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. ROOT NAVBAR THEME TOKENS
+   -------------------------------------------------------------------------- */
+
+.site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: var(--z-sticky, 200);
+    margin: 0 !important;
+    padding: 0 !important;
+    /* Safe area: push header down on iPhone with notch/Dynamic Island */
+    padding-top: env(safe-area-inset-top) !important;
+    pointer-events: none;
+}
+
+.global-nav {
+    /* Default / Light theme tokens */
+    --nav-fg: #1d1d1f;
+    --nav-bg: rgba(255, 255, 255, 0.95);
+    --nav-border: rgba(0, 0, 0, 0.08);
+    --nav-muted: #555555;
+
+    pointer-events: auto;
+    position: relative;
+    width: 100%;
+    margin: 0 !important;
+    padding: 0 var(--content-padding-x);
+    color: var(--nav-fg);
+    background-color: var(--nav-bg);
+    backdrop-filter: saturate(180%) blur(24px);
+    -webkit-backdrop-filter: saturate(180%) blur(24px);
+    border-bottom: 1px solid var(--nav-border);
+    transition: background-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                border-bottom-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                backdrop-filter 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --------------------------------------------------------------------------
+   2. SCROLL & ADAPTIVE THEME STATES
+   -------------------------------------------------------------------------- */
+
+/* Theme: Light (over white/light surfaces) */
+.global-nav--light {
+    --nav-fg: #1d1d1f;
+    --nav-bg: rgba(255, 255, 255, 0.95);
+    --nav-border: rgba(0, 0, 0, 0.08);
+    --nav-muted: #555555;
+}
+
+/* Theme: Cream (over parchment / #f5f5f7 surfaces) */
+.global-nav--cream {
+    --nav-fg: #1d1d1f;
+    --nav-bg: rgba(247, 245, 240, 0.96);
+    --nav-border: rgba(0, 0, 0, 0.08);
+    --nav-muted: #555555;
+}
+
+/* Theme: Dark (over dark hero or dark sections / #181816) */
+.global-nav--dark {
+    --nav-fg: #ffffff;
+    --nav-bg: rgba(18, 18, 16, 0.94);
+    --nav-border: rgba(255, 255, 255, 0.12);
+    --nav-muted: rgba(255, 255, 255, 0.78);
+}
+
+/* State: TOP (scrollY <= 10) — Translucent luxury bar over hero/content */
+.global-nav--top {
+    box-shadow: none !important;
+}
+
+.global-nav--top.global-nav--dark {
+    background-color: rgba(18, 18, 18, 0.35) !important;
+    border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(12px) saturate(140%) !important;
+    -webkit-backdrop-filter: blur(12px) saturate(140%) !important;
+    --nav-fg: #ffffff;
+    --nav-muted: rgba(255, 255, 255, 0.82);
+}
+
+.global-nav--top.global-nav--light,
+.global-nav--top.global-nav--cream,
+.global-nav--top:not(.global-nav--dark) {
+    background-color: rgba(255, 255, 255, 0.45) !important;
+    border-bottom-color: rgba(0, 0, 0, 0.06) !important;
+    backdrop-filter: blur(12px) saturate(140%) !important;
+    -webkit-backdrop-filter: blur(12px) saturate(140%) !important;
+    --nav-fg: #1d1d1f;
+    --nav-muted: #555555;
+}
+
+/* State: SCROLLED — High opacity & blur for 100% text readability over long scroll */
+.global-nav.is-scrolled {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    backdrop-filter: saturate(180%) blur(28px) !important;
+    -webkit-backdrop-filter: saturate(180%) blur(28px) !important;
+}
+
+.global-nav.is-scrolled.global-nav--light {
+    --nav-bg: rgba(255, 255, 255, 0.96);
+}
+
+.global-nav.is-scrolled.global-nav--cream {
+    --nav-bg: rgba(247, 245, 240, 0.96);
+}
+
+.global-nav.is-scrolled.global-nav--dark {
+    --nav-bg: rgba(18, 18, 16, 0.95);
+}
+
+/* --------------------------------------------------------------------------
+   3. DIMENSIONS & CONTAINER
+   -------------------------------------------------------------------------- */
+
+.global-nav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    max-width: var(--content-max-width, 1440px);
+    margin: 0 auto;
+    transition: height 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.global-nav.is-scrolled .global-nav__inner {
+    height: 56px;
+}
+
+/* --------------------------------------------------------------------------
+   4. BRAND / LOGO
+   -------------------------------------------------------------------------- */
+
+.global-nav__logo,
+.global-nav__logo:visited,
+.frontend-shell a.global-nav__logo {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-xs);
+    text-decoration: none;
+    flex-shrink: 0;
+    border-radius: var(--r-sm);
+    color: var(--nav-fg) !important;
+    transition: color 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.global-nav__logo:focus-visible {
+    outline: 2px solid var(--color-primary, #d1ab58);
+    outline-offset: 4px;
+}
+
+.global-nav__logo-text {
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    color: var(--nav-fg) !important;
+    white-space: nowrap;
+    transition: color 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --------------------------------------------------------------------------
+   5. DESKTOP PRIMARY LINKS
+   -------------------------------------------------------------------------- */
+
+.global-nav__links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.global-nav__link,
+.global-nav__link:visited,
+.frontend-shell a.global-nav__link {
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: var(--nav-muted) !important;
+    text-decoration: none;
+    padding: 4px 2px;
+    border-radius: var(--r-sm);
+    transition: color 0.25s var(--ease-out),
+                opacity 0.25s var(--ease-out);
+    white-space: nowrap;
+    position: relative;
+}
+
+.global-nav__link:hover,
+.frontend-shell a.global-nav__link:hover {
+    color: var(--nav-fg) !important;
+    opacity: 1;
+}
+
+.global-nav__link.is-active,
+.frontend-shell a.global-nav__link.is-active {
+    color: var(--nav-fg) !important;
+    font-weight: 600;
+}
+
+/* Subtle accent dot on active item — Apple minimalism */
+.global-nav__link.is-active::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: var(--color-primary, #d1ab58);
+}
+
+.global-nav__link:focus-visible {
+    outline: 2px solid var(--color-primary, #d1ab58);
+    outline-offset: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   6. RIGHT UTILITIES & HAMBURGER
+   -------------------------------------------------------------------------- */
+
+.global-nav__utils {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* Minimalist luxury gold CTA button ("Zapytaj o adopcję") — Never black */
+.global-nav__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 18px;
+    border-radius: var(--r-full, 9999px);
+    font-size: 13.5px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+    background-color: #d1ab58 !important;
+    color: #1d1d1f !important;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(209, 171, 88, 0.25);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    white-space: nowrap;
+}
+
+.global-nav__cta:hover {
+    background-color: #dfb966 !important;
+    color: #1d1d1f !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(209, 171, 88, 0.35);
+}
+
+/* Hamburger button for mobile */
+.global-nav__hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: var(--touch-target-min, 44px);
+    height: var(--touch-target-min, 44px);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    border-radius: var(--r-sm);
+}
+
+.global-nav__hamburger:focus-visible {
+    outline: 2px solid var(--color-primary, #d1ab58);
+    outline-offset: 2px;
+}
+
+.hamburger-line {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background-color: var(--nav-fg);
+    border-radius: 1px;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.25s ease;
+}
+
+.global-nav__hamburger[aria-expanded="true"] .hamburger-line:first-child {
+    transform: translateY(4px) rotate(45deg);
+}
+
+.global-nav__hamburger[aria-expanded="true"] .hamburger-line:last-child {
+    transform: translateY(-4px) rotate(-45deg);
+}
+
+/* --------------------------------------------------------------------------
+   7. APPLE-STYLE FULLSCREEN MOBILE MENU OVERLAY
+   -------------------------------------------------------------------------- */
+
+.mobile-menu {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-overlay, 300);
+    background-color: rgba(18, 18, 18, 0.96);
+    backdrop-filter: saturate(180%) blur(32px);
+    -webkit-backdrop-filter: saturate(180%) blur(32px);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                visibility 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    display: flex;
+    flex-direction: column;
+}
+
+.mobile-menu.is-open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.mobile-menu__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    padding: 0 var(--content-padding-x);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    flex-shrink: 0;
+}
+
+.mobile-menu__brand {
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.mobile-menu__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.mobile-menu__close:focus-visible {
+    outline: 2px solid var(--color-primary, #d1ab58);
+    outline-offset: -2px;
+}
+
+.mobile-menu__nav {
+    padding: 40px var(--content-padding-x);
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.mobile-menu__links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.mobile-menu__link {
+    display: block;
+    padding: 18px 0;
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    transition: color 0.25s var(--ease-out),
+                opacity 0.25s var(--ease-out);
+}
+
+.mobile-menu__link:hover,
+.mobile-menu__link.is-active {
+    color: var(--color-primary, #d1ab58);
+}
+
+.mobile-menu__footer {
+    margin-top: 40px;
+}
+
+.mobile-menu__cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 14px 24px;
+    border-radius: var(--r-full, 9999px);
+    background-color: #d1ab58 !important;
+    color: #181816 !important;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.25s ease;
+}
+
+.mobile-menu__cta:hover {
+    opacity: 0.9;
+    color: #181816 !important;
+}
+
+body.menu-open {
+    overflow: hidden;
+}
+
+/* Mobile menu safe-area-inset-bottom — gesture bar iOS / Android */
+.mobile-menu__footer {
+    padding-bottom: calc(var(--sp-xl) + env(safe-area-inset-bottom));
+}
+
+/* Compact nav links on very small viewports */
+@media (max-width: 400px) {
+    .mobile-menu__nav {
+        padding-top: 28px;
+        padding-bottom: 28px;
+    }
+
+    .mobile-menu__link {
+        padding: 14px 0;
+        font-size: 22px;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   8. RESPONSIVE BREAKPOINT (max-width: 834px)
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 834px) {
+    .global-nav__links {
+        display: none;
+    }
+
+    .global-nav__hamburger {
+        display: flex;
+    }
+
+    .global-nav__utils .global-nav__link,
+    .global-nav__utils .global-nav__cta {
+        display: none;
+    }
+
+    /* Prevent long brand name from pushing hamburger off-screen on small phones.
+       clamp: minimum 160px (e.g. 320px phone), preferred 50vw, max 280px.
+       text-overflow: ellipsis keeps the brand name readable without overflow. */
+    .global-nav__logo-text {
+        max-width: clamp(160px, 50vw, 280px);
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   9. ACCESSIBILITY & BROWSER FALLBACKS
+   -------------------------------------------------------------------------- */
+
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+    .global-nav--light {
+        background-color: #ffffff;
+    }
+    .global-nav--cream {
+        background-color: #f5f5f7;
+    }
+    .global-nav--dark {
+        background-color: #181816;
+    }
+    .global-nav--top:not(.global-nav--dark) {
+        background-color: transparent !important;
+    }
+    .global-nav--top.global-nav--dark {
+        background-color: transparent !important;
+    }
+    .mobile-menu {
+        background-color: #181816;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .global-nav,
+    .global-nav__inner,
+    .global-nav__link,
+    .global-nav__logo,
+    .mobile-menu,
+    .hamburger-line {
+        transition: none !important;
+    }
+}

@@ -1,0 +1,1036 @@
+/* ==========================================================================
+   HOME PAGE MODULE — Apple / Aesop / Polène / Rolls Royce Luxury Storytelling
+   Sprint 6.5 Editorial Finish Pass — Handcrafted 8-Pixel Rhythm & Craftsmanship
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. HERO STORYTELLING & SPLIT-SCREEN OPENING
+   -------------------------------------------------------------------------- */
+
+.hero-split-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    align-items: center;
+}
+
+@media (min-width: 992px) {
+    .hero-split-grid {
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 64px;
+    }
+}
+
+.hero-split__left {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    z-index: 2;
+}
+
+.hero-split__title {
+    font-size: clamp(2.5rem, 5.5vw, 4.25rem);
+    line-height: 1.05;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: #ffffff;
+    text-wrap: balance;
+}
+
+.hero-split__lead {
+    font-size: clamp(1.1rem, 2vw, 1.25rem);
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.82);
+    max-width: 52ch;
+    text-wrap: pretty;
+}
+
+.hero-split__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 24px;
+    margin-top: 16px;
+}
+
+.hero-split__secondary-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 4px;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: var(--text-sm, 14px);
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.25s var(--ease-out);
+}
+
+.hero-split__secondary-link:hover {
+    color: var(--color-primary, #c8a04a);
+}
+
+.hero-split__right {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.hero-split__frame {
+    position: relative;
+    border-radius: var(--r-xl);
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    max-width: 580px;
+    max-height: 480px;
+    margin-left: auto;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 32px 64px -16px rgba(0, 0, 0, 0.35);
+    width: 100%;
+}
+
+.hero-split__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.hero-split__seal {
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    background-color: rgba(23, 23, 23, 0.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: #ffffff;
+    padding: 16px 24px;
+    border-radius: var(--r-lg);
+    border: 1px solid rgba(209, 171, 88, 0.28);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    z-index: 5;
+}
+
+@media (max-width: 991px) {
+    .hero-split__frame {
+        max-height: 340px;
+        margin: 0 auto;
+    }
+
+    .hero-split__seal {
+        position: relative;
+        bottom: 0;
+        left: 0;
+        margin-top: 16px;
+        width: 100%;
+    }
+}
+
+@media (max-width: 640px) {
+    .hero-split__frame {
+        max-height: 240px;
+    }
+
+    .hero-split__seal {
+        padding: 12px 16px;
+        gap: 12px;
+        font-size: 11px;
+    }
+
+    .hero-split__actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .hero-split__secondary-link {
+        text-align: center;
+    }
+}
+
+.hero__trust-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 24px;
+    margin-top: 40px;
+    padding-top: 22px;
+    padding-bottom: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+@media (max-width: 991px) {
+    .hero__trust-bar {
+        gap: 16px;
+        margin-top: 36px;
+        padding-top: 24px;
+        justify-content: center;
+    }
+}
+
+.hero__trust-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.82);
+    letter-spacing: 0.01em;
+}
+
+@media (max-width: 640px) {
+    .hero__trust-bar {
+        gap: 12px;
+        margin-top: 28px;
+        padding-top: 18px;
+    }
+
+    .hero__trust-item {
+        font-size: 0.75rem;
+        gap: 6px;
+    }
+}
+
+.hero__trust-icon {
+    width: 16px;
+    height: 16px;
+    color: #d1ab58;
+    flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+   2. BREEDING PHILOSOPHY — Double-Spread Luxury Manifesto
+   -------------------------------------------------------------------------- */
+
+.manifesto-section {
+    padding: 80px 0;
+    background-color: var(--color-canvas);
+    border-bottom: 1px solid var(--color-hairline);
+}
+
+@media (min-width: 1024px) {
+    .manifesto-section {
+        padding: 112px 0;
+    }
+}
+
+.manifesto__quote-box {
+    max-width: 880px;
+    margin: 0 auto 64px auto;
+    text-align: center;
+}
+
+.manifesto__quote {
+    /* Lowered minimum so text doesn't dominate on mobile */
+    font-size: clamp(1.375rem, 4vw, 2.75rem);
+    line-height: 1.35;
+    font-weight: 300;
+    letter-spacing: -0.025em;
+    color: var(--color-ink);
+    margin-bottom: 24px;
+    text-wrap: balance;
+}
+
+.manifesto__attribution {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #d1ab58;
+}
+
+.manifesto__grid {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+}
+
+.manifesto__content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+@media (min-width: 992px) {
+    .manifesto__content {
+        grid-template-columns: 1.25fr 0.75fr;
+        gap: 64px;
+    }
+}
+
+.manifesto__tenets {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.manifesto-tenet {
+    display: flex;
+    gap: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--color-hairline);
+}
+
+.manifesto-tenet:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+@media (max-width: 640px) {
+    .manifesto-tenet {
+        gap: 16px;
+    }
+}
+
+.manifesto-tenet__num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: #d1ab58;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    flex-shrink: 0;
+    padding-top: 2px;
+}
+
+.manifesto-tenet__title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-ink);
+    margin-bottom: 8px;
+    line-height: 1.3;
+}
+
+.manifesto-tenet__desc {
+    font-size: 15px;
+    color: var(--color-ink-muted-80);
+    line-height: 1.65;
+    max-width: 56ch;
+}
+
+.manifesto__visual {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.manifesto__portrait {
+    border-radius: var(--r-xl);
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    max-width: 400px;
+    max-height: 500px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    width: 100%;
+}
+
+.manifesto__portrait img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.manifesto__stat-card {
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: var(--r-lg);
+    padding: 24px 32px;
+    box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.08);
+    z-index: 5;
+}
+
+@media (max-width: 767px) {
+    .manifesto__stat-card {
+        position: relative;
+        bottom: 0;
+        right: 0;
+        margin-top: 16px;
+        width: 100%;
+    }
+}
+
+.manifesto__stat-number {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--color-ink);
+    line-height: 1;
+}
+
+.manifesto__stat-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--color-ink-muted-80);
+    margin-top: 8px;
+    text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------------
+   3. IMMERSIVE BREED SHOWCASE — The Three Specialized Collections
+   -------------------------------------------------------------------------- */
+
+.collection-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-top: 0;
+}
+
+@media (min-width: 992px) {
+    .collection-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.collection-card {
+    position: relative;
+    background-color: var(--color-canvas-parchment);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--r-xl);
+    padding: var(--sp-xl) var(--sp-lg);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    min-height: 380px;
+    transition: all var(--duration-base) var(--ease-out);
+    text-decoration: none;
+}
+
+@media (min-width: 768px) {
+    .collection-card {
+        padding: 40px 32px;
+    }
+}
+
+/* Reduce min-height on mobile — cards should not tower */
+@media (max-width: 767px) {
+    .collection-card {
+        min-height: 280px;
+    }
+}
+
+.collection-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(0, 0, 0, 0.08);
+    box-shadow: var(--shadow-card-hover);
+}
+
+.collection-card__index {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #d1ab58;
+    margin-bottom: 12px;
+    display: block;
+}
+
+.collection-card__title {
+    font-size: 1.75rem;
+    line-height: 1.2;
+    font-weight: 700;
+    color: var(--color-ink);
+    margin-bottom: 16px;
+    text-wrap: balance;
+}
+
+.collection-card__quote {
+    font-size: 15px;
+    color: var(--color-ink-muted-80);
+    line-height: 1.65;
+    margin-bottom: 24px;
+    text-wrap: pretty;
+}
+
+.collection-card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 32px;
+}
+
+.collection-tag {
+    font-size: 11px;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: var(--r-full);
+    background-color: var(--color-canvas);
+    border: 1px solid var(--color-hairline);
+    color: var(--color-ink-muted-80);
+    letter-spacing: 0.02em;
+}
+
+.collection-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-ink);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    transition: transform var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out);
+}
+
+.collection-card:hover .collection-card__cta {
+    transform: translateX(4px);
+    color: #d1ab58;
+}
+
+/* --------------------------------------------------------------------------
+   4. ARCHITECTURAL HEALTH MATRIX (Czworoczęściowy Kodeks Zaufania)
+   -------------------------------------------------------------------------- */
+
+.kodeks-matrix {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1px;
+    background-color: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--r-xl);
+    overflow: hidden;
+    margin-top: 0;
+}
+
+@media (min-width: 640px) {
+    .kodeks-matrix {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.kodeks-column {
+    background-color: var(--color-ink);
+    padding: 36px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 12px;
+    height: 100%;
+    transition: background-color var(--duration-normal) var(--ease-out), transform var(--duration-normal) var(--ease-out);
+}
+
+/* Compact padding on 2-col mobile layout */
+@media (max-width: 992px) {
+    .kodeks-column {
+        padding: 32px 24px;
+    }
+}
+
+/* Single column — auto height, smaller padding */
+@media (max-width: 640px) {
+    .kodeks-column {
+        padding: 28px 24px;
+        min-height: auto;
+    }
+}
+
+.kodeks-column:hover {
+    background-color: #1a1a1c;
+    transform: translateY(-3px);
+}
+
+.kodeks-column__num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: #d1ab58;
+    letter-spacing: 0.12em;
+    display: block;
+}
+
+.kodeks-column__title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-top: 16px;
+    margin-bottom: 8px;
+    line-height: 1.3;
+}
+
+.kodeks-column__desc {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.72);
+    line-height: 1.65;
+}
+
+/* --------------------------------------------------------------------------
+   5. VERIFIED PATRON MONOLITHS (Editorial Testimonials)
+   -------------------------------------------------------------------------- */
+
+.patrons-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-top: 0;
+}
+
+@media (min-width: 768px) {
+    .patrons-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.patron-monolith {
+    background-color: var(--color-canvas-parchment);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--r-xl);
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 24px;
+    height: 100%;
+    transition: transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out), border-color var(--duration-normal) var(--ease-out);
+}
+
+@media (min-width: 768px) {
+    .patron-monolith {
+        padding: 40px 32px;
+    }
+}
+
+.patron-monolith:hover {
+    transform: translateY(-4px);
+    border-color: rgba(0, 0, 0, 0.08);
+    box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.06);
+}
+
+.patron-monolith__quote {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--color-ink);
+    font-style: italic;
+    text-wrap: balance;
+}
+
+.patron-monolith__author {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    padding-top: 24px;
+    margin-top: auto;
+}
+
+.patron-monolith__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: #d1ab58;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   6. CONCIERGE ADOPTION TIMELINE
+   -------------------------------------------------------------------------- */
+
+.adoption-journey-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-top: 0;
+}
+
+@media (min-width: 768px) {
+    .adoption-journey-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.adoption-journey-pillar {
+    background-color: var(--color-canvas-parchment);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--r-xl);
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    height: 100%;
+    transition: transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out), border-color var(--duration-normal) var(--ease-out);
+}
+
+@media (min-width: 768px) {
+    .adoption-journey-pillar {
+        padding: 40px 32px;
+    }
+}
+
+.adoption-journey-pillar:hover {
+    transform: translateY(-4px);
+    border-color: rgba(0, 0, 0, 0.08);
+    box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.06);
+}
+
+.adoption-journey__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.adoption-journey__number {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: #d1ab58;
+    letter-spacing: 0.14em;
+}
+
+.adoption-journey__title {
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--color-ink);
+    line-height: 1.3;
+}
+
+.adoption-journey__desc {
+    font-size: 15px;
+    color: var(--color-ink-muted-80);
+    line-height: 1.65;
+}
+
+/* --------------------------------------------------------------------------
+   7. EDITORIAL EMPTY STATE BOX
+   -------------------------------------------------------------------------- */
+
+.editorial-empty-box {
+    background-color: var(--color-canvas-parchment);
+    border-radius: var(--r-xl);
+    padding: var(--sp-2xl) var(--sp-lg);
+    text-align: center;
+    box-shadow: var(--shadow-card-hover);
+    margin-top: var(--sp-xl);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Compact on mobile — avoid over-padded empty states */
+@media (max-width: 640px) {
+    .editorial-empty-box {
+        padding: 48px 24px;
+    }
+}
+
+.editorial-empty-box__icon {
+    width: 32px;
+    height: 32px;
+    color: #d1ab58;
+    margin: 0 auto 16px auto;
+}
+
+.editorial-empty-box__title {
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--color-ink);
+    margin-bottom: 8px;
+    text-wrap: balance;
+}
+
+.editorial-empty-box__desc {
+    font-size: 15px;
+    color: var(--color-ink-muted-80);
+    max-width: 54ch;
+    margin: 0 auto;
+    line-height: 1.65;
+    text-wrap: pretty;
+}
+
+/* --------------------------------------------------------------------------
+   8. DAILY LIFE IN THE CATTERY — EDITORIAL FACEBOOK DISCOVERY
+   -------------------------------------------------------------------------- */
+
+.daily-life-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--sp-2xl, 48px);
+    align-items: center;
+}
+
+@media (min-width: 1024px) {
+    .daily-life-grid {
+        grid-template-columns: 1.05fr 1.15fr;
+        gap: var(--sp-3xl, 64px);
+    }
+}
+
+.daily-life__left {
+    display: flex;
+    flex-direction: column;
+}
+
+.daily-life__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.daily-life__eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--color-primary, #c8a04a);
+}
+
+.daily-life__badge {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-ink, #1d1d1f);
+    position: relative;
+    padding-left: 14px;
+}
+
+.daily-life__badge::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 6px;
+    border-radius: var(--r-full, 9999px);
+    background-color: var(--color-primary, #c8a04a);
+}
+
+.daily-life__frequency {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 16px;
+    margin-bottom: 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--color-hairline, rgba(0, 0, 0, 0.08));
+}
+
+.daily-life__subtext {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--color-ink-muted, #64748b);
+}
+
+.daily-life__headline {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 3.5vw, 2.75rem);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    color: var(--color-ink);
+    margin-bottom: var(--sp-md, 24px);
+    text-wrap: balance;
+}
+
+.daily-life__desc {
+    font-size: clamp(1.05rem, 1.4vw, 1.15rem);
+    line-height: 1.7;
+    color: var(--color-ink-muted-80, #515154);
+    margin-bottom: 20px;
+    max-width: 52ch;
+    text-wrap: pretty;
+}
+
+.daily-life__cta {
+    display: flex;
+    align-items: center;
+}
+
+/* Editorial Asymmetric Image Gallery */
+.daily-life__gallery {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 16px;
+}
+
+@media (min-width: 768px) {
+    .daily-life__gallery {
+        gap: 24px;
+    }
+}
+
+.daily-life__image-wrap {
+    position: relative;
+    border-radius: var(--r-xl, 16px);
+    overflow: hidden;
+    background-color: var(--color-surface, #f4f3f0);
+    box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--color-hairline, rgba(0, 0, 0, 0.08));
+}
+
+.daily-life__image-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.7s var(--ease-out);
+}
+
+.daily-life__image-wrap:hover img {
+    transform: scale(1.03);
+}
+
+.daily-life__image-wrap--main {
+    grid-column: 1 / 2;
+    grid-row: 1 / 3;
+    height: 100%;
+}
+
+.daily-life__image-wrap--sub1 {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    aspect-ratio: 4 / 3;
+}
+
+.daily-life__image-wrap--sub2 {
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+    aspect-ratio: 4 / 3;
+}
+
+@media (max-width: 640px) {
+    .daily-life__gallery {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+    }
+
+    .daily-life__image-wrap--main,
+    .daily-life__image-wrap--sub1,
+    .daily-life__image-wrap--sub2 {
+        grid-column: 1 / -1;
+        grid-row: auto;
+        aspect-ratio: 16 / 10;
+        height: auto;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   9. SYSTEM-WIDE SECTION RHYTHM & ACTION ALIGNMENT
+   -------------------------------------------------------------------------- */
+
+.section-action {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 56px;
+}
+
+/* --------------------------------------------------------------------------
+   10. HOMEPAGE OPTICAL SPACING & EDITORIAL RHYTHM (SPRINT 6.5 POLISH)
+   Handcrafted transitions between sections to feel like a cohesive book
+   -------------------------------------------------------------------------- */
+
+/* Section 2: Specjalizacje rasy -> Dostępne Kocięta */
+.home-section--specjalizacje {
+    padding-bottom: var(--sp-2xl, 48px);
+}
+
+/* Section 3: Dostępne Kocięta -> Historie */
+.home-section--nasze-koty {
+    padding-top: 56px;
+    padding-bottom: 56px;
+}
+
+/* Section 4: Historie -> Codzienność */
+.home-section--opinie {
+    padding-top: 56px;
+    padding-bottom: 72px;
+}
+
+/* Section 5: Codzienność (Facebook) -> Wiedza i Felinologia
+   Controlled editorial breathing space between daily life & knowledge reading room */
+.home-section--codziennosc {
+    padding-top: 72px;
+    padding-bottom: 36px;
+}
+
+/* Section 6: Wiedza i Felinologia -> Final CTA */
+.home-section--blog {
+    padding-top: 44px;
+    padding-bottom: 40px;
+}
+
+/* Section 7: Final CTA -> Footer separation */
+.home-section--cta .cta-section {
+    padding-top: 56px;
+    padding-bottom: 72px;
+}
+
+/* Mobile Responsive Adjustments — Compact Premium Rhythm */
+@media (max-width: 640px) {
+    .home-section--specjalizacje {
+        padding-top: var(--sp-2xl);
+        padding-bottom: var(--sp-2xl);
+    }
+
+    .home-section--nasze-koty {
+        padding-top: var(--sp-2xl);
+        padding-bottom: var(--sp-2xl);
+    }
+
+    .home-section--opinie {
+        padding-top: var(--sp-2xl);
+        padding-bottom: var(--sp-2xl);
+    }
+
+    .home-section--codziennosc {
+        padding-top: var(--sp-2xl);
+        padding-bottom: var(--sp-xl);
+    }
+
+    .home-section--blog {
+        padding-top: var(--sp-xl);
+        padding-bottom: var(--sp-xl);
+    }
+
+    .home-section--cta .cta-section {
+        padding-top: var(--sp-2xl);
+        padding-bottom: var(--sp-2xl);
+    }
+
+    .section-action {
+        margin-top: var(--sp-xl);
+    }
+}
+
+/* Tablet / Large phone mid-range (641px–834px) — Intermediate Editorial Rhythm */
+@media (min-width: 641px) and (max-width: 834px) {
+    .home-section--nasze-koty,
+    .home-section--opinie {
+        padding-top: 48px;
+        padding-bottom: 48px;
+    }
+
+    .home-section--codziennosc {
+        padding-top: 56px;
+        padding-bottom: 32px;
+    }
+
+    .home-section--blog {
+        padding-top: 40px;
+        padding-bottom: 36px;
+    }
+}

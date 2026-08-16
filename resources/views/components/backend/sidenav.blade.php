@@ -4,8 +4,8 @@
             <div class="sb-sidenav-menu-heading">Core</div>
 
             @can('view-backend-dashboard')
-                <a class="nav-link {{ request()->routeIs('backend.dashboard') ? 'active' : '' }}"
-                   href="{{ route('backend.dashboard') }}">
+                <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
+                   href="{{ route('dashboard') }}">
                     <div class="sb-nav-link-icon">
                         <i class="fas fa-tachometer-alt"></i>
                     </div>
@@ -14,6 +14,16 @@
             @endcan
 
             <div class="sb-sidenav-menu-heading">Content</div>
+
+            @can('viewAny', \App\Models\Animal::class)
+                <a class="nav-link {{ request()->routeIs('backend.animals.*') ? 'active' : '' }}"
+                   href="{{ route('backend.animals.index') }}">
+                    <div class="sb-nav-link-icon">
+                        <i class="fas fa-paw"></i>
+                    </div>
+                    Animals
+                </a>
+            @endcan
 
             @can('viewAny', \App\Models\Post::class)
                 <a class="nav-link {{ request()->routeIs('backend.posts.*') ? 'active' : '' }}"
