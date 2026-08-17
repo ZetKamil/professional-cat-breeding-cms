@@ -173,6 +173,23 @@ class Animal extends Model
     }
 
     /**
+     * Order animals prioritizing Available cats first, then Reserved, Breeding, Sold, and others.
+     */
+    public function scopeOrderedByStatus(Builder $query): Builder
+    {
+        return $query
+            ->orderByRaw("CASE 
+                WHEN status = 'available' THEN 1 
+                WHEN status = 'reserved' THEN 2 
+                WHEN status = 'breeding' THEN 3 
+                WHEN status = 'sold' THEN 4 
+                ELSE 5 
+            END ASC")
+            ->orderBy('sort_order', 'asc')
+            ->latest('published_at');
+    }
+
+    /**
      * Only animals marked as featured (for homepage).
      */
     public function scopeFeatured(Builder $query): Builder

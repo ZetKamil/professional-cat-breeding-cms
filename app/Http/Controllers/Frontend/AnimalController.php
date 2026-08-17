@@ -59,8 +59,7 @@ class AnimalController extends Controller
             ->when($request->filled('q'), function ($q) use ($request) {
                 $q->search($request->string('q')->toString());
             })
-            ->orderBy('sort_order', 'asc')
-            ->latest('published_at');
+            ->orderedByStatus();
 
         $animals = $query->paginate(12)->withQueryString();
 
@@ -101,7 +100,10 @@ class AnimalController extends Controller
 
         $children = ($animal->gender === AnimalGender::Female ? $animal->childrenAsMother : $animal->childrenAsFather)
             ->filter(fn ($child) => $child->is_published && $child->published_at)
-            ->sortBy('sort_order');
+            ->sortBy(fn ($child) => [
+                $child->status === AnimalStatus::Available ? 1 : ($child->status === AnimalStatus::Reserved ? 2 : ($child->status === AnimalStatus::Breeding ? 3 : 4)),
+                $child->sort_order,
+            ]);
 
         $relatedAnimals = Animal::query()
             ->published()
@@ -111,7 +113,7 @@ class AnimalController extends Controller
                   ->orWhere('status', '=', AnimalStatus::Available);
             })
             ->with('media')
-            ->orderBy('sort_order', 'asc')
+            ->orderedByStatus()
             ->take(3)
             ->get();
 

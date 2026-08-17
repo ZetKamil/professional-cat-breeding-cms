@@ -15,7 +15,7 @@ class HomeController extends Controller
             ->published()
             ->featured()
             ->with('media')
-            ->orderBy('sort_order')
+            ->orderedByStatus()
             ->take(3)
             ->get();
 
