@@ -18,9 +18,29 @@ class ReplaceMediaAction
             if (Storage::disk($media->disk)->exists($oldPath)) {
                 Storage::disk($media->disk)->delete($oldPath);
             }
+            $oldPublicPath = public_path('storage/' . $oldPath);
+            if (! is_link(public_path('storage')) && \Illuminate\Support\Facades\File::exists($oldPublicPath)) {
+                @\Illuminate\Support\Facades\File::delete($oldPublicPath);
+            }
 
             $directory = $media->directory ?: 'media/library';
             $storedPath = $file->store($directory, $media->disk);
+
+            $storageFullPath = storage_path('app/public/' . $storedPath);
+            if (\Illuminate\Support\Facades\File::exists($storageFullPath)) {
+                @chmod($storageFullPath, 0644);
+
+                $publicTarget = public_path('storage/' . $storedPath);
+                $publicTargetDir = dirname($publicTarget);
+                if (! \Illuminate\Support\Facades\File::isDirectory($publicTargetDir)) {
+                    \Illuminate\Support\Facades\File::makeDirectory($publicTargetDir, 0755, true, true);
+                    @chmod($publicTargetDir, 0755);
+                }
+                if (! is_link(public_path('storage'))) {
+                    @\Illuminate\Support\Facades\File::copy($storageFullPath, $publicTarget);
+                    @chmod($publicTarget, 0644);
+                }
+            }
 
             $filename = basename($storedPath);
             $dirName = dirname($storedPath) === '.' ? null : dirname($storedPath);

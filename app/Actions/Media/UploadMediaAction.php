@@ -29,9 +29,23 @@ class UploadMediaAction
                 }
 
                 $directory = $this->resolveDirectory($data['mediable_type'] ?? null);
-                $disk = 'public';
-
                 $storedPath = $file->store($directory, $disk);
+
+                $storageFullPath = storage_path('app/public/' . $storedPath);
+                if (\Illuminate\Support\Facades\File::exists($storageFullPath)) {
+                    @chmod($storageFullPath, 0644);
+
+                    $publicTarget = public_path('storage/' . $storedPath);
+                    $publicTargetDir = dirname($publicTarget);
+                    if (! \Illuminate\Support\Facades\File::isDirectory($publicTargetDir)) {
+                        \Illuminate\Support\Facades\File::makeDirectory($publicTargetDir, 0755, true, true);
+                        @chmod($publicTargetDir, 0755);
+                    }
+                    if (! is_link(public_path('storage'))) {
+                        @\Illuminate\Support\Facades\File::copy($storageFullPath, $publicTarget);
+                        @chmod($publicTarget, 0644);
+                    }
+                }
 
                 $filename = basename($storedPath);
                 $dirName = dirname($storedPath) === '.' ? null : dirname($storedPath);

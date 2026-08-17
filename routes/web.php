@@ -57,83 +57,104 @@ Route::get('/sitemap.xml', function () {
 })->name('sitemap');
 
 // Direct media streaming route to bypass Apache 403 Forbidden symlink restrictions on shared hosting
-Route::get('/storage/media/{filename}', function ($filename) {
-    $filename = basename($filename);
-
+Route::get('/storage/{path}', function ($path) {
     $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp', 'svg', 'gif', 'ico', 'pdf', 'mp4', 'webm'];
-    $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+    $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
     if (! in_array($ext, $allowedExtensions, true)) {
         abort(404);
     }
 
     $possiblePaths = [
-        public_path('storage/media/' . $filename),
-        storage_path('app/public/media/' . $filename),
-        storage_path('app/public/' . $filename),
+        public_path('storage/' . $path),
+        storage_path('app/public/' . $path),
+        public_path('storage/media/' . basename($path)),
+        storage_path('app/public/media/' . basename($path)),
+        public_path('storage/media/animals/' . basename($path)),
+        storage_path('app/public/media/animals/' . basename($path)),
+        storage_path('app/public/' . basename($path)),
     ];
 
-    foreach ($possiblePaths as $path) {
-        if (\Illuminate\Support\Facades\File::exists($path) && ! \Illuminate\Support\Facades\File::isDirectory($path)) {
-            $mime = @mime_content_type($path) ?: 'image/jpeg';
+    foreach ($possiblePaths as $fullPath) {
+        if (\Illuminate\Support\Facades\File::exists($fullPath) && ! \Illuminate\Support\Facades\File::isDirectory($fullPath)) {
+            $mime = @mime_content_type($fullPath) ?: 'image/jpeg';
 
-            return response()->file($path, [
+            return response()->file($fullPath, [
                 'Content-Type' => $mime,
                 'Cache-Control' => 'public, max-age=31536000',
             ]);
         }
     }
 
-    // Global recursive fallback search in base_path('image')
-    $baseImageDir = base_path('image');
-    if (\Illuminate\Support\Facades\File::isDirectory($baseImageDir)) {
-        $searchBase = strtolower(pathinfo($filename, PATHINFO_FILENAME));
-        foreach (\Illuminate\Support\Facades\File::allFiles($baseImageDir) as $f) {
-            $fNameBase = strtolower(pathinfo($f->getFilename(), PATHINFO_FILENAME));
-            if ($fNameBase === $searchBase) {
-                $mime = @mime_content_type($f->getPathname()) ?: 'image/jpeg';
+    // Global recursive fallback search in storage_path('app/public'), public_path('storage'), and base_path('image')
+    $filename = basename($path);
+    $searchDirs = [
+        storage_path('app/public'),
+        public_path('storage'),
+        base_path('image'),
+    ];
 
-                return response()->file($f->getPathname(), [
-                    'Content-Type' => $mime,
-                    'Cache-Control' => 'public, max-age=31536000',
-                ]);
+    foreach ($searchDirs as $dir) {
+        if (\Illuminate\Support\Facades\File::isDirectory($dir)) {
+            foreach (\Illuminate\Support\Facades\File::allFiles($dir) as $f) {
+                if (strtolower($f->getFilename()) === strtolower($filename)) {
+                    $mime = @mime_content_type($f->getPathname()) ?: 'image/jpeg';
+
+                    return response()->file($f->getPathname(), [
+                        'Content-Type' => $mime,
+                        'Cache-Control' => 'public, max-age=31536000',
+                    ]);
+                }
             }
         }
     }
 
     abort(404);
-});
+})->where('path', '.*');
 
 // Diagnostic route to inspect media status on hosting (auth required)
 Route::get('/check-media', function () {
-    $animals = \App\Models\Animal::with('media')->get();
-    $output = "<div style='font-family:sans-serif; padding:30px; max-width:800px; margin:0 auto;'>";
-    $output .= "<h2>Diagnostyka Bazy i Plikow Zdjec Kotow</h2>";
+    $animals = \App\Models\Animal::with(['media', 'gallery'])->get();
+    $output = "<div style='font-family:sans-serif; padding:30px; max-width:900px; margin:0 auto;'>";
+    $output .= "<h2>Diagnostyka Zdjec Kotow (Glowne i Galeria)</h2>";
     $output .= "<table border='1' cellpadding='8' cellspacing='0' style='border-collapse:collapse; width:100%;'>";
-    $output .= "<tr style='background:#f3f4f6;'><th>Kot</th><th>Rasa</th><th>Plik na serwerze?</th><th>Wygenerowany URL</th></tr>";
+    $output .= "<tr style='background:#f3f4f6;'><th>Kot</th><th>Typ</th><th>Sciezka w DB</th><th>Plik fizyczny?</th><th>Podglad</th></tr>";
 
     foreach ($animals as $a) {
-        $media = $a->media;
-        if (! $media) {
-            $output .= "<tr><td>" . e($a->name) . "</td><td>" . e($a->breed) . "</td><td style='color:red;'>BRAK MEDIA W BAZIE</td><td>-</td></tr>";
+        $allMedia = $a->gallery;
+        if ($allMedia->isEmpty() && $a->media) {
+            $allMedia = collect([$a->media]);
+        }
+
+        if ($allMedia->isEmpty()) {
+            $output .= "<tr><td><strong>" . e($a->name) . "</strong></td><td>-</td><td colspan='3' style='color:red;'>BRAK ZDJEC W BAZIE</td></tr>";
             continue;
         }
 
-        $filePath = public_path('storage/' . ($media->directory ? $media->directory . '/' : '') . $media->filename);
-        $exists = file_exists($filePath);
-        $statusColor = $exists ? 'green' : 'red';
-        $statusText = $exists ? 'TAK (Plik istnieje)' : 'NIE (Brak pliku)';
-        $url = $media->url();
+        foreach ($allMedia as $idx => $m) {
+            $isMain = ($a->media && $m->id === $a->media->id);
+            $typeLabel = $isMain ? '<span style="color:#059669; font-weight:bold;">Glowne</span>' : 'Galeria #' . ($idx + 1);
+            $dbPath = ($m->directory ? $m->directory . '/' : '') . $m->filename;
 
-        $output .= "<tr>"
-            . "<td><strong>" . e($a->name) . "</strong></td>"
-            . "<td>" . e($a->breed) . "</td>"
-            . "<td style='color:{$statusColor}; font-weight:bold;'>{$statusText}</td>"
-            . "<td><a href='" . e($url) . "' target='_blank'>Otworz zdjecie</a></td>"
-            . "</tr>";
+            $storageExists = file_exists(storage_path('app/public/' . $dbPath));
+            $publicExists = file_exists(public_path('storage/' . $dbPath));
+            $mediaExists = file_exists(public_path('storage/media/' . basename($m->filename)));
+
+            $found = $storageExists || $publicExists || $mediaExists;
+            $statusColor = $found ? '#059669' : '#dc2626';
+            $statusText = $found ? 'TAK (Istnieje)' : 'NIE (Brak)';
+
+            $output .= "<tr>"
+                . "<td><strong>" . e($a->name) . "</strong> (" . e($a->breed) . ")</td>"
+                . "<td>{$typeLabel}</td>"
+                . "<td><code>" . e($dbPath) . "</code></td>"
+                . "<td style='color:{$statusColor}; font-weight:bold;'>{$statusText}</td>"
+                . "<td><a href='" . e($m->url()) . "' target='_blank' style='color:#2563eb;'>Otworz URL</a></td>"
+                . "</tr>";
+        }
     }
 
     $output .= "</table>";
-    $output .= "<p style='margin-top:20px;'><a href='" . url('/fix-storage') . "' style='background:#2563eb; color:#fff; padding:10px 15px; border-radius:6px; text-decoration:none; font-weight:bold;'>Uruchom Naprawe (/fix-storage)</a></p>";
+    $output .= "<p style='margin-top:20px;'><a href='" . url('/dashboard') . "' style='color:#4b5563; text-decoration:none;'>← Wróć do Panelu</a></p>";
     $output .= "</div>";
 
     return $output;

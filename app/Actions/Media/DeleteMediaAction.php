@@ -19,6 +19,11 @@ class DeleteMediaAction
                 Storage::disk($media->disk)->delete($path);
             }
 
+            $pubPath = public_path('storage/' . $path);
+            if (! is_link(public_path('storage')) && \Illuminate\Support\Facades\File::exists($pubPath)) {
+                @\Illuminate\Support\Facades\File::delete($pubPath);
+            }
+
             return (bool) $media->delete();
         });
     }
