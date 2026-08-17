@@ -139,7 +139,9 @@ class Animal extends Model
      */
     public function media(): MorphOne
     {
-        return $this->morphOne(Media::class, 'mediable');
+        return $this->morphOne(Media::class, 'mediable')
+            ->orderByDesc('is_featured')
+            ->orderBy('sort_order', 'asc');
     }
 
     /**
@@ -148,7 +150,8 @@ class Animal extends Model
      */
     public function gallery(): MorphMany
     {
-        return $this->morphMany(Media::class, 'mediable');
+        return $this->morphMany(Media::class, 'mediable')
+            ->orderBy('sort_order', 'asc');
     }
 
     // ─── Query Scopes ───────────────────────────────────────────────

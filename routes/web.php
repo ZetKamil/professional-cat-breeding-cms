@@ -58,30 +58,35 @@ Route::get('/sitemap.xml', function () {
 
 // Direct media streaming route to bypass Apache 403 Forbidden symlink restrictions on shared hosting
 Route::get('/storage/{path}', function ($path) {
-    $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp', 'svg', 'gif', 'ico', 'pdf', 'mp4', 'webm'];
-    $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
-    if (! in_array($ext, $allowedExtensions, true)) {
+    $cleanPath = trim(parse_url($path, PHP_URL_PATH), '/');
+    $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp', 'svg', 'gif', 'ico', 'pdf', 'mp4', 'webm', 'jfif', 'bmp', 'avif', 'heic', 'heif'];
+    $ext = strtolower(pathinfo($cleanPath, PATHINFO_EXTENSION));
+    if ($ext !== '' && ! in_array($ext, $allowedExtensions, true)) {
         abort(404);
     }
 
     $possiblePaths = [
-        public_path('storage/' . $path),
-        storage_path('app/public/' . $path),
-        storage_path('app/private/' . $path),
-        storage_path('app/' . $path),
-        public_path('storage/media/' . basename($path)),
-        storage_path('app/public/media/' . basename($path)),
-        storage_path('app/private/media/' . basename($path)),
-        public_path('storage/media/animals/' . basename($path)),
-        storage_path('app/public/media/animals/' . basename($path)),
-        storage_path('app/private/media/animals/' . basename($path)),
-        storage_path('app/public/' . basename($path)),
-        storage_path('app/private/' . basename($path)),
+        public_path('storage/' . $cleanPath),
+        storage_path('app/public/' . $cleanPath),
+        storage_path('app/private/' . $cleanPath),
+        storage_path('app/' . $cleanPath),
+        public_path('storage/media/' . basename($cleanPath)),
+        storage_path('app/public/media/' . basename($cleanPath)),
+        storage_path('app/private/media/' . basename($cleanPath)),
+        public_path('storage/media/animals/' . basename($cleanPath)),
+        storage_path('app/public/media/animals/' . basename($cleanPath)),
+        storage_path('app/private/media/animals/' . basename($cleanPath)),
+        public_path('storage/animals/' . basename($cleanPath)),
+        storage_path('app/public/animals/' . basename($cleanPath)),
+        storage_path('app/private/animals/' . basename($cleanPath)),
+        storage_path('app/public/' . basename($cleanPath)),
+        storage_path('app/private/' . basename($cleanPath)),
+        base_path('image/' . $cleanPath),
     ];
 
     foreach ($possiblePaths as $fullPath) {
         if (\Illuminate\Support\Facades\File::exists($fullPath) && ! \Illuminate\Support\Facades\File::isDirectory($fullPath)) {
-            $mime = @mime_content_type($fullPath) ?: 'image/jpeg';
+            $mime = @mime_content_type($fullPath) ?: ($ext === 'jfif' || $ext === 'jpg' || $ext === 'jpeg' ? 'image/jpeg' : ($ext === 'png' ? 'image/png' : ($ext === 'webp' ? 'image/webp' : 'application/octet-stream')));
 
             return response()->file($fullPath, [
                 'Content-Type' => $mime,
@@ -91,7 +96,8 @@ Route::get('/storage/{path}', function ($path) {
     }
 
     // Global recursive fallback search in storage_path('app'), public_path('storage'), and base_path('image')
-    $filename = basename($path);
+    $filename = basename($cleanPath);
+    $filenameLower = strtolower($filename);
     $searchDirs = [
         storage_path('app/public'),
         storage_path('app/private'),
@@ -103,8 +109,8 @@ Route::get('/storage/{path}', function ($path) {
     foreach ($searchDirs as $dir) {
         if (\Illuminate\Support\Facades\File::isDirectory($dir)) {
             foreach (\Illuminate\Support\Facades\File::allFiles($dir) as $f) {
-                if (strtolower($f->getFilename()) === strtolower($filename)) {
-                    $mime = @mime_content_type($f->getPathname()) ?: 'image/jpeg';
+                if (strtolower($f->getFilename()) === $filenameLower) {
+                    $mime = @mime_content_type($f->getPathname()) ?: ($ext === 'jfif' || $ext === 'jpg' || $ext === 'jpeg' ? 'image/jpeg' : ($ext === 'png' ? 'image/png' : ($ext === 'webp' ? 'image/webp' : 'application/octet-stream')));
 
                     return response()->file($f->getPathname(), [
                         'Content-Type' => $mime,
