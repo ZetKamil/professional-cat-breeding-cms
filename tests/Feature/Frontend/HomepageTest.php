@@ -18,7 +18,7 @@ class HomepageTest extends TestCase
         $response->assertOk();
         $response->assertSee('Hodowla Kotów Rasowych z Rodowodem');
         $response->assertSee('SHiOZ ZOOLANDIA');
-        $response->assertSee('Badania Genetyczne i Echo Serca');
+        $response->assertSee('Badania Genetyczne Rodziców');
         $response->assertSee('Nasze Specjalizacje Rasy');
         $response->assertSee('Koty Bengalskie');
         $response->assertSee('Koty Brytyjskie');

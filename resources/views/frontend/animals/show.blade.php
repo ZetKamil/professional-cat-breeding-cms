@@ -1,6 +1,6 @@
 <x-frontend.shell
     title="{{ $animal->meta_title ?: ($animal->name . ' — ' . $animal->breed . ' | Hodowla Kotów z Mazowieckiej Szwajcarii') }}"
-    meta-description="{{ $animal->meta_description ?: ($animal->short_description ?: ('Poznaj kota ' . $animal->name . ' (' . $animal->breed . ', ' . $animal->color . '). Rodowód SHiOZ ZOOLANDIA, badania genetyczne i zrównoważony charakter.')) }}"
+    meta-description="{{ $animal->meta_description ?: ($animal->short_description ?: ('Poznaj kota ' . $animal->name . ' (' . $animal->breed . ', ' . $animal->color . '). Rodowód SHiOZ ZOOLANDIA, ' . ($animal->status === \App\Enums\AnimalStatus::Breeding ? 'dedykowane badania rasy' : 'po przebadanych rodzicach') . ' i zrównoważony charakter.')) }}"
     og-image="{{ $animal->media ? $animal->media->url() : asset('storage/media/parent_bella_1.jpg') }}"
     og-type="profile"
 >
@@ -163,12 +163,30 @@
                             {{ $animal->breed }} • {{ $animal->color }}
                         </p>
 
+                        @php
+                            $isBreeding = $animal->status === \App\Enums\AnimalStatus::Breeding;
+                            $breedLower = mb_strtolower($animal->breed ?? '');
+                            if (str_contains($breedLower, 'bengal')) {
+                                $breedHealthText = 'Badania genetyczne PRA-b, PK-Def n/n • Echo serca (HCM normal) • FIV/FeLV negatywny';
+                            } elseif (str_contains($breedLower, 'brytyj') || str_contains($breedLower, 'british')) {
+                                $breedHealthText = 'Badania genetyczne PKD n/n • Echo serca (HCM normal) • FIV/FeLV negatywny';
+                            } elseif (str_contains($breedLower, 'syjam') || str_contains($breedLower, 'siam')) {
+                                $breedHealthText = 'Badania genetyczne PRA n/n, GM1/GM2 • Kontrola kardiologiczna • FIV/FeLV negatywny';
+                            } else {
+                                $breedHealthText = 'Dedykowane badania genetyczne rasy • Echo serca • FIV/FeLV negatywny';
+                            }
+                        @endphp
+
                         <div class="animal-profile__meta-line">
                             <span>Data urodzenia:
                                 {{ $animal->date_of_birth ? $animal->date_of_birth->format('d.m.Y') : 'Wiek adult' }}
                                 ({{ $animal->age() ?? 'Dorosły kot' }})</span>
                             <span aria-hidden="true">·</span>
-                            <span>Badania genetyczne 100% HCM / PKD n/n</span>
+                            @if($isBreeding)
+                                <span title="Badania dedykowane dla rasy">{{ $breedHealthText }}</span>
+                            @else
+                                <span>Linia po przebadanych rodzicach (profil rasy) • Książeczka zdrowia, szczepienia i chip</span>
+                            @endif
                         </div>
                     </div>
 

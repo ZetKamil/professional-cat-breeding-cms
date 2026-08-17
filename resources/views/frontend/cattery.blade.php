@@ -36,11 +36,10 @@
                     <div class="manifesto-tenet" role="listitem">
                         <span class="manifesto-tenet__num">02</span>
                         <div>
-                            <h3 class="manifesto-tenet__title">Czystość Genetyczna i Profilaktyka</h3>
+                            <h3 class="manifesto-tenet__title">Czystość Genetyczna i Badania Rodziców</h3>
                             <p class="manifesto-tenet__desc">
-                                Nie uznajemy półśrodków w medycynie weterynaryjnej. Wszystkie nasze koty hodowlane
-                                są objęte badaniami genetycznymi i kardiologicznymi (HCM, PKD, PRA) oraz posiadają ujemny profil
-                                FIV/FeLV.
+                                Nie uznajemy półśrodków w medycynie weterynaryjnej. Wszystkie nasze dorosłe koty hodowlane
+                                są objęte pakietami badań genetycznych i kardiologicznych dobranymi dedykowanie do danej rasy (PRA-b, PK-Def, PKD, echo serca HCM) oraz posiadają ujemny profil FIV/FeLV.
                             </p>
                         </div>
                     </div>
@@ -81,10 +80,10 @@
             <div class="kodeks-column" role="listitem">
                 <div>
                     <span class="kodeks-column__num">01 / GENETICS & HEART</span>
-                    <h3 class="kodeks-column__title">Genetyka i Kardiologia</h3>
+                    <h3 class="kodeks-column__title">Genetyka i Kardiologia Rodziców</h3>
                 </div>
                 <p class="kodeks-column__desc">
-                    Systematyczne badania genetyczne rodziców oraz regularna kontrola kardiologiczna (echo serca) pod kątem HCM i PKD.
+                    Systematyczne badania genetyczne rodziców (PRA-b, PK-Def, PKD) oraz regularna kontrola kardiologiczna (echo serca HCM) dedykowane dla poszczególnych ras.
                 </p>
             </div>
 
@@ -149,7 +148,7 @@
                 </div>
                 <h3 class="adoption-journey__title">Umowa i Odbiór</h3>
                 <p class="adoption-journey__desc">
-                    Po podjęciu decyzji podpisujemy umowę, ustalamy dogodny termin odbioru oraz przekazujemy kota z kompletem dokumentów i badań.
+                    Po podjęciu decyzji podpisujemy umowę, ustalamy dogodny termin odbioru oraz przekazujemy kocię z książeczką zdrowia (komplet szczepień, odrobaczeń, microchip), rodowodem SHiOZ ZOOLANDIA oraz kopiami badań genetycznych rodziców.
                 </p>
             </div>
         </div>

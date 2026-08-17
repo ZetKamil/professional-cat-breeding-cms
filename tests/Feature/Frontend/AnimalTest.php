@@ -71,9 +71,27 @@ class AnimalTest extends TestCase
         $response->assertSee('Simba');
         $response->assertSee('Kot Brytyjski');
         $response->assertSee('Niebieski');
-        $response->assertSee('Badania Genetyczne');
+        $response->assertSee('przebadanych rodzicach');
         $response->assertSee('Strona Główna');
         $response->assertSee('Nasze Koty');
+    }
+
+    public function test_breeding_animal_profile_shows_breed_dedicated_tests(): void
+    {
+        $breedingCat = Animal::factory()->create([
+            'name' => 'Bella',
+            'slug' => 'bella-breeding',
+            'breed' => 'Kot Bengalski',
+            'status' => \App\Enums\AnimalStatus::Breeding,
+            'is_published' => true,
+            'published_at' => now(),
+        ]);
+
+        $response = $this->get('/koty/bella-breeding');
+
+        $response->assertOk();
+        $response->assertSee('PRA-b, PK-Def n/n');
+        $response->assertSee('HCM normal');
     }
 
     public function test_unpublished_animal_returns_404(): void

@@ -25,7 +25,7 @@
                     </h1>
                     <p class="hero-split__lead">
                         Domowa hodowla kotów z Mazowieckiej Szwajcarii, oficjalny członek <strong>SHiOZ ZOOLANDIA</strong> (Certyfikat: 58/CW/2025, Rejestracja: 58/P/2025). 
-                        Nasze koty rozwijają się w bezpiecznych, pełnych miłości warunkach domowych, z regularną kontrolą kardiologiczną (echo serca) i badaniami genetycznymi rodziców.
+                        Nasze koty rozwijają się w bezpiecznych, pełnych miłości warunkach domowych, z regularną kontrolą kardiologiczną (echo serca) i badaniami genetycznymi rodziców dobranymi do danej rasy.
                     </p>
                     <div class="hero-split__actions" style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
                         <x-frontend.button href="{{ route('frontend.animals.index') }}" icon="arrow-right">
@@ -67,7 +67,7 @@
                 </div>
                 <div class="hero__trust-item" role="listitem">
                     <i data-lucide="dna" class="hero__trust-icon" aria-hidden="true"></i>
-                    <span>Badania Genetyczne i Echo Serca</span>
+                    <span>Badania Genetyczne Rodziców (Dla Rasy)</span>
                 </div>
                 <div class="hero__trust-item" role="listitem">
                     <i data-lucide="heart-handshake" class="hero__trust-icon" aria-hidden="true"></i>
@@ -339,7 +339,7 @@
       "@@context": "https://schema.org",
       "@@type": "LocalBusiness",
       "name": "Hodowla Kotów z Mazowieckiej Szwajcarii",
-      "description": "Domowa hodowla kotów rasowych z Mazowieckiej Szwajcarii (Sikórz k. Płocka). Członek SHiOZ ZOOLANDIA (Certyfikat: 58/CW/2025, Rejestracja: 58/P/2025). Koty bengalskie, brytyjskie i syjamskie z rodowodem i badaniami.",
+      "description": "Domowa hodowla kotów rasowych z Mazowieckiej Szwajcarii (Sikórz k. Płocka). Członek SHiOZ ZOOLANDIA (Certyfikat: 58/CW/2025, Rejestracja: 58/P/2025). Koty bengalskie, brytyjskie i syjamskie z rodowodem, po przebadanych rodzicach.",
       "image": "{{ asset('storage/media/parent_bella_1.jpg') }}",
       "url": "https://kotyzmazowieckiejszwajcarii.pl/",
       "telephone": "+48514153204",

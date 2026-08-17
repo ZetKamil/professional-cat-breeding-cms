@@ -9,7 +9,7 @@ Displays the 4-pillar health & trust standards for our breeding cattery.
 
 <x-frontend.section tile="dark" id="zdrowie" class="reveal-up">
     <x-frontend.section-header eyebrow="Zaufanie i Zdrowie" headline="Standard Zdrowotny Naszej Hodowli"
-        description="Każdy kot w naszej hodowli objęty jest kompleksową profilaktyką medyczną i badaniami genetycznymi." />
+        description="Wszystkie dorosłe koty hodowlane objęte są badaniami genetycznymi i kardiologicznymi dedykowanymi dla swojej rasy, a kocięta opuszczają nas z pełną profilaktyką weterynaryjną." />
 
     <div class="trust-grid">
         <div class="trust-pillar">
@@ -19,10 +19,9 @@ Displays the 4-pillar health & trust standards for our breeding cattery.
                     <i data-lucide="dna" aria-hidden="true"></i>
                 </div>
             </div>
-            <h3 class="trust-pillar__title">Badania Genetyczne</h3>
+            <h3 class="trust-pillar__title">Badania Genetyczne Rodziców</h3>
             <p class="trust-pillar__desc">
-                Rodzice są w pełni wolni od chorób genetycznych właściwych dla rasy (HCM, PKD, SMA n/n) z weryfikowanymi
-                certyfikatami laboratoryjnymi.
+                Wszystkie dorosłe koty hodowlane posiadają certyfikowane badania laboratoryjne dobrane pod kątem danej rasy (m.in. PRA-b i PK-Def dla bengali, PKD dla brytyjczyków, PRA dla syjamów oraz echo serca HCM normal).
             </p>
         </div>
         <div class="trust-pillar">
@@ -34,8 +33,7 @@ Displays the 4-pillar health & trust standards for our breeding cattery.
             </div>
             <h3 class="trust-pillar__title">FIV / FeLV Negatywny</h3>
             <p class="trust-pillar__desc">
-                Hodowla pozostaje pod stałą, dedykowaną opieką weterynaryjną. Wszystkie nasze koty są wolne od wirusa
-                niedoboru odporności i białaczki.
+                Hodowla pozostaje pod stałą opieką weterynaryjną. Nasze stado hodowlane (rodzice) posiada udokumentowany ujemny status w kierunku FIV i FeLV.
             </p>
         </div>
 
@@ -46,10 +44,9 @@ Displays the 4-pillar health & trust standards for our breeding cattery.
                     <i data-lucide="home" aria-hidden="true"></i>
                 </div>
             </div>
-            <h3 class="trust-pillar__title">Domowa Socjalizacja</h3>
+            <h3 class="trust-pillar__title">Profilaktyka Kociąt</h3>
             <p class="trust-pillar__desc">
-                Koty wychowują się z nami w domowym zaciszu, w stałym kontakcie z człowiekiem, co gwarantuje im poczucie
-                bezpieczeństwa i otwartość.
+                Kocięta otrzymują książeczkę zdrowia, komplet szczepień, cykl odrobaczeń, microchip oraz pełną domową socjalizację w stałym kontakcie z ludźmi.
             </p>
         </div>
     </div>

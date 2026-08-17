@@ -200,9 +200,9 @@
                     Jakie dokumenty otrzymuję?
                 </summary>
                 <p class="faq-item__answer text-body">
-                    Każdy kot otrzymuje komplet dokumentów: książeczkę zdrowia z udokumentowaną historią
-                    szczepień i odrobaczeń, certyfikat rodowodowy wydany przez SHiOZ ZOOLANDIA,
-                    wyniki badań genetycznych i kardiologicznych obojga rodziców oraz formalną umowę.
+                    Każde kocię otrzymuje komplet dokumentów: książeczkę zdrowia z udokumentowaną historią
+                    szczepień i odrobaczeń, wszczepiony microchip, certyfikat rodowodowy wydany przez SHiOZ ZOOLANDIA,
+                    kopie wyników badań genetycznych i kardiologicznych obojga rodziców (dedykowanych dla danej rasy) oraz formalną umowę.
                 </p>
             </details>
 

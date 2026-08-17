@@ -36,8 +36,8 @@
                     </p>
                     <p class="text-body text-ink-muted-80">
                         Wierzymy, że odpowiedzialna hodowla to nie tylko piękne koty — to przede
-                        wszystkim gigantyczna odpowiedzialność. Każdy kot jest objęty badaniami genetycznymi
-                        i regularną kontrolą kardiologiczną (echo serca), kontrolowany przez zaufanego lekarza weterynarii i wychowywany w naszym domu.
+                        wszystkim gigantyczna odpowiedzialność. Każdy dorosły kot hodowlany jest objęty pakietem badań genetycznych dedykowanych dla danej rasy
+                        oraz regularną kontrolą kardiologiczną (echo serca HCM), a kocięta rozwijają się pod stałym nadzorem lekarza weterynarii.
                     </p>
                     <p class="text-body text-ink-muted-80">
                         Prowadzimy kameralną hodowlę domową, co pozwala nam
@@ -83,7 +83,7 @@
                 <div class="value-item__number">02</div>
                 <h3 class="value-item__title text-tagline">Zdrowie</h3>
                 <p class="value-item__desc text-body">
-                    Badania genetyczne, kontrola kardiologiczna (echo serca), stały nadzór weterynaryjny — zdrowie jest priorytetem numer jeden.
+                    Badania genetyczne i kardiologiczne rodziców, pełna profilaktyka kociąt, stały nadzór weterynaryjny — zdrowie jest priorytetem numer jeden.
                 </p>
             </div>
             <div class="value-item">
@@ -126,8 +126,8 @@
             </div>
             <div class="award-card">
                 <i data-lucide="dna" class="award-card__icon"></i>
-                <h3 class="text-body-strong">Badania Genetyczne & Echo Serca</h3>
-                <p class="text-nav text-ink-muted-48">HCM, PKD, PRA oraz regularna kontrola kardiologiczna</p>
+                <h3 class="text-body-strong">Badania Genetyczne Rodziców</h3>
+                <p class="text-nav text-ink-muted-48">Badania właściwe dla rasy (PRA-b, PK-Def, PKD) oraz echo serca</p>
             </div>
         </div>
     </x-frontend.section>
@@ -184,8 +184,8 @@
             </div>
             <div class="benefit-item">
                 <i data-lucide="dna" aria-hidden="true" class="benefit-item__icon"></i>
-                <h3 class="benefit-item__title text-body-strong">Badania genetyczne</h3>
-                <p class="benefit-item__desc">Wyniki testów DNA i badań kardiologicznych rodziców</p>
+                <h3 class="benefit-item__title text-body-strong">Badania rodziców</h3>
+                <p class="benefit-item__desc">Wyniki testów DNA i badań kardiologicznych rodziców dedykowanych dla rasy</p>
             </div>
             <div class="benefit-item">
                 <i data-lucide="syringe" aria-hidden="true" class="benefit-item__icon"></i>
