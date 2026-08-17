@@ -20,11 +20,12 @@ class MediaService
     /**
      * Upload a new media file and optionally attach to a model.
      */
-    public function upload($model, UploadedFile $file, ?string $directory = null): Media
+    public function upload($model, UploadedFile $file, ?string $directory = null, bool $isFeatured = false): Media
     {
         $data = [
             'mediable_type' => $model ? $model::class : null,
             'mediable_id' => $model ? $model->getKey() : null,
+            'is_featured' => $isFeatured,
         ];
 
         $media = $this->uploadAction->handle($data, $file);

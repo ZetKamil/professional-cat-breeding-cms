@@ -44,7 +44,8 @@ class CreateAnimalAction
                 $this->mediaService->upload(
                     $animal,
                     $data['image'],
-                    'animals'
+                    'animals',
+                    true
                 );
             }
 
