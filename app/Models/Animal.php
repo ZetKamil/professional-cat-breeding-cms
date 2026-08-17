@@ -173,7 +173,7 @@ class Animal extends Model
     }
 
     /**
-     * Order animals prioritizing Available cats first, then Reserved, Breeding, Sold, and others.
+     * Order animals prioritizing Available cats first, then Reserved, Sold (W nowym domu), Breeding, and others.
      */
     public function scopeOrderedByStatus(Builder $query): Builder
     {
@@ -181,8 +181,8 @@ class Animal extends Model
             ->orderByRaw("CASE 
                 WHEN status = 'available' THEN 1 
                 WHEN status = 'reserved' THEN 2 
-                WHEN status = 'breeding' THEN 3 
-                WHEN status = 'sold' THEN 4 
+                WHEN status = 'sold' THEN 3 
+                WHEN status = 'breeding' THEN 4 
                 ELSE 5 
             END ASC")
             ->orderBy('sort_order', 'asc')
