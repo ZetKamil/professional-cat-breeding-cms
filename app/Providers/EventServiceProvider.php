@@ -12,20 +12,15 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 
 class EventServiceProvider extends ServiceProvider
 {
-    protected $listen = [
-        ContactMessageSent::class => [
-            SendContactMessageMail::class,
-        ],
-        PostCreated::class => [
-            LogPostCreated::class,
-        ],
-        PostUpdated::class => [
-            LogPostUpdated::class,
-        ],
-    ];
+    protected $listen = [];
 
     public function boot(): void
     {
         //
+    }
+
+    public function shouldDiscoverEvents(): bool
+    {
+        return false;
     }
 }
