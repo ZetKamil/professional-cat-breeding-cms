@@ -139,6 +139,96 @@ Route::get('/check-media', function () {
     return $output;
 })->middleware(['auth', 'verified', 'active']);
 
+// Diagnostic route to test and inspect SMTP / Mail configuration on hosting (admin only)
+Route::match(['get', 'post'], '/check-mail', function (\Illuminate\Http\Request $request) {
+    if (auth()->user()?->role?->name !== 'admin') {
+        abort(403, 'Tylko administrator moze uruchomic diagnostyke poczty.');
+    }
+
+    $mailConfig = config('mail');
+    $queueDefault = config('queue.default');
+    $testResult = null;
+    $testError = null;
+
+    if ($request->has('clear_cache')) {
+        \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+        return redirect('/check-mail')->with('status_msg', 'Pamięć podręczna konfiguracji została wyczyszczona (optimize:clear)!');
+    }
+
+    if ($request->has('send_test')) {
+        $targetEmail = $request->input('target_email', config('mail.from.address') ?: auth()->user()->email);
+        try {
+            \Illuminate\Support\Facades\Mail::raw('To jest testowa wiadomosc z systemu Hodowli Kotow wyslana o ' . now()->toDateTimeString(), function ($msg) use ($targetEmail) {
+                $msg->to($targetEmail)
+                    ->subject('Test konfiguracji poczty SMTP - ' . config('app.name'));
+            });
+            $testResult = "Sukces! Wiadomość testowa została pomyślnie wysłana na adres: <strong>" . e($targetEmail) . "</strong>. Sprawdź skrzynkę odbiorczą oraz folder SPAM.";
+        } catch (\Throwable $e) {
+            $testError = "Błąd wysyłki SMTP: <strong>" . e($e->getMessage()) . "</strong><br><br><pre style='background:#fef2f2; padding:10px; border-radius:6px; overflow:auto; font-size:12px;'>" . e($e->getTraceAsString()) . "</pre>";
+        }
+    }
+
+    $defaultMailer = $mailConfig['default'] ?? 'nieznany';
+    $smtp = $mailConfig['mailers']['smtp'] ?? [];
+    $fromAddr = $mailConfig['from']['address'] ?? 'brak';
+    $fromName = $mailConfig['from']['name'] ?? 'brak';
+
+    $statusMsg = session('status_msg');
+
+    $html = "<div style='font-family:sans-serif; padding:30px; max-width:850px; margin:20px auto; line-height:1.5; color:#1f2937;'>";
+    $html .= "<h2 style='margin-top:0;'>📧 Diagnostyka Konfiguracji Poczty (SMTP)</h2>";
+
+    if ($statusMsg) {
+        $html .= "<div style='background:#ecfdf5; border:1px solid #10b981; color:#065f46; padding:12px 16px; border-radius:8px; margin-bottom:20px; font-weight:bold;'>{$statusMsg}</div>";
+    }
+
+    if ($testResult) {
+        $html .= "<div style='background:#ecfdf5; border:1px solid #10b981; color:#065f46; padding:16px; border-radius:8px; margin-bottom:20px;'>{$testResult}</div>";
+    }
+
+    if ($testError) {
+        $html .= "<div style='background:#fef2f2; border:1px solid #ef4444; color:#991b1b; padding:16px; border-radius:8px; margin-bottom:20px;'>{$testError}</div>";
+    }
+
+    $html .= "<div style='background:#f9fafb; border:1px solid #e5e7eb; border-radius:8px; padding:20px; margin-bottom:24px;'>";
+    $html .= "<h3 style='margin-top:0;'>Aktualnie załadowane zmienne w Laravel:</h3>";
+    $html .= "<ul style='list-style:none; padding-left:0;'>";
+    $html .= "<li><strong>MAIL_MAILER (domyślny sterownik):</strong> <code>" . e($defaultMailer) . "</code> " . ($defaultMailer === 'smtp' ? '✅' : '⚠️ (Ustawione na ' . e($defaultMailer) . ' zamiast smtp!)') . "</li>";
+    $html .= "<li><strong>MAIL_HOST:</strong> <code>" . e($smtp['host'] ?? 'brak') . "</code></li>";
+    $html .= "<li><strong>MAIL_PORT:</strong> <code>" . e($smtp['port'] ?? 'brak') . "</code></li>";
+    $html .= "<li><strong>MAIL_ENCRYPTION:</strong> <code>" . e($smtp['encryption'] ?? ($smtp['scheme'] ?? 'brak')) . "</code></li>";
+    $html .= "<li><strong>MAIL_USERNAME:</strong> <code>" . e($smtp['username'] ?? 'brak') . "</code></li>";
+    $html .= "<li><strong>MAIL_PASSWORD:</strong> <code>" . (!empty($smtp['password']) ? '****** (Ustawione)' : '❌ BRAK HASŁA') . "</code></li>";
+    $html .= "<li><strong>MAIL_FROM_ADDRESS:</strong> <code>" . e($fromAddr) . "</code></li>";
+    $html .= "<li><strong>MAIL_FROM_NAME:</strong> <code>" . e($fromName) . "</code></li>";
+    $html .= "<li><strong>QUEUE_CONNECTION:</strong> <code>" . e($queueDefault) . "</code> " . ($queueDefault === 'sync' ? '✅ (Natychmiast)' : '⚠️ (Zadania mogą czekać w bazie!)') . "</li>";
+    $html .= "</ul>";
+    $html .= "</div>";
+
+    $html .= "<div style='display:flex; gap:12px; flex-wrap:wrap; margin-bottom:20px;'>";
+    $html .= "<form method='POST' action='" . url('/check-mail') . "' style='flex:1; min-width:280px; background:#fff; border:1px solid #e5e7eb; padding:20px; border-radius:8px;'>";
+    $html .= "<input type='hidden' name='_token' value='" . csrf_token() . "'>";
+    $html .= "<input type='hidden' name='send_test' value='1'>";
+    $html .= "<h4 style='margin-top:0;'>Wyślij e-mail testowy</h4>";
+    $html .= "<label style='display:block; margin-bottom:8px; font-weight:bold;'>Adres odbiorcy:</label>";
+    $html .= "<input type='email' name='target_email' value='" . e($fromAddr) . "' style='width:100%; padding:8px 12px; border:1px solid #d1d5db; border-radius:6px; margin-bottom:12px;' required>";
+    $html .= "<button type='submit' style='background:#d1ab58; color:#181816; border:none; padding:10px 20px; border-radius:6px; font-weight:bold; cursor:pointer;'>🚀 Wyślij Testowy E-mail</button>";
+    $html .= "</form>";
+
+    $html .= "<form method='POST' action='" . url('/check-mail') . "' style='flex:1; min-width:280px; background:#fff; border:1px solid #e5e7eb; padding:20px; border-radius:8px; display:flex; flex-direction:column; justify-content:space-between;'>";
+    $html .= "<input type='hidden' name='_token' value='" . csrf_token() . "'>";
+    $html .= "<input type='hidden' name='clear_cache' value='1'>";
+    $html .= "<div><h4 style='margin-top:0;'>Wyczyść Cache Konfiguracji</h4><p style='color:#6b7280; font-size:14px;'>Jeśli zmieniłeś plik .env na serwerze, odśwież konfigurację tym przyciskiem.</p></div>";
+    $html .= "<button type='submit' style='background:#3b82f6; color:#fff; border:none; padding:10px 20px; border-radius:6px; font-weight:bold; cursor:pointer;'>🧹 Wyczyść Cache (optimize:clear)</button>";
+    $html .= "</form>";
+    $html .= "</div>";
+
+    $html .= "<p><a href='" . url('/dashboard') . "' style='color:#4b5563; text-decoration:none;'>← Wróć do Panelu</a></p>";
+    $html .= "</div>";
+
+    return $html;
+})->middleware(['auth', 'verified', 'active']);
+
 // Utility route to trigger storage link & seed real cat images on hosting without SSH (admin only)
 Route::get('/fix-storage', function () {
     // SECURITY: Restrict to admin role only — this route seeds data and must not be accessible to editors/users
