@@ -189,13 +189,13 @@
             </div>
             <div class="benefit-item">
                 <i data-lucide="syringe" aria-hidden="true" class="benefit-item__icon"></i>
-                <h3 class="benefit-item__title text-body-strong">Szczepienia i Chip</h3>
-                <p class="benefit-item__desc">Kompletny cykl szczepień oraz zarejestrowany mikrochip</p>
+                <h3 class="benefit-item__title text-body-strong">2x Szczepienie i Chip</h3>
+                <p class="benefit-item__desc">2 obowiązkowe szczepienia oraz wszczepiony, zarejestrowany mikrochip</p>
             </div>
             <div class="benefit-item">
                 <i data-lucide="bug-off" aria-hidden="true" class="benefit-item__icon"></i>
-                <h3 class="benefit-item__title text-body-strong">Odrobaczanie</h3>
-                <p class="benefit-item__desc">Regularne odrobaczanie od 2. tygodnia życia</p>
+                <h3 class="benefit-item__title text-body-strong">2x Odrobaczanie</h3>
+                <p class="benefit-item__desc">2 cykle odrobaczania potwierdzone wpisami w książeczce zdrowia</p>
             </div>
             <div class="benefit-item">
                 <i data-lucide="phone" aria-hidden="true" class="benefit-item__icon"></i>

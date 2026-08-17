@@ -44,9 +44,9 @@ Displays the 4-pillar health & trust standards for our breeding cattery.
                     <i data-lucide="home" aria-hidden="true"></i>
                 </div>
             </div>
-            <h3 class="trust-pillar__title">Profilaktyka Kociąt</h3>
+            <h3 class="trust-pillar__title">Profilaktyka i Pakiet Kociąt</h3>
             <p class="trust-pillar__desc">
-                Kocięta otrzymują książeczkę zdrowia, komplet szczepień, cykl odrobaczeń, microchip oraz pełną domową socjalizację w stałym kontakcie z ludźmi.
+                Każde kocię opuszcza nas z kompletem: 2x szczepienie, 2x odrobaczenie, zarejestrowany microchip, wielopokoleniowy rodowód SHiOZ ZOOLANDIA oraz książeczka zdrowia.
             </p>
         </div>
     </div>

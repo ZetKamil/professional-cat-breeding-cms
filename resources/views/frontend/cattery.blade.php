@@ -148,7 +148,7 @@
                 </div>
                 <h3 class="adoption-journey__title">Umowa i Odbiór</h3>
                 <p class="adoption-journey__desc">
-                    Po podjęciu decyzji podpisujemy umowę, ustalamy dogodny termin odbioru oraz przekazujemy kocię z książeczką zdrowia (komplet szczepień, odrobaczeń, microchip), rodowodem SHiOZ ZOOLANDIA oraz kopiami badań genetycznych rodziców.
+                    Po podjęciu decyzji podpisujemy umowę, ustalamy dogodny termin odbioru oraz przekazujemy kocię z książeczką zdrowia (2 szczepienia, 2 odrobaczenia), zarejestrowanym microchipem, rodowodem SHiOZ ZOOLANDIA oraz kopiami badań genetycznych rodziców.
                 </p>
             </div>
         </div>

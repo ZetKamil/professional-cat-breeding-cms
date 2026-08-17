@@ -185,7 +185,7 @@
                             @if($isBreeding)
                                 <span title="Badania dedykowane dla rasy">{{ $breedHealthText }}</span>
                             @else
-                                <span>Linia po przebadanych rodzicach (profil rasy) • Książeczka zdrowia, szczepienia i chip</span>
+                                <span>Linia po przebadanych rodzicach (profil rasy) • 2x szczepienie, 2x odrobaczenie, microchip i rodowód</span>
                             @endif
                         </div>
                     </div>

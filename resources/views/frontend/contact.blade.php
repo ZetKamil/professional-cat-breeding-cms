@@ -190,8 +190,8 @@
                     W jakim wieku kocięta opuszczają hodowlę?
                 </summary>
                 <p class="faq-item__answer text-body">
-                    Kocięta opuszczają hodowlę nie wcześniej niż w 14. tygodniu życia,
-                    po ukończeniu pełnego cyklu szczepień, odrobaczeń i domowej socjalizacji.
+                    Kocięta opuszczają hodowlę po ukończeniu 14. tygodnia życia,
+                    po przejściu 2 szczepień, 2 odrobaczeń, zachipowaniu i pełnej domowej socjalizacji.
                 </p>
             </details>
 
@@ -200,8 +200,8 @@
                     Jakie dokumenty otrzymuję?
                 </summary>
                 <p class="faq-item__answer text-body">
-                    Każde kocię otrzymuje komplet dokumentów: książeczkę zdrowia z udokumentowaną historią
-                    szczepień i odrobaczeń, wszczepiony microchip, certyfikat rodowodowy wydany przez SHiOZ ZOOLANDIA,
+                    Każde kocię otrzymuje komplet dokumentów: książeczkę zdrowia z udokumentowanymi 2 szczepieniami i 2 odrobaczeniami,
+                    wszczepiony i zarejestrowany microchip, certyfikat rodowodowy wydany przez SHiOZ ZOOLANDIA,
                     kopie wyników badań genetycznych i kardiologicznych obojga rodziców (dedykowanych dla danej rasy) oraz formalną umowę.
                 </p>
             </details>
