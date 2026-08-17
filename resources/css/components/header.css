@@ -314,6 +314,7 @@
     -webkit-backdrop-filter: saturate(180%) blur(32px);
     opacity: 0;
     visibility: hidden;
+    pointer-events: none;
     transform: translateY(-8px);
     transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1),
                 visibility 0.35s cubic-bezier(0.16, 1, 0.3, 1),
@@ -327,7 +328,16 @@
 .mobile-menu.is-open {
     opacity: 1;
     visibility: visible;
+    pointer-events: auto;
     transform: translateY(0);
+}
+
+.mobile-menu__brand,
+.mobile-menu__close,
+.mobile-menu__link,
+.mobile-menu__cta {
+    pointer-events: auto;
+    cursor: pointer;
 }
 
 .mobile-menu__header {
@@ -447,10 +457,10 @@ body.menu-open {
 }
 
 /* --------------------------------------------------------------------------
-   8. RESPONSIVE BREAKPOINT (max-width: 834px)
+   8. RESPONSIVE BREAKPOINT (max-width: 1024px)
    -------------------------------------------------------------------------- */
 
-@media (max-width: 834px) {
+@media (max-width: 1024px) {
     .global-nav__links {
         display: none;
     }
