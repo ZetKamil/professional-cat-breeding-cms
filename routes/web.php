@@ -136,6 +136,50 @@ Route::match(['get', 'post'], '/check-media', function (\Illuminate\Http\Request
         }
     }
 
+    // Auto-sync physical storage files into public/storage so Apache can serve them directly
+    $pubStorage = public_path('storage');
+    if (is_link($pubStorage)) {
+        @unlink($pubStorage);
+    }
+    if (! \Illuminate\Support\Facades\File::isDirectory($pubStorage)) {
+        \Illuminate\Support\Facades\File::makeDirectory($pubStorage, 0755, true, true);
+    }
+
+    $sourceDirs = [
+        storage_path('app/public'),
+        storage_path('app/private'),
+    ];
+
+    $syncedCount = 0;
+    foreach ($sourceDirs as $sDir) {
+        if (\Illuminate\Support\Facades\File::isDirectory($sDir)) {
+            foreach (\Illuminate\Support\Facades\File::allFiles($sDir) as $file) {
+                $rel = str_replace('\\', '/', substr($file->getPathname(), strlen($sDir) + 1));
+                $target = public_path('storage/' . $rel);
+                $targetDir = dirname($target);
+                if (! \Illuminate\Support\Facades\File::isDirectory($targetDir)) {
+                    \Illuminate\Support\Facades\File::makeDirectory($targetDir, 0755, true, true);
+                }
+                if (! \Illuminate\Support\Facades\File::exists($target) || \Illuminate\Support\Facades\File::size($target) !== $file->getSize()) {
+                    @\Illuminate\Support\Facades\File::copy($file->getPathname(), $target);
+                    @chmod($target, 0644);
+                    $syncedCount++;
+                }
+
+                // Also copy to public/storage/media/<filename> as flat fallback
+                $flatTarget = public_path('storage/media/' . $file->getFilename());
+                $flatDir = dirname($flatTarget);
+                if (! \Illuminate\Support\Facades\File::isDirectory($flatDir)) {
+                    \Illuminate\Support\Facades\File::makeDirectory($flatDir, 0755, true, true);
+                }
+                if (! \Illuminate\Support\Facades\File::exists($flatTarget)) {
+                    @\Illuminate\Support\Facades\File::copy($file->getPathname(), $flatTarget);
+                    @chmod($flatTarget, 0644);
+                }
+            }
+        }
+    }
+
     $animals = \App\Models\Animal::with(['media', 'gallery'])->get();
     $output = "<div style='font-family:sans-serif; padding:30px; max-width:900px; margin:0 auto;'>";
     $output .= "<h2>Diagnostyka Bazy i Zdjec Kotow</h2>";
