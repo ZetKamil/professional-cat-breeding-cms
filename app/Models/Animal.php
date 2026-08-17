@@ -164,7 +164,12 @@ class Animal extends Model
         return $query
             ->where('is_published', true)
             ->whereNotNull('published_at')
-            ->whereIn('status', [AnimalStatus::Available, AnimalStatus::Reserved, AnimalStatus::Breeding]);
+            ->whereIn('status', [
+                AnimalStatus::Available,
+                AnimalStatus::Reserved,
+                AnimalStatus::Breeding,
+                AnimalStatus::Sold,
+            ]);
     }
 
     /**

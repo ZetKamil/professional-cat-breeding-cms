@@ -250,6 +250,12 @@
                             Zapytaj o tego kota
                         </x-frontend.button>
 
+                        @if(isset($children) && $children->isNotEmpty())
+                            <x-frontend.button href="#potomstwo" variant="secondary" icon="users">
+                                Zobacz potomstwo ({{ $children->count() }})
+                            </x-frontend.button>
+                        @endif
+
                         @if($animal->mother || $animal->father)
                             <x-frontend.button href="#rodowod" variant="secondary" icon="git-branch">
                                 Zobacz rodowód
@@ -272,17 +278,33 @@
     </section>
 
     {{-- ============================================================
-    2. PEDIGREE & GENEALOGY (If parents present)
+    2. OFFSPRING / KITTENS FROM THIS PARENT (If present)
+    ============================================================ --}}
+    @if(isset($children) && $children->isNotEmpty())
+        <x-frontend.section id="potomstwo" class="reveal-up">
+            <x-frontend.section-header eyebrow="Rodzina i Mioty" headline="Potomstwo kota {{ $animal->name }}"
+                description="Kocięta urodzone po tym rodzicu w naszej hodowli — aktualnie dostępne do rezerwacji oraz te, które znalazły już swoje kochające domy." />
+
+            <div class="animals-grid">
+                @foreach($children as $child)
+                    <x-frontend.animal-card :animal="$child" />
+                @endforeach
+            </div>
+        </x-frontend.section>
+    @endif
+
+    {{-- ============================================================
+    3. PEDIGREE & GENEALOGY (If parents present)
     ============================================================ --}}
     <x-frontend.animal-pedigree :mother="$animal->mother" :father="$animal->father" />
 
     {{-- ============================================================
-    3. HEALTH & STANDARD TRUST
+    4. HEALTH & STANDARD TRUST
     ============================================================ --}}
     <x-frontend.animal-health-panel />
 
     {{-- ============================================================
-    4. RELATED ANIMALS (Same breed / available)
+    5. RELATED ANIMALS (Same breed / available)
     ============================================================ --}}
     @if($relatedAnimals->isNotEmpty())
         <x-frontend.section id="inne-koty" class="reveal-up">

@@ -107,4 +107,30 @@ class AnimalTest extends TestCase
 
         $response->assertNotFound();
     }
+
+    public function test_parent_profile_shows_offspring_section(): void
+    {
+        $mother = Animal::factory()->female()->breeding()->create([
+            'name' => 'Luna',
+            'slug' => 'luna-mother',
+            'is_published' => true,
+            'published_at' => now(),
+        ]);
+
+        $child = Animal::factory()->create([
+            'name' => 'Barbie',
+            'slug' => 'barbie-child',
+            'status' => \App\Enums\AnimalStatus::Sold,
+            'mother_id' => $mother->id,
+            'is_published' => true,
+            'published_at' => now(),
+        ]);
+
+        $response = $this->get('/koty/luna-mother');
+
+        $response->assertOk();
+        $response->assertSee('Potomstwo kota Luna');
+        $response->assertSee('Barbie');
+        $response->assertSee('W nowym domu');
+    }
 }

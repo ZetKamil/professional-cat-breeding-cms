@@ -99,6 +99,10 @@ class AnimalController extends Controller
             'childrenAsFather.media',
         ]);
 
+        $children = ($animal->gender === AnimalGender::Female ? $animal->childrenAsMother : $animal->childrenAsFather)
+            ->filter(fn ($child) => $child->is_published && $child->published_at)
+            ->sortBy('sort_order');
+
         $relatedAnimals = Animal::query()
             ->published()
             ->where('id', '!=', $animal->id)
@@ -113,6 +117,7 @@ class AnimalController extends Controller
 
         return view('frontend.animals.show', [
             'animal' => $animal,
+            'children' => $children,
             'relatedAnimals' => $relatedAnimals,
         ]);
     }

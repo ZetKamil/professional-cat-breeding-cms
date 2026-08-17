@@ -66,8 +66,8 @@ enum AnimalStatus: string
     public function isPubliclyVisible(): bool
     {
         return match ($this) {
-            self::Available, self::Reserved, self::Breeding => true,
-            self::Sold, self::Retired => false,
+            self::Available, self::Reserved, self::Breeding, self::Sold => true,
+            self::Retired => false,
         };
     }
 }
