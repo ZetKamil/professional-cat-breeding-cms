@@ -125,10 +125,33 @@ Route::get('/storage/{path}', function ($path) {
 })->where('path', '.*');
 
 // Diagnostic route to inspect media status on hosting (auth required)
-Route::get('/check-media', function () {
+Route::match(['get', 'post'], '/check-media', function (\Illuminate\Http\Request $request) {
+    $migrateOutput = null;
+    if ($request->has('run_migrate') || $request->input('run_migrate') === '1') {
+        try {
+            \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+            $migrateOutput = "Sukces! Migracje zostały wykonane: <br><pre style='background:#ecfdf5; padding:10px; border-radius:6px; font-size:12px; margin-top:8px;'>" . e(\Illuminate\Support\Facades\Artisan::output()) . "</pre>";
+        } catch (\Throwable $e) {
+            $migrateOutput = "<span style='color:#dc2626;'>Błąd migracji: " . e($e->getMessage()) . "</span>";
+        }
+    }
+
     $animals = \App\Models\Animal::with(['media', 'gallery'])->get();
     $output = "<div style='font-family:sans-serif; padding:30px; max-width:900px; margin:0 auto;'>";
-    $output .= "<h2>Diagnostyka Zdjec Kotow (Glowne i Galeria)</h2>";
+    $output .= "<h2>Diagnostyka Bazy i Zdjec Kotow</h2>";
+
+    if ($migrateOutput) {
+        $output .= "<div style='background:#f0fdf4; border:1px solid #10b981; color:#065f46; padding:14px; border-radius:8px; margin-bottom:20px;'>{$migrateOutput}</div>";
+    }
+
+    $output .= "<div style='margin-bottom:20px; display:flex; gap:10px;'>";
+    $output .= "<form method='POST' action='" . url('/check-media') . "'>";
+    $output .= "<input type='hidden' name='_token' value='" . csrf_token() . "'>";
+    $output .= "<input type='hidden' name='run_migrate' value='1'>";
+    $output .= "<button type='submit' style='background:#10b981; color:#fff; border:none; padding:10px 18px; border-radius:6px; font-weight:bold; cursor:pointer;'>🚀 Uruchom Migracje Bazy (Dodaj nowe koty / Barbie / Bella)</button>";
+    $output .= "</form>";
+    $output .= "</div>";
+
     $output .= "<table border='1' cellpadding='8' cellspacing='0' style='border-collapse:collapse; width:100%;'>";
     $output .= "<tr style='background:#f3f4f6;'><th>Kot</th><th>Typ</th><th>Sciezka w DB</th><th>Plik fizyczny?</th><th>Podglad</th></tr>";
 
@@ -139,7 +162,7 @@ Route::get('/check-media', function () {
         }
 
         if ($allMedia->isEmpty()) {
-            $output .= "<tr><td><strong>" . e($a->name) . "</strong></td><td>-</td><td colspan='3' style='color:red;'>BRAK ZDJEC W BAZIE</td></tr>";
+            $output .= "<tr><td><strong>" . e($a->name) . "</strong> (" . e($a->breed) . ")</td><td>-</td><td colspan='3' style='color:red;'>BRAK ZDJEC W BAZIE</td></tr>";
             continue;
         }
 
@@ -148,7 +171,7 @@ Route::get('/check-media', function () {
             $typeLabel = $isMain ? '<span style="color:#059669; font-weight:bold;">Glowne</span>' : 'Galeria #' . ($idx + 1);
             $dbPath = ($m->directory ? $m->directory . '/' : '') . $m->filename;
 
-            $storageExists = file_exists(storage_path('app/public/' . $dbPath));
+            $storageExists = file_exists(storage_path('app/public/' . $dbPath)) || file_exists(storage_path('app/private/' . $dbPath));
             $publicExists = file_exists(public_path('storage/' . $dbPath));
             $mediaExists = file_exists(public_path('storage/media/' . basename($m->filename)));
 

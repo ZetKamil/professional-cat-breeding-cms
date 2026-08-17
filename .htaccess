@@ -59,10 +59,22 @@
     RewriteRule ^AI(/.*)?$ - [F,L]
 
     # --------------------------------------------------------
-    # 8. ALLOW: public/ subdirectories (assets, images, etc.)
+    # 8. ALLOW / REWRITE: public/ & storage/
     # --------------------------------------------------------
+    # If requested file exists in public/storage/, serve it directly
+    RewriteCond %{DOCUMENT_ROOT}/public/storage/$1 -f
+    RewriteRule ^storage/(.*)$ public/storage/$1 [L]
+
+    # If requested file exists in public/, serve it directly
+    RewriteCond %{DOCUMENT_ROOT}/public/$1 -f
+    RewriteRule ^(.*)$ public/$1 [L]
+
+    # Allow direct access to public/ if prefix is present
     RewriteCond %{REQUEST_URI} ^/public/ [NC]
     RewriteRule ^ - [L]
+
+    # Route any unserved /storage/ request to Laravel index.php (to bypass root storage directory blockage)
+    RewriteRule ^storage(/.*)?$ index.php [L]
 
     # --------------------------------------------------------
     # 9. Redirect Trailing Slashes (not a folder)
