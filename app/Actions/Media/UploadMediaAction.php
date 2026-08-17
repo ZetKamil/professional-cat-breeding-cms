@@ -28,7 +28,16 @@ class UploadMediaAction
                     continue;
                 }
 
+                $disk = 'public';
                 $directory = $this->resolveDirectory($data['mediable_type'] ?? null);
+
+                // Ensure target storage directory exists
+                $storageDir = storage_path('app/public/' . $directory);
+                if (! \Illuminate\Support\Facades\File::isDirectory($storageDir)) {
+                    \Illuminate\Support\Facades\File::makeDirectory($storageDir, 0755, true, true);
+                    @chmod($storageDir, 0755);
+                }
+
                 $storedPath = $file->store($directory, $disk);
 
                 $storageFullPath = storage_path('app/public/' . $storedPath);

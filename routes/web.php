@@ -67,11 +67,16 @@ Route::get('/storage/{path}', function ($path) {
     $possiblePaths = [
         public_path('storage/' . $path),
         storage_path('app/public/' . $path),
+        storage_path('app/private/' . $path),
+        storage_path('app/' . $path),
         public_path('storage/media/' . basename($path)),
         storage_path('app/public/media/' . basename($path)),
+        storage_path('app/private/media/' . basename($path)),
         public_path('storage/media/animals/' . basename($path)),
         storage_path('app/public/media/animals/' . basename($path)),
+        storage_path('app/private/media/animals/' . basename($path)),
         storage_path('app/public/' . basename($path)),
+        storage_path('app/private/' . basename($path)),
     ];
 
     foreach ($possiblePaths as $fullPath) {
@@ -85,10 +90,12 @@ Route::get('/storage/{path}', function ($path) {
         }
     }
 
-    // Global recursive fallback search in storage_path('app/public'), public_path('storage'), and base_path('image')
+    // Global recursive fallback search in storage_path('app'), public_path('storage'), and base_path('image')
     $filename = basename($path);
     $searchDirs = [
         storage_path('app/public'),
+        storage_path('app/private'),
+        storage_path('app'),
         public_path('storage'),
         base_path('image'),
     ];
