@@ -30,13 +30,13 @@
                             </div>
                         </a>
 
-                        <a href="mailto:hodowla.z.mazowieckiej.szwajcarii@gmail.com" class="contact-fast-link" role="listitem">
+                        <a href="mailto:biuro@kotyzmazowieckiejszwajcarii.pl" class="contact-fast-link" role="listitem">
                             <div class="contact-fast-link__icon">
                                 <i data-lucide="mail" aria-hidden="true"></i>
                             </div>
                             <div class="contact-fast-link__body">
                                 <span class="contact-fast-link__label">Napisz e-mail</span>
-                                <span class="contact-fast-link__val">hodowla.z.mazowieckiej.szwajcarii@gmail.com</span>
+                                <span class="contact-fast-link__val">biuro@kotyzmazowieckiejszwajcarii.pl</span>
                                 <span class="contact-fast-link__hint">Odpowiedź zwykle w ciągu 24h</span>
                             </div>
                         </a>
@@ -243,7 +243,7 @@
         "name": "Hodowla Kotów z Mazowieckiej Szwajcarii",
         "image": "{{ asset('storage/media/parent_bella_1.jpg') }}",
         "telephone": "+48514153204",
-        "email": "hodowla.z.mazowieckiej.szwajcarii@gmail.com",
+        "email": "biuro@kotyzmazowieckiejszwajcarii.pl",
         "address": {
           "@@type": "PostalAddress",
           "streetAddress": "Sikórz 56A",

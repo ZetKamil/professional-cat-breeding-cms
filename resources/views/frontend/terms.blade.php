@@ -24,7 +24,7 @@
                             Polska
                         </li>
                         <li>Kontakt z Usługodawcą:<br><br>
-                            <strong>E-mail:</strong> <a href="mailto:hodowla.z.mazowieckiej.szwajcarii@gmail.com">hodowla.z.mazowieckiej.szwajcarii@gmail.com</a><br>
+                            <strong>E-mail:</strong> <a href="mailto:biuro@kotyzmazowieckiejszwajcarii.pl">biuro@kotyzmazowieckiejszwajcarii.pl</a><br>
                             <strong>Telefon:</strong> <a href="tel:+48514153204">+48 514 153 204</a>
                         </li>
                         <li>Regulamin jest udostępniany na stronie internetowej w sposób umożliwiający jego wyświetlenie, pobranie, zapisanie i odtworzenie.</li>

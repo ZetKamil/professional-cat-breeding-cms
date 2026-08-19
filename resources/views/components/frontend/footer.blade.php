@@ -25,8 +25,8 @@ Calm, minimal, trust-building
                     <div class="footer-contact-info">
                         <div class="footer-contact-item">
                             <i data-lucide="mail" aria-hidden="true" class="footer-contact-icon"></i>
-                            <a href="mailto:hodowla.z.mazowieckiej.szwajcarii@gmail.com"
-                                class="footer-link">hodowla.z.mazowieckiej.szwajcarii@gmail.com</a>
+                            <a href="mailto:biuro@kotyzmazowieckiejszwajcarii.pl"
+                                class="footer-link">biuro@kotyzmazowieckiejszwajcarii.pl</a>
                         </div>
                         <div class="footer-contact-item">
                             <i data-lucide="phone" aria-hidden="true" class="footer-contact-icon"></i>

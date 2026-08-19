@@ -26,7 +26,7 @@
                     </p>
                     <p style="margin-top: 12px;">Kontakt z Administratorem:</p>
                     <ul class="legal-page__list">
-                        <li><strong>E-mail:</strong> <a href="mailto:hodowla.z.mazowieckiej.szwajcarii@gmail.com">hodowla.z.mazowieckiej.szwajcarii@gmail.com</a></li>
+                        <li><strong>E-mail:</strong> <a href="mailto:biuro@kotyzmazowieckiejszwajcarii.pl">biuro@kotyzmazowieckiejszwajcarii.pl</a></li>
                         <li><strong>Telefon:</strong> <a href="tel:+48514153204">+48 514 153 204</a></li>
                     </ul>
                     <p style="margin-top: 12px;">Administrator odpowiada za zgodne z prawem przetwarzanie danych osobowych użytkowników strony internetowej.</p>
