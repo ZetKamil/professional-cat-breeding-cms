@@ -61,7 +61,7 @@ class AnimalController extends Controller
             })
             ->orderedByStatus();
 
-        $animals = $query->paginate(12)->withQueryString();
+        $animals = $query->paginate(24)->withQueryString();
 
         return view('frontend.animals.index', [
             'animals' => $animals,

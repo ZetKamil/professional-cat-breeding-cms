@@ -157,6 +157,25 @@ class RealKittensAndParentsSeeder extends Seeder
                 ],
                 'sort_order' => 16,
             ],
+            'nela' => [
+                'name' => 'Nela',
+                'slug' => 'nela-syjamska',
+                'breed' => 'Kot Syjamski',
+                'color' => 'Seal Point',
+                'gender' => AnimalGender::Female,
+                'status' => AnimalStatus::Breeding,
+                'type' => AnimalType::Cat,
+                'date_of_birth' => '2023-04-22',
+                'short_description' => 'Przepiękna kotka hodowlana rasy Kot Syjamski o klasycznym ubarwieniu Seal Point i hipnotyzujących szafirowych oczach.',
+                'description' => 'Nela to wspaniała kotka hodowlana rasy Kot Syjamski o umaszczeniu Seal Point. Odznacza się harmonijną budową, doskonałym kontrastem znaczeń oraz niezwykle łagodnym, przyjacielskim charakterem. Urodzona 22.04.2023 r.',
+                'photos' => [
+                    base_path('image/Syjamy/Reproduktory/Nela/profilowe.jfif'),
+                    base_path('image/Syjamy/Reproduktory/Nela/700a8851-0a09-427f-9692-b14ffb9f2d39.jfif'),
+                    base_path('image/Syjamy/Reproduktory/Nela/a1a9a5d9-2be4-4ecd-816a-88485b5ff522.jfif'),
+                    base_path('image/Syjamy/Reproduktory/Nela/b774b604-0440-4966-bc3f-582621045f8b.jfif'),
+                ],
+                'sort_order' => 17,
+            ],
         ];
 
         // Create Parent Records & Attach Photos
@@ -170,6 +189,7 @@ class RealKittensAndParentsSeeder extends Seeder
                 'gender' => $data['gender'],
                 'status' => $data['status'],
                 'type' => $data['type'],
+                'date_of_birth' => $data['date_of_birth'] ?? null,
                 'short_description' => $data['short_description'],
                 'description' => $data['description'],
                 'sort_order' => $data['sort_order'],

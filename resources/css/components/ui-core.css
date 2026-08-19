@@ -82,6 +82,20 @@
     color: var(--color-canvas);
 }
 
+.badge--gold {
+    background: linear-gradient(135deg, rgba(245, 222, 159, 0.45) 0%, rgba(209, 171, 88, 0.35) 100%);
+    color: #8c6314;
+    border: 1px solid rgba(209, 171, 88, 0.55);
+    box-shadow: 0 2px 8px rgba(209, 171, 88, 0.2);
+    font-weight: 600;
+}
+
+.dark .badge--gold {
+    background: linear-gradient(135deg, rgba(209, 171, 88, 0.3) 0%, rgba(184, 147, 69, 0.4) 100%);
+    color: var(--color-primary-on-dark);
+    border-color: rgba(226, 194, 117, 0.6);
+}
+
 .badge--muted {
     background-color: var(--color-canvas-parchment);
     color: var(--color-ink-muted-80);

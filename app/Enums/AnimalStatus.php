@@ -53,7 +53,7 @@ enum AnimalStatus: string
     public function badgeVariant(): string
     {
         return match ($this) {
-            self::Available => 'success',
+            self::Available => 'gold',
             self::Reserved => 'warning',
             self::Breeding => 'info',
             self::Sold, self::Retired => 'muted',

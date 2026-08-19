@@ -74,6 +74,15 @@
     font-weight: 600;
 }
 
+.animal-card__badge-overlay .badge--gold {
+    background: linear-gradient(135deg, #f5d88f 0%, #d1ab58 100%) !important;
+    color: #1a1608 !important;
+    border: 1px solid rgba(255, 255, 255, 0.75) !important;
+    box-shadow: 0 4px 14px rgba(209, 171, 88, 0.45) !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.02em;
+}
+
 /* --------------------------------------------------------------------------
    2. TYPOGRAPHY & SPACING HIERARCHY
    -------------------------------------------------------------------------- */

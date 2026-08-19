@@ -16,6 +16,7 @@
 
 @php
     $variantClass = match($variant) {
+        'gold', 'featured', 'primary' => 'badge--gold',
         'muted'   => 'badge--muted',
         'success' => 'badge--success',
         'warning' => 'badge--warning',
