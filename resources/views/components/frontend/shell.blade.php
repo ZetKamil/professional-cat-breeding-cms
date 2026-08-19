@@ -55,6 +55,21 @@
 
     <title>{{ $title }}</title>
 
+    {{-- Google Analytics 4 (gtag.js) --}}
+    @php
+        $gaId = config('services.google.analytics_id') ?: env('GOOGLE_ANALYTICS_ID', env('GA_MEASUREMENT_ID'));
+    @endphp
+    @if($gaId)
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ $gaId }}"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '{{ $gaId }}');
+        </script>
+    @endif
+
     {{-- Google Fonts: Inter --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
