@@ -192,7 +192,7 @@ Route::match(['get', 'post'], '/check-media', function (\Illuminate\Http\Request
     $output .= "<form method='POST' action='" . url('/check-media') . "'>";
     $output .= "<input type='hidden' name='_token' value='" . csrf_token() . "'>";
     $output .= "<input type='hidden' name='run_migrate' value='1'>";
-    $output .= "<button type='submit' style='background:#10b981; color:#fff; border:none; padding:10px 18px; border-radius:6px; font-weight:bold; cursor:pointer;'>🚀 Uruchom Migracje Bazy (Aktualizuj bazę / Nela)</button>";
+    $output .= "<button type='submit' style='background:#10b981; color:#fff; border:none; padding:10px 18px; border-radius:6px; font-weight:bold; cursor:pointer;'>🚀 Uruchom Migracje Bazy (Dodaj nowe kociaki: Candy, Carlos, Carmen, Cyprian)</button>";
     $output .= "</form>";
     $output .= "</div>";
 
