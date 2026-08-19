@@ -62,24 +62,24 @@
 
                 {{-- RIGHT COLUMN: Interactive Form Card --}}
                 <div class="contact-form-card" id="formularz">
-                    <div class="contact-form-card__header" style="margin-bottom: 20px;">
-                        <h2 style="font-size: 1.35rem; font-weight: 600; color: var(--color-ink); margin-bottom: 6px;">Formularz kontaktowy</h2>
-                        <p style="font-size: 0.9rem; color: var(--color-ink-muted-80);">Wypełnij poniższe pola, a odezwiemy się tak szybko, jak to możliwe.</p>
-                    </div>
-
                     @if(session('status'))
-                        <div class="form-alert form-alert--success" role="alert">
-                            <i data-lucide="check-circle" aria-hidden="true"></i>
-                            <p>{{ session('status') }}</p>
+                        <div class="form-alert form-alert--success" role="alert" style="margin-bottom: 24px; padding: 14px 18px; border-radius: 12px; background: rgba(52, 199, 89, 0.12); border: 1px solid rgba(52, 199, 89, 0.35); color: #15803d; display: flex; align-items: flex-start; gap: 12px; box-shadow: 0 4px 16px rgba(52, 199, 89, 0.12);">
+                            <i data-lucide="check-circle" style="width: 22px; height: 22px; color: #16a34a; flex-shrink: 0; margin-top: 1px;" aria-hidden="true"></i>
+                            <p style="margin: 0; font-size: 0.95rem; font-weight: 500; line-height: 1.45;">{{ session('status') }}</p>
                         </div>
                     @endif
 
                     @if(session('error'))
-                        <div class="form-alert form-alert--error" role="alert" style="background: rgba(220, 38, 38, 0.08); border-left: 4px solid #dc2626; padding: 14px 18px; border-radius: 8px; margin-bottom: 20px; color: #991b1b; display: flex; align-items: center; gap: 10px;">
-                            <i data-lucide="alert-circle" aria-hidden="true"></i>
-                            <p>{{ session('error') }}</p>
+                        <div class="form-alert form-alert--error" role="alert" style="margin-bottom: 24px; padding: 14px 18px; border-radius: 12px; background: rgba(220, 38, 38, 0.08); border-left: 4px solid #dc2626; color: #991b1b; display: flex; align-items: flex-start; gap: 12px;">
+                            <i data-lucide="alert-circle" style="width: 22px; height: 22px; color: #dc2626; flex-shrink: 0; margin-top: 1px;" aria-hidden="true"></i>
+                            <p style="margin: 0; font-size: 0.95rem; font-weight: 500; line-height: 1.45;">{{ session('error') }}</p>
                         </div>
                     @endif
+
+                    <div class="contact-form-card__header" style="margin-bottom: 20px;">
+                        <h2 style="font-size: 1.35rem; font-weight: 600; color: var(--color-ink); margin-bottom: 6px;">Formularz kontaktowy</h2>
+                        <p style="font-size: 0.9rem; color: var(--color-ink-muted-80);">Wypełnij poniższe pola, a odezwiemy się tak szybko, jak to możliwe.</p>
+                    </div>
 
                     <form action="{{ route('frontend.contact.store') }}" method="POST" class="contact-form" id="contactForm" novalidate onsubmit="const btn = this.querySelector('button[type=submit]'); if (btn) { btn.disabled = true; btn.style.opacity = '0.7'; btn.style.pointerEvents = 'none'; btn.innerText = 'Wysyłanie wiadomości...'; }">
                         @csrf
