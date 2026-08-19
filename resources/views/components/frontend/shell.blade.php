@@ -57,7 +57,7 @@
 
     {{-- Google Analytics 4 (gtag.js) --}}
     @php
-        $gaId = config('services.google.analytics_id') ?: env('GOOGLE_ANALYTICS_ID', env('GA_MEASUREMENT_ID'));
+        $gaId = config('services.google.analytics_id') ?: env('GOOGLE_ANALYTICS_ID', env('GA_MEASUREMENT_ID', 'G-VB4ZCKR8WB'));
     @endphp
     @if($gaId)
         <!-- Google tag (gtag.js) -->
