@@ -12,66 +12,68 @@
             <div class="hero__overlay"></div>
         </div>
 
-        <div class="section-inner relative z-10 py-20 lg:py-24">
-            {{-- Split-Screen Editorial Opening --}}
-            <div class="hero-split-grid">
-                <div class="hero-split__left">
-                    <span class="hero-split__eyebrow" style="display: inline-block; color: var(--color-gold, #c89d5c); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 12px;">
-                        Hodowla Kotów Rasowych • SHiOZ ZOOLANDIA • Sikórz k. Płocka
-                    </span>
-                    <h1 class="hero-split__title">
-                        Hodowla Kotów Rasowych z Rodowodem.<br>
-                        Bengalskie, Brytyjskie i Syjamskie.
-                    </h1>
-                    <p class="hero-split__lead">
-                        Domowa hodowla kotów z Mazowieckiej Szwajcarii, oficjalny członek <strong>SHiOZ ZOOLANDIA</strong> (Certyfikat: 58/CW/2025, Rejestracja: 58/P/2025). 
-                        Nasze koty rozwijają się w bezpiecznych, pełnych miłości warunkach domowych, z regularną kontrolą kardiologiczną (echo serca) i badaniami genetycznymi rodziców dobranymi do danej rasy.
-                    </p>
-                    <div class="hero-split__actions" style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
-                        <x-frontend.button href="{{ route('frontend.animals.index') }}" icon="arrow-right">
-                            Zobacz dostępne kocięta
-                        </x-frontend.button>
-                        <x-frontend.button href="{{ route('contact') }}" variant="secondary" icon="mail">
-                            Skontaktuj się z nami
-                        </x-frontend.button>
+        <div class="hero__content relative z-10">
+            <div class="section-inner">
+                {{-- Split-Screen Editorial Opening --}}
+                <div class="hero-split-grid">
+                    <div class="hero-split__left">
+                        <span class="hero-split__eyebrow" style="display: inline-block; color: var(--color-gold, #c89d5c); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 12px;">
+                            Hodowla Kotów Rasowych • SHiOZ ZOOLANDIA • Sikórz k. Płocka
+                        </span>
+                        <h1 class="hero-split__title">
+                            Hodowla Kotów Rasowych z Rodowodem.<br>
+                            Bengalskie, Brytyjskie i Syjamskie.
+                        </h1>
+                        <p class="hero-split__lead">
+                            Domowa hodowla kotów z Mazowieckiej Szwajcarii, oficjalny członek <strong>SHiOZ ZOOLANDIA</strong> (Certyfikat: 58/CW/2025, Rejestracja: 58/P/2025). 
+                            Nasze koty rozwijają się w bezpiecznych, pełnych miłości warunkach domowych, z regularną kontrolą kardiologiczną (echo serca) i badaniami genetycznymi rodziców dobranymi do danej rasy.
+                        </p>
+                        <div class="hero-split__actions" style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+                            <x-frontend.button href="{{ route('frontend.animals.index') }}" icon="arrow-right">
+                                Zobacz dostępne kocięta
+                            </x-frontend.button>
+                            <x-frontend.button href="{{ route('contact') }}" variant="secondary" icon="mail">
+                                Skontaktuj się z nami
+                            </x-frontend.button>
+                        </div>
+                        <div style="margin-top: 14px;">
+                            <a href="https://www.facebook.com/profile.php?id=61580668026948" target="_blank" rel="noopener"
+                                class="hero-split__secondary-link">
+                                Codzienne życie hodowli na Facebooku →
+                            </a>
+                        </div>
                     </div>
-                    <div style="margin-top: 14px;">
-                        <a href="https://www.facebook.com/profile.php?id=61580668026948" target="_blank" rel="noopener"
-                            class="hero-split__secondary-link">
-                            Codzienne życie hodowli na Facebooku →
-                        </a>
-                    </div>
-                </div>
 
-                <div class="hero-split__right">
-                    <div class="hero-split__frame">
-                        <img src="https://images.unsplash.com/photo-1543852786-1cf6624b9987?auto=format&fit=crop&w=1200&q=80"
-                            alt="Doskonałość rasy - kot bengalski" class="hero-split__image" width="1000" height="750"
-                            decoding="async" loading="eager">
-                    </div>
-                    <div class="hero-split__seal" role="status" aria-label="Gwarancja zdrowia i genetyki">
-                        <i data-lucide="award" class="w-5 h-5 text-primary" aria-hidden="true"></i>
-                        <div>
-                            <span class="block font-semibold">SHiOZ ZOOLANDIA</span>
-                            <span class="text-white/70 text-xs">Certyfikat: 58/CW/2025 · Rej. 58/P/2025</span>
+                    <div class="hero-split__right">
+                        <div class="hero-split__frame">
+                            <img src="https://images.unsplash.com/photo-1543852786-1cf6624b9987?auto=format&fit=crop&w=1200&q=80"
+                                alt="Doskonałość rasy - kot bengalski" class="hero-split__image" width="1000" height="750"
+                                decoding="async" loading="eager">
+                        </div>
+                        <div class="hero-split__seal" role="status" aria-label="Gwarancja zdrowia i genetyki">
+                            <i data-lucide="award" class="w-5 h-5 text-primary" aria-hidden="true"></i>
+                            <div>
+                                <span class="block font-semibold">SHiOZ ZOOLANDIA</span>
+                                <span class="text-white/70 text-xs">Certyfikat: 58/CW/2025 · Rej. 58/P/2025</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            {{-- Hero Trust Strip --}}
-            <div class="hero__trust-bar" role="list" aria-label="Nasze certyfikaty i standardy">
-                <div class="hero__trust-item" role="listitem">
-                    <i data-lucide="shield-check" class="hero__trust-icon" aria-hidden="true"></i>
-                    <span>Certyfikat SHiOZ ZOOLANDIA (58/CW/2025)</span>
-                </div>
-                <div class="hero__trust-item" role="listitem">
-                    <i data-lucide="dna" class="hero__trust-icon" aria-hidden="true"></i>
-                    <span>Badania Genetyczne Rodziców (Dla Rasy)</span>
-                </div>
-                <div class="hero__trust-item" role="listitem">
-                    <i data-lucide="heart-handshake" class="hero__trust-icon" aria-hidden="true"></i>
-                    <span>Domowa Socjalizacja</span>
+                {{-- Hero Trust Strip --}}
+                <div class="hero__trust-bar" role="list" aria-label="Nasze certyfikaty i standardy">
+                    <div class="hero__trust-item" role="listitem">
+                        <i data-lucide="shield-check" class="hero__trust-icon" aria-hidden="true"></i>
+                        <span>Certyfikat SHiOZ ZOOLANDIA (58/CW/2025)</span>
+                    </div>
+                    <div class="hero__trust-item" role="listitem">
+                        <i data-lucide="dna" class="hero__trust-icon" aria-hidden="true"></i>
+                        <span>Badania Genetyczne Rodziców (Dla Rasy)</span>
+                    </div>
+                    <div class="hero__trust-item" role="listitem">
+                        <i data-lucide="heart-handshake" class="hero__trust-icon" aria-hidden="true"></i>
+                        <span>Domowa Socjalizacja</span>
+                    </div>
                 </div>
             </div>
         </div>
