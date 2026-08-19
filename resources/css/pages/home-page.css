@@ -158,17 +158,17 @@
     flex-wrap: wrap;
     align-items: center;
     gap: 24px;
-    margin-top: 40px;
-    padding-top: 22px;
+    margin-top: 28px;
+    padding-top: 18px;
     padding-bottom: 0;
     border-top: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 @media (max-width: 991px) {
     .hero__trust-bar {
-        gap: 16px;
-        margin-top: 36px;
-        padding-top: 24px;
+        gap: 14px;
+        margin-top: 22px;
+        padding-top: 16px;
         justify-content: center;
     }
 }
@@ -947,6 +947,7 @@
 
 /* Section 2: Specjalizacje rasy -> Dostępne Kocięta */
 .home-section--specjalizacje {
+    padding-top: 48px;
     padding-bottom: var(--sp-2xl, 48px);
 }
 
@@ -984,7 +985,7 @@
 /* Mobile Responsive Adjustments — Compact Premium Rhythm */
 @media (max-width: 640px) {
     .home-section--specjalizacje {
-        padding-top: var(--sp-2xl);
+        padding-top: 28px;
         padding-bottom: var(--sp-2xl);
     }
 

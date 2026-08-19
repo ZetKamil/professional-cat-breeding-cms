@@ -5,15 +5,14 @@
 
 .hero {
     position: relative;
-    min-height: 85vh;
-    min-height: 85dvh;
+    min-height: auto;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
     background-color: var(--color-surface-black);
-    padding-top: clamp(100px, 14vh, 140px);
-    padding-bottom: clamp(40px, 6vh, 64px);
+    padding-top: clamp(84px, 10vh, 112px);
+    padding-bottom: clamp(20px, 3vh, 32px);
     padding-left: var(--content-padding-x, 24px);
     padding-right: var(--content-padding-x, 24px);
     box-sizing: border-box;
@@ -22,16 +21,15 @@
 
 @media (min-width: 1024px) {
     .hero {
-        min-height: calc(100vh - 80px);
-        min-height: calc(100dvh - 80px);
+        min-height: auto;
         max-height: none;
     }
 }
 
 @media (max-width: 640px) {
     .hero {
-        padding-top: calc(var(--nav-height, 64px) + 24px);
-        padding-bottom: 36px;
+        padding-top: calc(var(--nav-height, 64px) + 16px);
+        padding-bottom: 20px;
         padding-left: var(--sp-md, 16px);
         padding-right: var(--sp-md, 16px);
     }
@@ -39,8 +37,8 @@
 
 .hero--large,
 .hero--about {
-    min-height: 75vh;
-    min-height: 75dvh;
+    min-height: 60vh;
+    min-height: 60dvh;
 }
 
 /* --------------------------------------------------------------------------
