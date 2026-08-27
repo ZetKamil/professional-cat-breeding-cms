@@ -5,7 +5,7 @@
 
             <header class="legal-page__header">
                 <h1 class="text-hero-display legal-page__title">Polityka Prywatności</h1>
-                <p class="text-body text-ink-muted-48" style="margin-top: 8px; font-weight: 600;">Ostatnia aktualizacja: 11.08.2026</p>
+                <p class="text-body text-ink-muted-48" style="margin-top: 8px; font-weight: 600;">Ostatnia aktualizacja: 27.08.2026</p>
                 <p class="text-lead-airy text-ink-muted-80" style="margin-top: 16px;">
                     Prywatność osób odwiedzających naszą stronę internetową oraz osób kontaktujących się z nami jest dla nas ważna. Niniejsza Polityka Prywatności określa zasady przetwarzania danych osobowych w związku z korzystaniem ze strony internetowej <strong>Hodowli Kotów z Mazowieckiej Szwajcarii</strong> oraz korzystaniem z dostępnych za jej pośrednictwem form kontaktu.
                 </p>
@@ -83,6 +83,10 @@
                     <p>W związku z korzystaniem ze strony internetowej mogą być przetwarzane dane techniczne niezbędne do zapewnienia jej prawidłowego działania i bezpieczeństwa, w szczególności informacje dotyczące adresu IP, daty i czasu połączenia, rodzaju przeglądarki internetowej, systemu operacyjnego oraz informacje zawarte w logach serwera lub aplikacji.</p>
                     <p style="margin-top: 12px;">Dane te mogą być przetwarzane w celu zapewnienia bezpieczeństwa strony, wykrywania prób nieuprawnionego dostępu, zapobiegania nadużyciom, diagnozowania błędów oraz zapewnienia prawidłowego działania usług.</p>
                     <p style="margin-top: 12px;">Podstawą prawną przetwarzania jest <strong>art. 6 ust. 1 lit. f RODO</strong> – prawnie uzasadniony interes Administratora polegający na zapewnieniu bezpieczeństwa i prawidłowego funkcjonowania strony internetowej oraz ochronie przed nadużyciami.</p>
+
+                    <h3 style="font-size: 1.15rem; font-weight: 700; margin-top: 24px; margin-bottom: 8px; color: var(--color-ink);">2.5. Analityka internetowa (Google Analytics 4)</h3>
+                    <p>W przypadku wyrażenia przez Ciebie dobrowolnej zgody w banerze plików cookies, przetwarzamy dane statystyczne dotyczące Twojej wizyty w celu badania popularności podstron, optymalizacji struktury serwisu oraz poprawy jego funkcjonalności.</p>
+                    <p style="margin-top: 12px;">Podstawą prawną przetwarzania jest <strong>art. 6 ust. 1 lit. a RODO</strong> – Twoja dobrowolna i uprzednia zgoda. Zgodę możesz wycofać w dowolnym momencie, co opisano szczegółowo w punkcie 6 niniejszej Polityki.</p>
                 </section>
 
                 {{-- Sekcja 3 --}}
@@ -94,6 +98,7 @@
                         <li>dostawcy hostingu i infrastruktury informatycznej strony internetowej,</li>
                         <li>dostawcy usług poczty elektronicznej wykorzystywanej przez Administratora,</li>
                         <li>podmioty świadczące usługi techniczne, informatyczne lub serwisowe związane z utrzymaniem i zabezpieczeniem strony internetowej,</li>
+                        <li>dostawca usług analitycznych: <strong>Google Ireland Limited</strong> (w przypadku wyrażenia przez użytkownika zgody na analityczne pliki cookies),</li>
                         <li>podmioty świadczące usługi niezbędne do obsługi zawieranych umów, jeżeli ich udział jest konieczny do realizacji danego procesu.</li>
                     </ul>
                     <p style="margin-top: 12px;">Podmioty przetwarzające dane na zlecenie Administratora mogą przetwarzać je wyłącznie w zakresie wynikającym z powierzonego im zadania oraz na podstawie odpowiedniej podstawy prawnej lub zawartej umowy.</p>
@@ -132,14 +137,21 @@
 
                 {{-- Sekcja 6 --}}
                 <section class="legal-page__section">
-                    <h2 class="legal-page__section-title">6. Pliki cookies</h2>
-                    <p>Strona wykorzystuje wyłącznie pliki cookies niezbędne do jej prawidłowego działania, w szczególności do utrzymania sesji użytkownika oraz zapewnienia bezpieczeństwa formularzy i aplikacji.</p>
+                    <h2 class="legal-page__section-title">6. Pliki cookies i technologie analityczne</h2>
+                    <p>Strona wykorzystuje pliki cookies (niewielkie pliki tekstowe zapisywane na urządzeniu użytkownika) oraz technologię pamięci lokalnej (localStorage) w celach technicznych oraz – po wyrażeniu dobrowolnej zgody – analitycznych.</p>
+
+                    <h3 style="font-size: 1.15rem; font-weight: 700; margin-top: 20px; margin-bottom: 8px; color: var(--color-ink);">6.1. Kategorie plików cookies</h3>
+                    <ul class="legal-page__list">
+                        <li><strong>Cookies niezbędne (techniczne):</strong> Umożliwiają prawidłowe wyświetlanie strony, nawigację, utrzymanie sesji oraz zabezpieczenie formularzy przed atakami typu CSRF i spamem. Nie wymagają one uprzedniej zgody użytkownika (art. 173 ust. 3 ustawy Prawo telekomunikacyjne).</li>
+                        <li><strong>Cookies analityczne:</strong> Służą do tworzenia anonimowych statystyk oglądalności za pośrednictwem usługi Google Analytics 4. Wykorzystujemy je <strong>wyłącznie po wyrażeniu przez Ciebie wyraźnej zgody</strong> w banerze cookies (art. 6 ust. 1 lit. a RODO).</li>
+                    </ul>
 
                     <div style="overflow-x: auto; margin-top: 16px; margin-bottom: 16px;">
                         <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
                             <thead>
                                 <tr style="background-color: var(--color-canvas-parchment); text-align: left;">
                                     <th style="padding: 10px; border: 1px solid var(--color-hairline);">Nazwa</th>
+                                    <th style="padding: 10px; border: 1px solid var(--color-hairline);">Dostawca</th>
                                     <th style="padding: 10px; border: 1px solid var(--color-hairline);">Cel</th>
                                     <th style="padding: 10px; border: 1px solid var(--color-hairline);">Rodzaj</th>
                                     <th style="padding: 10px; border: 1px solid var(--color-hairline);">Czas przechowywania</th>
@@ -148,22 +160,49 @@
                             <tbody>
                                 <tr>
                                     <td style="padding: 10px; border: 1px solid var(--color-hairline);"><code>hodowla-kotow-z-mazowieckiej-szwajcarii-session</code></td>
+                                    <td style="padding: 10px; border: 1px solid var(--color-hairline);">Własny</td>
                                     <td style="padding: 10px; border: 1px solid var(--color-hairline);">utrzymanie sesji użytkownika i prawidłowe działanie aplikacji</td>
                                     <td style="padding: 10px; border: 1px solid var(--color-hairline);">niezbędny techniczny</td>
                                     <td style="padding: 10px; border: 1px solid var(--color-hairline);">zgodnie z konfiguracją sesji Laravel (domyślnie 120 minut)</td>
                                 </tr>
                                 <tr>
                                     <td style="padding: 10px; border: 1px solid var(--color-hairline);"><code>XSRF-TOKEN</code></td>
+                                    <td style="padding: 10px; border: 1px solid var(--color-hairline);">Własny</td>
                                     <td style="padding: 10px; border: 1px solid var(--color-hairline);">ochrona aplikacji przed atakami typu CSRF (Cross-Site Request Forgery)</td>
                                     <td style="padding: 10px; border: 1px solid var(--color-hairline);">niezbędny techniczny</td>
                                     <td style="padding: 10px; border: 1px solid var(--color-hairline);">zgodnie z konfiguracją aplikacji (sesyjny)</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px; border: 1px solid var(--color-hairline);"><code>katten_cookie_consent</code></td>
+                                    <td style="padding: 10px; border: 1px solid var(--color-hairline);">Własny (localStorage)</td>
+                                    <td style="padding: 10px; border: 1px solid var(--color-hairline);">zapisanie wyboru użytkownika w banerze cookies (akceptacja lub odrzucenie analityki)</td>
+                                    <td style="padding: 10px; border: 1px solid var(--color-hairline);">funkcjonalny</td>
+                                    <td style="padding: 10px; border: 1px solid var(--color-hairline);">do czasu wyczyszczenia pamięci podręcznej przeglądarki przez użytkownika</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px; border: 1px solid var(--color-hairline);"><code>_ga</code>, <code>_ga_*</code></td>
+                                    <td style="padding: 10px; border: 1px solid var(--color-hairline);">Google Ireland Limited</td>
+                                    <td style="padding: 10px; border: 1px solid var(--color-hairline);">zbieranie anonimowych statystyk odwiedzin i źródeł ruchu (Google Analytics 4)</td>
+                                    <td style="padding: 10px; border: 1px solid var(--color-hairline);">analityczny (wymaga zgody)</td>
+                                    <td style="padding: 10px; border: 1px solid var(--color-hairline);">do 2 lat lub do wycofania zgody przez użytkownika</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
 
-                    <p style="margin-top: 12px;">Nie wykorzystujemy obecnie plików cookies ani innych technologii śledzących w celu prowadzenia profilowania, reklamy behawioralnej lub analizy aktywności użytkowników.</p>
-                    <p style="margin-top: 12px;">Jeżeli w przyszłości na stronie zostaną zastosowane dodatkowe technologie wymagające zgody użytkownika, odpowiednie informacje oraz mechanizm uzyskania zgody zostaną wdrożone przed rozpoczęciem takiego przetwarzania.</p>
+                    <h3 style="font-size: 1.15rem; font-weight: 700; margin-top: 24px; margin-bottom: 8px; color: var(--color-ink);">6.2. Google Analytics 4 i Google Consent Mode v2</h3>
+                    <p>Za uprzednią zgodą użytkownika strona korzysta z usługi <strong>Google Analytics 4</strong>, dostarczanej przez firmę <strong>Google Ireland Limited</strong> (Gordon House, Barrow Street, Dublin 4, Irlandia).</p>
+                    <p style="margin-top: 8px;">Google Analytics gromadzi anonimowe informacje o korzystaniu z serwisu (m.in. odwiedzane podstrony, czas spędzony na stronie, przybliżona lokalizacja, rodzaj przeglądarki i urządzenia). Dane te służą wyłącznie analizie statystycznej w celu usprawniania działania strony.</p>
+                    <p style="margin-top: 8px;">Wdrożyliśmy standard <strong>Google Consent Mode v2</strong>. Oznacza to, że do momentu kliknięcia przycisku „Akceptuj” w banerze cookies, analityczne pliki cookies są całkowicie zablokowane (<code>analytics_storage: denied</code>). W przypadku kliknięcia „Odrzuć”, żadne ciasteczka analityczne nie są zapisywane.</p>
+                    <p style="margin-top: 8px;">Do narzędzia analitycznego nie są przesyłane żadne dane umożliwiające bezpośrednią identyfikację użytkownika (w szczególności: imię, nazwisko, adres e-mail, numer telefonu czy treść wiadomości wysyłanych przez formularz kontaktowy).</p>
+
+                    <h3 style="font-size: 1.15rem; font-weight: 700; margin-top: 24px; margin-bottom: 8px; color: var(--color-ink);">6.3. Wycofanie zgody i zarządzanie plikami cookies</h3>
+                    <p>Zgoda na pliki cookies analityczne jest w pełni dobrowolna i może zostać wycofana w dowolnym momencie:</p>
+                    <ul class="legal-page__list">
+                        <li><strong>Wyczyszczenie pamięci przeglądarki:</strong> Usunięcie plików cookies i danych witryny w ustawieniach Twojej przeglądarki internetowej spowoduje zresetowanie zgody i ponowne wyświetlenie banera cookies przy kolejnej wizycie na stronie.</li>
+                        <li><strong>Ustawienia przeglądarki internetowej:</strong> Możesz w każdej chwili zablokować lub ograniczyć zapisywanie plików cookies bezpośrednio w preferencjach swojej przeglądarki (np. Chrome, Firefox, Safari, Edge, Opera).</li>
+                        <li><strong>Dodatek blokujący Google Analytics:</strong> Możesz również skorzystać z oficjalnego dodatku do przeglądarek internetowych blokującego działanie Google Analytics na wszystkich stronach, udostępnianego przez Google pod adresem: <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener" class="text-primary" style="text-decoration: underline;">https://tools.google.com/dlpage/gaoptout</a>.</li>
+                    </ul>
                 </section>
 
                 {{-- Sekcja 7 --}}
@@ -207,7 +246,7 @@
             </article>
 
             <div class="legal-page__footer">
-                <p class="text-body text-ink-muted-48">Ostatnia aktualizacja: 11.08.2026</p>
+                <p class="text-body text-ink-muted-48">Ostatnia aktualizacja: 27.08.2026</p>
             </div>
 
         </div>
