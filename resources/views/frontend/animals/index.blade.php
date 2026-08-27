@@ -24,7 +24,12 @@
     {{-- ============================================================
          2. FILTER BAR (Breeds + Statuses)
          ============================================================ --}}
-    <section class="section section--no-pt animals-catalog-section" aria-label="Filtrowanie kotów">
+    <section class="section section--no-pt animals-catalog-section" aria-label="Filtrowanie kotów"
+        data-ga-page="animal_list"
+        data-ga-breed-filter="{{ $currentBreed && strlen((string)$currentBreed) ? (string)$currentBreed : 'all' }}"
+    >
+
+
         <div class="section-inner">
             <div class="animals-filter-bar">
                 {{-- Breed Filter --}}

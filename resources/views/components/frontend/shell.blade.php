@@ -55,19 +55,39 @@
 
     <title>{{ $title }}</title>
 
-    {{-- Google Analytics 4 (gtag.js) --}}
+    {{-- Google Analytics 4 — Consent Mode v2 + gtag.js --}}
     @php
         $gaId = config('services.google.analytics_id') ?: env('GOOGLE_ANALYTICS_ID', env('GA_MEASUREMENT_ID', 'G-VB4ZCKR8WB'));
     @endphp
     @if($gaId)
-        <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id={{ $gaId }}"></script>
+        {{-- Consent Mode v2: domyślnie odmawiamy analytics do czasu wyrażenia zgody przez użytkownika --}}
         <script>
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '{{ $gaId }}');
+            gtag('consent', 'default', {
+                'analytics_storage': 'denied',
+                'ad_storage': 'denied',
+                'ad_user_data': 'denied',
+                'ad_personalization': 'denied',
+                'wait_for_update': 500
+            });
+            // Przywróć zgodę jeśli użytkownik wcześniej ją wyraził
+            (function() {
+                try {
+                    var saved = localStorage.getItem('katten_cookie_consent');
+                    if (saved === 'accepted') {
+                        gtag('consent', 'update', { 'analytics_storage': 'granted' });
+                    }
+                } catch(e) {}
+            })();
         </script>
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ $gaId }}"></script>
+        <script>
+            gtag('js', new Date());
+            gtag('config', '{{ $gaId }}', { 'send_page_view': true });
+        </script>
+        <meta name="ga-measurement-id" content="{{ $gaId }}">
     @endif
 
     {{-- Google Fonts: Inter --}}
@@ -113,6 +133,9 @@
             }
         });
     </script>
+
+    {{-- Cookie Consent Banner --}}
+    <x-frontend.cookie-consent />
 
     {{-- Scripts slot for page-specific JS --}}
     {{ $scripts ?? '' }}

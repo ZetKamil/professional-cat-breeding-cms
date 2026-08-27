@@ -7,7 +7,14 @@
     {{-- ============================================================
     1. PROFILE DETAIL SECTION
     ============================================================ --}}
-    <section class="animal-profile" aria-label="Profil kota: {{ $animal->name }}">
+    <section class="animal-profile" aria-label="Profil kota: {{ $animal->name }}"
+        data-ga-page="animal_view"
+        data-ga-animal-name="{{ $animal->name }}"
+        data-ga-animal-breed="{{ $animal->breed }}"
+        data-ga-animal-status="{{ $animal->status instanceof \BackedEnum ? $animal->status->value : ($animal->status ?? '') }}"
+        data-ga-animal-slug="{{ $animal->slug ?? $animal->id }}"
+    >
+
         <div class="section-inner">
             {{-- Editorial Breadcrumbs --}}
             <nav class="animal-profile__breadcrumbs" aria-label="Nawigacja okruszkowa">
