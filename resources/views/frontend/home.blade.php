@@ -343,6 +343,7 @@
       "name": "Hodowla Kotów z Mazowieckiej Szwajcarii",
       "description": "Domowa hodowla kotów rasowych z Mazowieckiej Szwajcarii (Sikórz k. Płocka). Członek SHiOZ ZOOLANDIA (Certyfikat: 58/CW/2025, Rejestracja: 58/P/2025). Koty bengalskie, brytyjskie i syjamskie z rodowodem, po przebadanych rodzicach.",
       "image": "{{ asset('storage/media/parent_bella_1.jpg') }}",
+      "logo": "{{ asset('logo.png') }}",
       "url": "https://kotyzmazowieckiejszwajcarii.pl/",
       "telephone": "+48514153204",
       "email": "hodowla.z.mazowieckiej.szwajcarii@gmail.com",

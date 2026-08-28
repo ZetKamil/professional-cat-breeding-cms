@@ -158,6 +158,21 @@
     outline-offset: 4px;
 }
 
+.global-nav__logo-img {
+    width: 34px;
+    height: 34px;
+    border-radius: var(--r-sm, 8px);
+    object-fit: cover;
+    display: inline-block;
+    flex-shrink: 0;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.14);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.global-nav__logo:hover .global-nav__logo-img {
+    transform: scale(1.05);
+}
+
 .global-nav__logo-text {
     font-size: 17px;
     font-weight: 600;
@@ -351,11 +366,23 @@
 }
 
 .mobile-menu__brand {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-xs, 10px);
     font-size: 17px;
     font-weight: 600;
     letter-spacing: -0.015em;
     color: #ffffff;
     text-decoration: none;
+}
+
+.mobile-menu__brand-img {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--r-sm, 8px);
+    object-fit: cover;
+    display: inline-block;
+    flex-shrink: 0;
 }
 
 .mobile-menu__close {

@@ -121,7 +121,7 @@
         "name": "Hodowla Kotów z Mazowieckiej Szwajcarii",
         "logo": {
           "@@type": "ImageObject",
-          "url": "{{ asset('apple-touch-icon.png') }}"
+          "url": "{{ asset('logo.png') }}"
         }
       },
       "datePublished": "{{ $post->published_at ? $post->published_at->toIso8601String() : $post->created_at->toIso8601String() }}",

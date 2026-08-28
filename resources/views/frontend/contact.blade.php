@@ -242,6 +242,7 @@
         "@@type": "LocalBusiness",
         "name": "Hodowla Kotów z Mazowieckiej Szwajcarii",
         "image": "{{ asset('storage/media/parent_bella_1.jpg') }}",
+        "logo": "{{ asset('logo.png') }}",
         "telephone": "+48514153204",
         "email": "biuro@kotyzmazowieckiejszwajcarii.pl",
         "address": {

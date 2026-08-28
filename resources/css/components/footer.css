@@ -31,10 +31,22 @@
 
 /* Brand Column */
 .footer-brand {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-xs, 12px);
     text-decoration: none;
     margin-bottom: var(--sp-sm);
     border-radius: var(--r-sm);
+}
+
+.footer-brand__img {
+    width: 38px;
+    height: 38px;
+    border-radius: var(--r-sm, 8px);
+    object-fit: cover;
+    display: inline-block;
+    flex-shrink: 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .footer-brand:focus-visible {

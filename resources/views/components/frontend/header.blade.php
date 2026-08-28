@@ -10,6 +10,7 @@
         <div class="global-nav__inner">
             {{-- Zone 1: Logo / Brand --}}
             <a href="{{ route('home') }}" class="global-nav__logo" aria-label="{{ config('app.name', 'Cattery') }} — strona główna">
+                <img src="{{ asset('logo.png') }}" alt="{{ config('app.name', 'Cattery') }}" class="global-nav__logo-img" width="36" height="36">
                 <span class="global-nav__logo-text">{{ config('app.name', 'Cattery') }}</span>
             </a>
 
@@ -93,7 +94,8 @@
     <div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menu mobilne" aria-hidden="true">
         <div class="mobile-menu__header">
             <a href="{{ route('home') }}" class="mobile-menu__brand">
-                {{ config('app.name', 'Cattery') }}
+                <img src="{{ asset('logo.png') }}" alt="{{ config('app.name', 'Cattery') }}" class="mobile-menu__brand-img" width="34" height="34">
+                <span>{{ config('app.name', 'Cattery') }}</span>
             </a>
             <button type="button" class="mobile-menu__close" aria-label="Zamknij menu" id="mobileMenuCloseBtn">
                 <i data-lucide="x" aria-hidden="true"></i>

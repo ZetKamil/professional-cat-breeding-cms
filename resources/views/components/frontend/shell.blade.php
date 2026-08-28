@@ -29,10 +29,17 @@
     <link rel="canonical" href="{{ $canonicalUrl }}">
 
     {{-- Favicons & Web Manifest --}}
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
-    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
-    <link rel="manifest" href="{{ asset('manifest.webmanifest') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}?v=2">
+    <link rel="icon" type="image/png" sizes="48x48" href="{{ asset('favicon-48x48.png') }}?v=2">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}?v=2">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}?v=2">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}?v=2">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}?v=2">
+    <link rel="manifest" href="{{ asset('manifest.webmanifest') }}?v=2">
+
+    @php
+        $effectiveOgImage = $ogImage ?? asset('logo.png');
+    @endphp
 
     {{-- Open Graph --}}
     <meta property="og:site_name" content="Hodowla Kotów z Mazowieckiej Szwajcarii">
@@ -41,17 +48,13 @@
     <meta property="og:type" content="{{ $ogType }}">
     <meta property="og:url" content="{{ $canonicalUrl }}">
     <meta property="og:locale" content="pl_PL">
-    @if($ogImage)
-        <meta property="og:image" content="{{ $ogImage }}">
-    @endif
+    <meta property="og:image" content="{{ $effectiveOgImage }}">
 
     {{-- Twitter Cards --}}
-    <meta name="twitter:card" content="{{ $ogImage ? 'summary_large_image' : 'summary' }}">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ $title }}">
     <meta name="twitter:description" content="{{ $metaDescription }}">
-    @if($ogImage)
-        <meta name="twitter:image" content="{{ $ogImage }}">
-    @endif
+    <meta name="twitter:image" content="{{ $effectiveOgImage }}">
 
     <title>{{ $title }}</title>
 
