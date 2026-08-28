@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\DB;
 
 class UploadMediaAction
 {
+    public function __construct(
+        protected ?\App\Services\ImageOptimizerService $imageOptimizerService = null
+    ) {
+        $this->imageOptimizerService = $this->imageOptimizerService ?? new \App\Services\ImageOptimizerService();
+    }
+
     /**
      * Handle single or multiple file uploads and record creation.
      *
@@ -41,7 +47,15 @@ class UploadMediaAction
                 $storedPath = $file->store($directory, $disk);
 
                 $storageFullPath = storage_path('app/public/' . $storedPath);
+                $fileSize = $file->getSize();
+
                 if (\Illuminate\Support\Facades\File::exists($storageFullPath)) {
+                    // Optimize image in-place (downscale, EXIF orientation fix, compression)
+                    $optimizedInfo = $this->imageOptimizerService->optimize($storageFullPath);
+                    if ($optimizedInfo['size'] > 0) {
+                        $fileSize = $optimizedInfo['size'];
+                    }
+
                     @chmod($storageFullPath, 0644);
 
                     $publicTarget = public_path('storage/' . $storedPath);
@@ -71,7 +85,7 @@ class UploadMediaAction
                     'directory' => $dirName,
                     'filename' => $filename,
                     'mime_type' => $file->getClientMimeType(),
-                    'size' => $file->getSize(),
+                    'size' => $fileSize,
                     'title' => $data['title'] ?? pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME),
                     'alt_text' => $data['alt_text'] ?? null,
                     'caption' => $data['caption'] ?? null,

@@ -176,33 +176,52 @@
             </div>
             <div class="card-body">
                 @if($animal->media)
-                    <div class="mb-3">
-                        <img src="{{ $animal->media->url() }}" class="img-fluid rounded mb-2" alt="Current image" style="max-height: 180px; object-fit: cover;">
+                    <div class="mb-3" id="current-main-image-container">
+                        <div class="small text-muted mb-1">Obecne zdjęcie główne:</div>
+                        <img src="{{ $animal->media->url() }}" class="img-fluid rounded border mb-2" alt="Current image" style="max-height: 180px; object-fit: cover;">
                         <div class="form-text">Wgranie nowego zdjęcia zastąpi obecne zdjęcie główne.</div>
                     </div>
                 @endif
+
+                {{-- Live Preview for newly selected main image --}}
+                <div class="mb-3 d-none" id="new-main-preview-container">
+                    <div class="small text-success fw-bold mb-1"><i class="fas fa-check-circle me-1"></i>Nowe zdjęcie główne (podgląd):</div>
+                    <div class="position-relative d-inline-block">
+                        <img src="" id="new-main-preview-img" class="img-thumbnail rounded" style="max-height: 180px; object-fit: cover;">
+                        <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1 rounded-circle p-1" style="width: 26px; height: 26px; line-height: 1;" id="cancel-new-main" title="Anuluj zmianę zdjęcia">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="small text-muted mt-1" id="new-main-info"></div>
+                </div>
                 
-                <div class="mb-3">
+                <div class="mb-2">
                     <label for="image" class="form-label">Zmień / Wgraj zdjęcie główne</label>
-                    <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image" accept="image/*">
+                    <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image" accept="image/jpeg,image/png,image/webp,image/jfif,image/*">
                     @error('image') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    <div class="form-text">Maksymalnie 20 MB (JPG, PNG, WEBP, JFIF). Zdjęcie zostanie automatycznie zoptymalizowane w locie.</div>
                 </div>
             </div>
         </div>
 
         {{-- Gallery Images --}}
         <div class="card mb-4">
-            <div class="card-header bg-light fw-bold"><i class="fas fa-images me-1 text-primary"></i> Galeria zdjęć kota</div>
+            <div class="card-header bg-light fw-bold d-flex justify-content-between align-items-center">
+                <span><i class="fas fa-images me-1 text-primary"></i> Galeria zdjęć kota</span>
+                @if($animal->gallery && $animal->gallery->isNotEmpty())
+                    <span class="badge bg-secondary">{{ $animal->gallery->count() }} w galerii</span>
+                @endif
+            </div>
             <div class="card-body">
                 @if($animal->gallery && $animal->gallery->isNotEmpty())
                     <div class="mb-3">
-                        <label class="form-label small text-muted">Obecne zdjęcia w galerii (kliknij Usuń aby usunąć):</label>
+                        <label class="form-label small text-muted fw-bold">Zapisane zdjęcia w galerii (kliknij Usuń aby usunąć z serwera):</label>
                         <div class="row g-2">
                             @foreach($animal->gallery as $img)
                                 <div class="col-4 text-center">
-                                    <div class="position-relative border rounded p-1 bg-light">
-                                        <img src="{{ $img->url() }}" alt="Galeria" class="img-thumbnail w-100 mb-1" style="height: 70px; object-fit: cover;">
-                                        <button type="submit" form="delete-media-{{ $img->id }}" class="btn btn-danger btn-sm w-100 py-0 small" style="font-size: 11px;">
+                                    <div class="position-relative border rounded p-1 bg-light shadow-sm h-100 d-flex flex-column justify-content-between">
+                                        <img src="{{ $img->url() }}" alt="Galeria" class="img-thumbnail w-100 mb-1" style="height: 75px; object-fit: cover;">
+                                        <button type="submit" form="delete-media-{{ $img->id }}" class="btn btn-outline-danger btn-sm w-100 py-0" style="font-size: 11px;">
                                             <i class="fas fa-trash me-1"></i>Usuń
                                         </button>
                                     </div>
@@ -210,13 +229,48 @@
                             @endforeach
                         </div>
                     </div>
+                    <hr>
                 @endif
 
+                {{-- Modern Drag & Drop Upload Zone --}}
                 <div class="mb-3">
-                    <label for="gallery" class="form-label">Dodaj zdjęcia do galerii (wielokrotny wybór)</label>
-                    <input class="form-control @error('gallery.*') is-invalid @enderror" type="file" id="gallery" name="gallery[]" accept="image/*" multiple>
-                    <div class="form-text">Możesz zaznaczyć kilka zdjęć naraz.</div>
-                    @error('gallery.*') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    <label class="form-label fw-bold">Dodaj nowe zdjęcia do galerii</label>
+
+                    {{-- Drop area --}}
+                    <div id="gallery-dropzone" class="border-2 rounded p-4 text-center bg-light" style="border: 2px dashed #0d6efd !important; cursor: pointer; transition: all 0.2s ease;">
+                        <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-2"></i>
+                        <h6 class="fw-bold mb-1">Przeciągnij i upuść zdjęcia tutaj</h6>
+                        <p class="text-muted small mb-2">lub <span class="text-primary text-decoration-underline fw-bold">kliknij, aby wybrać z dysku</span></p>
+                        <div class="badge bg-white text-secondary border px-2 py-1 small">
+                            Wielokrotny wybór: do 30 zdjęć naraz (max 20 MB / plik, JPG, PNG, WEBP, JFIF)
+                        </div>
+                    </div>
+
+                    {{-- Hidden native multiple file input --}}
+                    <input type="file" id="gallery" name="gallery[]" accept="image/jpeg,image/png,image/webp,image/jfif,image/*" multiple class="d-none">
+
+                    @error('gallery.*')
+                        <div class="alert alert-danger mt-2 py-1 px-2 small">{{ $message }}</div>
+                    @enderror
+                    <div id="gallery-client-error" class="alert alert-danger mt-2 py-1 px-2 small d-none"></div>
+
+                    {{-- Live Queue Container (shown when files are selected) --}}
+                    <div id="gallery-queue-wrapper" class="mt-3 d-none">
+                        <div class="d-flex justify-content-between align-items-center mb-2 pb-1 border-bottom">
+                            <div>
+                                <span class="badge bg-primary me-2"><i class="fas fa-images me-1"></i><span id="queue-count">0</span> nowych zdjęć</span>
+                                <span class="badge bg-light text-dark border"><i class="fas fa-weight-hanging me-1"></i><span id="queue-size">0 MB</span></span>
+                            </div>
+                            <button type="button" class="btn btn-outline-danger btn-sm py-0 px-2" style="font-size: 12px;" id="queue-clear-all">
+                                <i class="fas fa-times me-1"></i>Wyczyść listę
+                            </button>
+                        </div>
+
+                        {{-- Previews grid --}}
+                        <div class="row g-2" id="gallery-preview-grid">
+                            {{-- Dynamic thumbnail cards injected by JS --}}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -240,3 +294,192 @@
         </div>
     </div>
 </div>
+
+{{-- Interactive Drag & Drop + Live Preview JavaScript --}}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Gallery Elements
+    const dropzone = document.getElementById('gallery-dropzone');
+    const input = document.getElementById('gallery');
+    const queueWrapper = document.getElementById('gallery-queue-wrapper');
+    const previewGrid = document.getElementById('gallery-preview-grid');
+    const countBadge = document.getElementById('queue-count');
+    const sizeBadge = document.getElementById('queue-size');
+    const clearAllBtn = document.getElementById('queue-clear-all');
+    const errorAlert = document.getElementById('gallery-client-error');
+
+    if (dropzone && input) {
+        let dt = new DataTransfer();
+        const maxFileSize = 20 * 1024 * 1024; // 20 MB
+
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        }
+
+        function renderQueue() {
+            previewGrid.innerHTML = '';
+            errorAlert.classList.add('d-none');
+            errorAlert.textContent = '';
+
+            if (dt.files.length === 0) {
+                queueWrapper.classList.add('d-none');
+                input.files = dt.files;
+                return;
+            }
+
+            queueWrapper.classList.remove('d-none');
+            let totalBytes = 0;
+
+            Array.from(dt.files).forEach((file, index) => {
+                totalBytes += file.size;
+
+                const col = document.createElement('div');
+                col.className = 'col-6 col-sm-4 text-center';
+
+                const card = document.createElement('div');
+                card.className = 'position-relative border rounded p-1 bg-white shadow-sm h-100 d-flex flex-column justify-content-between';
+
+                const objectUrl = URL.createObjectURL(file);
+
+                card.innerHTML = `
+                    <div class="position-relative">
+                        <img src="${objectUrl}" alt="${file.name}" class="rounded w-100 mb-1" style="height: 80px; object-fit: cover;">
+                        <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1 rounded-circle p-0 d-flex align-items-center justify-content-center" 
+                                style="width: 22px; height: 22px; font-size: 11px;" title="Usuń to zdjęcie z kolejki">
+                            &times;
+                        </button>
+                    </div>
+                    <div class="text-truncate small fw-semibold" title="${file.name}" style="font-size: 11px;">${file.name}</div>
+                    <div class="text-muted" style="font-size: 10px;">${formatBytes(file.size)}</div>
+                `;
+
+                card.querySelector('button').addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    removeFile(index);
+                });
+
+                col.appendChild(card);
+                previewGrid.appendChild(col);
+            });
+
+            countBadge.textContent = dt.files.length;
+            sizeBadge.textContent = formatBytes(totalBytes);
+            input.files = dt.files;
+        }
+
+        function removeFile(indexToRemove) {
+            const newDt = new DataTransfer();
+            Array.from(dt.files).forEach((file, idx) => {
+                if (idx !== indexToRemove) {
+                    newDt.items.add(file);
+                }
+            });
+            dt = newDt;
+            renderQueue();
+        }
+
+        function addFiles(newFiles) {
+            let errors = [];
+            Array.from(newFiles).forEach(file => {
+                const isValidImage = file.type.startsWith('image/') || file.name.match(/\\.(jpg|jpeg|png|webp|jfif)$/i);
+                if (!isValidImage) {
+                    errors.push(`"${file.name}" nie jest prawidłowym plikiem graficznym.`);
+                    return;
+                }
+                if (file.size > maxFileSize) {
+                    errors.push(`"${file.name}" przekracza 20 MB (${formatBytes(file.size)}).`);
+                    return;
+                }
+                const duplicate = Array.from(dt.files).some(f => f.name === file.name && f.size === file.size);
+                if (!duplicate) {
+                    dt.items.add(file);
+                }
+            });
+
+            if (errors.length > 0) {
+                errorAlert.textContent = errors.join(' ');
+                errorAlert.classList.remove('d-none');
+            }
+
+            renderQueue();
+        }
+
+        dropzone.addEventListener('click', () => input.click());
+
+        input.addEventListener('change', () => {
+            if (input.files.length > 0) {
+                addFiles(input.files);
+            }
+        });
+
+        if (clearAllBtn) {
+            clearAllBtn.addEventListener('click', () => {
+                dt = new DataTransfer();
+                renderQueue();
+            });
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropzone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dropzone.style.backgroundColor = '#e7f1ff';
+                dropzone.style.borderColor = '#0a58ca';
+                dropzone.style.transform = 'scale(1.01)';
+            });
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropzone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dropzone.style.backgroundColor = '#f8f9fa';
+                dropzone.style.borderColor = '#0d6efd';
+                dropzone.style.transform = 'scale(1)';
+            });
+        });
+
+        dropzone.addEventListener('drop', (e) => {
+            const dtData = e.dataTransfer;
+            if (dtData && dtData.files && dtData.files.length > 0) {
+                addFiles(dtData.files);
+            }
+        });
+    }
+
+    // Main Image Live Preview
+    const mainInput = document.getElementById('image');
+    const mainPreviewContainer = document.getElementById('new-main-preview-container');
+    const mainPreviewImg = document.getElementById('new-main-preview-img');
+    const mainPreviewInfo = document.getElementById('new-main-info');
+    const cancelMainBtn = document.getElementById('cancel-new-main');
+
+    if (mainInput && mainPreviewContainer && mainPreviewImg) {
+        mainInput.addEventListener('change', function() {
+            if (mainInput.files && mainInput.files[0]) {
+                const file = mainInput.files[0];
+                mainPreviewImg.src = URL.createObjectURL(file);
+                const k = 1024;
+                const sizeStr = file.size > k * k 
+                    ? (file.size / (k * k)).toFixed(1) + ' MB'
+                    : (file.size / k).toFixed(0) + ' KB';
+                mainPreviewInfo.textContent = `${file.name} (${sizeStr})`;
+                mainPreviewContainer.classList.remove('d-none');
+            } else {
+                mainPreviewContainer.classList.add('d-none');
+            }
+        });
+
+        if (cancelMainBtn) {
+            cancelMainBtn.addEventListener('click', function() {
+                mainInput.value = '';
+                mainPreviewContainer.classList.add('d-none');
+            });
+        }
+    }
+});
+</script>

@@ -11,6 +11,12 @@ use Illuminate\Support\Facades\Storage;
 
 class ReplaceMediaAction
 {
+    public function __construct(
+        protected ?\App\Services\ImageOptimizerService $imageOptimizerService = null
+    ) {
+        $this->imageOptimizerService = $this->imageOptimizerService ?? new \App\Services\ImageOptimizerService();
+    }
+
     public function handle(Media $media, UploadedFile $file, array $data = []): Media
     {
         return DB::transaction(function () use ($media, $file, $data) {
@@ -27,7 +33,15 @@ class ReplaceMediaAction
             $storedPath = $file->store($directory, $media->disk);
 
             $storageFullPath = storage_path('app/public/' . $storedPath);
+            $fileSize = $file->getSize();
+
             if (\Illuminate\Support\Facades\File::exists($storageFullPath)) {
+                // Optimize image in-place (downscale, EXIF orientation fix, compression)
+                $optimizedInfo = $this->imageOptimizerService->optimize($storageFullPath);
+                if ($optimizedInfo['size'] > 0) {
+                    $fileSize = $optimizedInfo['size'];
+                }
+
                 @chmod($storageFullPath, 0644);
 
                 $publicTarget = public_path('storage/' . $storedPath);
@@ -57,7 +71,7 @@ class ReplaceMediaAction
                 'directory' => $dirName,
                 'filename' => $filename,
                 'mime_type' => $file->getClientMimeType(),
-                'size' => $file->getSize(),
+                'size' => $fileSize,
                 'title' => $data['title'] ?? $media->title,
                 'alt_text' => $data['alt_text'] ?? $media->alt_text,
                 'caption' => $data['caption'] ?? $media->caption,

@@ -58,9 +58,9 @@ class StoreAnimalRequest extends FormRequest
             'meta_title' => ['nullable', 'string', 'max:255'],
             'meta_description' => ['nullable', 'string', 'max:255'],
 
-            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
-            'gallery' => ['nullable', 'array'],
-            'gallery.*' => ['image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,jfif', 'max:20480'],
+            'gallery' => ['nullable', 'array', 'max:50'],
+            'gallery.*' => ['image', 'mimes:jpg,jpeg,png,webp,jfif', 'max:20480'],
         ];
     }
 }
