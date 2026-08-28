@@ -199,7 +199,10 @@
                     <label for="image" class="form-label">Zmień / Wgraj zdjęcie główne</label>
                     <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image" accept="image/jpeg,image/png,image/webp,image/jfif,image/*">
                     @error('image') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                    <div class="form-text">Maksymalnie 20 MB (JPG, PNG, WEBP, JFIF). Zdjęcie zostanie automatycznie zoptymalizowane w locie.</div>
+                    <div class="form-text text-wrap" style="white-space: normal !important; line-height: 1.4;">
+                        Maksymalnie 20 MB (JPG, PNG, WEBP, JFIF).<br>
+                        <span class="text-success fw-semibold"><i class="fas fa-magic me-1"></i>Automatyczna optymalizacja / kompresja w locie</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -237,12 +240,15 @@
                     <label class="form-label fw-bold">Dodaj nowe zdjęcia do galerii</label>
 
                     {{-- Drop area --}}
-                    <div id="gallery-dropzone" class="border-2 rounded p-4 text-center bg-light" style="border: 2px dashed #0d6efd !important; cursor: pointer; transition: all 0.2s ease;">
+                    <div id="gallery-dropzone" class="border-2 rounded p-3 p-md-4 text-center bg-light" style="border: 2px dashed #0d6efd !important; cursor: pointer; transition: all 0.2s ease; word-break: break-word;">
                         <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-2"></i>
                         <h6 class="fw-bold mb-1">Przeciągnij i upuść zdjęcia tutaj</h6>
                         <p class="text-muted small mb-2">lub <span class="text-primary text-decoration-underline fw-bold">kliknij, aby wybrać z dysku</span></p>
-                        <div class="badge bg-white text-secondary border px-2 py-1 small">
-                            Wielokrotny wybór: do 30 zdjęć naraz (max 20 MB / plik, JPG, PNG, WEBP, JFIF)
+                        <div class="d-inline-block bg-white text-secondary border rounded-3 px-3 py-2 small text-wrap text-center shadow-sm" style="max-width: 100%; white-space: normal !important; line-height: 1.45;">
+                            <div>Wielokrotny wybór: do 30 zdjęć naraz (max 20 MB / plik)</div>
+                            <div class="text-success fw-semibold mt-1">
+                                <i class="fas fa-magic me-1"></i>Automatyczna optymalizacja / kompresja w locie
+                            </div>
                         </div>
                     </div>
 
