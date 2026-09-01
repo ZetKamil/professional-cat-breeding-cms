@@ -161,4 +161,10 @@ Options -Indexes -MultiViews +FollowSymLinks
     Header always set X-Frame-Options "SAMEORIGIN"
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
     Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+
+    # HSTS — 1 year. Safe: HTTPS enforced in rewrite rule above.
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+
+    # COOP — same-origin-allow-popups is compatible with GA/GTM OAuth popups.
+    Header always set Cross-Origin-Opener-Policy "same-origin-allow-popups"
 </IfModule>

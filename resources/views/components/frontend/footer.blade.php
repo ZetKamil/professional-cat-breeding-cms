@@ -14,7 +14,20 @@ Calm, minimal, trust-building
                 <div class="footer-col footer-col--brand">
                     <a href="{{ route('home') }}" class="footer-brand"
                         aria-label="Hodowla Kotów z Mazowieckiej Szwajcarii">
-                        <img src="{{ asset('logo.png') }}" alt="Hodowla Kotów z Mazowieckiej Szwajcarii" class="footer-brand__img" width="40" height="40">
+                        <picture>
+                            <source
+                                srcset="{{ asset('logo-36.webp') }} 1x, {{ asset('logo-72.webp') }} 2x"
+                                type="image/webp"
+                            >
+                            <img
+                                src="{{ asset('logo-36.png') }}"
+                                alt=""
+                                aria-hidden="true"
+                                class="footer-brand__img"
+                                width="40"
+                                height="40"
+                            >
+                        </picture>
                         <span class="footer-brand__name">Hodowla Kotów z Mazowieckiej Szwajcarii</span>
                     </a>
                     <p class="footer-brand__tagline text-body">

@@ -18,40 +18,46 @@
                     </p>
 
                     {{-- Direct Contact Fast Access Cards --}}
-                    <div class="contact-fast-links" role="list" aria-label="Szybki kontakt">
-                        <a href="tel:+48514153204" class="contact-fast-link" role="listitem">
-                            <div class="contact-fast-link__icon">
-                                <i data-lucide="phone-call" aria-hidden="true"></i>
-                            </div>
-                            <div class="contact-fast-link__body">
-                                <span class="contact-fast-link__label">Zadzwoń do nas</span>
-                                <span class="contact-fast-link__val">+48 514 153 204</span>
-                                <span class="contact-fast-link__hint">Dostępni codziennie • Szybka rozmowa</span>
-                            </div>
-                        </a>
+                    <ul class="contact-fast-links" aria-label="Szybki kontakt" style="list-style:none;margin:0;padding:0;">
+                        <li>
+                            <a href="tel:+48514153204" class="contact-fast-link">
+                                <div class="contact-fast-link__icon">
+                                    <i data-lucide="phone-call" aria-hidden="true"></i>
+                                </div>
+                                <div class="contact-fast-link__body">
+                                    <span class="contact-fast-link__label">Zadzwoń do nas</span>
+                                    <span class="contact-fast-link__val">+48 514 153 204</span>
+                                    <span class="contact-fast-link__hint">Dostępni codziennie • Szybka rozmowa</span>
+                                </div>
+                            </a>
+                        </li>
 
-                        <a href="mailto:biuro@kotyzmazowieckiejszwajcarii.pl" class="contact-fast-link" role="listitem">
-                            <div class="contact-fast-link__icon">
-                                <i data-lucide="mail" aria-hidden="true"></i>
-                            </div>
-                            <div class="contact-fast-link__body">
-                                <span class="contact-fast-link__label">Napisz e-mail</span>
-                                <span class="contact-fast-link__val">biuro@kotyzmazowieckiejszwajcarii.pl</span>
-                                <span class="contact-fast-link__hint">Odpowiedź zwykle w ciągu 24h</span>
-                            </div>
-                        </a>
+                        <li>
+                            <a href="mailto:biuro@kotyzmazowieckiejszwajcarii.pl" class="contact-fast-link">
+                                <div class="contact-fast-link__icon">
+                                    <i data-lucide="mail" aria-hidden="true"></i>
+                                </div>
+                                <div class="contact-fast-link__body">
+                                    <span class="contact-fast-link__label">Napisz e-mail</span>
+                                    <span class="contact-fast-link__val">biuro@kotyzmazowieckiejszwajcarii.pl</span>
+                                    <span class="contact-fast-link__hint">Odpowiedź zwykle w ciągu 24h</span>
+                                </div>
+                            </a>
+                        </li>
 
-                        <div class="contact-fast-link" role="listitem">
-                            <div class="contact-fast-link__icon">
-                                <i data-lucide="map-pin" aria-hidden="true"></i>
+                        <li>
+                            <div class="contact-fast-link">
+                                <div class="contact-fast-link__icon">
+                                    <i data-lucide="map-pin" aria-hidden="true"></i>
+                                </div>
+                                <div class="contact-fast-link__body">
+                                    <span class="contact-fast-link__label">Lokalizacja hodowli</span>
+                                    <span class="contact-fast-link__val">Sikórz k. Płocka (woj. mazowieckie)</span>
+                                    <span class="contact-fast-link__hint">Wizyty po wcześniejszym umówieniu terminu</span>
+                                </div>
                             </div>
-                            <div class="contact-fast-link__body">
-                                <span class="contact-fast-link__label">Lokalizacja hodowli</span>
-                                <span class="contact-fast-link__val">Sikórz k. Płocka (woj. mazowieckie)</span>
-                                <span class="contact-fast-link__hint">Wizyty po wcześniejszym umówieniu terminu</span>
-                            </div>
-                        </div>
-                    </div>
+                        </li>
+                    </ul>
 
                     {{-- Trust / Association Badge --}}
                     <div class="contact-trust-pill" style="margin-top: 28px; display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px; background: rgba(209, 171, 88, 0.12); border: 1px solid rgba(209, 171, 88, 0.35); border-radius: 9999px; font-size: 0.85rem; color: #78350f;">

@@ -132,7 +132,7 @@
             <div class="adoption-journey-pillar" role="listitem">
                 <div class="adoption-journey__header">
                     <span class="adoption-journey__number">KROK 02</span>
-                    <i data-lucide="home-heart" class="text-ink-muted-48" width="20" height="20" aria-hidden="true"></i>
+                    <i data-lucide="house-heart" class="text-ink-muted-48" width="20" height="20" aria-hidden="true"></i>
                 </div>
                 <h3 class="adoption-journey__title">Wizyta w Hodowli</h3>
                 <p class="adoption-journey__desc">

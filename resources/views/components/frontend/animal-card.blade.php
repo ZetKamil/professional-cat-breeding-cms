@@ -7,23 +7,27 @@
     <x-slot:image>
         <div class="animal-card__media-wrapper">
             @if($animal->media)
-                <img
-                    src="{{ $animal->media->url() }}"
-                    alt="{{ $animal->name }} — {{ $animal->breed }}"
-                    loading="lazy"
-                    decoding="async"
+                <x-frontend.picture
+                    :src="$animal->media->url()"
+                    :alt="$animal->name . ' — ' . $animal->breed"
                     width="800"
                     height="600"
-                >
+                    loading="lazy"
+                    decoding="async"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
+                    webp-widths="400,800"
+                />
             @else
-                <img 
-                    src="https://images.unsplash.com/photo-1543852786-1cf6624b9987?auto=format&fit=crop&w=800&q=80" 
-                    alt="{{ $animal->name }} — {{ $animal->breed }} (zdjęcie poglądowe)" 
-                    loading="lazy"
-                    decoding="async"
+                <x-frontend.picture
+                    src="https://images.unsplash.com/photo-1543852786-1cf6624b9987?auto=format&fit=crop&w=800&q=80"
+                    :alt="$animal->name . ' — ' . $animal->breed . ' (zdjęcie poglądowe)'"
                     width="800"
                     height="600"
-                >
+                    loading="lazy"
+                    decoding="async"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
+                    webp-widths="400,800"
+                />
             @endif
 
             <div class="animal-card__badge-overlay">

@@ -45,14 +45,33 @@
                         onkeydown="if(event.key === 'Enter' || event.key === ' '){ openAnimalLightbox(); event.preventDefault(); }"
                         title="Kliknij lub naciśnij Enter, aby powiększyć zdjęcie na pełnym ekranie">
                         @if($animal->media)
-                            <img src="{{ $animal->media->url() }}" alt="{{ $animal->name }} — {{ $animal->breed }}"
-                                class="animal-profile__main-image" id="animal-main-photo" width="1000" height="750"
-                                decoding="async" loading="eager" fetchpriority="high">
+                            <x-frontend.picture
+                                :src="$animal->media->url()"
+                                :alt="$animal->name . ' — ' . $animal->breed"
+                                class="animal-profile__main-image"
+                                id="animal-main-photo"
+                                width="1000"
+                                height="750"
+                                decoding="async"
+                                loading="eager"
+                                fetchpriority="high"
+                                sizes="(max-width: 1024px) 100vw, 600px"
+                                webp-widths="400,800,1200"
+                            />
                         @else
-                            <img src="https://images.unsplash.com/photo-1543852786-1cf6624b9987?auto=format&fit=crop&w=1200&q=80"
-                                alt="{{ $animal->name }} (Zdjęcie poglądowe)" class="animal-profile__main-image"
-                                id="animal-main-photo" width="1000" height="750" decoding="async" loading="eager"
-                                fetchpriority="high">
+                            <x-frontend.picture
+                                src="https://images.unsplash.com/photo-1543852786-1cf6624b9987?auto=format&fit=crop&w=1200&q=80"
+                                :alt="$animal->name . ' (Zdjęcie poglądowe)'"
+                                class="animal-profile__main-image"
+                                id="animal-main-photo"
+                                width="1000"
+                                height="750"
+                                decoding="async"
+                                loading="eager"
+                                fetchpriority="high"
+                                sizes="(max-width: 1024px) 100vw, 600px"
+                                webp-widths="400,800,1200"
+                            />
                         @endif
                         <div class="animal-profile__zoom-hint" aria-hidden="true">
                             <i data-lucide="maximize-2" class="w-3.5 h-3.5" aria-hidden="true"></i>
@@ -95,6 +114,10 @@
                                 const src = el.getAttribute('data-image-src');
                                 const alt = el.getAttribute('data-image-alt');
                                 if (src) {
+                                    const picture = mainImg.closest('picture');
+                                    if (picture) {
+                                        picture.querySelectorAll('source').forEach(s => s.remove());
+                                    }
                                     mainImg.src = src;
                                     if (alt) mainImg.alt = alt;
                                 }

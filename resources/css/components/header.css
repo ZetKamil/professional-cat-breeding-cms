@@ -39,11 +39,10 @@
     backdrop-filter: saturate(180%) blur(24px);
     -webkit-backdrop-filter: saturate(180%) blur(24px);
     border-bottom: 1px solid var(--nav-border);
+    will-change: background-color, opacity;
     transition: background-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
                 border-bottom-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-                box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-                color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-                backdrop-filter 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+                box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* --------------------------------------------------------------------------
@@ -205,8 +204,9 @@
     text-decoration: none;
     padding: 4px 2px;
     border-radius: var(--r-sm);
-    transition: color 0.25s var(--ease-out),
-                opacity 0.25s var(--ease-out);
+    /* opacity-only transition: GPU-composited, no repaint */
+    transition: opacity 0.20s var(--ease-out);
+    opacity: 0.75;
     white-space: nowrap;
     position: relative;
 }
@@ -220,6 +220,7 @@
 .global-nav__link.is-active,
 .frontend-shell a.global-nav__link.is-active {
     color: var(--nav-fg) !important;
+    opacity: 1;
     font-weight: 600;
 }
 

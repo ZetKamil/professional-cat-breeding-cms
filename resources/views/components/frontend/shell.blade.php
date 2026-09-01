@@ -93,13 +93,9 @@
         <meta name="ga-measurement-id" content="{{ $gaId }}">
     @endif
 
-    {{-- Google Fonts: Inter --}}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-    {{-- Lucide Icons --}}
-    <script src="https://unpkg.com/lucide@latest" defer></script>
+    {{-- Self-hosted Inter: preload critical Latin & Latin-Extended (Polish) subsets to minimise FOUT --}}
+    <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/inter-latin-ext.woff2" as="font" type="font/woff2" crossorigin>
 
     {{-- Vite assets --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -128,14 +124,6 @@
     {{-- Footer --}}
     <x-frontend.footer />
 
-    {{-- Initialize Lucide Icons --}}
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            if (window.lucide) {
-                lucide.createIcons();
-            }
-        });
-    </script>
 
     {{-- Cookie Consent Banner --}}
     <x-frontend.cookie-consent />

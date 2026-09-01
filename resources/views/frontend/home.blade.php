@@ -6,8 +6,8 @@
     ============================================================ --}}
     <section class="hero hero--dark" aria-label="Wprowadzenie i filozofia hodowli" data-nav-theme="dark">
         <div class="hero__bg" aria-hidden="true">
-            <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=2000&q=80"
-                alt="Kot bengalski w naturalnym oświetleniu" width="2000" height="1200" decoding="async" loading="eager"
+            <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&fm=webp&w=1400&q=75"
+                alt="" width="1400" height="935" decoding="async" loading="eager"
                 fetchpriority="high" class="hero__image opacity-25">
             <div class="hero__overlay"></div>
         </div>
@@ -46,9 +46,17 @@
 
                     <div class="hero-split__right">
                         <div class="hero-split__frame">
-                            <img src="https://images.unsplash.com/photo-1543852786-1cf6624b9987?auto=format&fit=crop&w=1200&q=80"
-                                alt="Doskonałość rasy - kot bengalski" class="hero-split__image" width="1000" height="750"
-                                decoding="async" loading="eager">
+                            <x-frontend.picture
+                                src="https://images.unsplash.com/photo-1543852786-1cf6624b9987?auto=format&fit=crop&w=1200&q=80"
+                                alt="Doskonałość rasy - kot bengalski"
+                                class="hero-split__image"
+                                width="1000"
+                                height="750"
+                                loading="eager"
+                                decoding="async"
+                                sizes="(max-width: 768px) 100vw, 50vw"
+                                webp-widths="600,900,1200"
+                            />
                         </div>
                         <div class="hero-split__seal" role="status" aria-label="Gwarancja zdrowia i genetyki">
                             <i data-lucide="award" class="w-5 h-5 text-primary" aria-hidden="true"></i>
@@ -277,18 +285,40 @@
             <div class="daily-life__right">
                 <div class="daily-life__gallery" role="group" aria-label="Codzienne życie hodowli">
                     <div class="daily-life__image-wrap daily-life__image-wrap--main">
-                        <img src="https://images.unsplash.com/photo-1548247416-ec66f4900b2e?auto=format&fit=crop&w=800&q=80"
-                            alt="Codzienna socjalizacja w hodowli" width="800" height="800" decoding="async"
-                            loading="lazy">
+                        <x-frontend.picture
+                            src="https://images.unsplash.com/photo-1548247416-ec66f4900b2e?auto=format&fit=crop&w=800&q=80"
+                            alt="Codzienna socjalizacja w hodowli"
+                            width="800"
+                            height="800"
+                            decoding="async"
+                            loading="lazy"
+                            sizes="(max-width: 768px) 100vw, 350px"
+                            webp-widths="350,700"
+                        />
                     </div>
                     <div class="daily-life__image-wrap daily-life__image-wrap--sub1">
-                        <img src="https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?auto=format&fit=crop&w=600&q=80"
-                            alt="Rozwój kociąt w domowym otoczeniu" width="600" height="600" decoding="async"
-                            loading="lazy">
+                        <x-frontend.picture
+                            src="https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?auto=format&fit=crop&w=600&q=80"
+                            alt="Rozwój kociąt w domowym otoczeniu"
+                            width="600"
+                            height="600"
+                            decoding="async"
+                            loading="lazy"
+                            sizes="(max-width: 768px) 50vw, 200px"
+                            webp-widths="200,400"
+                        />
                     </div>
                     <div class="daily-life__image-wrap daily-life__image-wrap--sub2">
-                        <img src="https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?auto=format&fit=crop&w=600&q=80"
-                            alt="Zabawa i relacje z kotami" width="600" height="600" decoding="async" loading="lazy">
+                        <x-frontend.picture
+                            src="https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?auto=format&fit=crop&w=600&q=80"
+                            alt="Zabawa i relacje z kotami"
+                            width="600"
+                            height="600"
+                            decoding="async"
+                            loading="lazy"
+                            sizes="(max-width: 768px) 50vw, 200px"
+                            webp-widths="200,400"
+                        />
                     </div>
                 </div>
             </div>

@@ -10,7 +10,20 @@
         <div class="global-nav__inner">
             {{-- Zone 1: Logo / Brand --}}
             <a href="{{ route('home') }}" class="global-nav__logo" aria-label="{{ config('app.name', 'Cattery') }} — strona główna">
-                <img src="{{ asset('logo.png') }}" alt="{{ config('app.name', 'Cattery') }}" class="global-nav__logo-img" width="36" height="36">
+                <picture>
+                    <source
+                        srcset="{{ asset('logo-36.webp') }} 1x, {{ asset('logo-72.webp') }} 2x"
+                        type="image/webp"
+                    >
+                    <img
+                        src="{{ asset('logo-36.png') }}"
+                        alt=""
+                        aria-hidden="true"
+                        class="global-nav__logo-img"
+                        width="36"
+                        height="36"
+                    >
+                </picture>
                 <span class="global-nav__logo-text">{{ config('app.name', 'Cattery') }}</span>
             </a>
 
@@ -94,7 +107,20 @@
     <div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menu mobilne" aria-hidden="true">
         <div class="mobile-menu__header">
             <a href="{{ route('home') }}" class="mobile-menu__brand">
-                <img src="{{ asset('logo.png') }}" alt="{{ config('app.name', 'Cattery') }}" class="mobile-menu__brand-img" width="34" height="34">
+                <picture>
+                    <source
+                        srcset="{{ asset('logo-36.webp') }} 1x, {{ asset('logo-72.webp') }} 2x"
+                        type="image/webp"
+                    >
+                    <img
+                        src="{{ asset('logo-36.png') }}"
+                        alt=""
+                        aria-hidden="true"
+                        class="mobile-menu__brand-img"
+                        width="34"
+                        height="34"
+                    >
+                </picture>
                 <span>{{ config('app.name', 'Cattery') }}</span>
             </a>
             <button type="button" class="mobile-menu__close" aria-label="Zamknij menu" id="mobileMenuCloseBtn">
