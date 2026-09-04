@@ -82,6 +82,8 @@ Route::get('/storage/{path}', function ($path) {
         storage_path('app/public/' . basename($cleanPath)),
         storage_path('app/private/' . basename($cleanPath)),
         base_path('image/' . $cleanPath),
+        base_path('BLOG/' . $cleanPath),
+        base_path('BLOG/' . str_replace('blog/', '', $cleanPath)),
     ];
 
     foreach ($possiblePaths as $fullPath) {

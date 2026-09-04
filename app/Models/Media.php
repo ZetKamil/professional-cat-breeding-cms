@@ -53,11 +53,22 @@ class Media extends Model
             return $this->filename;
         }
 
-        if ($this->directory) {
-            return asset('storage/'.$this->directory.'/'.$this->filename);
+        $cleanFilename = ltrim($this->filename, '/');
+
+        if (str_starts_with($cleanFilename, 'storage/')) {
+            return asset($cleanFilename);
         }
 
-        return asset('storage/'.$this->filename);
+        if ($this->directory) {
+            $cleanDir = trim($this->directory, '/');
+            if (str_starts_with($cleanDir, 'storage/')) {
+                return asset($cleanDir.'/'.$cleanFilename);
+            }
+
+            return asset('storage/'.$cleanDir.'/'.$cleanFilename);
+        }
+
+        return asset('storage/'.$cleanFilename);
     }
 
     public function isImage(): bool
