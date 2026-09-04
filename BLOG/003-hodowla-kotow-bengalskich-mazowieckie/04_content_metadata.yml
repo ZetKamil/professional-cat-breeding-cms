@@ -1,0 +1,51 @@
+id: ARTICLE-003
+title: "Hodowla kotów bengalskich Mazowieckie — jak wybrać odpowiedzialnego hodowcę?"
+slug: "hodowla-kotow-bengalskich-mazowieckie"
+publication_date: "2026-09-17"
+publication_time: "10:00"
+primary_keyword: "hodowla kotów bengalskich mazowieckie"
+secondary_keywords:
+  - "hodowla bengali mazowsze"
+  - "hodowla kotów Płock"
+  - "hodowca bengali mazowieckie"
+  - "legalna hodowla kotów"
+  - "certyfikowana hodowla kotów"
+
+intent: "commercial-local"
+cluster: "bengal-local-trust"
+
+target_page: "/o-hodowli"
+
+primary_cta: "Poznaj naszą hodowlę"
+cta_url: "/o-hodowli"
+
+hero_image:
+  filename: "hodowla-kotow-bengalskich-mazowieckie.webp"
+  alt: "Kot bengalski w Hodowli Kotów z Mazowieckiej Szwajcarii"
+  source: "AI Generated (Antigravity)"
+  status: "pending"
+
+meta:
+  title: "Hodowla kotów bengalskich Mazowieckie — jak wybrać hodowcę"
+  description: "Szukasz hodowli kotów bengalskich na Mazowszu? Dowiedz się, na co zwrócić uwagę, jakie certyfikaty powinien mieć hodowca i jak wygląda nasza hodowla w Sikorzu k. Płocka."
+
+categories:
+  - "Odmiany i Rasy"
+
+internal_links:
+  - anchor: "ile kosztuje kot bengalski"
+    url: "/blog/001-ile-kosztuje-kot-bengalski"
+  - anchor: "kot bengalski a dzieci"
+    url: "/blog/002-kot-bengalski-a-dzieci"
+  - anchor: "badania genetyczne HCM i PKD"
+    url: "/blog/niewidzialne-dziedzictwo-dlaczego-badania-genetyczne-hcm-i-pkd-to-najpiekniejsza-obietnica-dla-twojej-rodziny"
+  - anchor: "charakter i temperament bengala"
+    url: "/blog/zywy-obraz-w-twoim-salonie-magia-temperament-i-niespozyta-energia-kota-bengalskiego"
+  - anchor: "naszą hodowlę"
+    url: "/o-hodowli"
+  - anchor: "dostępne kocięta bengalskie"
+    url: "/koty"
+
+schema: "BlogPosting"
+
+status: "READY FOR REVIEW"

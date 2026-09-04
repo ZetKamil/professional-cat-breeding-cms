@@ -1,0 +1,36 @@
+id: ARTICLE-017
+title: "Kastracja i sterylizacja kota bengalskiego — kiedy, dlaczego i ile kosztuje"
+h1: "Kastracja i sterylizacja kota bengalskiego — kiedy wykonać zabieg, opieka i koszty"
+slug: "kastracja-kota-bengalskiego"
+publish_date: "2026-11-21 10:00"
+category: "Bengal / Health"
+primary_keyword: "kastracja kota bengalskiego"
+secondary_keywords:
+  - "sterylizacja kotki bengalskiej"
+  - "kiedy kastrować kota bengalskiego"
+  - "ile kosztuje kastracja kota"
+  - "opieka po kastracji kota"
+meta_title: "Kastracja i sterylizacja kota bengalskiego — kiedy, powody i koszty"
+meta_description: "Kiedy najlepiej wykonać kastrację kota bengalskiego? Poznaj zalety zabiegu, przebieg rekonwalescencji, koszty oraz wpływ na zachowanie i zdrowie."
+target_url: "/koty"
+cta: "Skontaktuj się z hodowlą"
+cattery_info:
+  name: "Hodowla Kotów z Mazowieckiej Szwajcarii"
+  location: "Sikórz k. Płocka (powiat płocki, woj. mazowieckie)"
+  registration: "SHiOZ ZOOLANDIA Certyfikat nr 58/CW/2025 (Rej. 58/P/2025)"
+available_kittens:
+  total: 5
+  older_ready_now: 2
+  younger_ready_next_week: 3
+pricing_note: "Średnia cena rynkowa kota bengalskiego w opcji PET wynosi 3 000 - 5 000 PLN. Nasze ceny nie są publikowane bezpośrednio na stronie, lecz są atrakcyjne i nieznacznie niższe od średniej rynkowej. Sam zabieg kastracji kocurka to koszt ok. 200 - 400 PLN, a sterylizacji kotki 350 - 600 PLN."
+schema_json_ld:
+  "@context": "https://schema.org"
+  "@type": "Article"
+  "headline": "Kastracja i sterylizacja kota bengalskiego — kiedy, dlaczego i ile kosztuje"
+  "description": "Przewodnik po kastracji i sterylizacji kotów bengalskich. Wiek przeprowadzenia zabiegu, wpływ na zdrowie i zachowanie, rekonwalescencja."
+  "author":
+    "@type": "Organization"
+    "name": "Hodowla Kotów z Mazowieckiej Szwajcarii"
+  "publisher":
+    "@type": "Organization"
+    "name": "Hodowla Kotów z Mazowieckiej Szwajcarii"

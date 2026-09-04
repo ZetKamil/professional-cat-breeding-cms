@@ -1,0 +1,63 @@
+id: ARTICLE-011
+title: "Kot bengalski czy brytyjski — którą rasę wybrać? Porównanie cech, charakteru i kosztów"
+slug: "kot-bengalski-czy-brytyjski"
+publication_date: "2026-10-24"
+publication_time: "10:00"
+primary_keyword: "kot bengalski czy brytyjski"
+secondary_keywords:
+  - "kot bengalski vs brytyjski"
+  - "porównanie ras kotów"
+  - "który kot lepszy bengalski czy brytyjski"
+  - "rasa dla dzieci bengalski czy brytyjski"
+  - "różnice bengal a brytyjczyk"
+
+intent: "commercial-investigation"
+cluster: "breed-comparison"
+
+target_page: "/koty"
+
+primary_cta: "Zobacz dostępne koty"
+cta_url: "/koty"
+
+hero_image:
+  filename: "kot-bengalski-czy-brytyjski.webp"
+  alt: "Porównanie kota bengalskiego i brytyjskiego"
+  source: "AI Generated (Antigravity)"
+  status: "pending"
+
+meta:
+  title: "Kot bengalski czy brytyjski — którą rasę wybrać?"
+  description: "Zastanawiasz się między kotem bengalskim a brytyjskim? Porównaj ich temperament, poziom energii, pielęgnację i koszty, by dokonać idealnego wyboru."
+
+categories:
+  - "Odmiany i Rasy"
+
+internal_links:
+  - anchor: "ile kosztuje kot bengalski"
+    url: "/blog/001-ile-kosztuje-kot-bengalski"
+  - anchor: "kot bengalski a dzieci"
+    url: "/blog/002-kot-bengalski-a-dzieci"
+  - anchor: "hodowla kotów bengalskich Mazowieckie"
+    url: "/blog/003-hodowla-kotow-bengalskich-mazowieckie"
+  - anchor: "rezerwacja i odbiór kocięcia"
+    url: "/blog/004-kocieta-bengalskie-rezerwacja-i-odbior"
+  - anchor: "pierwsze dni w nowym domu"
+    url: "/blog/005-pierwsze-dni-kociecia-w-nowym-domu"
+  - anchor: "co zawiera rodowód"
+    url: "/blog/006-co-zawiera-rodowod-kota"
+  - anchor: "badania genetyczne HCM i PKD"
+    url: "/blog/007-badania-genetyczne-hcm-pkd-koty"
+  - anchor: "żywienie kota bengalskiego"
+    url: "/blog/008-zywienie-kota-bengalskiego"
+  - anchor: "kot bengalski a inne zwierzęta"
+    url: "/blog/009-kot-bengalski-a-inne-zwierzeta"
+  - anchor: "socjalizacja kociąt w hodowli"
+    url: "/blog/010-socjalizacja-kociat-w-hodowli"
+  - anchor: "naszą hodowlę"
+    url: "/o-hodowli"
+  - anchor: "dostępne koty"
+    url: "/koty"
+
+schema: "BlogPosting"
+
+status: "READY FOR REVIEW"

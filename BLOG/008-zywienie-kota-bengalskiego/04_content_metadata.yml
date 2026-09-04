@@ -1,0 +1,58 @@
+id: ARTICLE-008
+title: "Żywienie kota bengalskiego — co je bengal i jak dobrać dietę?"
+slug: "zywienie-kota-bengalskiego"
+publication_date: "2026-10-10"
+publication_time: "10:00"
+primary_keyword: "żywienie kota bengalskiego"
+secondary_keywords:
+  - "co je kot bengalski"
+  - "dieta kota bengalskiego"
+  - "czym karmić bengala"
+  - "karma dla kota bengalskiego"
+  - "BARF kot bengalski"
+
+intent: "informational-nutrition"
+cluster: "bengal-nutrition"
+
+target_page: "/blog"
+
+primary_cta: "Skontaktuj się z hodowlą"
+cta_url: "/contact"
+
+hero_image:
+  filename: "zywienie-kota-bengalskiego.webp"
+  alt: "Kot bengalski przy misce z pełnowartościowym posiłkiem"
+  source: "AI Generated (Antigravity)"
+  status: "pending"
+
+meta:
+  title: "Żywienie kota bengalskiego — co je bengal i jak go karmić?"
+  description: "Jak żywić kota bengalskiego, by miał lśniące futro i mnóstwo energii? Sprawdź zalecenia żywieniowe, korzyści diety BARF i jakich karm unikać."
+
+categories:
+  - "Żywienie Holistyczne"
+  - "Odmiany i Rasy"
+
+internal_links:
+  - anchor: "ile kosztuje kot bengalski"
+    url: "/blog/001-ile-kosztuje-kot-bengalski"
+  - anchor: "kot bengalski a dzieci"
+    url: "/blog/002-kot-bengalski-a-dzieci"
+  - anchor: "hodowla kotów bengalskich Mazowieckie"
+    url: "/blog/003-hodowla-kotow-bengalskich-mazowieckie"
+  - anchor: "rezerwacja i odbiór kocięcia"
+    url: "/blog/004-kocieta-bengalskie-rezerwacja-i-odbior"
+  - anchor: "pierwsze dni w nowym domu"
+    url: "/blog/005-pierwsze-dni-kociecia-w-nowym-domu"
+  - anchor: "badania genetyczne HCM i PKD"
+    url: "/blog/007-badania-genetyczne-hcm-pkd-koty"
+  - anchor: "holistyczne żywienie i dietę BARF"
+    url: "/blog/powrot-do-natury-bez-kompromisow-holistyczne-zywienie-i-dieta-barf-jako-recepta-na-dlugowiecznosc"
+  - anchor: "naszą hodowlę"
+    url: "/o-hodowli"
+  - anchor: "dostępne kocięta bengalskie"
+    url: "/koty"
+
+schema: "BlogPosting"
+
+status: "READY FOR REVIEW"

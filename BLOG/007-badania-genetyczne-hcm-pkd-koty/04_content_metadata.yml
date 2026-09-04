@@ -1,0 +1,55 @@
+id: ARTICLE-007
+title: "Badania genetyczne HCM i PKD — co powinien wiedzieć każdy przyszły opiekun kota"
+slug: "badania-genetyczne-hcm-pkd-koty"
+publication_date: "2026-10-06"
+publication_time: "10:00"
+primary_keyword: "badania genetyczne HCM PKD koty"
+secondary_keywords:
+  - "HCM kot bengalski"
+  - "PKD u kota"
+  - "badania kardiologiczne kotów"
+  - "testy genetyczne kotów"
+  - "choroba serca u kota bengalskiego"
+
+intent: "informational-health"
+cluster: "health-genetics"
+
+target_page: "/o-hodowli"
+
+primary_cta: "Poznaj nasze certyfikaty"
+cta_url: "/o-hodowli"
+
+hero_image:
+  filename: "badania-genetyczne-hcm-pkd-koty.webp"
+  alt: "Badanie lekarskie i opieka weterynaryjna kota bengalskiego"
+  source: "AI Generated (Antigravity)"
+  status: "pending"
+
+meta:
+  title: "Badania genetyczne HCM i PKD u kotów — przewodnik dla kupujących"
+  description: "Czym są kardiomiopatia HCM i wielotorbielowatość nerek PKD u kotów? Sprawdź, dlaczego badania genetyczne rodziców to najważniejsza obietnica zdrowia dla Twojego kota."
+
+categories:
+  - "Zdrowie i Genetyka"
+
+internal_links:
+  - anchor: "ile kosztuje kot bengalski"
+    url: "/blog/001-ile-kosztuje-kot-bengalski"
+  - anchor: "kot bengalski a dzieci"
+    url: "/blog/002-kot-bengalski-a-dzieci"
+  - anchor: "hodowla kotów bengalskich Mazowieckie"
+    url: "/blog/003-hodowla-kotow-bengalskich-mazowieckie"
+  - anchor: "rezerwacja i odbiór kocięcia"
+    url: "/blog/004-kocieta-bengalskie-rezerwacja-i-odbior"
+  - anchor: "pierwsze dni w nowym domu"
+    url: "/blog/005-pierwsze-dni-kociecia-w-nowym-domu"
+  - anchor: "co zawiera rodowód"
+    url: "/blog/006-co-zawiera-rodowod-kota"
+  - anchor: "naszą hodowlę"
+    url: "/o-hodowli"
+  - anchor: "dostępne kocięta bengalskie"
+    url: "/koty"
+
+schema: "BlogPosting"
+
+status: "READY FOR REVIEW"

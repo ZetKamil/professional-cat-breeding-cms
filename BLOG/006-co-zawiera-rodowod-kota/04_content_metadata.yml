@@ -1,0 +1,57 @@
+id: ARTICLE-006
+title: "Co zawiera rodowód kota i dlaczego jest tak ważny?"
+slug: "co-zawiera-rodowod-kota"
+publication_date: "2026-10-01"
+publication_time: "10:00"
+primary_keyword: "rodowód kota rasowego"
+secondary_keywords:
+  - "co to rodowód kota"
+  - "rodowód FPL"
+  - "rodowód FIFe"
+  - "rodowód SHiOZ"
+  - "kot z rodowodem vs bez"
+  - "czy rodowód jest potrzebny"
+
+intent: "informational-trust"
+cluster: "trust-education"
+
+target_page: "/o-hodowli"
+
+primary_cta: "Poznaj naszą hodowlę"
+cta_url: "/o-hodowli"
+
+hero_image:
+  filename: "co-zawiera-rodowod-kota.webp"
+  alt: "Kot bengalski rasowy z rodowodem"
+  source: "AI Generated (Antigravity)"
+  status: "pending"
+
+meta:
+  title: "Co zawiera rodowód kota? Dlaczego jest ważny przy zakupie"
+  description: "Rodowód kota rasowego to nie formalność. Dowiedz się, co zawiera, jakie informacje gwarantuje i dlaczego kupowanie kota bez rodowodu to ryzyko."
+
+categories:
+  - "Zdrowie i Genetyka"
+  - "Odmiany i Rasy"
+
+internal_links:
+  - anchor: "ile kosztuje kot bengalski"
+    url: "/blog/001-ile-kosztuje-kot-bengalski"
+  - anchor: "kot bengalski a dzieci"
+    url: "/blog/002-kot-bengalski-a-dzieci"
+  - anchor: "hodowla kotów bengalskich Mazowieckie"
+    url: "/blog/003-hodowla-kotow-bengalskich-mazowieckie"
+  - anchor: "rezerwacja i odbiór kocięcia"
+    url: "/blog/004-kocieta-bengalskie-rezerwacja-i-odbior"
+  - anchor: "pierwsze dni w nowym domu"
+    url: "/blog/005-pierwsze-dni-kociecia-w-nowym-domu"
+  - anchor: "badania genetyczne HCM i PKD"
+    url: "/blog/niewidzialne-dziedzictwo-dlaczego-badania-genetyczne-hcm-i-pkd-to-najpiekniejsza-obietnica-dla-twojej-rodziny"
+  - anchor: "naszą hodowlę"
+    url: "/o-hodowli"
+  - anchor: "dostępne kocięta bengalskie"
+    url: "/koty"
+
+schema: "BlogPosting"
+
+status: "READY FOR REVIEW"

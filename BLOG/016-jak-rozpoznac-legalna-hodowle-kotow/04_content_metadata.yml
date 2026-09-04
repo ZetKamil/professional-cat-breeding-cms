@@ -1,0 +1,36 @@
+id: ARTICLE-016
+title: "Jak rozpoznać legalną hodowlę kotów? 10 sygnałów ostrzegawczych"
+h1: "Jak rozpoznać legalną hodowlę kotów? 10 sygnałów ostrzegawczych (Certyfikaty, rodowód, umowa)"
+slug: "jak-rozpoznac-legalna-hodowle-kotow"
+publish_date: "2026-11-17 10:00"
+category: "Trust / Education"
+primary_keyword: "legalna hodowla kotów jak rozpoznać"
+secondary_keywords:
+  - "pseudohodowla kotów jak rozpoznać"
+  - "jak sprawdzić czy hodowla jest legalna"
+  - "bezpieczny zakup kota rasowego"
+  - "rejestracja hodowli kotów"
+meta_title: "Jak rozpoznać legalną hodowlę kotów? 10 sygnałów ostrzegawczych"
+meta_description: "Jak sprawdzić, czy hodowla kotów jest legalna? Poznaj 10 najważniejszych sygnałów ostrzegawczych, sprawdź wymagane certyfikaty i uniknij pseudohodowli."
+target_url: "/o-hodowli"
+cta: "Poznaj naszą hodowlę"
+cattery_info:
+  name: "Hodowla Kotów z Mazowieckiej Szwajcarii"
+  location: "Sikórz k. Płocka (powiat płocki, woj. mazowieckie)"
+  registration: "SHiOZ ZOOLANDIA Certyfikat nr 58/CW/2025 (Rej. 58/P/2025)"
+available_kittens:
+  total: 5
+  older_ready_now: 2
+  younger_ready_next_week: 3
+pricing_note: "Średnia cena rynkowa kota bengalskiego w opcji PET wynosi 3 000 - 5 000 PLN. Nasze ceny nie są publikowane bezpośrednio na stronie, lecz są atrakcyjne i nieznacznie niższe od średniej rynkowej."
+schema_json_ld:
+  "@context": "https://schema.org"
+  "@type": "Article"
+  "headline": "Jak rozpoznać legalną hodowlę kotów? 10 sygnałów ostrzegawczych"
+  "description": "Przewodnik po bezpiecznym zakupie kota rasowego. Jak zweryfikować rodowód, przynależność do związku i uniknąć pseudohodowli."
+  "author":
+    "@type": "Organization"
+    "name": "Hodowla Kotów z Mazowieckiej Szwajcarii"
+  "publisher":
+    "@type": "Organization"
+    "name": "Hodowla Kotów z Mazowieckiej Szwajcarii"

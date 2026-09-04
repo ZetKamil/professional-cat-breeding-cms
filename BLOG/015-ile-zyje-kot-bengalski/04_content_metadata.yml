@@ -1,0 +1,62 @@
+id: ARTICLE-015
+title: "Ile żyje kot bengalski? Długowieczność i zdrowie rasy"
+slug: "ile-zyje-kot-bengalski"
+publication_date: "2026-11-12"
+publication_time: "10:00"
+primary_keyword: "ile żyje kot bengalski"
+secondary_keywords:
+  - "długość życia kota bengalskiego"
+  - "jak długo żyje kot bengalski"
+  - "zdrowie kota bengalskiego"
+  - "ile lat żyje bengal"
+  - "długowieczność kota"
+
+intent: "informational-health"
+cluster: "bengal-health"
+
+target_page: "/o-hodowli"
+
+primary_cta: "Poznaj nasze certyfikaty"
+cta_url: "/o-hodowli"
+
+hero_image:
+  filename: "ile-zyje-kot-bengalski.webp"
+  alt: "Dorosły kot bengalski w doskonałym zdrowiu z naszej hodowli"
+  source: "Real Bengal Photo (Hodowla Kotów z Mazowieckiej Szwajcarii)"
+  status: "generated"
+
+meta:
+  title: "Ile żyje kot bengalski? Długowieczność i zdrowie"
+  description: "Sprawdź, ile lat żyje kot bengalski, od czego zależy długowieczność rasy oraz jakie badania i żywienie pozwalają zachować zdrowie pupila na kilkanaście lat."
+
+categories:
+  - "Zdrowie i Genetyka"
+  - "Odmiany i Rasy"
+
+internal_links:
+  - anchor: "ile kosztuje kot bengalski"
+    url: "/blog/001-ile-kosztuje-kot-bengalski"
+  - anchor: "kot bengalski a dzieci"
+    url: "/blog/002-kot-bengalski-a-dzieci"
+  - anchor: "hodowla kotów bengalskich Mazowieckie"
+    url: "/blog/003-hodowla-kotow-bengalskich-mazowieckie"
+  - anchor: "rezerwacja i odbiór kocięcia"
+    url: "/blog/004-kocieta-bengalskie-rezerwacja-i-odbior"
+  - anchor: "pierwsze dni w nowym domu"
+    url: "/blog/005-pierwsze-dni-kociecia-w-nowym-domu"
+  - anchor: "co zawiera rodowód"
+    url: "/blog/006-co-zawiera-rodowod-kota"
+  - anchor: "badania genetyczne HCM i PKD"
+    url: "/blog/007-badania-genetyczne-hcm-pkd-koty"
+  - anchor: "żywienie kota bengalskiego"
+    url: "/blog/008-zywienie-kota-bengalskiego"
+  - anchor: "kot bengalski charakter i opieka"
+    url: "/blog/014-kot-bengalski-charakter-i-opieka"
+  - anchor: "naszą hodowlę"
+    url: "/o-hodowli"
+  - anchor: "dostępne kocięta bengalskie"
+    url: "/koty"
+
+schema: "BlogPosting"
+
+status: "READY FOR REVIEW"

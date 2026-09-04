@@ -1,0 +1,54 @@
+id: ARTICLE-005
+title: "Pierwsze dni kocięcia bengalskiego w nowym domu — poradnik adaptacji"
+slug: "pierwsze-dni-kociecia-w-nowym-domu"
+publication_date: "2026-09-26"
+publication_time: "10:00"
+primary_keyword: "pierwsze dni kocięcia w nowym domu"
+secondary_keywords:
+  - "adaptacja kociaka"
+  - "kot bengalski pierwsze dni"
+  - "stres kociaka"
+  - "kocię w nowym domu"
+  - "jak oswoić kota bengalskiego"
+
+intent: "informational"
+cluster: "bengal-care"
+
+target_page: "/blog"
+
+primary_cta: "Skontaktuj się z hodowlą"
+cta_url: "/contact"
+
+hero_image:
+  filename: "pierwsze-dni-kociecia-w-nowym-domu.webp"
+  alt: "Kocię bengalskie w pierwszych dniach w nowym domu"
+  source: "AI Generated (Antigravity)"
+  status: "pending"
+
+meta:
+  title: "Pierwsze dni kocięcia bengalskiego w nowym domu — adaptacja krok po kroku"
+  description: "Kocię bengalskie właśnie trafiło do Twojego domu? Sprawdź, jak wyglądają pierwsze 48 godzin adaptacji i co zrobić, by maluch poczuł się bezpiecznie."
+
+categories:
+  - "Wyprawka i Pielęgnacja"
+  - "Socjalizacja i Wychowanie"
+
+internal_links:
+  - anchor: "ile kosztuje kot bengalski"
+    url: "/blog/001-ile-kosztuje-kot-bengalski"
+  - anchor: "kot bengalski a dzieci"
+    url: "/blog/002-kot-bengalski-a-dzieci"
+  - anchor: "hodowla kotów bengalskich Mazowieckie"
+    url: "/blog/003-hodowla-kotow-bengalskich-mazowieckie"
+  - anchor: "rezerwacja i odbiór kocięcia"
+    url: "/blog/004-kocieta-bengalskie-rezerwacja-i-odbior"
+  - anchor: "wyprawkę dla kociaka"
+    url: "/blog/sztuka-kreowania-domowego-sanktuarium-kompletny-przewodnik-po-wyprawce-premium-dla-kociecia"
+  - anchor: "naszą hodowlę"
+    url: "/o-hodowli"
+  - anchor: "dostępne kocięta bengalskie"
+    url: "/koty"
+
+schema: "BlogPosting"
+
+status: "READY FOR REVIEW"

@@ -1,0 +1,36 @@
+id: ARTICLE-019
+title: "Nasze koty hodowlane — poznaj rodziców Twoich przyszłych kociąt"
+h1: "Koty hodowlane bengalskie — poznaj rodziców Twoich przyszłych kociąt (Reproduktory, kotki hodowlane i rodowody)"
+slug: "nasze-koty-hodowlane"
+publish_date: "2026-11-30 10:00"
+category: "Bengal / Trust"
+primary_keyword: "koty hodowlane bengalskie"
+secondary_keywords:
+  - "reproduktor kot bengalski"
+  - "kotka hodowlana bengalska"
+  - "rodzice kociąt bengalskich"
+  - "hodowla kotów bengalskich rodowód"
+meta_title: "Nasze koty hodowlane — poznaj rodziców Twoich przyszłych kociąt"
+meta_description: "Poznaj koty hodowlane z Hodowli Kotów z Mazowieckiej Szwajcarii. Zobacz reproduktory i kotki hodowlane bengalskie, ich rodowody, certyfikaty oraz badania genetyczne."
+target_url: "/o-hodowli"
+cta: "Zobacz nasze koty"
+cattery_info:
+  name: "Hodowla Kotów z Mazowieckiej Szwajcarii"
+  location: "Sikórz k. Płocka (powiat płocki, woj. mazowieckie)"
+  registration: "SHiOZ ZOOLANDIA Certyfikat nr 58/CW/2025 (Rej. 58/P/2025)"
+available_kittens:
+  total: 5
+  older_ready_now: 2
+  younger_ready_next_week: 3
+pricing_note: "Średnia cena rynkowa kota bengalskiego w opcji PET wynosi 3 000 - 5 000 PLN. Nasze ceny nie są publikowane bezpośrednio na stronie, lecz są atrakcyjne i nieznacznie niższe od średniej rynkowej."
+schema_json_ld:
+  "@context": "https://schema.org"
+  "@type": "Article"
+  "headline": "Nasze koty hodowlane — poznaj rodziców Twoich przyszłych kociąt"
+  "description": "Przedstawienie kotów hodowlanych (reproduktorów i matek) w Hodowli Kotów z Mazowieckiej Szwajcarii. Rodowody, badania genetyczne i temperament."
+  "author":
+    "@type": "Organization"
+    "name": "Hodowla Kotów z Mazowieckiej Szwajcarii"
+  "publisher":
+    "@type": "Organization"
+    "name": "Hodowla Kotów z Mazowieckiej Szwajcarii"

@@ -1,0 +1,54 @@
+id: ARTICLE-009
+title: "Kot bengalski a inne zwierzęta — czy bengal zaakceptuje drugiego kota lub psa?"
+slug: "kot-bengalski-a-inne-zwierzeta"
+publication_date: "2026-10-15"
+publication_time: "10:00"
+primary_keyword: "kot bengalski a inne zwierzęta"
+secondary_keywords:
+  - "kot bengalski i pies"
+  - "kot bengalski drugi kot"
+  - "czy bengal zaakceptuje psa"
+  - "socjalizacja kota bengalskiego"
+  - "bengal z innymi zwierzętami"
+
+intent: "informational-family"
+cluster: "bengal-family"
+
+target_page: "/koty"
+
+primary_cta: "Poznaj nasze kocięta"
+cta_url: "/koty"
+
+hero_image:
+  filename: "kot-bengalski-a-inne-zwierzeta.webp"
+  alt: "Kot bengalski w przyjaznej relacji z psem w domu"
+  source: "AI Generated (Antigravity)"
+  status: "pending"
+
+meta:
+  title: "Kot bengalski a inne zwierzęta — relacje z kotami i psami"
+  description: "Czy kot bengalski dogada się z drugim kotem lub psem? Dowiedz się, jak wprowadzić bengala do domu ze zwierzętami i jak wygląda jego socjalizacja."
+
+categories:
+  - "Socjalizacja i Wychowanie"
+  - "Odmiany i Rasy"
+
+internal_links:
+  - anchor: "ile kosztuje kot bengalski"
+    url: "/blog/001-ile-kosztuje-kot-bengalski"
+  - anchor: "kot bengalski a dzieci"
+    url: "/blog/002-kot-bengalski-a-dzieci"
+  - anchor: "hodowla kotów bengalskich Mazowieckie"
+    url: "/blog/003-hodowla-kotow-bengalskich-mazowieckie"
+  - anchor: "rezerwacja i odbiór kocięcia"
+    url: "/blog/004-kocieta-bengalskie-rezerwacja-i-odbior"
+  - anchor: "pierwsze dni w nowym domu"
+    url: "/blog/005-pierwsze-dni-kociecia-w-nowym-domu"
+  - anchor: "naszą hodowlę"
+    url: "/o-hodowli"
+  - anchor: "dostępne kocięta bengalskie"
+    url: "/koty"
+
+schema: "BlogPosting"
+
+status: "READY FOR REVIEW"

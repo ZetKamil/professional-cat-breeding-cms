@@ -1,0 +1,49 @@
+id: ARTICLE-002
+title: "Kot bengalski a dzieci — czy to dobry wybór dla rodziny?"
+slug: "kot-bengalski-a-dzieci"
+publication_date: "2026-09-12"
+publication_time: "10:00"
+primary_keyword: "kot bengalski a dzieci"
+secondary_keywords:
+  - "bengal a dzieci"
+  - "kot bengalski w rodzinie"
+  - "kot dla dzieci"
+  - "bengal temperament dzieci"
+  - "czy kot bengalski jest bezpieczny dla dzieci"
+
+intent: "informational-commercial"
+cluster: "bengal-family"
+
+target_page: "/koty"
+
+primary_cta: "Poznaj nasze kocięta bengalskie"
+cta_url: "/koty"
+
+hero_image:
+  filename: "kot-bengalski-a-dzieci.webp"
+  alt: "Kot bengalski bawiący się z dzieckiem"
+  source: "AI Generated (Antigravity)"
+  status: "pending"
+
+meta:
+  title: "Kot bengalski a dzieci — czy bengal pasuje do rodziny?"
+  description: "Czy kot bengalski jest bezpieczny dla małych dzieci? Poznaj charakter bengala w rodzinie i dowiedz się, na co zwrócić uwagę przed zakupem."
+
+categories:
+  - "Odmiany i Rasy"
+
+internal_links:
+  - anchor: "ile kosztuje kot bengalski"
+    url: "/blog/001-ile-kosztuje-kot-bengalski"
+  - anchor: "charakter i temperament bengala"
+    url: "/blog/zywy-obraz-w-twoim-salonie-magia-temperament-i-niespozyta-energia-kota-bengalskiego"
+  - anchor: "wyprawkę dla kociaka"
+    url: "/blog/sztuka-kreowania-domowego-sanktuarium-kompletny-przewodnik-po-wyprawce-premium-dla-kociecia"
+  - anchor: "nasza hodowla"
+    url: "/o-hodowli"
+  - anchor: "dostępne kocięta bengalskie"
+    url: "/koty"
+
+schema: "BlogPosting"
+
+status: "READY FOR REVIEW"

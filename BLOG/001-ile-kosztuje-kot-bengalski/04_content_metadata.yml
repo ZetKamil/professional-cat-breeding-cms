@@ -1,0 +1,52 @@
+id: ARTICLE-001
+title: "Ile kosztuje kot bengalski?"
+slug: "ile-kosztuje-kot-bengalski"
+publication_date: "2026-09-08"
+publication_time: "10:00"
+primary_keyword: "ile kosztuje kot bengalski"
+secondary_keywords:
+  - "cena kota bengalskiego"
+  - "kot bengalski cena"
+  - "kocię bengalskie cena"
+  - "ile kosztuje bengal"
+  - "koszty utrzymania kota bengalskiego"
+  - "kot bengalski z rodowodem cena"
+
+intent: "commercial-investigation"
+cluster: "bengal-purchase"
+
+target_page: "/koty"
+
+primary_cta: "Zobacz dostępne kocięta bengalskie"
+cta_url: "/koty"
+
+hero_image:
+  filename: "kot-bengalski-cena.webp"
+  alt: "Kot bengalski w domowym otoczeniu"
+  source: "AI Generated (Antigravity)"
+  status: "pending"
+
+meta:
+  title: "Ile kosztuje kot bengalski? Cena i koszty utrzymania"
+  description: "Sprawdź, od czego zależy cena kota bengalskiego z legalnej hodowli, jakie koszty utrzymania warto uwzględnić i na co zwrócić uwagę przed rezerwacją kociaka."
+
+categories:
+  - "Odmiany i Rasy"
+
+internal_links:
+  - anchor: "charakter i temperament bengala"
+    url: "/blog/zywy-obraz-w-twoim-salonie-magia-temperament-i-niespozyta-energia-kota-bengalskiego"
+  - anchor: "badania genetyczne HCM i PKD"
+    url: "/blog/niewidzialne-dziedzictwo-dlaczego-badania-genetyczne-hcm-i-pkd-to-najpiekniejsza-obietnica-dla-twojej-rodziny"
+  - anchor: "wyprawkę dla kociaka"
+    url: "/blog/sztuka-kreowania-domowego-sanktuarium-kompletny-przewodnik-po-wyprawce-premium-dla-kociecia"
+  - anchor: "żywienie biologicznie odpowiednie"
+    url: "/blog/powrot-do-natury-bez-kompromisow-holistyczne-zywienie-i-dieta-barf-jako-recepta-na-dlugowiecznosc"
+  - anchor: "nasza hodowla"
+    url: "/o-hodowli"
+  - anchor: "dostępne kocięta bengalskie"
+    url: "/koty"
+
+schema: "BlogPosting"
+
+status: "READY FOR REVIEW"

@@ -1,0 +1,58 @@
+id: ARTICLE-010
+title: "Jak wygląda socjalizacja kociąt w profesjonalnej hodowli?"
+slug: "socjalizacja-kociat-w-hodowli"
+publication_date: "2026-10-20"
+publication_time: "10:00"
+primary_keyword: "socjalizacja kociąt hodowla"
+secondary_keywords:
+  - "socjalizacja kota bengalskiego"
+  - "wychowanie kociąt w hodowli"
+  - "okno socjalizacyjne kota"
+  - "oswojone kocięta bengalskie"
+  - "hodowla domowa kotów"
+
+intent: "informational-process"
+cluster: "trust-process"
+
+target_page: "/o-hodowli"
+
+primary_cta: "Poznaj naszą hodowlę"
+cta_url: "/o-hodowli"
+
+hero_image:
+  filename: "socjalizacja-kociat-w-hodowli.webp"
+  alt: "Socjalizacja małego kocięcia bengalskiego w dłoniach hodowcy"
+  source: "AI Generated (Antigravity)"
+  status: "pending"
+
+meta:
+  title: "Jak wygląda socjalizacja kociąt w hodowli? Nasz proces"
+  description: "Zobacz, jak przebiega socjalizacja kociąt w domowej hodowli. Dowiedz się, jak pierwsze 12 tygodni życia wpływa na temperament i odwagę kota bengalskiego."
+
+categories:
+  - "Socjalizacja i Wychowanie"
+  - "Zdrowie i Genetyka"
+
+internal_links:
+  - anchor: "ile kosztuje kot bengalski"
+    url: "/blog/001-ile-kosztuje-kot-bengalski"
+  - anchor: "kot bengalski a dzieci"
+    url: "/blog/002-kot-bengalski-a-dzieci"
+  - anchor: "hodowla kotów bengalskich Mazowieckie"
+    url: "/blog/003-hodowla-kotow-bengalskich-mazowieckie"
+  - anchor: "rezerwacja i odbiór kocięcia"
+    url: "/blog/004-kocieta-bengalskie-rezerwacja-i-odbior"
+  - anchor: "pierwsze dni w nowym domu"
+    url: "/blog/005-pierwsze-dni-kociecia-w-nowym-domu"
+  - anchor: "co zawiera rodowód"
+    url: "/blog/006-co-zawiera-rodowod-kota"
+  - anchor: "badania genetyczne HCM i PKD"
+    url: "/blog/007-badania-genetyczne-hcm-pkd-koty"
+  - anchor: "naszą hodowlę"
+    url: "/o-hodowli"
+  - anchor: "dostępne kocięta bengalskie"
+    url: "/koty"
+
+schema: "BlogPosting"
+
+status: "READY FOR REVIEW"

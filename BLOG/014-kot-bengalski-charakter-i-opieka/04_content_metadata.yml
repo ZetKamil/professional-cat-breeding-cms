@@ -1,0 +1,70 @@
+id: ARTICLE-014
+title: "Kot bengalski — charakter, wymagania i codzienna opieka (kompletny przewodnik)"
+slug: "kot-bengalski-charakter-i-opieka"
+publication_date: "2026-11-07"
+publication_time: "10:00"
+primary_keyword: "kot bengalski charakter i opieka"
+secondary_keywords:
+  - "kot bengalski charakter"
+  - "wymagania kota bengalskiego"
+  - "opieka nad kotem bengalskim"
+  - "dla kogo kot bengalski"
+  - "kot bengalski opis rasy"
+
+intent: "informational-pillar"
+cluster: "bengal-pillar"
+
+target_page: "/koty"
+
+primary_cta: "Poznaj nasze kocięta bengalskie"
+cta_url: "/koty"
+
+hero_image:
+  filename: "kot-bengalski-charakter-i-opieka.webp"
+  alt: "Kot bengalski z naszej hodowli w pełnej krasie"
+  source: "Antigravity Image Editing (Real Bengal Stud Luki Reference)"
+  status: "pending"
+
+meta:
+  title: "Kot bengalski — charakter, wymagania i opieka (Przewodnik)"
+  description: "Kompletny przewodnik po rasie kot bengalski. Poznaj jego niesamowity temperament, wymagania mieszkaniowe, żywienie i sprawdź, czy to rasa dla Ciebie."
+
+categories:
+  - "Odmiany i Rasy"
+  - "Socjalizacja i Wychowanie"
+
+internal_links:
+  - anchor: "ile kosztuje kot bengalski"
+    url: "/blog/001-ile-kosztuje-kot-bengalski"
+  - anchor: "kot bengalski a dzieci"
+    url: "/blog/002-kot-bengalski-a-dzieci"
+  - anchor: "hodowla kotów bengalskich Mazowieckie"
+    url: "/blog/003-hodowla-kotow-bengalskich-mazowieckie"
+  - anchor: "rezerwacja i odbiór kocięcia"
+    url: "/blog/004-kocieta-bengalskie-rezerwacja-i-odbior"
+  - anchor: "pierwsze dni w nowym domu"
+    url: "/blog/005-pierwsze-dni-kociecia-w-nowym-domu"
+  - anchor: "co zawiera rodowód"
+    url: "/blog/006-co-zawiera-rodowod-kota"
+  - anchor: "badania genetyczne HCM i PKD"
+    url: "/blog/007-badania-genetyczne-hcm-pkd-koty"
+  - anchor: "żywienie kota bengalskiego"
+    url: "/blog/008-zywienie-kota-bengalskiego"
+  - anchor: "kot bengalski a inne zwierzęta"
+    url: "/blog/009-kot-bengalski-a-inne-zwierzeta"
+  - anchor: "socjalizacja kociąt w hodowli"
+    url: "/blog/010-socjalizacja-kociat-w-hodowli"
+  - anchor: "kot bengalski czy brytyjski"
+    url: "/blog/011-kot-bengalski-czy-brytyjski"
+  - anchor: "szczepienia kociąt harmonogram"
+    url: "/blog/012-szczepienia-kociat-harmonogram"
+  - anchor: "wyprawka dla kociaka lista"
+    url: "/blog/013-wyprawka-dla-kociaka-lista"
+  - anchor: "naszą hodowlę"
+    url: "/o-hodowli"
+  - anchor: "dostępne kocięta bengalskie"
+    url: "/koty"
+
+schema: "BlogPosting"
+
+status: "READY FOR REVIEW"

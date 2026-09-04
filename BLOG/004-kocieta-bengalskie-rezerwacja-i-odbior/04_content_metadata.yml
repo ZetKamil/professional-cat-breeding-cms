@@ -1,0 +1,51 @@
+id: ARTICLE-004
+title: "Kocięta bengalskie — rezerwacja, odbiór i co powinieneś wiedzieć przed zakupem"
+slug: "kocieta-bengalskie-rezerwacja-i-odbior"
+publication_date: "2026-09-22"
+publication_time: "10:00"
+primary_keyword: "kocięta bengalskie na sprzedaż"
+secondary_keywords:
+  - "kupić kociaka bengalskiego"
+  - "rezerwacja kocięcia bengalskiego"
+  - "kocięta bengalskie do adopcji"
+  - "jak zarezerwować kota bengalskiego"
+  - "wyprawka dla kociaka bengalskiego"
+
+intent: "transactional"
+cluster: "bengal-purchase"
+
+target_page: "/koty"
+
+primary_cta: "Zobacz dostępne kocięta bengalskie"
+cta_url: "/koty"
+
+hero_image:
+  filename: "kocieta-bengalskie-rezerwacja-i-odbior.webp"
+  alt: "Kocięta bengalskie w hodowli domowej"
+  source: "AI Generated (Antigravity)"
+  status: "pending"
+
+meta:
+  title: "Kocięta bengalskie — rezerwacja i przygotowanie do odbioru"
+  description: "Planujesz kupić kocię bengalskie? Dowiedz się, jak przebiega proces rezerwacji, co zawiera wyprawka i jak przygotować dom na przyjęcie malucha z hodowli."
+
+categories:
+  - "Odmiany i Rasy"
+
+internal_links:
+  - anchor: "ile kosztuje kot bengalski"
+    url: "/blog/001-ile-kosztuje-kot-bengalski"
+  - anchor: "kot bengalski a dzieci"
+    url: "/blog/002-kot-bengalski-a-dzieci"
+  - anchor: "hodowla kotów bengalskich Mazowieckie"
+    url: "/blog/003-hodowla-kotow-bengalskich-mazowieckie"
+  - anchor: "wyprawkę dla kociaka"
+    url: "/blog/sztuka-kreowania-domowego-sanktuarium-kompletny-przewodnik-po-wyprawce-premium-dla-kociecia"
+  - anchor: "naszą hodowlę"
+    url: "/o-hodowli"
+  - anchor: "dostępne kocięta bengalskie"
+    url: "/koty"
+
+schema: "BlogPosting"
+
+status: "READY FOR REVIEW"

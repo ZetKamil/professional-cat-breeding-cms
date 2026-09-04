@@ -1,0 +1,62 @@
+id: ARTICLE-012
+title: "Szczepienia kociąt — harmonogram, koszt i najczęstsze pytania"
+slug: "szczepienia-kociat-harmonogram"
+publication_date: "2026-10-29"
+publication_time: "10:00"
+primary_keyword: "szczepienia kociąt harmonogram"
+secondary_keywords:
+  - "szczepienie kota cena"
+  - "pierwsze szczepienie kociaka"
+  - "jakie szczepienia dla kota bengalskiego"
+  - "kiedy szczepić kocię"
+  - "kalendarz szczepień kota"
+
+intent: "informational-health"
+cluster: "health-care"
+
+target_page: "/blog"
+
+primary_cta: "Skontaktuj się z hodowlą"
+cta_url: "/contact"
+
+hero_image:
+  filename: "szczepienia-kociat-harmonogram.webp"
+  alt: "Kocię bengalskie z naszej hodowli podczas opieki profilaktycznej"
+  source: "Antigravity Image Editing (Real Bengal Cat Reference)"
+  status: "pending"
+
+meta:
+  title: "Szczepienia kociąt — harmonogram, koszt i poradnik"
+  description: "Kiedy zaszczepić małego kota? Poznaj oficjalny harmonogram szczepień kociąt, koszty profilaktyki oraz dowiedz się, jak hodowla dba o odporność malucha."
+
+categories:
+  - "Zdrowie i Genetyka"
+  - "Wyprawka i Pielęgnacja"
+
+internal_links:
+  - anchor: "ile kosztuje kot bengalski"
+    url: "/blog/001-ile-kosztuje-kot-bengalski"
+  - anchor: "kot bengalski a dzieci"
+    url: "/blog/002-kot-bengalski-a-dzieci"
+  - anchor: "hodowla kotów bengalskich Mazowieckie"
+    url: "/blog/003-hodowla-kotow-bengalskich-mazowieckie"
+  - anchor: "rezerwacja i odbiór kocięcia"
+    url: "/blog/004-kocieta-bengalskie-rezerwacja-i-odbior"
+  - anchor: "pierwsze dni w nowym domu"
+    url: "/blog/005-pierwsze-dni-kociecia-w-nowym-domu"
+  - anchor: "co zawiera rodowód"
+    url: "/blog/006-co-zawiera-rodowod-kota"
+  - anchor: "badania genetyczne HCM i PKD"
+    url: "/blog/007-badania-genetyczne-hcm-pkd-koty"
+  - anchor: "żywienie kota bengalskiego"
+    url: "/blog/008-zywienie-kota-bengalskiego"
+  - anchor: "socjalizacja kociąt w hodowli"
+    url: "/blog/010-socjalizacja-kociat-w-hodowli"
+  - anchor: "naszą hodowlę"
+    url: "/o-hodowli"
+  - anchor: "dostępne kocięta bengalskie"
+    url: "/koty"
+
+schema: "BlogPosting"
+
+status: "READY FOR REVIEW"

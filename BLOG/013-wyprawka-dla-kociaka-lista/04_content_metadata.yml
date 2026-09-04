@@ -1,0 +1,66 @@
+id: ARTICLE-013
+title: "Wyprawka dla kociaka — kompletna lista zakupów na 2026 rok"
+slug: "wyprawka-dla-kociaka-lista"
+publication_date: "2026-11-03"
+publication_time: "10:00"
+primary_keyword: "wyprawka dla kociaka lista"
+secondary_keywords:
+  - "co kupić dla kociaka"
+  - "wyprawka dla kota bengalskiego"
+  - "lista zakupów dla kota"
+  - "akcesoria dla kociaka"
+  - "wyprawka do domu dla kota"
+
+intent: "informational-care"
+cluster: "care-purchase"
+
+target_page: "/koty"
+
+primary_cta: "Zobacz dostępne kocięta"
+cta_url: "/koty"
+
+hero_image:
+  filename: "wyprawka-dla-kociaka-lista.webp"
+  alt: "Kocię bengalskie z naszej hodowli w domowym kąciku z wyprawką"
+  source: "Antigravity Image Editing (Real Bengal Cat Reference)"
+  status: "pending"
+
+meta:
+  title: "Wyprawka dla kociaka — kompletna lista zakupów"
+  description: "Przygotowujesz dom na przyjęcie małego kota? Poznaj kompletną listę zakupów wyprawki dla kociaka: drapaki, kuwety, karmy i akcesoria rekomendowane przez hodowcę."
+
+categories:
+  - "Wyprawka i Pielęgnacja"
+  - "Zdrowie i Genetyka"
+
+internal_links:
+  - anchor: "ile kosztuje kot bengalski"
+    url: "/blog/001-ile-kosztuje-kot-bengalski"
+  - anchor: "kot bengalski a dzieci"
+    url: "/blog/002-kot-bengalski-a-dzieci"
+  - anchor: "hodowla kotów bengalskich Mazowieckie"
+    url: "/blog/003-hodowla-kotow-bengalskich-mazowieckie"
+  - anchor: "rezerwacja i odbiór kocięcia"
+    url: "/blog/004-kocieta-bengalskie-rezerwacja-i-odbior"
+  - anchor: "pierwsze dni w nowym domu"
+    url: "/blog/005-pierwsze-dni-kociecia-w-nowym-domu"
+  - anchor: "co zawiera rodowód"
+    url: "/blog/006-co-zawiera-rodowod-kota"
+  - anchor: "badania genetyczne HCM i PKD"
+    url: "/blog/007-badania-genetyczne-hcm-pkd-koty"
+  - anchor: "żywienie kota bengalskiego"
+    url: "/blog/008-zywienie-kota-bengalskiego"
+  - anchor: "socjalizacja kociąt w hodowli"
+    url: "/blog/010-socjalizacja-kociat-w-hodowli"
+  - anchor: "szczepienia kociąt harmonogram"
+    url: "/blog/012-szczepienia-kociat-harmonogram"
+  - anchor: "przewodnik po wyprawce premium"
+    url: "/blog/sztuka-kreowania-domowego-sanktuarium-kompletny-przewodnik-po-wyprawce-premium-dla-kociecia"
+  - anchor: "naszą hodowlę"
+    url: "/o-hodowli"
+  - anchor: "dostępne kocięta bengalskie"
+    url: "/koty"
+
+schema: "BlogPosting"
+
+status: "READY FOR REVIEW"
