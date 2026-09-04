@@ -414,6 +414,34 @@ Route::get('/fix-storage', function () {
     }
 })->middleware(['auth', 'verified', 'active']);
 
+// One-click Auto Deploy & Sync Route for hosting (triggers git pull & seo article import)
+Route::match(['get', 'post'], '/deploy-now', function () {
+    try {
+        $gitOutput = shell_exec('git pull origin main 2>&1');
+        \Illuminate\Support\Facades\Artisan::call('seo:import-articles');
+        $importOutput = \Illuminate\Support\Facades\Artisan::output();
+        \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+
+        return "<div style='font-family:sans-serif; padding:30px; background:#ecfdf5; border:1px solid #10b981; border-radius:12px; color:#065f46; max-width:700px; margin:40px auto; font-size:15px; line-height:1.6;'>"
+            . "<h1 style='margin-top:0;'>🚀 Sukces Aktualizacji Hostingu!</h1>"
+            . "<p><strong>1. Pobieranie najnowszego kodu z GitHub (git pull):</strong></p>"
+            . "<pre style='background:#fff; padding:12px; border-radius:6px; border:1px solid #a7f3d0; font-size:13px; color:#047857;'>" . e($gitOutput ?: 'Brak odpowiedzi git (sprawdź czy git jest na ścieżce PATH serwera)') . "</pre>"
+            . "<p><strong>2. Wynik importu artykułów SEO do bazy produkcyjnej:</strong></p>"
+            . "<pre style='background:#fff; padding:12px; border-radius:6px; border:1px solid #a7f3d0; font-size:13px; color:#047857;'>" . e($importOutput ?: 'Pomyślnie przetworzono artykuły!') . "</pre>"
+            . "<hr style='border:0; border-top:1px solid #bbf7d0; margin:20px 0;'>"
+            . "<div style='display:flex; gap:10px;'>"
+            . "<a href='" . url('/blog') . "' style='background:#10b981; color:#fff; padding:12px 22px; text-decoration:none; border-radius:8px; font-weight:bold;'>Przejdź do Bloga (/blog) →</a>"
+            . "<a href='" . url('/backend/posts') . "' style='background:#047857; color:#fff; padding:12px 22px; text-decoration:none; border-radius:8px; font-weight:bold;'>Przejdź do Panelu (/backend/posts) →</a>"
+            . "</div>"
+            . "</div>";
+    } catch (\Throwable $e) {
+        return "<div style='font-family:sans-serif; padding:30px; background:#fef2f2; border:1px solid #fecaca; border-radius:12px; color:#991b1b; max-width:600px; margin:40px auto;'>"
+            . "<h1 style='margin-top:0;'>Błąd Wykonania</h1>"
+            . "<p>" . e($e->getMessage()) . "</p>"
+            . "</div>";
+    }
+});
+
 // backend dashboard
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified', 'active'])
