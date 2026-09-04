@@ -221,6 +221,24 @@ class PostController extends Controller
         }
     }
 
+    public function importSeo()
+    {
+        $this->authorize('create', Post::class);
+
+        try {
+            \Illuminate\Support\Facades\Artisan::call('seo:import-articles');
+            $output = \Illuminate\Support\Facades\Artisan::output();
+
+            return redirect()
+                ->route('backend.posts.index')
+                ->with('success', 'Pomyślnie zaimportowano artykuły SEO z katalogu BLOG/! ' . trim($output));
+        } catch (\Throwable $e) {
+            return redirect()
+                ->route('backend.posts.index')
+                ->with('error', 'Błąd podczas importu artykułów SEO: ' . $e->getMessage());
+        }
+    }
+
     protected function canManageAllPosts(): bool
     {
         return in_array(auth()->user()?->role?->name, ['admin', 'editor'], true);

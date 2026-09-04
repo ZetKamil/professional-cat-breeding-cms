@@ -444,6 +444,8 @@ Route::middleware(['auth', 'verified', 'active'])
         Route::delete('categories/{id}/force-delete', [CategoryController::class, 'forceDelete'])
             ->name('categories.forceDelete');
 
+        Route::post('posts/import-seo', [PostController::class, 'importSeo'])
+            ->name('posts.importSeo');
         Route::resource('posts', PostController::class);
         Route::patch('posts/{id}/restore', [PostController::class, 'restore'])
             ->name('posts.restore');

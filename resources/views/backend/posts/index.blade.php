@@ -83,7 +83,14 @@
                     </a>
 
                     @can('create', \App\Models\Post::class)
-                        <a href="{{ route('backend.posts.create') }}" class="btn btn-success ms-auto">
+                        <form method="POST" action="{{ route('backend.posts.importSeo') }}" class="d-inline ms-auto" onsubmit="return confirm('Czy na pewno chcesz zaimportować/zaktualizować 19 artykułów SEO z katalogu BLOG/ z niedzielnym harmonogramem?');">
+                            @csrf
+                            <button type="submit" class="btn btn-warning fw-bold">
+                                <i class="fas fa-file-import me-1"></i>
+                                🚀 Importuj Artykuły SEO (19)
+                            </button>
+                        </form>
+                        <a href="{{ route('backend.posts.create') }}" class="btn btn-success ms-2">
                             <i class="fas fa-plus me-1"></i>
                             New post
                         </a>
