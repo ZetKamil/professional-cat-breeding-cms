@@ -325,36 +325,7 @@
         </div>
     </x-frontend.section>
 
-    {{-- ============================================================
-    6. READING ROOM — EDITORIAL KNOWLEDGE
-    ============================================================ --}}
-    <x-frontend.section id="blog" class="reveal-up home-section--blog">
-        <x-frontend.section-header eyebrow="Czytelnia Hodowlana" headline="Wiedza i Felinologia"
-            description="Edukujemy, dzielimy się wiedzą i pomagamy zrozumieć świat kotów rasowych." />
 
-        @if(isset($latestPosts) && $latestPosts->count() > 0)
-            <div class="articles-grid">
-                @foreach($latestPosts->take(3) as $post)
-                    <x-frontend.blog-card :post="$post" />
-                @endforeach
-            </div>
-
-            <div class="section-action">
-                <x-frontend.button variant="secondary" href="{{ route('frontend.blog.index') }}" icon="arrow-right">
-                    Zobacz wszystkie artykuły w czytelni
-                </x-frontend.button>
-            </div>
-        @else
-            <div class="editorial-empty-box">
-                <i data-lucide="book-open" aria-hidden="true" class="editorial-empty-box__icon"></i>
-                <h3 class="editorial-empty-box__title">Nasza czytelnia — wkrótce nowe publikacje</h3>
-                <p class="editorial-empty-box__desc">
-                    Przygotowujemy dla Państwa rzetelne poradniki na temat pielęgnacji, żywienia oraz psychologii kotów
-                    rasowych.
-                </p>
-            </div>
-        @endif
-    </x-frontend.section>
 
     {{-- ============================================================
     7. FINAL INVITATION — LUXURY CONCIERGE CTA MONOLITH

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Animal;
-use App\Models\Post;
 use Illuminate\View\View;
 
 class HomeController extends Controller
@@ -19,16 +18,8 @@ class HomeController extends Controller
             ->take(3)
             ->get();
 
-        $latestPosts = Post::query()
-            ->published()
-            ->with(['user', 'categories', 'media'])
-            ->latest('published_at')
-            ->take(3)
-            ->get();
-
         return view('frontend.home', [
             'featuredAnimals' => $featuredAnimals,
-            'latestPosts' => $latestPosts,
         ]);
     }
 }

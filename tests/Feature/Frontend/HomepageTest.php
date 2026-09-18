@@ -25,7 +25,6 @@ class HomepageTest extends TestCase
         $response->assertSee('Koty Syjamskie');
         $response->assertSee('Historie Opiekunów Naszych Kotów');
         $response->assertSee('Codzienność w hodowli');
-        $response->assertSee('Nasza czytelnia — wkrótce nowe publikacje');
     }
 
     public function test_cattery_page_renders_successfully_with_philosophy_code_and_process_journey(): void
@@ -56,34 +55,11 @@ class HomepageTest extends TestCase
         $response->assertSee('Luna Royal Bengal');
     }
 
-    public function test_homepage_does_not_display_future_scheduled_posts(): void
+    public function test_homepage_does_not_render_blog_section(): void
     {
-        $user = \App\Models\User::factory()->create();
-
-        $futurePost = Post::create([
-            'user_id' => $user->id,
-            'title' => 'Niewidoczny Post z Przyszłości',
-            'slug' => 'niewidoczny-post-z-przyszlosci',
-            'excerpt' => 'Przyszłość.',
-            'body' => 'Treść.',
-            'is_published' => true,
-            'published_at' => now()->addMonth(),
-        ]);
-
-        $pastPost = Post::create([
-            'user_id' => $user->id,
-            'title' => 'Widoczny Opublikowany Post',
-            'slug' => 'widoczny-opublikowany-post',
-            'excerpt' => 'Przeszłość.',
-            'body' => 'Treść.',
-            'is_published' => true,
-            'published_at' => now()->subDay(),
-        ]);
-
         $response = $this->get(route('home'));
 
         $response->assertOk();
-        $response->assertSee('Widoczny Opublikowany Post');
-        $response->assertDontSee('Niewidoczny Post z Przyszłości');
+        $response->assertDontSee('home-section--blog');
     }
 }
