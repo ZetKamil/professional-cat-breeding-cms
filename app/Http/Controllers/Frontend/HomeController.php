@@ -20,9 +20,8 @@ class HomeController extends Controller
             ->get();
 
         $latestPosts = Post::query()
+            ->published()
             ->with(['user', 'categories', 'media'])
-            ->where('is_published', true)
-            ->whereNotNull('published_at')
             ->latest('published_at')
             ->take(3)
             ->get();

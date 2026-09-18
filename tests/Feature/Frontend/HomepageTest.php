@@ -55,4 +55,35 @@ class HomepageTest extends TestCase
         $response->assertOk();
         $response->assertSee('Luna Royal Bengal');
     }
+
+    public function test_homepage_does_not_display_future_scheduled_posts(): void
+    {
+        $user = \App\Models\User::factory()->create();
+
+        $futurePost = Post::create([
+            'user_id' => $user->id,
+            'title' => 'Niewidoczny Post z Przyszłości',
+            'slug' => 'niewidoczny-post-z-przyszlosci',
+            'excerpt' => 'Przyszłość.',
+            'body' => 'Treść.',
+            'is_published' => true,
+            'published_at' => now()->addMonth(),
+        ]);
+
+        $pastPost = Post::create([
+            'user_id' => $user->id,
+            'title' => 'Widoczny Opublikowany Post',
+            'slug' => 'widoczny-opublikowany-post',
+            'excerpt' => 'Przeszłość.',
+            'body' => 'Treść.',
+            'is_published' => true,
+            'published_at' => now()->subDay(),
+        ]);
+
+        $response = $this->get(route('home'));
+
+        $response->assertOk();
+        $response->assertSee('Widoczny Opublikowany Post');
+        $response->assertDontSee('Niewidoczny Post z Przyszłości');
+    }
 }
