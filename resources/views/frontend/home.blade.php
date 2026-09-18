@@ -261,9 +261,6 @@
     <x-frontend.section id="codziennosc" class="reveal-up home-section--codziennosc">
         <div class="daily-life-grid">
             <div class="daily-life__left">
-                <div class="daily-life__meta">
-                    <span class="daily-life__eyebrow">01 — DAILY LIFE & TRANSPARENCY</span>
-                </div>
                 <h2 class="daily-life__headline">Codzienność w hodowli</h2>
                 <p class="daily-life__desc">
                     Nie pokazujemy tylko efektu końcowego.
