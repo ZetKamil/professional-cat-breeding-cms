@@ -98,7 +98,6 @@
             <a href="{{ route('frontend.animals.index', ['breed' => 'bengal']) }}" class="collection-card"
                 role="listitem">
                 <div>
-                    <span class="collection-card__index">Collection 01 / Bengal</span>
                     <h3 class="collection-card__title">Koty Bengalskie</h3>
                     <p class="collection-card__quote">
                         Dzikie spojrzenie, wyraźna atłasowa rozeta i niezwykle inteligentny, aktywny temperament.
@@ -118,7 +117,6 @@
             <a href="{{ route('frontend.animals.index', ['breed' => 'british']) }}" class="collection-card"
                 role="listitem">
                 <div>
-                    <span class="collection-card__index">Collection 02 / British Shorthair</span>
                     <h3 class="collection-card__title">Koty Brytyjskie</h3>
                     <p class="collection-card__quote">
                         Aksamitne futro, zrównoważony spokój i klasyczna, brytyjska elegancja w każdym ruchu.
@@ -138,7 +136,6 @@
             <a href="{{ route('frontend.animals.index', ['breed' => 'siamese']) }}" class="collection-card"
                 role="listitem">
                 <div>
-                    <span class="collection-card__index">Collection 03 / Siamese</span>
                     <h3 class="collection-card__title">Koty Syjamskie</h3>
                     <p class="collection-card__quote">
                         Szafirowe spojrzenie, smukła sylwetka oraz wyjątkowe przywiązanie i komunikatywność z
