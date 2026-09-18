@@ -22,5 +22,11 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->render(function (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e, \Illuminate\Http\Request $request) {
+            \Illuminate\Support\Facades\Log::notice('404 Page Not Found: ' . $request->fullUrl(), [
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'referer' => $request->header('referer'),
+            ]);
+        });
     })->create();

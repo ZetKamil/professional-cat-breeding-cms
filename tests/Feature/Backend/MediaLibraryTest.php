@@ -6,6 +6,10 @@ use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+uses(RefreshDatabase::class);
+
 beforeEach(function () {
     Storage::fake('public');
     $this->seed(\Database\Seeders\RoleSeeder::class);
@@ -17,6 +21,8 @@ test('admin can upload single and multiple media images with metadata', function
 
     $file1 = UploadedFile::fake()->image('cat1.jpg', 600, 600);
     $file2 = UploadedFile::fake()->image('cat2.jpg', 600, 600);
+
+    $initialCount = Media::count();
 
     $response = $this->post(route('backend.media.store'), [
         'uploads' => [$file1, $file2],
@@ -32,9 +38,9 @@ test('admin can upload single and multiple media images with metadata', function
 
     $response->assertRedirect(route('backend.media.index'));
 
-    expect(Media::count())->toBe(2);
+    expect(Media::count())->toBe($initialCount + 2);
 
-    $media1 = Media::orderBy('id')->first();
+    $media1 = Media::where('title', 'Luxury Cat Photo')->first();
     expect($media1->title)->toBe('Luxury Cat Photo')
         ->and($media1->alt_text)->toBe('A gorgeous Bengal cat')
         ->and($media1->caption)->toBe('Bengal sitting gracefully')

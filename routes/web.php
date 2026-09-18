@@ -29,6 +29,14 @@ Route::view('/o-hodowli', 'frontend.cattery')->name('cattery');
 Route::view('/polityka-prywatnosci', 'frontend.privacy')->name('privacy');
 Route::view('/regulamin', 'frontend.terms')->name('terms');
 
+// Polish URL aliases & 301 redirects to prevent 404s from intuitive Polish queries
+Route::redirect('/kontakt', '/contact', 301);
+Route::redirect('/o-nas', '/about', 301);
+Route::redirect('/kocieta', '/koty', 301);
+Route::redirect('/galeria', '/koty', 301);
+Route::redirect('/rodowody', '/o-hodowli', 301);
+Route::redirect('/admin', '/login', 301);
+
 // Dynamic Sitemap XML
 Route::get('/sitemap.xml', function () {
     $posts = \App\Models\Post::where('is_published', true)

@@ -22,4 +22,18 @@
             </div>
         </div>
     </section>
+
+    <x-slot name="scripts">
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                if (typeof gtag === 'function') {
+                    gtag('event', 'page_404_error', {
+                        'page_path': window.location.pathname,
+                        'page_location': window.location.href,
+                        'referrer': document.referrer || 'direct'
+                    });
+                }
+            });
+        </script>
+    </x-slot>
 </x-frontend.shell>

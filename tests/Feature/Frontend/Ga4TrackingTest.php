@@ -182,4 +182,12 @@ class Ga4TrackingTest extends TestCase
         $response->assertOk();
         $response->assertSee('name="ga-measurement-id"', false);
     }
+
+    public function test_404_page_renders_ga4_error_event_script(): void
+    {
+        $response = $this->get('/non-existent-page-test-12345');
+
+        $response->assertNotFound();
+        $response->assertSee("gtag('event', 'page_404_error'", false);
+    }
 }

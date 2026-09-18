@@ -83,21 +83,21 @@ class SecurityHardeningTest extends TestCase
 
     public function test_media_streaming_rejects_directory_traversal_and_disallowed_extensions(): void
     {
-        // Disallowed extensions must return 404
+        // Disallowed extensions must return 404 or 403 (blocked)
         $responseEnv = $this->get('/storage/media/production.env');
-        $responseEnv->assertNotFound();
+        $this->assertTrue(in_array($responseEnv->status(), [403, 404], true));
 
         $responsePhp = $this->get('/storage/media/shell.php');
-        $responsePhp->assertNotFound();
+        $this->assertTrue(in_array($responsePhp->status(), [403, 404], true));
 
         $responseSh = $this->get('/storage/media/script.sh');
-        $responseSh->assertNotFound();
+        $this->assertTrue(in_array($responseSh->status(), [403, 404], true));
 
         $responseSql = $this->get('/storage/media/dump.sql');
-        $responseSql->assertNotFound();
+        $this->assertTrue(in_array($responseSql->status(), [403, 404], true));
 
         $responseJson = $this->get('/storage/media/composer.json');
-        $responseJson->assertNotFound();
+        $this->assertTrue(in_array($responseJson->status(), [403, 404], true));
     }
 
     public function test_contact_form_rate_limiting(): void

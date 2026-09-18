@@ -140,4 +140,22 @@ class ProductionSmokeTest extends TestCase
         $this->assertFileExists(public_path('robots.txt'));
         $this->assertFileExists(base_path('storage/.htaccess'));
     }
+
+    public function test_polish_url_aliases_redirect_301(): void
+    {
+        $redirects = [
+            '/kontakt' => '/contact',
+            '/o-nas' => '/about',
+            '/kocieta' => '/koty',
+            '/galeria' => '/koty',
+            '/rodowody' => '/o-hodowli',
+            '/admin' => '/login',
+        ];
+
+        foreach ($redirects as $from => $to) {
+            $response = $this->get($from);
+            $response->assertRedirect($to);
+            $response->assertStatus(301);
+        }
+    }
 }
