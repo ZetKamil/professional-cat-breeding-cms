@@ -38,10 +38,6 @@ class BlogController extends Controller
             ->paginate(9)
             ->withQueryString();
 
-        foreach ($posts as $postItem) {
-            $this->autoSyncBlogImages($postItem);
-        }
-
         $categories = Category::query()
             ->withCount(['posts' => function ($q) {
                 $q->where('is_published', true)
@@ -67,8 +63,6 @@ class BlogController extends Controller
         if (! $post->is_published || ! $post->published_at || $post->published_at->isFuture()) {
             abort(404);
         }
-
-        $this->autoSyncBlogImages($post);
 
         $post->load(['user', 'categories', 'media']);
 
@@ -97,42 +91,5 @@ class BlogController extends Controller
             'post' => $post,
             'relatedPosts' => $relatedPosts,
         ]);
-    }
-
-    /**
-     * Automatyczna synchronizacja plików graficznych z katalogu BLOG/ do public/storage/blog/
-     */
-    private function autoSyncBlogImages(Post $post): void
-    {
-        try {
-            $blogPath = base_path('BLOG');
-            if (! \Illuminate\Support\Facades\File::isDirectory($blogPath)) {
-                return;
-            }
-
-            $directories = \Illuminate\Support\Facades\File::directories($blogPath);
-            foreach ($directories as $dirPath) {
-                $folderName = basename($dirPath);
-                if (Str::contains($folderName, $post->slug) || Str::contains($post->slug, Str::after($folderName, '-'))) {
-                    $storagePublicDir = public_path("storage/blog/{$folderName}");
-                    \Illuminate\Support\Facades\File::ensureDirectoryExists($storagePublicDir);
-
-                    $sourceFiles = \Illuminate\Support\Facades\File::files($dirPath);
-                    foreach ($sourceFiles as $file) {
-                        $ext = strtolower($file->getExtension());
-                        if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'jfif'], true)) {
-                            $targetPath = $storagePublicDir . '/' . $file->getFilename();
-                            if (! \Illuminate\Support\Facades\File::exists($targetPath) || \Illuminate\Support\Facades\File::size($targetPath) !== $file->getSize() || \Illuminate\Support\Facades\File::lastModified($file->getPathname()) > \Illuminate\Support\Facades\File::lastModified($targetPath)) {
-                                @\Illuminate\Support\Facades\File::copy($file->getPathname(), $targetPath);
-                                @chmod($targetPath, 0644);
-                            }
-                        }
-                    }
-                    break;
-                }
-            }
-        } catch (\Throwable $e) {
-            // Fail silently
-        }
     }
 }
