@@ -157,9 +157,10 @@ class ImportSeoArticles extends Command
 
             $post->categories()->sync($categoryIds);
 
-            // Attach Hero Media (Hero image 02_hero.jpg)
-            $heroUrl = "/storage/blog/{$folderName}/02_hero.jpg";
-            if (! File::exists($storagePublicDir . '/02_hero.jpg')) {
+            // Attach Hero Media (Hero image 02_hero_v2.jpg or 02_hero.jpg)
+            $heroFilename = File::exists($storagePublicDir . '/02_hero_v2.jpg') ? '02_hero_v2.jpg' : '02_hero.jpg';
+            $heroUrl = "/storage/blog/{$folderName}/{$heroFilename}";
+            if (! File::exists($storagePublicDir . '/' . $heroFilename)) {
                 $anyJpg = collect(File::files($storagePublicDir))->first(fn($f) => in_array(strtolower($f->getExtension()), ['jpg', 'jpeg', 'webp', 'jfif']));
                 if ($anyJpg) {
                     $heroUrl = "/storage/blog/{$folderName}/" . $anyJpg->getFilename();

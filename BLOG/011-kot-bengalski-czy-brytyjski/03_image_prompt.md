@@ -10,13 +10,14 @@ Hero image — editorial breed comparison pet photography
 Antigravity generate_image (built-in)
 
 ## Prompt
-Cinematic editorial photograph featuring a striking wild-patterned Bengal cat and a plush British Shorthair blue cat sitting gracefully side by side on a warm wooden floor in a cozy modern sunlit home interior. Soft natural lighting streaming through floor-to-ceiling windows, high detail on both distinct coat textures (glittering rosette bengal coat vs dense plush British coat), photorealistic, 8k resolution, horizontal wide composition 16:9.
+A professional side-by-side photograph of two distinct cat breeds sitting gracefully next to each other on a modern sunlit hardwood floor. On the left is a wild-looking Bengal cat with sharp brown leopard rosette spots and a sleek coat. On the right is a plush, chubby-cheeked blue-grey British Shorthair cat with dense silvery-blue fur, a round face, and vivid amber orange eyes. Soft warm lighting, photorealistic, 8k resolution.
 
 ## Negative Constraints
-no text, no watermark, no logo, no distorted anatomy, no aggressive postures, no artificial background.
+no text, no watermark, no logo, no distorted anatomy, no black cat, no aggressive postures, no artificial background.
 
 ## Output
 16:9 aspect ratio
 
 ## Status
-Generated — saved as 02_hero.jpg
+Regenerated & Updated — saved as 02_hero.jpg
+

@@ -492,3 +492,99 @@
     gap: var(--space-4);
     justify-content: center;
 }
+
+/* ==========================================================================
+   Editorial Markdown Tables (Luxury Magazine Comparison Tables)
+   ========================================================================== */
+.article-editorial table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 2.5rem 0;
+    font-size: 0.9375rem;
+    font-family: var(--font-sans, system-ui, sans-serif);
+    line-height: 1.6;
+    border-radius: var(--r-xl, 16px);
+    overflow: hidden;
+    background-color: var(--color-canvas, #ffffff);
+    border: 1px solid var(--color-hairline, rgba(0, 0, 0, 0.08));
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03), 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.article-editorial th,
+.article-editorial td {
+    padding: 14px 18px;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid var(--color-hairline, rgba(0, 0, 0, 0.06));
+    border-right: 1px solid var(--color-hairline, rgba(0, 0, 0, 0.04));
+}
+
+.article-editorial th:last-child,
+.article-editorial td:last-child {
+    border-right: none;
+}
+
+.article-editorial th {
+    background-color: var(--color-canvas-parchment, #f8f6f0);
+    color: var(--color-ink, #1d1d1f);
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: -0.01em;
+    border-bottom: 2px solid var(--color-primary, #d1ab58);
+}
+
+.article-editorial tr:last-child td {
+    border-bottom: none;
+}
+
+/* Alternating row colors for high contrast readability */
+.article-editorial tbody tr:nth-child(even) td {
+    background-color: rgba(248, 246, 240, 0.5);
+}
+
+/* Hover highlight */
+.article-editorial tbody tr:hover td {
+    background-color: rgba(209, 171, 88, 0.06);
+    transition: background-color 0.15s ease;
+}
+
+/* First column (Parameters) distinct styling */
+.article-editorial td:first-child {
+    font-weight: 600;
+    color: var(--color-ink, #1d1d1f);
+    background-color: rgba(248, 246, 240, 0.25);
+    width: 28%;
+    min-width: 150px;
+}
+
+.article-editorial td:nth-child(2),
+.article-editorial td:nth-child(3) {
+    width: 36%;
+}
+
+/* Responsive scrolling on mobile viewports */
+@media (max-width: 640px) {
+    .article-editorial table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+        margin: 1.5rem 0;
+    }
+
+    .article-editorial th,
+    .article-editorial td {
+        padding: 10px 12px;
+        font-size: 0.875rem;
+        white-space: normal;
+    }
+
+    .article-editorial td:first-child,
+    .article-editorial td:nth-child(2),
+    .article-editorial td:nth-child(3) {
+        width: auto;
+        min-width: 130px;
+    }
+}

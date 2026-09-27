@@ -4,7 +4,7 @@ Wybór idealnego kota rasowego do domu to jedna z najważniejszych decyzji felin
 
 Odpowiedź w pigułce: **Wybierz kota bengalskiego, jeśli szukasz aktywnego, niezwykle inteligentnego i "psiego" towarzysza do stałej zabawy i interakcji z rodziną. Wybierz kota brytyjskiego, jeśli cenisz spokój, aksamitną harmonię, niezależność i cichego pupila, który doskonale znosi czas spędzony samotnie podczas Twojej pracy.**
 
-![Porównanie kota bengalskiego i brytyjskiego](02_hero.jpg)
+![Porównanie kota bengalskiego i brytyjskiego](02_hero_v2.jpg)
 *Wybór między kotem bengalskim a brytyjskim to wybór dwóch zupełnie różnych stylów domowego życia.*
 
 ---
