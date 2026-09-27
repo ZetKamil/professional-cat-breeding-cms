@@ -250,6 +250,45 @@ Route::match(['get', 'post'], '/check-media', function (\Illuminate\Http\Request
     return $output;
 })->middleware(['auth', 'verified', 'active']);
 
+// One-shot sync endpoint for blog articles & media on hosting
+Route::get('/sync-blog-articles', function () {
+    try {
+        $blogPath = base_path('BLOG');
+        if (\Illuminate\Support\Facades\File::isDirectory($blogPath)) {
+            $directories = \Illuminate\Support\Facades\File::directories($blogPath);
+            foreach ($directories as $dirPath) {
+                $folderName = basename($dirPath);
+                $storagePublicDir = public_path("storage/blog/{$folderName}");
+                \Illuminate\Support\Facades\File::ensureDirectoryExists($storagePublicDir);
+
+                $sourceFiles = \Illuminate\Support\Facades\File::files($dirPath);
+                foreach ($sourceFiles as $file) {
+                    $ext = strtolower($file->getExtension());
+                    if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'jfif'], true)) {
+                        $targetPath = $storagePublicDir . '/' . $file->getFilename();
+                        @\Illuminate\Support\Facades\File::copy($file->getPathname(), $targetPath);
+                        @chmod($targetPath, 0644);
+                    }
+                }
+            }
+        }
+
+        \Illuminate\Support\Facades\Artisan::call('seo:import-articles', ['--force-now' => true]);
+        \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Successfully synced blog images and re-imported articles on production!',
+            'artisan' => trim(\Illuminate\Support\Facades\Artisan::output()),
+        ]);
+    } catch (\Throwable $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage(),
+        ], 500);
+    }
+});
+
 // Diagnostic route to test and inspect SMTP / Mail configuration on hosting (admin only)
 Route::match(['get', 'post'], '/check-mail', function (\Illuminate\Http\Request $request) {
     if (auth()->user()?->role?->name !== 'admin') {
