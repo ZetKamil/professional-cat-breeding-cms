@@ -70,24 +70,39 @@
             <div class="mb-4">
                 <label class="form-label fw-semibold">
                     <i class="fas fa-lightbulb me-1 text-warning"></i>
-                    Sugerowane tematy <span class="text-muted fw-normal">(jesień 2026)</span>
+                    Sugerowane tematy na dziś <span class="text-muted fw-normal">(na żywo z Google Trends / AI)</span>
                 </label>
-                <div class="row g-2">
-                    @foreach($topics as $i => $topic)
-                        <div class="col-12 col-md-6">
-                            <button type="button"
-                                    wire:click="selectTopic('{{ addslashes($topic['title']) }}')"
-                                    id="topic-btn-{{ $i }}"
-                                    class="btn w-100 text-start {{ $selectedTopic === $topic['title'] ? 'btn-primary' : 'btn-outline-secondary' }}"
-                                    style="white-space: normal; line-height: 1.4;">
-                                <span class="d-block">{{ $topic['title'] }}</span>
-                                <span class="badge {{ $topic['intent'] === 'commercial' ? 'bg-warning text-dark' : 'bg-info' }} mt-1" style="font-size:.65rem;">
-                                    {{ $topic['intent'] === 'commercial' ? 'Zakupowy' : 'Edukacyjny' }}
-                                </span>
-                            </button>
+
+                @if($topicError)
+                    <div class="alert alert-warning d-flex align-items-start gap-2 mb-3">
+                        <i class="fas fa-exclamation-triangle mt-1"></i>
+                        <div>
+                            <strong>Problem z pobraniem trendów:</strong> {{ $topicError }}<br>
+                            <small class="text-muted">Możesz wpisać własny temat w polu poniżej.</small>
                         </div>
-                    @endforeach
-                </div>
+                    </div>
+                @elseif(empty($topics))
+                    <div class="alert alert-info py-2 mb-3">
+                        <i class="fas fa-spinner fa-spin me-1"></i> Pobieram najnowsze trendy…
+                    </div>
+                @else
+                    <div class="row g-2">
+                        @foreach($topics as $i => $topic)
+                            <div class="col-12 col-md-6">
+                                <button type="button"
+                                        wire:click="selectTopic('{{ addslashes($topic['title']) }}')"
+                                        id="topic-btn-{{ $i }}"
+                                        class="btn w-100 text-start {{ $selectedTopic === $topic['title'] ? 'btn-primary' : 'btn-outline-secondary' }}"
+                                        style="white-space: normal; line-height: 1.4;">
+                                    <span class="d-block">{{ $topic['title'] }}</span>
+                                    <span class="badge {{ $topic['intent'] === 'commercial' ? 'bg-warning text-dark' : 'bg-info' }} mt-1" style="font-size:.65rem;">
+                                        {{ $topic['intent'] === 'commercial' ? 'Zakupowy' : 'Edukacyjny' }}
+                                    </span>
+                                </button>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
             </div>
 
             {{-- Custom topic --}}

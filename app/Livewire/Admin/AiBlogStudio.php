@@ -49,6 +49,7 @@ class AiBlogStudio extends Component
     public bool   $isSavingDraft     = false;
     public string $errorMessage      = '';
     public string $successMessage    = '';
+    public string $topicError        = '';
 
     // ─── Computed data (loaded on mount) ─────────────────────────────
     public array          $breeds    = [];
@@ -61,7 +62,7 @@ class AiBlogStudio extends Component
         AiBlogGeneratorService  $blogService
     ): void {
         $this->breeds     = $topicService->breeds();
-        $this->topics     = $topicService->suggest($this->selectedBreed);
+        $this->loadTopics($topicService, $this->selectedBreed);
         $this->loadAnimals($blogService);
         $this->categories = Category::orderBy('name')->get(['id', 'name'])->toArray();
     }
@@ -73,8 +74,24 @@ class AiBlogStudio extends Component
         $this->selectedBreed     = $breed;
         $this->selectedTopic     = '';
         $this->selectedAnimalIds = [];
-        $this->topics            = $topicService->suggest($breed);
+        $this->loadTopics($topicService, $breed);
         $this->loadAnimals($blogService);
+    }
+
+    public function loadTopics(TopicSuggesterService $topicService, string $breed): void
+    {
+        $this->topicError = '';
+        $this->topics     = [];
+
+        try {
+            $this->topics = $topicService->suggest($breed);
+        } catch (GeminiApiKeyMissingException) {
+            $this->topicError = 'Klucz API Gemini nie jest skonfigurowany w pliku .env na serwerze.';
+        } catch (GeminiServiceUnavailableException $e) {
+            $this->topicError = 'Usługa AI jest chwilowo niedostępna (' . $e->getMessage() . ').';
+        } catch (\Throwable $e) {
+            $this->topicError = 'Nie udało się pobrać aktualnych trendów: ' . $e->getMessage();
+        }
     }
 
     public function selectTopic(string $topic): void

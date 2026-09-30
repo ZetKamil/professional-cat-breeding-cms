@@ -4,86 +4,57 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Services;
 
+use App\Services\GeminiService;
 use App\Services\TopicSuggesterService;
+use Mockery\MockInterface;
 use Tests\TestCase;
 
 /**
  * Unit tests for TopicSuggesterService.
- *
- * All tests are pure (no DB, no HTTP) — the service has no external deps.
  */
 class TopicSuggesterServiceTest extends TestCase
 {
-    private TopicSuggesterService $service;
-
-    protected function setUp(): void
+    public function test_breeds_returns_bengalski_brytyjski_and_syjamski(): void
     {
-        parent::setUp();
-        $this->service = app(TopicSuggesterService::class);
-    }
-
-    public function test_suggest_returns_array_for_bengalski(): void
-    {
-        $topics = $this->service->suggest('bengalski');
-
-        $this->assertIsArray($topics);
-        $this->assertNotEmpty($topics, 'Should return at least one topic for bengalski');
-        $this->assertLessThanOrEqual(6, count($topics), 'Should return at most 6 topics');
-    }
-
-    public function test_suggest_returns_array_for_brytyjski(): void
-    {
-        $topics = $this->service->suggest('brytyjski');
-
-        $this->assertIsArray($topics);
-        $this->assertNotEmpty($topics);
-    }
-
-    public function test_suggest_returns_array_for_maine_coon(): void
-    {
-        $topics = $this->service->suggest('maine-coon');
-
-        $this->assertIsArray($topics);
-        $this->assertNotEmpty($topics);
-    }
-
-    public function test_each_topic_has_required_keys(): void
-    {
-        $topics = $this->service->suggest('bengalski');
-
-        foreach ($topics as $topic) {
-            $this->assertArrayHasKey('title',   $topic, 'Topic must have title');
-            $this->assertArrayHasKey('keyword', $topic, 'Topic must have keyword');
-            $this->assertArrayHasKey('intent',  $topic, 'Topic must have intent');
-        }
-    }
-
-    public function test_breeds_returns_all_three_breeds(): void
-    {
-        $breeds = $this->service->breeds();
+        $service = app(TopicSuggesterService::class);
+        $breeds  = $service->breeds();
 
         $this->assertCount(3, $breeds);
-        $this->assertArrayHasKey('bengalski',  $breeds);
-        $this->assertArrayHasKey('brytyjski',  $breeds);
-        $this->assertArrayHasKey('maine-coon', $breeds);
+        $this->assertArrayHasKey('bengalski', $breeds);
+        $this->assertArrayHasKey('brytyjski', $breeds);
+        $this->assertArrayHasKey('syjamski',  $breeds);
+        $this->assertEquals('Kot Syjamski', $breeds['syjamski']);
     }
 
-    public function test_topics_contain_polish_text(): void
+    public function test_suggest_returns_topics_from_gemini(): void
     {
-        $topics = $this->service->suggest('bengalski');
-        $allTitles = implode(' ', array_column($topics, 'title'));
+        $this->mock(GeminiService::class, function (MockInterface $mock) {
+            $mock->shouldReceive('generateText')
+                ->once()
+                ->andReturn(json_encode([
+                    ['title' => 'Cena kota syjamskiego', 'keyword' => 'kot syjamski cena', 'intent' => 'commercial'],
+                    ['title' => 'Żywienie kota syjamskiego', 'keyword' => 'dieta kot syjamski', 'intent' => 'informational'],
+                ]));
+        });
 
-        // Verify Polish content — at least one topic should mention 'kot' or 'koci'
-        $this->assertMatchesRegularExpression('/kot|koci/i', $allTitles);
+        $service = app(TopicSuggesterService::class);
+        $topics  = $service->suggest('syjamski');
+
+        $this->assertCount(2, $topics);
+        $this->assertEquals('Cena kota syjamskiego', $topics[0]['title']);
     }
 
-    public function test_suggest_returns_empty_for_unknown_breed(): void
+    public function test_suggest_throws_exception_on_api_failure_no_hardcoded_fallbacks(): void
     {
-        // Unknown breed should not crash, returns whatever seasonal topics match
-        $topics = $this->service->suggest('unknown-breed');
+        $this->mock(GeminiService::class, function (MockInterface $mock) {
+            $mock->shouldReceive('generateText')
+                ->once()
+                ->andThrow(new \RuntimeException('API error'));
+        });
 
-        $this->assertIsArray($topics);
-        // Should still return seasonal topics even for unknown breed
-        $this->assertLessThanOrEqual(6, count($topics));
+        $this->expectException(\RuntimeException::class);
+
+        $service = app(TopicSuggesterService::class);
+        $service->suggest('bengalski');
     }
 }
