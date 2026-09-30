@@ -39,4 +39,21 @@ return [
         'analytics_id' => env('GOOGLE_ANALYTICS_ID', env('GA_MEASUREMENT_ID', 'G-VB4ZCKR8WB')),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Gemini AI API
+    |--------------------------------------------------------------------------
+    |
+    | Used by AiBlogGeneratorService to generate blog post drafts and
+    | decorative hero images. The key MUST only live in .env — never
+    | commit it to version control.
+    |
+    */
+    'gemini' => [
+        'api_key'     => env('GEMINI_API_KEY'),
+        'text_model'  => env('GEMINI_TEXT_MODEL', 'gemini-1.5-pro'),
+        'image_model' => env('GEMINI_IMAGE_MODEL', 'imagen-3.0-generate-002'),
+        'timeout'     => (int) env('GEMINI_TIMEOUT', 60),
+    ],
+
 ];

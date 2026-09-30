@@ -35,6 +35,16 @@
                 </a>
             @endcan
 
+            @can('create', \App\Models\Post::class)
+                <a class="nav-link {{ request()->routeIs('backend.posts.ai-studio') ? 'active' : '' }}"
+                   href="{{ route('backend.posts.ai-studio') }}">
+                    <div class="sb-nav-link-icon">
+                        <i class="fas fa-wand-magic-sparkles"></i>
+                    </div>
+                    AI Blog Studio
+                </a>
+            @endcan
+
             @can('viewAny', \App\Models\Post::class)
                 <a class="nav-link {{ request()->routeIs('backend.categories.*') ? 'active' : '' }}"
                    href="{{ route('backend.categories.index') }}">

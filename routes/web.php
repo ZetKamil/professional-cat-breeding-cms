@@ -523,6 +523,14 @@ Route::middleware(['auth', 'verified', 'active'])
 
         Route::post('posts/import-seo', [PostController::class, 'importSeo'])
             ->name('posts.importSeo');
+
+        // AI Blog Studio — Livewire wizard for AI-generated post drafts
+        // Must be registered BEFORE Route::resource('posts') to avoid conflict with /posts/{post}
+        Route::get('posts/ai-studio', function () {
+            abort_unless(auth()->user()->can('create', \App\Models\Post::class), 403);
+            return view('backend.ai-blog-studio.index');
+        })->name('posts.ai-studio');
+
         Route::resource('posts', PostController::class);
         Route::patch('posts/{id}/restore', [PostController::class, 'restore'])
             ->name('posts.restore');
