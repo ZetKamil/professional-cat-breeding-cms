@@ -73,6 +73,7 @@ class AiBlogStudio extends Component
     {
         $this->selectedBreed     = $breed;
         $this->selectedTopic     = '';
+        $this->customTopic       = '';
         $this->selectedAnimalIds = [];
         $this->loadTopics($topicService, $breed);
         $this->loadAnimals($blogService);
@@ -94,10 +95,19 @@ class AiBlogStudio extends Component
         }
     }
 
-    public function selectTopic(string $topic): void
+    public function selectTopic(int|string $indexOrTopic): void
     {
-        $this->selectedTopic = $topic;
-        $this->customTopic   = $topic;
+        if (is_int($indexOrTopic) || ctype_digit((string) $indexOrTopic)) {
+            $idx = (int) $indexOrTopic;
+            if (isset($this->topics[$idx]['title'])) {
+                $title = $this->topics[$idx]['title'];
+                $this->selectedTopic = $title;
+                $this->customTopic   = $title;
+            }
+        } else {
+            $this->selectedTopic = (string) $indexOrTopic;
+            $this->customTopic   = (string) $indexOrTopic;
+        }
     }
 
     public function updatedCustomTopic(): void
@@ -109,12 +119,15 @@ class AiBlogStudio extends Component
 
     public function goToStep2(): void
     {
-        $topic = $this->customTopic ?: $this->selectedTopic;
+        $topic = trim($this->customTopic) ?: trim($this->selectedTopic);
 
         if (blank($topic)) {
             $this->errorMessage = 'Wybierz temat lub wpisz własny przed przejściem dalej.';
             return;
         }
+
+        $this->customTopic   = $topic;
+        $this->selectedTopic = $topic;
 
         $this->errorMessage  = '';
         $this->currentStep   = 2;
@@ -141,7 +154,7 @@ class AiBlogStudio extends Component
         $this->isGenerating   = true;
         $this->currentStep    = 3;
 
-        $topic = $this->customTopic ?: $this->selectedTopic;
+        $topic = trim($this->customTopic) ?: trim($this->selectedTopic);
         $breedLabel = $this->breeds[$this->selectedBreed] ?? $this->selectedBreed;
 
         try {
@@ -152,12 +165,12 @@ class AiBlogStudio extends Component
             );
         } catch (GeminiApiKeyMissingException $e) {
             $this->errorMessage = 'Klucz API Gemini nie jest skonfigurowany. Skontaktuj się z administratorem.';
-            $this->currentStep  = 1;
+            $this->currentStep  = 2;
         } catch (GeminiServiceUnavailableException $e) {
             $this->errorMessage = 'AI chwilowo niedostępne: ' . $e->getMessage() . ' Spróbuj ponownie za chwilę.';
             $this->currentStep  = 2;
         } catch (\Throwable $e) {
-            $this->errorMessage = 'Wystąpił nieoczekiwany błąd podczas generowania. Spróbuj ponownie.';
+            $this->errorMessage = 'Wystąpił nieoczekiwany błąd podczas generowania: ' . $e->getMessage();
             $this->currentStep  = 2;
         } finally {
             $this->isGenerating = false;

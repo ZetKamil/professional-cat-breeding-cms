@@ -44,90 +44,99 @@
     {{-- ════════════════════════════════════════════════════════════════════ --}}
     {{-- STEP 1: Breed + Topic --}}
     {{-- ════════════════════════════════════════════════════════════════════ --}}
+    {{-- ════════════════════════════════════════════════════════════════════ --}}
+    {{-- STEP 1: Breed + Topic --}}
+    {{-- ════════════════════════════════════════════════════════════════════ --}}
     @if($currentStep === 1)
         <div wire:key="step-1">
-            <form wire:submit.prevent="goToStep2">
 
-                {{-- Breed selector --}}
-                <div class="mb-4">
-                    <label class="form-label fw-semibold">
-                        <i class="fas fa-paw me-1 text-primary"></i> Rasa kota
-                    </label>
+            {{-- Breed selector --}}
+            <div class="mb-4">
+                <label class="form-label fw-semibold">
+                    <i class="fas fa-paw me-1 text-primary"></i> Rasa kota
+                </label>
+                <div class="row g-2">
+                    @foreach($breeds as $key => $label)
+                        <div class="col-12 col-md-4" wire:key="breed-card-{{ $key }}">
+                            <button type="button"
+                                    wire:click="selectBreed('{{ $key }}')"
+                                    id="breed-btn-{{ $key }}"
+                                    class="btn w-100 {{ $selectedBreed === $key ? 'btn-primary' : 'btn-outline-secondary' }}">
+                                {{ $label }}
+                            </button>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            {{-- Topic suggestions --}}
+            <div class="mb-4">
+                <label class="form-label fw-semibold">
+                    <i class="fas fa-lightbulb me-1 text-warning"></i>
+                    Sugerowane tematy na dziś <span class="text-muted fw-normal">(na żywo z Google Trends / AI)</span>
+                </label>
+
+                @if($topicError)
+                    <div class="alert alert-warning d-flex align-items-start gap-2 mb-3">
+                        <i class="fas fa-exclamation-triangle mt-1"></i>
+                        <div>
+                            <strong>Problem z pobraniem trendów:</strong> {{ $topicError }}<br>
+                            <small class="text-muted">Możesz wpisać własny temat w polu poniżej.</small>
+                        </div>
+                    </div>
+                @elseif(empty($topics))
+                    <div class="alert alert-info py-2 mb-3">
+                        <i class="fas fa-spinner fa-spin me-1"></i> Pobieram najnowsze trendy…
+                    </div>
+                @else
                     <div class="row g-2">
-                        @foreach($breeds as $key => $label)
-                            <div class="col-12 col-md-4" wire:key="breed-card-{{ $key }}">
+                        @foreach($topics as $i => $topic)
+                            <div class="col-12 col-md-6" wire:key="topic-card-{{ $i }}-{{ $selectedBreed }}">
                                 <button type="button"
-                                        wire:click="selectBreed('{{ $key }}')"
-                                        id="breed-btn-{{ $key }}"
-                                        class="btn w-100 {{ $selectedBreed === $key ? 'btn-primary' : 'btn-outline-secondary' }}">
-                                    {{ $label }}
+                                        wire:click="selectTopic({{ $i }})"
+                                        id="topic-btn-{{ $i }}"
+                                        class="btn w-100 text-start {{ ($selectedTopic === $topic['title'] || $customTopic === $topic['title']) ? 'btn-primary' : 'btn-outline-secondary' }}"
+                                        style="white-space: normal; line-height: 1.4; user-select: text;">
+                                    <span class="d-block fw-semibold">{{ $topic['title'] }}</span>
+                                    <span class="badge {{ $topic['intent'] === 'commercial' ? 'bg-warning text-dark' : 'bg-info' }} mt-1" style="font-size:.65rem;">
+                                        {{ $topic['intent'] === 'commercial' ? 'Zakupowy' : 'Edukacyjny' }}
+                                    </span>
                                 </button>
                             </div>
                         @endforeach
                     </div>
-                </div>
+                @endif
+            </div>
 
-                {{-- Topic suggestions --}}
-                <div class="mb-4">
-                    <label class="form-label fw-semibold">
-                        <i class="fas fa-lightbulb me-1 text-warning"></i>
-                        Sugerowane tematy na dziś <span class="text-muted fw-normal">(na żywo z Google Trends / AI)</span>
-                    </label>
+            {{-- Selected / Custom topic field --}}
+            <div class="mb-4">
+                <label for="customTopic" class="form-label fw-semibold">
+                    <i class="fas fa-pencil me-1"></i> Temat artykułu <span class="text-muted fw-normal">(wybierz powyżej lub wpisz/edytuj własny)</span>
+                </label>
+                <input type="text"
+                       id="customTopic"
+                       wire:model.live.debounce.150ms="customTopic"
+                       wire:keydown.enter.prevent="goToStep2"
+                       class="form-control form-control-lg"
+                       placeholder="Wybierz temat z listy powyżej lub wpisz własny...">
+            </div>
 
-                    @if($topicError)
-                        <div class="alert alert-warning d-flex align-items-start gap-2 mb-3">
-                            <i class="fas fa-exclamation-triangle mt-1"></i>
-                            <div>
-                                <strong>Problem z pobraniem trendów:</strong> {{ $topicError }}<br>
-                                <small class="text-muted">Możesz wpisać własny temat w polu poniżej.</small>
-                            </div>
-                        </div>
-                    @elseif(empty($topics))
-                        <div class="alert alert-info py-2 mb-3">
-                            <i class="fas fa-spinner fa-spin me-1"></i> Pobieram najnowsze trendy…
-                        </div>
-                    @else
-                        <div class="row g-2">
-                            @foreach($topics as $i => $topic)
-                                <div class="col-12 col-md-6" wire:key="topic-card-{{ $i }}-{{ $selectedBreed }}">
-                                    <button type="button"
-                                            wire:click="selectTopic('{{ addslashes($topic['title']) }}')"
-                                            id="topic-btn-{{ $i }}"
-                                            class="btn w-100 text-start {{ $selectedTopic === $topic['title'] ? 'btn-primary' : 'btn-outline-secondary' }}"
-                                            style="white-space: normal; line-height: 1.4; user-select: text;">
-                                        <span class="d-block">{{ $topic['title'] }}</span>
-                                        <span class="badge {{ $topic['intent'] === 'commercial' ? 'bg-warning text-dark' : 'bg-info' }} mt-1" style="font-size:.65rem;">
-                                            {{ $topic['intent'] === 'commercial' ? 'Zakupowy' : 'Edukacyjny' }}
-                                        </span>
-                                    </button>
-                                </div>
-                            @endforeach
-                        </div>
-                    @endif
-                </div>
-
-                {{-- Selected / Custom topic field --}}
-                <div class="mb-4">
-                    <label for="customTopic" class="form-label fw-semibold">
-                        <i class="fas fa-pencil me-1"></i> Temat artykułu <span class="text-muted fw-normal">(wybierz powyżej lub wpisz/edytuj własny)</span>
-                    </label>
-                    <input type="text"
-                           id="customTopic"
-                           wire:model="customTopic"
-                           class="form-control form-control-lg"
-                           placeholder="Wybierz temat z listy powyżej lub wpisz własny...">
-                </div>
-
-                {{-- CTA --}}
-                <div class="d-grid">
-                    <button type="submit"
-                            id="step1-next-btn"
-                            class="btn btn-primary btn-lg">
+            {{-- CTA --}}
+            <div class="d-grid">
+                <button type="button"
+                        wire:click="goToStep2"
+                        wire:loading.attr="disabled"
+                        wire:target="goToStep2"
+                        id="step1-next-btn"
+                        class="btn btn-primary btn-lg">
+                    <span wire:loading.remove wire:target="goToStep2">
                         Dalej: Wybierz koty →
-                    </button>
-                </div>
-
-            </form>
+                    </span>
+                    <span wire:loading wire:target="goToStep2">
+                        <span class="spinner-border spinner-border-sm me-2"></span> Przechodzę dalej…
+                    </span>
+                </button>
+            </div>
         </div>
 
     {{-- ════════════════════════════════════════════════════════════════════ --}}
