@@ -33,16 +33,24 @@ class GeminiService
 
     public function __construct()
     {
-        $key = config('services.gemini.api_key');
-
-        if (blank($key)) {
-            throw GeminiApiKeyMissingException::notConfigured();
-        }
-
-        $this->apiKey     = $key;
+        // We store whatever is configured — validation happens at call-time
+        // so the Livewire page loads even when the key is not yet set.
+        $this->apiKey     = (string) config('services.gemini.api_key', '');
         $this->textModel  = config('services.gemini.text_model',  'gemini-1.5-pro');
         $this->imageModel = config('services.gemini.image_model', 'imagen-3.0-generate-002');
         $this->timeout    = (int) config('services.gemini.timeout', 60);
+    }
+
+    /**
+     * Assert API key is present before any network call.
+     *
+     * @throws GeminiApiKeyMissingException
+     */
+    private function assertKeyConfigured(): void
+    {
+        if (blank($this->apiKey)) {
+            throw GeminiApiKeyMissingException::notConfigured();
+        }
     }
 
     /**
@@ -56,6 +64,8 @@ class GeminiService
      */
     public function generateText(string $systemPrompt, string $userPrompt): string
     {
+        $this->assertKeyConfigured();
+
         $url = self::BASE_URL . $this->textModel . ':generateContent?key=' . $this->apiKey;
 
         $payload = [
@@ -112,6 +122,8 @@ class GeminiService
      */
     public function generateImage(string $prompt): string
     {
+        $this->assertKeyConfigured();
+
         // Imagen uses a different endpoint format
         $url = 'https://generativelanguage.googleapis.com/v1beta/models/'
             . $this->imageModel

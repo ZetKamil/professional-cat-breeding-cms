@@ -54,7 +54,10 @@ class AiBlogGeneratorServiceTest extends TestCase
 
         $this->expectException(GeminiApiKeyMissingException::class);
 
-        app(GeminiService::class);
+        // Key is validated at call-time, not construction time
+        // (page loads fine; error appears only when user clicks Generate)
+        $service = new GeminiService();
+        $service->generateText('system', 'user');
     }
 
     public function test_throws_when_api_key_is_empty_string(): void
@@ -63,7 +66,8 @@ class AiBlogGeneratorServiceTest extends TestCase
 
         $this->expectException(GeminiApiKeyMissingException::class);
 
-        app(GeminiService::class);
+        $service = new GeminiService();
+        $service->generateText('system', 'user');
     }
 
     public function test_service_unavailable_propagates_to_caller(): void
