@@ -51,7 +51,7 @@ return [
     */
     'gemini' => [
         'api_key'     => env('GEMINI_API_KEY'),
-        'text_model'  => env('GEMINI_TEXT_MODEL', 'gemini-1.5-flash'),
+        'text_model'  => env('GEMINI_TEXT_MODEL', 'gemini-flash-latest'),
         'image_model' => env('GEMINI_IMAGE_MODEL', 'imagen-3.0-generate-002'),
         'timeout'     => (int) env('GEMINI_TIMEOUT', 60),
     ],

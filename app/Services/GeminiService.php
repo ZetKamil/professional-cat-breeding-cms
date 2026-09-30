@@ -36,7 +36,7 @@ class GeminiService
         // We store whatever is configured — trim any quotes/spaces from .env
         $rawKey           = (string) config('services.gemini.api_key', '');
         $this->apiKey     = trim($rawKey, " \t\n\r\0\x0B\"'");
-        $this->textModel  = (string) config('services.gemini.text_model',  'gemini-1.5-flash');
+        $this->textModel  = (string) config('services.gemini.text_model',  'gemini-flash-latest');
         $this->imageModel = (string) config('services.gemini.image_model', 'imagen-3.0-generate-002');
         $this->timeout    = (int) config('services.gemini.timeout', 60);
     }
@@ -114,10 +114,10 @@ class GeminiService
             throw GeminiServiceUnavailableException::timeout();
         }
 
-        // Automatic fallback if model returns 404 (e.g. gemini-1.5-pro or specific model unavailable)
-        if ($response->status() === 404 && $this->textModel !== 'gemini-1.5-flash') {
-            Log::info("GeminiService: model {$this->textModel} returned 404, falling back to gemini-1.5-flash");
-            $fallbackUrl = self::BASE_URL . 'gemini-1.5-flash:generateContent';
+        // Automatic fallback if model returns 404
+        if ($response->status() === 404 && $this->textModel !== 'gemini-flash-latest') {
+            Log::info("GeminiService: model {$this->textModel} returned 404, falling back to gemini-flash-latest");
+            $fallbackUrl = self::BASE_URL . 'gemini-flash-latest:generateContent';
             try {
                 $response = $this->sendPostRequest($fallbackUrl, $payload);
             } catch (ConnectionException) {
