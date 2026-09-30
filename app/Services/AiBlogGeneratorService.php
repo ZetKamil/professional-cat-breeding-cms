@@ -51,17 +51,36 @@ class AiBlogGeneratorService
     }
 
     /**
-     * Generate a decorative hero image for a post cover.
-     * Delegates to GeminiService — exposed here so the Livewire component
-     * only needs to depend on this one service.
+     * Generate a decorative hero image for a post cover and attach it via MediaService.
      *
-     * Returns base64 data URI or empty string on failure.
-     *
-     * @throws GeminiServiceUnavailableException
+     * @param  string            $prompt Image prompt for Imagen
+     * @param  \App\Models\Post  $post   Created Post model
+     * @return \App\Models\Media|null
      */
-    public function generateHeroImage(string $prompt): string
+    public function generateHeroImage(string $prompt, \App\Models\Post $post): ?\App\Models\Media
     {
-        return $this->gemini->generateImage($prompt);
+        $base64 = $this->gemini->generateImage($prompt);
+
+        if (blank($base64)) {
+            return null;
+        }
+
+        $imageData = base64_decode($base64);
+        if (! $imageData) {
+            return null;
+        }
+
+        $tmpPath = sys_get_temp_dir() . '/gemini_hero_' . uniqid() . '.png';
+        file_put_contents($tmpPath, $imageData);
+
+        try {
+            $uploadedFile = new \Illuminate\Http\UploadedFile($tmpPath, 'hero.png', 'image/png', null, true);
+            return app(MediaService::class)->upload($post, $uploadedFile, 'posts');
+        } finally {
+            if (file_exists($tmpPath)) {
+                @unlink($tmpPath);
+            }
+        }
     }
 
 

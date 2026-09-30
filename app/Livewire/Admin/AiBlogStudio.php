@@ -12,6 +12,7 @@ use App\Services\PostService;
 use App\Services\TopicSuggesterService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 /**
@@ -139,25 +140,9 @@ class AiBlogStudio extends Component
         }
     }
 
-    public function generateHeroImage(AiBlogGeneratorService $blogService): void
-    {
-        if (! $this->generatedDraft || blank($this->generatedDraft['hero_image_prompt'] ?? '')) {
-            return;
-        }
-
-        try {
-            $this->heroImageDataUri = $blogService->generateHeroImage(
-                $this->generatedDraft['hero_image_prompt']
-            );
-        } catch (\Throwable) {
-            // Hero image is optional — fail silently, user can publish without it
-            $this->heroImageDataUri = '';
-        }
-    }
-
     // ─── Step 3: Save Draft ─────────────────────────────────────────
 
-    public function saveDraft(PostService $postService): void
+    public function saveDraft(PostService $postService, AiBlogGeneratorService $blogService): void
     {
         if (! $this->generatedDraft) {
             return;
@@ -179,17 +164,31 @@ class AiBlogStudio extends Component
             $draft['body'] = $this->injectAnimalPhotos($draft['body'] ?? '');
 
             $post = $postService->create([
-                'user_id'      => $draft['user_id'],
-                'title'        => $draft['title'],
-                'slug'         => $draft['slug'],
-                'excerpt'      => $draft['excerpt'],
-                'body'         => $draft['body'],
-                'is_published' => false,  // hardcoded — human must publish manually
-                'published_at' => null,
-                'categories'   => [],
+                'user_id'          => $draft['user_id'],
+                'title'            => $draft['title'],
+                'slug'             => $draft['slug'],
+                'excerpt'          => $draft['excerpt'],
+                'body'             => $draft['body'],
+                'meta_title'       => $draft['meta_title'] ?? null,
+                'meta_description' => $draft['meta_description'] ?? null,
+                'is_published'     => false,  // hardcoded — human must publish manually
+                'published_at'     => null,
+                'categories'       => [],
             ]);
 
-            $this->successMessage = "Szkic \"{$post->title}\" został zapisany! Możesz go teraz przejrzeć i opublikować.";
+            // Auto-generate decorative AI cover image via Imagen
+            if (! empty($draft['hero_image_prompt'])) {
+                try {
+                    $blogService->generateHeroImage($draft['hero_image_prompt'], $post);
+                } catch (\Throwable $e) {
+                    Log::warning('AI Blog Studio: failed to generate hero cover image', [
+                        'post_id' => $post->id,
+                        'error'   => $e->getMessage(),
+                    ]);
+                }
+            }
+
+            $this->successMessage = "Szkic \"{$post->title}\" został zapisany! Okładka AI i zdjęcia kotów są już wstawione.";
             $this->generatedDraft  = null;
             $this->currentStep     = 1;
             $this->reset(['selectedTopic', 'customTopic', 'selectedAnimalIds', 'heroImageDataUri']);

@@ -29,6 +29,8 @@ class Post extends Model
         'slug',
         'excerpt',
         'body',
+        'meta_title',
+        'meta_description',
         'is_published',
         'published_at',
         'created_by',

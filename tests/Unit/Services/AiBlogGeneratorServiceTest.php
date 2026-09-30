@@ -139,4 +139,21 @@ class AiBlogGeneratorServiceTest extends TestCase
             'Slug must be URL-safe lowercase'
         );
     }
+
+    public function test_generate_hero_image_returns_null_when_base64_empty(): void
+    {
+        $this->mock(GeminiService::class, function (MockInterface $mock) {
+            $mock->shouldReceive('generateImage')
+                ->once()
+                ->andReturn('');
+        });
+
+        Config::set('services.gemini.api_key', 'test-key-123');
+
+        $service = app(AiBlogGeneratorService::class);
+        $post    = new \App\Models\Post();
+        $media   = $service->generateHeroImage('cat prompt', $post);
+
+        $this->assertNull($media);
+    }
 }

@@ -165,7 +165,9 @@ class GeminiService
             return '';
         }
 
-        return 'data:image/png;base64,' . $predictions[0]['bytesBase64Encoded'];
+        // Return raw base64 (no data URI prefix).
+        // Callers decode this and save via MediaService.
+        return $predictions[0]['bytesBase64Encoded'];
     }
 
     /**

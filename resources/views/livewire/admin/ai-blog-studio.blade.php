@@ -244,39 +244,17 @@
                     </div>
                 </div>
 
-                {{-- ─── Hero Image ────────────────────────────────────────── --}}
+                {{-- ─── Hero Image Info ────────────────────────────────────── --}}
                 <div class="card border-0 bg-light mb-4">
                     <div class="card-body">
                         <h6 class="card-title text-muted text-uppercase small fw-bold mb-2">
-                            <i class="fas fa-image me-1"></i> Grafika okładkowa (dekoracyjna)
+                            <i class="fas fa-image me-1"></i> Grafika okładkowa (dekoracyjna AI)
                         </h6>
-
-                        @if($heroImageDataUri)
-                            <img src="{{ $heroImageDataUri }}"
-                                 alt="Wygenerowana okładka"
-                                 class="img-fluid rounded mb-2"
-                                 style="max-height:300px; object-fit:cover;">
-                        @else
-                            <p class="small text-muted mb-2">
-                                Grafika okładkowa nie została jeszcze wygenerowana.
-                                Kliknij poniżej, aby stworzyć AI ilustrację (opcjonalne).
-                            </p>
-                            <button type="button"
-                                    wire:click="generateHeroImage"
-                                    wire:loading.attr="disabled"
-                                    wire:target="generateHeroImage"
-                                    class="btn btn-sm btn-outline-secondary">
-                                <span wire:loading.remove wire:target="generateHeroImage">
-                                    <i class="fas fa-image me-1"></i> Generuj grafikę okładkową (Gemini)
-                                </span>
-                                <span wire:loading wire:target="generateHeroImage">
-                                    <span class="spinner-border spinner-border-sm"></span> Generuję…
-                                </span>
-                            </button>
-                            <p class="text-muted small mt-1 mb-0">
-                                Uwaga: Prawdziwe zdjęcia kotów są już wstawione w treść artykułu poniżej.
-                            </p>
-                        @endif
+                        <p class="small text-muted mb-0">
+                            <i class="fas fa-magic me-1 text-primary"></i>
+                            Dekoracyjna okładka z AI (Gemini Imagen) zostanie wygenerowana automatycznie podczas zapisywania szkicu i dołączona do artykułu.
+                            Prawdziwe zdjęcia wybranych kotów z hodowli zostały już wstawione bezpośrednio w treść poniżej.
+                        </p>
                     </div>
                 </div>
 
