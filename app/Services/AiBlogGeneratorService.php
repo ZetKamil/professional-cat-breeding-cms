@@ -41,7 +41,8 @@ class AiBlogGeneratorService
     {
         $query = Animal::published()
             ->with(['media', 'gallery'])
-            ->orderByStatus();
+            ->orderBy('status')
+            ->orderBy('name');
 
         if ($breedFilter) {
             $query->where('breed', 'like', "%{$breedFilter}%");
