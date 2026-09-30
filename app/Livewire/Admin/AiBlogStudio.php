@@ -97,7 +97,14 @@ class AiBlogStudio extends Component
     public function selectTopic(string $topic): void
     {
         $this->selectedTopic = $topic;
-        $this->customTopic   = '';
+        $this->customTopic   = $topic;
+    }
+
+    public function updatedCustomTopic(): void
+    {
+        if ($this->customTopic !== $this->selectedTopic) {
+            $this->selectedTopic = '';
+        }
     }
 
     public function goToStep2(): void
