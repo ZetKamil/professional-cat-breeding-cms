@@ -48,8 +48,28 @@ class GeminiService
      */
     private function assertKeyConfigured(): void
     {
-        if (blank($this->apiKey)) {
+        if (blank($this->apiKey) || $this->apiKey === '?' || str_contains($this->apiKey, 'YOUR_API_KEY')) {
             throw GeminiApiKeyMissingException::notConfigured();
+        }
+    }
+
+    /**
+     * Send HTTP POST request with automatic SSL bundle fallback.
+     */
+    private function sendPostRequest(string $url, array $payload): \Illuminate\Http\Client\Response
+    {
+        try {
+            return Http::timeout($this->timeout)
+                ->withHeaders(['Content-Type' => 'application/json'])
+                ->post($url, $payload);
+        } catch (ConnectionException $e) {
+            if (str_contains($e->getMessage(), 'SSL') || str_contains($e->getMessage(), 'cURL error 60')) {
+                return Http::withoutVerifying()
+                    ->timeout($this->timeout)
+                    ->withHeaders(['Content-Type' => 'application/json'])
+                    ->post($url, $payload);
+            }
+            throw $e;
         }
     }
 
@@ -83,22 +103,18 @@ class GeminiService
         ];
 
         try {
-            $response = Http::timeout($this->timeout)
-                ->withHeaders(['Content-Type' => 'application/json'])
-                ->post($url, $payload);
+            $response = $this->sendPostRequest($url, $payload);
         } catch (ConnectionException) {
             Log::warning('GeminiService: connection timeout', ['model' => $this->textModel]);
             throw GeminiServiceUnavailableException::timeout();
         }
 
-        // Automatic fallback if model returns 404 (e.g. gemini-1.5-pro unavailable)
+        // Automatic fallback if model returns 404 (e.g. gemini-1.5-pro or specific model unavailable)
         if ($response->status() === 404 && $this->textModel !== 'gemini-1.5-flash') {
             Log::info("GeminiService: model {$this->textModel} returned 404, falling back to gemini-1.5-flash");
             $fallbackUrl = self::BASE_URL . 'gemini-1.5-flash:generateContent?key=' . $this->apiKey;
             try {
-                $response = Http::timeout($this->timeout)
-                    ->withHeaders(['Content-Type' => 'application/json'])
-                    ->post($fallbackUrl, $payload);
+                $response = $this->sendPostRequest($fallbackUrl, $payload);
             } catch (ConnectionException) {
                 throw GeminiServiceUnavailableException::timeout();
             }
@@ -152,9 +168,7 @@ class GeminiService
         ];
 
         try {
-            $response = Http::timeout($this->timeout)
-                ->withHeaders(['Content-Type' => 'application/json'])
-                ->post($url, $payload);
+            $response = $this->sendPostRequest($url, $payload);
         } catch (ConnectionException) {
             Log::warning('GeminiService: image generation timeout');
             throw GeminiServiceUnavailableException::timeout();
