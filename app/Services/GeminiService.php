@@ -33,9 +33,9 @@ class GeminiService
 
     public function __construct()
     {
-        // We store whatever is configured — validation happens at call-time
-        // so the Livewire page loads even when the key is not yet set.
-        $this->apiKey     = (string) config('services.gemini.api_key', '');
+        // We store whatever is configured — trim any quotes/spaces from .env
+        $rawKey           = (string) config('services.gemini.api_key', '');
+        $this->apiKey     = trim($rawKey, " \t\n\r\0\x0B\"'");
         $this->textModel  = (string) config('services.gemini.text_model',  'gemini-1.5-flash');
         $this->imageModel = (string) config('services.gemini.image_model', 'imagen-3.0-generate-002');
         $this->timeout    = (int) config('services.gemini.timeout', 60);
@@ -54,19 +54,24 @@ class GeminiService
     }
 
     /**
-     * Send HTTP POST request with automatic SSL bundle fallback.
+     * Send HTTP POST request with x-goog-api-key header and automatic SSL bundle fallback.
      */
     private function sendPostRequest(string $url, array $payload): \Illuminate\Http\Client\Response
     {
+        $headers = [
+            'Content-Type'   => 'application/json',
+            'x-goog-api-key' => $this->apiKey,
+        ];
+
         try {
             return Http::timeout($this->timeout)
-                ->withHeaders(['Content-Type' => 'application/json'])
+                ->withHeaders($headers)
                 ->post($url, $payload);
         } catch (ConnectionException $e) {
             if (str_contains($e->getMessage(), 'SSL') || str_contains($e->getMessage(), 'cURL error 60')) {
                 return Http::withoutVerifying()
                     ->timeout($this->timeout)
-                    ->withHeaders(['Content-Type' => 'application/json'])
+                    ->withHeaders($headers)
                     ->post($url, $payload);
             }
             throw $e;
@@ -86,7 +91,7 @@ class GeminiService
     {
         $this->assertKeyConfigured();
 
-        $url = self::BASE_URL . $this->textModel . ':generateContent?key=' . $this->apiKey;
+        $url = self::BASE_URL . $this->textModel . ':generateContent';
 
         $payload = [
             'system_instruction' => [
@@ -112,7 +117,7 @@ class GeminiService
         // Automatic fallback if model returns 404 (e.g. gemini-1.5-pro or specific model unavailable)
         if ($response->status() === 404 && $this->textModel !== 'gemini-1.5-flash') {
             Log::info("GeminiService: model {$this->textModel} returned 404, falling back to gemini-1.5-flash");
-            $fallbackUrl = self::BASE_URL . 'gemini-1.5-flash:generateContent?key=' . $this->apiKey;
+            $fallbackUrl = self::BASE_URL . 'gemini-1.5-flash:generateContent';
             try {
                 $response = $this->sendPostRequest($fallbackUrl, $payload);
             } catch (ConnectionException) {
@@ -153,10 +158,8 @@ class GeminiService
     {
         $this->assertKeyConfigured();
 
-        // Imagen uses a different endpoint format
-        $url = 'https://generativelanguage.googleapis.com/v1beta/models/'
-            . $this->imageModel
-            . ':predict?key=' . $this->apiKey;
+        // Imagen uses predict endpoint with x-goog-api-key header
+        $url = self::BASE_URL . $this->imageModel . ':predict';
 
         $payload = [
             'instances'  => [['prompt' => $prompt]],

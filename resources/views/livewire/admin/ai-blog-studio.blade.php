@@ -112,8 +112,7 @@
                 </label>
                 <input type="text"
                        id="customTopic"
-                       wire:model.live="customTopic"
-                       wire:focus="$set('selectedTopic', '')"
+                       wire:model.live.debounce.150ms="customTopic"
                        class="form-control form-control-lg"
                        placeholder="Np. Jak przygotować dom na nowego kociaka bengalskiego?">
             </div>
@@ -123,8 +122,7 @@
                 <button type="button"
                         wire:click="goToStep2"
                         id="step1-next-btn"
-                        class="btn btn-primary btn-lg"
-                        @if(blank($selectedTopic) && blank($customTopic)) disabled @endif>
+                        class="btn btn-primary btn-lg">
                     Dalej: Wybierz koty →
                 </button>
             </div>
