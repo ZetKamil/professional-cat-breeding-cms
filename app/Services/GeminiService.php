@@ -36,8 +36,8 @@ class GeminiService
         // We store whatever is configured — validation happens at call-time
         // so the Livewire page loads even when the key is not yet set.
         $this->apiKey     = (string) config('services.gemini.api_key', '');
-        $this->textModel  = config('services.gemini.text_model',  'gemini-1.5-pro');
-        $this->imageModel = config('services.gemini.image_model', 'imagen-3.0-generate-002');
+        $this->textModel  = (string) config('services.gemini.text_model',  'gemini-1.5-flash');
+        $this->imageModel = (string) config('services.gemini.image_model', 'imagen-3.0-generate-002');
         $this->timeout    = (int) config('services.gemini.timeout', 60);
     }
 
@@ -89,6 +89,19 @@ class GeminiService
         } catch (ConnectionException) {
             Log::warning('GeminiService: connection timeout', ['model' => $this->textModel]);
             throw GeminiServiceUnavailableException::timeout();
+        }
+
+        // Automatic fallback if model returns 404 (e.g. gemini-1.5-pro unavailable)
+        if ($response->status() === 404 && $this->textModel !== 'gemini-1.5-flash') {
+            Log::info("GeminiService: model {$this->textModel} returned 404, falling back to gemini-1.5-flash");
+            $fallbackUrl = self::BASE_URL . 'gemini-1.5-flash:generateContent?key=' . $this->apiKey;
+            try {
+                $response = Http::timeout($this->timeout)
+                    ->withHeaders(['Content-Type' => 'application/json'])
+                    ->post($fallbackUrl, $payload);
+            } catch (ConnectionException) {
+                throw GeminiServiceUnavailableException::timeout();
+            }
         }
 
         if ($response->status() === 429) {

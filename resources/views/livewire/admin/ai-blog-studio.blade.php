@@ -54,7 +54,7 @@
                 </label>
                 <div class="row g-2">
                     @foreach($breeds as $key => $label)
-                        <div class="col-12 col-md-4">
+                        <div class="col-12 col-md-4" wire:key="breed-card-{{ $key }}">
                             <button type="button"
                                     wire:click="selectBreed('{{ $key }}')"
                                     id="breed-btn-{{ $key }}"
@@ -88,7 +88,7 @@
                 @else
                     <div class="row g-2">
                         @foreach($topics as $i => $topic)
-                            <div class="col-12 col-md-6">
+                            <div class="col-12 col-md-6" wire:key="topic-card-{{ $i }}-{{ $selectedBreed }}">
                                 <button type="button"
                                         wire:click="selectTopic('{{ addslashes($topic['title']) }}')"
                                         id="topic-btn-{{ $i }}"
