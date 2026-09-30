@@ -140,7 +140,8 @@ Route::match(['get', 'post'], '/check-media', function (\Illuminate\Http\Request
     if ($request->has('run_migrate') || $request->input('run_migrate') === '1') {
         try {
             \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-            $migrateOutput = "Sukces! Migracje zostały wykonane: <br><pre style='background:#ecfdf5; padding:10px; border-radius:6px; font-size:12px; margin-top:8px;'>" . e(\Illuminate\Support\Facades\Artisan::output()) . "</pre>";
+            \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+            $migrateOutput = "Sukces! Migracje i czyszczenie pamięci podręcznej (optimize:clear) zostały wykonane:<br><pre style='background:#ecfdf5; padding:10px; border-radius:6px; font-size:12px; margin-top:8px;'>" . e(\Illuminate\Support\Facades\Artisan::output()) . "</pre>";
         } catch (\Throwable $e) {
             $migrateOutput = "<span style='color:#dc2626;'>Błąd migracji: " . e($e->getMessage()) . "</span>";
         }
@@ -546,5 +547,28 @@ Route::middleware(['auth', 'verified', 'active'])
         Route::get('media-api', [MediaController::class, 'api'])->name('media.api');
         Route::resource('media', MediaController::class);
     });
+
+
+// Deployment sync route: runs migrations & clears cache via browser
+Route::get('/deploy-sync', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        $migrateOut = \Illuminate\Support\Facades\Artisan::output();
+
+        \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+        $clearOut = \Illuminate\Support\Facades\Artisan::output();
+
+        return response("<div style='font-family:sans-serif; padding:30px; max-width:700px; margin:40px auto; background:#f0fdf4; border:1px solid #10b981; border-radius:12px;'>"
+            . "<h2 style='color:#065f46; margin-top:0;'>✅ System Zsynchronizowany!</h2>"
+            . "<p>Baza danych i pamięć podręczna zostały zaktualizowane.</p>"
+            . "<h4>Migracje:</h4><pre style='background:#fff; padding:10px; border-radius:6px;'>" . e($migrateOut ?: 'Brak nowych migracji.') . "</pre>"
+            . "<h4>Kesz (optimize:clear):</h4><pre style='background:#fff; padding:10px; border-radius:6px;'>" . e($clearOut) . "</pre>"
+            . "<a href='" . route('backend.posts.ai-studio') . "' style='display:inline-block; margin-top:15px; background:#059669; color:#fff; padding:10px 20px; border-radius:8px; text-decoration:none; font-weight:bold;'>Przejdź do AI Blog Studio →</a>"
+            . "</div>");
+    } catch (\Throwable $e) {
+        return response("<div style='font-family:sans-serif; padding:30px; max-width:700px; margin:40px auto; background:#fef2f2; border:1px solid #f87171; border-radius:12px; color:#991b1b;'>"
+            . "<h2>❌ Błąd aktualizacji:</h2><pre>" . e($e->getMessage()) . "</pre></div>", 500);
+    }
+});
 
 require __DIR__.'/settings.php';
