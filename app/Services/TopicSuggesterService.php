@@ -112,32 +112,37 @@ class TopicSuggesterService
 
     private function seasonalTopics(string $breedKey, string $season): array
     {
-        $breedLabel = self::BREEDS[$breedKey] ?? 'kota';
+        $genitiveMap = [
+            'bengalski'  => 'kota bengalskiego',
+            'brytyjski'  => 'kota brytyjskiego',
+            'maine-coon' => 'Maine Coona',
+        ];
+        $breedGenitive = $genitiveMap[$breedKey] ?? 'kota';
 
         return match ($season) {
             'wiosna' => [
-                ['title' => "Wiosenne odrobaczanie {$breedLabel} – kiedy i jak?",
-                 'keyword' => "odrobaczanie {$breedLabel}", 'intent' => 'informational'],
-                ['title' => "Alergie wiosenne u {$breedLabel} – objawy i leczenie",
-                 'keyword' => "alergie {$breedLabel}", 'intent' => 'informational'],
+                ['title' => "Wiosenne linienie u {$breedGenitive} – jak dbać o sierść?",
+                 'keyword' => "linienie {$breedGenitive}", 'intent' => 'informational'],
+                ['title' => "Bezpieczny balkon dla {$breedGenitive} – siatki i zabezpieczenia",
+                 'keyword' => "balkon dla kota", 'intent' => 'informational'],
             ],
             'lato' => [
-                ['title' => "Jak chronić {$breedLabel} przed upałem latem?",
-                 'keyword' => "{$breedLabel} upał lato", 'intent' => 'informational'],
-                ['title' => "Wakacje z {$breedLabel} – podróż i opieka",
-                 'keyword' => "{$breedLabel} wakacje", 'intent' => 'informational'],
+                ['title' => "Jak uchronić {$breedGenitive} przed upałami?",
+                 'keyword' => "{$breedGenitive} upał", 'intent' => 'informational'],
+                ['title' => "Wakacyjny wyjazd a {$breedGenitive} – hotel czy opieka w domu?",
+                 'keyword' => "{$breedGenitive} wakacje", 'intent' => 'informational'],
             ],
             'jesień' => [
-                ['title' => "Jesienne szczepienia {$breedLabel} – harmonogram",
-                 'keyword' => "szczepienia {$breedLabel}", 'intent' => 'informational'],
-                ['title' => "Zima zbliża się – jak przygotować {$breedLabel} na chłody?",
-                 'keyword' => "{$breedLabel} zima przygotowanie", 'intent' => 'informational'],
+                ['title' => "Jesienne wzmocnienie odporności u {$breedGenitive}",
+                 'keyword' => "odporność {$breedGenitive}", 'intent' => 'informational'],
+                ['title' => "Jesienne wieczory z {$breedGenitive} – najlepsze zabawki i aktywności",
+                 'keyword' => "zabawki dla {$breedGenitive}", 'intent' => 'informational'],
             ],
             'zima' => [
-                ['title' => "Grudniowe kocięta – jak zadbać o kota na święta?",
-                 'keyword' => "{$breedLabel} święta", 'intent' => 'informational'],
-                ['title' => "Nowy rok, nowy kot – poradnik dla przyszłego właściciela {$breedLabel}",
-                 'keyword' => "zakup {$breedLabel}", 'intent' => 'commercial'],
+                ['title' => "Bezpieczne święta z {$breedGenitive} – choinka i trujące rośliny",
+                 'keyword' => "{$breedGenitive} święta", 'intent' => 'informational'],
+                ['title' => "Nowy rok z {$breedGenitive} – jak pomóc przetrwać sylwestrowe hałasy?",
+                 'keyword' => "{$breedGenitive} sylwester", 'intent' => 'informational'],
             ],
             default => [],
         };
