@@ -19,7 +19,7 @@ class TopicSuggesterServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->service = new TopicSuggesterService();
+        $this->service = app(TopicSuggesterService::class);
     }
 
     public function test_suggest_returns_array_for_bengalski(): void

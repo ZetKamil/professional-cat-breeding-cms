@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Models\TrendingTopic;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Provides breed-specific, seasonally-aware blog topic suggestions.
  *
- * Topics are curated to match real buyer search intent and seasonal
- * peaks in Poland. They respects the Katten tone of voice:
- * educational first, never salesy.
- *
- * This service is pure — no DB queries, no external API calls.
- * All topics are statically defined and can be extended.
+ * Architecture:
+ * 1. Checks DB table `trending_topics` for today's AI-generated trends per breed.
+ * 2. If not found in DB today, queries Gemini API for current search trends in Poland.
+ * 3. Saves newly fetched AI trends to DB (`trending_topics` table) for caching today.
+ * 4. Falls back to curated static topics if API is unavailable or unconfigured.
  */
 class TopicSuggesterService
 {
@@ -23,10 +24,14 @@ class TopicSuggesterService
      * Keys are used as identifiers in the Livewire component.
      */
     public const BREEDS = [
-        'bengalski' => 'Kot Bengalski',
-        'brytyjski' => 'Kot Brytyjski',
+        'bengalski'  => 'Kot Bengalski',
+        'brytyjski'  => 'Kot Brytyjski',
         'maine-coon' => 'Maine Coon',
     ];
+
+    public function __construct(
+        private readonly GeminiService $gemini
+    ) {}
 
     /**
      * Return 5–6 topic suggestions for the given breed and current month.
@@ -36,19 +41,44 @@ class TopicSuggesterService
      */
     public function suggest(string $breedKey): array
     {
-        $month   = (int) Carbon::now()->format('n');
-        $season  = $this->currentSeason($month);
-        $breed   = self::BREEDS[$breedKey] ?? 'Kot Bengalski';
-        $topics  = $this->breedTopics($breedKey);
-        $seasonal = $this->seasonalTopics($breedKey, $season);
+        $today = Carbon::today()->toDateString();
 
-        // Merge seasonal (first) + evergreen, deduplicate, return top 6
-        $merged = array_values(array_unique(
-            array_merge($seasonal, $topics),
-            SORT_REGULAR
-        ));
+        // 1. Check DB cache first
+        try {
+            $cached = TrendingTopic::where('breed', $breedKey)
+                ->where('fetched_date', $today)
+                ->first();
 
-        return array_slice($merged, 0, 6);
+            if ($cached && ! empty($cached->topics) && is_array($cached->topics)) {
+                Log::info('TopicSuggesterService: returning cached trends from DB', [
+                    'breed' => $breedKey,
+                    'date'  => $today,
+                ]);
+                return $cached->topics;
+            }
+        } catch (\Throwable $e) {
+            Log::warning('TopicSuggesterService: DB cache check failed', ['error' => $e->getMessage()]);
+        }
+
+        // 2. Fetch live trends from Gemini API
+        $liveTopics = $this->fetchLiveTrendsFromGemini($breedKey);
+
+        if (! empty($liveTopics)) {
+            // Store in DB for today
+            try {
+                TrendingTopic::updateOrCreate(
+                    ['breed' => $breedKey, 'fetched_date' => $today],
+                    ['topics' => $liveTopics]
+                );
+            } catch (\Throwable $e) {
+                Log::warning('TopicSuggesterService: failed to cache trends to DB', ['error' => $e->getMessage()]);
+            }
+
+            return $liveTopics;
+        }
+
+        // 3. Fallback to curated static topics if API fails/unavailable
+        return $this->fallbackTopics($breedKey);
     }
 
     /**
@@ -59,7 +89,87 @@ class TopicSuggesterService
         return self::BREEDS;
     }
 
-    // ─── Private Topic Banks ─────────────────────────────────────────
+    // ─── AI Live Trend Fetcher ───────────────────────────────────────
+
+    /**
+     * Query Gemini API for live, search-trending article topics in Poland.
+     */
+    private function fetchLiveTrendsFromGemini(string $breedKey): array
+    {
+        $breedName = self::BREEDS[$breedKey] ?? 'Kot Bengalski';
+        $currentMonthYear = Carbon::now()->translatedFormat('F Y');
+
+        $systemPrompt = <<<PROMPT
+You are a senior SEO keyword analyst and content strategy expert for a high-end Polish cat breeding cattery.
+Your goal is to suggest 6 highly engaging, search-trending blog post topics in Polish for cat owners and prospective kitten buyers.
+
+Rules:
+1. All titles MUST be in natural Polish with correct grammar and noun declensions (e.g. "kota bengalskiego", "kota brytyjskiego", "Maine Coona").
+2. Mix evergreen high-volume search queries (price/cost, feeding/diet, temperament with children, health/genetics) with current seasonal interests for {$currentMonthYear}.
+3. Respond ONLY with a valid JSON array of 6 objects. Do not include markdown code blocks or additional text.
+
+JSON Schema:
+[
+  {
+    "title": "Title in Polish",
+    "keyword": "main target keyword",
+    "intent": "informational" | "commercial"
+  }
+]
+PROMPT;
+
+        $userPrompt = "Suggest 6 trending blog post topics for breed '{$breedName}' for {$currentMonthYear} in Poland.";
+
+        try {
+            $rawResponse = $this->gemini->generateText($systemPrompt, $userPrompt);
+            $parsed      = json_decode($rawResponse, true);
+
+            if (is_array($parsed) && count($parsed) >= 3) {
+                $clean = [];
+                foreach ($parsed as $item) {
+                    if (isset($item['title'], $item['keyword'])) {
+                        $clean[] = [
+                            'title'   => (string) $item['title'],
+                            'keyword' => (string) $item['keyword'],
+                            'intent'  => (string) ($item['intent'] ?? 'informational'),
+                        ];
+                    }
+                }
+
+                if (count($clean) >= 3) {
+                    Log::info('TopicSuggesterService: fetched fresh trends from Gemini API', [
+                        'breed' => $breedKey,
+                        'count' => count($clean),
+                    ]);
+                    return array_slice($clean, 0, 6);
+                }
+            }
+        } catch (\Throwable $e) {
+            Log::warning('TopicSuggesterService: Gemini API live trends fetch failed', [
+                'breed' => $breedKey,
+                'error' => $e->getMessage(),
+            ]);
+        }
+
+        return [];
+    }
+
+    // ─── Fallback Static Topics ──────────────────────────────────────
+
+    private function fallbackTopics(string $breedKey): array
+    {
+        $month   = (int) Carbon::now()->format('n');
+        $season  = $this->currentSeason($month);
+        $topics  = $this->breedTopics($breedKey);
+        $seasonal = $this->seasonalTopics($breedKey, $season);
+
+        $merged = array_values(array_unique(
+            array_merge($seasonal, $topics),
+            SORT_REGULAR
+        ));
+
+        return array_slice($merged, 0, 6);
+    }
 
     private function breedTopics(string $breedKey): array
     {
