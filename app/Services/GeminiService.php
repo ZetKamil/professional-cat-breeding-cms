@@ -128,13 +128,13 @@ class GeminiService
         // Topic suggestions need speed, not a 60s budget. Images use the full timeout.
         $textTimeout = min($this->timeout, 10);
 
-        // Try at most 2 models — primary + one fallback.
-        // Fewer models = faster fallback to curated topics when API is down.
-        $modelsToTry = array_slice(array_unique(array_filter([
+        // Try primary model + fallbacks (gemini-2.5-flash, gemini-2.0-flash, gemini-1.5-flash)
+        $modelsToTry = array_values(array_unique(array_filter([
             $this->textModel,
+            'gemini-2.5-flash',
             'gemini-2.0-flash',
             'gemini-1.5-flash',
-        ])), 0, 2);
+        ])));
 
         $payload = [
             'system_instruction' => [
