@@ -1,6 +1,12 @@
 {{-- AI Blog Studio — 3-step wizard with AI Agent & MCP Tools Integration --}}
 <div>
 
+    {{-- ─── Global Livewire Action Loading Bar ────────────────────────── --}}
+    <div wire:loading class="alert alert-info d-flex align-items-center justify-content-center gap-2 mb-3 py-2 shadow-sm" style="border-radius: 8px;">
+        <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+        <span class="fw-bold text-dark">Agent AI wykonuje zapytanie... proszę czekać.</span>
+    </div>
+
     {{-- ─── Progress Bar ────────────────────────────────────────────────── --}}
     <div class="mb-4">
         <div class="d-flex justify-content-between align-items-center mb-2">
@@ -62,7 +68,7 @@
                             <button type="button"
                                     wire:click="selectBreed('{{ $key }}')"
                                     id="breed-btn-{{ $key }}"
-                                    class="btn w-100 {{ $selectedBreed === $key ? 'btn-primary' : 'btn-outline-secondary' }}">
+                                    class="btn w-100 {{ $selectedBreed === $key ? 'btn-primary fw-bold' : 'btn-outline-secondary' }}">
                                 {{ $label }}
                             </button>
                         </div>
@@ -82,7 +88,6 @@
                     <button type="button"
                             wire:click="fetchTopics"
                             wire:loading.attr="disabled"
-                            wire:target="fetchTopics"
                             class="btn btn-sm btn-outline-dark ms-auto flex-shrink-0">
                         <span wire:loading.remove wire:target="fetchTopics">
                             <i class="fas fa-rotate me-1"></i>Ponów próbę
@@ -101,13 +106,12 @@
                     {{-- === STAN POCZĄTKOWY: Brak akcji aż do kliknięcia przycisku === --}}
                     <div class="text-center py-4 border rounded bg-light">
                         <p class="text-muted mb-3">
-                            Tematy nie są ładowane automatycznie.<br>
+                            Tematy z AI nie są ładowane automatycznie.<br>
                             Kliknij przycisk poniżej, aby Agent AI pobrał najnowsze trendy dla rasy <strong>{{ $breeds[$selectedBreed] ?? $selectedBreed }}</strong>.
                         </p>
                         <button type="button"
                                 wire:click="fetchTopics"
                                 wire:loading.attr="disabled"
-                                wire:target="fetchTopics"
                                 id="fetch-topics-btn"
                                 class="btn btn-primary btn-lg px-5 shadow-sm">
                             <span wire:loading.remove wire:target="fetchTopics">
@@ -141,7 +145,6 @@
                             <button type="button"
                                     wire:click="refreshTopics"
                                     wire:loading.attr="disabled"
-                                    wire:target="refreshTopics"
                                     class="btn btn-sm btn-outline-secondary"
                                     title="Wymuś powtórzenie analizy przez Agenta">
                                 <span wire:loading.remove wire:target="refreshTopics">
