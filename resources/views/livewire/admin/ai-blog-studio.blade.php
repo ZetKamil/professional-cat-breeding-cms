@@ -77,7 +77,7 @@
                     <div class="flex-grow-1">
                         <strong class="d-block text-dark">Informacja o stanie usługi AI:</strong>
                         <span class="text-secondary small d-block mb-2">{{ $topicError }}</span>
-                        <span class="badge bg-dark text-warning font-monospace">Status: Wpisz własny temat poniżej lub kliknij ponów próbę</span>
+                        <span class="badge bg-dark text-warning font-monospace">Wpisz własny temat poniżej lub kliknij ponów próbę</span>
                     </div>
                     <button type="button"
                             wire:click="fetchTopics"
@@ -98,21 +98,20 @@
             <div class="mb-4">
 
                 @if(! $topicsLoaded)
-                    {{-- === STAN POCZĄTKOWY: Przycisk pobierania tematów === --}}
+                    {{-- === STAN POCZĄTKOWY: Brak akcji aż do kliknięcia przycisku === --}}
                     <div class="text-center py-4 border rounded bg-light">
-                        <i class="fas fa-lightbulb fa-2x text-warning mb-3 d-block"></i>
                         <p class="text-muted mb-3">
-                            Kliknij przycisk poniżej, aby pobrać sugerowane tematy blogowe dla rasy <strong>{{ $breeds[$selectedBreed] ?? $selectedBreed }}</strong><br>
-                            <span class="small text-muted">(Agent AI użyje narzędzi MCP do analizy trendów Google oraz bazy Twojej hodowli).</span>
+                            Tematy nie są ładowane automatycznie.<br>
+                            Kliknij przycisk poniżej, aby Agent AI pobrał najnowsze trendy dla rasy <strong>{{ $breeds[$selectedBreed] ?? $selectedBreed }}</strong>.
                         </p>
                         <button type="button"
                                 wire:click="fetchTopics"
                                 wire:loading.attr="disabled"
                                 wire:target="fetchTopics"
                                 id="fetch-topics-btn"
-                                class="btn btn-warning btn-lg px-5 shadow-sm">
+                                class="btn btn-primary btn-lg px-5 shadow-sm">
                             <span wire:loading.remove wire:target="fetchTopics">
-                                <i class="fas fa-bolt me-2"></i> Pobierz najnowsze trendy (Agent AI)
+                                <i class="fas fa-robot me-2"></i> Uruchom Agenta AI (Pobierz tematy)
                             </span>
                             <span wire:loading wire:target="fetchTopics">
                                 <span class="spinner-border spinner-border-sm me-2"></span>
@@ -127,7 +126,6 @@
                     @if(!empty($topics))
                         <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
                             <label class="form-label fw-semibold mb-0">
-                                <i class="fas fa-lightbulb me-1 text-warning"></i>
                                 Sugerowane tematy (Agent AI)
                                 @if($topicSource === 'cache')
                                     <span class="badge bg-secondary text-white ms-1 fw-normal">
