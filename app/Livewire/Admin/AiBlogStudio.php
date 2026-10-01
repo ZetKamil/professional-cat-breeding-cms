@@ -62,18 +62,17 @@ class AiBlogStudio extends Component
     public string  $topicSource = 'none';
     public ?string $topicDate   = null;
 
-    public function mount(
-        TopicSuggesterService   $topicService,
-        AiBlogGeneratorService  $blogService
-    ): void {
-        $this->breeds     = $topicService->breeds();
-        $this->loadAnimals($blogService);
+    public function mount(): void
+    {
+        $topicService = app(TopicSuggesterService::class);
+        $this->breeds = $topicService->breeds();
+        $this->loadAnimals();
         $this->categories = Category::orderBy('name')->get(['id', 'name'])->toArray();
     }
 
     // ─── Step 1 Actions (AI Agent Execution) ─────────────────────────
 
-    public function selectBreed(string $breed, AiBlogGeneratorService $blogService): void
+    public function selectBreed(string $breed): void
     {
         $this->selectedBreed     = $breed;
         $this->selectedTopic     = '';
@@ -84,28 +83,29 @@ class AiBlogStudio extends Component
         $this->topicError        = '';
         $this->topicSource       = 'none';
         $this->agentLogs         = [];
-        $this->loadAnimals($blogService);
+        $this->loadAnimals();
     }
 
     /**
      * Synchronously execute AI Agent to fetch topics & MCP tools context.
      * Direct execution guarantees reliability on shared hosting environments without queue workers.
      */
-    public function fetchTopics(BlogContentAgent $agent): void
+    public function fetchTopics(): void
     {
-        $this->executeAgent(forceRefresh: false, agent: $agent);
+        $this->executeAgent(forceRefresh: false);
     }
 
     /**
      * Force-refresh topics via AI Agent (bypassing today's cache).
      */
-    public function refreshTopics(BlogContentAgent $agent): void
+    public function refreshTopics(): void
     {
-        $this->executeAgent(forceRefresh: true, agent: $agent);
+        $this->executeAgent(forceRefresh: true);
     }
 
-    private function executeAgent(bool $forceRefresh, BlogContentAgent $agent): void
+    private function executeAgent(bool $forceRefresh): void
     {
+        $agent                  = app(BlogContentAgent::class);
         $this->isFetchingTopics = true;
         $this->topicError       = '';
         $this->topics           = [];
@@ -203,8 +203,9 @@ class AiBlogStudio extends Component
         }
     }
 
-    public function goToStep3(AiBlogGeneratorService $blogService): void
+    public function goToStep3(): void
     {
+        $blogService           = app(AiBlogGeneratorService::class);
         $this->errorMessage   = '';
         $this->generatedDraft = null;
         $this->heroImageDataUri = '';
@@ -236,11 +237,14 @@ class AiBlogStudio extends Component
 
     // ─── Step 3: Save Draft ─────────────────────────────────────────
 
-    public function saveDraft(PostService $postService, AiBlogGeneratorService $blogService): void
+    public function saveDraft(): void
     {
         if (! $this->generatedDraft) {
             return;
         }
+
+        $postService  = app(PostService::class);
+        $blogService  = app(AiBlogGeneratorService::class);
 
         $this->isSavingDraft  = true;
         $this->errorMessage   = '';
@@ -314,10 +318,11 @@ class AiBlogStudio extends Component
         return view('livewire.admin.ai-blog-studio');
     }
 
-    private function loadAnimals(AiBlogGeneratorService $blogService): void
+    private function loadAnimals(): void
     {
-        $breedLabel = $this->breeds[$this->selectedBreed] ?? null;
-        $grouped    = $blogService->getAvailableAnimals($breedLabel);
+        $blogService = app(AiBlogGeneratorService::class);
+        $breedLabel  = $this->breeds[$this->selectedBreed] ?? null;
+        $grouped     = $blogService->getAvailableAnimals($breedLabel);
 
         $this->animals = $grouped->map(
             fn (Collection $group) => $group->map(fn ($animal) => [
