@@ -55,29 +55,37 @@ class GeminiService
 
     /**
      * Send HTTP POST request with x-goog-api-key header, automatic SSL bundle fallback,
-     * and retry mechanism for transient server errors (503, 502, 504, 429).
+     * and optional retry on transient errors.
+     *
+     * @param  int  $maxAttempts  1 = no retry, 2 = one retry, etc.
+     * @param  int|null  $timeout  Override configured timeout (seconds).
      */
-    private function sendPostRequest(string $url, array $payload): \Illuminate\Http\Client\Response
-    {
+    private function sendPostRequest(
+        string   $url,
+        array    $payload,
+        int      $maxAttempts = 2,
+        ?int     $timeout     = null
+    ): \Illuminate\Http\Client\Response {
+        $effectiveTimeout = $timeout ?? $this->timeout;
+
         $headers = [
             'Content-Type'   => 'application/json',
             'x-goog-api-key' => $this->apiKey,
         ];
 
-        $maxAttempts = 3;
         $attempt = 0;
 
         while ($attempt < $maxAttempts) {
             $attempt++;
             try {
-                $response = Http::timeout($this->timeout)
+                $response = Http::timeout($effectiveTimeout)
                     ->withHeaders($headers)
                     ->post($url, $payload);
 
-                // If response status is transient server error (503, 502, 504, 429), retry after exponential backoff
-                if ($attempt < $maxAttempts && in_array($response->status(), [503, 502, 504, 429], true)) {
-                    Log::warning("GeminiService: HTTP {$response->status()} received on attempt {$attempt}/{$maxAttempts}. Retrying...", ['url' => $url]);
-                    usleep((int) (1000000 * pow(2, $attempt - 1))); // 1s, 2s delay
+                // Retry on transient server errors
+                if ($attempt < $maxAttempts && in_array($response->status(), [503, 502, 504], true)) {
+                    Log::warning("GeminiService: HTTP {$response->status()} on attempt {$attempt}/{$maxAttempts}. Retrying...");
+                    usleep(500000); // 0.5s flat delay — keep total time short
                     continue;
                 }
 
@@ -85,14 +93,14 @@ class GeminiService
             } catch (ConnectionException $e) {
                 if (str_contains($e->getMessage(), 'SSL') || str_contains($e->getMessage(), 'cURL error 60')) {
                     return Http::withoutVerifying()
-                        ->timeout($this->timeout)
+                        ->timeout($effectiveTimeout)
                         ->withHeaders($headers)
                         ->post($url, $payload);
                 }
 
                 if ($attempt < $maxAttempts) {
-                    Log::warning("GeminiService: Connection timeout on attempt {$attempt}/{$maxAttempts}. Retrying...", ['url' => $url]);
-                    usleep((int) (1000000 * pow(2, $attempt - 1)));
+                    Log::warning("GeminiService: Connection error on attempt {$attempt}/{$maxAttempts}. Retrying...");
+                    usleep(500000);
                     continue;
                 }
 
@@ -116,14 +124,17 @@ class GeminiService
     {
         $this->assertKeyConfigured();
 
-        // Model hierarchy to try in sequence if primary model encounters error (503/404/500)
-        $modelsToTry = array_unique(array_filter([
+        // Short timeout for text: keeps Livewire request well within PHP max_execution_time.
+        // Topic suggestions need speed, not a 60s budget. Images use the full timeout.
+        $textTimeout = min($this->timeout, 10);
+
+        // Try at most 2 models — primary + one fallback.
+        // Fewer models = faster fallback to curated topics when API is down.
+        $modelsToTry = array_slice(array_unique(array_filter([
             $this->textModel,
-            'gemini-1.5-flash',
             'gemini-2.0-flash',
-            'gemini-flash-latest',
-            'gemini-1.5-pro',
-        ]));
+            'gemini-1.5-flash',
+        ])), 0, 2);
 
         $payload = [
             'system_instruction' => [
@@ -145,7 +156,8 @@ class GeminiService
             $url = self::BASE_URL . $model . ':generateContent';
 
             try {
-                $response = $this->sendPostRequest($url, $payload);
+                // 1 retry max, 10s timeout — must finish fast on shared hosting
+                $response = $this->sendPostRequest($url, $payload, maxAttempts: 1, timeout: $textTimeout);
             } catch (ConnectionException) {
                 Log::warning('GeminiService: connection timeout', ['model' => $model]);
                 continue;
