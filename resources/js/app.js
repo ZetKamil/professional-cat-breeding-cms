@@ -103,10 +103,20 @@ const lucideIconSet = {
  * @param {Element|Document} [root=document]
  */
 function initLucideIcons(root) {
-    createIcons({
-        icons: lucideIconSet,
-        ...(root && root !== document ? { nameAttr: 'data-lucide', attrs: {}, nodes: Array.from((root || document).querySelectorAll('[data-lucide]')) } : {}),
-    });
+    try {
+        const container = (root && typeof root.querySelectorAll === 'function') ? root : document;
+        const nodes = Array.from(container.querySelectorAll('[data-lucide]'));
+        if (nodes.length > 0) {
+            createIcons({
+                icons: lucideIconSet,
+                nameAttr: 'data-lucide',
+                attrs: {},
+                nodes: nodes,
+            });
+        }
+    } catch (err) {
+        console.warn('Lucide icon initialization warning:', err);
+    }
 }
 
 // Initial page load
@@ -117,13 +127,10 @@ if (document.readyState === 'loading') {
 }
 
 // Livewire 3 — re-initialize icons after any component update
-// Using targeted re-scan on the updated component to avoid expensive full-DOM scan
 if (typeof window !== 'undefined') {
     document.addEventListener('livewire:navigated', () => initLucideIcons());
-    document.addEventListener('livewire:update', (event) => {
-        // event.target is the Livewire component element that was updated
+    document.addEventListener('livewire:updated', (event) => {
         const target = event?.target ?? document;
-        // Small delay to allow DOM to settle
         requestAnimationFrame(() => initLucideIcons(target));
     });
 }
