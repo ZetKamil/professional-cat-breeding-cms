@@ -20,7 +20,7 @@ use Livewire\Component;
 /**
  * AI Blog Studio — 3-step Livewire component with AI Agent & MCP Tools Integration.
  *
- * Step 1: Choose breed + AI Agent Topic Discovery
+ * Step 1: Choose breed + AI Agent Topic Discovery (or custom topic)
  * Step 2: Select cats from database to feature
  * Step 3: Review generated draft → save as DRAFT
  */
@@ -64,10 +64,11 @@ class AiBlogStudio extends Component
 
     public function mount(): void
     {
-        $topicService = app(TopicSuggesterService::class);
-        $this->breeds = $topicService->breeds();
+        $topicService       = app(TopicSuggesterService::class);
+        $this->breeds       = $topicService->breeds();
         $this->loadAnimals();
-        $this->categories = Category::orderBy('name')->get(['id', 'name'])->toArray();
+        $this->categories   = Category::orderBy('name')->get(['id', 'name'])->toArray();
+        $this->setInitialTopic();
     }
 
     // ─── Step 1 Actions (AI Agent Execution) ─────────────────────────
@@ -76,7 +77,6 @@ class AiBlogStudio extends Component
     {
         $this->selectedBreed     = $breed;
         $this->selectedTopic     = '';
-        $this->customTopic       = '';
         $this->selectedAnimalIds = [];
         $this->topics            = [];
         $this->topicsLoaded      = false;
@@ -84,6 +84,20 @@ class AiBlogStudio extends Component
         $this->topicSource       = 'none';
         $this->agentLogs         = [];
         $this->loadAnimals();
+        $this->setInitialTopic();
+    }
+
+    private function setInitialTopic(): void
+    {
+        $label = $this->breeds[$this->selectedBreed] ?? 'Kot Bengalski';
+        $genitive = match ($this->selectedBreed) {
+            'bengalski' => 'kota bengalskiego',
+            'brytyjski' => 'kota brytyjskiego',
+            'syjamski'  => 'kota syjamskiego',
+            default     => mb_strtolower($label),
+        };
+        $this->customTopic   = "Żywienie i pielęgnacja {$genitive}";
+        $this->selectedTopic = $this->customTopic;
     }
 
     /**
@@ -134,14 +148,14 @@ class AiBlogStudio extends Component
 
         } catch (GeminiApiKeyMissingException $e) {
             $this->topicsLoaded = true;
-            $this->topicError   = 'Klucz API Gemini nie jest skonfigurowany w pliku .env na serwerze (GEMINI_API_KEY). Wpisz własny temat poniżej.';
+            $this->topicError   = 'Klucz API Gemini nie jest skonfigurowany w pliku .env na serwerze (GEMINI_API_KEY). Możesz użyć domyślnego tematu lub wpisać własny poniżej.';
         } catch (GeminiServiceUnavailableException $e) {
             $this->topicsLoaded = true;
-            $this->topicError   = 'Usługa Gemini AI jest niedostępna (Błąd HTTP 503 / Limit API). Wpisz własny temat poniżej lub spróbuj ponownie za chwilę.';
+            $this->topicError   = 'Usługa Gemini AI jest niedostępna (Błąd HTTP 503 / Limit API). Możesz użyć domyślnego tematu lub wpisać własny poniżej.';
         } catch (\Throwable $e) {
             Log::warning('AiBlogStudio: Agent execution exception', ['error' => $e->getMessage()]);
             $this->topicsLoaded = true;
-            $this->topicError   = 'Błąd pobierania tematów AI: ' . $e->getMessage() . '. Wpisz własny temat poniżej.';
+            $this->topicError   = 'Błąd pobierania tematów AI: ' . $e->getMessage() . '. Możesz użyć domyślnego tematu lub wpisać własny poniżej.';
 
             // Load logs up to error point
             $statusKey = "ai_agent_status_{$this->agentSessionId}";
@@ -176,12 +190,12 @@ class AiBlogStudio extends Component
         $this->errorMessage = '';
     }
 
-    public function goToStep2(?string $topicOverride = null): void
+    public function goToStep2(): void
     {
-        $topic = trim($topicOverride ?? '') ?: trim($this->customTopic) ?: trim($this->selectedTopic);
+        $topic = trim($this->customTopic) ?: trim($this->selectedTopic);
 
         if (blank($topic)) {
-            $this->errorMessage = 'Proszę wpisać własny temat artykułu lub wybrać temat z listy przed przejściem dalej.';
+            $this->errorMessage = 'Proszę wpisać temat artykułu w polu tekstowym poniżej.';
             return;
         }
 
@@ -224,7 +238,7 @@ class AiBlogStudio extends Component
                 $this->selectedAnimalIds
             );
         } catch (GeminiApiKeyMissingException $e) {
-            $this->errorMessage = 'Klucz API Gemini nie jest skonfigurowany. Skontaktuj się z administratorem.';
+            $this->errorMessage = 'Klucz API Gemini nie jest skonfigurowany w .env (GEMINI_API_KEY). Skontaktuj się z administratorem.';
             $this->currentStep  = 2;
         } catch (GeminiServiceUnavailableException $e) {
             $this->errorMessage = 'AI chwilowo niedostępne: ' . $e->getMessage() . ' Spróbuj ponownie za chwilę.';

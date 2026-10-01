@@ -97,7 +97,7 @@ class Animal extends Model
             return 'Kot Hodowlany';
         }
 
-        return $this->status->label();
+        return $this->status?->label() ?? 'Nieznany';
     }
 
     // ─── Relationships ──────────────────────────────────────────────
