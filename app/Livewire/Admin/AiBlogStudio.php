@@ -88,7 +88,6 @@ class AiBlogStudio extends Component
 
     /**
      * Synchronously execute AI Agent to fetch topics & MCP tools context.
-     * Direct execution guarantees reliability on shared hosting environments without queue workers.
      */
     public function fetchTopics(): void
     {
@@ -108,6 +107,7 @@ class AiBlogStudio extends Component
         $agent                  = app(BlogContentAgent::class);
         $this->isFetchingTopics = true;
         $this->topicError       = '';
+        $this->errorMessage     = '';
         $this->topics           = [];
         $this->agentLogs        = [];
         $this->agentSessionId   = 'session_' . uniqid();
@@ -132,18 +132,18 @@ class AiBlogStudio extends Component
             $this->agentLogs   = $cachedStatus['logs'] ?? [];
             $this->topicSource = $cachedStatus['source'] ?? 'live_api';
 
-        } catch (GeminiApiKeyMissingException) {
+        } catch (GeminiApiKeyMissingException $e) {
             $this->topicsLoaded = true;
-            $this->topicError   = 'Klucz API Gemini nie jest skonfigurowany w pliku .env na serwerze. Wpisz własny temat poniżej.';
+            $this->topicError   = 'Klucz API Gemini nie jest skonfigurowany w pliku .env na serwerze (GEMINI_API_KEY). Wpisz własny temat poniżej.';
         } catch (GeminiServiceUnavailableException $e) {
             $this->topicsLoaded = true;
-            $this->topicError   = 'Usługa AI jest chwilowo przeciążona (' . $e->getMessage() . '). Wpisz własny temat poniżej lub spróbuj ponownie za chwilę.';
+            $this->topicError   = 'Usługa Gemini AI jest niedostępna (Błąd HTTP 503 / Limit API). Wpisz własny temat poniżej lub spróbuj ponownie za chwilę.';
         } catch (\Throwable $e) {
             Log::warning('AiBlogStudio: Agent execution exception', ['error' => $e->getMessage()]);
             $this->topicsLoaded = true;
-            $this->topicError   = 'Nie udało się pobrać tematów przez Agenta AI: ' . $e->getMessage() . ' Wpisz własny temat poniżej.';
+            $this->topicError   = 'Błąd pobierania tematów AI: ' . $e->getMessage() . '. Wpisz własny temat poniżej.';
 
-            // Try to load logs up to error point
+            // Load logs up to error point
             $statusKey = "ai_agent_status_{$this->agentSessionId}";
             $cachedStatus = Cache::get($statusKey, []);
             $this->agentLogs = $cachedStatus['logs'] ?? [];
@@ -165,6 +165,7 @@ class AiBlogStudio extends Component
             $this->selectedTopic = (string) $indexOrTopic;
             $this->customTopic   = (string) $indexOrTopic;
         }
+        $this->errorMessage = '';
     }
 
     public function updatedCustomTopic(): void
@@ -172,14 +173,15 @@ class AiBlogStudio extends Component
         if ($this->customTopic !== $this->selectedTopic) {
             $this->selectedTopic = '';
         }
+        $this->errorMessage = '';
     }
 
-    public function goToStep2(): void
+    public function goToStep2(?string $topicOverride = null): void
     {
-        $topic = trim($this->customTopic) ?: trim($this->selectedTopic);
+        $topic = trim($topicOverride ?? '') ?: trim($this->customTopic) ?: trim($this->selectedTopic);
 
         if (blank($topic)) {
-            $this->errorMessage = 'Wybierz temat lub wpisz własny przed przejściem dalej.';
+            $this->errorMessage = 'Proszę wpisać własny temat artykułu lub wybrać temat z listy przed przejściem dalej.';
             return;
         }
 

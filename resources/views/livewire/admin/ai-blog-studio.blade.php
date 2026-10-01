@@ -27,17 +27,21 @@
 
     {{-- ─── Error / Success Messages ───────────────────────────────────── --}}
     @if($errorMessage)
-        <div class="alert alert-danger d-flex align-items-center" role="alert">
-            <i class="fas fa-triangle-exclamation me-2"></i>
-            {{ $errorMessage }}
+        <div class="alert alert-danger d-flex align-items-center mb-4 shadow-sm" role="alert">
+            <i class="fas fa-triangle-exclamation me-2 fa-lg"></i>
+            <div>
+                <strong>Uwaga:</strong> {{ $errorMessage }}
+            </div>
         </div>
     @endif
 
     @if($successMessage)
-        <div class="alert alert-success d-flex align-items-center" role="alert">
-            <i class="fas fa-check-circle me-2"></i>
-            {!! $successMessage !!}
-            &nbsp;<a href="{{ route('backend.posts.index') }}" class="alert-link ms-1">Przejdź do listy postów →</a>
+        <div class="alert alert-success d-flex align-items-center mb-4 shadow-sm" role="alert">
+            <i class="fas fa-check-circle me-2 fa-lg"></i>
+            <div>
+                {!! $successMessage !!}
+                <a href="{{ route('backend.posts.index') }}" class="alert-link ms-1">Przejdź do listy postów →</a>
+            </div>
         </div>
     @endif
 
@@ -66,6 +70,30 @@
                 </div>
             </div>
 
+            {{-- ─── Topic Error Alert (ALWAYS visible if set) ──────────── --}}
+            @if($topicError)
+                <div class="alert alert-warning d-flex align-items-start gap-3 mb-4 shadow-sm" role="alert">
+                    <i class="fas fa-triangle-exclamation fa-lg mt-1 text-warning flex-shrink-0"></i>
+                    <div class="flex-grow-1">
+                        <strong class="d-block text-dark">Informacja o stanie usługi AI:</strong>
+                        <span class="text-secondary small d-block mb-2">{{ $topicError }}</span>
+                        <span class="badge bg-dark text-warning font-monospace">Status: Wpisz własny temat poniżej lub kliknij ponów próbę</span>
+                    </div>
+                    <button type="button"
+                            wire:click="fetchTopics"
+                            wire:loading.attr="disabled"
+                            wire:target="fetchTopics"
+                            class="btn btn-sm btn-outline-dark ms-auto flex-shrink-0">
+                        <span wire:loading.remove wire:target="fetchTopics">
+                            <i class="fas fa-rotate me-1"></i>Ponów próbę
+                        </span>
+                        <span wire:loading wire:target="fetchTopics">
+                            <span class="spinner-border spinner-border-sm me-1"></span>Łączenie z AI…
+                        </span>
+                    </button>
+                </div>
+            @endif
+
             {{-- ─── Topic suggestions ──────────────────────────────────── --}}
             <div class="mb-4">
 
@@ -88,7 +116,7 @@
                             </span>
                             <span wire:loading wire:target="fetchTopics">
                                 <span class="spinner-border spinner-border-sm me-2"></span>
-                                Agent AI analizuje dane…
+                                Agent AI analizuje dane… (proszę czekać)
                             </span>
                         </button>
                     </div>
@@ -96,29 +124,7 @@
                 @else
                     {{-- === TEMATY ZAŁADOWANE (lub błąd AI) === --}}
 
-                    @if($topicError)
-                        <div class="alert alert-warning d-flex align-items-start gap-3 mb-3">
-                            <i class="fas fa-triangle-exclamation fa-lg mt-1 text-warning flex-shrink-0"></i>
-                            <div>
-                                <strong>Usługa AI nie odpowiedziała</strong><br>
-                                <span class="text-muted small">{{ $topicError }}</span>
-                            </div>
-                            <button type="button"
-                                    wire:click="fetchTopics"
-                                    wire:loading.attr="disabled"
-                                    wire:target="fetchTopics"
-                                    class="btn btn-sm btn-outline-warning ms-auto flex-shrink-0">
-                                <span wire:loading.remove wire:target="fetchTopics">
-                                    <i class="fas fa-rotate me-1"></i>Spróbuj ponownie
-                                </span>
-                                <span wire:loading wire:target="fetchTopics">
-                                    <span class="spinner-border spinner-border-sm me-1"></span>Pobieram…
-                                </span>
-                            </button>
-                        </div>
-
-                    @else
-                        {{-- Tematy załadowane poprawnie --}}
+                    @if(!empty($topics))
                         <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
                             <label class="form-label fw-semibold mb-0">
                                 <i class="fas fa-lightbulb me-1 text-warning"></i>
@@ -174,7 +180,7 @@
                                 <span class="fw-bold font-monospace small">
                                     <i class="fas fa-microchip me-2 text-warning"></i> AI Agent Console (MCP Execution Log)
                                 </span>
-                                <span class="badge bg-success" style="font-size: 0.65rem;">Completed</span>
+                                <span class="badge bg-success" style="font-size: 0.65rem;">Execution Log</span>
                             </div>
                             <div class="card-body p-3 font-monospace small" style="max-height: 160px; overflow-y: auto; background-color: #121212;">
                                 @foreach($agentLogs as $log)
@@ -195,10 +201,10 @@
                 </label>
                 <input type="text"
                        id="customTopic"
-                       wire:model.live.debounce.150ms="customTopic"
+                       wire:model.live="customTopic"
                        wire:keydown.enter.prevent="goToStep2"
                        class="form-control form-control-lg"
-                       placeholder="Wybierz temat z listy powyżej lub wpisz własny...">
+                       placeholder="Wybierz temat z listy powyżej lub wpisz własny temat tutaj...">
             </div>
 
             {{-- CTA --}}
