@@ -1,18 +1,12 @@
 {{-- AI Blog Studio — 3-step wizard with AI Agent & MCP Tools Integration --}}
 <div>
 
-    {{-- ─── Action Loading Bar (ONLY visible when an action button is clicked) ─── --}}
-    <div wire:loading wire:target="fetchTopics, refreshTopics, selectBreed, goToStep2, goToStep3, saveDraft" class="alert alert-info d-flex align-items-center justify-content-center gap-2 mb-3 py-2 shadow-sm" style="border-radius: 8px;">
-        <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
-        <span class="fw-bold text-dark">Agent AI wykonuje zapytanie... proszę czekać.</span>
-    </div>
-
     {{-- ─── Progress Bar ────────────────────────────────────────────────── --}}
     <div class="mb-4">
         <div class="d-flex justify-content-between align-items-center mb-2">
             <span class="fw-semibold text-muted small">
                 Krok {{ $currentStep }} z 3 —
-                @if($currentStep === 1) Wybierz rasę i pobierz tematy AI
+                @if($currentStep === 1) Wybierz rasę i temat
                 @elseif($currentStep === 2) Wybierz koty do artykułu
                 @else Podgląd i zapis szkicu
                 @endif
