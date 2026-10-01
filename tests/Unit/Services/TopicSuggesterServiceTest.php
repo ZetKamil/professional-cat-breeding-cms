@@ -44,7 +44,11 @@ class TopicSuggesterServiceTest extends TestCase
         $this->assertEquals('Cena kota syjamskiego', $topics[0]['title']);
     }
 
-    public function test_suggest_returns_fallback_topics_on_api_failure(): void
+    /**
+     * NO hardcoded fallback topics — if Gemini API fails, suggest() must throw an exception.
+     * The caller (AiBlogStudio) is responsible for showing an error and letting user type their own topic.
+     */
+    public function test_suggest_throws_exception_on_api_failure_no_hardcoded_fallbacks(): void
     {
         $this->mock(GeminiService::class, function (MockInterface $mock) {
             $mock->shouldReceive('generateText')
@@ -53,10 +57,10 @@ class TopicSuggesterServiceTest extends TestCase
         });
 
         $service = app(TopicSuggesterService::class);
-        $topics  = $service->suggest('bengalski');
 
-        $this->assertNotEmpty($topics);
-        $this->assertCount(6, $topics);
-        $this->assertStringContainsString('bengalski', strtolower($topics[0]['title']));
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessageMatches('/503|nie udało|trendów/i');
+
+        $service->suggest('bengalski');
     }
 }

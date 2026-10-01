@@ -92,6 +92,7 @@ class AiBlogStudio extends Component
     /**
      * Explicitly fetch topics — called only when user clicks the fetch button.
      * Never called automatically on mount or breed change.
+     * NO fallback topics — if AI fails, shows error so user can type their own topic.
      */
     public function fetchTopics(TopicSuggesterService $topicService): void
     {
@@ -102,29 +103,28 @@ class AiBlogStudio extends Component
         $this->topicDate        = null;
 
         try {
-            $status             = $topicService->suggestWithStatus($this->selectedBreed);
-            $this->topics       = $status['topics'];
-            $this->topicSource  = $status['source'];
-            $this->topicDate    = $status['date'];
+            $topics             = $topicService->suggest($this->selectedBreed);
+            $this->topics       = $topics;
+            $this->topicSource  = 'live_api';
             $this->topicsLoaded = true;
         } catch (GeminiApiKeyMissingException) {
-            $this->topics       = TopicSuggesterService::CURATED_TOPICS[$this->selectedBreed] ?? [];
-            $this->topicSource  = 'curated_fallback';
             $this->topicsLoaded = true;
-            $this->topicError   = 'Klucz API Gemini nie jest skonfigurowany — załadowano tematy wzorcowe.';
+            $this->topicError   = 'Klucz API Gemini nie jest skonfigurowany w pliku .env na serwerze. Wpisz własny temat poniżej.';
+        } catch (GeminiServiceUnavailableException $e) {
+            $this->topicsLoaded = true;
+            $this->topicError   = 'AI jest chwilowo przeciążone (' . $e->getMessage() . '). Wpisz własny temat poniżej lub spróbuj ponownie za chwilę.';
         } catch (\Throwable $e) {
             Log::warning('AiBlogStudio: fetchTopics exception', ['error' => $e->getMessage()]);
-            $this->topics       = TopicSuggesterService::CURATED_TOPICS[$this->selectedBreed] ?? [];
-            $this->topicSource  = 'curated_fallback';
             $this->topicsLoaded = true;
-            $this->topicError   = 'AI chwilowo niedostępne — załadowano sprawdzone tematy wzorcowe.';
+            $this->topicError   = 'Nie udało się pobrać tematów: ' . $e->getMessage() . ' Wpisz własny temat poniżej.';
         } finally {
             $this->isFetchingTopics = false;
         }
     }
 
     /**
-     * Force-refresh topics from Gemini API ignoring today\'s cache.
+     * Force-refresh topics from Gemini API ignoring today's cache.
+     * NO fallback topics — if AI fails, shows error so user can type their own topic.
      */
     public function refreshTopics(TopicSuggesterService $topicService): void
     {
@@ -134,17 +134,17 @@ class AiBlogStudio extends Component
         $this->topicDate        = null;
 
         try {
-            $status             = $topicService->suggestWithStatus($this->selectedBreed, forceRefresh: true);
-            $this->topics       = $status['topics'];
-            $this->topicSource  = $status['source'];
-            $this->topicDate    = $status['date'];
+            $topics            = $topicService->suggest($this->selectedBreed, forceRefresh: true);
+            $this->topics      = $topics;
+            $this->topicSource = 'live_api';
             $this->topicsLoaded = true;
+        } catch (GeminiServiceUnavailableException $e) {
+            $this->topicsLoaded = true;
+            $this->topicError   = 'AI chwilowo niedostępne: ' . $e->getMessage() . ' Spróbuj ponownie za chwilę.';
         } catch (\Throwable $e) {
             Log::warning('AiBlogStudio: refreshTopics exception', ['error' => $e->getMessage()]);
-            $this->topics       = TopicSuggesterService::CURATED_TOPICS[$this->selectedBreed] ?? [];
-            $this->topicSource  = 'curated_fallback';
             $this->topicsLoaded = true;
-            $this->topicError   = 'AI chwilowo niedostępne — załadowano sprawdzone tematy wzorcowe.';
+            $this->topicError   = 'Nie udało się odświeżyć tematów: ' . $e->getMessage();
         } finally {
             $this->isFetchingTopics = false;
         }

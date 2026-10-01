@@ -98,70 +98,82 @@
                     </div>
 
                 @else
-                    {{-- === TEMATY ZAŁADOWANE === --}}
-                    <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
-                        <label class="form-label fw-semibold mb-0">
-                            <i class="fas fa-lightbulb me-1 text-warning"></i>
-                            Sugerowane tematy
-                            @if($topicSource === 'live_api')
-                                <span class="badge bg-success text-white ms-1 fw-normal">
-                                    <i class="fas fa-signal me-1"></i>Na żywo z AI
-                                </span>
-                            @elseif($topicSource === 'today_cache')
-                                <span class="badge bg-primary text-white ms-1 fw-normal">
-                                    <i class="fas fa-database me-1"></i>Z dzisiejszego cache
-                                </span>
-                            @elseif($topicSource === 'db_fallback')
-                                <span class="badge bg-warning text-dark ms-1 fw-normal">
-                                    <i class="fas fa-history me-1"></i>Z bazy ({{ $topicDate ?? '—' }})
-                                </span>
-                            @elseif($topicSource === 'curated_fallback')
-                                <span class="badge bg-secondary text-white ms-1 fw-normal">
-                                    <i class="fas fa-layer-group me-1"></i>Tematy wzorcowe
-                                </span>
-                            @endif
-                        </label>
-
-                        <button type="button"
-                                wire:click="refreshTopics"
-                                wire:loading.attr="disabled"
-                                wire:target="refreshTopics"
-                                class="btn btn-sm btn-outline-secondary"
-                                title="Wymuś nowe pobranie z Gemini AI">
-                            <span wire:loading.remove wire:target="refreshTopics">
-                                <i class="fas fa-rotate me-1"></i>Odśwież z AI
-                            </span>
-                            <span wire:loading wire:target="refreshTopics">
-                                <span class="spinner-border spinner-border-sm me-1"></span>Pobieram…
-                            </span>
-                        </button>
-                    </div>
+                    {{-- === TEMATY ZAŁADOWANE (lub błąd AI) === --}}
 
                     @if($topicError)
-                        <div class="alert alert-info py-2 px-3 small mb-3">
-                            <i class="fas fa-info-circle me-1"></i>
-                            {{ $topicError }} Możesz też wpisać własny temat poniżej.
+                        {{-- AI niedostępne — pokaż wyraźny komunikat, wróć do wpisania własnego tematu --}}
+                        <div class="alert alert-warning d-flex align-items-start gap-3 mb-3">
+                            <i class="fas fa-triangle-exclamation fa-lg mt-1 text-warning flex-shrink-0"></i>
+                            <div>
+                                <strong>Nie udało się pobrać tematów z AI</strong><br>
+                                <span class="text-muted small">{{ $topicError }}</span>
+                            </div>
+                            <button type="button"
+                                    wire:click="fetchTopics"
+                                    wire:loading.attr="disabled"
+                                    wire:target="fetchTopics"
+                                    class="btn btn-sm btn-outline-warning ms-auto flex-shrink-0">
+                                <span wire:loading.remove wire:target="fetchTopics">
+                                    <i class="fas fa-rotate me-1"></i>Spróbuj ponownie
+                                </span>
+                                <span wire:loading wire:target="fetchTopics">
+                                    <span class="spinner-border spinner-border-sm me-1"></span>
+                                </span>
+                            </button>
+                        </div>
+
+                    @else
+                        {{-- Tematy załadowane poprawnie --}}
+                        <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+                            <label class="form-label fw-semibold mb-0">
+                                <i class="fas fa-lightbulb me-1 text-warning"></i>
+                                Sugerowane tematy
+                                @if($topicSource === 'today_cache')
+                                    <span class="badge bg-primary text-white ms-1 fw-normal">
+                                        <i class="fas fa-database me-1"></i>Z dzisiejszego cache
+                                    </span>
+                                @else
+                                    <span class="badge bg-success text-white ms-1 fw-normal">
+                                        <i class="fas fa-signal me-1"></i>Na żywo z AI
+                                    </span>
+                                @endif
+                            </label>
+
+                            <button type="button"
+                                    wire:click="refreshTopics"
+                                    wire:loading.attr="disabled"
+                                    wire:target="refreshTopics"
+                                    class="btn btn-sm btn-outline-secondary"
+                                    title="Wymuś nowe pobranie z Gemini AI">
+                                <span wire:loading.remove wire:target="refreshTopics">
+                                    <i class="fas fa-rotate me-1"></i>Odśwież z AI
+                                </span>
+                                <span wire:loading wire:target="refreshTopics">
+                                    <span class="spinner-border spinner-border-sm me-1"></span>Pobieram…
+                                </span>
+                            </button>
+                        </div>
+
+                        <div class="row g-2">
+                            @foreach($topics as $i => $topic)
+                                <div class="col-12 col-md-6" wire:key="topic-card-{{ $i }}-{{ $selectedBreed }}">
+                                    <button type="button"
+                                            wire:click="selectTopic({{ $i }})"
+                                            id="topic-btn-{{ $i }}"
+                                            class="btn w-100 text-start {{ ($selectedTopic === $topic['title'] || $customTopic === $topic['title']) ? 'btn-primary' : 'btn-outline-secondary' }}"
+                                            style="white-space: normal; line-height: 1.4; user-select: text;">
+                                        <span class="d-block fw-semibold">{{ $topic['title'] }}</span>
+                                        <span class="badge {{ $topic['intent'] === 'commercial' ? 'bg-warning text-dark' : 'bg-info' }} mt-1" style="font-size:.65rem;">
+                                            {{ $topic['intent'] === 'commercial' ? 'Zakupowy' : 'Edukacyjny' }}
+                                        </span>
+                                    </button>
+                                </div>
+                            @endforeach
                         </div>
                     @endif
-
-                    <div class="row g-2">
-                        @foreach($topics as $i => $topic)
-                            <div class="col-12 col-md-6" wire:key="topic-card-{{ $i }}-{{ $selectedBreed }}">
-                                <button type="button"
-                                        wire:click="selectTopic({{ $i }})"
-                                        id="topic-btn-{{ $i }}"
-                                        class="btn w-100 text-start {{ ($selectedTopic === $topic['title'] || $customTopic === $topic['title']) ? 'btn-primary' : 'btn-outline-secondary' }}"
-                                        style="white-space: normal; line-height: 1.4; user-select: text;">
-                                    <span class="d-block fw-semibold">{{ $topic['title'] }}</span>
-                                    <span class="badge {{ $topic['intent'] === 'commercial' ? 'bg-warning text-dark' : 'bg-info' }} mt-1" style="font-size:.65rem;">
-                                        {{ $topic['intent'] === 'commercial' ? 'Zakupowy' : 'Edukacyjny' }}
-                                    </span>
-                                </button>
-                            </div>
-                        @endforeach
-                    </div>
                 @endif
             </div>
+
 
             {{-- Selected / Custom topic field --}}
             <div class="mb-4">

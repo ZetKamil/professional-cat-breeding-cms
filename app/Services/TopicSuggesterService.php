@@ -34,63 +34,26 @@ class TopicSuggesterService
         'syjamski'  => 'Kot Syjamski',
     ];
 
-    /**
-     * High-quality curated fallback topics per breed used when Google AI API is unavailable.
-     */
-    public const CURATED_TOPICS = [
-        'bengalski' => [
-            ['title' => 'Cena kota bengalskiego — ile kosztuje kociak z rodowodem FIFE/TICA?', 'keyword' => 'kot bengalski cena', 'intent' => 'commercial'],
-            ['title' => 'Pielęgnacja i żywienie kota bengalskiego — co powinien jeść mały leopard?', 'keyword' => 'dieta kot bengalski', 'intent' => 'informational'],
-            ['title' => 'Czy kot bengalski nadaje się dla dzieci i do mieszkania?', 'keyword' => 'kot bengalski dla dzieci', 'intent' => 'informational'],
-            ['title' => 'Charakter i zachowanie kota bengalskiego — jak radzić sobie z energią?', 'keyword' => 'kot bengalski charakter', 'intent' => 'informational'],
-            ['title' => 'Kot bengalski a inne zwierzęta — czy dogada się z psem lub kotem?', 'keyword' => 'kot bengalski z psem', 'intent' => 'informational'],
-            ['title' => 'Wyprawka dla kota bengalskiego — niezbędne akcesoria i drapaki', 'keyword' => 'wyprawka dla kota bengalskiego', 'intent' => 'commercial'],
-        ],
-        'brytyjski' => [
-            ['title' => 'Kot brytyjski cena i koszty utrzymania — na co zwrócić uwagę w hodowli?', 'keyword' => 'kot brytyjski cena', 'intent' => 'commercial'],
-            ['title' => 'Żywienie i waga kota brytyjskiego — jak dbać o zdrową sylwetkę?', 'keyword' => 'dieta kot brytyjski', 'intent' => 'informational'],
-            ['title' => 'Temperament kota brytyjskiego — cichy pieszczoch czy niezależny domownik?', 'keyword' => 'kot brytyjski charakter', 'intent' => 'informational'],
-            ['title' => 'Pielęgnacja gęstej sierści kota brytyjskiego — czesanie i higiena', 'keyword' => 'sierść kota brytyjskiego', 'intent' => 'informational'],
-            ['title' => 'Kot brytyjski w domu z dziećmi — dlaczego to idealna rasa rodzinna?', 'keyword' => 'kot brytyjski dzieci', 'intent' => 'informational'],
-            ['title' => 'Kastracja i sterylizacja kota brytyjskiego — kiedy wykonać zabieg?', 'keyword' => 'sterylizacja kota brytyjskiego', 'intent' => 'informational'],
-        ],
-        'syjamski' => [
-            ['title' => 'Kot syjamski cena i rodowód — ile kosztuje prawdziwy Syjam z hodowli?', 'keyword' => 'kot syjamski cena', 'intent' => 'commercial'],
-            ['title' => 'Mowa i charakter kota syjamskiego — dlaczego te koty tak dużo mówią?', 'keyword' => 'kot syjamski charakter', 'intent' => 'informational'],
-            ['title' => 'Pielęgnacja i zdrowie kota syjamskiego — genetyka i długość życia', 'keyword' => 'zdrowie kota syjamskiego', 'intent' => 'informational'],
-            ['title' => 'Czy kot syjamski źle znosi samotność? Porady dla właścicieli', 'keyword' => 'kot syjamski samotność', 'intent' => 'informational'],
-            ['title' => 'Jak żywić kota syjamskiego — dieta dla aktywnego i smukłego kota', 'keyword' => 'dieta kot syjamski', 'intent' => 'informational'],
-            ['title' => 'Kot syjamski a alergia — czy ta rasa uczula mniej?', 'keyword' => 'kot syjamski alergia', 'intent' => 'informational'],
-        ],
-    ];
-
     public function __construct(
         private readonly GeminiService $gemini
     ) {}
 
     /**
-     * Return topic suggestions for the given breed.
+     * Return topic suggestions for the given breed from DB cache or live Gemini API.
      *
-     * @param  string  $breedKey
-     * @param  bool    $forceRefresh
+     * @param  string  $breedKey      One of BREEDS keys ('bengalski', 'brytyjski', 'syjamski')
+     * @param  bool    $forceRefresh  Skip today's DB cache and fetch fresh from AI
      * @return array<int, array{title: string, keyword: string, intent: string}>
+     *
+     * @throws GeminiApiKeyMissingException
+     * @throws GeminiServiceUnavailableException
+     * @throws \RuntimeException
      */
     public function suggest(string $breedKey, bool $forceRefresh = false): array
     {
-        $status = $this->suggestWithStatus($breedKey, $forceRefresh);
-        return $status['topics'];
-    }
-
-    /**
-     * Return topic suggestions along with source information (live_api, today_cache, db_fallback, curated_fallback).
-     *
-     * @return array{topics: array, source: string, date: ?string}
-     */
-    public function suggestWithStatus(string $breedKey, bool $forceRefresh = false): array
-    {
         $today = Carbon::today()->toDateString();
 
-        // 1. Check DB cache for today unless force refresh is requested
+        // 1. Check DB cache for today (unless force refresh)
         if (! $forceRefresh) {
             try {
                 $cached = TrendingTopic::where('breed', $breedKey)
@@ -102,11 +65,7 @@ class TopicSuggesterService
                         'breed' => $breedKey,
                         'date'  => $today,
                     ]);
-                    return [
-                        'topics' => $cached->topics,
-                        'source' => 'today_cache',
-                        'date'   => $today,
-                    ];
+                    return $cached->topics;
                 }
             } catch (\Throwable $e) {
                 Log::warning('TopicSuggesterService: DB cache read error', ['error' => $e->getMessage()]);
@@ -114,59 +73,26 @@ class TopicSuggesterService
         }
 
         // 2. Fetch live trends from Gemini API
-        try {
-            $liveTopics = $this->fetchLiveTrendsFromGemini($breedKey);
-            if (! empty($liveTopics)) {
-                try {
-                    TrendingTopic::updateOrCreate(
-                        ['breed' => $breedKey, 'fetched_date' => $today],
-                        ['topics' => $liveTopics]
-                    );
-                } catch (\Throwable $e) {
-                    Log::warning('TopicSuggesterService: DB cache save error', ['error' => $e->getMessage()]);
-                }
+        //    Will throw GeminiApiKeyMissingException / GeminiServiceUnavailableException on failure.
+        $liveTopics = $this->fetchLiveTrendsFromGemini($breedKey);
 
-                return [
-                    'topics' => $liveTopics,
-                    'source' => 'live_api',
-                    'date'   => $today,
-                ];
-            }
-        } catch (\Throwable $e) {
-            Log::warning('TopicSuggesterService: Gemini live fetch failed, resorting to fallbacks', [
-                'breed' => $breedKey,
-                'error' => $e->getMessage(),
-            ]);
+        if (empty($liveTopics)) {
+            throw new \RuntimeException(
+                "Nie udało się pobrać aktualnych trendów AI dla rasy '{$breedKey}'. Spróbuj ponownie lub wpisz własny temat."
+            );
         }
 
-        // 3. Fallback: Check for previous cached entries in DB
+        // 3. Cache to DB for today
         try {
-            $previous = TrendingTopic::where('breed', $breedKey)
-                ->orderBy('fetched_date', 'desc')
-                ->first();
-
-            if ($previous && ! empty($previous->topics) && is_array($previous->topics)) {
-                $dateStr = $previous->fetched_date instanceof \DateTimeInterface
-                    ? $previous->fetched_date->format('Y-m-d')
-                    : (string) $previous->fetched_date;
-
-                return [
-                    'topics' => $previous->topics,
-                    'source' => 'db_fallback',
-                    'date'   => $dateStr,
-                ];
-            }
+            TrendingTopic::updateOrCreate(
+                ['breed' => $breedKey, 'fetched_date' => $today],
+                ['topics' => $liveTopics]
+            );
         } catch (\Throwable $e) {
-            Log::warning('TopicSuggesterService: DB fallback read error', ['error' => $e->getMessage()]);
+            Log::warning('TopicSuggesterService: DB cache save error', ['error' => $e->getMessage()]);
         }
 
-        // 4. Fallback: Curated breed topics
-        $curated = self::CURATED_TOPICS[$breedKey] ?? self::CURATED_TOPICS['bengalski'];
-        return [
-            'topics' => $curated,
-            'source' => 'curated_fallback',
-            'date'   => null,
-        ];
+        return $liveTopics;
     }
 
     /**
@@ -185,7 +111,7 @@ class TopicSuggesterService
      */
     private function fetchLiveTrendsFromGemini(string $breedKey): array
     {
-        $breedName = self::BREEDS[$breedKey] ?? 'Kot Bengalski';
+        $breedName        = self::BREEDS[$breedKey] ?? 'Kot Bengalski';
         $currentMonthYear = Carbon::now()->translatedFormat('F Y');
 
         $systemPrompt = <<<PROMPT
