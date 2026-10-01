@@ -6,7 +6,6 @@ namespace App\Livewire\Admin;
 
 use App\Exceptions\GeminiApiKeyMissingException;
 use App\Exceptions\GeminiServiceUnavailableException;
-use App\Jobs\RunBlogAgentJob;
 use App\Models\Category;
 use App\Services\AiAgent\BlogContentAgent;
 use App\Services\AiBlogGeneratorService;
@@ -21,7 +20,7 @@ use Livewire\Component;
 /**
  * AI Blog Studio — 3-step Livewire component with AI Agent & MCP Tools Integration.
  *
- * Step 1: Choose breed + AI Agent Topic Discovery (Asynchronous & Resilient)
+ * Step 1: Choose breed + AI Agent Topic Discovery
  * Step 2: Select cats from database to feature
  * Step 3: Review generated draft → save as DRAFT
  */
@@ -52,9 +51,7 @@ class AiBlogStudio extends Component
 
     // ─── AI Agent & MCP State ─────────────────────────────────────────
     public string $agentSessionId    = '';
-    public bool   $isAgentRunning    = false;
     public array  $agentLogs         = [];
-    public string $agentLastMessage  = '';
 
     // ─── Computed data (loaded on mount) ─────────────────────────────
     public array  $breeds     = [];
@@ -86,91 +83,72 @@ class AiBlogStudio extends Component
         $this->topicsLoaded      = false;
         $this->topicError        = '';
         $this->topicSource       = 'none';
-        $this->isAgentRunning    = false;
         $this->agentLogs         = [];
         $this->loadAnimals($blogService);
     }
 
     /**
-     * Dispatch AI Agent Job in background to execute MCP tools and discover topics.
+     * Synchronously execute AI Agent to fetch topics & MCP tools context.
+     * Direct execution guarantees reliability on shared hosting environments without queue workers.
      */
-    public function fetchTopics(BlogContentAgent $agent, TopicSuggesterService $topicService): void
+    public function fetchTopics(BlogContentAgent $agent): void
     {
-        $this->startAgentExecution(forceRefresh: false, topicService: $topicService, agent: $agent);
+        $this->executeAgent(forceRefresh: false, agent: $agent);
     }
 
     /**
      * Force-refresh topics via AI Agent (bypassing today's cache).
      */
-    public function refreshTopics(BlogContentAgent $agent, TopicSuggesterService $topicService): void
+    public function refreshTopics(BlogContentAgent $agent): void
     {
-        $this->startAgentExecution(forceRefresh: true, topicService: $topicService, agent: $agent);
+        $this->executeAgent(forceRefresh: true, agent: $agent);
     }
 
-    private function startAgentExecution(bool $forceRefresh, TopicSuggesterService $topicService, BlogContentAgent $agent): void
+    private function executeAgent(bool $forceRefresh, BlogContentAgent $agent): void
     {
         $this->isFetchingTopics = true;
         $this->topicError       = '';
         $this->topics           = [];
         $this->agentLogs        = [];
         $this->agentSessionId   = 'session_' . uniqid();
-        $this->isAgentRunning   = true;
 
         $breedLabel = $this->breeds[$this->selectedBreed] ?? 'Kot Bengalski';
 
         try {
-            // Run Agent directly or via Queue Job depending on environment
-            if (config('queue.default') === 'sync') {
-                // Synchronous fallback execution for local env without background worker
-                $topics = $agent->runTopicDiscovery($this->agentSessionId, $this->selectedBreed, $breedLabel, $forceRefresh);
-                $this->topics       = $topics;
-                $this->topicSource  = 'live_api';
-                $this->topicsLoaded = true;
-                $this->isAgentRunning = false;
-            } else {
-                // Async Queue Execution for Production
-                RunBlogAgentJob::dispatch($this->agentSessionId, $this->selectedBreed, $breedLabel, $forceRefresh);
-            }
+            // Execute Agent & MCP Tools synchronously
+            $topics = $agent->runTopicDiscovery(
+                $this->agentSessionId,
+                $this->selectedBreed,
+                $breedLabel,
+                $forceRefresh
+            );
+
+            $this->topics       = $topics;
+            $this->topicsLoaded = true;
+
+            // Load execution logs from Cache
+            $statusKey = "ai_agent_status_{$this->agentSessionId}";
+            $cachedStatus = Cache::get($statusKey, []);
+            $this->agentLogs   = $cachedStatus['logs'] ?? [];
+            $this->topicSource = $cachedStatus['source'] ?? 'live_api';
+
+        } catch (GeminiApiKeyMissingException) {
+            $this->topicsLoaded = true;
+            $this->topicError   = 'Klucz API Gemini nie jest skonfigurowany w pliku .env na serwerze. Wpisz własny temat poniżej.';
+        } catch (GeminiServiceUnavailableException $e) {
+            $this->topicsLoaded = true;
+            $this->topicError   = 'Usługa AI jest chwilowo przeciążona (' . $e->getMessage() . '). Wpisz własny temat poniżej lub spróbuj ponownie za chwilę.';
         } catch (\Throwable $e) {
             Log::warning('AiBlogStudio: Agent execution exception', ['error' => $e->getMessage()]);
-            $this->topicsLoaded   = true;
-            $this->isAgentRunning = false;
-            $this->topicError     = 'Nie udało się pobrać tematów przez Agenta: ' . $e->getMessage() . ' Wpisz własny temat poniżej.';
+            $this->topicsLoaded = true;
+            $this->topicError   = 'Nie udało się pobrać tematów przez Agenta AI: ' . $e->getMessage() . ' Wpisz własny temat poniżej.';
+
+            // Try to load logs up to error point
+            $statusKey = "ai_agent_status_{$this->agentSessionId}";
+            $cachedStatus = Cache::get($statusKey, []);
+            $this->agentLogs = $cachedStatus['logs'] ?? [];
         } finally {
             $this->isFetchingTopics = false;
-            $this->checkAgentStatus();
-        }
-    }
-
-    /**
-     * Polled by Livewire wire:poll while agent is running to update thought log & status.
-     */
-    public function checkAgentStatus(): void
-    {
-        if (empty($this->agentSessionId)) {
-            return;
-        }
-
-        $key = "ai_agent_status_{$this->agentSessionId}";
-        $data = Cache::get($key);
-
-        if (! is_array($data)) {
-            return;
-        }
-
-        $this->agentLogs        = $data['logs'] ?? [];
-        $this->agentLastMessage  = $data['last_message'] ?? '';
-        $state                  = $data['state'] ?? 'idle';
-
-        if ($state === 'completed') {
-            $this->topics          = $data['topics'] ?? [];
-            $this->topicSource     = $data['source'] ?? 'live_api';
-            $this->topicsLoaded    = true;
-            $this->isAgentRunning  = false;
-        } elseif ($state === 'failed') {
-            $this->topicError      = $data['last_message'] ?? 'Błąd Agenta AI.';
-            $this->topicsLoaded    = true;
-            $this->isAgentRunning  = false;
         }
     }
 

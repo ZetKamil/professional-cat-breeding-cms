@@ -1,12 +1,12 @@
 {{-- AI Blog Studio — 3-step wizard with AI Agent & MCP Tools Integration --}}
-<div @if($isAgentRunning) wire:poll.1s="checkAgentStatus" @endif>
+<div>
 
     {{-- ─── Progress Bar ────────────────────────────────────────────────── --}}
     <div class="mb-4">
         <div class="d-flex justify-content-between align-items-center mb-2">
             <span class="fw-semibold text-muted small">
                 Krok {{ $currentStep }} z 3 —
-                @if($currentStep === 1) Wybierz rasę i uruchom Agenta AI
+                @if($currentStep === 1) Wybierz rasę i pobierz tematy AI
                 @elseif($currentStep === 2) Wybierz koty do artykułu
                 @else Podgląd i zapis szkicu
                 @endif
@@ -66,55 +66,31 @@
                 </div>
             </div>
 
-            {{-- ─── AI Agent & MCP Log Console ──────────────────────────── --}}
-            @if(!empty($agentLogs) || $isAgentRunning)
-                <div class="card bg-dark text-light border-secondary mb-4 shadow-sm" style="border-radius: 8px;">
-                    <div class="card-header bg-black text-info d-flex align-items-center justify-content-between py-2 border-bottom border-secondary">
-                        <span class="fw-bold font-monospace small">
-                            <i class="fas fa-microchip me-2 text-warning"></i> AI Agent Console (MCP Tools Runtime)
-                        </span>
-                        @if($isAgentRunning)
-                            <span class="badge bg-warning text-dark spinner-border spinner-border-sm" style="width:0.8rem; height:0.8rem;"></span>
-                        @else
-                            <span class="badge bg-success" style="font-size: 0.65rem;">Agent Ready</span>
-                        @endif
-                    </div>
-                    <div class="card-body p-3 font-monospace small" style="max-height: 180px; overflow-y: auto; background-color: #121212;">
-                        @foreach($agentLogs as $log)
-                            <div class="text-light opacity-90 py-1 border-bottom border-secondary border-opacity-25" style="font-size: 0.82rem;">
-                                <span class="text-success fw-bold">❯</span> {{ $log }}
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            @endif
-
             {{-- ─── Topic suggestions ──────────────────────────────────── --}}
             <div class="mb-4">
 
-                @if(! $topicsLoaded && ! $isAgentRunning)
-                    {{-- === STAN POCZĄTKOWY: Uruchomienie Agenta === --}}
+                @if(! $topicsLoaded)
+                    {{-- === STAN POCZĄTKOWY: Przycisk pobierania tematów === --}}
                     <div class="text-center py-4 border rounded bg-light">
-                        <i class="fas fa-robot fa-2x text-primary mb-3 d-block"></i>
+                        <i class="fas fa-lightbulb fa-2x text-warning mb-3 d-block"></i>
                         <p class="text-muted mb-3">
-                            Uruchom Agenta AI, aby wykorzystał narzędzia MCP (Google Trends + Baza Hodowli)<br>
-                            i wygenerował sugerowane tematy dla rasy <strong>{{ $breeds[$selectedBreed] ?? $selectedBreed }}</strong>.
+                            Kliknij przycisk poniżej, aby pobrać sugerowane tematy blogowe dla rasy <strong>{{ $breeds[$selectedBreed] ?? $selectedBreed }}</strong><br>
+                            <span class="small text-muted">(Agent AI użyje narzędzi MCP do analizy trendów Google oraz bazy Twojej hodowli).</span>
                         </p>
                         <button type="button"
                                 wire:click="fetchTopics"
                                 wire:loading.attr="disabled"
+                                wire:target="fetchTopics"
                                 id="fetch-topics-btn"
-                                class="btn btn-primary btn-lg px-5 shadow-sm">
-                            <i class="fas fa-play me-2"></i> Uruchom Agenta AI (MCP Tools)
+                                class="btn btn-warning btn-lg px-5 shadow-sm">
+                            <span wire:loading.remove wire:target="fetchTopics">
+                                <i class="fas fa-bolt me-2"></i> Pobierz najnowsze trendy (Agent AI)
+                            </span>
+                            <span wire:loading wire:target="fetchTopics">
+                                <span class="spinner-border spinner-border-sm me-2"></span>
+                                Agent AI analizuje dane…
+                            </span>
                         </button>
-                    </div>
-
-                @elseif($isAgentRunning)
-                    {{-- === AGENT W TRAKCIE PRACY === --}}
-                    <div class="text-center py-4 border rounded bg-light">
-                        <div class="spinner-border text-primary mb-3" role="status" style="width: 2.5rem; height: 2.5rem;"></div>
-                        <h5 class="fw-semibold text-primary mb-1">Agent AI przetwarza dane w tle...</h5>
-                        <p class="text-muted small mb-0">Wykonywanie narzędzi MCP i analiza trendów dla {{ $breeds[$selectedBreed] ?? $selectedBreed }}</p>
                     </div>
 
                 @else
@@ -124,13 +100,20 @@
                         <div class="alert alert-warning d-flex align-items-start gap-3 mb-3">
                             <i class="fas fa-triangle-exclamation fa-lg mt-1 text-warning flex-shrink-0"></i>
                             <div>
-                                <strong>Status Agenta AI: Odmowa / Błąd niedostępności</strong><br>
+                                <strong>Usługa AI nie odpowiedziała</strong><br>
                                 <span class="text-muted small">{{ $topicError }}</span>
                             </div>
                             <button type="button"
                                     wire:click="fetchTopics"
+                                    wire:loading.attr="disabled"
+                                    wire:target="fetchTopics"
                                     class="btn btn-sm btn-outline-warning ms-auto flex-shrink-0">
-                                <i class="fas fa-rotate me-1"></i>Ponów próbę Agenta
+                                <span wire:loading.remove wire:target="fetchTopics">
+                                    <i class="fas fa-rotate me-1"></i>Spróbuj ponownie
+                                </span>
+                                <span wire:loading wire:target="fetchTopics">
+                                    <span class="spinner-border spinner-border-sm me-1"></span>Pobieram…
+                                </span>
                             </button>
                         </div>
 
@@ -139,27 +122,34 @@
                         <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
                             <label class="form-label fw-semibold mb-0">
                                 <i class="fas fa-lightbulb me-1 text-warning"></i>
-                                Sugerowane tematy od Agenta AI
+                                Sugerowane tematy (Agent AI)
                                 @if($topicSource === 'cache')
                                     <span class="badge bg-secondary text-white ms-1 fw-normal">
-                                        <i class="fas fa-database me-1"></i>MCP Cache
+                                        <i class="fas fa-database me-1"></i>Pamięć podręczna
                                     </span>
                                 @else
                                     <span class="badge bg-success text-white ms-1 fw-normal">
-                                        <i class="fas fa-brain me-1"></i>Na żywo z MCP Tools & Gemini
+                                        <i class="fas fa-bolt me-1"></i>Na żywo z Google Trends & AI
                                     </span>
                                 @endif
                             </label>
 
                             <button type="button"
                                     wire:click="refreshTopics"
+                                    wire:loading.attr="disabled"
+                                    wire:target="refreshTopics"
                                     class="btn btn-sm btn-outline-secondary"
                                     title="Wymuś powtórzenie analizy przez Agenta">
-                                <i class="fas fa-rotate me-1"></i>Ponów analizę Agenta
+                                <span wire:loading.remove wire:target="refreshTopics">
+                                    <i class="fas fa-rotate me-1"></i>Odśwież tematy z AI
+                                </span>
+                                <span wire:loading wire:target="refreshTopics">
+                                    <span class="spinner-border spinner-border-sm me-1"></span>Pobieram…
+                                </span>
                             </button>
                         </div>
 
-                        <div class="row g-2">
+                        <div class="row g-2 mb-3">
                             @foreach($topics as $i => $topic)
                                 <div class="col-12 col-md-6" wire:key="topic-card-{{ $i }}-{{ $selectedBreed }}">
                                     <button type="button"
@@ -174,6 +164,25 @@
                                     </button>
                                 </div>
                             @endforeach
+                        </div>
+                    @endif
+
+                    {{-- Logi wykonania Agenta AI --}}
+                    @if(!empty($agentLogs))
+                        <div class="card bg-dark text-light border-secondary mb-4 shadow-sm" style="border-radius: 8px;">
+                            <div class="card-header bg-black text-info d-flex align-items-center justify-content-between py-2 border-bottom border-secondary">
+                                <span class="fw-bold font-monospace small">
+                                    <i class="fas fa-microchip me-2 text-warning"></i> AI Agent Console (MCP Execution Log)
+                                </span>
+                                <span class="badge bg-success" style="font-size: 0.65rem;">Completed</span>
+                            </div>
+                            <div class="card-body p-3 font-monospace small" style="max-height: 160px; overflow-y: auto; background-color: #121212;">
+                                @foreach($agentLogs as $log)
+                                    <div class="text-light opacity-90 py-1 border-bottom border-secondary border-opacity-25" style="font-size: 0.82rem;">
+                                        <span class="text-success fw-bold">❯</span> {{ $log }}
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
                     @endif
                 @endif
