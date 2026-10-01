@@ -6,27 +6,24 @@ namespace App\Livewire\Admin;
 
 use App\Exceptions\GeminiApiKeyMissingException;
 use App\Exceptions\GeminiServiceUnavailableException;
+use App\Jobs\RunBlogAgentJob;
 use App\Models\Category;
+use App\Services\AiAgent\BlogContentAgent;
 use App\Services\AiBlogGeneratorService;
 use App\Services\PostService;
 use App\Services\TopicSuggesterService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 /**
- * AI Blog Studio — 3-step Livewire component.
+ * AI Blog Studio — 3-step Livewire component with AI Agent & MCP Tools Integration.
  *
- * Step 1: Choose breed + topic
+ * Step 1: Choose breed + AI Agent Topic Discovery (Asynchronous & Resilient)
  * Step 2: Select cats from database to feature
  * Step 3: Review generated draft → save as DRAFT
- *
- * Safety guarantees:
- * - Posts are ALWAYS saved as is_published = false (draft)
- * - Animal photos in article come from real DB gallery, not AI
- * - API errors show friendly messages, never HTTP 500
- * - Generate button is disabled during processing (wire:loading)
  */
 class AiBlogStudio extends Component
 {
@@ -50,30 +47,34 @@ class AiBlogStudio extends Component
     public string $errorMessage      = '';
     public string $successMessage    = '';
     public string $topicError        = '';
-    public bool   $topicsLoaded      = false;  // true after user explicitly fetches topics
+    public bool   $topicsLoaded      = false;
     public bool   $isFetchingTopics  = false;
 
-    // ─── Computed data (loaded on mount) ─────────────────────────────
-    public array          $breeds    = [];
-    public array          $topics    = [];
-    public array          $animals   = [];  // grouped by breed: ['breed' => [Animal, ...]]
-    public array          $categories = [];
+    // ─── AI Agent & MCP State ─────────────────────────────────────────
+    public string $agentSessionId    = '';
+    public bool   $isAgentRunning    = false;
+    public array  $agentLogs         = [];
+    public string $agentLastMessage  = '';
 
-    public string $topicSource = 'none';
+    // ─── Computed data (loaded on mount) ─────────────────────────────
+    public array  $breeds     = [];
+    public array  $topics     = [];
+    public array  $animals    = [];
+    public array  $categories = [];
+
+    public string  $topicSource = 'none';
     public ?string $topicDate   = null;
 
     public function mount(
         TopicSuggesterService   $topicService,
         AiBlogGeneratorService  $blogService
     ): void {
-        // IMPORTANT: No API calls here — page must open instantly.
-        // Topics are fetched only when user clicks the fetch button.
         $this->breeds     = $topicService->breeds();
         $this->loadAnimals($blogService);
         $this->categories = Category::orderBy('name')->get(['id', 'name'])->toArray();
     }
 
-    // ─── Step 1 Actions ─────────────────────────────────────────────
+    // ─── Step 1 Actions (AI Agent Execution) ─────────────────────────
 
     public function selectBreed(string $breed, AiBlogGeneratorService $blogService): void
     {
@@ -81,72 +82,95 @@ class AiBlogStudio extends Component
         $this->selectedTopic     = '';
         $this->customTopic       = '';
         $this->selectedAnimalIds = [];
-        // Reset topics — user must re-fetch for new breed
-        $this->topics        = [];
-        $this->topicsLoaded  = false;
-        $this->topicError    = '';
-        $this->topicSource   = 'none';
+        $this->topics            = [];
+        $this->topicsLoaded      = false;
+        $this->topicError        = '';
+        $this->topicSource       = 'none';
+        $this->isAgentRunning    = false;
+        $this->agentLogs         = [];
         $this->loadAnimals($blogService);
     }
 
     /**
-     * Explicitly fetch topics — called only when user clicks the fetch button.
-     * Never called automatically on mount or breed change.
-     * NO fallback topics — if AI fails, shows error so user can type their own topic.
+     * Dispatch AI Agent Job in background to execute MCP tools and discover topics.
      */
-    public function fetchTopics(TopicSuggesterService $topicService): void
+    public function fetchTopics(BlogContentAgent $agent, TopicSuggesterService $topicService): void
+    {
+        $this->startAgentExecution(forceRefresh: false, topicService: $topicService, agent: $agent);
+    }
+
+    /**
+     * Force-refresh topics via AI Agent (bypassing today's cache).
+     */
+    public function refreshTopics(BlogContentAgent $agent, TopicSuggesterService $topicService): void
+    {
+        $this->startAgentExecution(forceRefresh: true, topicService: $topicService, agent: $agent);
+    }
+
+    private function startAgentExecution(bool $forceRefresh, TopicSuggesterService $topicService, BlogContentAgent $agent): void
     {
         $this->isFetchingTopics = true;
         $this->topicError       = '';
         $this->topics           = [];
-        $this->topicSource      = 'none';
-        $this->topicDate        = null;
+        $this->agentLogs        = [];
+        $this->agentSessionId   = 'session_' . uniqid();
+        $this->isAgentRunning   = true;
+
+        $breedLabel = $this->breeds[$this->selectedBreed] ?? 'Kot Bengalski';
 
         try {
-            $topics             = $topicService->suggest($this->selectedBreed);
-            $this->topics       = $topics;
-            $this->topicSource  = 'live_api';
-            $this->topicsLoaded = true;
-        } catch (GeminiApiKeyMissingException) {
-            $this->topicsLoaded = true;
-            $this->topicError   = 'Klucz API Gemini nie jest skonfigurowany w pliku .env na serwerze. Wpisz własny temat poniżej.';
-        } catch (GeminiServiceUnavailableException $e) {
-            $this->topicsLoaded = true;
-            $this->topicError   = 'AI jest chwilowo przeciążone (' . $e->getMessage() . '). Wpisz własny temat poniżej lub spróbuj ponownie za chwilę.';
+            // Run Agent directly or via Queue Job depending on environment
+            if (config('queue.default') === 'sync') {
+                // Synchronous fallback execution for local env without background worker
+                $topics = $agent->runTopicDiscovery($this->agentSessionId, $this->selectedBreed, $breedLabel, $forceRefresh);
+                $this->topics       = $topics;
+                $this->topicSource  = 'live_api';
+                $this->topicsLoaded = true;
+                $this->isAgentRunning = false;
+            } else {
+                // Async Queue Execution for Production
+                RunBlogAgentJob::dispatch($this->agentSessionId, $this->selectedBreed, $breedLabel, $forceRefresh);
+            }
         } catch (\Throwable $e) {
-            Log::warning('AiBlogStudio: fetchTopics exception', ['error' => $e->getMessage()]);
-            $this->topicsLoaded = true;
-            $this->topicError   = 'Nie udało się pobrać tematów: ' . $e->getMessage() . ' Wpisz własny temat poniżej.';
+            Log::warning('AiBlogStudio: Agent execution exception', ['error' => $e->getMessage()]);
+            $this->topicsLoaded   = true;
+            $this->isAgentRunning = false;
+            $this->topicError     = 'Nie udało się pobrać tematów przez Agenta: ' . $e->getMessage() . ' Wpisz własny temat poniżej.';
         } finally {
             $this->isFetchingTopics = false;
+            $this->checkAgentStatus();
         }
     }
 
     /**
-     * Force-refresh topics from Gemini API ignoring today's cache.
-     * NO fallback topics — if AI fails, shows error so user can type their own topic.
+     * Polled by Livewire wire:poll while agent is running to update thought log & status.
      */
-    public function refreshTopics(TopicSuggesterService $topicService): void
+    public function checkAgentStatus(): void
     {
-        $this->isFetchingTopics = true;
-        $this->topicError       = '';
-        $this->topics           = [];
-        $this->topicDate        = null;
+        if (empty($this->agentSessionId)) {
+            return;
+        }
 
-        try {
-            $topics            = $topicService->suggest($this->selectedBreed, forceRefresh: true);
-            $this->topics      = $topics;
-            $this->topicSource = 'live_api';
-            $this->topicsLoaded = true;
-        } catch (GeminiServiceUnavailableException $e) {
-            $this->topicsLoaded = true;
-            $this->topicError   = 'AI chwilowo niedostępne: ' . $e->getMessage() . ' Spróbuj ponownie za chwilę.';
-        } catch (\Throwable $e) {
-            Log::warning('AiBlogStudio: refreshTopics exception', ['error' => $e->getMessage()]);
-            $this->topicsLoaded = true;
-            $this->topicError   = 'Nie udało się odświeżyć tematów: ' . $e->getMessage();
-        } finally {
-            $this->isFetchingTopics = false;
+        $key = "ai_agent_status_{$this->agentSessionId}";
+        $data = Cache::get($key);
+
+        if (! is_array($data)) {
+            return;
+        }
+
+        $this->agentLogs        = $data['logs'] ?? [];
+        $this->agentLastMessage  = $data['last_message'] ?? '';
+        $state                  = $data['state'] ?? 'idle';
+
+        if ($state === 'completed') {
+            $this->topics          = $data['topics'] ?? [];
+            $this->topicSource     = $data['source'] ?? 'live_api';
+            $this->topicsLoaded    = true;
+            $this->isAgentRunning  = false;
+        } elseif ($state === 'failed') {
+            $this->topicError      = $data['last_message'] ?? 'Błąd Agenta AI.';
+            $this->topicsLoaded    = true;
+            $this->isAgentRunning  = false;
         }
     }
 
@@ -247,12 +271,10 @@ class AiBlogStudio extends Component
         try {
             $draft = $this->generatedDraft;
 
-            // SAFETY: Force is_published = false regardless of AI output
             $draft['is_published'] = false;
             $draft['published_at'] = null;
             $draft['user_id']      = Auth::id();
 
-            // Build final body: AI text + real animal photo blocks
             $draft['body'] = $this->injectAnimalPhotos($draft['body'] ?? '');
 
             $post = $postService->create([
@@ -263,12 +285,11 @@ class AiBlogStudio extends Component
                 'body'             => $draft['body'],
                 'meta_title'       => $draft['meta_title'] ?? null,
                 'meta_description' => $draft['meta_description'] ?? null,
-                'is_published'     => false,  // hardcoded — human must publish manually
+                'is_published'     => false,
                 'published_at'     => null,
                 'categories'       => [],
             ]);
 
-            // Auto-generate decorative AI cover image via Imagen
             if (! empty($draft['hero_image_prompt'])) {
                 try {
                     $blogService->generateHeroImage($draft['hero_image_prompt'], $post);
@@ -310,21 +331,16 @@ class AiBlogStudio extends Component
         }
     }
 
-    // ─── Render ─────────────────────────────────────────────────────
-
     public function render(): \Illuminate\View\View
     {
         return view('livewire.admin.ai-blog-studio');
     }
-
-    // ─── Private Helpers ────────────────────────────────────────────
 
     private function loadAnimals(AiBlogGeneratorService $blogService): void
     {
         $breedLabel = $this->breeds[$this->selectedBreed] ?? null;
         $grouped    = $blogService->getAvailableAnimals($breedLabel);
 
-        // Convert to plain array for Livewire serialization
         $this->animals = $grouped->map(
             fn (Collection $group) => $group->map(fn ($animal) => [
                 'id'         => $animal->id,
@@ -338,13 +354,6 @@ class AiBlogStudio extends Component
         )->toArray();
     }
 
-    /**
-     * Inject real animal gallery photos into the article body.
-     *
-     * After the first closing </p> tag, insert a gallery block
-     * with actual photos of selected cats. This replaces AI-generated
-     * images in the article body with real cattery photos.
-     */
     private function injectAnimalPhotos(string $body): string
     {
         if (empty($this->selectedAnimalIds)) {
@@ -381,7 +390,6 @@ class AiBlogStudio extends Component
 
         $galleryHtml .= '</div>';
 
-        // Insert after the first closing </p>
         return preg_replace('/<\/p>/', '</p>' . $galleryHtml, $body, 1) ?? $body . $galleryHtml;
     }
 }
