@@ -56,7 +56,7 @@ class AiBlogStudio extends Component
     // ─── Computed data (loaded on mount) ─────────────────────────────
     public array  $breeds     = [];
     public array  $topics     = [];
-    public array  $animals    = [];
+    public array  $animals    = []; // Flat 0-indexed array for the selected breed
     public array  $categories = [];
 
     public string  $topicSource = 'none';
@@ -340,17 +340,18 @@ class AiBlogStudio extends Component
         $breedLabel  = $this->breeds[$this->selectedBreed] ?? null;
         $grouped     = $blogService->getAvailableAnimals($breedLabel);
 
-        $this->animals = $grouped->map(
-            fn (Collection $group) => $group->map(fn ($animal) => [
-                'id'         => $animal->id,
-                'name'       => $animal->name,
-                'breed'      => $animal->breed,
-                'color'      => $animal->color,
-                'status'     => $animal->statusLabel(),
-                'age'        => $animal->age(),
-                'photo_url'  => $animal->media?->url() ?? '',
-            ])->values()->toArray()
-        )->toArray();
+        // Extract animals for selected breed into a simple 0-indexed flat array (prevents space keys in snapshot)
+        $breedGroup  = $grouped->get($breedLabel) ?? collect();
+
+        $this->animals = $breedGroup->map(fn ($animal) => [
+            'id'         => $animal->id,
+            'name'       => $animal->name,
+            'breed'      => $animal->breed,
+            'color'      => $animal->color,
+            'status'     => $animal->statusLabel(),
+            'age'        => $animal->age(),
+            'photo_url'  => $animal->media?->url() ?? '',
+        ])->values()->toArray();
     }
 
     private function injectAnimalPhotos(string $body): string

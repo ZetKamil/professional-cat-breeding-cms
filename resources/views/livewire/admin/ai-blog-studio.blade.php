@@ -86,7 +86,7 @@
                         <span wire:loading.remove wire:target="fetchTopics">
                             <i class="fas fa-rotate me-1"></i>Ponów próbę
                         </span>
-                        <span wire:loading wire:target="fetchTopics">
+                        <span wire:loading wire:target="fetchTopics" style="display: none;">
                             <span class="spinner-border spinner-border-sm me-1"></span>Łączenie z AI…
                         </span>
                     </button>
@@ -111,7 +111,7 @@
                             <span wire:loading.remove wire:target="fetchTopics">
                                 <i class="fas fa-robot me-2"></i> Uruchom Agenta AI (Pobierz tematy)
                             </span>
-                            <span wire:loading wire:target="fetchTopics">
+                            <span wire:loading wire:target="fetchTopics" style="display: none;">
                                 <span class="spinner-border spinner-border-sm me-2"></span>
                                 Agent AI analizuje dane… (proszę czekać)
                             </span>
@@ -144,7 +144,7 @@
                                 <span wire:loading.remove wire:target="refreshTopics">
                                     <i class="fas fa-rotate me-1"></i>Odśwież tematy z AI
                                 </span>
-                                <span wire:loading wire:target="refreshTopics">
+                                <span wire:loading wire:target="refreshTopics" style="display: none;">
                                     <span class="spinner-border spinner-border-sm me-1"></span>Pobieram…
                                 </span>
                             </button>
@@ -196,7 +196,7 @@
                 </label>
                 <input type="text"
                        id="customTopic"
-                       wire:model.live="customTopic"
+                       wire:model="customTopic"
                        wire:keydown.enter.prevent="goToStep2"
                        class="form-control form-control-lg"
                        placeholder="Wybierz temat z listy powyżej lub wpisz własny temat tutaj...">
@@ -209,7 +209,10 @@
                         wire:loading.attr="disabled"
                         id="step1-next-btn"
                         class="btn btn-primary btn-lg">
-                    Dalej: Wybierz koty →
+                    <span wire:loading.remove wire:target="goToStep2">Dalej: Wybierz koty →</span>
+                    <span wire:loading wire:target="goToStep2" style="display: none;">
+                        <span class="spinner-border spinner-border-sm me-2"></span>Przechodzę…
+                    </span>
                 </button>
             </div>
         </div>
@@ -230,7 +233,7 @@
 
             @php
                 $breedLabel = $breeds[$selectedBreed] ?? $selectedBreed;
-                $currentAnimals = $animals[$breedLabel] ?? [];
+                $currentAnimals = $animals;
             @endphp
 
             @if(empty($currentAnimals))
@@ -273,8 +276,11 @@
                 <button type="button" wire:click="backToStep(1)" class="btn btn-outline-secondary btn-lg">
                     ← Wstecz
                 </button>
-                <button type="button" wire:click="goToStep3" class="btn btn-primary btn-lg px-5">
-                    Generuj artykuł z AI →
+                <button type="button" wire:click="goToStep3" class="btn btn-primary btn-lg px-5" wire:loading.attr="disabled">
+                    <span wire:loading.remove wire:target="goToStep3">Generuj artykuł z AI →</span>
+                    <span wire:loading wire:target="goToStep3" style="display: none;">
+                        <span class="spinner-border spinner-border-sm me-2"></span>Generuję artykuł z AI…
+                    </span>
                 </button>
             </div>
         </div>
@@ -314,7 +320,7 @@
                         <span wire:loading.remove wire:target="saveDraft">
                             <i class="fas fa-save me-2"></i> Zapisz jako Szkic w CMS
                         </span>
-                        <span wire:loading wire:target="saveDraft">
+                        <span wire:loading wire:target="saveDraft" style="display: none;">
                             <span class="spinner-border spinner-border-sm me-2"></span> Zapisuję...
                         </span>
                     </button>
