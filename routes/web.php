@@ -549,9 +549,16 @@ Route::middleware(['auth', 'verified', 'active'])
     });
 
 
-// Deployment sync route: runs migrations & clears cache via browser
+// Deployment sync route: pulls latest code from git, runs migrations & clears cache via browser
 Route::get('/deploy-sync', function () {
     try {
+        $gitOut = 'Funkcja exec jest wyłączona na serwerze.';
+        if (function_exists('exec')) {
+            $output = [];
+            @exec('git pull origin main 2>&1', $output);
+            $gitOut = !empty($output) ? implode("\n", $output) : 'Git pull wykonany (brak odpowiedzi stdout)';
+        }
+
         \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
         $migrateOut = \Illuminate\Support\Facades\Artisan::output();
 
@@ -559,8 +566,9 @@ Route::get('/deploy-sync', function () {
         $clearOut = \Illuminate\Support\Facades\Artisan::output();
 
         return response("<div style='font-family:sans-serif; padding:30px; max-width:700px; margin:40px auto; background:#f0fdf4; border:1px solid #10b981; border-radius:12px;'>"
-            . "<h2 style='color:#065f46; margin-top:0;'>✅ System Zsynchronizowany!</h2>"
-            . "<p>Baza danych i pamięć podręczna zostały zaktualizowane.</p>"
+            . "<h2 style='color:#065f46; margin-top:0;'>✅ System Zsynchronizowany na Hostingu!</h2>"
+            . "<p>Kod z Git, baza danych i pamięć podręczna zostały zaktualizowane.</p>"
+            . "<h4>Git Pull:</h4><pre style='background:#fff; padding:10px; border-radius:6px;'>" . e($gitOut) . "</pre>"
             . "<h4>Migracje:</h4><pre style='background:#fff; padding:10px; border-radius:6px;'>" . e($migrateOut ?: 'Brak nowych migracji.') . "</pre>"
             . "<h4>Kesz (optimize:clear):</h4><pre style='background:#fff; padding:10px; border-radius:6px;'>" . e($clearOut) . "</pre>"
             . "<a href='" . route('backend.posts.ai-studio') . "' style='display:inline-block; margin-top:15px; background:#059669; color:#fff; padding:10px 20px; border-radius:8px; text-decoration:none; font-weight:bold;'>Przejdź do AI Blog Studio →</a>"
