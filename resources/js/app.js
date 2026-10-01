@@ -1,14 +1,6 @@
 // SB Admin core script
 import './sb-admin/scripts'
 
-// SB Admin plugins (conditionally load to prevent Chart.js ReferenceError on frontend)
-if (document.querySelector('.sb-nav-fixed')) {
-    import('./sb-admin/datatables-simple-demo').catch(() => {});
-    import('./sb-admin/chart-area-demo').catch(() => {});
-    import('./sb-admin/chart-bar-demo').catch(() => {});
-    import('./sb-admin/chart-pie-demo').catch(() => {});
-}
-
 // ==========================================================================
 // LUCIDE ICONS — Self-hosted, tree-shaken (replaces unpkg CDN)
 // Only icons actually used in templates are imported.

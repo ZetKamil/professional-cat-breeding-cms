@@ -18,39 +18,9 @@
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-4FWbzECq.js",
+    "file": "assets/app-C5XtSD7t.js",
     "name": "app",
     "src": "resources/js/app.js",
-    "isEntry": true,
-    "dynamicImports": [
-      "resources/js/sb-admin/datatables-simple-demo.js",
-      "resources/js/sb-admin/chart-area-demo.js",
-      "resources/js/sb-admin/chart-bar-demo.js",
-      "resources/js/sb-admin/chart-pie-demo.js"
-    ]
-  },
-  "resources/js/sb-admin/chart-area-demo.js": {
-    "file": "assets/chart-area-demo-fC8TM-oP.js",
-    "name": "chart-area-demo",
-    "src": "resources/js/sb-admin/chart-area-demo.js",
-    "isDynamicEntry": true
-  },
-  "resources/js/sb-admin/chart-bar-demo.js": {
-    "file": "assets/chart-bar-demo-BxECMz_k.js",
-    "name": "chart-bar-demo",
-    "src": "resources/js/sb-admin/chart-bar-demo.js",
-    "isDynamicEntry": true
-  },
-  "resources/js/sb-admin/chart-pie-demo.js": {
-    "file": "assets/chart-pie-demo-CwqS73S5.js",
-    "name": "chart-pie-demo",
-    "src": "resources/js/sb-admin/chart-pie-demo.js",
-    "isDynamicEntry": true
-  },
-  "resources/js/sb-admin/datatables-simple-demo.js": {
-    "file": "assets/datatables-simple-demo-DOuXy_NJ.js",
-    "name": "datatables-simple-demo",
-    "src": "resources/js/sb-admin/datatables-simple-demo.js",
-    "isDynamicEntry": true
+    "isEntry": true
   }
 }
