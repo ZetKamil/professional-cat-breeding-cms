@@ -50,7 +50,7 @@
     @if($currentStep === 1)
         <div wire:key="step-1">
 
-            {{-- Breed selector --}}
+            {{-- ─── Breed selector ─────────────────────────────────────── --}}
             <div class="mb-4">
                 <label class="form-label fw-semibold">
                     <i class="fas fa-paw me-1 text-primary"></i> Rasa kota
@@ -69,26 +69,81 @@
                 </div>
             </div>
 
-            {{-- Topic suggestions --}}
+            {{-- ─── Topic suggestions ──────────────────────────────────── --}}
             <div class="mb-4">
-                <label class="form-label fw-semibold">
-                    <i class="fas fa-lightbulb me-1 text-warning"></i>
-                    Sugerowane tematy na dziś <span class="text-muted fw-normal">(na żywo z Google Trends / AI)</span>
-                </label>
 
-                @if($topicError)
-                    <div class="alert alert-warning d-flex align-items-start gap-2 mb-3">
-                        <i class="fas fa-exclamation-triangle mt-1"></i>
-                        <div>
-                            <strong>Problem z pobraniem trendów:</strong> {{ $topicError }}<br>
-                            <small class="text-muted">Możesz wpisać własny temat w polu poniżej.</small>
-                        </div>
+                @if(! $topicsLoaded)
+                    {{-- === STAN POCZĄTKOWY: przycisk pobierania === --}}
+                    <div class="text-center py-4 border rounded bg-light">
+                        <i class="fas fa-lightbulb fa-2x text-warning mb-3 d-block"></i>
+                        <p class="text-muted mb-3">
+                            Kliknij poniżej, aby pobrać sugerowane tematy blogowe<br>
+                            dla rasy <strong>{{ $breeds[$selectedBreed] ?? $selectedBreed }}</strong>
+                            (Google Trends / AI lub sprawdzone tematy wzorcowe).
+                        </p>
+                        <button type="button"
+                                wire:click="fetchTopics"
+                                wire:loading.attr="disabled"
+                                wire:target="fetchTopics"
+                                id="fetch-topics-btn"
+                                class="btn btn-warning btn-lg px-5">
+                            <span wire:loading.remove wire:target="fetchTopics">
+                                <i class="fas fa-lightbulb me-2"></i> Pobierz sugerowane tematy
+                            </span>
+                            <span wire:loading wire:target="fetchTopics">
+                                <span class="spinner-border spinner-border-sm me-2"></span>
+                                Pobieram tematy… (kilka sekund)
+                            </span>
+                        </button>
                     </div>
-                @elseif(empty($topics))
-                    <div class="alert alert-info py-2 mb-3">
-                        <i class="fas fa-spinner fa-spin me-1"></i> Pobieram najnowsze trendy…
-                    </div>
+
                 @else
+                    {{-- === TEMATY ZAŁADOWANE === --}}
+                    <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+                        <label class="form-label fw-semibold mb-0">
+                            <i class="fas fa-lightbulb me-1 text-warning"></i>
+                            Sugerowane tematy
+                            @if($topicSource === 'live_api')
+                                <span class="badge bg-success text-white ms-1 fw-normal">
+                                    <i class="fas fa-signal me-1"></i>Na żywo z AI
+                                </span>
+                            @elseif($topicSource === 'today_cache')
+                                <span class="badge bg-primary text-white ms-1 fw-normal">
+                                    <i class="fas fa-database me-1"></i>Z dzisiejszego cache
+                                </span>
+                            @elseif($topicSource === 'db_fallback')
+                                <span class="badge bg-warning text-dark ms-1 fw-normal">
+                                    <i class="fas fa-history me-1"></i>Z bazy ({{ $topicDate ?? '—' }})
+                                </span>
+                            @elseif($topicSource === 'curated_fallback')
+                                <span class="badge bg-secondary text-white ms-1 fw-normal">
+                                    <i class="fas fa-layer-group me-1"></i>Tematy wzorcowe
+                                </span>
+                            @endif
+                        </label>
+
+                        <button type="button"
+                                wire:click="refreshTopics"
+                                wire:loading.attr="disabled"
+                                wire:target="refreshTopics"
+                                class="btn btn-sm btn-outline-secondary"
+                                title="Wymuś nowe pobranie z Gemini AI">
+                            <span wire:loading.remove wire:target="refreshTopics">
+                                <i class="fas fa-rotate me-1"></i>Odśwież z AI
+                            </span>
+                            <span wire:loading wire:target="refreshTopics">
+                                <span class="spinner-border spinner-border-sm me-1"></span>Pobieram…
+                            </span>
+                        </button>
+                    </div>
+
+                    @if($topicError)
+                        <div class="alert alert-info py-2 px-3 small mb-3">
+                            <i class="fas fa-info-circle me-1"></i>
+                            {{ $topicError }} Możesz też wpisać własny temat poniżej.
+                        </div>
+                    @endif
+
                     <div class="row g-2">
                         @foreach($topics as $i => $topic)
                             <div class="col-12 col-md-6" wire:key="topic-card-{{ $i }}-{{ $selectedBreed }}">

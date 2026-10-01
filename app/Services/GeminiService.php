@@ -54,7 +54,8 @@ class GeminiService
     }
 
     /**
-     * Send HTTP POST request with x-goog-api-key header and automatic SSL bundle fallback.
+     * Send HTTP POST request with x-goog-api-key header, automatic SSL bundle fallback,
+     * and retry mechanism for transient server errors (503, 502, 504, 429).
      */
     private function sendPostRequest(string $url, array $payload): \Illuminate\Http\Client\Response
     {
@@ -63,19 +64,43 @@ class GeminiService
             'x-goog-api-key' => $this->apiKey,
         ];
 
-        try {
-            return Http::timeout($this->timeout)
-                ->withHeaders($headers)
-                ->post($url, $payload);
-        } catch (ConnectionException $e) {
-            if (str_contains($e->getMessage(), 'SSL') || str_contains($e->getMessage(), 'cURL error 60')) {
-                return Http::withoutVerifying()
-                    ->timeout($this->timeout)
+        $maxAttempts = 3;
+        $attempt = 0;
+
+        while ($attempt < $maxAttempts) {
+            $attempt++;
+            try {
+                $response = Http::timeout($this->timeout)
                     ->withHeaders($headers)
                     ->post($url, $payload);
+
+                // If response status is transient server error (503, 502, 504, 429), retry after exponential backoff
+                if ($attempt < $maxAttempts && in_array($response->status(), [503, 502, 504, 429], true)) {
+                    Log::warning("GeminiService: HTTP {$response->status()} received on attempt {$attempt}/{$maxAttempts}. Retrying...", ['url' => $url]);
+                    usleep((int) (1000000 * pow(2, $attempt - 1))); // 1s, 2s delay
+                    continue;
+                }
+
+                return $response;
+            } catch (ConnectionException $e) {
+                if (str_contains($e->getMessage(), 'SSL') || str_contains($e->getMessage(), 'cURL error 60')) {
+                    return Http::withoutVerifying()
+                        ->timeout($this->timeout)
+                        ->withHeaders($headers)
+                        ->post($url, $payload);
+                }
+
+                if ($attempt < $maxAttempts) {
+                    Log::warning("GeminiService: Connection timeout on attempt {$attempt}/{$maxAttempts}. Retrying...", ['url' => $url]);
+                    usleep((int) (1000000 * pow(2, $attempt - 1)));
+                    continue;
+                }
+
+                throw $e;
             }
-            throw $e;
         }
+
+        throw new ConnectionException('Gemini API request failed after retries.');
     }
 
     /**
@@ -91,7 +116,14 @@ class GeminiService
     {
         $this->assertKeyConfigured();
 
-        $url = self::BASE_URL . $this->textModel . ':generateContent';
+        // Model hierarchy to try in sequence if primary model encounters error (503/404/500)
+        $modelsToTry = array_unique(array_filter([
+            $this->textModel,
+            'gemini-1.5-flash',
+            'gemini-2.0-flash',
+            'gemini-flash-latest',
+            'gemini-1.5-pro',
+        ]));
 
         $payload = [
             'system_instruction' => [
@@ -107,40 +139,45 @@ class GeminiService
             ],
         ];
 
-        try {
-            $response = $this->sendPostRequest($url, $payload);
-        } catch (ConnectionException) {
-            Log::warning('GeminiService: connection timeout', ['model' => $this->textModel]);
-            throw GeminiServiceUnavailableException::timeout();
-        }
+        $lastStatus = 500;
 
-        // Automatic fallback if model returns 404
-        if ($response->status() === 404 && $this->textModel !== 'gemini-flash-latest') {
-            Log::info("GeminiService: model {$this->textModel} returned 404, falling back to gemini-flash-latest");
-            $fallbackUrl = self::BASE_URL . 'gemini-flash-latest:generateContent';
+        foreach ($modelsToTry as $model) {
+            $url = self::BASE_URL . $model . ':generateContent';
+
             try {
-                $response = $this->sendPostRequest($fallbackUrl, $payload);
+                $response = $this->sendPostRequest($url, $payload);
             } catch (ConnectionException) {
-                throw GeminiServiceUnavailableException::timeout();
+                Log::warning('GeminiService: connection timeout', ['model' => $model]);
+                continue;
+            }
+
+            $lastStatus = $response->status();
+
+            if ($response->status() === 429) {
+                Log::warning("GeminiService: model {$model} rate limited");
+                continue;
+            }
+
+            if (! $response->successful()) {
+                Log::warning("GeminiService: model {$model} returned HTTP {$lastStatus}, trying fallback if available...", [
+                    'body' => $response->body(),
+                ]);
+                continue;
+            }
+
+            $body = $response->json();
+            $text = $body['candidates'][0]['content']['parts'][0]['text'] ?? '';
+
+            if (! empty($text)) {
+                return $text;
             }
         }
 
-        if ($response->status() === 429) {
-            Log::warning('GeminiService: rate limited');
+        if ($lastStatus === 429) {
             throw GeminiServiceUnavailableException::rateLimited();
         }
 
-        if (! $response->successful()) {
-            Log::error('GeminiService: unexpected HTTP status', [
-                'status' => $response->status(),
-                'body'   => $response->body(),
-            ]);
-            throw GeminiServiceUnavailableException::serverError($response->status());
-        }
-
-        $body = $response->json();
-
-        return $body['candidates'][0]['content']['parts'][0]['text'] ?? '';
+        throw GeminiServiceUnavailableException::serverError($lastStatus);
     }
 
     /**

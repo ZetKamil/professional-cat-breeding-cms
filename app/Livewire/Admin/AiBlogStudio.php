@@ -50,6 +50,8 @@ class AiBlogStudio extends Component
     public string $errorMessage      = '';
     public string $successMessage    = '';
     public string $topicError        = '';
+    public bool   $topicsLoaded      = false;  // true after user explicitly fetches topics
+    public bool   $isFetchingTopics  = false;
 
     // ─── Computed data (loaded on mount) ─────────────────────────────
     public array          $breeds    = [];
@@ -57,41 +59,94 @@ class AiBlogStudio extends Component
     public array          $animals   = [];  // grouped by breed: ['breed' => [Animal, ...]]
     public array          $categories = [];
 
+    public string $topicSource = 'none';
+    public ?string $topicDate   = null;
+
     public function mount(
         TopicSuggesterService   $topicService,
         AiBlogGeneratorService  $blogService
     ): void {
+        // IMPORTANT: No API calls here — page must open instantly.
+        // Topics are fetched only when user clicks the fetch button.
         $this->breeds     = $topicService->breeds();
-        $this->loadTopics($topicService, $this->selectedBreed);
         $this->loadAnimals($blogService);
         $this->categories = Category::orderBy('name')->get(['id', 'name'])->toArray();
     }
 
     // ─── Step 1 Actions ─────────────────────────────────────────────
 
-    public function selectBreed(string $breed, TopicSuggesterService $topicService, AiBlogGeneratorService $blogService): void
+    public function selectBreed(string $breed, AiBlogGeneratorService $blogService): void
     {
         $this->selectedBreed     = $breed;
         $this->selectedTopic     = '';
         $this->customTopic       = '';
         $this->selectedAnimalIds = [];
-        $this->loadTopics($topicService, $breed);
+        // Reset topics — user must re-fetch for new breed
+        $this->topics        = [];
+        $this->topicsLoaded  = false;
+        $this->topicError    = '';
+        $this->topicSource   = 'none';
         $this->loadAnimals($blogService);
     }
 
-    public function loadTopics(TopicSuggesterService $topicService, string $breed): void
+    /**
+     * Explicitly fetch topics — called only when user clicks the fetch button.
+     * Never called automatically on mount or breed change.
+     */
+    public function fetchTopics(TopicSuggesterService $topicService): void
     {
-        $this->topicError = '';
-        $this->topics     = [];
+        $this->isFetchingTopics = true;
+        $this->topicError       = '';
+        $this->topics           = [];
+        $this->topicSource      = 'none';
+        $this->topicDate        = null;
 
         try {
-            $this->topics = $topicService->suggest($breed);
+            $status             = $topicService->suggestWithStatus($this->selectedBreed);
+            $this->topics       = $status['topics'];
+            $this->topicSource  = $status['source'];
+            $this->topicDate    = $status['date'];
+            $this->topicsLoaded = true;
         } catch (GeminiApiKeyMissingException) {
-            $this->topicError = 'Klucz API Gemini nie jest skonfigurowany w pliku .env na serwerze.';
-        } catch (GeminiServiceUnavailableException $e) {
-            $this->topicError = 'Usługa AI jest chwilowo niedostępna (' . $e->getMessage() . ').';
+            $this->topics       = TopicSuggesterService::CURATED_TOPICS[$this->selectedBreed] ?? [];
+            $this->topicSource  = 'curated_fallback';
+            $this->topicsLoaded = true;
+            $this->topicError   = 'Klucz API Gemini nie jest skonfigurowany — załadowano tematy wzorcowe.';
         } catch (\Throwable $e) {
-            $this->topicError = 'Nie udało się pobrać aktualnych trendów: ' . $e->getMessage();
+            Log::warning('AiBlogStudio: fetchTopics exception', ['error' => $e->getMessage()]);
+            $this->topics       = TopicSuggesterService::CURATED_TOPICS[$this->selectedBreed] ?? [];
+            $this->topicSource  = 'curated_fallback';
+            $this->topicsLoaded = true;
+            $this->topicError   = 'AI chwilowo niedostępne — załadowano sprawdzone tematy wzorcowe.';
+        } finally {
+            $this->isFetchingTopics = false;
+        }
+    }
+
+    /**
+     * Force-refresh topics from Gemini API ignoring today\'s cache.
+     */
+    public function refreshTopics(TopicSuggesterService $topicService): void
+    {
+        $this->isFetchingTopics = true;
+        $this->topicError       = '';
+        $this->topics           = [];
+        $this->topicDate        = null;
+
+        try {
+            $status             = $topicService->suggestWithStatus($this->selectedBreed, forceRefresh: true);
+            $this->topics       = $status['topics'];
+            $this->topicSource  = $status['source'];
+            $this->topicDate    = $status['date'];
+            $this->topicsLoaded = true;
+        } catch (\Throwable $e) {
+            Log::warning('AiBlogStudio: refreshTopics exception', ['error' => $e->getMessage()]);
+            $this->topics       = TopicSuggesterService::CURATED_TOPICS[$this->selectedBreed] ?? [];
+            $this->topicSource  = 'curated_fallback';
+            $this->topicsLoaded = true;
+            $this->topicError   = 'AI chwilowo niedostępne — załadowano sprawdzone tematy wzorcowe.';
+        } finally {
+            $this->isFetchingTopics = false;
         }
     }
 

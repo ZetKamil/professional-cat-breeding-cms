@@ -44,17 +44,19 @@ class TopicSuggesterServiceTest extends TestCase
         $this->assertEquals('Cena kota syjamskiego', $topics[0]['title']);
     }
 
-    public function test_suggest_throws_exception_on_api_failure_no_hardcoded_fallbacks(): void
+    public function test_suggest_returns_fallback_topics_on_api_failure(): void
     {
         $this->mock(GeminiService::class, function (MockInterface $mock) {
             $mock->shouldReceive('generateText')
                 ->once()
-                ->andThrow(new \RuntimeException('API error'));
+                ->andThrow(new \RuntimeException('API error 503'));
         });
 
-        $this->expectException(\RuntimeException::class);
-
         $service = app(TopicSuggesterService::class);
-        $service->suggest('bengalski');
+        $topics  = $service->suggest('bengalski');
+
+        $this->assertNotEmpty($topics);
+        $this->assertCount(6, $topics);
+        $this->assertStringContainsString('bengalski', strtolower($topics[0]['title']));
     }
 }
