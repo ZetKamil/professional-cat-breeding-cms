@@ -10,6 +10,7 @@
     <title>{{ $title ?? 'Dashboard - SB Admin' }}</title>
 
     @vite(['resources/css/styles.css', 'resources/js/app.js'])
+    @livewireStyles
 
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 
@@ -53,6 +54,8 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+@livewireScripts
 
 {{-- Named slot: extra scripts per pagina (optioneel) --}}
 {{ $scripts ?? '' }}
