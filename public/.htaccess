@@ -88,6 +88,11 @@ Options -Indexes -MultiViews +FollowSymLinks
 # SECURITY HEADERS
 # ============================================================
 <IfModule mod_headers.c>
+    Header unset X-Content-Type-Options
+    Header unset X-Frame-Options
+    Header unset Referrer-Policy
+    Header unset Permissions-Policy
+
     Header always set X-Content-Type-Options "nosniff"
     Header always set X-Frame-Options "SAMEORIGIN"
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
