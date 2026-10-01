@@ -1,8 +1,8 @@
 {{-- AI Blog Studio — 3-step wizard with AI Agent & MCP Tools Integration --}}
 <div>
 
-    {{-- ─── Global Livewire Action Loading Bar ────────────────────────── --}}
-    <div wire:loading class="alert alert-info d-flex align-items-center justify-content-center gap-2 mb-3 py-2 shadow-sm" style="border-radius: 8px;">
+    {{-- ─── Action Loading Bar (ONLY visible when an action button is clicked) ─── --}}
+    <div wire:loading wire:target="fetchTopics, refreshTopics, selectBreed, goToStep2, goToStep3, saveDraft" class="alert alert-info d-flex align-items-center justify-content-center gap-2 mb-3 py-2 shadow-sm" style="border-radius: 8px;">
         <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
         <span class="fw-bold text-dark">Agent AI wykonuje zapytanie... proszę czekać.</span>
     </div>
