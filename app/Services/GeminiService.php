@@ -36,7 +36,8 @@ class GeminiService
         // We store whatever is configured — trim any quotes/spaces from .env
         $rawKey           = (string) config('services.gemini.api_key', '');
         $this->apiKey     = trim($rawKey, " \t\n\r\0\x0B\"'");
-        $this->textModel  = (string) config('services.gemini.text_model',  'gemini-flash-latest');
+        $configured       = (string) config('services.gemini.text_model', 'gemini-2.0-flash');
+        $this->textModel  = in_array($configured, ['gemini-flash-latest', 'gemini-2.5-flash'], true) ? 'gemini-2.0-flash' : $configured;
         $this->imageModel = (string) config('services.gemini.image_model', 'imagen-3.0-generate-002');
         $this->timeout    = (int) config('services.gemini.timeout', 60);
     }
@@ -128,12 +129,12 @@ class GeminiService
         // Topic suggestions need speed, not a 60s budget. Images use the full timeout.
         $textTimeout = min($this->timeout, 10);
 
-        // Try primary model + fallbacks (gemini-2.5-flash, gemini-2.0-flash, gemini-1.5-flash)
+        // Try valid models: gemini-2.0-flash, gemini-1.5-flash, gemini-1.5-pro
         $modelsToTry = array_values(array_unique(array_filter([
             $this->textModel,
-            'gemini-2.5-flash',
             'gemini-2.0-flash',
             'gemini-1.5-flash',
+            'gemini-1.5-pro',
         ])));
 
         $payload = [
