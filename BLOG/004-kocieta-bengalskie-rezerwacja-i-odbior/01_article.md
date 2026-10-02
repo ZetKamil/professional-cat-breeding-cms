@@ -87,5 +87,5 @@ W hodowli Kotów z Mazowieckiej Szwajcarii (Sikórz k. Płocka / Mazowieckie) po
 Nie zwlekaj — skontaktuj się z nami, zapytaj o szczegóły i zarezerwuj swojego wymarzonego kota bengalskiego.
 
 👉 **[Zobacz dostępne kocięta bengalskie i zarezerwuj malucha →](/koty)**  
-📞 **Telefon / WhatsApp:** +48 789 790 846  
+📞 **Telefon / WhatsApp:** +48 514 153 204  
 📍 **Lokalizacja:** Sikórz k. Płocka (woj. mazowieckie — blisko Warszawy i Łodzi)

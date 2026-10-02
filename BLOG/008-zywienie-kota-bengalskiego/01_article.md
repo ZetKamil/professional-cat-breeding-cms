@@ -71,5 +71,5 @@ Aktualnie w naszej hodowli posiadamy **5 pięknych kociąt bengalskich**:
 Oferujemy bardzo [atrakcyjne ceny](/blog/001-ile-kosztuje-kot-bengalski) oraz stały kontakt z hodowcą po zakupie.
 
 👉 **[Skontaktuj się z nami i zapytaj o żywienie oraz dostępne kocięta →](/contact)**  
-📞 **Telefon / WhatsApp:** +48 789 790 846  
+📞 **Telefon / WhatsApp:** +48 514 153 204  
 📍 **Lokalizacja:** Sikórz k. Płocka (woj. mazowieckie — blisko Warszawy i Łodzi)

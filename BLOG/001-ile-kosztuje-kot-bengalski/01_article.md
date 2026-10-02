@@ -97,6 +97,6 @@ Każdy maluch opuszcza naszą hodowlę z pełnym rodowodem SHiOZ, książeczką 
 Jeżeli szukasz kota bengalskiego z pewnego źródła, o zrównoważonym charakterze i atrakcyjnej cenie — skontaktuj się z nami i umów wizytę!
 
 👉 **[Zobacz dostępne kocięta bengalskie i zarezerwuj malucha →](/koty)**  
-📞 **Telefon / WhatsApp:** +48 789 790 846  
+📞 **Telefon / WhatsApp:** +48 514 153 204  
 📍 **Lokalizacja:** Sikórz (powiat płocki, woj. mazowieckie — blisko Warszawy i Łodzi)
 

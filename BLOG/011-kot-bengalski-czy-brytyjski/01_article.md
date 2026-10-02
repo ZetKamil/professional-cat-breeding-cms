@@ -79,5 +79,5 @@ W tej chwili w naszej hodowli w Sikorzu posiadamy **5 pięknych kociąt bengalsk
 - 🗓️ **3 młodsze kocięta** — w trakcie ostatnich dni socjalizacji, **gotowe do odbioru od przyszłego tygodnia**!
 
 👉 **[Zobacz dostępne koty i porozmawiaj z hodowcą →](/koty)**  
-📞 **Telefon / WhatsApp:** +48 789 790 846  
+📞 **Telefon / WhatsApp:** +48 514 153 204  
 📍 **Lokalizacja:** Sikórz k. Płocka (woj. mazowieckie — blisko Warszawy, Płocka i Łodzi)

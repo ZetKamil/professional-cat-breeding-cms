@@ -83,5 +83,5 @@ W naszej hodowli w Sikorzu posiadamy aktualnie **5 cudownych kociąt bengalskich
 Oferujemy bardzo atrakcyjne, konkurencyjne ceny w stosunku do średniej rynkowej, zapewniając bezkompromisową jakość, pełne badania genetyczne parents (HCM, PKD) oraz pełną dokumentację felinologiczną.
 
 👉 **[Zobacz nasze dostępne kocięta bengalskie i skontaktuj się z nami →](/koty)**  
-📞 **Telefon / WhatsApp:** +48 789 790 846  
+📞 **Telefon / WhatsApp:** +48 514 153 204  
 📍 **Lokalizacja:** Sikórz k. Płocka (woj. mazowieckie)

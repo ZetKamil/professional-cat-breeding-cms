@@ -73,5 +73,5 @@ Aktualnie w naszej hodowli w Sikorzu posiadamy **5 wyjątkowych kociąt bengalsk
 Zapraszamy do kontaktu, rezerwacji oraz umówienia wizyty w naszej hodowli.
 
 👉 **[Poznaj naszą hodowlę i zobacz dostępne kocięta →](/o-hodowli)**  
-📞 **Telefon / WhatsApp:** +48 789 790 846  
+📞 **Telefon / WhatsApp:** +48 514 153 204  
 📍 **Lokalizacja:** Sikórz (powiat płocki, woj. mazowieckie — blisko Warszawy, Płocka i Łodzi)

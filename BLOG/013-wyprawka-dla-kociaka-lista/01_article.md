@@ -78,5 +78,5 @@ W hodowli Kotów z Mazowieckiej Szwajcarii (Sikórz k. Płocka / Mazowieckie) po
 Oferujemy bardzo atrakcyjne, konkurencyjne ceny oraz pełne wsparcie merytoryczne.
 
 👉 **[Zobacz nasze dostępne kocięta bengalskie i skontaktuj się z nami →](/koty)**  
-📞 **Telefon / WhatsApp:** +48 789 790 846  
+📞 **Telefon / WhatsApp:** +48 514 153 204  
 📍 **Lokalizacja:** Sikórz k. Płocka (woj. mazowieckie — blisko Warszawy i Łodzi)

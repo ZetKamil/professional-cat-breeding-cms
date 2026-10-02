@@ -71,5 +71,5 @@ W hodowli Kotów z Mazowieckiej Szwajcarii posiadamy obecnie **5 cudownych koci�
 Oferujemy bardzo [atrakcyjne ceny](/blog/001-ile-kosztuje-kot-bengalski) oraz wsparcie po zakupie.
 
 👉 **[Poznaj naszą hodowlę i zarezerwuj malucha →](/o-hodowli)**  
-📞 **Telefon / WhatsApp:** +48 789 790 846  
+📞 **Telefon / WhatsApp:** +48 514 153 204  
 📍 **Lokalizacja:** Sikórz k. Płocka (woj. mazowieckie — blisko Warszawy i Łodzi)

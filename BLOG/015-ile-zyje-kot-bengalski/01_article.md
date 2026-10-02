@@ -55,5 +55,5 @@ W naszej hodowli w Sikorzu k. Płocka posiadamy w tej chwili **5 pięknych koci�
 Oferujemy bardzo atrakcyjne i nieco niższe ceny niż średnia rynkowa konkurencji oraz pełne wsparcie zdrowotne na całe życie kota.
 
 👉 **[Poznaj naszą hodowlę i zobacz certyfikaty naszych kotów →](/o-hodowli)**  
-📞 **Telefon / WhatsApp:** +48 789 790 846  
+📞 **Telefon / WhatsApp:** +48 514 153 204  
 📍 **Lokalizacja:** Sikórz k. Płocka (woj. mazowieckie — blisko Warszawy i Łodzi)

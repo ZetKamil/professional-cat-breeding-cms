@@ -77,5 +77,5 @@ W naszej hodowli w Sikorzu k. Płocka (woj. mazowieckie) posiadamy aktualnie **5
 Oferujemy ceny atrakcyjniejsze i nieco niższe niż średnia rynkowa konkurencji oraz stałe wsparcie po zakupie.
 
 👉 **[Zobacz dostępne kocięta bengalskie i zarezerwuj malucha →](/koty)**  
-📞 **Telefon / WhatsApp:** +48 789 790 846  
+📞 **Telefon / WhatsApp:** +48 514 153 204  
 📍 **Lokalizacja:** Sikórz k. Płocka (woj. mazowieckie — blisko Warszawy i Łodzi)

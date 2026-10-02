@@ -68,5 +68,5 @@ W hodowli Kotów z Mazowieckiej Szwajcarii (Sikórz k. Płocka / Mazowieckie) po
 Oferujemy atrakcyjniejsze i nieco niższe ceny niż średnia rynkowa konkurencji, gwarantując bezkompromisowy standard zdrowotny.
 
 👉 **[Poznaj naszą hodowlę i zobacz certyfikaty naszych kotów →](/o-hodowli)**  
-📞 **Telefon / WhatsApp:** +48 789 790 846  
+📞 **Telefon / WhatsApp:** +48 514 153 204  
 📍 **Lokalizacja:** Sikórz k. Płocka (woj. mazowieckie — blisko Warszawy i Łodzi)
