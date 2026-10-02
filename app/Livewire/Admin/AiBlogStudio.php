@@ -270,7 +270,7 @@ class AiBlogStudio extends Component
             $draft = $this->generatedDraft;
 
             $draft['is_published'] = false;
-            $draft['published_at'] = null;
+            $draft['published_at'] = now();
             $draft['user_id']      = Auth::id();
 
             $draft['body'] = $this->injectAnimalPhotos($draft['body'] ?? '');
@@ -284,22 +284,32 @@ class AiBlogStudio extends Component
                 'meta_title'       => $draft['meta_title'] ?? null,
                 'meta_description' => $draft['meta_description'] ?? null,
                 'is_published'     => false,
-                'published_at'     => null,
+                'published_at'     => $draft['published_at'],
                 'categories'       => [],
             ]);
 
+            $heroCreated = false;
             if (! empty($draft['hero_image_prompt'])) {
                 try {
-                    $blogService->generateHeroImage($draft['hero_image_prompt'], $post);
+                    $media = $blogService->generateHeroImage($draft['hero_image_prompt'], $post);
+                    if ($media) {
+                        $heroCreated = true;
+                    }
                 } catch (\Throwable $e) {
-                    Log::warning('AI Blog Studio: failed to generate hero cover image', [
+                    Log::warning('AI Blog Studio: failed to generate hero cover image via Imagen', [
                         'post_id' => $post->id,
                         'error'   => $e->getMessage(),
                     ]);
                 }
             }
 
-            $this->successMessage = "Szkic \"{$post->title}\" został zapisany! Okładka AI i zdjęcia kotów są już wstawione.";
+            // If Imagen is unavailable or failed (e.g. Free Tier Google API key),
+            // automatically attach the selected cat's photo as the Post's Featured Image!
+            if (! $heroCreated) {
+                $this->attachFeaturedImageFromAnimal($post, $this->selectedAnimalIds);
+            }
+
+            $this->successMessage = "Szkic \"{$post->title}\" został zapisany! Zdjęcie wyróżniające oraz galeria kotów są już wstawione.";
             $this->generatedDraft  = null;
             $this->currentStep     = 1;
             $this->reset(['selectedTopic', 'customTopic', 'selectedAnimalIds', 'heroImageDataUri']);
@@ -361,7 +371,7 @@ class AiBlogStudio extends Component
         }
 
         $animals = \App\Models\Animal::published()
-            ->with('gallery')
+            ->with(['media', 'gallery'])
             ->whereIn('id', $this->selectedAnimalIds)
             ->get();
 
@@ -372,7 +382,10 @@ class AiBlogStudio extends Component
         $galleryHtml = '<div class="ai-article-gallery row g-3 my-4">';
 
         foreach ($animals as $animal) {
-            $photos = $animal->gallery->take(2);
+            // Get gallery photos or fall back to primary featured media
+            $photos = $animal->gallery->isNotEmpty()
+                ? $animal->gallery->take(2)
+                : collect([$animal->media])->filter();
 
             foreach ($photos as $photo) {
                 $url = $photo->url();
@@ -391,5 +404,83 @@ class AiBlogStudio extends Component
         $galleryHtml .= '</div>';
 
         return preg_replace('/<\/p>/', '</p>' . $galleryHtml, $body, 1) ?? $body . $galleryHtml;
+    }
+
+    /**
+     * Attach a high-resolution photo from the selected cattery animal as the Post's Featured Image.
+     * Ensures the post ALWAYS has a featured cover image, even when AI image generation (Imagen) is unavailable.
+     */
+    private function attachFeaturedImageFromAnimal(\App\Models\Post $post, array $animalIds): void
+    {
+        $animals = \App\Models\Animal::whereIn('id', $animalIds)
+            ->with(['media', 'gallery'])
+            ->get();
+
+        if ($animals->isEmpty()) {
+            $breedLabel = $this->breeds[$this->selectedBreed] ?? null;
+            $animals = \App\Models\Animal::published()
+                ->where('breed', 'like', "%{$breedLabel}%")
+                ->with(['media', 'gallery'])
+                ->get();
+        }
+
+        $sourceMedia = null;
+        $sourceAnimal = null;
+
+        foreach ($animals as $animal) {
+            if ($animal->media) {
+                $sourceMedia  = $animal->media;
+                $sourceAnimal = $animal;
+                break;
+            }
+            if ($animal->gallery->isNotEmpty()) {
+                $sourceMedia  = $animal->gallery->first();
+                $sourceAnimal = $animal;
+                break;
+            }
+        }
+
+        if (! $sourceMedia) {
+            return;
+        }
+
+        try {
+            $sourceDisk = $sourceMedia->disk ?? 'public';
+            $sourcePath = $sourceMedia->path();
+
+            if (\Illuminate\Support\Facades\Storage::disk($sourceDisk)->exists($sourcePath)) {
+                $ext          = pathinfo($sourceMedia->filename, PATHINFO_EXTENSION) ?: 'jpg';
+                $newFilename  = 'post_' . $post->id . '_' . uniqid() . '.' . $ext;
+                $newDirectory = 'posts';
+                $newPath      = $newDirectory . '/' . $newFilename;
+
+                \Illuminate\Support\Facades\Storage::disk($sourceDisk)->copy($sourcePath, $newPath);
+
+                \App\Models\Media::create([
+                    'disk'          => $sourceDisk,
+                    'directory'     => $newDirectory,
+                    'filename'      => $newFilename,
+                    'mime_type'     => $sourceMedia->mime_type ?: 'image/jpeg',
+                    'size'          => $sourceMedia->size ?: 0,
+                    'title'         => $post->title,
+                    'alt_text'      => e(($sourceAnimal?->name ?? 'Kot') . ' — ' . $post->title),
+                    'caption'       => $sourceAnimal ? "{$sourceAnimal->name} ({$sourceAnimal->breed})" : null,
+                    'is_featured'   => true,
+                    'mediable_type' => \App\Models\Post::class,
+                    'mediable_id'   => $post->id,
+                ]);
+
+                \Illuminate\Support\Facades\Log::info('AI Blog Studio: attached animal photo as post featured image', [
+                    'post_id'   => $post->id,
+                    'animal_id' => $sourceAnimal?->id,
+                    'filename'  => $newFilename,
+                ]);
+            }
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('AI Blog Studio: failed to attach animal photo as post featured image', [
+                'post_id' => $post->id,
+                'error'   => $e->getMessage(),
+            ]);
+        }
     }
 }
