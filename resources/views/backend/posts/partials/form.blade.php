@@ -558,11 +558,29 @@ document.addEventListener('DOMContentLoaded', function () {
         image_url: ''
     };
 
-    if (rawSections.length > 1) {
-        closingSection = Object.assign({}, closingSection, rawSections[rawSections.length - 1]);
+    // Check if the last section is a legacy or custom cattery closing/CTA section
+    const lastItem = rawSections[rawSections.length - 1];
+    const isLegacyOrCustomCta = rawSections.length > 1 && lastItem && (
+        (lastItem.heading && (
+            lastItem.heading.startsWith('🐾') ||
+            lastItem.heading.toLowerCase().includes('dostępne kocięta') ||
+            lastItem.heading.toLowerCase().includes('rezerwacja') ||
+            lastItem.heading.toLowerCase().includes('kontakt z hodowlą') ||
+            lastItem.heading.toLowerCase().includes('zapraszamy do kontaktu')
+        )) ||
+        (lastItem.body && (
+            lastItem.body.toLowerCase().includes('rezerwacj') &&
+            lastItem.body.toLowerCase().includes('kociąt')
+        ))
+    );
+
+    if (isLegacyOrCustomCta) {
+        closingSection = Object.assign({}, closingSection, lastItem);
         regularSections = rawSections.slice(0, rawSections.length - 1);
+        if (modeCustomRadio) modeCustomRadio.checked = true;
     } else {
         regularSections = rawSections;
+        if (modeGlobalRadio) modeGlobalRadio.checked = true;
     }
 
     // ── Elements ─────────────────────────────────────────────────────
@@ -933,6 +951,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // ── Init ─────────────────────────────────────────────────────────
     updateClosingUI();
+    updateClosingMode();
     renderRegularSections();
 });
 </script>

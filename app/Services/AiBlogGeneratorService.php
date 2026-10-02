@@ -111,6 +111,8 @@ class AiBlogGeneratorService
         $rawResponse = $this->gemini->generateText($systemPrompt, $userPrompt);
         $parsed      = $this->parseGeminiResponse($rawResponse);
 
+        $sections = $this->normalizeSections($parsed, $topic);
+
         // Safety net: generate hero image prompt even if Gemini did not return one
         $heroImagePrompt = $parsed['hero_image_prompt']
             ?? $this->fallbackHeroPrompt($breed);
@@ -119,16 +121,16 @@ class AiBlogGeneratorService
             // Post fields — passed directly to PostService::create()
             'title'       => $parsed['h1'] ?? $topic,
             'slug'        => Str::slug($parsed['h1'] ?? $topic),
-            'excerpt'     => $parsed['excerpt'] ?? '',
-            'sections'    => $parsed['sections'] ?? null,
+            'excerpt'     => $parsed['excerpt'] ?? ($sections[0]['body'] ?? ''),
+            'sections'    => $sections,
             // body is auto-generated from sections in PostRequest, but set here for fallback
-            'body'        => $this->sectionsToBody($parsed['sections'] ?? []),
+            'body'        => $this->sectionsToBody($sections),
             'is_published' => false,   // ALWAYS false — human must publish manually
             'published_at' => null,
 
             // SEO metadata (stored separately from post body)
-            'meta_title'       => $parsed['meta_title'] ?? null,
-            'meta_description' => $parsed['meta_description'] ?? null,
+            'meta_title'       => $parsed['meta_title'] ?? Str::limit($parsed['h1'] ?? $topic, 60),
+            'meta_description' => $parsed['meta_description'] ?? Str::limit($parsed['excerpt'] ?? '', 155),
 
             // Passed back to Livewire to offer image generation
             'hero_image_prompt' => $heroImagePrompt,
@@ -217,6 +219,7 @@ class AiBlogGeneratorService
         - All other sections MUST have a non-empty heading (H2 level).
         - image_url is always empty string "" — images will be added manually by the editor.
         - body is plain text only. No HTML tags.
+        - DO NOT generate a contact/closing cattery offer section (e.g. "Dostępne kocięta", "Kontakt z hodowlą"). The website dynamically appends the live cattery offer and contact card at the bottom of every article. Focus 100% on high-quality educational knowledge and advice for the reader.
         PROMPT;
     }
 
@@ -349,5 +352,135 @@ class AiBlogGeneratorService
             }
             return implode("\n\n", $parts);
         })->implode("\n\n");
+    }
+
+    /**
+     * Normalize the parsed Gemini response into a standard sections array:
+     * [
+     *   ['heading' => '', 'body' => '...', 'image_url' => ''],
+     *   ['heading' => 'H2...', 'body' => '...', 'image_url' => ''],
+     * ]
+     *
+     * Handles:
+     * - Key variations ('content', 'text', 'paragraph' -> 'body')
+     * - Key variations ('title', 'subtitle' -> 'heading')
+     * - Ensures Section 0 is always the intro (heading = '')
+     * - Strips redundant trailing CTA / contact sections (since Global CTA handles this dynamically)
+     * - Fallback: parses raw markdown or HTML body if 'sections' was missing
+     */
+    public function normalizeSections(array $parsed, string $fallbackTopic = ''): array
+    {
+        $rawSections = $parsed['sections'] ?? null;
+
+        // Fallback: If sections is missing, parse raw body / content_html / excerpt
+        if (!is_array($rawSections) || empty($rawSections)) {
+            $rawContent = $parsed['body'] ?? $parsed['content_html'] ?? $parsed['content'] ?? '';
+            $rawSections = $this->parseContentIntoSections($rawContent, $parsed['excerpt'] ?? '');
+        }
+
+        $normalized = [];
+
+        foreach ($rawSections as $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+
+            // Extract heading with fallbacks
+            $heading = trim((string) (
+                $item['heading'] ?? $item['title'] ?? $item['subtitle'] ?? ''
+            ));
+
+            // Extract body with fallbacks
+            $body = trim((string) (
+                $item['body'] ?? $item['content'] ?? $item['text'] ?? $item['paragraph'] ?? ''
+            ));
+
+            // Strip HTML tags if Gemini returned raw tags
+            $body = strip_tags(str_replace(['<br>', '<br/>', '<br />', '</p>'], ["\n", "\n", "\n", "\n\n"], $body));
+            $body = trim(preg_replace("/\n{3,}/", "\n\n", $body));
+
+            $imageUrl = trim((string) ($item['image_url'] ?? $item['image_path'] ?? ''));
+
+            if ($body === '' && $heading === '') {
+                continue;
+            }
+
+            // Omit legacy trailing CTA / contact section if Gemini generated one
+            // because our CMS dynamically displays the live Global CTA at the bottom
+            $isClosingCta = str_starts_with($heading, '🐾')
+                || str_contains(mb_strtolower($heading), 'dostępne kocięta')
+                || str_contains(mb_strtolower($heading), 'rezerwacja')
+                || str_contains(mb_strtolower($heading), 'kontakt z hodowlą')
+                || str_contains(mb_strtolower($heading), 'zapraszamy do kontaktu');
+
+            if ($isClosingCta && count($normalized) >= 3) {
+                continue;
+            }
+
+            $normalized[] = [
+                'heading'   => $heading,
+                'body'      => $body,
+                'image_url' => $imageUrl,
+            ];
+        }
+
+        // Guarantee at least 1 section exists
+        if (empty($normalized)) {
+            $introText = !empty($parsed['excerpt']) ? $parsed['excerpt'] : "Wprowadzenie do artykułu na temat: {$fallbackTopic}.";
+            $normalized[] = [
+                'heading'   => '',
+                'body'      => $introText,
+                'image_url' => '',
+            ];
+        }
+
+        // Section 0 MUST have empty heading (it's the intro lead section in our editorial template)
+        $normalized[0]['heading'] = '';
+
+        return $normalized;
+    }
+
+    /**
+     * Fallback parser to break markdown or plain text into sections by H2 (##) or <h2> tags.
+     */
+    private function parseContentIntoSections(string $content, string $excerpt = ''): array
+    {
+        $content = trim($content);
+        if ($content === '') {
+            return !empty($excerpt)
+                ? [['heading' => '', 'body' => $excerpt, 'image_url' => '']]
+                : [];
+        }
+
+        // Convert HTML <h2> to markdown ##
+        $content = preg_replace('/<h2[^>]*>(.*?)<\/h2>/i', "\n## $1\n", $content);
+
+        // Split by markdown ##
+        $parts = preg_split('/(?=^##\s+)/m', $content);
+
+        $sections = [];
+        foreach ($parts as $part) {
+            $part = trim($part);
+            if ($part === '') continue;
+
+            if (preg_match('/^##\s+(.+)$/m', $part, $matches)) {
+                $heading = trim($matches[1]);
+                $body = trim(preg_replace('/^##\s+.+$/m', '', $part));
+                $sections[] = [
+                    'heading'   => $heading,
+                    'body'      => $body,
+                    'image_url' => '',
+                ];
+            } else {
+                // Intro text before any H2
+                $sections[] = [
+                    'heading'   => '',
+                    'body'      => $part,
+                    'image_url' => '',
+                ];
+            }
+        }
+
+        return $sections;
     }
 }

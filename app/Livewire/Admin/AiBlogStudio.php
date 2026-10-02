@@ -291,6 +291,9 @@ class AiBlogStudio extends Component
                 ? $blogService->sectionsToBody($sections)
                 : ($draft['body'] ?? '');
 
+            $topicForCategory = trim($this->customTopic) ?: trim($this->selectedTopic);
+            $assignedCategories = $this->detectCategoryForTopic($topicForCategory);
+
             $post = $postService->create([
                 'user_id'             => $draft['user_id'],
                 'title'               => $draft['title'],
@@ -303,7 +306,7 @@ class AiBlogStudio extends Component
                 'meta_description'    => $draft['meta_description'] ?? null,
                 'is_published'        => false,
                 'published_at'        => $draft['published_at'],
-                'categories'          => [],
+                'categories'          => $assignedCategories,
             ]);
 
             $heroCreated = false;
@@ -567,5 +570,36 @@ class AiBlogStudio extends Component
         }
 
         return $sections;
+    }
+
+    /**
+     * Automatically suggest/assign a category matching the topic for the blog post.
+     *
+     * @return array<int> Category IDs
+     */
+    private function detectCategoryForTopic(string $topic): array
+    {
+        $lower = mb_strtolower($topic);
+
+        $matchedSlug = match (true) {
+            str_contains($lower, 'karm') || str_contains($lower, 'żywien') || str_contains($lower, 'diet') || str_contains($lower, 'barf') || str_contains($lower, 'mięs')
+                => 'zywienie-holistyczne',
+
+            str_contains($lower, 'wyprawk') || str_contains($lower, 'szczotk') || str_contains($lower, 'pielęgnac') || str_contains($lower, 'kąpiel') || str_contains($lower, 'kuwet') || str_contains($lower, 'drapak') || str_contains($lower, 'linieni')
+                => 'wyprawka-i-pielegnacja',
+
+            str_contains($lower, 'zdrow') || str_contains($lower, 'badani') || str_contains($lower, 'chorob') || str_contains($lower, 'genetyk') || str_contains($lower, 'hcm') || str_contains($lower, 'pkd') || str_contains($lower, 'szczepien') || str_contains($lower, 'kastrac')
+                => 'zdrowie-i-genetyka',
+
+            str_contains($lower, 'wychowan') || str_contains($lower, 'socjalizac') || str_contains($lower, 'zachowan') || str_contains($lower, 'dzieć') || str_contains($lower, 'dzieck') || str_contains($lower, 'pies') || str_contains($lower, 'miaucz')
+                => 'socjalizacja-i-wychowanie',
+
+            default
+                => 'odmiany-i-rasy',
+        };
+
+        $category = \App\Models\Category::where('slug', $matchedSlug)->first();
+
+        return $category ? [$category->id] : [];
     }
 }
