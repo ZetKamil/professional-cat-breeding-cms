@@ -70,7 +70,9 @@
                         @if($isIntro)
                             {{-- Intro section: no H2, just lead paragraph --}}
                             @if($sectionBody)
-                                <p class="article-intro-paragraph">{{ $sectionBody }}</p>
+                                <div class="article-intro-content">
+                                    {!! Str::markdown($sectionBody) !!}
+                                </div>
                             @endif
                             @if($sectionImage)
                                 <figure class="article-section-figure article-section-figure--full">
@@ -89,11 +91,9 @@
                                     <h2>{{ $sectionHeading }}</h2>
                                 @endif
                                 @if($sectionBody)
-                                    @foreach(explode("\n", $sectionBody) as $paragraph)
-                                        @if(trim($paragraph) !== '')
-                                            <p>{{ trim($paragraph) }}</p>
-                                        @endif
-                                    @endforeach
+                                    <div class="article-section-content">
+                                        {!! Str::markdown($sectionBody) !!}
+                                    </div>
                                 @endif
                                 @if($sectionImage)
                                     <figure class="article-section-figure">
