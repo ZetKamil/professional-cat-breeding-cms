@@ -28,8 +28,14 @@ class GeminiServiceUnavailableException extends RuntimeException
         );
     }
 
-    public static function serverError(int $statusCode): self
+    public static function serverError(int $statusCode, string $details = ''): self
     {
-        return new self("Gemini API returned HTTP {$statusCode}. Please try again later.");
+        $message = "Gemini API returned HTTP {$statusCode}";
+        if (! empty($details)) {
+            $message .= " ({$details})";
+        } else {
+            $message .= ". Please try again later.";
+        }
+        return new self($message);
     }
 }

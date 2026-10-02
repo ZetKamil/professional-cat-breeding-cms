@@ -36,10 +36,31 @@ class GeminiService
         // We store whatever is configured — trim any quotes/spaces from .env
         $rawKey           = (string) config('services.gemini.api_key', '');
         $this->apiKey     = trim($rawKey, " \t\n\r\0\x0B\"'");
-        $configured       = (string) config('services.gemini.text_model', 'gemini-2.0-flash');
-        // Map deprecated/sunset models to current stable model
-        $deprecatedModels = ['gemini-flash-latest', 'gemini-2.5-flash', 'gemini-1.5-pro', 'gemini-1.5-flash', 'gemini-pro'];
-        $this->textModel  = in_array($configured, $deprecatedModels, true) ? 'gemini-2.0-flash' : $configured;
+
+        $configured       = trim((string) config('services.gemini.text_model', 'gemini-flash-latest'));
+        $normalized       = strtolower(str_replace(' ', '-', $configured));
+
+        // Models that have been shut down or deprecated in Google's API:
+        // gemini-2.0-flash / lite (shut down June 1, 2026), gemini-1.5 series, etc.
+        $shutDownModels = [
+            'gemini-2.0-flash',
+            'gemini-2.0-flash-001',
+            'gemini-2.0-flash-lite',
+            'gemini-2.0-flash-lite-001',
+            '2.0-flash',
+            '2.0-flash-lite',
+            'gemini-1.5-pro',
+            'gemini-1.5-flash',
+            'gemini-pro',
+        ];
+
+        // Route shut down or empty models to Google's official rolling alias 'gemini-flash-latest'
+        if (empty($normalized) || in_array($normalized, $shutDownModels, true)) {
+            $this->textModel = 'gemini-flash-latest';
+        } else {
+            $this->textModel = $normalized;
+        }
+
         $this->imageModel = (string) config('services.gemini.image_model', 'imagen-3.0-generate-002');
         $this->timeout    = (int) config('services.gemini.timeout', 60);
     }
@@ -130,11 +151,18 @@ class GeminiService
         // Text timeout: generous enough for free-tier Gemini, but within PHP max_execution_time.
         $textTimeout = min($this->timeout, 30);
 
-        // Try valid models: gemini-2.0-flash, gemini-2.0-flash-lite
+        // Cascade of models to try if the primary fails (503/404/500/timeout):
+        // 1. Configured text model
+        // 2. gemini-flash-latest (Google's official rolling alias)
+        // 3. gemini-2.5-flash (stable production flash)
+        // 4. gemini-3.8-flash (current generation flash)
+        // 5. gemini-3.5-flash
         $modelsToTry = array_values(array_unique(array_filter([
             $this->textModel,
-            'gemini-2.0-flash',
-            'gemini-2.0-flash-lite',
+            'gemini-flash-latest',
+            'gemini-2.5-flash',
+            'gemini-3.8-flash',
+            'gemini-3.5-flash',
         ])));
 
         $payload = [
@@ -151,7 +179,8 @@ class GeminiService
             ],
         ];
 
-        $lastStatus = 500;
+        $lastStatus       = 500;
+        $lastErrorDetails = '';
 
         foreach ($modelsToTry as $model) {
             $url = self::BASE_URL . $model . ':generateContent';
@@ -172,8 +201,10 @@ class GeminiService
             }
 
             if (! $response->successful()) {
+                $body             = $response->json();
+                $lastErrorDetails = $body['error']['message'] ?? $response->body();
                 Log::warning("GeminiService: model {$model} returned HTTP {$lastStatus}, trying fallback if available...", [
-                    'body' => $response->body(),
+                    'error' => $lastErrorDetails,
                 ]);
                 continue;
             }
@@ -190,7 +221,7 @@ class GeminiService
             throw GeminiServiceUnavailableException::rateLimited();
         }
 
-        throw GeminiServiceUnavailableException::serverError($lastStatus);
+        throw GeminiServiceUnavailableException::serverError($lastStatus, $lastErrorDetails);
     }
 
     /**
