@@ -22,15 +22,16 @@ class UpdatePostRequest extends FormRequest
         $slug = trim((string) $this->input('slug', ''));
         $isPublished = $this->boolean('is_published');
         $publishedAt = $this->input('published_at');
+        if ($publishedAt !== null && trim((string) $publishedAt) === '') {
+            $publishedAt = null;
+        }
 
         $this->merge([
             'title' => $title,
             'slug' => $slug !== '' ? Str::slug($slug) : Str::slug($title),
             'is_published' => $isPublished,
             'categories' => $this->input('categories', []),
-            'published_at' => $isPublished
-                ? ($publishedAt ?: now())
-                : null,
+            'published_at' => $publishedAt ?: ($isPublished ? now() : null),
         ]);
     }
 

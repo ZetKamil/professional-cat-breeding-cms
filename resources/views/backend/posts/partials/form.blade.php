@@ -61,11 +61,18 @@
     </div>
 
     {{-- ========================= STATUS ========================= --}}
+    @php
+        $postStatus = old('is_published');
+        if ($postStatus === null && isset($post)) {
+            $postStatus = $post->is_published ? '1' : '0';
+        }
+        $postStatus = (string) ($postStatus ?? '0');
+    @endphp
     <div class="col-12 col-md-3">
         <label class="form-label">Status</label>
         <select name="is_published" class="form-select @error('is_published') is-invalid @enderror">
-            <option value="1" @selected((string) old('is_published', $post?->is_published ?? '0') === '1')>Published</option>
-            <option value="0" @selected((string) old('is_published', $post?->is_published ?? '0') === '0')>Draft</option>
+            <option value="1" @selected($postStatus === '1')>Published</option>
+            <option value="0" @selected($postStatus === '0')>Draft</option>
         </select>
 
         @error('is_published')
