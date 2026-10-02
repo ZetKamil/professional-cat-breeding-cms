@@ -9,6 +9,7 @@
         $readTime = max(1, (int) ceil($wordCount / 200));
         $category = $post->categories->first();
         $hasSections = !empty($post->sections) && is_array($post->sections);
+        $globalCta = \App\Models\Setting::getBlogCta();
     @endphp
 
     {{-- ============================================================
@@ -61,15 +62,23 @@
                     {{-- ─── Structured sections rendering ─────────── --}}
                     @php
                         $sectionsCount = count($post->sections);
-                        $hasClosing = $sectionsCount > 1;
+                        // If the last section is a legacy static CTA (starts with 🐾 or mentions kittens), omit it from the body loop
+                        $lastSection = $sectionsCount > 1 ? $post->sections[$sectionsCount - 1] : null;
+                        $lastIsCta = $lastSection && (
+                            str_starts_with(trim($lastSection['heading'] ?? ''), '🐾') ||
+                            str_contains(mb_strtolower($lastSection['heading'] ?? ''), 'dostępne') ||
+                            str_contains(mb_strtolower($lastSection['heading'] ?? ''), 'kocięta')
+                        );
+                        $renderCount = ($lastIsCta && ($globalCta['is_enabled'] ?? true)) ? $sectionsCount - 1 : $sectionsCount;
                     @endphp
-                    @foreach($post->sections as $i => $section)
+
+                    @for($i = 0; $i < $renderCount; $i++)
                         @php
+                            $section = $post->sections[$i];
                             $sectionBody = trim($section['body'] ?? '');
                             $sectionHeading = trim($section['heading'] ?? '');
                             $sectionImage = trim($section['image_url'] ?? '');
                             $isIntro = $i === 0;
-                            $isClosing = $hasClosing && ($i === $sectionsCount - 1);
                         @endphp
 
                         @if($isIntro)
@@ -89,32 +98,6 @@
                                     >
                                 </figure>
                             @endif
-                        @elseif($isClosing)
-                            {{-- Closing section: dedicated luxury CTA / offer card --}}
-                            <aside class="article-closing-cta-card" aria-label="Sekcja podsumowująca i oferta hodowli">
-                                <div class="article-closing-cta-card__badge">
-                                    <span class="article-closing-cta-card__icon">🐾</span>
-                                    <span class="article-closing-cta-card__label">Hodowla Kotów z Mazowieckiej Szwajcarii</span>
-                                </div>
-                                @if($sectionHeading)
-                                    <h2 class="article-closing-cta-card__title">{{ $sectionHeading }}</h2>
-                                @endif
-                                @if($sectionBody)
-                                    <div class="article-closing-cta-card__body">
-                                        {!! Str::markdown($sectionBody) !!}
-                                    </div>
-                                @endif
-                                @if($sectionImage)
-                                    <figure class="article-closing-cta-card__figure">
-                                        <img
-                                            src="{{ $sectionImage }}"
-                                            alt="{{ $sectionHeading ?: 'Zdjęcie sekcji końcowej' }}"
-                                            class="article-closing-cta-card__img"
-                                            loading="lazy"
-                                        >
-                                    </figure>
-                                @endif
-                            </aside>
                         @else
                             {{-- Regular section: optional H2 + body + image --}}
                             <div class="article-section-block">
@@ -138,10 +121,50 @@
                                 @endif
                             </div>
                         @endif
-                    @endforeach
+                    @endfor
                 @else
                     {{-- ─── Legacy body (markdown HTML) ─────────────── --}}
                     {!! Str::markdown($post->body) !!}
+                @endif
+
+                {{-- ============================================================
+                     DYNAMIC GLOBAL CATTERY OFFER & KITTENS CTA CARD
+                     Always displays the latest kittens availability across ALL articles!
+                     ============================================================ --}}
+                @if(!empty($globalCta) && ($globalCta['is_enabled'] ?? true) && !empty($globalCta['body']))
+                    <aside class="article-closing-cta-card" aria-label="Aktualna oferta hodowli i kontakt">
+                        <div class="article-closing-cta-card__badge">
+                            <span class="article-closing-cta-card__icon">🐾</span>
+                            <span class="article-closing-cta-card__label">{{ $globalCta['badge'] ?? 'Hodowla Kotów z Mazowieckiej Szwajcarii' }}</span>
+                        </div>
+
+                        @if(!empty($globalCta['heading']))
+                            <h2 class="article-closing-cta-card__title">{{ $globalCta['heading'] }}</h2>
+                        @endif
+
+                        <div class="article-closing-cta-card__body">
+                            {!! Str::markdown($globalCta['body']) !!}
+                        </div>
+
+                        @if(!empty($globalCta['image_url']))
+                            <figure class="article-closing-cta-card__figure">
+                                <img
+                                    src="{{ $globalCta['image_url'] }}"
+                                    alt="{{ $globalCta['heading'] ?? 'Kocięta w hodowli' }}"
+                                    class="article-closing-cta-card__img"
+                                    loading="lazy"
+                                >
+                            </figure>
+                        @endif
+
+                        @if(!empty($globalCta['button_text']) && !empty($globalCta['button_url']))
+                            <div class="article-closing-cta-card__actions" style="margin-top: 1.5rem;">
+                                <a href="{{ $globalCta['button_url'] }}" class="btn btn-warning text-dark fw-bold" style="background:#c59b27; border-color:#c59b27; color:#181816; font-weight:700; padding:10px 24px; border-radius:9999px; text-decoration:none; display:inline-block; box-shadow: 0 4px 14px rgba(197, 155, 39, 0.25);">
+                                    {{ $globalCta['button_text'] }} →
+                                </a>
+                            </div>
+                        @endif
+                    </aside>
                 @endif
 
             </article>

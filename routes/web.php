@@ -532,6 +532,12 @@ Route::middleware(['auth', 'verified', 'active'])
             return view('backend.ai-blog-studio.index');
         })->name('posts.ai-studio');
 
+        // Global Blog CTA & Cattery Offer Setting
+        Route::get('blog-cta', [\App\Http\Controllers\Backend\BlogCtaController::class, 'edit'])
+            ->name('blog-cta.edit');
+        Route::post('blog-cta', [\App\Http\Controllers\Backend\BlogCtaController::class, 'update'])
+            ->name('blog-cta.update');
+
         Route::resource('posts', PostController::class);
         Route::patch('posts/{id}/restore', [PostController::class, 'restore'])
             ->name('posts.restore');

@@ -233,71 +233,119 @@
     </div>
 
     {{-- ===============================================================
-         SEKCJA KOŃCOWA: OFERTA KOCIĄT & PODSUMOWANIE (DEDYKOWANE OKIENKO)
+         SEKCJA KOŃCOWA: AKTUALNA OFERTA HODOWLI (GLOBAL CTA)
          =============================================================== --}}
+    @php
+        $globalCtaSetting = \App\Models\Setting::getBlogCta();
+    @endphp
     <div class="col-12" id="closing_section_wrapper">
         <div class="card border-warning shadow-sm">
             <div class="card-header bg-warning text-dark d-flex align-items-center justify-content-between">
                 <span>
                     <i class="fas fa-bullhorn me-2"></i>
-                    <strong>Sekcja końcowa artykułu — Oferta kociąt, podsumowanie & kontakt (CTA)</strong>
+                    <strong>Oferta hodowli pod artykułem (Kocięta & Kontakt CTA)</strong>
                 </span>
-                <span class="badge bg-dark text-warning">Dedykowane okienko</span>
+                <span class="badge bg-dark text-warning">Dynamiczna & Zawsze świeża</span>
             </div>
             <div class="card-body">
-                <div class="alert alert-warning bg-warning bg-opacity-10 border-warning border-opacity-25 mb-3 py-2 px-3 small text-dark">
-                    <i class="fas fa-info-circle text-warning me-1"></i>
-                    <strong>Osobne okienko na zakończenie artykułu:</strong> Ta treść wyświetla się na samym dole artykułu w dedykowanej złotej ramce.
-                    Wpisz tutaj aktualną ofertę kociąt (np. kocięta brytyjskie, bengalskie), zaproszenie do rezerwacji lub dane kontaktowe hodowli.
+                <div class="alert alert-warning bg-warning bg-opacity-10 border-warning border-opacity-25 mb-3 py-2 px-3 small text-dark d-flex align-items-center justify-content-between flex-wrap gap-2">
+                    <div>
+                        <i class="fas fa-magic text-warning me-1"></i>
+                        <strong>Zawsze świeże kocięta pod każdym artykułem:</strong>
+                        Pod tym wpisem (oraz wszystkimi pozostałymi na blogu) automatycznie wyświetla się aktualna oferta kociąt z zakładki <em>„Oferta pod artykułami”</em>.
+                    </div>
+                    <a href="{{ route('backend.blog-cta.edit') }}" target="_blank" class="btn btn-warning btn-sm text-dark fw-bold">
+                        <i class="fas fa-edit me-1"></i> Edytuj globalną ofertę dla wszystkich artykułów →
+                    </a>
                 </div>
 
-                <div class="row g-3">
-                    <div class="col-12 col-md-8">
-                        <div class="mb-3">
-                            <label class="form-label small fw-bold" for="closing_heading_input">
-                                Nagłówek sekcji końcowej (H2)
-                            </label>
-                            <input
-                                type="text"
-                                class="form-control fw-semibold"
-                                id="closing_heading_input"
-                                placeholder="Np. 🐾 Dostępne kocięta brytyjskie i bengalskie w naszej hodowli"
-                            >
-                        </div>
-                        <div>
-                            <label class="form-label small fw-bold" for="closing_body_input">
-                                Treść sekcji końcowej (oferta maluchów, telefon, zaproszenie) <span class="text-danger">*</span>
-                            </label>
-                            <textarea
-                                class="form-control font-monospace small"
-                                id="closing_body_input"
-                                rows="8"
-                                placeholder="Wpisz treść sekcji końcowej: aktualne kocięta brytyjskie / bengalskie, wolne miejsca na rezerwację, telefon (+48 514 153 204), zaproszenie do hodowli..."
-                            ></textarea>
-                            <div class="form-text small text-muted">
-                                Obsługuje formatowanie Markdown: <code>**pogrubienie**</code>, listy (<code>- punkt</code>), linki (<code>[tekst](/koty)</code>).
-                            </div>
+                {{-- Mode selector --}}
+                <div class="mb-3">
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="closing_mode" id="closing_mode_global" value="global" checked>
+                        <label class="form-check-label fw-bold" for="closing_mode_global">
+                            <i class="fas fa-globe text-primary me-1"></i> Używaj aktualnej globalnej oferty hodowli (Zalecane)
+                        </label>
+                        <div class="small text-muted ms-4">
+                            Gdy zmienisz ofertę w panelu, natychmiast zaktualizuje się pod wszystkimi artykułami (również tymi sprzed roku!).
                         </div>
                     </div>
-                    <div class="col-12 col-md-4">
-                        <label class="form-label small fw-bold">Zdjęcie sekcji końcowej <span class="text-muted fw-normal">(opcjonalne)</span></label>
-                        <div class="section-image-area" id="closing_image_area">
-                            <div id="closing_image_preview_wrapper">
-                                <div class="d-flex align-items-center justify-content-center bg-light border rounded mb-2" style="height:140px;">
-                                    <i class="fas fa-image fa-2x text-muted"></i>
-                                </div>
+
+                    {{-- Live snippet of current global offer --}}
+                    <div id="global_offer_snippet_box" class="p-3 bg-light border rounded ms-4 mb-3">
+                        <div class="small text-muted fw-bold text-uppercase mb-1">
+                            <i class="fas fa-eye me-1 text-primary"></i> Aktualnie wyświetlana oferta hodowli:
+                        </div>
+                        <div class="fw-bold text-dark mb-1">{{ $globalCtaSetting['heading'] ?? '' }}</div>
+                        <div class="small text-muted mb-2" style="max-height: 80px; overflow-y: auto; white-space: pre-line;">
+                            {{ Str::limit($globalCtaSetting['body'] ?? '', 220) }}
+                        </div>
+                        <div class="d-flex align-items-center gap-2 small text-muted">
+                            <span>📞 +48 514 153 204</span>
+                            <span>·</span>
+                            <span>📍 Sikórz k. Płocka</span>
+                        </div>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="closing_mode" id="closing_mode_custom" value="custom">
+                        <label class="form-check-label fw-bold" for="closing_mode_custom">
+                            <i class="fas fa-pen text-secondary me-1"></i> Wpisz własną, niestandardową sekcję końcową tylko dla tego jednego artykułu
+                        </label>
+                        <div class="small text-muted ms-4">
+                            Wybierz tę opcję tylko jeśli ten konkretny artykuł musi mieć inny boks na dole niż reszta bloga.
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Custom fields (hidden unless custom mode selected) --}}
+                <div id="closing_custom_fields" class="d-none pt-3 border-top">
+                    <div class="row g-3">
+                        <div class="col-12 col-md-8">
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold" for="closing_heading_input">
+                                    Niestandardowy nagłówek sekcji końcowej (H2)
+                                </label>
+                                <input
+                                    type="text"
+                                    class="form-control fw-semibold"
+                                    id="closing_heading_input"
+                                    placeholder="Np. 🐾 Dostępne kocięta w naszej hodowli"
+                                >
                             </div>
-                            <div class="d-flex gap-1">
-                                <button type="button" class="btn btn-sm btn-outline-warning text-dark flex-grow-1" id="closing_pick_image_btn">
-                                    <i class="fas fa-folder-open me-1"></i> Wybierz zdjęcie
-                                </button>
-                                <button type="button" class="btn btn-sm btn-outline-danger d-none" id="closing_remove_image_btn" title="Usuń zdjęcie">
-                                    <i class="fas fa-times"></i>
-                                </button>
+                            <div>
+                                <label class="form-label small fw-bold" for="closing_body_input">
+                                    Niestandardowa treść sekcji końcowej
+                                </label>
+                                <textarea
+                                    class="form-control font-monospace small"
+                                    id="closing_body_input"
+                                    rows="7"
+                                    placeholder="Wpisz treść sekcji..."
+                                ></textarea>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label small fw-bold">Zdjęcie sekcji <span class="text-muted fw-normal">(opcjonalne)</span></label>
+                            <div class="section-image-area" id="closing_image_area">
+                                <div id="closing_image_preview_wrapper">
+                                    <div class="d-flex align-items-center justify-content-center bg-light border rounded mb-2" style="height:140px;">
+                                        <i class="fas fa-image fa-2x text-muted"></i>
+                                    </div>
+                                </div>
+                                <div class="d-flex gap-1">
+                                    <button type="button" class="btn btn-sm btn-outline-warning text-dark flex-grow-1" id="closing_pick_image_btn">
+                                        <i class="fas fa-folder-open me-1"></i> Wybierz zdjęcie
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger d-none" id="closing_remove_image_btn" title="Usuń zdjęcie">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -522,6 +570,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const badge = document.getElementById('sections_count_badge');
     const jsonInput = document.getElementById('sections_json_input');
 
+    const modeGlobalRadio = document.getElementById('closing_mode_global');
+    const modeCustomRadio = document.getElementById('closing_mode_custom');
+    const closingCustomFields = document.getElementById('closing_custom_fields');
+    const globalSnippetBox = document.getElementById('global_offer_snippet_box');
+
     const closingHeadingInput = document.getElementById('closing_heading_input');
     const closingBodyInput = document.getElementById('closing_body_input');
     const closingImgWrapper = document.getElementById('closing_image_preview_wrapper');
@@ -529,6 +582,21 @@ document.addEventListener('DOMContentLoaded', function () {
     const closingRemoveBtn = document.getElementById('closing_remove_image_btn');
 
     // ── Closing Section Handlers ─────────────────────────────────────
+    function updateClosingMode() {
+        const isCustom = modeCustomRadio?.checked;
+        if (isCustom) {
+            closingCustomFields?.classList.remove('d-none');
+            globalSnippetBox?.classList.add('d-none');
+        } else {
+            closingCustomFields?.classList.add('d-none');
+            globalSnippetBox?.classList.remove('d-none');
+        }
+        saveToInput();
+    }
+
+    modeGlobalRadio?.addEventListener('change', updateClosingMode);
+    modeCustomRadio?.addEventListener('change', updateClosingMode);
+
     function updateClosingUI() {
         if (closingHeadingInput) closingHeadingInput.value = closingSection.heading || '';
         if (closingBodyInput) closingBodyInput.value = closingSection.body || '';
@@ -687,12 +755,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function saveToInput() {
         const all = [...regularSections];
-        const hasClosingContent = closingSection.body.trim() !== ''
-            || closingSection.heading.trim() !== ''
-            || (closingSection.image_url && closingSection.image_url.trim() !== '');
+        const isCustom = modeCustomRadio?.checked;
+        if (isCustom) {
+            const hasClosingContent = closingSection.body.trim() !== ''
+                || closingSection.heading.trim() !== ''
+                || (closingSection.image_url && closingSection.image_url.trim() !== '');
 
-        if (hasClosingContent) {
-            all.push(closingSection);
+            if (hasClosingContent) {
+                all.push(closingSection);
+            }
         }
         jsonInput.value = JSON.stringify(all);
         const count = all.length;
@@ -722,14 +793,21 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
-        if (closingSection.body.trim() || closingSection.heading.trim()) {
+        const isCustom = modeCustomRadio?.checked;
+        if (isCustom && (closingSection.body.trim() || closingSection.heading.trim())) {
             html += '<div style="margin-top:2rem;padding:1.5rem;background:#fffdf5;border:2px solid #e0c370;border-left:5px solid #d4af37;border-radius:12px;">';
-            html += '<div style="font-size:0.8rem;font-weight:700;color:#946c00;margin-bottom:0.5rem;text-transform:uppercase;">🐾 Sekcja końcowa / Oferta kociąt</div>';
+            html += '<div style="font-size:0.8rem;font-weight:700;color:#946c00;margin-bottom:0.5rem;text-transform:uppercase;">🐾 Niestandardowa sekcja końcowa tego artykułu</div>';
             if (closingSection.heading) html += '<h2 style="font-size:1.3rem;color:#946c00;margin-top:0;">' + escHtml(closingSection.heading) + '</h2>';
             if (closingSection.body) html += '<p style="color:#333;">' + escHtml(closingSection.body).replace(/\n/g, '<br>') + '</p>';
             if (closingSection.image_url) {
                 html += `<figure style="margin:1rem 0;"><img src="${escHtml(closingSection.image_url)}" style="max-width:100%;border-radius:8px;" alt=""></figure>`;
             }
+            html += '</div>';
+        } else {
+            html += '<div style="margin-top:2rem;padding:1.5rem;background:#fffdf5;border:2px solid #e0c370;border-left:5px solid #d4af37;border-radius:12px;">';
+            html += '<div style="font-size:0.8rem;font-weight:700;color:#946c00;margin-bottom:0.5rem;text-transform:uppercase;">🐾 Aktualna oferta hodowli (zawsze świeża pod wszystkimi artykułami)</div>';
+            html += '<h2 style="font-size:1.3rem;color:#946c00;margin-top:0;">' + escHtml(@json($globalCtaSetting['heading'] ?? '')) + '</h2>';
+            html += '<p style="color:#333;">' + escHtml(@json($globalCtaSetting['body'] ?? '')).replace(/\n/g, '<br>') + '</p>';
             html += '</div>';
         }
 

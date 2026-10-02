@@ -90,6 +90,10 @@
                                 🚀 Importuj Artykuły SEO (19)
                             </button>
                         </form>
+                        <a href="{{ route('backend.blog-cta.edit') }}" class="btn btn-outline-warning text-dark fw-bold ms-2">
+                            <i class="fas fa-bullhorn me-1"></i>
+                            Oferta pod artykułami
+                        </a>
                         <a href="{{ route('backend.posts.create') }}" class="btn btn-success ms-2">
                             <i class="fas fa-plus me-1"></i>
                             New post

@@ -46,6 +46,16 @@
             @endcan
 
             @can('viewAny', \App\Models\Post::class)
+                <a class="nav-link {{ request()->routeIs('backend.blog-cta.*') ? 'active' : '' }}"
+                   href="{{ route('backend.blog-cta.edit') }}">
+                    <div class="sb-nav-link-icon">
+                        <i class="fas fa-bullhorn text-warning"></i>
+                    </div>
+                    Oferta pod artykułami
+                </a>
+            @endcan
+
+            @can('viewAny', \App\Models\Post::class)
                 <a class="nav-link {{ request()->routeIs('backend.categories.*') ? 'active' : '' }}"
                    href="{{ route('backend.categories.index') }}">
                     <div class="sb-nav-link-icon">
