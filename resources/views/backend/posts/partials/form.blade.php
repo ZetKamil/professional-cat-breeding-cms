@@ -540,10 +540,26 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    // ── Elements ─────────────────────────────────────────────────────
+    const editor = document.getElementById('sections_editor');
+    const badge = document.getElementById('sections_count_badge');
+    const jsonInput = document.getElementById('sections_json_input');
+
+    const modeGlobalRadio = document.getElementById('closing_mode_global');
+    const modeCustomRadio = document.getElementById('closing_mode_custom');
+    const closingCustomFields = document.getElementById('closing_custom_fields');
+    const globalSnippetBox = document.getElementById('global_offer_snippet_box');
+
+    const closingHeadingInput = document.getElementById('closing_heading_input');
+    const closingBodyInput = document.getElementById('closing_body_input');
+    const closingImgWrapper = document.getElementById('closing_image_preview_wrapper');
+    const closingPickBtn = document.getElementById('closing_pick_image_btn');
+    const closingRemoveBtn = document.getElementById('closing_remove_image_btn');
+
     // ── State ────────────────────────────────────────────────────────
     let rawSections = [];
     try {
-        const raw = document.getElementById('sections_json_input').value;
+        const raw = jsonInput ? jsonInput.value : '';
         rawSections = JSON.parse(raw) || [];
     } catch (e) {
         rawSections = [{ heading: '', body: '', image_url: '' }];
@@ -584,22 +600,6 @@ document.addEventListener('DOMContentLoaded', function () {
         regularSections = rawSections;
         if (modeGlobalRadio) modeGlobalRadio.checked = true;
     }
-
-    // ── Elements ─────────────────────────────────────────────────────
-    const editor = document.getElementById('sections_editor');
-    const badge = document.getElementById('sections_count_badge');
-    const jsonInput = document.getElementById('sections_json_input');
-
-    const modeGlobalRadio = document.getElementById('closing_mode_global');
-    const modeCustomRadio = document.getElementById('closing_mode_custom');
-    const closingCustomFields = document.getElementById('closing_custom_fields');
-    const globalSnippetBox = document.getElementById('global_offer_snippet_box');
-
-    const closingHeadingInput = document.getElementById('closing_heading_input');
-    const closingBodyInput = document.getElementById('closing_body_input');
-    const closingImgWrapper = document.getElementById('closing_image_preview_wrapper');
-    const closingPickBtn = document.getElementById('closing_pick_image_btn');
-    const closingRemoveBtn = document.getElementById('closing_remove_image_btn');
 
     // ── Closing Section Handlers ─────────────────────────────────────
     function updateClosingMode() {
@@ -785,20 +785,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 all.push(closingSection);
             }
         }
-        jsonInput.value = JSON.stringify(all);
+        if (jsonInput) jsonInput.value = JSON.stringify(all);
         const count = all.length;
-        badge.textContent = count + ' ' + (count === 1 ? 'sekcja' : count < 5 ? 'sekcje' : 'sekcji');
+        if (badge) badge.textContent = count + ' ' + (count === 1 ? 'sekcja' : count < 5 ? 'sekcje' : 'sekcji');
     }
 
     // ── Add section ──────────────────────────────────────────────────
-    document.getElementById('add_section_btn').addEventListener('click', function () {
+    document.getElementById('add_section_btn')?.addEventListener('click', function () {
         regularSections.push({ heading: '', body: '', image_url: '' });
         renderRegularSections();
-        editor.lastElementChild?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        editor?.lastElementChild?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 
     // ── Preview ──────────────────────────────────────────────────────
-    document.getElementById('preview_sections_btn').addEventListener('click', function () {
+    document.getElementById('preview_sections_btn')?.addEventListener('click', function () {
         const titleEl = document.getElementById('post_title_input');
         let html = '<h1 style="font-size:1.8rem;margin-bottom:0.5rem;">' + escHtml(titleEl?.value || '(bez tytułu)') + '</h1><hr>';
         regularSections.forEach((s, i) => {
