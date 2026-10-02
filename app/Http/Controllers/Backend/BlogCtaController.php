@@ -16,7 +16,7 @@ class BlogCtaController extends Controller
      */
     public function edit(): View
     {
-        $this->authorize('update', Post::class);
+        $this->authorize('create', Post::class);
 
         $cta = Setting::getBlogCta();
 
@@ -30,7 +30,7 @@ class BlogCtaController extends Controller
      */
     public function update(Request $request): RedirectResponse
     {
-        $this->authorize('update', Post::class);
+        $this->authorize('create', Post::class);
 
         $validated = $request->validate([
             'is_enabled'    => ['nullable', 'boolean'],
