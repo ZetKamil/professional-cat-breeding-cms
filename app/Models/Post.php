@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
@@ -29,6 +30,7 @@ class Post extends Model
         'slug',
         'excerpt',
         'body',
+        'sections',
         'meta_title',
         'meta_description',
         'is_published',
@@ -45,6 +47,7 @@ class Post extends Model
         return [
             'is_published' => 'boolean',
             'published_at' => 'datetime',
+            'sections'     => 'array',
         ];
     }
 
@@ -78,6 +81,17 @@ class Post extends Model
     public function media(): MorphOne
     {
         return $this->morphOne(Media::class, 'mediable');
+    }
+
+    /**
+     * Animals (cats) featured/highlighted below this post.
+     * Editors and AI can pin specific cattery animals per article.
+     */
+    public function animals(): BelongsToMany
+    {
+        return $this->belongsToMany(Animal::class, 'animal_post')
+            ->withPivot('sort_order')
+            ->orderBy('animal_post.sort_order');
     }
 
     /**

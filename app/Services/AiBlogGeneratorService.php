@@ -120,7 +120,9 @@ class AiBlogGeneratorService
             'title'       => $parsed['h1'] ?? $topic,
             'slug'        => Str::slug($parsed['h1'] ?? $topic),
             'excerpt'     => $parsed['excerpt'] ?? '',
-            'body'        => $parsed['content_html'] ?? '',
+            'sections'    => $parsed['sections'] ?? null,
+            // body is auto-generated from sections in PostRequest, but set here for fallback
+            'body'        => $this->sectionsToBody($parsed['sections'] ?? []),
             'is_published' => false,   // ALWAYS false — human must publish manually
             'published_at' => null,
 
@@ -166,21 +168,21 @@ class AiBlogGeneratorService
         $animalContext    = $this->buildAnimalContext($animals);
 
         return <<<PROMPT
-        You are a senior copywriter working exclusively for "Hodowla Kotów z Mazowieckiej Szwajcarii" — 
+        You are a senior copywriter working exclusively for "Hodowla Kotów z Mazowieckiej Szwajcarii" —
         a premium, responsible cat breeding cattery in Poland.
-        
-        Your ONLY goal is to write blog content in Polish that educates potential cat owners and 
+
+        Your ONLY goal is to write blog content in Polish that educates potential cat owners and
         builds trust in the cattery. You NEVER write generic content.
-        
+
         ## MANDATORY TONE OF VOICE AND WRITING RULES
         {$copywritingRules}
-        
+
         ## CATTERY KNOWLEDGE — THE ANIMALS WE ARE WRITING ABOUT
         {$animalContext}
-        
+
         ## BREED CONTEXT
         You are writing about: {$breed}
-        
+
         ## OUTPUT FORMAT
         You MUST respond with a single valid JSON object. No markdown, no explanation, ONLY JSON.
         Required fields:
@@ -188,10 +190,27 @@ class AiBlogGeneratorService
           "h1": "Main article title (H1)",
           "meta_title": "SEO meta title (max 60 chars)",
           "meta_description": "SEO meta description (max 155 chars)",
-          "excerpt": "Short teaser paragraph (2-3 sentences)",
-          "content_html": "Full article body as valid HTML with H2, H3, P, UL tags",
+          "excerpt": "Short teaser paragraph (2-3 sentences, shown under the title and in article listings)",
+          "sections": [
+            {
+              "heading": "",
+              "body": "Introductory lead paragraph text (no heading for the first section)",
+              "image_url": ""
+            },
+            {
+              "heading": "First H2 subtitle",
+              "body": "Body paragraphs for this section. Use \\n between paragraphs.",
+              "image_url": ""
+            }
+          ],
           "hero_image_prompt": "English prompt for generating a decorative cover image (NOT a photo of a real cat)"
         }
+        RULES FOR sections:
+        - Generate 4-6 sections total.
+        - The FIRST section MUST have an empty heading ("") — it is the intro paragraph.
+        - All other sections MUST have a non-empty heading (H2 level).
+        - image_url is always empty string "" — images will be added manually by the editor.
+        - body is plain text only. No HTML tags.
         PROMPT;
     }
 
@@ -304,5 +323,25 @@ class AiBlogGeneratorService
         return "Elegant minimalist illustration of a {$breed} cat, warm natural lighting, "
             . "luxury interior background, soft bokeh, professional photography style, "
             . "warm amber tones, premium lifestyle aesthetic";
+    }
+
+    /**
+     * Convert sections array to a plain-text body string for backward compatibility
+     * (full-text search index, RSS feeds, legacy posts without sections).
+     *
+     * @param  array<int, array{heading: string, body: string, image_url: string}>  $sections
+     */
+    private function sectionsToBody(array $sections): string
+    {
+        return collect($sections)->map(function (array $s) {
+            $parts = [];
+            if (!empty($s['heading'])) {
+                $parts[] = '## ' . $s['heading'];
+            }
+            if (!empty($s['body'])) {
+                $parts[] = $s['body'];
+            }
+            return implode("\n\n", $parts);
+        })->implode("\n\n");
     }
 }

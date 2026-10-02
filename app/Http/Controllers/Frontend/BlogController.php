@@ -64,7 +64,7 @@ class BlogController extends Controller
             abort(404);
         }
 
-        $post->load(['user', 'categories', 'media']);
+        $post->load(['user', 'categories', 'media', 'animals.media']);
 
         $relatedPosts = Post::query()
             ->published()
@@ -88,7 +88,7 @@ class BlogController extends Controller
         }
 
         return view('frontend.blog.show', [
-            'post' => $post,
+            'post'         => $post,
             'relatedPosts' => $relatedPosts,
         ]);
     }

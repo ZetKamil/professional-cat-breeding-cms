@@ -15,10 +15,11 @@
                     @csrf
 
                     @include('backend.posts.partials.form', [
-                        'post' => null,
-                        'authors' => $authors,
-                        'categories' => $categories,
-                        'submitLabel' => 'Create post',
+                        'post'        => null,
+                        'authors'     => $authors,
+                        'categories'  => $categories,
+                        'animals'     => $animals,
+                        'submitLabel' => 'Utwórz post',
                     ])
                 </form>
             </div>

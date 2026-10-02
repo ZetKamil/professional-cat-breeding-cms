@@ -16,10 +16,11 @@
                     @method('PATCH')
 
                     @include('backend.posts.partials.form', [
-                        'post' => $post,
-                        'authors' => $authors,
-                        'categories' => $categories,
-                        'submitLabel' => 'Save changes',
+                        'post'        => $post,
+                        'authors'     => $authors,
+                        'categories'  => $categories,
+                        'animals'     => $animals,
+                        'submitLabel' => 'Zapisz zmiany',
                     ])
                 </form>
             </div>

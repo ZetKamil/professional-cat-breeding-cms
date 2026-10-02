@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PostIndexRequest;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use App\Models\Animal;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
@@ -82,9 +83,15 @@ class PostController extends Controller
             ->orderBy('name')
             ->get(['id', 'name']);
 
+        $animals = Animal::published()
+            ->with('media')
+            ->orderBy('name')
+            ->get(['id', 'name', 'breed', 'status']);
+
         return view('backend.posts.create', [
-            'authors' => $authors,
+            'authors'    => $authors,
             'categories' => $categories,
+            'animals'    => $animals,
         ]);
     }
 
@@ -123,7 +130,7 @@ class PostController extends Controller
     {
         $this->authorize('update', $post);
 
-        $post->load(['categories', 'media']);
+        $post->load(['categories', 'media', 'animals']);
 
         $authorsQuery = User::query()->orderBy('name');
 
@@ -137,10 +144,16 @@ class PostController extends Controller
             ->orderBy('name')
             ->get(['id', 'name']);
 
+        $animals = Animal::published()
+            ->with('media')
+            ->orderBy('name')
+            ->get(['id', 'name', 'breed', 'status']);
+
         return view('backend.posts.edit', [
-            'post' => $post,
-            'authors' => $authors,
+            'post'       => $post,
+            'authors'    => $authors,
             'categories' => $categories,
+            'animals'    => $animals,
         ]);
     }
 

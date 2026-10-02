@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -152,6 +153,15 @@ class Animal extends Model
     {
         return $this->morphMany(Media::class, 'mediable')
             ->orderBy('sort_order', 'asc');
+    }
+
+    /**
+     * Blog posts that feature this animal.
+     */
+    public function posts(): BelongsToMany
+    {
+        return $this->belongsToMany(Post::class, 'animal_post')
+            ->withPivot('sort_order');
     }
 
     // ─── Query Scopes ───────────────────────────────────────────────

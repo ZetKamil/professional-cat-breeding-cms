@@ -8,6 +8,7 @@
         $wordCount = str_word_count(strip_tags($post->body));
         $readTime = max(1, (int) ceil($wordCount / 200));
         $category = $post->categories->first();
+        $hasSections = !empty($post->sections) && is_array($post->sections);
     @endphp
 
     {{-- ============================================================
@@ -50,17 +51,94 @@
 
     {{-- ============================================================
          3. EDITORIAL ARTICLE BODY
+         Renders either structured sections (new) or legacy HTML body
          ============================================================ --}}
     <x-frontend.section class="article-body-section">
         <div class="article-layout">
             <article class="article-editorial">
-                {!! Str::markdown($post->body) !!}
+
+                @if($hasSections)
+                    {{-- ─── Structured sections rendering ─────────── --}}
+                    @foreach($post->sections as $i => $section)
+                        @php
+                            $sectionBody = trim($section['body'] ?? '');
+                            $sectionHeading = trim($section['heading'] ?? '');
+                            $sectionImage = trim($section['image_url'] ?? '');
+                            $isIntro = $i === 0;
+                        @endphp
+
+                        @if($isIntro)
+                            {{-- Intro section: no H2, just lead paragraph --}}
+                            @if($sectionBody)
+                                <p class="article-intro-paragraph">{{ $sectionBody }}</p>
+                            @endif
+                            @if($sectionImage)
+                                <figure class="article-section-figure article-section-figure--full">
+                                    <img
+                                        src="{{ $sectionImage }}"
+                                        alt="Zdjęcie do artykułu"
+                                        class="article-section-img"
+                                        loading="lazy"
+                                    >
+                                </figure>
+                            @endif
+                        @else
+                            {{-- Regular section: optional H2 + body + image --}}
+                            <div class="article-section-block">
+                                @if($sectionHeading)
+                                    <h2>{{ $sectionHeading }}</h2>
+                                @endif
+                                @if($sectionBody)
+                                    @foreach(explode("\n", $sectionBody) as $paragraph)
+                                        @if(trim($paragraph) !== '')
+                                            <p>{{ trim($paragraph) }}</p>
+                                        @endif
+                                    @endforeach
+                                @endif
+                                @if($sectionImage)
+                                    <figure class="article-section-figure">
+                                        <img
+                                            src="{{ $sectionImage }}"
+                                            alt="{{ $sectionHeading ?: 'Zdjęcie sekcji' }}"
+                                            class="article-section-img"
+                                            loading="lazy"
+                                        >
+                                    </figure>
+                                @endif
+                            </div>
+                        @endif
+                    @endforeach
+                @else
+                    {{-- ─── Legacy body (markdown HTML) ─────────────── --}}
+                    {!! Str::markdown($post->body) !!}
+                @endif
+
             </article>
         </div>
     </x-frontend.section>
 
     {{-- ============================================================
-         4. RELATED ARTICLES GRID
+         4. FEATURED CATS STRIP (before related articles)
+         Shows animals pinned to this post by the editor
+         ============================================================ --}}
+    @if($post->animals->isNotEmpty())
+        <x-frontend.section class="article-featured-cats-section">
+            <x-frontend.section-header
+                eyebrow="Poznaj nasze koty"
+                headline="Koty z tego artykułu"
+                description="Chcesz dowiedzieć się więcej? Zajrzyj bezpośrednio do profili kotów wspomnianych w tym artykule."
+            />
+
+            <div class="animals-grid animals-grid--compact">
+                @foreach($post->animals as $animal)
+                    <x-frontend.animal-card :animal="$animal" :show-age="false" />
+                @endforeach
+            </div>
+        </x-frontend.section>
+    @endif
+
+    {{-- ============================================================
+         5. RELATED ARTICLES GRID
          ============================================================ --}}
     @if ($relatedPosts->count() > 0)
         <x-frontend.section tile="light" class="related-articles-section">
@@ -79,7 +157,7 @@
     @endif
 
     {{-- ============================================================
-         5. CTA SECTION
+         6. CTA SECTION
          ============================================================ --}}
     <x-frontend.section class="article-cta-section">
         <div class="article-cta-box">

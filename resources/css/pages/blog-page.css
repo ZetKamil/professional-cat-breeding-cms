@@ -588,3 +588,72 @@
         min-width: 130px;
     }
 }
+
+/* ==========================================================================
+   Structured Article Sections (new editorial layout)
+   ========================================================================== */
+
+/* Intro paragraph — first section, no H2, slightly larger lead */
+.article-editorial .article-intro-paragraph {
+    font-size: 1.25rem;
+    line-height: 1.75;
+    color: var(--color-text-muted, #555);
+    margin-bottom: var(--space-8, 32px);
+}
+
+/* Regular section block: heading + paragraphs + optional image */
+.article-section-block {
+    margin-top: var(--space-12, 48px);
+}
+
+.article-section-block:first-child {
+    margin-top: 0;
+}
+
+/* Section images — standardised ratio 16:9, max 720px */
+.article-section-figure {
+    margin: var(--space-6, 24px) 0 var(--space-8, 32px);
+}
+
+.article-section-figure--full {
+    margin: var(--space-8, 32px) 0;
+}
+
+.article-section-img {
+    width: 100%;
+    max-width: 720px;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: var(--radius-lg, 12px);
+    display: block;
+    margin: 0 auto;
+    box-shadow: var(--shadow-md, 0 4px 24px rgba(0,0,0,0.08));
+}
+
+/* ==========================================================================
+   Featured Cats Strip (article-featured-cats-section)
+   ========================================================================== */
+.article-featured-cats-section {
+    padding-top: var(--space-16, 64px);
+    padding-bottom: var(--space-16, 64px);
+    background: linear-gradient(
+        180deg,
+        var(--color-surface, #fff) 0%,
+        var(--color-surface-elevated, #f9f7f4) 100%
+    );
+}
+
+/* Compact animals grid for article page (max 4 columns) */
+.animals-grid--compact {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: var(--space-6, 24px);
+    margin-top: var(--space-8, 32px);
+}
+
+@media (max-width: 640px) {
+    .animals-grid--compact {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-4, 16px);
+    }
+}
