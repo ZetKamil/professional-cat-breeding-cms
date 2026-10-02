@@ -565,6 +565,13 @@ Route::get('/deploy-sync', function () {
             $gitOut = !empty($output) ? implode("\n", $output) : 'Git pull wykonany (brak odpowiedzi stdout)';
         }
 
+        $gitLog = '';
+        if (function_exists('exec')) {
+            $logOut = [];
+            @exec('git log -1 --oneline 2>&1', $logOut);
+            $gitLog = implode("\n", $logOut);
+        }
+
         \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
         $migrateOut = \Illuminate\Support\Facades\Artisan::output();
 
@@ -574,6 +581,7 @@ Route::get('/deploy-sync', function () {
         return response("<div style='font-family:sans-serif; padding:30px; max-width:700px; margin:40px auto; background:#f0fdf4; border:1px solid #10b981; border-radius:12px;'>"
             . "<h2 style='color:#065f46; margin-top:0;'>✅ System Zsynchronizowany na Hostingu!</h2>"
             . "<p>Kod z Git, baza danych i pamięć podręczna zostały zaktualizowane.</p>"
+            . "<h4>Aktualny commit:</h4><pre style='background:#fff; padding:10px; border-radius:6px;'>" . e($gitLog) . "</pre>"
             . "<h4>Git Pull:</h4><pre style='background:#fff; padding:10px; border-radius:6px;'>" . e($gitOut) . "</pre>"
             . "<h4>Migracje:</h4><pre style='background:#fff; padding:10px; border-radius:6px;'>" . e($migrateOut ?: 'Brak nowych migracji.') . "</pre>"
             . "<h4>Kesz (optimize:clear):</h4><pre style='background:#fff; padding:10px; border-radius:6px;'>" . e($clearOut) . "</pre>"
