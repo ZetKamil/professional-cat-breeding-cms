@@ -233,6 +233,76 @@
     </div>
 
     {{-- ===============================================================
+         SEKCJA KOŃCOWA: OFERTA KOCIĄT & PODSUMOWANIE (DEDYKOWANE OKIENKO)
+         =============================================================== --}}
+    <div class="col-12" id="closing_section_wrapper">
+        <div class="card border-warning shadow-sm">
+            <div class="card-header bg-warning text-dark d-flex align-items-center justify-content-between">
+                <span>
+                    <i class="fas fa-bullhorn me-2"></i>
+                    <strong>Sekcja końcowa artykułu — Oferta kociąt, podsumowanie & kontakt (CTA)</strong>
+                </span>
+                <span class="badge bg-dark text-warning">Dedykowane okienko</span>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning bg-warning bg-opacity-10 border-warning border-opacity-25 mb-3 py-2 px-3 small text-dark">
+                    <i class="fas fa-info-circle text-warning me-1"></i>
+                    <strong>Osobne okienko na zakończenie artykułu:</strong> Ta treść wyświetla się na samym dole artykułu w dedykowanej złotej ramce.
+                    Wpisz tutaj aktualną ofertę kociąt (np. kocięta brytyjskie, bengalskie), zaproszenie do rezerwacji lub dane kontaktowe hodowli.
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-12 col-md-8">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold" for="closing_heading_input">
+                                Nagłówek sekcji końcowej (H2)
+                            </label>
+                            <input
+                                type="text"
+                                class="form-control fw-semibold"
+                                id="closing_heading_input"
+                                placeholder="Np. 🐾 Dostępne kocięta brytyjskie i bengalskie w naszej hodowli"
+                            >
+                        </div>
+                        <div>
+                            <label class="form-label small fw-bold" for="closing_body_input">
+                                Treść sekcji końcowej (oferta maluchów, telefon, zaproszenie) <span class="text-danger">*</span>
+                            </label>
+                            <textarea
+                                class="form-control font-monospace small"
+                                id="closing_body_input"
+                                rows="8"
+                                placeholder="Wpisz treść sekcji końcowej: aktualne kocięta brytyjskie / bengalskie, wolne miejsca na rezerwację, telefon (+48 514 153 204), zaproszenie do hodowli..."
+                            ></textarea>
+                            <div class="form-text small text-muted">
+                                Obsługuje formatowanie Markdown: <code>**pogrubienie**</code>, listy (<code>- punkt</code>), linki (<code>[tekst](/koty)</code>).
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label small fw-bold">Zdjęcie sekcji końcowej <span class="text-muted fw-normal">(opcjonalne)</span></label>
+                        <div class="section-image-area" id="closing_image_area">
+                            <div id="closing_image_preview_wrapper">
+                                <div class="d-flex align-items-center justify-content-center bg-light border rounded mb-2" style="height:140px;">
+                                    <i class="fas fa-image fa-2x text-muted"></i>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-1">
+                                <button type="button" class="btn btn-sm btn-outline-warning text-dark flex-grow-1" id="closing_pick_image_btn">
+                                    <i class="fas fa-folder-open me-1"></i> Wybierz zdjęcie
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-danger d-none" id="closing_remove_image_btn" title="Usuń zdjęcie">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- ===============================================================
          WYRÓŻNIONE KOTY POD ARTYKUŁEM
          =============================================================== --}}
     <div class="col-12">
@@ -421,25 +491,89 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     // ── State ────────────────────────────────────────────────────────
-    let sections = [];
+    let rawSections = [];
     try {
         const raw = document.getElementById('sections_json_input').value;
-        sections = JSON.parse(raw) || [];
+        rawSections = JSON.parse(raw) || [];
     } catch (e) {
-        sections = [{ heading: '', body: '', image_url: '' }];
+        rawSections = [{ heading: '', body: '', image_url: '' }];
+    }
+    if (!Array.isArray(rawSections) || rawSections.length === 0) {
+        rawSections = [{ heading: '', body: '', image_url: '' }];
     }
 
-    // ── Render ───────────────────────────────────────────────────────
+    // Split into regular sections (intro + middle) and the dedicated closing section
+    let regularSections = [];
+    let closingSection = {
+        heading: '🐾 Dostępne kocięta w naszej hodowli',
+        body: '',
+        image_url: ''
+    };
+
+    if (rawSections.length > 1) {
+        closingSection = Object.assign({}, closingSection, rawSections[rawSections.length - 1]);
+        regularSections = rawSections.slice(0, rawSections.length - 1);
+    } else {
+        regularSections = rawSections;
+    }
+
+    // ── Elements ─────────────────────────────────────────────────────
     const editor = document.getElementById('sections_editor');
     const badge = document.getElementById('sections_count_badge');
     const jsonInput = document.getElementById('sections_json_input');
 
-    function renderSections() {
+    const closingHeadingInput = document.getElementById('closing_heading_input');
+    const closingBodyInput = document.getElementById('closing_body_input');
+    const closingImgWrapper = document.getElementById('closing_image_preview_wrapper');
+    const closingPickBtn = document.getElementById('closing_pick_image_btn');
+    const closingRemoveBtn = document.getElementById('closing_remove_image_btn');
+
+    // ── Closing Section Handlers ─────────────────────────────────────
+    function updateClosingUI() {
+        if (closingHeadingInput) closingHeadingInput.value = closingSection.heading || '';
+        if (closingBodyInput) closingBodyInput.value = closingSection.body || '';
+        renderClosingImage();
+    }
+
+    function renderClosingImage() {
+        if (!closingImgWrapper) return;
+        if (closingSection.image_url) {
+            closingImgWrapper.innerHTML = `<img src="${escHtml(closingSection.image_url)}" class="section-card-image-preview mb-2" style="height:140px;width:100%;object-fit:cover;border-radius:6px;" alt="Zdjęcie sekcji końcowej">`;
+            closingRemoveBtn?.classList.remove('d-none');
+            if (closingPickBtn) closingPickBtn.innerHTML = '<i class="fas fa-folder-open me-1"></i> Zmień';
+        } else {
+            closingImgWrapper.innerHTML = `<div class="d-flex align-items-center justify-content-center bg-light border rounded mb-2" style="height:140px;"><i class="fas fa-image fa-2x text-muted"></i></div>`;
+            closingRemoveBtn?.classList.add('d-none');
+            if (closingPickBtn) closingPickBtn.innerHTML = '<i class="fas fa-folder-open me-1"></i> Wybierz zdjęcie';
+        }
+    }
+
+    closingHeadingInput?.addEventListener('input', function () {
+        closingSection.heading = this.value;
+        saveToInput();
+    });
+
+    closingBodyInput?.addEventListener('input', function () {
+        closingSection.body = this.value;
+        saveToInput();
+    });
+
+    closingRemoveBtn?.addEventListener('click', function () {
+        closingSection.image_url = '';
+        renderClosingImage();
+        saveToInput();
+    });
+
+    closingPickBtn?.addEventListener('click', function () {
+        openSectionMediaPicker('closing');
+    });
+
+    // ── Regular Sections Render ──────────────────────────────────────
+    function renderRegularSections() {
         editor.innerHTML = '';
-        sections.forEach((sec, idx) => {
+        regularSections.forEach((sec, idx) => {
             editor.appendChild(buildSectionCard(sec, idx));
         });
-        badge.textContent = sections.length + ' ' + (sections.length === 1 ? 'sekcja' : sections.length < 5 ? 'sekcje' : 'sekcji');
         saveToInput();
     }
 
@@ -455,14 +589,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
         card.innerHTML = `
             <div class="section-card-header">
-                <span class="drag-handle text-muted me-1" title="Przeciągnij aby zmienić kolejność">
+                <span class="drag-handle text-muted me-1" title="Kolejność sekcji">
                     <i class="fas fa-grip-vertical"></i>
                 </span>
                 ${headingLabel}
                 <span class="ms-auto">
+                    ${regularSections.length > 1 ? `
                     <button type="button" class="btn btn-sm btn-outline-danger section-remove-btn" data-idx="${idx}" title="Usuń sekcję">
                         <i class="fas fa-trash"></i>
                     </button>
+                    ` : ''}
                 </span>
             </div>
             <div class="section-card-body">
@@ -517,21 +653,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Remove section
         card.querySelector('.section-remove-btn')?.addEventListener('click', function () {
-            if (sections.length > 1 && confirm('Usunąć tę sekcję?')) {
-                sections.splice(idx, 1);
-                renderSections();
+            if (regularSections.length > 1 && confirm('Usunąć tę sekcję?')) {
+                regularSections.splice(idx, 1);
+                renderRegularSections();
             }
         });
 
         // Heading input
         card.querySelector('.section-heading')?.addEventListener('input', function () {
-            sections[idx].heading = this.value;
+            regularSections[idx].heading = this.value;
             saveToInput();
         });
 
         // Body textarea
         card.querySelector('.section-body')?.addEventListener('input', function () {
-            sections[idx].body = this.value;
+            regularSections[idx].body = this.value;
             saveToInput();
         });
 
@@ -542,32 +678,39 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Remove image
         card.querySelector('.section-remove-image')?.addEventListener('click', function () {
-            sections[idx].image_url = '';
-            renderSections();
+            regularSections[idx].image_url = '';
+            renderRegularSections();
         });
 
         return card;
     }
 
     function saveToInput() {
-        jsonInput.value = JSON.stringify(sections);
-        badge.textContent = sections.length + ' ' + (sections.length === 1 ? 'sekcja' : sections.length < 5 ? 'sekcje' : 'sekcji');
+        const all = [...regularSections];
+        const hasClosingContent = closingSection.body.trim() !== ''
+            || closingSection.heading.trim() !== ''
+            || (closingSection.image_url && closingSection.image_url.trim() !== '');
+
+        if (hasClosingContent) {
+            all.push(closingSection);
+        }
+        jsonInput.value = JSON.stringify(all);
+        const count = all.length;
+        badge.textContent = count + ' ' + (count === 1 ? 'sekcja' : count < 5 ? 'sekcje' : 'sekcji');
     }
 
     // ── Add section ──────────────────────────────────────────────────
     document.getElementById('add_section_btn').addEventListener('click', function () {
-        sections.push({ heading: '', body: '', image_url: '' });
-        renderSections();
-        // Scroll to new section
+        regularSections.push({ heading: '', body: '', image_url: '' });
+        renderRegularSections();
         editor.lastElementChild?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 
     // ── Preview ──────────────────────────────────────────────────────
     document.getElementById('preview_sections_btn').addEventListener('click', function () {
         const titleEl = document.getElementById('post_title_input');
-        let html = '<h1 style="font-size:1.8rem;margin-bottom:0.5rem;">' + escHtml(titleEl?.value || '(bez tytułu)') + '</h1>';
-        html += '<hr>';
-        sections.forEach((s, i) => {
+        let html = '<h1 style="font-size:1.8rem;margin-bottom:0.5rem;">' + escHtml(titleEl?.value || '(bez tytułu)') + '</h1><hr>';
+        regularSections.forEach((s, i) => {
             if (i === 0) {
                 if (s.body) html += '<p style="font-size:1.05rem;color:#555;">' + escHtml(s.body).replace(/\n/g, '<br>') + '</p>';
             } else {
@@ -578,6 +721,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 html += `<figure style="margin:1rem 0;"><img src="${escHtml(s.image_url)}" style="max-width:100%;border-radius:8px;" alt=""><figcaption style="font-size:0.8rem;color:#888;text-align:center;">Zdjęcie sekcji ${i + 1}</figcaption></figure>`;
             }
         });
+
+        if (closingSection.body.trim() || closingSection.heading.trim()) {
+            html += '<div style="margin-top:2rem;padding:1.5rem;background:#fffdf5;border:2px solid #e0c370;border-left:5px solid #d4af37;border-radius:12px;">';
+            html += '<div style="font-size:0.8rem;font-weight:700;color:#946c00;margin-bottom:0.5rem;text-transform:uppercase;">🐾 Sekcja końcowa / Oferta kociąt</div>';
+            if (closingSection.heading) html += '<h2 style="font-size:1.3rem;color:#946c00;margin-top:0;">' + escHtml(closingSection.heading) + '</h2>';
+            if (closingSection.body) html += '<p style="color:#333;">' + escHtml(closingSection.body).replace(/\n/g, '<br>') + '</p>';
+            if (closingSection.image_url) {
+                html += `<figure style="margin:1rem 0;"><img src="${escHtml(closingSection.image_url)}" style="max-width:100%;border-radius:8px;" alt=""></figure>`;
+            }
+            html += '</div>';
+        }
+
         document.getElementById('sections_preview_body').innerHTML = html;
         new bootstrap.Modal(document.getElementById('sectionsPreviewModal')).show();
     });
@@ -603,8 +758,8 @@ document.addEventListener('DOMContentLoaded', function () {
     let smpCurrentPage = 1;
     let smpSearchTimeout;
 
-    function openSectionMediaPicker(idx) {
-        smpTargetIdx = idx;
+    function openSectionMediaPicker(target) {
+        smpTargetIdx = target;
         loadSmpMedia(1);
         new bootstrap.Modal(smpModal).show();
     }
@@ -660,8 +815,14 @@ document.addEventListener('DOMContentLoaded', function () {
             const card = col.querySelector('.card');
             const pick = () => {
                 if (smpTargetIdx !== null) {
-                    sections[smpTargetIdx].image_url = item.url;
-                    renderSections();
+                    if (smpTargetIdx === 'closing') {
+                        closingSection.image_url = item.url;
+                        renderClosingImage();
+                        saveToInput();
+                    } else if (typeof smpTargetIdx === 'number' && regularSections[smpTargetIdx]) {
+                        regularSections[smpTargetIdx].image_url = item.url;
+                        renderRegularSections();
+                    }
                     bootstrap.Modal.getInstance(smpModal)?.hide();
                     smpTargetIdx = null;
                 }
@@ -693,6 +854,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // ── Init ─────────────────────────────────────────────────────────
-    renderSections();
+    updateClosingUI();
+    renderRegularSections();
 });
 </script>

@@ -337,7 +337,7 @@ class AiBlogGeneratorService
      *
      * @param  array<int, array{heading: string, body: string, image_url: string}>  $sections
      */
-    private function sectionsToBody(array $sections): string
+    public function sectionsToBody(array $sections): string
     {
         return collect($sections)->map(function (array $s) {
             $parts = [];

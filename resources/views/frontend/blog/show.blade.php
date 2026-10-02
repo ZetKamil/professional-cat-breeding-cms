@@ -59,12 +59,17 @@
 
                 @if($hasSections)
                     {{-- ─── Structured sections rendering ─────────── --}}
+                    @php
+                        $sectionsCount = count($post->sections);
+                        $hasClosing = $sectionsCount > 1;
+                    @endphp
                     @foreach($post->sections as $i => $section)
                         @php
                             $sectionBody = trim($section['body'] ?? '');
                             $sectionHeading = trim($section['heading'] ?? '');
                             $sectionImage = trim($section['image_url'] ?? '');
                             $isIntro = $i === 0;
+                            $isClosing = $hasClosing && ($i === $sectionsCount - 1);
                         @endphp
 
                         @if($isIntro)
@@ -84,6 +89,32 @@
                                     >
                                 </figure>
                             @endif
+                        @elseif($isClosing)
+                            {{-- Closing section: dedicated luxury CTA / offer card --}}
+                            <aside class="article-closing-cta-card" aria-label="Sekcja podsumowująca i oferta hodowli">
+                                <div class="article-closing-cta-card__badge">
+                                    <span class="article-closing-cta-card__icon">🐾</span>
+                                    <span class="article-closing-cta-card__label">Hodowla Kotów z Mazowieckiej Szwajcarii</span>
+                                </div>
+                                @if($sectionHeading)
+                                    <h2 class="article-closing-cta-card__title">{{ $sectionHeading }}</h2>
+                                @endif
+                                @if($sectionBody)
+                                    <div class="article-closing-cta-card__body">
+                                        {!! Str::markdown($sectionBody) !!}
+                                    </div>
+                                @endif
+                                @if($sectionImage)
+                                    <figure class="article-closing-cta-card__figure">
+                                        <img
+                                            src="{{ $sectionImage }}"
+                                            alt="{{ $sectionHeading ?: 'Zdjęcie sekcji końcowej' }}"
+                                            class="article-closing-cta-card__img"
+                                            loading="lazy"
+                                        >
+                                    </figure>
+                                @endif
+                            </aside>
                         @else
                             {{-- Regular section: optional H2 + body + image --}}
                             <div class="article-section-block">
