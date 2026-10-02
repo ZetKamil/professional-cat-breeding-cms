@@ -37,7 +37,9 @@ class GeminiService
         $rawKey           = (string) config('services.gemini.api_key', '');
         $this->apiKey     = trim($rawKey, " \t\n\r\0\x0B\"'");
         $configured       = (string) config('services.gemini.text_model', 'gemini-2.0-flash');
-        $this->textModel  = in_array($configured, ['gemini-flash-latest', 'gemini-2.5-flash'], true) ? 'gemini-2.0-flash' : $configured;
+        // Map deprecated/sunset models to current stable model
+        $deprecatedModels = ['gemini-flash-latest', 'gemini-2.5-flash', 'gemini-1.5-pro', 'gemini-1.5-flash', 'gemini-pro'];
+        $this->textModel  = in_array($configured, $deprecatedModels, true) ? 'gemini-2.0-flash' : $configured;
         $this->imageModel = (string) config('services.gemini.image_model', 'imagen-3.0-generate-002');
         $this->timeout    = (int) config('services.gemini.timeout', 60);
     }
@@ -125,16 +127,14 @@ class GeminiService
     {
         $this->assertKeyConfigured();
 
-        // Short timeout for text: keeps Livewire request well within PHP max_execution_time.
-        // Topic suggestions need speed, not a 60s budget. Images use the full timeout.
-        $textTimeout = min($this->timeout, 10);
+        // Text timeout: generous enough for free-tier Gemini, but within PHP max_execution_time.
+        $textTimeout = min($this->timeout, 30);
 
-        // Try valid models: gemini-2.0-flash, gemini-1.5-flash, gemini-1.5-pro
+        // Try valid models: gemini-2.0-flash, gemini-2.0-flash-lite
         $modelsToTry = array_values(array_unique(array_filter([
             $this->textModel,
             'gemini-2.0-flash',
-            'gemini-1.5-flash',
-            'gemini-1.5-pro',
+            'gemini-2.0-flash-lite',
         ])));
 
         $payload = [
@@ -157,8 +157,8 @@ class GeminiService
             $url = self::BASE_URL . $model . ':generateContent';
 
             try {
-                // 1 retry max, 10s timeout — must finish fast on shared hosting
-                $response = $this->sendPostRequest($url, $payload, maxAttempts: 1, timeout: $textTimeout);
+                // 2 attempts (1 retry), 30s timeout — allows for free-tier latency
+                $response = $this->sendPostRequest($url, $payload, maxAttempts: 2, timeout: $textTimeout);
             } catch (ConnectionException) {
                 Log::warning('GeminiService: connection timeout', ['model' => $model]);
                 continue;

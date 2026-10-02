@@ -151,7 +151,7 @@ class AiBlogStudio extends Component
             $this->topicError   = 'Klucz API Gemini nie jest skonfigurowany w pliku .env na serwerze (GEMINI_API_KEY). Możesz użyć domyślnego tematu lub wpisać własny poniżej.';
         } catch (GeminiServiceUnavailableException $e) {
             $this->topicsLoaded = true;
-            $this->topicError   = 'Usługa Gemini AI jest niedostępna (Błąd HTTP 503 / Limit API). Możesz użyć domyślnego tematu lub wpisać własny poniżej.';
+            $this->topicError   = 'Usługa Gemini AI jest niedostępna (' . $e->getMessage() . '). Sprawdź czy GEMINI_TEXT_MODEL w .env to aktualny model (np. gemini-2.0-flash). Możesz wpisać własny temat poniżej.';
         } catch (\Throwable $e) {
             Log::warning('AiBlogStudio: Agent execution exception', ['error' => $e->getMessage()]);
             $this->topicsLoaded = true;

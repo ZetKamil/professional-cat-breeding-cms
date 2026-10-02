@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services\AiAgent;
 
+use App\Exceptions\GeminiApiKeyMissingException;
+use App\Exceptions\GeminiServiceUnavailableException;
 use App\Models\TrendingTopic;
 use App\Services\AiAgent\Contracts\AgentToolInterface;
 use App\Services\AiAgent\Tools\FetchGoogleTrendsTool;
@@ -124,6 +126,16 @@ class BlogContentAgent
 
             return $liveTopics;
 
+        } catch (GeminiApiKeyMissingException $e) {
+            $errorMsg = "Brak klucza API: " . $e->getMessage();
+            $this->logThought($sessionId, "❌ " . $errorMsg);
+            $this->updateStatus($sessionId, 'failed', $errorMsg, []);
+            throw $e;
+        } catch (GeminiServiceUnavailableException $e) {
+            $errorMsg = "Usługa AI niedostępna: " . $e->getMessage();
+            $this->logThought($sessionId, "❌ " . $errorMsg);
+            $this->updateStatus($sessionId, 'failed', $errorMsg, []);
+            throw $e;
         } catch (\Throwable $e) {
             $errorMsg = "Błąd wykonania Agenta: " . $e->getMessage();
             $this->logThought($sessionId, "❌ " . $errorMsg);
