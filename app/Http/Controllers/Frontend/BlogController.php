@@ -60,7 +60,9 @@ class BlogController extends Controller
      */
     public function show(Post $post): View
     {
-        if (! $post->is_published || ! $post->published_at || $post->published_at->isFuture()) {
+        $isStaff = auth()->check();
+
+        if ((! $post->is_published || ! $post->published_at || $post->published_at->isFuture()) && ! $isStaff) {
             abort(404);
         }
 

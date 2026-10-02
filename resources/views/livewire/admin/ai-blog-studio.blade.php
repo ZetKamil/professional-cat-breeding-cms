@@ -38,9 +38,14 @@
     @if($successMessage)
         <div class="alert alert-success d-flex align-items-center mb-4 shadow-sm" role="alert">
             <i class="fas fa-check-circle me-2 fa-lg"></i>
-            <div>
-                {!! $successMessage !!}
-                <a href="{{ route('backend.posts.index') }}" class="alert-link ms-1">Przejdź do listy postów →</a>
+            <div class="d-flex align-items-center flex-wrap gap-2">
+                <span>{!! $successMessage !!}</span>
+                @if($savedPostSlug)
+                    <a href="{{ route('backend.posts.edit', $savedPostSlug) }}" class="btn btn-sm btn-success fw-bold">
+                        <i class="fas fa-edit me-1"></i> Otwórz edycję w nowym szablonie →
+                    </a>
+                @endif
+                <a href="{{ route('backend.posts.index') }}" class="alert-link ms-1">Lista postów</a>
             </div>
         </div>
     @endif
@@ -298,17 +303,102 @@
                     <p class="text-muted">Generuję nagłówki, treść SEO oraz prompty graficzne.</p>
                 </div>
             @elseif($generatedDraft)
-                <div class="card mb-4">
+                <div class="card mb-4 border-primary">
                     <div class="card-header bg-light d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0 fw-bold">{{ $generatedDraft['title'] ?? 'Szkic wpisu' }}</h5>
-                        <span class="badge bg-warning text-dark">SZKIC (Niepublikowany)</span>
+                        <div>
+                            <span class="badge bg-primary text-white me-2">Nowy Szablon Editorialny</span>
+                            <span class="badge bg-warning text-dark">SZKIC (Draft)</span>
+                        </div>
+                        <span class="text-muted small">
+                            <i class="fas fa-layer-group me-1"></i>
+                            {{ !empty($generatedDraft['sections']) ? count($generatedDraft['sections']) . ' sekcji' : '' }}
+                        </span>
                     </div>
                     <div class="card-body">
-                        <p class="lead text-muted">{{ $generatedDraft['excerpt'] ?? '' }}</p>
-                        <hr>
-                        <div class="article-body">
-                            {!! $generatedDraft['body'] ?? '' !!}
-                        </div>
+                        {{-- H1 --}}
+                        <h2 class="fw-bold mb-3" style="color: #1e293b;">
+                            {{ $generatedDraft['title'] ?? 'Szkic wpisu' }}
+                        </h2>
+
+                        {{-- Excerpt / Lead --}}
+                        @if(!empty($generatedDraft['excerpt']))
+                            <div class="p-3 bg-light rounded border-start border-4 border-primary mb-4">
+                                <span class="fw-bold text-uppercase small text-muted d-block mb-1">Wstęp / Lead artykułu:</span>
+                                <p class="lead mb-0 text-secondary" style="font-size: 1.05rem;">
+                                    {{ $generatedDraft['excerpt'] }}
+                                </p>
+                            </div>
+                        @endif
+
+                        {{-- Structured Sections --}}
+                        @if(!empty($generatedDraft['sections']))
+                            <div class="structured-sections-preview">
+                                @foreach($generatedDraft['sections'] as $sIdx => $sec)
+                                    <div class="p-3 mb-3 rounded border bg-white shadow-sm" style="border-left: 4px solid #3b82f6 !important;">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <span class="badge bg-secondary text-white" style="font-size: 0.72rem;">
+                                                {{ $sIdx === 0 ? 'Sekcja 1 (Wprowadzenie)' : 'Sekcja ' . ($sIdx + 1) }}
+                                            </span>
+                                            @if(!empty($sec['image_url']))
+                                                <span class="badge bg-info text-dark" style="font-size: 0.7rem;">
+                                                    <i class="fas fa-image me-1"></i> Ze zdjęciem
+                                                </span>
+                                            @endif
+                                        </div>
+
+                                        @if(!empty($sec['heading']))
+                                            <h4 class="fw-bold text-dark mt-2 mb-2" style="font-size: 1.25rem;">
+                                                {{ $sec['heading'] }}
+                                            </h4>
+                                        @endif
+
+                                        <div class="row g-3">
+                                            <div class="{{ !empty($sec['image_url']) ? 'col-12 col-md-8' : 'col-12' }}">
+                                                @foreach(explode("\n", $sec['body'] ?? '') as $p)
+                                                    @if(trim($p) !== '')
+                                                        <p class="text-muted mb-2" style="line-height: 1.6;">{{ trim($p) }}</p>
+                                                    @endif
+                                                @endforeach
+                                            </div>
+                                            @if(!empty($sec['image_url']))
+                                                <div class="col-12 col-md-4 text-center">
+                                                    <img src="{{ $sec['image_url'] }}"
+                                                         class="img-fluid rounded border shadow-sm"
+                                                         style="max-height: 160px; object-fit: cover; width: 100%;"
+                                                         alt="Zdjęcie sekcji">
+                                                    <small class="text-muted d-block mt-1" style="font-size: 0.75rem;">Zdjęcie przypisane do sekcji</small>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="article-body">
+                                {!! $generatedDraft['body'] ?? '' !!}
+                            </div>
+                        @endif
+
+                        {{-- Featured Cats preview --}}
+                        @if(!empty($selectedAnimalIds))
+                            @php
+                                $previewAnimals = \App\Models\Animal::whereIn('id', $selectedAnimalIds)->with('media')->get();
+                            @endphp
+                            @if($previewAnimals->isNotEmpty())
+                                <div class="mt-4 pt-3 border-top">
+                                    <h6 class="fw-bold text-dark mb-2">
+                                        <i class="fas fa-paw text-warning me-1"></i> Wyróżnione koty pod artykułem ({{ $previewAnimals->count() }}):
+                                    </h6>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        @foreach($previewAnimals as $pAnimal)
+                                            <span class="badge bg-warning text-dark py-2 px-3 fs-6">
+                                                🐾 {{ $pAnimal->name }} ({{ $pAnimal->breed }})
+                                            </span>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+                        @endif
                     </div>
                 </div>
 

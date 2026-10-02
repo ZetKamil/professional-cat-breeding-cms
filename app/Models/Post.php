@@ -271,4 +271,86 @@ class Post extends Model
 
         return 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?q=80&w=1200&auto=format&fit=crop';
     }
+
+    /**
+     * Konwertuje ciało Markdown starego artykułu na tablicę sekcji (H2 + tekst + zdjęcia).
+     */
+    public static function parseBodyToSections(?string $body): array
+    {
+        if (blank($body)) {
+            return [];
+        }
+
+        $parts = preg_split('/^##\s+(.+)$/m', $body, -1, PREG_SPLIT_DELIM_CAPTURE);
+
+        if (empty($parts)) {
+            return [
+                ['heading' => '', 'body' => trim($body), 'image_url' => '']
+            ];
+        }
+
+        $sections = [];
+
+        // Wstęp / Intro (przed pierwszym ##)
+        $introText = trim($parts[0]);
+        $introImage = '';
+        if (preg_match('/!\[.*?\]\((.*?)\)/', $introText, $imgMatch)) {
+            $introImage = $imgMatch[1];
+            $introText = preg_replace('/!\[.*?\]\((.*?)\)/', '', $introText);
+        }
+        $introText = preg_replace('/^\*[^\*\n]+\*\s*$/m', '', $introText);
+        $introText = preg_replace('/^---+\s*$/m', '', $introText);
+        $introText = trim($introText);
+
+        if ($introText || $introImage) {
+            $sections[] = [
+                'heading'   => '',
+                'body'      => $introText,
+                'image_url' => $introImage,
+            ];
+        }
+
+        // Kolejne sekcje H2
+        for ($i = 1; $i < count($parts); $i += 2) {
+            $heading = trim($parts[$i]);
+            $content = isset($parts[$i + 1]) ? trim($parts[$i + 1]) : '';
+
+            $imageUrl = '';
+            if (preg_match('/!\[.*?\]\((.*?)\)/', $content, $imgMatch)) {
+                $imageUrl = $imgMatch[1];
+                $content = preg_replace('/!\[.*?\]\((.*?)\)/', '', $content);
+            }
+            $content = preg_replace('/^\*[^\*\n]+\*\s*$/m', '', $content);
+            $content = preg_replace('/^---+\s*$/m', '', $content);
+            $content = trim($content);
+
+            $sections[] = [
+                'heading'   => $heading,
+                'body'      => $content,
+                'image_url' => $imageUrl,
+            ];
+        }
+
+        return $sections;
+    }
+
+    /**
+     * Zwraca sekcje artykułu. Jeśli kolumna sections jest pusta (stary post),
+     * automatycznie parsuje pole body na ustrukturyzowane sekcje.
+     */
+    public function getSectionsAttribute($value)
+    {
+        if (!empty($value)) {
+            $decoded = is_string($value) ? json_decode($value, true) : $value;
+            if (is_array($decoded) && !empty($decoded)) {
+                return $decoded;
+            }
+        }
+
+        if (!empty($this->attributes['body'] ?? null)) {
+            return static::parseBodyToSections($this->attributes['body']);
+        }
+
+        return [];
+    }
 }

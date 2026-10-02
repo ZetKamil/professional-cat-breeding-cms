@@ -1,11 +1,11 @@
 <x-frontend.shell
     title="{{ $post->title }} | Baza Wiedzy — Hodowla Kotów z Mazowieckiej Szwajcarii"
-    meta-description="{{ Str::limit($post->excerpt ?: strip_tags($post->body), 160) }}"
+    meta-description="{{ Str::limit($post->excerpt ?: strip_tags($post->body ?? ''), 160) }}"
     og-image="{{ $post->coverImageUrl() }}"
     og-type="article"
 >
     @php
-        $wordCount = str_word_count(strip_tags($post->body));
+        $wordCount = str_word_count(strip_tags($post->body ?? ''));
         $readTime = max(1, (int) ceil($wordCount / 200));
         $category = $post->categories->first();
         $hasSections = !empty($post->sections) && is_array($post->sections);
@@ -188,7 +188,7 @@
         "@@id": "{{ route('frontend.blog.show', $post) }}"
       },
       "headline": "{{ $post->title }}",
-      "description": "{{ Str::limit($post->excerpt ?: strip_tags($post->body), 160) }}",
+      "description": "{{ Str::limit($post->excerpt ?: strip_tags($post->body ?? ''), 160) }}",
       "image": "{{ $post->coverImageUrl() }}",
       "author": {
         "@@type": "Organization",

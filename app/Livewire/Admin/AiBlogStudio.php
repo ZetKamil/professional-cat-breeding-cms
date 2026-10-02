@@ -45,6 +45,8 @@ class AiBlogStudio extends Component
     public bool   $isSavingDraft     = false;
     public string $errorMessage      = '';
     public string $successMessage    = '';
+    public string $savedPostSlug     = '';
+    public string $savedPostTitle    = '';
     public string $topicError        = '';
     public bool   $topicsLoaded      = false;
     public bool   $isFetchingTopics  = false;
@@ -232,11 +234,22 @@ class AiBlogStudio extends Component
         $breedLabel = $this->breeds[$this->selectedBreed] ?? $this->selectedBreed;
 
         try {
-            $this->generatedDraft = $blogService->generateDraft(
+            $draft = $blogService->generateDraft(
                 $breedLabel,
                 $topic,
                 $this->selectedAnimalIds
             );
+
+            // Distribute photos from selected cattery animals to the article sections
+            if (!empty($draft['sections'])) {
+                $draft['sections'] = $this->distributeAnimalPhotosToSections(
+                    $draft['sections'],
+                    $this->selectedAnimalIds
+                );
+                $draft['body'] = $blogService->sectionsToBody($draft['sections']);
+            }
+
+            $this->generatedDraft = $draft;
         } catch (GeminiApiKeyMissingException $e) {
             $this->errorMessage = 'Klucz API Gemini nie jest skonfigurowany w .env (GEMINI_API_KEY). Skontaktuj się z administratorem.';
             $this->currentStep  = 2;
@@ -273,19 +286,24 @@ class AiBlogStudio extends Component
             $draft['published_at'] = now();
             $draft['user_id']      = Auth::id();
 
-            $draft['body'] = $this->injectAnimalPhotos($draft['body'] ?? '');
+            $sections = $draft['sections'] ?? [];
+            $body = !empty($sections)
+                ? $blogService->sectionsToBody($sections)
+                : ($draft['body'] ?? '');
 
             $post = $postService->create([
-                'user_id'          => $draft['user_id'],
-                'title'            => $draft['title'],
-                'slug'             => $draft['slug'],
-                'excerpt'          => $draft['excerpt'],
-                'body'             => $draft['body'],
-                'meta_title'       => $draft['meta_title'] ?? null,
-                'meta_description' => $draft['meta_description'] ?? null,
-                'is_published'     => false,
-                'published_at'     => $draft['published_at'],
-                'categories'       => [],
+                'user_id'             => $draft['user_id'],
+                'title'               => $draft['title'],
+                'slug'                => $draft['slug'],
+                'excerpt'             => $draft['excerpt'],
+                'sections'            => $sections,
+                'body'                => $body,
+                'featured_animal_ids' => $this->selectedAnimalIds ?? [],
+                'meta_title'          => $draft['meta_title'] ?? null,
+                'meta_description'    => $draft['meta_description'] ?? null,
+                'is_published'        => false,
+                'published_at'        => $draft['published_at'],
+                'categories'          => [],
             ]);
 
             $heroCreated = false;
@@ -309,7 +327,9 @@ class AiBlogStudio extends Component
                 $this->attachFeaturedImageFromAnimal($post, $this->selectedAnimalIds);
             }
 
-            $this->successMessage = "Szkic \"{$post->title}\" został zapisany! Zdjęcie wyróżniające oraz galeria kotów są już wstawione.";
+            $this->savedPostSlug   = $post->slug;
+            $this->savedPostTitle  = $post->title;
+            $this->successMessage  = "Szkic \"{$post->title}\" został zapisany w nowym szablonie!";
             $this->generatedDraft  = null;
             $this->currentStep     = 1;
             $this->reset(['selectedTopic', 'customTopic', 'selectedAnimalIds', 'heroImageDataUri']);
@@ -482,5 +502,70 @@ class AiBlogStudio extends Component
                 'error'   => $e->getMessage(),
             ]);
         }
+    }
+
+    /**
+     * Przypisuje zdjęcia wybranych kotów z hodowli bezpośrednio do sekcji artykułu.
+     */
+    private function distributeAnimalPhotosToSections(array $sections, array $animalIds): array
+    {
+        $urls = [];
+
+        if (!empty($animalIds)) {
+            $animals = \App\Models\Animal::whereIn('id', $animalIds)
+                ->with(['media', 'gallery'])
+                ->get();
+
+            foreach ($animals as $animal) {
+                if ($animal->media) {
+                    $urls[] = $animal->media->url();
+                }
+                if ($animal->gallery->isNotEmpty()) {
+                    foreach ($animal->gallery as $photo) {
+                        $urls[] = $photo->url();
+                    }
+                }
+            }
+        }
+
+        // Jeśli brakuje zdjęć, pobierz zdjęcia innych kotów danej rasy z hodowli
+        if (count($urls) < count($sections)) {
+            $breedLabel = $this->breeds[$this->selectedBreed] ?? null;
+            if ($breedLabel) {
+                $otherAnimals = \App\Models\Animal::published()
+                    ->where('breed', 'like', "%{$breedLabel}%")
+                    ->whereNotIn('id', $animalIds)
+                    ->with(['media', 'gallery'])
+                    ->take(3)
+                    ->get();
+
+                foreach ($otherAnimals as $animal) {
+                    if ($animal->media) {
+                        $urls[] = $animal->media->url();
+                    }
+                    if ($animal->gallery->isNotEmpty()) {
+                        foreach ($animal->gallery as $photo) {
+                            $urls[] = $photo->url();
+                        }
+                    }
+                }
+            }
+        }
+
+        $urls = array_values(array_unique(array_filter($urls)));
+
+        if (empty($urls)) {
+            return $sections;
+        }
+
+        $photoIndex = 0;
+        foreach ($sections as &$sec) {
+            if (empty($sec['image_url']) && isset($urls[$photoIndex])) {
+                $sec['image_url'] = $urls[$photoIndex];
+                $photoIndex++;
+            }
+        }
+
+        return $sections;
     }
 }
