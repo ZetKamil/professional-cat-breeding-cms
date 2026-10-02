@@ -34,38 +34,6 @@ class TopicSuggesterService
         'syjamski'  => 'Kot Syjamski',
     ];
 
-    /**
-     * Curated high-performing SEO blog topics used when Google AI is experiencing peak capacity (503).
-     *
-     * @var array<string, list<array{title: string, keyword: string, intent: string}>>
-     */
-    public const CURATED_TOPICS = [
-        'bengalski' => [
-            ['title' => 'Kot bengalski cena i koszty utrzymania — ile kosztuje kociak z rodowodem?', 'keyword' => 'kot bengalski cena', 'intent' => 'commercial'],
-            ['title' => 'Charakter kota bengalskiego — czy to rasa dla każdego? Fakty i mity', 'keyword' => 'kot bengalski charakter', 'intent' => 'informational'],
-            ['title' => 'Żywienie kota bengalskiego — BARF, karma mokra czy sucha? Poradnik', 'keyword' => 'co je kot bengalski', 'intent' => 'informational'],
-            ['title' => 'Kot bengalski a dzieci i inne zwierzęta — jak wygląda socjalizacja?', 'keyword' => 'kot bengalski a dzieci', 'intent' => 'informational'],
-            ['title' => 'Zdrowie i choroby kota bengalskiego — badania genetyczne HCM i PRA', 'keyword' => 'kot bengalski zdrowie', 'intent' => 'informational'],
-            ['title' => 'Wyprawka dla kota bengalskiego — niezbędne akcesoria i drapaki', 'keyword' => 'wyprawka dla kota bengalskiego', 'intent' => 'commercial'],
-        ],
-        'brytyjski' => [
-            ['title' => 'Kot brytyjski cena i koszty utrzymania — na co zwrócić uwagę w hodowli?', 'keyword' => 'kot brytyjski cena', 'intent' => 'commercial'],
-            ['title' => 'Żywienie i waga kota brytyjskiego — jak dbać o zdrową sylwetkę?', 'keyword' => 'dieta kot brytyjski', 'intent' => 'informational'],
-            ['title' => 'Temperament kota brytyjskiego — cichy pieszczoch czy niezależny domownik?', 'keyword' => 'kot brytyjski charakter', 'intent' => 'informational'],
-            ['title' => 'Pielęgnacja gęstej sierści kota brytyjskiego — czesanie i higiena', 'keyword' => 'sierść kota brytyjskiego', 'intent' => 'informational'],
-            ['title' => 'Kot brytyjski w domu z dziećmi — dlaczego to idealna rasa rodzinna?', 'keyword' => 'kot brytyjski dzieci', 'intent' => 'informational'],
-            ['title' => 'Kastracja i sterylizacja kota brytyjskiego — kiedy wykonać zabieg?', 'keyword' => 'sterylizacja kota brytyjskiego', 'intent' => 'informational'],
-        ],
-        'syjamski' => [
-            ['title' => 'Kot syjamski cena i rodowód — ile kosztuje prawdziwy Syjam z hodowli?', 'keyword' => 'kot syjamski cena', 'intent' => 'commercial'],
-            ['title' => 'Mowa i charakter kota syjamskiego — dlaczego te koty tak dużo mówią?', 'keyword' => 'kot syjamski charakter', 'intent' => 'informational'],
-            ['title' => 'Pielęgnacja i zdrowie kota syjamskiego — genetyka i długość życia', 'keyword' => 'zdrowie kota syjamskiego', 'intent' => 'informational'],
-            ['title' => 'Czy kot syjamski źle znosi samotność? Porady dla właścicieli', 'keyword' => 'kot syjamski samotność', 'intent' => 'informational'],
-            ['title' => 'Jak żywić kota syjamskiego — dieta dla aktywnego i smukłego kota', 'keyword' => 'dieta kot syjamski', 'intent' => 'informational'],
-            ['title' => 'Kot syjamski a alergia — czy ta rasa uczula mniej?', 'keyword' => 'kot syjamski alergia', 'intent' => 'informational'],
-        ],
-    ];
-
     public function __construct(
         private readonly GeminiService $gemini
     ) {}

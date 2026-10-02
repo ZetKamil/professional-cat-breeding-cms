@@ -129,14 +129,6 @@
                                     <span class="badge bg-secondary text-white ms-1 fw-normal">
                                         <i class="fas fa-database me-1"></i>Pamięć podręczna
                                     </span>
-                                @elseif($topicSource === 'db_fallback')
-                                    <span class="badge bg-warning text-dark ms-1 fw-normal" title="Google AI chwilowo zajęte — załadowano zweryfikowane trendy z bazy">
-                                        <i class="fas fa-history me-1"></i>Archiwum trendów (AI zajęte)
-                                    </span>
-                                @elseif($topicSource === 'curated_fallback')
-                                    <span class="badge bg-info text-white ms-1 fw-normal" title="Google AI chwilowo zajęte — załadowano rekomendowane tematy SEO">
-                                        <i class="fas fa-star me-1"></i>Baza tematów SEO (AI zajęte)
-                                    </span>
                                 @else
                                     <span class="badge bg-success text-white ms-1 fw-normal">
                                         <i class="fas fa-bolt me-1"></i>Na żywo z Google Trends & AI

@@ -11,7 +11,6 @@ use App\Services\AiAgent\Contracts\AgentToolInterface;
 use App\Services\AiAgent\Tools\FetchGoogleTrendsTool;
 use App\Services\AiAgent\Tools\GetCatteryAnimalsTool;
 use Illuminate\Support\Carbon;
-use App\Services\TopicSuggesterService;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
@@ -133,46 +132,7 @@ class BlogContentAgent
             $this->updateStatus($sessionId, 'failed', $errorMsg, []);
             throw $e;
         } catch (GeminiServiceUnavailableException $e) {
-            $this->logThought($sessionId, "⚠️ Google Gemini API zgłasza przeciążenie serwerów (503: High demand).");
-            $this->logThought($sessionId, "Uruchamiam automatyczną procedurę awaryjną (Fallback Strategy)...");
-
-            // 1. Sprawdź czy mamy w bazie wcześniejsze trendy dla tej rasy
-            try {
-                $previous = TrendingTopic::where('breed', $breedKey)
-                    ->orderBy('fetched_date', 'desc')
-                    ->first();
-
-                if ($previous && ! empty($previous->topics) && is_array($previous->topics)) {
-                    $dateStr = $previous->fetched_date instanceof \DateTimeInterface
-                        ? $previous->fetched_date->format('Y-m-d')
-                        : (string) $previous->fetched_date;
-
-                    $this->logThought($sessionId, "✅ Załadowano zweryfikowane trendy z bazy danych (zapis z {$dateStr}).");
-                    $this->updateStatus($sessionId, 'completed', 'Załadowano trendy z bazy danych (Google AI jest chwilowo przeciążone).', [
-                        'topics' => $previous->topics,
-                        'source' => 'db_fallback',
-                    ]);
-
-                    return $previous->topics;
-                }
-            } catch (\Throwable $dbEx) {
-                Log::warning('BlogContentAgent: DB fallback read error', ['error' => $dbEx->getMessage()]);
-            }
-
-            // 2. Jeśli brak w bazie — użyj zestawu rekomendowanych tematów SEO dla danej rasy
-            $curated = TopicSuggesterService::CURATED_TOPICS[$breedKey] ?? null;
-            if (! empty($curated)) {
-                $this->logThought($sessionId, "✅ Załadowano sprawdzoną bazę tematów SEO hodowli dla rasy {$breedLabel}.");
-                $this->updateStatus($sessionId, 'completed', 'Załadowano rekomendowane tematy SEO hodowli (Google AI jest chwilowo przeciążone).', [
-                    'topics' => $curated,
-                    'source' => 'curated_fallback',
-                ]);
-
-                return $curated;
-            }
-
-            // Jeśli żaden fallback nie zadziałał — zaraportuj błąd
-            $errorMsg = "Usługa AI niedostępna: " . $e->getMessage();
+            $errorMsg = "Usługa Gemini AI chwilowo niedostępna: " . $e->getMessage();
             $this->logThought($sessionId, "❌ " . $errorMsg);
             $this->updateStatus($sessionId, 'failed', $errorMsg, []);
             throw $e;
