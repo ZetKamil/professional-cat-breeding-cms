@@ -280,10 +280,12 @@
                         <div class="small text-muted mb-2" style="max-height: 80px; overflow-y: auto; white-space: pre-line;">
                             {{ Str::limit($globalCtaSetting['body'] ?? '', 220) }}
                         </div>
-                        <div class="d-flex align-items-center gap-2 small text-muted">
+                        <div class="d-flex align-items-center gap-2 small text-muted flex-wrap">
                             <span>📞 +48 514 153 204</span>
                             <span>·</span>
                             <span>📍 Sikórz k. Płocka</span>
+                            <span>·</span>
+                            <span><i class="fab fa-facebook text-primary"></i> Facebook hodowli</span>
                         </div>
                     </div>
 

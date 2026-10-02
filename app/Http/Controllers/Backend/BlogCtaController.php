@@ -33,13 +33,16 @@ class BlogCtaController extends Controller
         $this->authorize('update', Post::class);
 
         $validated = $request->validate([
-            'is_enabled'   => ['nullable', 'boolean'],
-            'badge'        => ['nullable', 'string', 'max:100'],
-            'heading'      => ['required', 'string', 'max:255'],
-            'body'         => ['required', 'string'],
-            'image_url'    => ['nullable', 'string', 'max:500'],
-            'button_text'  => ['nullable', 'string', 'max:100'],
-            'button_url'   => ['nullable', 'string', 'max:255'],
+            'is_enabled'    => ['nullable', 'boolean'],
+            'badge'         => ['nullable', 'string', 'max:100'],
+            'heading'       => ['required', 'string', 'max:255'],
+            'body'          => ['required', 'string'],
+            'image_url'     => ['nullable', 'string', 'max:500'],
+            'button_text'   => ['nullable', 'string', 'max:100'],
+            'button_url'    => ['nullable', 'string', 'max:255'],
+            'facebook_info' => ['nullable', 'string', 'max:500'],
+            'facebook_text' => ['nullable', 'string', 'max:100'],
+            'facebook_url'  => ['nullable', 'string', 'max:255'],
         ]);
 
         $validated['is_enabled'] = $request->boolean('is_enabled');

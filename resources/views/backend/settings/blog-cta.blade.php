@@ -199,7 +199,7 @@
                         {{-- Action button (Optional) --}}
                         <div class="row g-2 pt-2 border-top">
                             <div class="col-12 col-md-6">
-                                <label class="form-label small fw-semibold">Tekst przycisku (opcjonalny)</label>
+                                <label class="form-label small fw-semibold">Tekst przycisku oferty (opcjonalny)</label>
                                 <input
                                     type="text"
                                     name="button_text"
@@ -210,7 +210,7 @@
                                 >
                             </div>
                             <div class="col-12 col-md-6">
-                                <label class="form-label small fw-semibold">Link przycisku</label>
+                                <label class="form-label small fw-semibold">Link przycisku oferty</label>
                                 <input
                                     type="text"
                                     name="button_url"
@@ -219,6 +219,57 @@
                                     value="{{ old('button_url', $cta['button_url'] ?? '/koty') }}"
                                     placeholder="Np. /koty lub /contact"
                                 >
+                            </div>
+                        </div>
+
+                        {{-- Facebook Section (Requested by user) --}}
+                        <div class="pt-3 mt-3 border-top">
+                            <h6 class="fw-bold text-primary small mb-2">
+                                <i class="fab fa-facebook me-1"></i> Zaproszenie na Facebook hodowli & Przycisk
+                            </h6>
+                            <div class="mb-2">
+                                <label class="form-label small fw-semibold" for="facebook_info_input">Tekst zaproszenia na Facebook</label>
+                                <input
+                                    type="text"
+                                    name="facebook_info"
+                                    id="facebook_info_input"
+                                    class="form-control form-control-sm @error('facebook_info') is-invalid @enderror"
+                                    value="{{ old('facebook_info', $cta['facebook_info'] ?? 'Zapraszamy również na nasz profil na Facebooku — publikujemy tam bieżące relacje, codzienne życie kociąt oraz nowe zdjęcia i filmy!') }}"
+                                    placeholder="Np. Zapraszamy na nasz profil na Facebooku..."
+                                >
+                                @error('facebook_info')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="row g-2">
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label small fw-semibold" for="facebook_text_input">Napis na guziku Facebooka</label>
+                                    <input
+                                        type="text"
+                                        name="facebook_text"
+                                        id="facebook_text_input"
+                                        class="form-control form-control-sm @error('facebook_text') is-invalid @enderror"
+                                        value="{{ old('facebook_text', $cta['facebook_text'] ?? 'Odwiedź nas na Facebooku') }}"
+                                        placeholder="Np. Odwiedź nas na Facebooku"
+                                    >
+                                    @error('facebook_text')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label small fw-semibold" for="facebook_url_input">Link do profilu Facebook</label>
+                                    <input
+                                        type="text"
+                                        name="facebook_url"
+                                        id="facebook_url_input"
+                                        class="form-control form-control-sm @error('facebook_url') is-invalid @enderror"
+                                        value="{{ old('facebook_url', $cta['facebook_url'] ?? 'https://www.facebook.com/profile.php?id=61580668026948') }}"
+                                        placeholder="https://www.facebook.com/..."
+                                    >
+                                    @error('facebook_url')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
 
@@ -254,6 +305,20 @@
                                 <div id="preview_img_wrapper" class="{{ empty($cta['image_url']) ? 'd-none' : '' }}">
                                     <img src="{{ $cta['image_url'] ?? '' }}" id="preview_card_img" class="cta-preview-img" alt="Zdjęcie oferty">
                                 </div>
+
+                                {{-- Facebook Preview Block --}}
+                                <div id="preview_facebook_wrapper" class="p-3 mt-3 rounded bg-white border border-primary border-opacity-25 d-flex align-items-center justify-content-between flex-wrap gap-2 shadow-sm">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="fab fa-facebook fa-2x text-primary flex-shrink-0"></i>
+                                        <div class="small text-dark fw-medium" id="preview_facebook_info">
+                                            {{ $cta['facebook_info'] ?? 'Zapraszamy również na nasz profil na Facebooku — publikujemy tam bieżące relacje, codzienne życie kociąt oraz nowe zdjęcia i filmy!' }}
+                                        </div>
+                                    </div>
+                                    <a href="{{ $cta['facebook_url'] ?? 'https://www.facebook.com/profile.php?id=61580668026948' }}" target="_blank" class="btn btn-sm btn-primary fw-bold text-white rounded-pill px-3 py-1 text-nowrap" id="preview_facebook_btn">
+                                        <i class="fab fa-facebook me-1"></i> <span id="preview_facebook_text">{{ $cta['facebook_text'] ?? 'Odwiedź nas na Facebooku' }}</span> →
+                                    </a>
+                                </div>
+
                                 <div class="mt-3 text-start" id="preview_button_wrapper">
                                     <a href="#" class="btn btn-warning text-dark btn-sm fw-bold px-3 py-2 rounded-pill shadow-sm" id="preview_button">
                                         {{ $cta['button_text'] ?? 'Zobacz dostępne koty' }} →
@@ -303,6 +368,9 @@
         const imageUrlInput = document.getElementById('image_url_input');
         const buttonTextInput = document.getElementById('button_text_input');
         const buttonUrlInput = document.getElementById('button_url_input');
+        const facebookInfoInput = document.getElementById('facebook_info_input');
+        const facebookTextInput = document.getElementById('facebook_text_input');
+        const facebookUrlInput = document.getElementById('facebook_url_input');
         const isEnabledInput = document.getElementById('is_enabled');
 
         const previewBadgeText = document.getElementById('preview_badge_text');
@@ -312,6 +380,10 @@
         const previewCardImg = document.getElementById('preview_card_img');
         const previewButton = document.getElementById('preview_button');
         const previewButtonWrapper = document.getElementById('preview_button_wrapper');
+        const previewFacebookWrapper = document.getElementById('preview_facebook_wrapper');
+        const previewFacebookInfo = document.getElementById('preview_facebook_info');
+        const previewFacebookText = document.getElementById('preview_facebook_text');
+        const previewFacebookBtn = document.getElementById('preview_facebook_btn');
         const previewStatusBadge = document.getElementById('preview_status_badge');
         const livePreviewCard = document.getElementById('live_preview_card');
 
@@ -365,6 +437,16 @@
                 previewButtonWrapper.classList.add('d-none');
             }
 
+            // Facebook Live Preview
+            if (facebookUrlInput && facebookUrlInput.value) {
+                previewFacebookWrapper?.classList.remove('d-none');
+                if (previewFacebookInfo) previewFacebookInfo.textContent = facebookInfoInput.value || '';
+                if (previewFacebookText) previewFacebookText.textContent = facebookTextInput.value || 'Odwiedź nas na Facebooku';
+                if (previewFacebookBtn) previewFacebookBtn.href = facebookUrlInput.value;
+            } else {
+                previewFacebookWrapper?.classList.add('d-none');
+            }
+
             if (isEnabledInput.checked) {
                 previewStatusBadge.textContent = 'Aktywny';
                 previewStatusBadge.className = 'badge bg-success';
@@ -381,6 +463,9 @@
         bodyInput.addEventListener('input', updatePreview);
         buttonTextInput.addEventListener('input', updatePreview);
         buttonUrlInput.addEventListener('input', updatePreview);
+        facebookInfoInput?.addEventListener('input', updatePreview);
+        facebookTextInput?.addEventListener('input', updatePreview);
+        facebookUrlInput?.addEventListener('input', updatePreview);
         isEnabledInput.addEventListener('change', updatePreview);
 
         updatePreview();

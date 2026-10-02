@@ -53,13 +53,16 @@ class Setting extends Model
     public static function getBlogCta(): array
     {
         $defaults = [
-            'is_enabled'   => true,
-            'badge'        => 'Hodowla Kotów z Mazowieckiej Szwajcarii',
-            'heading'      => '🐾 Dostępne kocięta w naszej hodowli',
-            'body'         => '',
-            'image_url'    => '',
-            'button_text'  => 'Zobacz dostępne koty',
-            'button_url'   => '/koty',
+            'is_enabled'    => true,
+            'badge'         => 'Hodowla Kotów z Mazowieckiej Szwajcarii',
+            'heading'       => '🐾 Dostępne kocięta w naszej hodowli',
+            'body'          => '',
+            'image_url'     => '',
+            'button_text'   => 'Zobacz dostępne koty',
+            'button_url'    => '/koty',
+            'facebook_info' => 'Zapraszamy również na nasz profil na Facebooku — publikujemy tam bieżące relacje, codzienne życie kociąt oraz nowe zdjęcia i filmy!',
+            'facebook_text' => 'Odwiedź nas na Facebooku',
+            'facebook_url'  => 'https://www.facebook.com/profile.php?id=61580668026948',
         ];
 
         $data = static::get('blog_closing_cta', []);
