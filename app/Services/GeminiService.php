@@ -54,8 +54,15 @@ class GeminiService
             'gemini-pro',
         ];
 
-        // Route shut down or empty models to Google's official rolling alias 'gemini-flash-latest'
-        if (empty($normalized) || in_array($normalized, $shutDownModels, true)) {
+        $latestAliases = [
+            'latest',
+            'flash-latest',
+            'gemini-latest',
+            'gemini-flash-latest',
+        ];
+
+        // Route shut down, empty, or shorthand 'latest' models to Google's official rolling alias 'gemini-flash-latest'
+        if (empty($normalized) || in_array($normalized, $shutDownModels, true) || in_array($normalized, $latestAliases, true)) {
             $this->textModel = 'gemini-flash-latest';
         } else {
             $this->textModel = $normalized;
