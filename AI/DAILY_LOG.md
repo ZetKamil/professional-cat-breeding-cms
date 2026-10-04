@@ -1,5 +1,22 @@
 # DAILY_LOG.md
 
+## 2026-10-04
+
+### Completed
+
+✓ Artykuł Bazy Wiedzy: Szczepienia kociąt — wdrożenie autentycznych fotografii kotki brytyjskiej i najmłodszych kociąt (`feat(blog)`, `style(ui)`)
+  - Wybór i zoptymalizowanie 2 najlepszych fotografii kotki brytyjskiej z miotem z folderu `image/Brytyjczyki/` (`7d9781e7...` oraz `706e576b...`).
+  - Wykadrowanie w proporcji 4:3 (1200x900) z zachowaniem pełnej sylwetki matki oraz wszystkich nowo narodzonych maluchów (brak uciętych głów/uszu).
+  - Wdrożenie zdjęć do artykułu `Szczepienia kociąt — harmonogram, koszt i poradnik`:
+    - Sekcja 2 (Harmonogram szczepień i przeciwciała matczyne): wplecenie zdjęcia troskliwie karmiącej kotki brytyjskiej (`08_kotka_brytyjska_karmiaca.jpg`) jako merytorycznej ilustracji odporności z siary w pierwszych tygodniach życia.
+    - Sekcja 3 (Standard profilaktyki w hodowli w Sikorzu): wplecenie zdjęcia czuwającej kotki brytyjskiej z maluchami (`09_kotka_brytyjska_z_kocietami.jpg`) jako wizytówki domowych warunków i bezpieczeństwa hodowli.
+    - Sekcja 1 (Przed czym chronią szczepienia): przypisanie zdjęcia młodego kociaka (`06_nasz_kociak_1.jpg`).
+    - Sekcja 4 (Ile kosztuje szczepienie): zachowanie zdjęcia odchowanego kociaka (`07_nasz_kociak_2.jpg`).
+  - Zaktualizowanie bazy danych (`Post` id: 12) – pola `sections` oraz `body`.
+  - Zaktualizowanie pliku `BLOG/012-szczepienia-kociat-harmonogram/01_article.md` oraz synchronizacja plików w `public/storage/` i `storage/app/public/`.
+  - Optymalizacja CSS w `blog-page.css`: uelastycznienie `.article-section-img` (`max-height: 560px`, `height: auto`), dzięki czemu zdjęcia 4:3 oraz pionowe nie są obcinane przez sztywne 16:9.
+  - Pomyślna kompilacja assetów produkcyjnych (`npm run build`).
+
 ## 2026-08-11
 
 ### Completed

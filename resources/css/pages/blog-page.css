@@ -622,7 +622,8 @@
 .article-section-img {
     width: 100%;
     max-width: 720px;
-    aspect-ratio: 16 / 9;
+    height: auto;
+    max-height: 560px;
     object-fit: cover;
     border-radius: var(--radius-lg, 12px);
     display: block;

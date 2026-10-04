@@ -575,15 +575,40 @@ Route::get('/deploy-sync', function () {
         \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
         $migrateOut = \Illuminate\Support\Facades\Artisan::output();
 
+        // Sync blog assets & articles
+        $blogSyncOut = 'Brak folderu BLOG';
+        $blogPath = base_path('BLOG');
+        if (\Illuminate\Support\Facades\File::isDirectory($blogPath)) {
+            $directories = \Illuminate\Support\Facades\File::directories($blogPath);
+            foreach ($directories as $dirPath) {
+                $folderName = basename($dirPath);
+                $storagePublicDir = public_path("storage/blog/{$folderName}");
+                \Illuminate\Support\Facades\File::ensureDirectoryExists($storagePublicDir);
+
+                $sourceFiles = \Illuminate\Support\Facades\File::files($dirPath);
+                foreach ($sourceFiles as $file) {
+                    $ext = strtolower($file->getExtension());
+                    if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'jfif'], true)) {
+                        $targetPath = $storagePublicDir . '/' . $file->getFilename();
+                        @\Illuminate\Support\Facades\File::copy($file->getPathname(), $targetPath);
+                        @chmod($targetPath, 0644);
+                    }
+                }
+            }
+            \Illuminate\Support\Facades\Artisan::call('seo:import-articles', ['--force-now' => true]);
+            $blogSyncOut = trim(\Illuminate\Support\Facades\Artisan::output());
+        }
+
         \Illuminate\Support\Facades\Artisan::call('optimize:clear');
         $clearOut = \Illuminate\Support\Facades\Artisan::output();
 
         return response("<div style='font-family:sans-serif; padding:30px; max-width:700px; margin:40px auto; background:#f0fdf4; border:1px solid #10b981; border-radius:12px;'>"
             . "<h2 style='color:#065f46; margin-top:0;'>✅ System Zsynchronizowany na Hostingu!</h2>"
-            . "<p>Kod z Git, baza danych i pamięć podręczna zostały zaktualizowane.</p>"
+            . "<p>Kod z Git, baza danych, artykuły bloga i pamięć podręczna zostały zaktualizowane.</p>"
             . "<h4>Aktualny commit:</h4><pre style='background:#fff; padding:10px; border-radius:6px;'>" . e($gitLog) . "</pre>"
             . "<h4>Git Pull:</h4><pre style='background:#fff; padding:10px; border-radius:6px;'>" . e($gitOut) . "</pre>"
             . "<h4>Migracje:</h4><pre style='background:#fff; padding:10px; border-radius:6px;'>" . e($migrateOut ?: 'Brak nowych migracji.') . "</pre>"
+            . "<h4>Synchronizacja Bloga:</h4><pre style='background:#fff; padding:10px; border-radius:6px;'>" . e($blogSyncOut ?: 'Zsynchronizowano.') . "</pre>"
             . "<h4>Kesz (optimize:clear):</h4><pre style='background:#fff; padding:10px; border-radius:6px;'>" . e($clearOut) . "</pre>"
             . "<a href='" . route('backend.posts.ai-studio') . "' style='display:inline-block; margin-top:15px; background:#059669; color:#fff; padding:10px 20px; border-radius:8px; text-decoration:none; font-weight:bold;'>Przejdź do AI Blog Studio →</a>"
             . "</div>");

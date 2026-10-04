@@ -17,6 +17,9 @@ Zgodnie z wytycznymi Światowego Stowarzyszenia Lekarzy Weterynarii Małych Zwie
 2. **Kaliciwirusoza (FCV):** Wirus wywołujący bolesne owrzodzenia w jamie ustnej, gorączkę i zapalenie płuc.
 3. **Herpeswirusoza (FHV-1 / katar koci):** Wirus atakujący górne drogi oddechowe i oczy, mogący prowadzić do przewlekłych powikłań.
 
+![Kocię pod opieką profilaktyczną w hodowli](06_nasz_kociak_1.jpg)
+*Zapewnienie pełnego cyklu szczepień zasadniczych w hodowli daje pewność, że kocię rozwija się w bezpiecznym środowisku.*
+
 ---
 
 ## Oficjalny harmonogram szczepień kociąt krok po kroku
@@ -29,8 +32,8 @@ Dlaczego nie można zaszczepić kocięcia w pierwszym miesiącu życia? Przez pi
 - 📌 **12. miesiąc życia:** I Szczepienie przypominające (po roku od dawki dziecięcej).
 - 📌 **Co 2–3 lata:** Szczepienia przypominające dla domowych kotów dorosłych.
 
-![Kocię z Hodowli Kotów z Mazowieckiej Szwajcarii](06_nasz_kociak_1.jpg)
-*Nasze maluchy w Sikorzu przechodzą pełny cykl profilaktyczny pod stałym nadzorem lekarza weterynarii.*
+![Kotka brytyjska troskliwie karmiąca nowo narodzone kocięta](08_kotka_brytyjska_karmiaca.jpg)
+*W pierwszych tygodniach życia maluchy czerpią odporność z przeciwciał matczynych (siary) — nasza kotka brytyjska ze swoim najmłodszym miotem.*
 
 ---
 
@@ -43,6 +46,9 @@ W [naszej Hodowli Kotów z Mazowieckiej Szwajcarii](/o-hodowli) w Sikorzu k. Pł
 - Opiekun otrzymuje [oficjalny rodowód SHiOZ](/blog/006-co-zawiera-rodowod-kota), Książeczkę Zdrowia Kota oraz wpisy o wykonanych badaniach rodziców w kierunku [HCM i PKD](/blog/007-badania-genetyczne-hcm-pkd-koty).
 
 Nigdy nie wydajemy kociąt po jednym szczepieniu — pełna odporność buduje się dopiero po dawce przypominającej w 12. tygodniu.
+
+![Kotka brytyjska czuwająca nad bezpieczeństwem i zdrowiem kociąt](09_kotka_brytyjska_z_kocietami.jpg)
+*Bezpieczeństwo i najwyższy standard profilaktyki od pierwszych chwil życia: nasza kotka brytyjska z maluchami w domowych warunkach hodowli w Sikorzu.*
 
 ---
 

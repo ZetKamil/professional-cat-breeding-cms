@@ -136,6 +136,7 @@ class ImportSeoArticles extends Command
                     'title' => $title,
                     'excerpt' => $excerpt,
                     'body' => $processedBody,
+                    'sections' => Post::parseBodyToSections($processedBody),
                     'is_published' => true,
                     'published_at' => $publishedAt,
                 ]

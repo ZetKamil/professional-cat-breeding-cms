@@ -2,6 +2,39 @@
 
 ---
 
+## 2026-10-04 — Sprint 7: British Shorthair Mother & Newborn Kittens Media Integration (`feat(blog)`, `style(ui)`)
+
+### Context
+User requested selecting and weaving 1-2 authentic photographs of the cattery's British Shorthair mother cat and her newborn kittens (recently added to `image/Brytyjczyki/`) into the published Knowledge Base article **"Szczepienia kociąt — harmonogram, koszt i poradnik"** (`/blog/szczepienia-kociat-harmonogram`, post ID 12).
+
+### Technical & Creative Implementation
+1. **Photo Curation & Aspect Ratio Optimization**:
+   - Evaluated 3 candidate photos in `image/Brytyjczyki/`:
+     - `7d9781e7...`: Mother cat tenderly looking down at her nursing newborn kittens, with one tiny kitten looking up toward the camera.
+     - `706e576b...`: Mother cat looking directly and proudly into the lens, vigilant and calm, with her litter sleeping peacefully beside her.
+   - Identified that the raw photos were in 3:4 vertical orientation (1536x2048). A strict 16:9 box crop would have severed either the mother's head or the kittens at the bottom.
+   - Used GD image processing to create framed 4:3 (1200x900, 92% quality, ~175KB) web-optimized images preserving full head, ears, paws, and all kittens with comfortable visual margins:
+     - `08_kotka_brytyjska_karmiaca.jpg` (siara & naturalna odporność)
+     - `09_kotka_brytyjska_z_kocietami.jpg` (bezpieczeństwo i opieka w Sikorzu)
+2. **Thematic Content Integration**:
+   - Mapped `08_kotka_brytyjska_karmiaca.jpg` directly into Section 2 (*"Oficjalny harmonogram szczepień kociąt krok po kroku"*), perfectly illustrating the paragraph on why newborn kittens cannot be vaccinated in the first weeks due to maternal antibodies in colostrum (siara).
+   - Mapped `09_kotka_brytyjska_z_kocietami.jpg` directly into Section 3 (*"Standard profilaktyki w naszej hodowli w Sikorzu"*), validating the cattery's domestic care, ethical breeding, and health standards.
+   - Reassigned `06_nasz_kociak_1.jpg` to Section 1 (*"Przed czym chronią podstawowe szczepienia kota?"*) and preserved `07_nasz_kociak_2.jpg` in Section 4 (*"Ile kosztuje szczepienie kota?"*).
+3. **Multi-Source Synchronization**:
+   - Deployed processed images to:
+     - `BLOG/012-szczepienia-kociat-harmonogram/`
+     - `public/storage/blog/012-szczepienia-kociat-harmonogram/`
+     - `storage/app/public/blog/012-szczepienia-kociat-harmonogram/`
+   - Updated `01_article.md` markdown package.
+   - Updated database record `Post` ID 12 (both `sections` array and `body` column).
+4. **CSS Image Flexibility**:
+   - Refined `.article-section-img` in `resources/css/pages/blog-page.css`: replaced rigid `aspect-ratio: 16 / 9;` with `height: auto; max-height: 560px; object-fit: cover;`, allowing 4:3, 16:9, and portrait photos to display with editorial elegance without cropping cat heads.
+   - Compiled clean production assets via `npm run build` (337KB CSS, 205KB styles bundle).
+5. **Quality Assurance**:
+   - Executed `php artisan test --filter=BlogTest`: 5/5 passed.
+
+---
+
 ## 2026-08-11 — Sprint 7: Security, SEO, Forms & Final Production QA (Production Readiness)
 
 ### Context
