@@ -19,7 +19,7 @@ class ImportSeoArticles extends Command
      *
      * @var string
      */
-    protected $signature = 'seo:import-articles {--folder= : Specific blog folder to import e.g. 002-kot-bengalski-a-dzieci} {--force-now : Force published_at to now for immediate live viewing}';
+    protected $signature = 'seo:import-articles {--folder= : Specific blog folder to import e.g. 002-kot-bengalski-a-dzieci} {--force-now : Force published_at to now for immediate live viewing (requires --folder)} {--force-sync : Overwrite existing CMS posts with disk markdown files}';
 
     /**
      * The console command description.
@@ -35,6 +35,7 @@ class ImportSeoArticles extends Command
     {
         $targetFolder = $this->option('folder');
         $forceNow = (bool) $this->option('force-now');
+        $forceSync = (bool) $this->option('force-sync');
 
         if ($forceNow && ! $targetFolder) {
             $this->warn('Ostrzeżenie: Opcja --force-now została wywołana bez wskazania folderu (--folder). Aby zapobiec nadpisaniu harmonogramu bazy wiedzy, data zostanie przypisana zgodnie z kalendarzem publikacji.');
@@ -132,6 +133,22 @@ class ImportSeoArticles extends Command
             $excerpt = $metaData['meta']['description'] ?? $metaData['excerpt'] ?? Str::limit(strip_tags($processedBody), 160);
 
             $publishedAt = $forceNow ? now() : $scheduledDate;
+
+            // Check if Post already exists in database (CMS)
+            $existingPost = Post::where('slug', $slug)->first();
+
+            if ($existingPost && ! $forceSync) {
+                // Ensure published_at has its scheduled Sunday date if missing
+                if (! $existingPost->published_at) {
+                    $existingPost->update([
+                        'published_at' => $scheduledDate,
+                        'is_published' => true,
+                    ]);
+                }
+
+                $this->info("Skipped Post ID {$existingPost->id}: {$title} [Już istnieje w CMS — zachowano edycje]");
+                continue;
+            }
 
             // Create or Update Post
             $post = Post::updateOrCreate(
