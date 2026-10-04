@@ -70,6 +70,10 @@ class StorePostRequest extends FormRequest
             'slug'                  => ['required', 'string', 'min:3', 'max:255', Rule::unique('posts', 'slug')],
             'excerpt'               => ['nullable', 'string', 'max:1000'],
             'body'                  => ['nullable', 'string'],
+            'sections'              => ['nullable', 'array'],
+            'sections.*.heading'    => ['nullable', 'string'],
+            'sections.*.body'       => ['nullable', 'string'],
+            'sections.*.image_url'  => ['nullable', 'string'],
             'sections_json'         => ['nullable', 'string'],
             'is_published'          => ['required', 'boolean'],
             'published_at'          => ['nullable', 'date'],
@@ -90,6 +94,10 @@ class StorePostRequest extends FormRequest
             $parts = [];
             if (!empty($s['heading'])) {
                 $parts[] = '## ' . $s['heading'];
+            }
+            if (!empty($s['image_url'])) {
+                $alt = !empty($s['heading']) ? $s['heading'] : 'Zdjęcie do sekcji';
+                $parts[] = '![' . $alt . '](' . $s['image_url'] . ')';
             }
             if (!empty($s['body'])) {
                 $parts[] = $s['body'];

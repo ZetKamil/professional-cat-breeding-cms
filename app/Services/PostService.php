@@ -64,7 +64,7 @@ class PostService
                 'slug'             => $data['slug'],
                 'excerpt'          => $data['excerpt'] ?? null,
                 'body'             => $data['body'] ?? '',
-                'sections'         => $data['sections'] ?? null,
+                'sections'         => array_key_exists('sections', $data) ? $data['sections'] : $post->sections,
                 'meta_title'       => $data['meta_title'] ?? null,
                 'meta_description' => $data['meta_description'] ?? null,
                 'is_published'     => $data['is_published'],

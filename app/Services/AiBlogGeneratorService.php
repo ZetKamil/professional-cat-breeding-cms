@@ -347,6 +347,10 @@ class AiBlogGeneratorService
             if (!empty($s['heading'])) {
                 $parts[] = '## ' . $s['heading'];
             }
+            if (!empty($s['image_url'])) {
+                $alt = !empty($s['heading']) ? $s['heading'] : 'Zdjęcie sekcji';
+                $parts[] = '![' . $alt . '](' . $s['image_url'] . ')';
+            }
             if (!empty($s['body'])) {
                 $parts[] = $s['body'];
             }

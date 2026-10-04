@@ -951,6 +951,14 @@ document.addEventListener('DOMContentLoaded', function () {
         return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
 
+    // ── Form submit listener: ensure latest sections are serialized ────
+    const postForm = jsonInput ? jsonInput.closest('form') : document.querySelector('form');
+    if (postForm) {
+        postForm.addEventListener('submit', function () {
+            saveToInput();
+        });
+    }
+
     // ── Init ─────────────────────────────────────────────────────────
     updateClosingUI();
     updateClosingMode();
