@@ -34,7 +34,8 @@ class BlogController extends Controller
         }
 
         $posts = $query
-            ->latest('published_at')
+            ->orderByDesc('published_at')
+            ->orderByDesc('id')
             ->paginate(9)
             ->withQueryString();
 
@@ -75,7 +76,8 @@ class BlogController extends Controller
             ->whereHas('categories', function ($q) use ($post) {
                 $q->whereIn('categories.id', $post->categories->pluck('id'));
             })
-            ->latest('published_at')
+            ->orderByDesc('published_at')
+            ->orderByDesc('id')
             ->take(3)
             ->get();
 
@@ -84,7 +86,8 @@ class BlogController extends Controller
                 ->published()
                 ->with(['user', 'categories', 'media'])
                 ->where('id', '!=', $post->id)
-                ->latest('published_at')
+                ->orderByDesc('published_at')
+                ->orderByDesc('id')
                 ->take(3)
                 ->get();
         }

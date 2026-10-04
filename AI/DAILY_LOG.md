@@ -17,6 +17,33 @@
   - Optymalizacja CSS w `blog-page.css`: uelastycznienie `.article-section-img` (`max-height: 560px`, `height: auto`), dzięki czemu zdjęcia 4:3 oraz pionowe nie są obcinane przez sztywne 16:9.
   - Pomyślna kompilacja assetów produkcyjnych (`npm run build`).
 
+✓ Naprawa błędu CMS: Znikające zdjęcia przy zapisie / usuwaniu pojedynczego zdjęcia (`fix(blog)`)
+  - **Diagnoza problemu:**
+    1. W `UpdatePostRequest` oraz `StorePostRequest` pole `sections` nie było zadeklarowane w tablicy `rules()`. W efekcie Laravel przy wywołaniu `$request->validated()` bezwzględnie odrzucał pole `sections`.
+    2. Metoda `PostService::update()` otrzymywała pustą wartość `sections` i nadpisywała kolumnę w bazie jako `null`.
+    3. Metoda `sectionsToBody()` w FormRequestach i serwisach odrzucała tagi zdjęć markdown (`![...]`), regenerując `body` wyłącznie z tekstu akapitów.
+    4. Każde kliknięcie "Zapisz" (lub usunięcie pojedynczego zdjęcia z dowolnej sekcji) powodowało całkowite wyczyszczenie zdjęć ze wszystkich sekcji artykułu.
+  - **Wdrożone rozwiązanie:**
+    1. Dodano pełną walidację struktury `sections` (`sections.*.heading`, `sections.*.body`, `sections.*.image_url`) w `UpdatePostRequest` i `StorePostRequest`.
+    2. Zabezpieczono `sectionsToBody()`, aby zachowywał linki do zdjęć w Markdown (`![alt](url)`).
+    3. Dodano zabezpieczenie w `PostService::update()`: `array_key_exists('sections', $data) ? $data['sections'] : $post->sections`.
+    4. Dodano nasłuchiwacz zdarzenia `submit` w `form.blade.php`, aby przed wysłaniem formularza zawsze upewnić się o serializacji `sections_json`.
+    5. Wszystkie 124 testy Laravel Pest przeszły pomyślnie.
+
+✓ Naprawa Bazy Wiedzy: Wszystkie zaplanowane artykuły widoczne z dzisiejszą datą i zaburzoną kolejnością (`fix(blog)`, `fix(deploy)`)
+  - **Diagnoza problemu:**
+    1. W `routes/web.php` w trasie `/deploy-sync` wywoływano `Artisan::call('seo:import-articles', ['--force-now' => true]);`.
+    2. Przekazanie flagi `--force-now` sprawiało, że dla każdego z 19 pakietów artykułów z folderu `BLOG/` kolumna `published_at` była bezwzględnie nadpisywana stemplem czasu `now()`.
+    3. W efekcie wszystkie 7 artykułów zaplanowanych na przyszłość (od 11 października do 22 listopada) otrzymywało dzisiejszą datę publikacji, stając się natychmiast widocznymi publicznie (`published_at <= now()`).
+    4. Ponieważ wszystkie 19 artykułów otrzymało ten sam timestamp co do sekundy, klauzula `latest('published_at')` sortowała je losowo, zaburzając porządek chronologiczny.
+  - **Wdrożone rozwiązanie:**
+    1. W `routes/web.php` usunięto flagę `['--force-now' => true]` z wywołania w trasie `/deploy-sync`.
+    2. W `ImportSeoArticles.php` dodano zabezpieczenie ignorujące `--force-now`, jeśli nie wskazano konkretnego folderu (`--folder=...`), uniemożliwiając globalne nadpisanie harmonogramu.
+    3. W `BlogController.php` wprowadzono deterministyczne sortowanie `orderByDesc('published_at')->orderByDesc('id')`.
+    4. Utworzono migrację `2026_10_04_133000_restore_exact_weekly_publishing_schedule.php`, która przywraca 100% precyzyjny niedzielny harmonogram 10:00 (12 opublikowanych, 7 przyszłych).
+    5. Dodano testy w `BlogTest.php` weryfikujące ukrywanie zaplanowanych artykułów oraz ścisłą kolejność chronologiczną.
+
+
 ## 2026-08-11
 
 ### Completed

@@ -34,7 +34,12 @@ class ImportSeoArticles extends Command
     public function handle(): int
     {
         $targetFolder = $this->option('folder');
-        $forceNow = $this->option('force-now');
+        $forceNow = (bool) $this->option('force-now');
+
+        if ($forceNow && ! $targetFolder) {
+            $this->warn('Ostrzeżenie: Opcja --force-now została wywołana bez wskazania folderu (--folder). Aby zapobiec nadpisaniu harmonogramu bazy wiedzy, data zostanie przypisana zgodnie z kalendarzem publikacji.');
+            $forceNow = false;
+        }
 
         $user = User::first();
         if (! $user) {

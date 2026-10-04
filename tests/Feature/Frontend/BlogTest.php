@@ -121,4 +121,56 @@ class BlogTest extends TestCase
 
         $response->assertNotFound();
     }
+
+    public function test_future_scheduled_post_is_hidden_from_catalog_and_returns_404_for_guest(): void
+    {
+        $user = User::factory()->create();
+        $futurePost = Post::factory()->create([
+            'user_id' => $user->id,
+            'title' => 'Artykuł Zaplanowany Na Za Tydzień',
+            'is_published' => true,
+            'published_at' => now()->addDays(7),
+        ]);
+
+        // Catalog test
+        $catalogResponse = $this->get(route('frontend.blog.index'));
+        $catalogResponse->assertOk();
+        $catalogResponse->assertDontSee('Artykuł Zaplanowany Na Za Tydzień');
+
+        // Show test for guest
+        $showResponse = $this->get(route('frontend.blog.show', $futurePost));
+        $showResponse->assertNotFound();
+    }
+
+    public function test_blog_posts_are_sorted_strictly_reverse_chronological_by_published_at(): void
+    {
+        $user = User::factory()->create();
+
+        $olderPost = Post::factory()->create([
+            'user_id' => $user->id,
+            'title' => 'Starszy Artykuł Lipiec',
+            'is_published' => true,
+            'published_at' => now()->subWeeks(4),
+        ]);
+
+        $newerPost = Post::factory()->create([
+            'user_id' => $user->id,
+            'title' => 'Nowszy Artykuł Wrzesień',
+            'is_published' => true,
+            'published_at' => now()->subWeeks(1),
+        ]);
+
+        $response = $this->get(route('frontend.blog.index'));
+        $response->assertOk();
+
+        // Newer post should appear before older post in the HTML content
+        $content = $response->getContent();
+        $posNewer = strpos($content, 'Nowszy Artykuł Wrzesień');
+        $posOlder = strpos($content, 'Starszy Artykuł Lipiec');
+
+        $this->assertNotFalse($posNewer);
+        $this->assertNotFalse($posOlder);
+        $this->assertTrue($posNewer < $posOlder, 'Newer post must be rendered before older post.');
+    }
 }
+

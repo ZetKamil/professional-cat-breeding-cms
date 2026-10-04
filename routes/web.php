@@ -50,14 +50,14 @@ Route::get('/sitemap.xml', function () {
     $baseUrl = rtrim(config('app.url', 'https://kotyzmazowieckiejszwajcarii.pl'), '/');
 
     $staticPages = [
-        ['url' => $baseUrl . '/',                    'priority' => '1.0', 'changefreq' => 'weekly',  'lastmod' => now()->toDateString()],
-        ['url' => $baseUrl . '/koty',                'priority' => '0.9', 'changefreq' => 'weekly',  'lastmod' => now()->toDateString()],
-        ['url' => $baseUrl . '/o-hodowli',           'priority' => '0.8', 'changefreq' => 'monthly', 'lastmod' => '2026-08-11'],
-        ['url' => $baseUrl . '/about',               'priority' => '0.8', 'changefreq' => 'monthly', 'lastmod' => '2026-08-11'],
-        ['url' => $baseUrl . '/blog',                'priority' => '0.8', 'changefreq' => 'weekly',  'lastmod' => now()->toDateString()],
-        ['url' => $baseUrl . '/contact',             'priority' => '0.7', 'changefreq' => 'monthly', 'lastmod' => '2026-08-11'],
-        ['url' => $baseUrl . '/polityka-prywatnosci', 'priority' => '0.3', 'changefreq' => 'yearly',  'lastmod' => '2026-08-11'],
-        ['url' => $baseUrl . '/regulamin',           'priority' => '0.3', 'changefreq' => 'yearly',  'lastmod' => '2026-08-11'],
+        ['url' => $baseUrl . '/', 'priority' => '1.0', 'changefreq' => 'weekly', 'lastmod' => now()->toDateString()],
+        ['url' => $baseUrl . '/koty', 'priority' => '0.9', 'changefreq' => 'weekly', 'lastmod' => now()->toDateString()],
+        ['url' => $baseUrl . '/o-hodowli', 'priority' => '0.8', 'changefreq' => 'monthly', 'lastmod' => '2026-08-11'],
+        ['url' => $baseUrl . '/about', 'priority' => '0.8', 'changefreq' => 'monthly', 'lastmod' => '2026-08-11'],
+        ['url' => $baseUrl . '/blog', 'priority' => '0.8', 'changefreq' => 'weekly', 'lastmod' => now()->toDateString()],
+        ['url' => $baseUrl . '/contact', 'priority' => '0.7', 'changefreq' => 'monthly', 'lastmod' => '2026-08-11'],
+        ['url' => $baseUrl . '/polityka-prywatnosci', 'priority' => '0.3', 'changefreq' => 'yearly', 'lastmod' => '2026-08-11'],
+        ['url' => $baseUrl . '/regulamin', 'priority' => '0.3', 'changefreq' => 'yearly', 'lastmod' => '2026-08-11'],
     ];
 
     return response()->view('sitemap', compact('staticPages', 'animals', 'posts', 'baseUrl'))
@@ -69,7 +69,7 @@ Route::get('/storage/{path}', function ($path) {
     $cleanPath = trim(parse_url($path, PHP_URL_PATH), '/');
     $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp', 'svg', 'gif', 'ico', 'pdf', 'mp4', 'webm', 'jfif', 'bmp', 'avif', 'heic', 'heif'];
     $ext = strtolower(pathinfo($cleanPath, PATHINFO_EXTENSION));
-    if ($ext !== '' && ! in_array($ext, $allowedExtensions, true)) {
+    if ($ext !== '' && !in_array($ext, $allowedExtensions, true)) {
         abort(404);
     }
 
@@ -95,7 +95,7 @@ Route::get('/storage/{path}', function ($path) {
     ];
 
     foreach ($possiblePaths as $fullPath) {
-        if (\Illuminate\Support\Facades\File::exists($fullPath) && ! \Illuminate\Support\Facades\File::isDirectory($fullPath)) {
+        if (\Illuminate\Support\Facades\File::exists($fullPath) && !\Illuminate\Support\Facades\File::isDirectory($fullPath)) {
             $mime = @mime_content_type($fullPath) ?: ($ext === 'jfif' || $ext === 'jpg' || $ext === 'jpeg' ? 'image/jpeg' : ($ext === 'png' ? 'image/png' : ($ext === 'webp' ? 'image/webp' : 'application/octet-stream')));
 
             return response()->file($fullPath, [
@@ -152,7 +152,7 @@ Route::match(['get', 'post'], '/check-media', function (\Illuminate\Http\Request
     if (is_link($pubStorage)) {
         @unlink($pubStorage);
     }
-    if (! \Illuminate\Support\Facades\File::isDirectory($pubStorage)) {
+    if (!\Illuminate\Support\Facades\File::isDirectory($pubStorage)) {
         \Illuminate\Support\Facades\File::makeDirectory($pubStorage, 0755, true, true);
     }
 
@@ -168,10 +168,10 @@ Route::match(['get', 'post'], '/check-media', function (\Illuminate\Http\Request
                 $rel = str_replace('\\', '/', substr($file->getPathname(), strlen($sDir) + 1));
                 $target = public_path('storage/' . $rel);
                 $targetDir = dirname($target);
-                if (! \Illuminate\Support\Facades\File::isDirectory($targetDir)) {
+                if (!\Illuminate\Support\Facades\File::isDirectory($targetDir)) {
                     \Illuminate\Support\Facades\File::makeDirectory($targetDir, 0755, true, true);
                 }
-                if (! \Illuminate\Support\Facades\File::exists($target) || \Illuminate\Support\Facades\File::size($target) !== $file->getSize()) {
+                if (!\Illuminate\Support\Facades\File::exists($target) || \Illuminate\Support\Facades\File::size($target) !== $file->getSize()) {
                     @\Illuminate\Support\Facades\File::copy($file->getPathname(), $target);
                     @chmod($target, 0644);
                     $syncedCount++;
@@ -180,10 +180,10 @@ Route::match(['get', 'post'], '/check-media', function (\Illuminate\Http\Request
                 // Also copy to public/storage/media/<filename> as flat fallback
                 $flatTarget = public_path('storage/media/' . $file->getFilename());
                 $flatDir = dirname($flatTarget);
-                if (! \Illuminate\Support\Facades\File::isDirectory($flatDir)) {
+                if (!\Illuminate\Support\Facades\File::isDirectory($flatDir)) {
                     \Illuminate\Support\Facades\File::makeDirectory($flatDir, 0755, true, true);
                 }
-                if (! \Illuminate\Support\Facades\File::exists($flatTarget)) {
+                if (!\Illuminate\Support\Facades\File::exists($flatTarget)) {
                     @\Illuminate\Support\Facades\File::copy($file->getPathname(), $flatTarget);
                     @chmod($flatTarget, 0644);
                 }
@@ -392,19 +392,19 @@ Route::get('/fix-storage', function () {
         $pubStorage = public_path('storage');
         if (is_link($pubStorage)) {
             @unlink($pubStorage);
-        } elseif (file_exists($pubStorage) && ! is_dir($pubStorage)) {
+        } elseif (file_exists($pubStorage) && !is_dir($pubStorage)) {
             @unlink($pubStorage);
         }
 
         // Ensure physical directory public/storage/media exists directly on disk
         $pubStorageMedia = public_path('storage/media');
-        if (! \Illuminate\Support\Facades\File::isDirectory($pubStorageMedia)) {
+        if (!\Illuminate\Support\Facades\File::isDirectory($pubStorageMedia)) {
             \Illuminate\Support\Facades\File::makeDirectory($pubStorageMedia, 0755, true, true);
         }
 
         // Ensure storage/app/public/media exists
         $storageAppMedia = storage_path('app/public/media');
-        if (! \Illuminate\Support\Facades\File::isDirectory($storageAppMedia)) {
+        if (!\Illuminate\Support\Facades\File::isDirectory($storageAppMedia)) {
             \Illuminate\Support\Facades\File::makeDirectory($storageAppMedia, 0755, true, true);
         }
 
@@ -595,7 +595,7 @@ Route::get('/deploy-sync', function () {
                     }
                 }
             }
-            \Illuminate\Support\Facades\Artisan::call('seo:import-articles', ['--force-now' => true]);
+            \Illuminate\Support\Facades\Artisan::call('seo:import-articles');
             $blogSyncOut = trim(\Illuminate\Support\Facades\Artisan::output());
         }
 
@@ -618,4 +618,4 @@ Route::get('/deploy-sync', function () {
     }
 });
 
-require __DIR__.'/settings.php';
+require __DIR__ . '/settings.php';
