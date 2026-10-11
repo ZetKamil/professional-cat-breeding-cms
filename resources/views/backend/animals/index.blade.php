@@ -1,29 +1,29 @@
-<x-backend.shell title="Animals - SB Admin">
+<x-backend.shell title="Koty hodowlane - Panel Administracyjny">
 
     <x-slot:head>
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </x-slot:head>
 
-    <x-backend.page-header title="Animals">
+    <x-backend.page-header title="Koty hodowlane">
 
         <form method="GET" action="{{ route('backend.animals.index') }}" class="mb-4">
             <div class="row g-2 align-items-end">
 
                 <div class="col-12 col-md-3">
-                    <label class="form-label mb-1">Search</label>
+                    <label class="form-label mb-1">Szukaj</label>
                     <input
                         type="text"
                         name="q"
                         value="{{ $filters['q'] }}"
                         class="form-control"
-                        placeholder="Search name, breed, color..."
+                        placeholder="Szukaj po imieniu, rasie, kolorze..."
                     >
                 </div>
 
                 <div class="col-12 col-md-2">
                     <label class="form-label mb-1">Status</label>
                     <select name="status" class="form-select">
-                        <option value="">All statuses</option>
+                        <option value="">Wszystkie statusy</option>
                         @foreach($statuses as $status)
                             <option value="{{ $status->value }}" @selected($filters['status'] === $status->value)>
                                 {{ $status->label() }}
@@ -33,9 +33,9 @@
                 </div>
 
                 <div class="col-12 col-md-2">
-                    <label class="form-label mb-1">Gender</label>
+                    <label class="form-label mb-1">Płeć</label>
                     <select name="gender" class="form-select">
-                        <option value="">All genders</option>
+                        <option value="">Wszystkie płcie</option>
                         @foreach($genders as $gender)
                             <option value="{{ $gender->value }}" @selected($filters['gender'] === $gender->value)>
                                 {{ $gender->label() }}
@@ -45,7 +45,7 @@
                 </div>
 
                 <div class="col-12 col-md-1">
-                    <label class="form-label mb-1">Per page</label>
+                    <label class="form-label mb-1">Na stronę</label>
                     <select name="per_page" class="form-select">
                         @foreach($perPageAllowed as $n)
                             <option value="{{ $n }}" @selected((int) $filters['per_page'] === (int) $n)>{{ $n }}</option>
@@ -54,11 +54,11 @@
                 </div>
 
                 <div class="col-12 col-md-2">
-                    <label class="form-label mb-1">Deleted</label>
+                    <label class="form-label mb-1">Kosz / Usunięte</label>
                     <select name="trashed" class="form-select">
-                        <option value="">Active only</option>
-                        <option value="with" @selected($filters['trashed'] === 'with')>Active + deleted</option>
-                        <option value="only" @selected($filters['trashed'] === 'only')>Deleted only</option>
+                        <option value="">Tylko aktywne</option>
+                        <option value="with" @selected($filters['trashed'] === 'with')>Aktywne i w koszu</option>
+                        <option value="only" @selected($filters['trashed'] === 'only')>Tylko w koszu</option>
                     </select>
                 </div>
 
@@ -66,16 +66,18 @@
                 <input type="hidden" name="dir" value="{{ $filters['dir'] }}">
 
                 <div class="col-12 d-flex gap-2 mt-2">
-                    <button class="btn btn-primary" type="submit">Apply</button>
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fas fa-filter me-1"></i> Filtruj
+                    </button>
 
                     <a class="btn btn-outline-secondary" href="{{ route('backend.animals.index') }}">
-                        Clear
+                        Wyczyść
                     </a>
 
                     @can('create', \App\Models\Animal::class)
                         <a href="{{ route('backend.animals.create') }}" class="btn btn-success ms-auto">
                             <i class="fas fa-plus me-1"></i>
-                            New animal
+                            Dodaj kota
                         </a>
                     @endcan
                 </div>
@@ -106,22 +108,22 @@
         <x-backend.card>
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
-                Animals list
-                <span class="text-muted ms-2">({{ $animals->total() }} total)</span>
+                Lista kotów
+                <span class="text-muted ms-2">({{ $animals->total() }} łącznie)</span>
             </div>
 
             <div class="table-responsive">
                 <table class="table table-bordered table-striped mb-0">
                     <thead>
                     <tr>
-                        <th>Image</th>
-                        <th><a class="text-decoration-none" href="{{ $sortUrl('name') }}">Name{!! $sortIcon('name') !!}</a></th>
-                        <th><a class="text-decoration-none" href="{{ $sortUrl('breed') }}">Breed{!! $sortIcon('breed') !!}</a></th>
-                        <th><a class="text-decoration-none" href="{{ $sortUrl('gender') }}">Gender{!! $sortIcon('gender') !!}</a></th>
+                        <th>Zdjęcie</th>
+                        <th><a class="text-decoration-none" href="{{ $sortUrl('name') }}">Imię{!! $sortIcon('name') !!}</a></th>
+                        <th><a class="text-decoration-none" href="{{ $sortUrl('breed') }}">Rasa{!! $sortIcon('breed') !!}</a></th>
+                        <th><a class="text-decoration-none" href="{{ $sortUrl('gender') }}">Płeć{!! $sortIcon('gender') !!}</a></th>
                         <th><a class="text-decoration-none" href="{{ $sortUrl('status') }}">Status{!! $sortIcon('status') !!}</a></th>
-                        <th>Featured / Published</th>
-                        <th><a class="text-decoration-none" href="{{ $sortUrl('sort_order') }}">Sort Order{!! $sortIcon('sort_order') !!}</a></th>
-                        <th class="text-end">Actions</th>
+                        <th>Wyróżniony / Opublikowany</th>
+                        <th><a class="text-decoration-none" href="{{ $sortUrl('sort_order') }}">Kolejność{!! $sortIcon('sort_order') !!}</a></th>
+                        <th class="text-end">Akcje</th>
                     </tr>
                     </thead>
 
@@ -141,7 +143,7 @@
                             <td>
                                 {{ $animal->name }}
                                 @if($animal->deleted_at)
-                                    <span class="badge bg-danger ms-1">deleted</span>
+                                    <span class="badge bg-danger ms-1">w koszu</span>
                                 @endif
                             </td>
 
@@ -156,13 +158,13 @@
 
                             <td>
                                 @if($animal->is_featured)
-                                    <span class="badge bg-warning text-dark"><i class="fas fa-star"></i> Featured</span>
+                                    <span class="badge bg-warning text-dark"><i class="fas fa-star"></i> Wyróżniony</span>
                                 @endif
                                 
                                 @if($animal->is_published)
-                                    <span class="badge bg-success">Published</span>
+                                    <span class="badge bg-success">Opublikowany</span>
                                 @else
-                                    <span class="badge bg-secondary">Draft</span>
+                                    <span class="badge bg-secondary">Szkic</span>
                                 @endif
                             </td>
 
@@ -171,15 +173,15 @@
                             <td class="text-end">
                                 <div class="d-inline-flex gap-1">
                                     @can('view', $animal)
-                                        <a href="{{ route('backend.animals.show', $animal) }}" class="btn btn-sm btn-outline-primary">
-                                            Show
+                                        <a href="{{ route('backend.animals.show', $animal) }}" class="btn btn-sm btn-outline-primary" title="Podgląd">
+                                            Podgląd
                                         </a>
                                     @endcan
 
                                     @if(! $animal->deleted_at)
                                         @can('update', $animal)
-                                            <a href="{{ route('backend.animals.edit', $animal) }}" class="btn btn-sm btn-outline-secondary">
-                                                Edit
+                                            <a href="{{ route('backend.animals.edit', $animal) }}" class="btn btn-sm btn-outline-secondary" title="Edytuj">
+                                                Edytuj
                                             </a>
                                         @endcan
 
@@ -189,8 +191,8 @@
                                                 @method('DELETE')
 
                                                 <button type="submit" class="btn btn-sm btn-outline-danger"
-                                                        onclick="return confirm('Are you sure you want to delete this animal?')">
-                                                    Delete
+                                                        onclick="return confirm('Czy na pewno chcesz przenieść tego kota do kosza?')">
+                                                    Usuń
                                                 </button>
                                             </form>
                                         @endcan
@@ -201,8 +203,8 @@
                                                 @method('PATCH')
 
                                                 <button type="submit" class="btn btn-sm btn-success"
-                                                        onclick="return confirm('Restore this animal?')">
-                                                    Restore
+                                                        onclick="return confirm('Przywrócić tego kota z kosza?')">
+                                                    Przywróć
                                                 </button>
                                             </form>
                                         @endcan
@@ -213,8 +215,8 @@
                                                 @method('DELETE')
 
                                                 <button type="submit" class="btn btn-sm btn-danger"
-                                                        onclick="return confirm('Permanently delete this animal? This cannot be undone.')">
-                                                    Force delete
+                                                        onclick="return confirm('Czy na pewno chcesz bezpowrotnie usunąć tego kota? Tej operacji nie można cofnąć.')">
+                                                    Usuń trwale
                                                 </button>
                                             </form>
                                         @endcan
@@ -225,7 +227,7 @@
                     @empty
                         <tr>
                             <td colspan="8" class="text-center text-muted py-4">
-                                No animals found. Try clearing filters.
+                                Nie znaleziono kotów. Spróbuj wyczyścić filtry.
                             </td>
                         </tr>
                     @endforelse
@@ -235,7 +237,7 @@
 
             <div class="d-flex align-items-center justify-content-between mt-3">
                 <div class="small text-muted">
-                    Showing {{ $animals->firstItem() ?? 0 }} to {{ $animals->lastItem() ?? 0 }} of {{ $animals->total() }}
+                    Wyświetlanie {{ $animals->firstItem() ?? 0 }} do {{ $animals->lastItem() ?? 0 }} z {{ $animals->total() }} kotów
                 </div>
                 <div>
                     {{ $animals->links() }}

@@ -13,14 +13,7 @@
 
     {{-- ========================= NAME ========================= --}}
     <div class="col-12 col-md-6">
-        <label class="form-label">Name</label>
-
-        {{--
-            value:
-            - old('name') bij validation error
-            - anders $user->name bij edit
-            - anders leeg bij create
-        --}}
+        <label class="form-label">Imię i nazwisko</label>
         <input
             type="text"
             name="name"
@@ -29,7 +22,6 @@
             autocomplete="name"
         >
 
-        {{-- Bootstrap per-field error styling --}}
         @error('name')
         <div class="invalid-feedback">{{ $message }}</div>
         @enderror
@@ -37,7 +29,7 @@
 
     {{-- ========================= EMAIL ========================= --}}
     <div class="col-12 col-md-6">
-        <label class="form-label">Email</label>
+        <label class="form-label">Adres e-mail</label>
 
         <input
             type="email"
@@ -54,14 +46,10 @@
 
     {{-- ========================= ROLE ========================= --}}
     <div class="col-12 col-md-6">
-        <label class="form-label">Role</label>
+        <label class="form-label">Rola w systemie</label>
 
-        {{--
-            role_id is een foreign key.
-            Dropdown + exists validation voorkomt DB constraint errors.
-        --}}
         <select name="role_id" class="form-select @error('role_id') is-invalid @enderror">
-            <option value="">Select role</option>
+            <option value="">Wybierz rolę</option>
 
             @foreach($roles as $role)
                 <option value="{{ $role->id }}"
@@ -78,15 +66,11 @@
 
     {{-- ========================= STATUS ========================= --}}
     <div class="col-12 col-md-3">
-        <label class="form-label">Status</label>
+        <label class="form-label">Status konta</label>
 
-        {{--
-            HTML values zijn strings "1"/"0".
-            Daarom string comparison in @selected.
-        --}}
         <select name="is_active" class="form-select @error('is_active') is-invalid @enderror">
-            <option value="1" @selected((string) old('is_active', $user?->is_active ?? '1') === '1')>Active</option>
-            <option value="0" @selected((string) old('is_active', $user?->is_active ?? '1') === '0')>Inactive</option>
+            <option value="1" @selected((string) old('is_active', $user?->is_active ?? '1') === '1')>Aktywny</option>
+            <option value="0" @selected((string) old('is_active', $user?->is_active ?? '1') === '0')>Nieaktywny</option>
         </select>
 
         @error('is_active')
@@ -96,13 +80,8 @@
 
     {{-- ========================= VERIFIED ========================= --}}
     <div class="col-12 col-md-3">
-        <label class="form-label">Verified</label>
+        <label class="form-label">Weryfikacja e-mail</label>
 
-        {{--
-            Checkbox post alleen data als hij aangevinkt is.
-            Daarom normaliseren we in UserStoreRequest:
-            verified => email_verified_at = now() / null
-        --}}
         <div class="form-check mt-2">
             <input
                 class="form-check-input @error('verified') is-invalid @enderror"
@@ -112,7 +91,7 @@
                 id="verified"
                 @checked(old('verified', $user?->email_verified_at ? 1 : 0))
             >
-            <label class="form-check-label" for="verified">Mark as verified</label>
+            <label class="form-check-label" for="verified">Konto zweryfikowane</label>
 
             @error('verified')
             <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -122,11 +101,8 @@
 
     {{-- ========================= PASSWORD ========================= --}}
     <div class="col-12 col-md-6">
-        <label class="form-label">Password</label>
+        <label class="form-label">Hasło</label>
 
-        {{--
-            Password nooit repopulaten met old() (security).
-        --}}
         <input
             type="password"
             name="password"
@@ -138,15 +114,14 @@
         <div class="invalid-feedback">{{ $message }}</div>
         @enderror
 
-        {{-- Bij edit kan password optioneel worden --}}
         @if(!empty($isEdit))
-            <div class="form-text">Leave blank to keep the current password.</div>
+            <div class="form-text">Pozostaw puste, aby zachować obecne hasło.</div>
         @endif
     </div>
 
     {{-- ========================= CONFIRM PASSWORD ========================= --}}
     <div class="col-12 col-md-6">
-        <label class="form-label">Confirm password</label>
+        <label class="form-label">Potwierdź hasło</label>
 
         <input
             type="password"
@@ -161,7 +136,7 @@
     </div>
     <div class="col-12">
 
-        <label class="form-label">Profile image</label>
+        <label class="form-label">Zdjęcie profilowe</label>
 
         <input
             type="file"
@@ -175,7 +150,7 @@
         @enderror
 
         <div class="form-text">
-            Allowed formats: jpg, jpeg, png, webp (max 2MB)
+            Dozwolone formaty: jpg, jpeg, png, webp (maks. 2MB)
         </div>
 
         @if($user?->media)
@@ -183,7 +158,7 @@
             <div class="mt-3">
 
                 <div class="small text-muted mb-2">
-                    Current image
+                    Aktualne zdjęcie
                 </div>
 
                 <img
@@ -201,11 +176,11 @@
     {{-- ========================= ACTIONS ========================= --}}
     <div class="col-12 d-flex gap-2 mt-2">
         <button class="btn btn-primary" type="submit">
-            {{ $submitLabel ?? 'Save' }}
+            {{ $submitLabel ?? 'Zapisz' }}
         </button>
 
         <a class="btn btn-outline-secondary" href="{{ route('backend.users.index') }}">
-            Cancel
+            Anuluj
         </a>
     </div>
 

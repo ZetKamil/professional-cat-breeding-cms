@@ -1,11 +1,11 @@
-<x-backend.shell title="Edit role">
+<x-backend.shell title="Edycja roli: {{ $role->name }}">
 
-    <x-backend.page-header title="Edit role">
+    <x-backend.page-header title="Edycja roli: {{ $role->name }}">
 
         <x-backend.card>
             <div class="card-header">
                 <i class="fas fa-pen me-1"></i>
-                Edit: {{ $role->name }}
+                Edycja: {{ $role->name }}
             </div>
 
             <div class="card-body">
@@ -15,7 +15,7 @@
 
                     @include('backend.roles.partials.form', [
                         'role' => $role,
-                        'submitLabel' => 'Save changes',
+                        'submitLabel' => 'Zapisz zmiany',
                     ])
                 </form>
             </div>

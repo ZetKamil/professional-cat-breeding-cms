@@ -1,11 +1,11 @@
-<x-backend.shell title="Create post">
+<x-backend.shell title="Nowy wpis na blogu">
 
-    <x-backend.page-header title="Create post">
+    <x-backend.page-header title="Nowy wpis na blogu">
 
         <x-backend.card>
             <div class="card-header">
                 <i class="fas fa-file-circle-plus me-1"></i>
-                New post
+                Napisz nowy artykuł
             </div>
 
             <div class="card-body">

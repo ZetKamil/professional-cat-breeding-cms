@@ -1,11 +1,11 @@
-<x-backend.shell title="Edit Animal - SB Admin">
+<x-backend.shell title="Edycja kota: {{ $animal->name }}">
 
-    <x-backend.page-header title="Edit Animal: {{ $animal->name }}">
+    <x-backend.page-header title="Edycja kota: {{ $animal->name }}">
         
         <x-backend.card>
             <div class="card-header">
                 <i class="fas fa-edit me-1"></i>
-                Edit animal
+                Edytuj dane kota
             </div>
             
             <div class="card-body">
@@ -19,11 +19,11 @@
                     
                     <div class="d-flex justify-content-between">
                         <a href="{{ route('backend.animals.index') }}" class="btn btn-outline-secondary">
-                            Cancel
+                            Anuluj
                         </a>
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-save me-1"></i>
-                            Update Animal
+                            Zaktualizuj dane kota
                         </button>
                     </div>
                 </form>

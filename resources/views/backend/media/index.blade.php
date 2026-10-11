@@ -299,15 +299,15 @@
                                                     <i class="fas fa-info-circle"></i>
                                                 </a>
                                                 @can('update', $item)
-                                                    <a href="{{ route('backend.media.edit', $item) }}" class="btn btn-outline-primary" title="Edit">
+                                                    <a href="{{ route('backend.media.edit', $item) }}" class="btn btn-outline-primary" title="Edytuj">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
                                                 @endcan
                                                 @can('delete', $item)
-                                                    <form method="POST" action="{{ route('backend.media.destroy', $item) }}" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this media file?');">
+                                                    <form method="POST" action="{{ route('backend.media.destroy', $item) }}" class="d-inline" onsubmit="return confirm('Czy na pewno chcesz usunąć ten plik multimedialny?');">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-outline-danger" title="Delete">
+                                                        <button type="submit" class="btn btn-outline-danger" title="Usuń">
                                                             <i class="fas fa-trash"></i>
                                                         </button>
                                                     </form>
@@ -328,12 +328,12 @@
                                     <div class="media-thumb-wrapper">
                                         <div class="badge-overlay d-flex flex-column gap-1">
                                             @if($item->is_featured)
-                                                <span class="badge bg-warning text-dark">Featured</span>
+                                                <span class="badge bg-warning text-dark">Wyróżnione</span>
                                             @endif
                                             @if($item->mediable)
                                                 <span class="badge bg-info text-dark">{{ class_basename($item->mediable_type) }}</span>
                                             @else
-                                                <span class="badge bg-secondary">Library</span>
+                                                <span class="badge bg-secondary">Biblioteka</span>
                                             @endif
                                         </div>
                                         @if($item->isImage())
@@ -357,7 +357,7 @@
                                             </h6>
                                             <div class="d-flex justify-content-between align-items-center text-muted" style="font-size: 0.75rem;">
                                                 <span>{{ round($item->size / 1024, 1) }} KB</span>
-                                                <span>{{ $item->created_at?->format('M d, Y') }}</span>
+                                                <span>{{ $item->created_at?->format('d.m.Y') }}</span>
                                             </div>
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top">
@@ -365,7 +365,7 @@
                                                 @if($item->alt_text)
                                                     <span class="badge bg-success-subtle text-success-emphasis" style="font-size: 0.65rem;">ALT</span>
                                                 @else
-                                                    <span class="badge bg-warning-subtle text-warning-emphasis" style="font-size: 0.65rem;">NO ALT</span>
+                                                    <span class="badge bg-warning-subtle text-warning-emphasis" style="font-size: 0.65rem;">BRAK ALT</span>
                                                 @endif
                                             </div>
                                             <div class="btn-group btn-group-sm">
@@ -376,24 +376,24 @@
                                                     data-bs-target="#mediaPreviewModal"
                                                     data-media-url="{{ $item->url() }}"
                                                     data-media-title="{{ $item->title ?: $item->filename }}"
-                                                    data-media-alt="{{ $item->alt_text ?: 'None' }}"
-                                                    data-media-caption="{{ $item->caption ?: 'None' }}"
-                                                    data-media-copyright="{{ $item->copyright ?: 'None' }}"
+                                                    data-media-alt="{{ $item->alt_text ?: 'Brak' }}"
+                                                    data-media-caption="{{ $item->caption ?: 'Brak' }}"
+                                                    data-media-copyright="{{ $item->copyright ?: 'Brak' }}"
                                                     data-media-size="{{ round($item->size / 1024, 1) }} KB"
-                                                    title="Preview"
+                                                    title="Podgląd"
                                                 >
                                                     <i class="fas fa-eye"></i>
                                                 </button>
                                                 @can('update', $item)
-                                                    <a href="{{ route('backend.media.edit', $item) }}" class="btn btn-sm btn-outline-primary" title="Edit">
+                                                    <a href="{{ route('backend.media.edit', $item) }}" class="btn btn-sm btn-outline-primary" title="Edytuj">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
                                                 @endcan
                                                 @can('delete', $item)
-                                                    <form method="POST" action="{{ route('backend.media.destroy', $item) }}" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this media file?');">
+                                                    <form method="POST" action="{{ route('backend.media.destroy', $item) }}" class="d-inline" onsubmit="return confirm('Czy na pewno chcesz usunąć ten plik multimedialny?');">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Usuń">
                                                             <i class="fas fa-trash"></i>
                                                         </button>
                                                     </form>

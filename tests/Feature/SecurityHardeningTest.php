@@ -17,9 +17,9 @@ class SecurityHardeningTest extends TestCase
             '/',
             '/koty',
             '/blog',
-            '/contact',
+            '/kontakt',
             '/o-hodowli',
-            '/about',
+            '/o-nas',
             '/polityka-prywatnosci',
             '/regulamin',
         ];
@@ -104,7 +104,7 @@ class SecurityHardeningTest extends TestCase
     {
         // 5 requests allowed per minute
         for ($i = 0; $i < 5; $i++) {
-            $response = $this->post('/contact', [
+            $response = $this->post('/kontakt', [
                 'name' => 'Jan Kowalski',
                 'email' => 'jan@example.com',
                 'phone' => '+48500100200',
@@ -115,7 +115,7 @@ class SecurityHardeningTest extends TestCase
         }
 
         // 6th request must be throttled with HTTP 429 Too Many Requests
-        $responseBlocked = $this->post('/contact', [
+        $responseBlocked = $this->post('/kontakt', [
             'name' => 'Jan Kowalski',
             'email' => 'jan@example.com',
             'phone' => '+48500100200',

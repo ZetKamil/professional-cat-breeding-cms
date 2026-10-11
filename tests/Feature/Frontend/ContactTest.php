@@ -15,14 +15,22 @@ class ContactTest extends TestCase
 {
     use RefreshDatabase;
 
-    // ─── GET /contact ─────────────────────────────────────────────────────────
+    // ─── GET /kontakt ─────────────────────────────────────────────────────────
 
     public function test_contact_page_can_be_rendered(): void
     {
-        $response = $this->get('/contact');
+        $response = $this->get('/kontakt');
 
         $response->assertOk();
         $response->assertSee('Porozmawiajmy');
+    }
+
+    public function test_legacy_contact_url_redirects_to_canonical_kontakt(): void
+    {
+        $response = $this->get('/contact');
+
+        $response->assertRedirect('/kontakt');
+        $response->assertStatus(301);
     }
 
     // ─── POST /contact — valid payload ────────────────────────────────────────
@@ -31,7 +39,7 @@ class ContactTest extends TestCase
     {
         Event::fake([ContactMessageSent::class]);
 
-        $response = $this->post('/contact', [
+        $response = $this->post('/kontakt', [
             'name'    => 'Jan Kowalski',
             'email'   => 'jan@example.com',
             'message' => 'To jest wiadomość testowa dłuższa niż 15 znaków.',
@@ -71,7 +79,7 @@ class ContactTest extends TestCase
 
     public function test_name_is_required(): void
     {
-        $response = $this->post('/contact', [
+        $response = $this->post('/kontakt', [
             'email'   => 'jan@example.com',
             'message' => 'Wiadomość o długości powyżej 15 znaków.',
         ]);
@@ -81,7 +89,7 @@ class ContactTest extends TestCase
 
     public function test_name_minimum_length(): void
     {
-        $response = $this->post('/contact', [
+        $response = $this->post('/kontakt', [
             'name'    => 'X',
             'email'   => 'jan@example.com',
             'message' => 'Wiadomość o długości powyżej 15 znaków.',
@@ -92,7 +100,7 @@ class ContactTest extends TestCase
 
     public function test_name_maximum_length(): void
     {
-        $response = $this->post('/contact', [
+        $response = $this->post('/kontakt', [
             'name'    => str_repeat('A', 121),
             'email'   => 'jan@example.com',
             'message' => 'Wiadomość o długości powyżej 15 znaków.',
@@ -105,7 +113,7 @@ class ContactTest extends TestCase
 
     public function test_email_is_required(): void
     {
-        $response = $this->post('/contact', [
+        $response = $this->post('/kontakt', [
             'name'    => 'Jan Kowalski',
             'message' => 'Wiadomość o długości powyżej 15 znaków.',
         ]);
@@ -115,7 +123,7 @@ class ContactTest extends TestCase
 
     public function test_email_must_be_valid(): void
     {
-        $response = $this->post('/contact', [
+        $response = $this->post('/kontakt', [
             'name'    => 'Jan Kowalski',
             'email'   => 'nie-email',
             'message' => 'Wiadomość o długości powyżej 15 znaków.',
@@ -128,7 +136,7 @@ class ContactTest extends TestCase
 
     public function test_message_is_required(): void
     {
-        $response = $this->post('/contact', [
+        $response = $this->post('/kontakt', [
             'name'  => 'Jan Kowalski',
             'email' => 'jan@example.com',
         ]);
@@ -138,7 +146,7 @@ class ContactTest extends TestCase
 
     public function test_message_minimum_length(): void
     {
-        $response = $this->post('/contact', [
+        $response = $this->post('/kontakt', [
             'name'    => 'Jan Kowalski',
             'email'   => 'jan@example.com',
             'message' => 'Za krótka.',
@@ -149,7 +157,7 @@ class ContactTest extends TestCase
 
     public function test_message_maximum_length(): void
     {
-        $response = $this->post('/contact', [
+        $response = $this->post('/kontakt', [
             'name'    => 'Jan Kowalski',
             'email'   => 'jan@example.com',
             'message' => str_repeat('A', 3001),
@@ -162,7 +170,7 @@ class ContactTest extends TestCase
 
     public function test_subject_maximum_length(): void
     {
-        $response = $this->post('/contact', [
+        $response = $this->post('/kontakt', [
             'name'    => 'Jan Kowalski',
             'email'   => 'jan@example.com',
             'message' => 'Wiadomość testowa dłuższa niż 15 znaków.',
@@ -174,7 +182,7 @@ class ContactTest extends TestCase
 
     public function test_phone_maximum_length(): void
     {
-        $response = $this->post('/contact', [
+        $response = $this->post('/kontakt', [
             'name'    => 'Jan Kowalski',
             'email'   => 'jan@example.com',
             'message' => 'Wiadomość testowa dłuższa niż 15 znaków.',
@@ -198,11 +206,11 @@ class ContactTest extends TestCase
 
         // 5 successful submissions
         for ($i = 0; $i < 5; $i++) {
-            $this->post('/contact', $payload)->assertRedirect();
+            $this->post('/kontakt', $payload)->assertRedirect();
         }
 
         // 6th should be throttled — 429
-        $response = $this->post('/contact', $payload);
+        $response = $this->post('/kontakt', $payload);
         $response->assertStatus(429);
     }
 
@@ -210,7 +218,7 @@ class ContactTest extends TestCase
 
     public function test_validation_errors_are_in_polish(): void
     {
-        $response = $this->post('/contact', [
+        $response = $this->post('/kontakt', [
             'name'    => '',
             'email'   => 'niepoprawny-email',
             'message' => 'Krótka',
@@ -227,7 +235,7 @@ class ContactTest extends TestCase
 
     public function test_honeypot_field_blocks_spam_bots(): void
     {
-        $response = $this->post('/contact', [
+        $response = $this->post('/kontakt', [
             'name'        => 'Bot Name',
             'email'       => 'bot@example.com',
             'message'     => 'Wiadomość wysłana przez automatycznego bota spamującego.',

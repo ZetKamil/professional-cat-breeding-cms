@@ -20,18 +20,18 @@ Route::get('/koty', [FrontendAnimalController::class, 'index'])->name('frontend.
 Route::get('/koty/{animal}', [FrontendAnimalController::class, 'show'])->name('frontend.animals.show');
 Route::get('/blog', [FrontendBlogController::class, 'index'])->name('frontend.blog.index');
 Route::get('/blog/{post}', [FrontendBlogController::class, 'show'])->name('frontend.blog.show');
-Route::get('/contact', [ContactController::class, 'create'])->name('contact');
-Route::post('/contact', [ContactController::class, 'store'])
+Route::get('/kontakt', [ContactController::class, 'create'])->name('contact');
+Route::post('/kontakt', [ContactController::class, 'store'])
     ->middleware('throttle:5,1')
     ->name('frontend.contact.store');
-Route::view('/about', 'frontend.about')->name('about');
+Route::view('/o-nas', 'frontend.about')->name('about');
 Route::view('/o-hodowli', 'frontend.cattery')->name('cattery');
 Route::view('/polityka-prywatnosci', 'frontend.privacy')->name('privacy');
 Route::view('/regulamin', 'frontend.terms')->name('terms');
 
-// Polish URL aliases & 301 redirects to prevent 404s from intuitive Polish queries
-Route::redirect('/kontakt', '/contact', 301);
-Route::redirect('/o-nas', '/about', 301);
+// Polish URL canonical structure & 301 redirects from legacy English queries
+Route::redirect('/contact', '/kontakt', 301);
+Route::redirect('/about', '/o-nas', 301);
 Route::redirect('/kocieta', '/koty', 301);
 Route::redirect('/galeria', '/koty', 301);
 Route::redirect('/rodowody', '/o-hodowli', 301);
@@ -53,9 +53,9 @@ Route::get('/sitemap.xml', function () {
         ['url' => $baseUrl . '/', 'priority' => '1.0', 'changefreq' => 'weekly', 'lastmod' => now()->toDateString()],
         ['url' => $baseUrl . '/koty', 'priority' => '0.9', 'changefreq' => 'weekly', 'lastmod' => now()->toDateString()],
         ['url' => $baseUrl . '/o-hodowli', 'priority' => '0.8', 'changefreq' => 'monthly', 'lastmod' => '2026-08-11'],
-        ['url' => $baseUrl . '/about', 'priority' => '0.8', 'changefreq' => 'monthly', 'lastmod' => '2026-08-11'],
+        ['url' => $baseUrl . '/o-nas', 'priority' => '0.8', 'changefreq' => 'monthly', 'lastmod' => '2026-08-11'],
         ['url' => $baseUrl . '/blog', 'priority' => '0.8', 'changefreq' => 'weekly', 'lastmod' => now()->toDateString()],
-        ['url' => $baseUrl . '/contact', 'priority' => '0.7', 'changefreq' => 'monthly', 'lastmod' => '2026-08-11'],
+        ['url' => $baseUrl . '/kontakt', 'priority' => '0.7', 'changefreq' => 'monthly', 'lastmod' => '2026-08-11'],
         ['url' => $baseUrl . '/polityka-prywatnosci', 'priority' => '0.3', 'changefreq' => 'yearly', 'lastmod' => '2026-08-11'],
         ['url' => $baseUrl . '/regulamin', 'priority' => '0.3', 'changefreq' => 'yearly', 'lastmod' => '2026-08-11'],
     ];

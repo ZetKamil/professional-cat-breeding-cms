@@ -1,5 +1,26 @@
 # DAILY_LOG.md
 
+## 2026-10-11
+
+### Completed
+
+✓ Pełne przejście na język polski w dashboardzie i na stronie głównej oraz kanoniczne polskie URL (`feat(i18n)`, `feat(seo)`, `refactor(routing)`)
+  - **Kanoniczne adresy URL & SEO:**
+    - Zmiana adresu formularza kontaktowego na `/kontakt` (GET i POST).
+    - Zmiana adresu strony "O nas" na `/o-nas`.
+    - Wdrożenie trwałych przekierowań 301 z dawnych adresów angielskich (`/contact` -> `/kontakt`, `/about` -> `/o-nas`).
+    - Zaktualizowanie dynamicznej mapy witryny `/sitemap.xml` oraz inwentarza SEO.
+  - **Zmiana nazwy sekcji na Blog:**
+    - Zmiana nazewnictwa z „Baza Wiedzy” na „Blog” w nagłówku strony (desktop i mobile), w stopce, w okruszkach chleba, w nagłówkach `<h1>`, tagach `<title>` oraz opisach powiązanych artykułów.
+  - **Polonizacja panelu CMS (Dashboard / Backend):**
+    - Przetłumaczenie całego paska bocznego (Sidenav) oraz górnego (Topnav), usunięcie pozostałości szablonowych i języka niderlandzkiego (*Naar website*, *Start Bootstrap*, *Gebruiker*).
+    - Pełne przetłumaczenie widoków modułów: Koty hodowlane, Wpisy na blogu, Kategorie bloga, Biblioteka mediów, Użytkownicy, Role i uprawnienia, Oferta pod artykułami (Global CTA).
+    - Utworzenie słownika `lang/pl.json` dla wszystkich komponentów autoryzacji i ustawień konta (Livewire, 2FA, hasło, wygląd, powiadomienia).
+    - Przetłumaczenie szablonu wiadomości e-mail (`emails/contact.blade.php`) i klasy Mailable na język polski.
+  - **Testy automatyczne:**
+    - Zaktualizowano wszystkie testy funkcjonalne i dymne (`ContactTest`, `SeoTest`, `ProductionSmokeTest`, `SecurityHardeningTest`).
+    - Wszystkie 125 testów (705 asercji) zakończone wynikiem 100% PASS.
+
 ## 2026-10-04
 
 ### Completed
@@ -42,6 +63,14 @@
     3. W `BlogController.php` wprowadzono deterministyczne sortowanie `orderByDesc('published_at')->orderByDesc('id')`.
     4. Utworzono migrację `2026_10_04_133000_restore_exact_weekly_publishing_schedule.php`, która przywraca 100% precyzyjny niedzielny harmonogram 10:00 (12 opublikowanych, 7 przyszłych).
     5. Dodano testy w `BlogTest.php` weryfikujące ukrywanie zaplanowanych artykułów oraz ścisłą kolejność chronologiczną.
+
+✓ Ochrona edycji CMS: Zakaz nadpisywania istniejących artykułów przez pliki z dysku (`fix(cms)`, `fix(deploy)`)
+  - **Diagnoza problemu:** Gdy użytkownik usuwał zdjęcia lub poprawiał sekcje artykułu w panelu CMS (`/backend/posts`), każde wywołanie trasy `/deploy-sync` lub komendy `seo:import-articles` pobierało plik markdown z dysku (`BLOG/{folder}/01_article.md`) i przez `Post::updateOrCreate()` bezwzględnie nadpisywało bazę danych, przywracając usunięte zdjęcia.
+  - **Wdrożone rozwiązanie:**
+    1. W `ImportSeoArticles.php` dodano weryfikację: jeśli dany artykuł istnieje już w bazie danych (`slug`), import go bezwzględnie pomija (`Skipped Post ID ... [Już istnieje w CMS — zachowano edycje]`).
+    2. Import tworzy wyłącznie *nowe* pakiety artykułów, które nie mają jeszcze odpowiednika w CMS.
+    3. Dodano flagę `--force-sync`, która jest jedynym sposobem na wymuszenie nadpisania bazy z dysku, jeśli kiedykolwiek byłoby to potrzebne.
+    4. Zmiany wypchnięto na produkcję i uruchomiono `/deploy-sync` — serwer pomyślnie pominął wszystkie 19 istniejących postów, zachowując 100% edycji dokonanych przez hodowcę w panelu.
 
 
 ## 2026-08-11

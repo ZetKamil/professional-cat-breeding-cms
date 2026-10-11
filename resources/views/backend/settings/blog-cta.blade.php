@@ -1,4 +1,4 @@
-<x-backend.shell title="Oferta pod artykułami (Global CTA) - SB Admin">
+<x-backend.shell title="Oferta pod artykułami (Global CTA) - Panel hodowli">
 
     <x-slot:head>
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>

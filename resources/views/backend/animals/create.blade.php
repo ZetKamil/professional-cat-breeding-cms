@@ -1,11 +1,11 @@
-<x-backend.shell title="New Animal - SB Admin">
+<x-backend.shell title="Dodaj kota - Panel hodowli">
 
-    <x-backend.page-header title="New Animal">
+    <x-backend.page-header title="Dodaj nowego kota">
         
         <x-backend.card>
             <div class="card-header">
                 <i class="fas fa-plus me-1"></i>
-                Add new animal
+                Nowy kot w hodowli
             </div>
             
             <div class="card-body">
@@ -18,11 +18,11 @@
                     
                     <div class="d-flex justify-content-between">
                         <a href="{{ route('backend.animals.index') }}" class="btn btn-outline-secondary">
-                            Cancel
+                            Anuluj
                         </a>
                         <button type="submit" class="btn btn-success">
                             <i class="fas fa-save me-1"></i>
-                            Save Animal
+                            Zapisz kota
                         </button>
                     </div>
                 </form>

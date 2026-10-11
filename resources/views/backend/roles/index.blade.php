@@ -1,27 +1,27 @@
-<x-backend.shell title="Roles - SB Admin">
+<x-backend.shell title="Role i uprawnienia - Panel Administracyjny">
 
     <x-slot:head>
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </x-slot:head>
 
-    <x-backend.page-header title="Roles">
+    <x-backend.page-header title="Role i uprawnienia">
 
         <form method="GET" action="{{ route('backend.roles.index') }}" class="mb-4">
             <div class="row g-2 align-items-end">
 
                 <div class="col-12 col-md-6">
-                    <label class="form-label mb-1">Search</label>
+                    <label class="form-label mb-1">Szukaj</label>
                     <input
                         type="text"
                         name="q"
                         value="{{ $filters['q'] }}"
                         class="form-control"
-                        placeholder="Search role name or description..."
+                        placeholder="Szukaj po nazwie roli lub opisie..."
                     >
                 </div>
 
                 <div class="col-12 col-md-2">
-                    <label class="form-label mb-1">Per page</label>
+                    <label class="form-label mb-1">Na stronę</label>
                     <select name="per_page" class="form-select">
                         @foreach($perPageAllowed as $n)
                             <option value="{{ $n }}" @selected((int)$filters['per_page'] === (int)$n)>{{ $n }}</option>
@@ -30,11 +30,11 @@
                 </div>
 
                 <div class="col-12 col-md-2">
-                    <label class="form-label mb-1">Deleted</label>
+                    <label class="form-label mb-1">Kosz / Usunięte</label>
                     <select name="trashed" class="form-select">
-                        <option value="">Active only</option>
-                        <option value="with" @selected($filters['trashed'] === 'with')>Active + deleted</option>
-                        <option value="only" @selected($filters['trashed'] === 'only')>Deleted only</option>
+                        <option value="">Tylko aktywne</option>
+                        <option value="with" @selected($filters['trashed'] === 'with')>Aktywne i w koszu</option>
+                        <option value="only" @selected($filters['trashed'] === 'only')>Tylko w koszu</option>
                     </select>
                 </div>
 
@@ -42,16 +42,18 @@
                 <input type="hidden" name="dir" value="{{ $filters['dir'] }}">
 
                 <div class="col-12 d-flex gap-2 mt-2">
-                    <button class="btn btn-primary" type="submit">Apply</button>
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fas fa-filter me-1"></i> Filtruj
+                    </button>
 
                     <a class="btn btn-outline-secondary" href="{{ route('backend.roles.index') }}">
-                        Clear
+                        Wyczyść
                     </a>
 
                     @can('create', \App\Models\Role::class)
                         <a href="{{ route('backend.roles.create') }}" class="btn btn-success ms-auto">
                             <i class="fas fa-plus me-1"></i>
-                            New role
+                            Nowa rola
                         </a>
                     @endcan
                 </div>
@@ -80,8 +82,8 @@
         <x-backend.card>
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
-                Roles lijst
-                <span class="text-muted ms-2">({{ $roles->total() }} totaal)</span>
+                Lista ról
+                <span class="text-muted ms-2">({{ $roles->total() }} łącznie)</span>
             </div>
 
             <div class="table-responsive">
@@ -89,11 +91,11 @@
                     <thead>
                     <tr>
                         <th><a class="text-decoration-none" href="{{ $sortUrl('id') }}">ID{!! $sortIcon('id') !!}</a></th>
-                        <th><a class="text-decoration-none" href="{{ $sortUrl('name') }}">Name{!! $sortIcon('name') !!}</a></th>
-                        <th>Description</th>
-                        <th>Users</th>
-                        <th><a class="text-decoration-none" href="{{ $sortUrl('created_at') }}">Created{!! $sortIcon('created_at') !!}</a></th>
-                        <th class="text-end">Actions</th>
+                        <th><a class="text-decoration-none" href="{{ $sortUrl('name') }}">Nazwa roli{!! $sortIcon('name') !!}</a></th>
+                        <th>Opis</th>
+                        <th>Liczba użytkowników</th>
+                        <th><a class="text-decoration-none" href="{{ $sortUrl('created_at') }}">Utworzono{!! $sortIcon('created_at') !!}</a></th>
+                        <th class="text-end">Akcje</th>
                     </tr>
                     </thead>
 
@@ -105,7 +107,7 @@
                                 {{ $role->name }}
 
                                 @if($role->deleted_at)
-                                    <span class="badge bg-danger ms-1">deleted</span>
+                                    <span class="badge bg-danger ms-1">w koszu</span>
                                 @endif
                             </td>
                             <td>{{ \Illuminate\Support\Str::limit($role->description ?? '-', 80) }}</td>
@@ -115,15 +117,15 @@
                             <td class="text-end">
                                 <div class="d-inline-flex gap-1">
                                     @can('view', $role)
-                                        <a href="{{ route('backend.roles.show', $role) }}" class="btn btn-sm btn-outline-primary">
-                                            Show
+                                        <a href="{{ route('backend.roles.show', $role) }}" class="btn btn-sm btn-outline-primary" title="Podgląd">
+                                            Podgląd
                                         </a>
                                     @endcan
 
                                     @if(! $role->deleted_at)
                                         @can('update', $role)
-                                            <a href="{{ route('backend.roles.edit', $role) }}" class="btn btn-sm btn-outline-secondary">
-                                                Edit
+                                            <a href="{{ route('backend.roles.edit', $role) }}" class="btn btn-sm btn-outline-secondary" title="Edytuj">
+                                                Edytuj
                                             </a>
                                         @endcan
 
@@ -133,8 +135,8 @@
                                                 @method('DELETE')
 
                                                 <button type="submit" class="btn btn-sm btn-outline-danger"
-                                                        onclick="return confirm('Are you sure you want to delete this role?')">
-                                                    Delete
+                                                        onclick="return confirm('Czy na pewno chcesz przenieść tę rolę do kosza?')">
+                                                    Usuń
                                                 </button>
                                             </form>
                                         @endcan
@@ -145,8 +147,8 @@
                                                 @method('PATCH')
 
                                                 <button type="submit" class="btn btn-sm btn-success"
-                                                        onclick="return confirm('Restore this role?')">
-                                                    Restore
+                                                        onclick="return confirm('Przywrócić tę rolę z kosza?')">
+                                                    Przywróć
                                                 </button>
                                             </form>
                                         @endcan
@@ -157,8 +159,8 @@
                                                 @method('DELETE')
 
                                                 <button type="submit" class="btn btn-sm btn-danger"
-                                                        onclick="return confirm('Permanently delete this role? This cannot be undone.')">
-                                                    Force delete
+                                                        onclick="return confirm('Czy na pewno chcesz bezpowrotnie usunąć tę rolę? Tej operacji nie można cofnąć.')">
+                                                    Usuń trwale
                                                 </button>
                                             </form>
                                         @endcan
@@ -169,7 +171,7 @@
                     @empty
                         <tr>
                             <td colspan="6" class="text-center text-muted py-4">
-                                No roles found. Try clearing filters.
+                                Nie znaleziono ról. Spróbuj wyczyścić filtry.
                             </td>
                         </tr>
                     @endforelse
@@ -179,7 +181,7 @@
 
             <div class="d-flex align-items-center justify-content-between mt-3">
                 <div class="small text-muted">
-                    Showing {{ $roles->firstItem() ?? 0 }} to {{ $roles->lastItem() ?? 0 }} of {{ $roles->total() }}
+                    Wyświetlanie {{ $roles->firstItem() ?? 0 }} do {{ $roles->lastItem() ?? 0 }} z {{ $roles->total() }} ról
                 </div>
                 <div>
                     {{ $roles->links() }}

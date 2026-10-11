@@ -1,16 +1,16 @@
-<x-frontend.shell title="Baza Wiedzy i Poradniki o Kotach Rasowych | Hodowla Kotów z Mazowieckiej Szwajcarii"
+<x-frontend.shell title="Blog i Poradniki o Kotach Rasowych | Hodowla Kotów z Mazowieckiej Szwajcarii"
     meta-description="Eksperckie poradniki felinologiczne: zdrowie, żywienie BARF, wyprawka dla kociaka, badania genetyczne rodziców i socjalizacja kotów bengalskich, brytyjskich i syjamskich."
     og-image="{{ asset('storage/media/parent_bella_1.jpg') }}">
     {{-- ============================================================
     1. EDITORIAL HERO HEADER
     ============================================================ --}}
-    <section class="blog-hero" aria-label="Baza Wiedzy">
+    <section class="blog-hero" aria-label="Blog">
         <div class="section-inner">
             <span class="text-eyebrow blog-hero__eyebrow">
                 Wiedza & Poradniki
             </span>
             <h1 class="text-hero-display blog-hero__title">
-                Baza Wiedzy
+                Blog
             </h1>
             <p class="text-lead-airy blog-hero__lead">
                 Dzielimy się naszą pasją, doświadczeniem weterynaryjnym oraz wieloletnią praktyką w wychowaniu kotów

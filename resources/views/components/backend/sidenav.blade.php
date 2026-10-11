@@ -1,7 +1,7 @@
 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
     <div class="sb-sidenav-menu">
         <div class="nav">
-            <div class="sb-sidenav-menu-heading">Core</div>
+            <div class="sb-sidenav-menu-heading">Główne</div>
 
             @can('view-backend-dashboard')
                 <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
@@ -9,11 +9,11 @@
                     <div class="sb-nav-link-icon">
                         <i class="fas fa-tachometer-alt"></i>
                     </div>
-                    Dashboard
+                    Pulpit nawigacyjny
                 </a>
             @endcan
 
-            <div class="sb-sidenav-menu-heading">Content</div>
+            <div class="sb-sidenav-menu-heading">Treści</div>
 
             @can('viewAny', \App\Models\Animal::class)
                 <a class="nav-link {{ request()->routeIs('backend.animals.*') ? 'active' : '' }}"
@@ -21,7 +21,7 @@
                     <div class="sb-nav-link-icon">
                         <i class="fas fa-paw"></i>
                     </div>
-                    Animals
+                    Koty hodowlane
                 </a>
             @endcan
 
@@ -31,7 +31,7 @@
                     <div class="sb-nav-link-icon">
                         <i class="fas fa-thumbtack"></i>
                     </div>
-                    Posts
+                    Wpisy na blogu
                 </a>
             @endcan
 
@@ -61,7 +61,7 @@
                     <div class="sb-nav-link-icon">
                         <i class="fas fa-folder"></i>
                     </div>
-                    Categories
+                    Kategorie bloga
                 </a>
             @endcan
 
@@ -71,11 +71,11 @@
                     <div class="sb-nav-link-icon">
                         <i class="fas fa-image"></i>
                     </div>
-                    Media
+                    Biblioteka mediów
                 </a>
             @endcan
 
-            <div class="sb-sidenav-menu-heading">Administration</div>
+            <div class="sb-sidenav-menu-heading">Administracja</div>
 
             @can('viewAny', \App\Models\User::class)
                 <a class="nav-link {{ request()->routeIs('backend.users.*') ? 'active' : '' }}"
@@ -83,7 +83,7 @@
                     <div class="sb-nav-link-icon">
                         <i class="fas fa-users"></i>
                     </div>
-                    Users
+                    Użytkownicy
                 </a>
             @endcan
 
@@ -93,23 +93,23 @@
                     <div class="sb-nav-link-icon">
                         <i class="fas fa-user-shield"></i>
                     </div>
-                    Roles
+                    Role i uprawnienia
                 </a>
             @endcan
 
-            <div class="sb-sidenav-menu-heading">Website</div>
+            <div class="sb-sidenav-menu-heading">Strona</div>
 
-            <a class="nav-link" href="{{ route('home') }}">
+            <a class="nav-link" href="{{ route('home') }}" target="_blank">
                 <div class="sb-nav-link-icon">
                     <i class="fas fa-globe"></i>
                 </div>
-                Naar website
+                Przejdź do strony
             </a>
         </div>
     </div>
 
     <div class="sb-sidenav-footer">
-        <div class="small">Logged in as:</div>
-        {{ auth()->user()->name ?? 'Start Bootstrap' }}
+        <div class="small">Zalogowano jako:</div>
+        {{ auth()->user()->name ?? 'Administrator' }}
     </div>
 </nav>

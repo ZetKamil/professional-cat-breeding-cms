@@ -1,11 +1,11 @@
-<x-backend.shell title="Create role">
+<x-backend.shell title="Dodaj rolę">
 
-    <x-backend.page-header title="Create role">
+    <x-backend.page-header title="Dodaj nową rolę">
 
         <x-backend.card>
             <div class="card-header">
                 <i class="fas fa-user-tag me-1"></i>
-                New role
+                Nowa rola
             </div>
 
             <div class="card-body">
@@ -14,7 +14,7 @@
 
                     @include('backend.roles.partials.form', [
                         'role' => null,
-                        'submitLabel' => 'Create role',
+                        'submitLabel' => 'Dodaj rolę',
                     ])
                 </form>
             </div>

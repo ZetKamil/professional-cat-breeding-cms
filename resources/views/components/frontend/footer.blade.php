@@ -73,7 +73,7 @@ Calm, minimal, trust-building
                         <li><a href="{{ route('frontend.animals.index') }}" class="footer-link">Nasze Koty</a></li>
                         <li><a href="{{ route('cattery') }}" class="footer-link">O Hodowli</a></li>
                         <li><a href="{{ route('about') }}" class="footer-link">O Nas</a></li>
-                        <li><a href="{{ route('frontend.blog.index') }}" class="footer-link">Baza Wiedzy</a></li>
+                        <li><a href="{{ route('frontend.blog.index') }}" class="footer-link">Blog</a></li>
                         <li><a href="{{ route('contact') }}" class="footer-link">Kontakt</a></li>
                     </ul>
                 </div>

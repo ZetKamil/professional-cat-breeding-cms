@@ -15,7 +15,7 @@ class ContactMail extends Mailable
 
     public function build()
     {
-        return $this->subject('Nieuw contactbericht')
+        return $this->subject('Nowa wiadomość z formularza kontaktowego')
             ->view('emails.contact');
     }
 }

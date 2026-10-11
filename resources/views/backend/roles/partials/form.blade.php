@@ -1,7 +1,7 @@
 <div class="row g-3">
 
     <div class="col-12 col-md-6">
-        <label class="form-label">Name</label>
+        <label class="form-label">Nazwa roli</label>
         <input
             type="text"
             name="name"
@@ -15,7 +15,7 @@
     </div>
 
     <div class="col-12">
-        <label class="form-label">Description</label>
+        <label class="form-label">Opis roli</label>
         <textarea
             name="description"
             rows="4"
@@ -29,11 +29,11 @@
 
     <div class="col-12 d-flex gap-2 mt-2">
         <button class="btn btn-primary" type="submit">
-            {{ $submitLabel ?? 'Save' }}
+            {{ $submitLabel ?? 'Zapisz' }}
         </button>
 
         <a class="btn btn-outline-secondary" href="{{ route('backend.roles.index') }}">
-            Cancel
+            Anuluj
         </a>
     </div>
 

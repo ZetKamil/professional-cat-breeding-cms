@@ -45,9 +45,9 @@ class SeoTest extends TestCase
         // Check public static routes
         $this->assertStringContainsString('/koty</loc>', $content);
         $this->assertStringContainsString('/o-hodowli</loc>', $content);
-        $this->assertStringContainsString('/about</loc>', $content);
+        $this->assertStringContainsString('/o-nas</loc>', $content);
         $this->assertStringContainsString('/blog</loc>', $content);
-        $this->assertStringContainsString('/contact</loc>', $content);
+        $this->assertStringContainsString('/kontakt</loc>', $content);
         $this->assertStringContainsString('/polityka-prywatnosci</loc>', $content);
         $this->assertStringContainsString('/regulamin</loc>', $content);
 
@@ -86,10 +86,10 @@ class SeoTest extends TestCase
         $routes = [
             '/',
             '/o-hodowli',
-            '/about',
+            '/o-nas',
             '/koty',
             '/blog',
-            '/contact',
+            '/kontakt',
             '/polityka-prywatnosci',
             '/regulamin',
         ];

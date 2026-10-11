@@ -64,9 +64,9 @@ class ProductionSmokeTest extends TestCase
 
         $publicRoutes = [
             '/',
-            '/about',
+            '/o-nas',
             '/o-hodowli',
-            '/contact',
+            '/kontakt',
             '/login',
             '/register',
             '/forgot-password',
@@ -119,7 +119,7 @@ class ProductionSmokeTest extends TestCase
 
     public function test_contact_form_processes_and_redirects(): void
     {
-        $response = $this->post('/contact', [
+        $response = $this->post('/kontakt', [
             'name'    => 'Jan Kowalski',
             'email'   => 'jan.kowalski@example.com',
             'phone'   => '+48 514 153 204',
@@ -144,8 +144,8 @@ class ProductionSmokeTest extends TestCase
     public function test_polish_url_aliases_redirect_301(): void
     {
         $redirects = [
-            '/kontakt' => '/contact',
-            '/o-nas' => '/about',
+            '/contact' => '/kontakt',
+            '/about' => '/o-nas',
             '/kocieta' => '/koty',
             '/galeria' => '/koty',
             '/rodowody' => '/o-hodowli',

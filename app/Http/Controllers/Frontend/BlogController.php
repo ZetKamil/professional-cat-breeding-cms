@@ -34,17 +34,18 @@ class BlogController extends Controller
         }
 
         $posts = $query
-            ->orderByDesc('published_at')
-            ->orderByDesc('id')
+            ->latest('published_at')
             ->paginate(9)
             ->withQueryString();
 
         $categories = Category::query()
-            ->withCount(['posts' => function ($q) {
-                $q->where('is_published', true)
-                  ->whereNotNull('published_at')
-                  ->where('published_at', '<=', now());
-            }])
+            ->withCount([
+                'posts' => function ($q) {
+                    $q->where('is_published', true)
+                        ->whereNotNull('published_at')
+                        ->where('published_at', '<=', now());
+                }
+            ])
             ->orderBy('name')
             ->get();
 
@@ -63,7 +64,7 @@ class BlogController extends Controller
     {
         $isStaff = auth()->check();
 
-        if ((! $post->is_published || ! $post->published_at || $post->published_at->isFuture()) && ! $isStaff) {
+        if ((!$post->is_published || !$post->published_at || $post->published_at->isFuture()) && !$isStaff) {
             abort(404);
         }
 
@@ -76,8 +77,7 @@ class BlogController extends Controller
             ->whereHas('categories', function ($q) use ($post) {
                 $q->whereIn('categories.id', $post->categories->pluck('id'));
             })
-            ->orderByDesc('published_at')
-            ->orderByDesc('id')
+            ->latest('published_at')
             ->take(3)
             ->get();
 
@@ -86,14 +86,13 @@ class BlogController extends Controller
                 ->published()
                 ->with(['user', 'categories', 'media'])
                 ->where('id', '!=', $post->id)
-                ->orderByDesc('published_at')
-                ->orderByDesc('id')
+                ->latest('published_at')
                 ->take(3)
                 ->get();
         }
 
         return view('frontend.blog.show', [
-            'post'         => $post,
+            'post' => $post,
             'relatedPosts' => $relatedPosts,
         ]);
     }

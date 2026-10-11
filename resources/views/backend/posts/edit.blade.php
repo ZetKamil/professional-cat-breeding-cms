@@ -1,11 +1,11 @@
-<x-backend.shell title="Edit post">
+<x-backend.shell title="Edycja wpisu: {{ $post->title }}">
 
-    <x-backend.page-header title="Edit post">
+    <x-backend.page-header title="Edycja wpisu: {{ $post->title }}">
 
         <x-backend.card>
             <div class="card-header">
                 <i class="fas fa-file-pen me-1"></i>
-                Edit: {{ $post->title }}
+                Edycja: {{ $post->title }}
             </div>
 
             <div class="card-body">

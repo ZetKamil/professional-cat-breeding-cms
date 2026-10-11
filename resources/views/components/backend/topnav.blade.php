@@ -25,8 +25,8 @@
             <input
                 class="form-control"
                 type="text"
-                placeholder="Search for..."
-                aria-label="Search for..."
+                placeholder="Szukaj..."
+                aria-label="Szukaj..."
                 aria-describedby="btnNavbarSearch"
             />
             <button class="btn btn-primary" id="btnNavbarSearch" type="button">
@@ -45,12 +45,12 @@
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
             >
-                <span class="me-2 text-white">{{ $user->name ?? 'Gebruiker' }}</span>
+                <span class="me-2 text-white">{{ $user->name ?? 'Użytkownik' }}</span>
 
                 @if ($avatarUrl)
                     <img
                         src="{{ $avatarUrl }}"
-                        alt="{{ $user->name ?? 'Gebruiker' }}"
+                        alt="{{ $user->name ?? 'Użytkownik' }}"
                         class="rounded-circle"
                         style="width: 36px; height: 36px; object-fit: cover;"
                     >
@@ -77,7 +77,7 @@
                     <form method="POST" action="{{ route('logout') }}" class="m-0">
                         @csrf
                         <button type="submit" class="dropdown-item">
-                            Logout
+                            <i class="fas fa-right-from-bracket me-2 text-danger"></i>Wyloguj się
                         </button>
                     </form>
                 </li>

@@ -1,11 +1,11 @@
-<x-backend.shell title="Create media">
+<x-backend.shell title="Dodaj media">
 
-    <x-backend.page-header title="Create media">
+    <x-backend.page-header title="Dodaj media">
 
         <x-backend.card>
             <div class="card-header">
                 <i class="fas fa-photo-film me-1"></i>
-                New media
+                Nowe pliki multimedialne
             </div>
 
             <div class="card-body">
@@ -19,7 +19,7 @@
                         'animals' => $animals,
                         'prefillType' => $prefillType,
                         'prefillId' => $prefillId,
-                        'submitLabel' => 'Upload Media',
+                        'submitLabel' => 'Wgraj pliki mediów',
                     ])
                 </form>
             </div>

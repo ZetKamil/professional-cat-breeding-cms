@@ -1,5 +1,5 @@
 <x-frontend.shell
-    title="{{ $post->title }} | Baza Wiedzy — Hodowla Kotów z Mazowieckiej Szwajcarii"
+    title="{{ $post->title }} | Blog — Hodowla Kotów z Mazowieckiej Szwajcarii"
     meta-description="{{ Str::limit($post->excerpt ?: strip_tags($post->body ?? ''), 160) }}"
     og-image="{{ $post->coverImageUrl() }}"
     og-type="article"
@@ -21,7 +21,7 @@
             <nav class="article-breadcrumb" aria-label="Nawigacja okruszkowa">
                 <a href="{{ route('home') }}" class="article-breadcrumb__link">Strona Główna</a>
                 <span class="article-breadcrumb__sep" aria-hidden="true">/</span>
-                <a href="{{ route('frontend.blog.index') }}" class="article-breadcrumb__link">Baza Wiedzy</a>
+                <a href="{{ route('frontend.blog.index') }}" class="article-breadcrumb__link">Blog</a>
             </nav>
 
             <h1 class="article-cover-hero__title">
@@ -223,7 +223,7 @@
             <x-frontend.section-header
                 eyebrow="Podobne Artykuły"
                 headline="Przeczytaj także"
-                description="Poznaj inne wpisy z naszej bazy wiedzy, które pomogą Ci w codziennej opiece nad kotem rasowym."
+                description="Poznaj inne wpisy z naszego bloga, które pomogą Ci w codziennej opiece nad kotem rasowym."
             />
 
             <div class="articles-grid">

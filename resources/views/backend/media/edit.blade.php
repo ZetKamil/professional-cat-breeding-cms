@@ -1,11 +1,11 @@
-<x-backend.shell title="Edit media">
+<x-backend.shell title="Edycja mediów: {{ $media->file_name }}">
 
-    <x-backend.page-header title="Edit media">
+    <x-backend.page-header title="Edycja mediów: {{ $media->file_name }}">
 
         <x-backend.card>
             <div class="card-header">
                 <i class="fas fa-pen me-1"></i>
-                Edit: {{ $media->file_name }}
+                Edycja: {{ $media->file_name }}
             </div>
 
             <div class="card-body">
@@ -18,7 +18,7 @@
                         'posts' => $posts,
                         'users' => $users,
                         'animals' => $animals,
-                        'submitLabel' => 'Save changes',
+                        'submitLabel' => 'Zapisz zmiany',
                     ])
                 </form>
             </div>

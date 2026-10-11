@@ -1,13 +1,13 @@
-<x-backend.shell title="Animal Details: {{ $animal->name }}">
+<x-backend.shell title="Szczegóły kota: {{ $animal->name }}">
 
-    <x-backend.page-header title="Animal Details: {{ $animal->name }}">
+    <x-backend.page-header title="Szczegóły kota: {{ $animal->name }}">
         
         <div class="mb-4">
             <a href="{{ route('backend.animals.index') }}" class="btn btn-outline-secondary">
-                <i class="fas fa-arrow-left me-1"></i> Back to List
+                <i class="fas fa-arrow-left me-1"></i> Powrót do listy
             </a>
             <a href="{{ route('backend.animals.edit', $animal) }}" class="btn btn-primary ms-2">
-                <i class="fas fa-edit me-1"></i> Edit Animal
+                <i class="fas fa-edit me-1"></i> Edytuj kota
             </a>
         </div>
 
@@ -97,7 +97,7 @@
                 {{-- Status & Visibility --}}
                 <x-backend.card class="mb-4">
                     <div class="card-header">
-                        <i class="fas fa-info-circle me-1"></i> Status & Visibility
+                        <i class="fas fa-info-circle me-1"></i> Status i widoczność
                     </div>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -107,27 +107,27 @@
                             </span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            Published
+                            Opublikowany
                             @if($animal->is_published)
-                                <span class="badge bg-success">Yes</span>
+                                <span class="badge bg-success">Tak</span>
                             @else
-                                <span class="badge bg-secondary">No</span>
+                                <span class="badge bg-secondary">Nie</span>
                             @endif
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            Featured
+                            Wyróżniony na głównej
                             @if($animal->is_featured)
-                                <span class="badge bg-warning text-dark">Yes</span>
+                                <span class="badge bg-warning text-dark">Tak</span>
                             @else
-                                <span class="text-muted">No</span>
+                                <span class="text-muted">Nie</span>
                             @endif
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            Sort Order
+                            Kolejność
                             <span>{{ $animal->sort_order }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            Created
+                            Utworzono
                             <span>{{ $animal->created_at->format('Y-m-d H:i') }}</span>
                         </li>
                     </ul>
@@ -138,13 +138,13 @@
                 {{-- Data --}}
                 <x-backend.card class="mb-4">
                     <div class="card-header">
-                        <i class="fas fa-paw me-1"></i> Basic Details
+                        <i class="fas fa-paw me-1"></i> Dane podstawowe
                     </div>
                     <div class="card-body">
                         <table class="table table-bordered mb-0">
                             <tbody>
                                 <tr>
-                                    <th style="width: 30%">Name</th>
+                                    <th style="width: 30%">Imię</th>
                                     <td><strong>{{ $animal->name }}</strong></td>
                                 </tr>
                                 <tr>
@@ -152,26 +152,26 @@
                                     <td><code>{{ $animal->slug }}</code></td>
                                 </tr>
                                 <tr>
-                                    <th>Breed</th>
+                                    <th>Rasa</th>
                                     <td>{{ $animal->breed }}</td>
                                 </tr>
                                 <tr>
-                                    <th>Color</th>
+                                    <th>Kod koloru (EMS)</th>
                                     <td>{{ $animal->color ?? '-' }}</td>
                                 </tr>
                                 <tr>
-                                    <th>Gender</th>
+                                    <th>Płeć</th>
                                     <td>{{ $animal->gender->label() }}</td>
                                 </tr>
                                 <tr>
-                                    <th>Type</th>
+                                    <th>Typ</th>
                                     <td>{{ $animal->type->label() }}</td>
                                 </tr>
                                 <tr>
-                                    <th>Date of Birth</th>
+                                    <th>Data urodzenia</th>
                                     <td>
                                         @if($animal->date_of_birth)
-                                            {{ $animal->date_of_birth->format('Y-m-d') }}
+                                             {{ $animal->date_of_birth->format('Y-m-d') }}
                                             <span class="text-muted ms-1">({{ $animal->age() }})</span>
                                         @else
                                             -
@@ -186,31 +186,31 @@
                 {{-- Pedigree --}}
                 <x-backend.card class="mb-4">
                     <div class="card-header">
-                        <i class="fas fa-sitemap me-1"></i> Pedigree
+                        <i class="fas fa-sitemap me-1"></i> Rodowód
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6 border-end">
-                                <h6 class="text-muted text-uppercase small fw-bold">Parents</h6>
+                                <h6 class="text-muted text-uppercase small fw-bold">Rodzice</h6>
                                 <p class="mb-1">
-                                    <strong>Mother:</strong> 
+                                    <strong>Matka:</strong> 
                                     @if($animal->mother)
                                         <a href="{{ route('backend.animals.show', $animal->mother) }}">{{ $animal->mother->name }}</a>
                                     @else
-                                        <span class="text-muted">None / External</span>
+                                        <span class="text-muted">Brak / Zewnętrzna</span>
                                     @endif
                                 </p>
                                 <p class="mb-0">
-                                    <strong>Father:</strong> 
+                                    <strong>Ojciec:</strong> 
                                     @if($animal->father)
                                         <a href="{{ route('backend.animals.show', $animal->father) }}">{{ $animal->father->name }}</a>
                                     @else
-                                        <span class="text-muted">None / External</span>
+                                        <span class="text-muted">Brak / Zewnętrzny</span>
                                     @endif
                                 </p>
                             </div>
                             <div class="col-md-6">
-                                <h6 class="text-muted text-uppercase small fw-bold">Offspring</h6>
+                                <h6 class="text-muted text-uppercase small fw-bold">Potomstwo</h6>
                                 @php
                                     $children = $animal->gender->value === 'female' 
                                         ? $animal->childrenAsMother 
@@ -224,7 +224,7 @@
                                         @endforeach
                                     </ul>
                                 @else
-                                    <p class="text-muted mb-0">No registered offspring in system.</p>
+                                    <p class="text-muted mb-0">Brak zarejestrowanego potomstwa w systemie.</p>
                                 @endif
                             </div>
                         </div>
@@ -234,19 +234,19 @@
                 {{-- Text Content --}}
                 <x-backend.card class="mb-4">
                     <div class="card-header">
-                        <i class="fas fa-file-alt me-1"></i> Content & SEO
+                        <i class="fas fa-file-alt me-1"></i> Opis i SEO
                     </div>
                     <div class="card-body">
-                        <h6 class="fw-bold">Short Description</h6>
+                        <h6 class="fw-bold">Krótki opis</h6>
                         <div class="p-3 bg-light rounded border mb-3 text-break">
-                            {{ $animal->short_description ?: 'No short description provided.' }}
+                            {{ $animal->short_description ?: 'Brak krótkiego opisu.' }}
                         </div>
                         
-                        <h6 class="fw-bold">Description</h6>
-                        <div class="p-3 bg-light rounded border mb-4 text-break" style="white-space: pre-wrap;">{{ $animal->description ?: 'No description provided.' }}</div>
+                        <h6 class="fw-bold">Pełny opis</h6>
+                        <div class="p-3 bg-light rounded border mb-4 text-break" style="white-space: pre-wrap;">{{ $animal->description ?: 'Brak pełnego opisu.' }}</div>
                         
                         <div class="border-top pt-3 mt-2">
-                            <h6 class="text-muted text-uppercase small fw-bold">SEO Preview</h6>
+                            <h6 class="text-muted text-uppercase small fw-bold">Podgląd w wyszukiwarce (SEO)</h6>
                             @if($animal->meta_title || $animal->meta_description)
                                 <div class="p-3 border rounded shadow-sm" style="max-width: 600px; background-color: #fff;">
                                     <div style="color: #1a0dab; font-size: 20px; font-family: arial, sans-serif; cursor: pointer;">
@@ -260,7 +260,7 @@
                                     </div>
                                 </div>
                             @else
-                                <p class="text-muted">No custom SEO data provided. Default fallbacks will be used.</p>
+                                <p class="text-muted">Brak własnych danych SEO. Zastosowane zostaną wartości domyślne.</p>
                             @endif
                         </div>
                     </div>

@@ -1,29 +1,29 @@
-<x-backend.shell title="Posts - SB Admin">
+<x-backend.shell title="Wpisy na blogu - Panel Administracyjny">
 
     <x-slot:head>
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </x-slot:head>
 
-    <x-backend.page-header title="Posts">
+    <x-backend.page-header title="Wpisy na blogu">
 
         <form method="GET" action="{{ route('backend.posts.index') }}" class="mb-4">
             <div class="row g-2 align-items-end">
 
                 <div class="col-12 col-md-3">
-                    <label class="form-label mb-1">Search</label>
+                    <label class="form-label mb-1">Szukaj</label>
                     <input
                         type="text"
                         name="q"
                         value="{{ $filters['q'] }}"
                         class="form-control"
-                        placeholder="Search title, slug, excerpt or body..."
+                        placeholder="Szukaj po tytule, skrócie lub treści..."
                     >
                 </div>
 
                 <div class="col-12 col-md-2">
-                    <label class="form-label mb-1">Author</label>
+                    <label class="form-label mb-1">Autor</label>
                     <select name="author" class="form-select">
-                        <option value="">All authors</option>
+                        <option value="">Wszyscy autorzy</option>
                         @foreach($authors as $author)
                             <option value="{{ $author->id }}" @selected((string) $filters['author'] === (string) $author->id)>
                                 {{ $author->name }}
@@ -33,9 +33,9 @@
                 </div>
 
                 <div class="col-12 col-md-2">
-                    <label class="form-label mb-1">Category</label>
+                    <label class="form-label mb-1">Kategoria</label>
                     <select name="category" class="form-select">
-                        <option value="">All categories</option>
+                        <option value="">Wszystkie kategorie</option>
                         @foreach($categories as $category)
                             <option value="{{ $category->id }}" @selected((string) $filters['category'] === (string) $category->id)>
                                 {{ $category->name }}
@@ -47,14 +47,14 @@
                 <div class="col-12 col-md-2">
                     <label class="form-label mb-1">Status</label>
                     <select name="status" class="form-select">
-                        <option value="">All</option>
-                        <option value="published" @selected($filters['status'] === 'published')>Published</option>
-                        <option value="draft" @selected($filters['status'] === 'draft')>Draft</option>
+                        <option value="">Wszystkie</option>
+                        <option value="published" @selected($filters['status'] === 'published')>Opublikowane</option>
+                        <option value="draft" @selected($filters['status'] === 'draft')>Szkice</option>
                     </select>
                 </div>
 
                 <div class="col-12 col-md-1">
-                    <label class="form-label mb-1">Per page</label>
+                    <label class="form-label mb-1">Na stronę</label>
                     <select name="per_page" class="form-select">
                         @foreach($perPageAllowed as $n)
                             <option value="{{ $n }}" @selected((int) $filters['per_page'] === (int) $n)>{{ $n }}</option>
@@ -63,11 +63,11 @@
                 </div>
 
                 <div class="col-12 col-md-2">
-                    <label class="form-label mb-1">Deleted</label>
+                    <label class="form-label mb-1">Kosz / Usunięte</label>
                     <select name="trashed" class="form-select">
-                        <option value="">Active only</option>
-                        <option value="with" @selected($filters['trashed'] === 'with')>Active + deleted</option>
-                        <option value="only" @selected($filters['trashed'] === 'only')>Deleted only</option>
+                        <option value="">Tylko aktywne</option>
+                        <option value="with" @selected($filters['trashed'] === 'with')>Aktywne i w koszu</option>
+                        <option value="only" @selected($filters['trashed'] === 'only')>Tylko w koszu</option>
                     </select>
                 </div>
 
@@ -76,10 +76,12 @@
                 <input type="hidden" name="dir" value="{{ $filters['dir'] }}">
 
                 <div class="col-12 d-flex gap-2 mt-2">
-                    <button class="btn btn-primary" type="submit">Apply</button>
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fas fa-filter me-1"></i> Filtruj
+                    </button>
 
                     <a class="btn btn-outline-secondary" href="{{ route('backend.posts.index') }}">
-                        Clear
+                        Wyczyść
                     </a>
 
                     @can('create', \App\Models\Post::class)
@@ -96,7 +98,7 @@
                         </a>
                         <a href="{{ route('backend.posts.create') }}" class="btn btn-success ms-2">
                             <i class="fas fa-plus me-1"></i>
-                            New post
+                            Nowy wpis
                         </a>
                     @endcan
                 </div>
@@ -128,23 +130,23 @@
         <x-backend.card>
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
-                Posts lijst
-                <span class="text-muted ms-2">({{ $posts->total() }} totaal)</span>
+                Lista wpisów
+                <span class="text-muted ms-2">({{ $posts->total() }} łącznie)</span>
             </div>
 
             <div class="table-responsive">
                 <table class="table table-bordered table-striped mb-0">
                     <thead>
                     <tr>
-                        <th>Image</th>
+                        <th>Zdjęcie</th>
                         <th><a class="text-decoration-none" href="{{ $sortUrl('id') }}">ID{!! $sortIcon('id') !!}</a></th>
-                        <th><a class="text-decoration-none" href="{{ $sortUrl('title') }}">Title{!! $sortIcon('title') !!}</a></th>
-                        <th>Author</th>
-                        <th>Categories</th>
+                        <th><a class="text-decoration-none" href="{{ $sortUrl('title') }}">Tytuł{!! $sortIcon('title') !!}</a></th>
+                        <th>Autor</th>
+                        <th>Kategorie</th>
                         <th><a class="text-decoration-none" href="{{ $sortUrl('is_published') }}">Status{!! $sortIcon('is_published') !!}</a></th>
-                        <th><a class="text-decoration-none" href="{{ $sortUrl('published_at') }}">Published{!! $sortIcon('published_at') !!}</a></th>
-                        <th><a class="text-decoration-none" href="{{ $sortUrl('created_at') }}">Created{!! $sortIcon('created_at') !!}</a></th>
-                        <th class="text-end">Actions</th>
+                        <th><a class="text-decoration-none" href="{{ $sortUrl('published_at') }}">Data publikacji{!! $sortIcon('published_at') !!}</a></th>
+                        <th><a class="text-decoration-none" href="{{ $sortUrl('created_at') }}">Utworzono{!! $sortIcon('created_at') !!}</a></th>
+                        <th class="text-end">Akcje</th>
                     </tr>
                     </thead>
 
@@ -170,7 +172,7 @@
                                 {{ $post->title }}
 
                                 @if($post->deleted_at)
-                                    <span class="badge bg-danger ms-1">deleted</span>
+                                    <span class="badge bg-danger ms-1">w koszu</span>
                                 @endif
                             </td>
 
@@ -186,9 +188,9 @@
 
                             <td>
                                 @if($post->is_published)
-                                    <span class="badge bg-success">published</span>
+                                    <span class="badge bg-success">opublikowany</span>
                                 @else
-                                    <span class="badge bg-secondary">draft</span>
+                                    <span class="badge bg-secondary">szkic</span>
                                 @endif
                             </td>
 
@@ -198,15 +200,15 @@
                             <td class="text-end">
                                 <div class="d-inline-flex gap-1">
                                     @can('view', $post)
-                                        <a href="{{ route('backend.posts.show', $post) }}" class="btn btn-sm btn-outline-primary">
-                                            Show
+                                        <a href="{{ route('backend.posts.show', $post) }}" class="btn btn-sm btn-outline-primary" title="Podgląd">
+                                            Podgląd
                                         </a>
                                     @endcan
 
                                     @if(! $post->deleted_at)
                                         @can('update', $post)
-                                            <a href="{{ route('backend.posts.edit', $post) }}" class="btn btn-sm btn-outline-secondary">
-                                                Edit
+                                            <a href="{{ route('backend.posts.edit', $post) }}" class="btn btn-sm btn-outline-secondary" title="Edytuj">
+                                                Edytuj
                                             </a>
                                         @endcan
 
@@ -216,8 +218,8 @@
                                                 @method('DELETE')
 
                                                 <button type="submit" class="btn btn-sm btn-outline-danger"
-                                                        onclick="return confirm('Are you sure you want to delete this post?')">
-                                                    Delete
+                                                        onclick="return confirm('Czy na pewno chcesz przenieść ten wpis do kosza?')">
+                                                    Usuń
                                                 </button>
                                             </form>
                                         @endcan
@@ -228,8 +230,8 @@
                                                 @method('PATCH')
 
                                                 <button type="submit" class="btn btn-sm btn-success"
-                                                        onclick="return confirm('Restore this post?')">
-                                                    Restore
+                                                        onclick="return confirm('Przywrócić ten wpis z kosza?')">
+                                                    Przywróć
                                                 </button>
                                             </form>
                                         @endcan
@@ -240,8 +242,8 @@
                                                 @method('DELETE')
 
                                                 <button type="submit" class="btn btn-sm btn-danger"
-                                                        onclick="return confirm('Permanently delete this post? This cannot be undone.')">
-                                                    Force delete
+                                                        onclick="return confirm('Czy na pewno chcesz bezpowrotnie usunąć ten wpis? Tej operacji nie można cofnąć.')">
+                                                    Usuń trwale
                                                 </button>
                                             </form>
                                         @endcan
@@ -252,7 +254,7 @@
                     @empty
                         <tr>
                             <td colspan="8" class="text-center text-muted py-4">
-                                No posts found. Try clearing filters.
+                                Nie znaleziono wpisów. Spróbuj wyczyścić filtry.
                             </td>
                         </tr>
                     @endforelse
@@ -262,7 +264,7 @@
 
             <div class="d-flex align-items-center justify-content-between mt-3">
                 <div class="small text-muted">
-                    Showing {{ $posts->firstItem() ?? 0 }} to {{ $posts->lastItem() ?? 0 }} of {{ $posts->total() }}
+                    Wyświetlanie {{ $posts->firstItem() ?? 0 }} do {{ $posts->lastItem() ?? 0 }} z {{ $posts->total() }} wpisów
                 </div>
                 <div>
                     {{ $posts->links() }}

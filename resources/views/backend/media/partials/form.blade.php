@@ -19,9 +19,9 @@
     <div class="col-12">
         <label class="form-label fw-semibold">
             @if(isset($media) && $media)
-                Replace Image File (optional)
+                Zastąp plik obrazu (opcjonalnie)
             @else
-                Upload Image(s) — Single or Multiple
+                Wgraj zdjęcia — pojedynczo lub wielokrotnie
             @endif
         </label>
 
@@ -45,8 +45,8 @@
 
             <div id="dropzonePlaceholder">
                 <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-2"></i>
-                <h6 class="mb-1 fw-bold">Drag & drop image files here, or click to browse</h6>
-                <p class="text-muted small mb-0">Supports JPG, PNG, WEBP, GIF up to 10 MB per file</p>
+                <h6 class="mb-1 fw-bold">Przeciągnij i upuść pliki graficzne tutaj lub kliknij, aby wybrać</h6>
+                <p class="text-muted small mb-0">Obsługuje JPG, PNG, WEBP, GIF do 10 MB na plik</p>
             </div>
 
             <div id="dropzonePreview" class="row g-2 mt-3 d-none text-start">
@@ -68,7 +68,7 @@
             <div class="d-flex align-items-center gap-3 mt-3 p-2 border rounded bg-white">
                 <img src="{{ $media->url() }}" alt="{{ $media->alt_text }}" class="rounded" style="width: 64px; height: 64px; object-fit: cover;">
                 <div>
-                    <div class="fw-semibold small">Current File: {{ $media->filename }}</div>
+                    <div class="fw-semibold small">Aktualny plik: {{ $media->filename }}</div>
                     <div class="text-muted small">{{ round($media->size / 1024, 1) }} KB | {{ $media->mime_type }}</div>
                 </div>
             </div>
@@ -78,17 +78,17 @@
     {{-- METADATA SECTION --}}
     <div class="col-12">
         <hr class="my-1">
-        <h6 class="text-muted small text-uppercase fw-bold mb-2">Media Metadata & SEO</h6>
+        <h6 class="text-muted small text-uppercase fw-bold mb-2">Metadane mediów i SEO</h6>
     </div>
 
     <div class="col-12 col-md-6">
-        <label class="form-label">Title / Headline</label>
+        <label class="form-label">Tytuł / Nagłówek</label>
         <input
             type="text"
             name="title"
             value="{{ old('title', $media?->title ?? '') }}"
             class="form-control @error('title') is-invalid @enderror"
-            placeholder="Descriptive title"
+            placeholder="Opisowy tytuł"
         >
         @error('title')
             <div class="invalid-feedback">{{ $message }}</div>
@@ -96,13 +96,13 @@
     </div>
 
     <div class="col-12 col-md-6">
-        <label class="form-label">Copyright / Credit</label>
+        <label class="form-label">Prawa autorskie / Źródło</label>
         <input
             type="text"
             name="copyright"
             value="{{ old('copyright', $media?->copyright ?? '') }}"
             class="form-control @error('copyright') is-invalid @enderror"
-            placeholder="e.g. © 2026 ZetKamil Cattery"
+            placeholder="np. © 2026 Hodowla Kotów z Mazowieckiej Szwajcarii"
         >
         @error('copyright')
             <div class="invalid-feedback">{{ $message }}</div>
@@ -111,15 +111,15 @@
 
     <div class="col-12">
         <label class="form-label">
-            ALT Text <span class="text-danger">*</span>
-            <span class="text-muted fw-normal small">(Crucial for accessibility and SEO)</span>
+            Tekst alternatywny ALT <span class="text-danger">*</span>
+            <span class="text-muted fw-normal small">(Kluczowy dla dostępności i SEO)</span>
         </label>
         <input
             type="text"
             name="alt_text"
             value="{{ old('alt_text', $media?->alt_text ?? '') }}"
             class="form-control @error('alt_text') is-invalid @enderror"
-            placeholder="Describe what is seen in the image for visually impaired readers"
+            placeholder="Opisz, co przedstawia zdjęcie dla osób niewidomych i wyszukiwarki"
         >
         @error('alt_text')
             <div class="invalid-feedback">{{ $message }}</div>
@@ -127,12 +127,12 @@
     </div>
 
     <div class="col-12">
-        <label class="form-label">Caption / Description</label>
+        <label class="form-label">Podpis / Opis rozszerzony</label>
         <textarea
             name="caption"
             rows="3"
             class="form-control @error('caption') is-invalid @enderror"
-            placeholder="Optional extended description displayed below the image"
+            placeholder="Opcjonalny opis wyświetlany pod zdjęciem"
         >{{ old('caption', $media?->caption ?? '') }}</textarea>
         @error('caption')
             <div class="invalid-feedback">{{ $message }}</div>
@@ -142,16 +142,16 @@
     {{-- PARENT ATTACHMENT SECTION --}}
     <div class="col-12">
         <hr class="my-1">
-        <h6 class="text-muted small text-uppercase fw-bold mb-2">Attachment & Ordering</h6>
+        <h6 class="text-muted small text-uppercase fw-bold mb-2">Powiązanie i kolejność</h6>
     </div>
 
     <div class="col-12 col-md-4">
-        <label class="form-label">Parent Type (Optional)</label>
+        <label class="form-label">Typ powiązania (opcjonalnie)</label>
         <select name="parent_type" id="parentTypeSelect" class="form-select @error('parent_type') is-invalid @enderror">
-            <option value="">Unattached (Media Library)</option>
-            <option value="animal" @selected($currentParentType === 'animal')>Animal</option>
-            <option value="post" @selected($currentParentType === 'post')>Post (Blog)</option>
-            <option value="user" @selected($currentParentType === 'user')>User</option>
+            <option value="">Nieprzypisany (Biblioteka mediów)</option>
+            <option value="animal" @selected($currentParentType === 'animal')>Kot</option>
+            <option value="post" @selected($currentParentType === 'post')>Wpis (Blog)</option>
+            <option value="user" @selected($currentParentType === 'user')>Użytkownik</option>
         </select>
         @error('parent_type')
             <div class="invalid-feedback">{{ $message }}</div>
@@ -159,26 +159,26 @@
     </div>
 
     <div class="col-12 col-md-4">
-        <label class="form-label">Parent Record</label>
+        <label class="form-label">Przypisany obiekt</label>
         <select name="parent_id" id="parentIdSelect" class="form-select @error('parent_id') is-invalid @enderror">
-            <option value="">No parent selected</option>
+            <option value="">Brak powiązania</option>
 
             @if($currentParentType === 'animal' && isset($animals))
                 @foreach($animals as $animal)
                     <option value="{{ $animal->id }}" @selected((string) $currentParentId === (string) $animal->id)>
-                        Animal #{{ $animal->id }} - {{ $animal->name }}
+                        Kot #{{ $animal->id }} - {{ $animal->name }}
                     </option>
                 @endforeach
             @elseif($currentParentType === 'post' && isset($posts))
                 @foreach($posts as $post)
                     <option value="{{ $post->id }}" @selected((string) $currentParentId === (string) $post->id)>
-                        Post #{{ $post->id }} - {{ $post->title }}
+                        Wpis #{{ $post->id }} - {{ $post->title }}
                     </option>
                 @endforeach
             @elseif($currentParentType === 'user' && isset($users))
                 @foreach($users as $user)
                     <option value="{{ $user->id }}" @selected((string) $currentParentId === (string) $user->id)>
-                        User #{{ $user->id }} - {{ $user->name }}
+                        Użytkownik #{{ $user->id }} - {{ $user->name }}
                     </option>
                 @endforeach
             @endif
@@ -189,7 +189,7 @@
     </div>
 
     <div class="col-6 col-md-2">
-        <label class="form-label">Sort Order</label>
+        <label class="form-label">Kolejność</label>
         <input
             type="number"
             name="sort_order"
@@ -213,18 +213,18 @@
                 @checked(old('is_featured', $media?->is_featured ?? false))
             >
             <label class="form-check-label fw-semibold" for="isFeaturedCheck">
-                Featured
+                Wyróżnione
             </label>
         </div>
     </div>
 
     <div class="col-12 mt-4 pt-3 border-top d-flex justify-content-between">
         <a href="{{ route('backend.media.index') }}" class="btn btn-outline-secondary">
-            <i class="fas fa-arrow-left me-1"></i> Cancel
+            <i class="fas fa-arrow-left me-1"></i> Anuluj
         </a>
 
         <button type="submit" class="btn btn-primary px-4">
-            <i class="fas fa-save me-1"></i> {{ $submitLabel ?? 'Save Media' }}
+            <i class="fas fa-save me-1"></i> {{ $submitLabel ?? 'Zapisz media' }}
         </button>
     </div>
 </div>

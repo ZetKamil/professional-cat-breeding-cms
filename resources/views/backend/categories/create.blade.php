@@ -1,11 +1,11 @@
-<x-backend.shell title="Create category">
+<x-backend.shell title="Dodaj kategorię">
 
-    <x-backend.page-header title="Create category">
+    <x-backend.page-header title="Dodaj nową kategorię">
 
         <x-backend.card>
             <div class="card-header">
                 <i class="fas fa-folder-plus me-1"></i>
-                New category
+                Nowa kategoria
             </div>
 
             <div class="card-body">
@@ -14,7 +14,7 @@
 
                     @include('backend.categories.partials.form', [
                         'category' => null,
-                        'submitLabel' => 'Create category',
+                        'submitLabel' => 'Dodaj kategorię',
                     ])
                 </form>
             </div>
