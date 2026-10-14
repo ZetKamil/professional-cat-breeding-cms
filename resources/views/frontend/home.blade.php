@@ -54,45 +54,18 @@
 
                     <div class="hero-split__right">
                         <div class="hero-split__frame">
-                            <div id="hero-cat-bars" class="hero-cat-slide" style="width: 100%; height: 100%;">
-                                <x-frontend.picture
-                                    src="{{ asset('image/hero/bars_studio.jpg') }}"
-                                    alt="Bars – kot bengalski z rodowodem, reproduktor hodowli Mazowiecka Szwajcaria"
-                                    class="hero-split__image"
-                                    width="1000"
-                                    height="750"
-                                    loading="eager"
-                                    decoding="async"
-                                    fetchpriority="high"
-                                    sizes="(max-width: 768px) 100vw, 50vw"
-                                    webp-widths="400,800,1200"
-                                />
-                            </div>
-                            <div id="hero-cat-stas" class="hero-cat-slide" style="display: none; width: 100%; height: 100%;">
-                                <x-frontend.picture
-                                    src="{{ asset('image/hero/stas_studio.jpg') }}"
-                                    alt="Staś – kocur brytyjski z rodowodem, reproduktor hodowli Mazowiecka Szwajcaria"
-                                    class="hero-split__image"
-                                    width="1000"
-                                    height="750"
-                                    loading="lazy"
-                                    decoding="async"
-                                    sizes="(max-width: 768px) 100vw, 50vw"
-                                    webp-widths="400,800,1200"
-                                />
-                            </div>
-                        </div>
-
-                        {{-- Stud Switcher Bar --}}
-                        <div class="hero-split__switcher" role="tablist" aria-label="Wybierz kota w ramce">
-                            <button type="button" id="btn-hero-bars" class="hero-switcher-pill hero-switcher-pill--active" onclick="switchHeroCat('bars')" role="tab" aria-selected="true" aria-controls="hero-cat-bars">
-                                <span class="hero-switcher-pill__dot hero-switcher-pill__dot--bengal" aria-hidden="true"></span>
-                                Kot Bengalski · Bars
-                            </button>
-                            <button type="button" id="btn-hero-stas" class="hero-switcher-pill" onclick="switchHeroCat('stas')" role="tab" aria-selected="false" aria-controls="hero-cat-stas">
-                                <span class="hero-switcher-pill__dot hero-switcher-pill__dot--british" aria-hidden="true"></span>
-                                Kot Brytyjski · Staś
-                            </button>
+                            <x-frontend.picture
+                                src="{{ asset('image/hero/bars_studio.jpg') }}"
+                                alt="Bars – kot bengalski z rodowodem, reproduktor hodowli Mazowiecka Szwajcaria"
+                                class="hero-split__image"
+                                width="1000"
+                                height="750"
+                                loading="eager"
+                                decoding="async"
+                                fetchpriority="high"
+                                sizes="(max-width: 768px) 100vw, 50vw"
+                                webp-widths="400,800,1200"
+                            />
                         </div>
 
                         <div class="hero-split__seal" role="status" aria-label="Gwarancja zdrowia i genetyki">
@@ -393,21 +366,4 @@
     }
     </script>
     @endpush
-
-    <script>
-    function switchHeroCat(name) {
-        document.querySelectorAll('.hero-cat-slide').forEach(function(el) { el.style.display = 'none'; });
-        document.querySelectorAll('.hero-switcher-pill').forEach(function(btn) {
-            btn.classList.remove('hero-switcher-pill--active');
-            btn.setAttribute('aria-selected', 'false');
-        });
-        var target = document.getElementById('hero-cat-' + name);
-        var btn = document.getElementById('btn-hero-' + name);
-        if (target) target.style.display = 'block';
-        if (btn) {
-            btn.classList.add('hero-switcher-pill--active');
-            btn.setAttribute('aria-selected', 'true');
-        }
-    }
-    </script>
 </x-frontend.shell>
