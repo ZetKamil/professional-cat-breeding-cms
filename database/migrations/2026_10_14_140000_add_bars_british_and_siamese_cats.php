@@ -42,8 +42,6 @@ return new class extends Migration
                 true,
                 0
             );
-        } else {
-            $baltazar->update(['sort_order' => 40]);
         }
 
         $koko = Animal::where('slug', 'koko')->first();
@@ -72,8 +70,6 @@ return new class extends Migration
                 true,
                 0
             );
-        } else {
-            $koko->update(['sort_order' => 41]);
         }
 
         // ─────────────────────────────────────────────────────────────
@@ -123,8 +119,6 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
                 false,
                 2
             );
-        } else {
-            $bars->update(['sort_order' => 54]);
         }
 
         // ─────────────────────────────────────────────────────────────
@@ -206,8 +200,6 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
                     true,
                     0
                 );
-            } else {
-                $kitten->update(['sort_order' => $kData['sort_order']]);
             }
         }
 
@@ -250,8 +242,6 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
                 false,
                 1
             );
-        } else {
-            $nel->update(['sort_order' => 30]);
         }
 
         // ─────────────────────────────────────────────────────────────
@@ -277,8 +267,6 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
                 'published_at' => now(),
             ]);
             // Zdjęcia Atosa nie są dodawane (zgodnie z wytyczną: karta miotu wykluczona, a właściwe zdjęcia zostaną dodane w przyszłości)
-        } else {
-            $atos->update(['sort_order' => 32]);
         }
 
         // ─────────────────────────────────────────────────────────────
@@ -319,8 +307,6 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
                 false,
                 1
             );
-        } else {
-            $ada->update(['sort_order' => 1]);
         }
 
         // Alma
@@ -358,8 +344,6 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
                 false,
                 1
             );
-        } else {
-            $alma->update(['sort_order' => 2]);
         }
 
         // Atena
@@ -411,17 +395,7 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
                 false,
                 3
             );
-        } else {
-            $atena->update(['sort_order' => 3]);
         }
-
-        // ─────────────────────────────────────────────────────────────
-        // 7. HARMONIZACJA ISTNIEJĄCYCH KOTÓW WG STANDARDU HODOWLI:
-        //    20+ Koty w nowych domach | 40+ Syjamy hodowlane
-        // ─────────────────────────────────────────────────────────────
-        Animal::where('slug', 'barbie')->update(['sort_order' => 20]);
-        Animal::where('slug', 'nela-syjamska')->orWhere('slug', 'nela')->update(['sort_order' => 42]);
-        Animal::where('slug', 'bella-kociak')->update(['sort_order' => 5]);
     }
 
     public function down(): void
