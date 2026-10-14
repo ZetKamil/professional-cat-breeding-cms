@@ -102,6 +102,59 @@
     display: block;
 }
 
+.hero-split__switcher {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+    justify-content: flex-end;
+}
+
+.hero-switcher-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.hero-switcher-pill:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.24);
+}
+
+.hero-switcher-pill--active {
+    background: rgba(209, 171, 88, 0.18);
+    border-color: #d1ab58;
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 0 16px rgba(209, 171, 88, 0.22);
+}
+
+.hero-switcher-pill__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+}
+
+.hero-switcher-pill__dot--bengal {
+    background: #d1ab58;
+}
+
+.hero-switcher-pill__dot--british {
+    background: #7ea3cc;
+}
+
 .hero-split__seal {
     position: absolute;
     bottom: 24px;

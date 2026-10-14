@@ -57,8 +57,13 @@
 @php
     $widths         = array_filter(array_map('intval', explode(',', $webpWidths)));
     $isUnsplash     = str_contains($src, 'unsplash.com');
-    $isLocalStorage = str_contains($src, '/storage/') || str_starts_with($src, 'storage/');
-    $isExternal     = str_starts_with($src, 'http') && ! $isUnsplash && ! $isLocalStorage;
+    $isInternal     = ! str_starts_with($src, 'http')
+        || str_contains($src, (string) config('app.url'))
+        || str_contains($src, 'kotyzmazowieckiejszwajcarii.pl')
+        || str_contains($src, 'localhost')
+        || str_contains($src, '/storage/')
+        || str_contains($src, '/image/');
+    $isExternal     = ! $isUnsplash && ! $isInternal;
     $srcsetParts    = [];
 
     if ($isUnsplash) {
@@ -68,27 +73,29 @@
         foreach ($widths as $w) {
             $srcsetParts[] = $baseUrl . '?auto=format&fit=crop&fm=webp&w=' . $w . '&q=78 ' . $w . 'w';
         }
-        // Fallback src: original format, reasonable width
         $fallbackSrc = $src;
     } elseif (! $isExternal) {
-        // Local storage media — point to generated WebP derivatives.
-        // src is expected to be a full URL like /storage/media/file.jpg
-        // Derive path without extension.
-        $parsedPath  = parse_url($src, PHP_URL_PATH);
-        $info        = pathinfo($parsedPath);
-        $dirUrl      = rtrim($info['dirname'], '/');
-        $basename    = $info['filename'];
+        // Local asset / storage media — point to generated WebP derivatives.
+        $parsedPath   = (string) parse_url($src, PHP_URL_PATH);
+        $basePath     = trim((string) parse_url((string) config('app.url'), PHP_URL_PATH), '/');
+        $cleanPath    = ltrim($parsedPath, '/');
+        $relativePath = ($basePath !== '' && str_starts_with($cleanPath, $basePath . '/'))
+            ? substr($cleanPath, strlen($basePath) + 1)
+            : $cleanPath;
 
-        $relDir = ltrim($dirUrl, '/');
+        $info        = pathinfo($relativePath);
+        $dirUrl      = rtrim($info['dirname'] ?? '', '/.');
+        $basename    = $info['filename'] ?? '';
+
+        $relDir      = ($dirUrl !== '' && $dirUrl !== '.') ? ltrim($dirUrl, '/') : '';
         $mediaSubDir = preg_replace('#^storage/?#', '', $relDir);
 
         foreach ($widths as $w) {
-            $webpUrl = asset($relDir . '/' . $basename . '-' . $w . '.webp');
-            // Check existence either in public/storage or storage/app/public
-            $publicPath  = public_path($relDir . '/' . $basename . '-' . $w . '.webp');
-            $storagePath = storage_path('app/public/' . $mediaSubDir . '/' . $basename . '-' . $w . '.webp');
+            $webpRelPath = ($relDir !== '' ? $relDir . '/' : '') . $basename . '-' . $w . '.webp';
+            $publicPath  = public_path($webpRelPath);
+            $storagePath = storage_path('app/public/' . ($mediaSubDir !== '' ? $mediaSubDir . '/' : '') . $basename . '-' . $w . '.webp');
             if (file_exists($publicPath) || file_exists($storagePath)) {
-                $srcsetParts[] = $webpUrl . ' ' . $w . 'w';
+                $srcsetParts[] = asset($webpRelPath) . ' ' . $w . 'w';
             }
         }
         $fallbackSrc = $src;

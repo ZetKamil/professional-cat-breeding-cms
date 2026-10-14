@@ -1,13 +1,13 @@
 <x-frontend.shell title="Hodowla Kotów Rasowych z Rodowodem – Bengalskie, Brytyjskie, Syjamskie | Mazowiecka Szwajcaria"
     meta-description="Domowa hodowla kotów rasowych z rodowodem SHiOZ ZOOLANDIA (Certyfikat 58/CW/2025, Rej. 58/P/2025). Koty bengalskie, brytyjskie i syjamskie w Sikorzu k. Płocka (Mazowsze). Sprawdź dostępne kocięta!"
-    og-image="{{ asset('storage/media/hero_bars_studio.jpg') }}">
+    og-image="{{ asset('image/hero/bars_studio.jpg') }}">
     {{-- ============================================================
     1. CINEMATIC ASYMMETRIC HERO — ROLLS ROYCE / APPLE STYLE
     ============================================================ --}}
     <section class="hero hero--dark" aria-label="Wprowadzenie i filozofia hodowli" data-nav-theme="dark">
         <div class="hero__bg" aria-hidden="true">
             <x-frontend.picture
-                src="{{ asset('storage/media/hero_cinematic_bg.jpg') }}"
+                src="{{ asset('image/hero/cinematic_bg.jpg') }}"
                 alt=""
                 width="1600"
                 height="900"
@@ -54,19 +54,47 @@
 
                     <div class="hero-split__right">
                         <div class="hero-split__frame">
-                            <x-frontend.picture
-                                src="{{ asset('storage/media/hero_bars_studio.jpg') }}"
-                                alt="Bars – kot bengalski z rodowodem, reproduktor hodowli Mazowiecka Szwajcaria"
-                                class="hero-split__image"
-                                width="1000"
-                                height="750"
-                                loading="eager"
-                                decoding="async"
-                                fetchpriority="high"
-                                sizes="(max-width: 768px) 100vw, 50vw"
-                                webp-widths="400,800,1200"
-                            />
+                            <div id="hero-cat-bars" class="hero-cat-slide" style="width: 100%; height: 100%;">
+                                <x-frontend.picture
+                                    src="{{ asset('image/hero/bars_studio.jpg') }}"
+                                    alt="Bars – kot bengalski z rodowodem, reproduktor hodowli Mazowiecka Szwajcaria"
+                                    class="hero-split__image"
+                                    width="1000"
+                                    height="750"
+                                    loading="eager"
+                                    decoding="async"
+                                    fetchpriority="high"
+                                    sizes="(max-width: 768px) 100vw, 50vw"
+                                    webp-widths="400,800,1200"
+                                />
+                            </div>
+                            <div id="hero-cat-stas" class="hero-cat-slide" style="display: none; width: 100%; height: 100%;">
+                                <x-frontend.picture
+                                    src="{{ asset('image/hero/stas_studio.jpg') }}"
+                                    alt="Staś – kocur brytyjski z rodowodem, reproduktor hodowli Mazowiecka Szwajcaria"
+                                    class="hero-split__image"
+                                    width="1000"
+                                    height="750"
+                                    loading="lazy"
+                                    decoding="async"
+                                    sizes="(max-width: 768px) 100vw, 50vw"
+                                    webp-widths="400,800,1200"
+                                />
+                            </div>
                         </div>
+
+                        {{-- Stud Switcher Bar --}}
+                        <div class="hero-split__switcher" role="tablist" aria-label="Wybierz kota w ramce">
+                            <button type="button" id="btn-hero-bars" class="hero-switcher-pill hero-switcher-pill--active" onclick="switchHeroCat('bars')" role="tab" aria-selected="true" aria-controls="hero-cat-bars">
+                                <span class="hero-switcher-pill__dot hero-switcher-pill__dot--bengal" aria-hidden="true"></span>
+                                Kot Bengalski · Bars
+                            </button>
+                            <button type="button" id="btn-hero-stas" class="hero-switcher-pill" onclick="switchHeroCat('stas')" role="tab" aria-selected="false" aria-controls="hero-cat-stas">
+                                <span class="hero-switcher-pill__dot hero-switcher-pill__dot--british" aria-hidden="true"></span>
+                                Kot Brytyjski · Staś
+                            </button>
+                        </div>
+
                         <div class="hero-split__seal" role="status" aria-label="Gwarancja zdrowia i genetyki">
                             <i data-lucide="award" class="w-5 h-5 text-primary" aria-hidden="true"></i>
                             <div>
@@ -289,38 +317,38 @@
                 <div class="daily-life__gallery" role="group" aria-label="Codzienne życie hodowli">
                     <div class="daily-life__image-wrap daily-life__image-wrap--main">
                         <x-frontend.picture
-                            src="https://images.unsplash.com/photo-1548247416-ec66f4900b2e?auto=format&fit=crop&w=800&q=80"
-                            alt="Codzienna socjalizacja w hodowli"
+                            src="{{ asset('image/hero/stas_studio.jpg') }}"
+                            alt="Staś – kocur brytyjski (BLH a 33), reproduktor hodowli Mazowiecka Szwajcaria"
                             width="800"
                             height="800"
                             decoding="async"
                             loading="lazy"
                             sizes="(max-width: 768px) 100vw, 350px"
-                            webp-widths="350,700"
+                            webp-widths="400,800"
                         />
                     </div>
                     <div class="daily-life__image-wrap daily-life__image-wrap--sub1">
                         <x-frontend.picture
-                            src="https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?auto=format&fit=crop&w=600&q=80"
-                            alt="Rozwój kociąt w domowym otoczeniu"
+                            src="{{ asset('image/hero/baltazar_studio.jpg') }}"
+                            alt="Baltazar – kot syjamski seal point, reproduktor hodowli Mazowiecka Szwajcaria"
                             width="600"
                             height="600"
                             decoding="async"
                             loading="lazy"
                             sizes="(max-width: 768px) 50vw, 200px"
-                            webp-widths="200,400"
+                            webp-widths="400"
                         />
                     </div>
                     <div class="daily-life__image-wrap daily-life__image-wrap--sub2">
                         <x-frontend.picture
-                            src="https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?auto=format&fit=crop&w=600&q=80"
-                            alt="Zabawa i relacje z kotami"
+                            src="{{ asset('image/hero/bars_studio.jpg') }}"
+                            alt="Bars – kot bengalski z rodowodem, reproduktor hodowli Mazowiecka Szwajcaria"
                             width="600"
                             height="600"
                             decoding="async"
                             loading="lazy"
                             sizes="(max-width: 768px) 50vw, 200px"
-                            webp-widths="200,400"
+                            webp-widths="400"
                         />
                     </div>
                 </div>
@@ -346,7 +374,7 @@
       "@@type": "LocalBusiness",
       "name": "Hodowla Kotów z Mazowieckiej Szwajcarii",
       "description": "Domowa hodowla kotów rasowych z Mazowieckiej Szwajcarii (Sikórz k. Płocka). Członek SHiOZ ZOOLANDIA (Certyfikat: 58/CW/2025, Rejestracja: 58/P/2025). Koty bengalskie, brytyjskie i syjamskie z rodowodem, po przebadanych rodzicach.",
-      "image": "{{ asset('storage/media/parent_bella_1.jpg') }}",
+      "image": "{{ asset('image/hero/bars_studio.jpg') }}",
       "logo": "{{ asset('logo.png') }}",
       "url": "https://kotyzmazowieckiejszwajcarii.pl/",
       "telephone": "+48514153204",
@@ -366,4 +394,20 @@
     </script>
     @endpush
 
+    <script>
+    function switchHeroCat(name) {
+        document.querySelectorAll('.hero-cat-slide').forEach(function(el) { el.style.display = 'none'; });
+        document.querySelectorAll('.hero-switcher-pill').forEach(function(btn) {
+            btn.classList.remove('hero-switcher-pill--active');
+            btn.setAttribute('aria-selected', 'false');
+        });
+        var target = document.getElementById('hero-cat-' + name);
+        var btn = document.getElementById('btn-hero-' + name);
+        if (target) target.style.display = 'block';
+        if (btn) {
+            btn.classList.add('hero-switcher-pill--active');
+            btn.setAttribute('aria-selected', 'true');
+        }
+    }
+    </script>
 </x-frontend.shell>
