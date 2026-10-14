@@ -278,7 +278,7 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
         }
 
         // ─────────────────────────────────────────────────────────────
-        // 5. ATOS (Brytyjczyk, duży - profil bez zdjęć wg polecenia; Staś 31, Nel 32, więc Atos ma 33)
+        // 5. ATOS (Brytyjczyk, duży kocur - nie jest dzieckiem Nel i Stasia; Staś 31, Nel 32, więc Atos ma 33)
         // ─────────────────────────────────────────────────────────────
         $atos = Animal::where('slug', 'atos')->orWhere('name', 'Atos')->first();
         if (! $atos) {
@@ -290,19 +290,25 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
                 'gender' => AnimalGender::Male,
                 'status' => AnimalStatus::Breeding,
                 'type' => AnimalType::Cat,
-                'date_of_birth' => Carbon::create(2026, 9, 9),
-                'mother_id' => $nel?->id,
-                'father_id' => $stas?->id,
+                'date_of_birth' => Carbon::create(2024, 9, 9),
+                'mother_id' => null,
+                'father_id' => null,
                 'short_description' => 'Dostojny kocur rasy Kot Brytyjski Długowłosy o szlachetnym umaszczeniu colourpoint niebieski (BLH a 33).',
-                'description' => 'Atos to wyjątkowy kocur rasy Kot Brytyjski Długowłosy (British Longhair – BLH a 33) o jasnej szacie ze szlachetnymi niebieskimi znaczeniami i szafirowym spojrzeniu. Charakteryzuje się mocną, masywną budową ciała, gęstym podszerstkiem i oazą spokoju w usposobieniu. Syn naszej kotki Nel. Zarejestrowany w SHiOZ ZOOLANDIA.',
+                'description' => 'Atos to wyjątkowy kocur rasy Kot Brytyjski Długowłosy (British Longhair – BLH a 33) o jasnej szacie ze szlachetnymi niebieskimi znaczeniami i szafirowym spojrzeniu. Charakteryzuje się mocną, masywną budową ciała, gęstym podszerstkiem i oazą spokoju w usposobieniu. Zarejestrowany w SHiOZ ZOOLANDIA.',
                 'sort_order' => 33,
                 'is_featured' => true,
                 'is_published' => true,
                 'published_at' => now(),
             ]);
             // Zdjęcia Atosa nie są dodawane (zgodnie z wytyczną: karta miotu wykluczona, a właściwe zdjęcia zostaną dodane w przyszłości)
-        } elseif (! $atos->father_id && $stas) {
-            $atos->update(['father_id' => $stas->id]);
+        } else {
+            // Upewniamy się, że Atos nie ma przypisanych rodziców Nel ani Stasia
+            if ($atos->mother_id !== null || $atos->father_id !== null) {
+                $atos->update([
+                    'mother_id' => null,
+                    'father_id' => null,
+                ]);
+            }
         }
 
         // ─────────────────────────────────────────────────────────────
