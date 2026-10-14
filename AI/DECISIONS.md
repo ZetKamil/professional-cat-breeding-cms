@@ -584,3 +584,86 @@ Accepted
 The project should become one of the best open-source Laravel CMS examples focused on luxury branding, clean architecture and premium frontend experience.
 
 Every implementation should move toward this vision.
+
+---
+
+# Decision 026
+
+## Production Database Integrity & Zero-Overwrite Policy
+
+Status:
+Accepted
+
+Date:
+2026-10-14
+
+The live production database on the hosting server is the ultimate single source of truth for all animals, blog content, custom descriptions, photos, and sort orders edited by the breeder.
+
+1. **Seeders Are Local Only:**
+   Seeders (e.g. `RealKittensAndParentsSeeder.php`, `DatabaseSeeder.php`) must NEVER be executed on the production hosting. They exist solely for fresh local development setups.
+
+2. **Insert-Only Migrations:**
+   All migrations introducing new animals or content must be strictly insert-only:
+   - Always verify if a record exists (`if (! Animal::where(...)->exists())`).
+   - If a record exists, leave it 100% untouched.
+   - NEVER execute `->update()` or delete pre-existing records in migrations.
+
+3. **Safe Deployment Procedure:**
+   Deployment is executed via:
+   - `git push origin main`
+   - Accessing `/deploy-sync` in browser.
+   - `/deploy-sync` executes only: `git pull`, `artisan migrate --force`, and `artisan optimize:clear`. Blog asset import is disabled by default to protect CMS dashboard edits.
+
+---
+
+# Decision 027
+
+## Animal Sort Order Hierarchy
+
+Status:
+Accepted
+
+Date:
+2026-10-14
+
+To ensure deterministic, clean sorting and eliminate manual order management, all animals follow a standardized global numbering scheme:
+
+- **1–19:** Kocięta do rezerwacji / dostępne (*Available / Reserved*)
+- **20–29:** Koty w nowych domach (*Sold / Alumni*)
+- **31–39:** Dorosłe koty hodowlane rasy Kot Brytyjski (*Breeding*) [Staś 31, Nel 32, Atos 33]
+- **41–49:** Dorosłe koty hodowlane rasy Kot Syjamski (*Breeding*) [Baltazar 41, Nela 42, Koko 43]
+- **51–59:** Dorosłe koty hodowlane rasy Kot Bengalski (*Breeding*) [Bella 51, Luki 52, Luna 53, Nel 54, Bars 55]
+
+Automated assignment is handled natively by `Animal::nextSortOrderFor($status, $breed)`.
+
+---
+
+# Decision 028
+
+## Dual Table Pagination Standard
+
+Status:
+Accepted
+
+Date:
+2026-10-14
+
+For maximum accessibility and seamless administrative workflow:
+- All data tables across the CMS Backend (Animals, Posts, Media, Categories, Users, Roles) and frontend catalogs (Animals, Blog) must render pagination links **both at the top and at the bottom** of the table/grid.
+- Users must never be forced to scroll down long lists just to switch pages.
+
+---
+
+# Decision 029
+
+## Complete Polish Localization for CMS & Frontend
+
+Status:
+Accepted
+
+Date:
+2026-10-14
+
+1. **Frontend:** 100% Polish editorial copy, canonical Polish URLs (`/kontakt`, `/o-nas`, `/blog`, `/koty`).
+2. **Backend CMS:** 100% Polish interface (navigation, sidebars, form labels, tooltips, validation messages) tailored for non-technical breeders.
+3. **Codebase:** 100% clean English (PHP class names, methods, database columns, architectural patterns).

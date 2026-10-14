@@ -246,6 +246,29 @@ AnimalType
 
 ---
 
+Cattery Specialization (Core Breeds)
+
+1. Kot Bengalski (Bengal)
+- Breeding Studs & Queens: Bella (51), Luki (52), Luna (53), Nel (54), Bars (55)
+- Characteristics: Kontrastowe rozety, srebrzysty / brązowy cętkowany (BEN ns 24 / BEN n 24)
+
+2. Kot Brytyjski (British Shorthair & Longhair)
+- Breeding Studs & Queens: Staś (31), Nel (32), Atos (33)
+- Characteristics: Krótkowłose klasyczne niebieskie (BSH a) oraz długowłose colourpoint (BLH a 33)
+
+3. Kot Syjamski (Siamese)
+- Breeding Studs & Queens: Baltazar (41), Nela (42), Koko (43)
+- Characteristics: Klasyczny Seal Point oraz Blue Point, szafirowe oczy
+
+Sort Order Numbering Hierarchy (Automated via Animal::nextSortOrderFor)
+- 1–19: Kocięta do rezerwacji / dostępne (Available / Reserved)
+- 20–29: Koty w nowych domach (Sold / Alumni)
+- 31–39: Brytyjczyki hodowlane (Breeding)
+- 41–49: Syjamy hodowlane (Breeding)
+- 51–59: Bengale hodowlane (Breeding)
+
+---
+
 Actions
 
 CreateAnimalAction

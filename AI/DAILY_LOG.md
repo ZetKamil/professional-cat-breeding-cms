@@ -4,6 +4,27 @@
 
 ### Completed
 
+✓ Pełna synchronizacja dokumentacji AI i zasad bezpiecznej pracy z produkcją (`docs(ai)`, `feat(db)`)
+  - **Zero Overwrite Policy & Bezpieczeństwo Danych Produkcyjnych:**
+    - Dodano oficjalne zasady w `DECISIONS.md` (Decision 026) oraz `RULES.md` (Sekcja 15): baza produkcyjna na hostingu jest jedynym źródłem prawdy dla kotów, treści i kolejności.
+    - Zakaz uruchamiania seederów (`RealKittensAndParentsSeeder.php`, `DatabaseSeeder.php`) na serwerze produkcyjnym (wyłącznie lokalny dev).
+    - Wszystkie migracje muszą być ściśle typu *insert-only* z warunkiem `if (! Animal::where(...)->exists())` i zerem `update()`.
+    - Bezpieczna procedura wdrożeń: `git push origin main` -> wywołanie `/deploy-sync` (automatyczny git pull, bezpieczne migracje i optimize:clear).
+  - **Standaryzacja hierarchii `sort_order` w dokumentacji:**
+    - 1–19: Kocięta do rezerwacji / dostępne (Available / Reserved)
+    - 20–29: Koty w nowych domach (Sold / Alumni)
+    - 31–39: Koty hodowlane rasy Kot Brytyjski (Breeding) [Staś 31, Nel 32, Atos 33]
+    - 41–49: Koty hodowlane rasy Kot Syjamski (Breeding) [Baltazar 41, Nela 42, Koko 43]
+    - 51–59: Koty hodowlane rasy Kot Bengalski (Breeding) [Bella 51, Luki 52, Luna 53, Nel 54, Bars 55]
+    - Automatyczne wyliczanie za pomocą `Animal::nextSortOrderFor($status, $breed)`.
+  - **Podwójna paginacja (góra i dół) w standardach UI:**
+    - Wdrożono przyciski stronicowania na górze i na dole każdej tabeli w panelu CMS (Animals, Posts, Media, Categories, Users, Roles) oraz na publicznych katalogach (Koty, Blog).
+    - Zapisano jako obligatoryjny standard w `DECISIONS.md` (Decision 028) oraz `RULES.md` (Sekcja 15.4).
+  - **Synchronizacja statusu w `SPRINTS.md` i `CLAUDE.md`:**
+    - Zaktualizowano `SPRINTS.md`: Sprinty 0 do 7 oznaczone jako w 100% zrealizowane (Wydanie produkcyjne, SEO, polskie URL, bezpieczeństwo).
+    - Zaktualizowano `CLAUDE.md`: priorytet czytania plików sesji oraz bezpośrednia widoczność polityki Zero Overwrite.
+    - Zaktualizowano `DOMAINS.md`: szczegółowe wytyczne dla 3 głównych ras hodowli (Bengale, Brytyjczyki, Syjamy).
+
 ✓ Utworzenie profili i rejestracja mediów dla nowych kotów: Bengal Bars, 4 małe syjamy, 3 maluchy brytyjskie i reproduktor Atos (`feat(animals)`, `feat(media)`)
   - **Bengal Bars (Reproduktor):**
     - Dodano profil reproduktora rasy Kot Bengalski (`bars`, `AnimalGender::Male`, `AnimalStatus::Breeding`, sort_order: 12).
