@@ -247,3 +247,23 @@ Implemented the **Media Library CMS Module** (`dev` branch) as the foundational 
    - Developed reusable modal picker (`resources/views/components/backend/media-picker.blade.php`) allowing any backend form (Animals, Blog, Homepage Builder) to select library images or upload new ones without leaving the form.
 6. **Integration Testing (`tests/Feature/Backend/MediaLibraryTest.php`)**:
    - Added comprehensive feature tests covering single/multiple uploads, grid/list rendering, API JSON endpoint (`/admin/media?json=1`), media replacement, and deletion. All 46 tests pass.
+
+---
+
+## 2026-10-14 — Sprint: Production Database Alignment & Dual Table Pagination
+
+### Context
+Synchronized codebase with live production database state (21 animals across 3 pages) without touching, updating, or overwriting manual edits made directly on the production server.
+
+### Technical Implementation
+1. **Zero-Overwrite Insert Migration (`2026_10_14_140000_add_bars_british_and_siamese_cats.php`)**:
+   - Fully insert-only migration: existing production records (Baltazar #41, Koko #43, British Nel #32, etc.) are matched safely by slug/name and left 100% untouched.
+   - Aligned Bengal breeding sequence: Bella (51), Luki (52), Luna (53), Bengal Nel (54 per user production state) -> new stud **Bars assigned #55**.
+   - Aligned British breeding sequence: Staś (31), British Nel (32) -> new stud **Atos assigned #33**.
+   - Assigned Siamese kittens (Miot D: Dafne 7, Daisy 8, Dakota 9, Diana 10) and British kittens (Miot A: Ada 12, Alma 13, Atena 14) into open slots (1-19) with zero collisions against existing kittens (Baron 2, Carmen 3, Cyprian 4, Carlos 5, Conan 6, Bounty 11).
+2. **Dual Pagination (Top & Bottom)**:
+   - Added pagination above and below tables across all backend views (animals, posts, media, categories, users, roles) and frontend catalogs (animals, blog).
+3. **Automated `sort_order` Assignment**:
+   - Refined `Animal::nextSortOrderFor()` to auto-increment within standard breeding pools (British 31+, Siamese 41+, Bengals 51+), sold pool (20-29), and kittens (1-19).
+4. **Testing**:
+   - 100% passing test suite (125 tests, 705 assertions).
