@@ -60,7 +60,7 @@
                             />
                         @else
                             <x-frontend.picture
-                                src="https://images.unsplash.com/photo-1543852786-1cf6624b9987?auto=format&fit=crop&w=1200&q=80"
+                                src="{{ asset('image/hero/bars_studio.jpg') }}"
                                 :alt="$animal->name . ' (Zdjęcie poglądowe)'"
                                 class="animal-profile__main-image"
                                 id="animal-main-photo"

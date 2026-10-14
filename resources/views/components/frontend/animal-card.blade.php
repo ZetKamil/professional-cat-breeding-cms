@@ -19,7 +19,7 @@
                 />
             @else
                 <x-frontend.picture
-                    src="https://images.unsplash.com/photo-1543852786-1cf6624b9987?auto=format&fit=crop&w=800&q=80"
+                    src="{{ asset('image/hero/bars_studio.jpg') }}"
                     :alt="$animal->name . ' — ' . $animal->breed . ' (zdjęcie poglądowe)'"
                     width="800"
                     height="600"

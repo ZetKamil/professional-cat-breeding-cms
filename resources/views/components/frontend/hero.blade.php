@@ -15,7 +15,7 @@
     'title',
     'eyebrow' => null,
     'lead' => null,
-    'imageUrl' => 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=2000&q=80',
+    'imageUrl' => null,
     'imageAlt' => 'Piękny kot rasowy w hodowli',
     'scrollTarget' => '#o-nas',
     'align' => 'left',
@@ -25,21 +25,23 @@
 @php
     $alignClass = $align === 'center' ? 'hero--center' : 'hero--left';
     $sizeClass = $size === 'large' ? 'hero--large' : 'hero--full';
+    $resolvedImageUrl = $imageUrl ?: asset('image/hero/cinematic_bg.jpg');
 @endphp
 
 <section {{ $attributes->merge(['class' => "hero {$alignClass} {$sizeClass}", 'data-nav-theme' => 'dark']) }} aria-label="Powitanie">
     {{-- Background Photography --}}
     <div class="hero__bg">
-        <img 
-            src="{{ $imageUrl }}" 
-            alt="{{ $imageAlt }}"
+        <x-frontend.picture 
+            :src="$resolvedImageUrl" 
+            :alt="$imageAlt"
             class="hero__image"
             width="2000"
             height="1200"
             decoding="async"
             loading="eager"
             fetchpriority="high"
-        >
+            sizes="100vw"
+        />
         <div class="hero__overlay" aria-hidden="true"></div>
         <div class="hero__vignette" aria-hidden="true"></div>
     </div>

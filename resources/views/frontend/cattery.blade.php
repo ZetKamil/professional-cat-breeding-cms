@@ -1,13 +1,13 @@
 <x-frontend.shell title="O Hodowli — Standardy, Filozofia i Kodeks Zaufania | Hodowla Kotów z Mazowieckiej Szwajcarii"
     meta-description="Poznaj standardy hodowli kotów z Mazowieckiej Szwajcarii (SHiOZ ZOOLANDIA). Badania kardiologiczne i genetyczne rodziców, etyczna domowa socjalizacja i jasny proces zakupu kocięcia."
-    og-image="{{ asset('storage/media/parent_luki_1.jpg') }}">
+    og-image="{{ asset('image/cattery/hero_bg.jpg') }}">
     {{-- ============================================================
     1. HERO — Editorial, photography-first
     ============================================================ --}}
     <x-frontend.hero eyebrow="Felinologia i Standardy" title="O Hodowli.<br>Bezkompromisowa Etyka."
         lead="Poznaj naszą filozofię opieki, Kodeks Zaufania oraz jasny, przejrzysty proces zakupu i dołączenia kocięcia do Twojego domu."
-        image-url="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=2000&q=80"
-        image-alt="Kot bengalski w naturalnym oświetleniu" scroll-target="#filozofia" size="large"
+        image-url="{{ asset('image/cattery/hero_bg.jpg') }}"
+        image-alt="Arystokratyczny kot brytyjski długowłosy colourpoint w eleganckim wnętrzu hodowli" scroll-target="#filozofia" size="large"
         data-nav-theme="dark" />
 
     {{-- ============================================================
@@ -57,8 +57,15 @@
 
                 <div class="manifesto__visual">
                     <div class="manifesto__portrait">
-                        <img src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=800&q=80"
-                            alt="Kot w domowym otoczeniu" width="800" height="1066" decoding="async" loading="lazy">
+                        <x-frontend.picture 
+                            src="{{ asset('image/cattery/manifesto_portrait.jpg') }}"
+                            alt="Kot bengalski w luksusowym, domowym otoczeniu hodowli" 
+                            width="800" 
+                            height="1066" 
+                            decoding="async" 
+                            loading="lazy"
+                            sizes="(max-width: 768px) 100vw, 400px"
+                        />
                     </div>
                     <div class="manifesto__stat-card" aria-label="Certyfikacja SHiOZ ZOOLANDIA">
                         <div class="manifesto__stat-number" style="font-size: 1.5rem; letter-spacing: 0.05em;">SHiOZ</div>

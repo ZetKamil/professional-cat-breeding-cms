@@ -1,7 +1,7 @@
 <x-frontend.shell
     title="O Nas — Pasja, Certyfikaty i Domowa Socjalizacja | Hodowla Kotów z Mazowieckiej Szwajcarii"
     meta-description="Poznaj naszą hodowlę kotów rasowych w Sikorzu k. Płocka. Członek SHiOZ ZOOLANDIA (Certyfikat 58/CW/2025, Rej. 58/P/2025). Opieka weterynaryjna, badania rodziców i domowa socjalizacja."
-    og-image="{{ asset('storage/media/parent_bella_1.jpg') }}"
+    og-image="{{ asset('image/about/hero_bg.jpg') }}"
 >
     {{-- ============================================================
          1. HERO — Editorial, photography-first
@@ -10,8 +10,8 @@
         eyebrow="Nasza Historia"
         title="Hodowla z pasją<br>i pełną troską."
         lead="Każdy kot, który opuszcza naszą hodowlę, niesie ze sobą doświadczenie, miłość i bezkompromisową troskę o zdrowie i rozwój."
-        image-url="https://images.unsplash.com/photo-1599839619722-39751411ea63?auto=format&fit=crop&w=2000&q=80"
-        image-alt="Spokojny kot w promieniach słońca"
+        image-url="{{ asset('image/about/hero_bg.jpg') }}"
+        image-alt="Ciepła i jasna przestrzeń domowa hodowli kotów rasowych z kotem bengalskim"
         scroll-target="#nasza-filozofia"
         size="large"
         data-nav-theme="dark"
@@ -46,15 +46,16 @@
                 </div>
             </div>
             <div class="about-story__image-wrapper">
-                <img 
-                    src="https://images.unsplash.com/photo-1543852786-1cf6624b9987?auto=format&fit=crop&w=1000&q=80" 
-                    alt="Kot i właściciel"
+                <x-frontend.picture 
+                    src="{{ asset('image/about/story_care.jpg') }}" 
+                    alt="Opieka i czułość w hodowli — hodowca z kociakiem brytyjskim colourpoint"
                     class="about-story__image"
                     width="1000"
-                    height="1250"
+                    height="1333"
                     decoding="async"
                     loading="lazy"
-                >
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                />
             </div>
         </div>
     </x-frontend.section>
@@ -144,13 +145,37 @@
 
         <div class="gallery-grid">
             <div class="gallery-item gallery-item--large">
-                <img src="https://images.unsplash.com/photo-1548247416-ec66f4900b2e?auto=format&fit=crop&w=800&q=80" alt="Spokojny kot rasowy odpoczywający w domowym zaciszu hodowli" width="800" height="800" decoding="async" loading="lazy">
+                <x-frontend.picture 
+                    src="{{ asset('image/hero/stas_studio.jpg') }}" 
+                    alt="Nasz arystokratyczny reproduktor Staś — kot brytyjski długowłosy colourpoint" 
+                    width="1200" 
+                    height="896" 
+                    decoding="async" 
+                    loading="lazy"
+                    sizes="(max-width: 768px) 100vw, 66vw"
+                />
             </div>
             <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?auto=format&fit=crop&w=600&q=80" alt="Młody kociak poznający otoczenie podczas procesu wczesnej socjalizacji w hodowli" width="600" height="600" decoding="async" loading="lazy">
+                <x-frontend.picture 
+                    src="{{ asset('image/hero/bars_studio.jpg') }}" 
+                    alt="Nasz reproduktor Bars — kot bengalski o umaszczeniu silver rosetted" 
+                    width="1200" 
+                    height="896" 
+                    decoding="async" 
+                    loading="lazy"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                />
             </div>
             <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1526336024174-e58f5cdd8e13?auto=format&fit=crop&w=600&q=80" alt="Bawiący się dorosły kot w trakcie stymulacji behawioralnej zapewniającej zrównoważony rozwój" width="600" height="600" decoding="async" loading="lazy">
+                <x-frontend.picture 
+                    src="{{ asset('image/hero/baltazar_studio.jpg') }}" 
+                    alt="Nasz reproduktor Baltazar — dumny kot syjamski / tajski" 
+                    width="1200" 
+                    height="896" 
+                    decoding="async" 
+                    loading="lazy"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                />
             </div>
         </div>
 
