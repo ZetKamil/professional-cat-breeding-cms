@@ -55,10 +55,11 @@
 ])
 
 @php
-    $widths      = array_filter(array_map('intval', explode(',', $webpWidths)));
-    $isUnsplash  = str_contains($src, 'unsplash.com');
-    $isExternal  = str_starts_with($src, 'http') && ! $isUnsplash;
-    $srcsetParts = [];
+    $widths         = array_filter(array_map('intval', explode(',', $webpWidths)));
+    $isUnsplash     = str_contains($src, 'unsplash.com');
+    $isLocalStorage = str_contains($src, '/storage/') || str_starts_with($src, 'storage/');
+    $isExternal     = str_starts_with($src, 'http') && ! $isUnsplash && ! $isLocalStorage;
+    $srcsetParts    = [];
 
     if ($isUnsplash) {
         // Unsplash supports format conversion via URL params.

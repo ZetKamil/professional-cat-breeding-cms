@@ -1,14 +1,22 @@
 <x-frontend.shell title="Hodowla Kotów Rasowych z Rodowodem – Bengalskie, Brytyjskie, Syjamskie | Mazowiecka Szwajcaria"
     meta-description="Domowa hodowla kotów rasowych z rodowodem SHiOZ ZOOLANDIA (Certyfikat 58/CW/2025, Rej. 58/P/2025). Koty bengalskie, brytyjskie i syjamskie w Sikorzu k. Płocka (Mazowsze). Sprawdź dostępne kocięta!"
-    og-image="{{ asset('storage/media/parent_bella_1.jpg') }}">
+    og-image="{{ asset('storage/media/hero_bars_studio.jpg') }}">
     {{-- ============================================================
     1. CINEMATIC ASYMMETRIC HERO — ROLLS ROYCE / APPLE STYLE
     ============================================================ --}}
     <section class="hero hero--dark" aria-label="Wprowadzenie i filozofia hodowli" data-nav-theme="dark">
         <div class="hero__bg" aria-hidden="true">
-            <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&fm=webp&w=1400&q=75"
-                alt="" width="1400" height="935" decoding="async" loading="eager"
-                fetchpriority="high" class="hero__image opacity-25">
+            <x-frontend.picture
+                src="{{ asset('storage/media/hero_cinematic_bg.jpg') }}"
+                alt=""
+                width="1600"
+                height="900"
+                decoding="async"
+                loading="eager"
+                fetchpriority="high"
+                class="hero__image opacity-30"
+                webp-widths="400,800,1200"
+            />
             <div class="hero__overlay"></div>
         </div>
 
@@ -47,15 +55,16 @@
                     <div class="hero-split__right">
                         <div class="hero-split__frame">
                             <x-frontend.picture
-                                src="https://images.unsplash.com/photo-1543852786-1cf6624b9987?auto=format&fit=crop&w=1200&q=80"
-                                alt="Doskonałość rasy - kot bengalski"
+                                src="{{ asset('storage/media/hero_bars_studio.jpg') }}"
+                                alt="Bars – kot bengalski z rodowodem, reproduktor hodowli Mazowiecka Szwajcaria"
                                 class="hero-split__image"
                                 width="1000"
                                 height="750"
                                 loading="eager"
                                 decoding="async"
+                                fetchpriority="high"
                                 sizes="(max-width: 768px) 100vw, 50vw"
-                                webp-widths="600,900,1200"
+                                webp-widths="400,800,1200"
                             />
                         </div>
                         <div class="hero-split__seal" role="status" aria-label="Gwarancja zdrowia i genetyki">
