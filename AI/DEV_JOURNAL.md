@@ -2,6 +2,39 @@
 
 ---
 
+## 2026-10-14 — Animal Domain Expansion: Bengal Bars, Siamese & British Litters Media & Profiles (`feat(animals)`, `feat(media)`)
+
+### Context
+User provided new batches of cattery images in `image/`:
+1. Bengal stud cat **Bars** (reproduktor) with pedigree registration card (`karta kota.jpg`).
+2. Siamese litter D consisting of 4 kittens (**Dafne**, **Daisy**, **Dakota**, **Diana**) by parents **Baltazar** and **Koko** with litter card (`karta miotu.jpg`).
+3. British litter A with 3 kittens (**Ada**, **Alma**, **Atena**) and future breeding stud **Atos** (awaiting standalone photos).
+
+Strict instructions from user:
+- Never attach breeding or litter cards (`karta kota.jpg`, `karta miotu.jpg`, `kata miotu.jpg`) as public media.
+- Photos designated as `profilowe.jpg` (or designated main photo) must be set as `is_featured = true`.
+- Avoid destructive database re-syncs (`deploy-sync` / `check-media`) that could wipe or overwrite custom data.
+- Changes are pushed directly to remote hosting via `git push`.
+
+### Technical Implementation
+1. **Document Data Extraction**:
+   - Analyzed `karta kota.jpg` for Bars: SHiOZ ZOOLANDIA, A-BARS, male, born 09.05.2024, EMS BEN ns 24 (Black Silver Spotted Tabby), chip 900263006037836, pedigree (PL) FPL LO 354902.
+   - Analyzed `karta miotu.jpg` for Siamese: Litter D born 13.09.2026, father Baltazar (Seal Point), mother Koko (Seal Point), all 4 females with Seal Point coat.
+   - Analyzed `kata miotu.jpg` for British: Litter A born 09.09.2026, mother Nel (BSH a), father Cook (BLH a 33), kittens: Atos (BLH a 33, male stud), Alma (BLH a 33, female), Ada (BSH a, female), Atena (BSH a, female).
+2. **Safe Idempotent Migration**:
+   - Created `database/migrations/2026_10_14_140000_add_bars_british_and_siamese_cats.php`.
+   - Used non-destructive checks (`where('slug', ...)->exists()`) ensuring existing animals are never wiped or reset.
+   - Auto-copies media files to both `storage/app/public/media/` and `public/storage/media/` with unique filenames.
+   - Correctly assigns `is_featured = true` and `sort_order = 0` to profile photos.
+   - Linked self-referencing pedigree relations (`father_id`, `mother_id`).
+3. **Verification**:
+   - Local migration executed cleanly.
+   - Direct HTTP test of public catalog (`/koty`) and individual profiles (`/koty/bars`, `/koty/dafne`, etc.) confirmed all HTTP 200.
+   - Full test suite: 125 tests, 705 assertions, 100% PASS.
+   - Laravel Pint run and verified.
+
+---
+
 ## 2026-10-04 — Sprint 7: British Shorthair Mother & Newborn Kittens Media Integration (`feat(blog)`, `style(ui)`)
 
 ### Context
