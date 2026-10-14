@@ -208,8 +208,38 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
         }
 
         // ─────────────────────────────────────────────────────────────
-        // 4. KOTKA BRYTYJSKA NEL (Matka miotu brytyjskiego - na serwerze ma nr 32)
+        // 4. KOTKA BRYTYJSKA NEL (Matka miotu brytyjskiego - na serwerze ma nr 32) & STAŚ (#31 - Ojciec)
         // ─────────────────────────────────────────────────────────────
+        $stas = Animal::where('breed', 'Kot Brytyjski')
+            ->where(fn ($q) => $q->where('slug', 'stas')->orWhere('name', 'like', '%Staś%')->orWhere('name', 'like', '%Stas%'))
+            ->first();
+        if (! $stas) {
+            $stas = Animal::create([
+                'name' => 'Staś',
+                'slug' => 'stas',
+                'breed' => 'Kot Brytyjski',
+                'color' => 'Długowłosy niebieski (BLH a 33)',
+                'gender' => AnimalGender::Male,
+                'status' => AnimalStatus::Breeding,
+                'type' => AnimalType::Cat,
+                'date_of_birth' => Carbon::create(2021, 5, 20),
+                'short_description' => 'Dostojny kocur hodowlany rasy Kot Brytyjski o błękitnym spojrzeniu.',
+                'description' => 'Staś to nasz flagowy reproduktor rasy Kot Brytyjski.',
+                'sort_order' => 31,
+                'is_featured' => true,
+                'is_published' => true,
+                'published_at' => now(),
+            ]);
+
+            $this->attachPhoto(
+                $stas,
+                base_path('image/Brytyjczyki/Reproduktory/Stas/Stas.jpg'),
+                'parent_stas_1.jpg',
+                true,
+                0
+            );
+        }
+
         $nel = Animal::where('breed', 'Kot Brytyjski')
             ->where(fn ($q) => $q->where('slug', 'nel')->orWhere('name', 'Nel'))
             ->first();
@@ -252,7 +282,7 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
         // ─────────────────────────────────────────────────────────────
         $atos = Animal::where('slug', 'atos')->orWhere('name', 'Atos')->first();
         if (! $atos) {
-            Animal::create([
+            $atos = Animal::create([
                 'name' => 'Atos',
                 'slug' => 'atos',
                 'breed' => 'Kot Brytyjski',
@@ -262,6 +292,7 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
                 'type' => AnimalType::Cat,
                 'date_of_birth' => Carbon::create(2026, 9, 9),
                 'mother_id' => $nel?->id,
+                'father_id' => $stas?->id,
                 'short_description' => 'Dostojny kocur rasy Kot Brytyjski Długowłosy o szlachetnym umaszczeniu colourpoint niebieski (BLH a 33).',
                 'description' => 'Atos to wyjątkowy kocur rasy Kot Brytyjski Długowłosy (British Longhair – BLH a 33) o jasnej szacie ze szlachetnymi niebieskimi znaczeniami i szafirowym spojrzeniu. Charakteryzuje się mocną, masywną budową ciała, gęstym podszerstkiem i oazą spokoju w usposobieniu. Syn naszej kotki Nel. Zarejestrowany w SHiOZ ZOOLANDIA.',
                 'sort_order' => 33,
@@ -270,6 +301,8 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
                 'published_at' => now(),
             ]);
             // Zdjęcia Atosa nie są dodawane (zgodnie z wytyczną: karta miotu wykluczona, a właściwe zdjęcia zostaną dodane w przyszłości)
+        } elseif (! $atos->father_id && $stas) {
+            $atos->update(['father_id' => $stas->id]);
         }
 
         // ─────────────────────────────────────────────────────────────
@@ -288,6 +321,7 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
                 'type' => AnimalType::Cat,
                 'date_of_birth' => Carbon::create(2026, 9, 9),
                 'mother_id' => $nel?->id,
+                'father_id' => $stas?->id,
                 'short_description' => 'Pluszowa koteczka brytyjska o klasycznym niebieskim umaszczeniu (BSH a) i czułym serduszku.',
                 'description' => 'Ada to śliczna koteczka rasy Kot Brytyjski Krótkowłosy o tradycyjnym niebieskim ubarwieniu (BSH a). Odznacza się gęstym, aksamitnym futrem i kochanym, spokojnym charakterem. Córka Nel, urodzona 9 września 2026 r. (SHiOZ ZOOLANDIA). Dostępna do rezerwacji.',
                 'sort_order' => 12,
@@ -310,6 +344,8 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
                 false,
                 1
             );
+        } elseif (! $ada->father_id && $stas) {
+            $ada->update(['father_id' => $stas->id]);
         }
 
         // Alma
@@ -325,6 +361,7 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
                 'type' => AnimalType::Cat,
                 'date_of_birth' => Carbon::create(2026, 9, 9),
                 'mother_id' => $nel?->id,
+                'father_id' => $stas?->id,
                 'short_description' => 'Puchata koteczka brytyjska długowłosa o unikalnym umaszczeniu colourpoint niebieski (BLH a 33).',
                 'description' => 'Alma to prawdziwa perełka w naszej hodowli – kotka rasy Kot Brytyjski Długowłosy o zjawiskowym umaszczeniu colourpoint niebieski (BLH a 33) i błękitnych oczach. Jej puchata, miękka szata oraz łagodne, urocze spojrzenie natychmiast skradają serce. Córka Nel, urodzona 9 września 2026 r. Dostępna do rezerwacji.',
                 'sort_order' => 13,
@@ -347,6 +384,8 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
                 false,
                 1
             );
+        } elseif (! $alma->father_id && $stas) {
+            $alma->update(['father_id' => $stas->id]);
         }
 
         // Atena
@@ -362,6 +401,7 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
                 'type' => AnimalType::Cat,
                 'date_of_birth' => Carbon::create(2026, 9, 9),
                 'mother_id' => $nel?->id,
+                'father_id' => $stas?->id,
                 'short_description' => 'Ciekawska i wesoła kotka brytyjska krótkowłosa o pluszowej niebieskiej okrywie (BSH a).',
                 'description' => 'Atena to energiczna, ciekawa świata koteczka brytyjska krótkowłosa (BSH a) o aksamitnym, sprężystym futerku. Uwielbia zabawy, towarzystwo człowieka i innych zwierząt. Córka Nel, urodzona 9 września 2026 r. Posiada dokumentację SHiOZ ZOOLANDIA. Dostępna do rezerwacji.',
                 'sort_order' => 14,
@@ -398,6 +438,8 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
                 false,
                 3
             );
+        } elseif (! $atena->father_id && $stas) {
+            $atena->update(['father_id' => $stas->id]);
         }
     }
 
