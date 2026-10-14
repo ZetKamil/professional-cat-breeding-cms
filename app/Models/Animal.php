@@ -391,20 +391,20 @@ class Animal extends Model
             return $max !== null ? (int) $max + 1 : 20;
         }
 
-        // 2. Dorosłe koty hodowlane (Breeding): pule rasowe 30+, 40+, 50+
+        // 2. Dorosłe koty hodowlane (Breeding): pule rasowe 31–39, 41–49, 51–59
         if ($statusValue === AnimalStatus::Breeding->value) {
             $normalizedBreed = mb_strtolower(trim((string) $breed));
 
-            $rangeStart = 30;
+            $rangeStart = 31;
             if (str_contains($normalizedBreed, 'bryt') || str_contains($normalizedBreed, 'brit')) {
-                $rangeStart = 30;
+                $rangeStart = 31;
             } elseif (str_contains($normalizedBreed, 'syjam') || str_contains($normalizedBreed, 'siam')) {
-                $rangeStart = 40;
+                $rangeStart = 41;
             } elseif (str_contains($normalizedBreed, 'bengal')) {
-                $rangeStart = 50;
+                $rangeStart = 51;
             }
 
-            $rangeEnd = $rangeStart + 9;
+            $rangeEnd = $rangeStart + 8;
 
             $max = static::where('status', AnimalStatus::Breeding)
                 ->whereBetween('sort_order', [$rangeStart, $rangeEnd])
@@ -415,7 +415,6 @@ class Animal extends Model
 
         // 3. Kocięta (Available / Reserved): pula 1 - 19
         $max = static::whereIn('status', [AnimalStatus::Available, AnimalStatus::Reserved])
-            ->when($breed, fn ($q) => $q->where('breed', $breed))
             ->whereBetween('sort_order', [1, 19])
             ->max('sort_order');
 

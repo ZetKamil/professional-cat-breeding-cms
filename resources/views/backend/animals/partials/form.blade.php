@@ -162,9 +162,9 @@
                         <div class="d-flex flex-wrap gap-1 my-1">
                             <span class="badge bg-light text-dark border">1–19 Kocięta</span>
                             <span class="badge bg-light text-dark border">20+ W nowym domu</span>
-                            <span class="badge bg-light text-dark border">30+ Brytyjczyki</span>
-                            <span class="badge bg-light text-dark border">40+ Syjamy</span>
-                            <span class="badge bg-light text-dark border">50+ Bengale</span>
+                            <span class="badge bg-light text-dark border">31+ Brytyjczyki</span>
+                            <span class="badge bg-light text-dark border">41+ Syjamy</span>
+                            <span class="badge bg-light text-dark border">51+ Bengale</span>
                         </div>
                         <div class="small text-muted">Zostaw puste lub wpisz 0, aby system nadał kolejny numer automatycznie.</div>
                     </div>
