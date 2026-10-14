@@ -10,7 +10,6 @@ use App\Http\Controllers\MediaController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
@@ -50,14 +49,14 @@ Route::get('/sitemap.xml', function () {
     $baseUrl = rtrim(config('app.url', 'https://kotyzmazowieckiejszwajcarii.pl'), '/');
 
     $staticPages = [
-        ['url' => $baseUrl . '/', 'priority' => '1.0', 'changefreq' => 'weekly', 'lastmod' => now()->toDateString()],
-        ['url' => $baseUrl . '/koty', 'priority' => '0.9', 'changefreq' => 'weekly', 'lastmod' => now()->toDateString()],
-        ['url' => $baseUrl . '/o-hodowli', 'priority' => '0.8', 'changefreq' => 'monthly', 'lastmod' => '2026-08-11'],
-        ['url' => $baseUrl . '/o-nas', 'priority' => '0.8', 'changefreq' => 'monthly', 'lastmod' => '2026-08-11'],
-        ['url' => $baseUrl . '/blog', 'priority' => '0.8', 'changefreq' => 'weekly', 'lastmod' => now()->toDateString()],
-        ['url' => $baseUrl . '/kontakt', 'priority' => '0.7', 'changefreq' => 'monthly', 'lastmod' => '2026-08-11'],
-        ['url' => $baseUrl . '/polityka-prywatnosci', 'priority' => '0.3', 'changefreq' => 'yearly', 'lastmod' => '2026-08-11'],
-        ['url' => $baseUrl . '/regulamin', 'priority' => '0.3', 'changefreq' => 'yearly', 'lastmod' => '2026-08-11'],
+        ['url' => $baseUrl.'/', 'priority' => '1.0', 'changefreq' => 'weekly', 'lastmod' => now()->toDateString()],
+        ['url' => $baseUrl.'/koty', 'priority' => '0.9', 'changefreq' => 'weekly', 'lastmod' => now()->toDateString()],
+        ['url' => $baseUrl.'/o-hodowli', 'priority' => '0.8', 'changefreq' => 'monthly', 'lastmod' => '2026-08-11'],
+        ['url' => $baseUrl.'/o-nas', 'priority' => '0.8', 'changefreq' => 'monthly', 'lastmod' => '2026-08-11'],
+        ['url' => $baseUrl.'/blog', 'priority' => '0.8', 'changefreq' => 'weekly', 'lastmod' => now()->toDateString()],
+        ['url' => $baseUrl.'/kontakt', 'priority' => '0.7', 'changefreq' => 'monthly', 'lastmod' => '2026-08-11'],
+        ['url' => $baseUrl.'/polityka-prywatnosci', 'priority' => '0.3', 'changefreq' => 'yearly', 'lastmod' => '2026-08-11'],
+        ['url' => $baseUrl.'/regulamin', 'priority' => '0.3', 'changefreq' => 'yearly', 'lastmod' => '2026-08-11'],
     ];
 
     return response()->view('sitemap', compact('staticPages', 'animals', 'posts', 'baseUrl'))
@@ -69,33 +68,33 @@ Route::get('/storage/{path}', function ($path) {
     $cleanPath = trim(parse_url($path, PHP_URL_PATH), '/');
     $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp', 'svg', 'gif', 'ico', 'pdf', 'mp4', 'webm', 'jfif', 'bmp', 'avif', 'heic', 'heif'];
     $ext = strtolower(pathinfo($cleanPath, PATHINFO_EXTENSION));
-    if ($ext !== '' && !in_array($ext, $allowedExtensions, true)) {
+    if ($ext !== '' && ! in_array($ext, $allowedExtensions, true)) {
         abort(404);
     }
 
     $possiblePaths = [
-        public_path('storage/' . $cleanPath),
-        storage_path('app/public/' . $cleanPath),
-        storage_path('app/private/' . $cleanPath),
-        storage_path('app/' . $cleanPath),
-        public_path('storage/media/' . basename($cleanPath)),
-        storage_path('app/public/media/' . basename($cleanPath)),
-        storage_path('app/private/media/' . basename($cleanPath)),
-        public_path('storage/media/animals/' . basename($cleanPath)),
-        storage_path('app/public/media/animals/' . basename($cleanPath)),
-        storage_path('app/private/media/animals/' . basename($cleanPath)),
-        public_path('storage/animals/' . basename($cleanPath)),
-        storage_path('app/public/animals/' . basename($cleanPath)),
-        storage_path('app/private/animals/' . basename($cleanPath)),
-        storage_path('app/public/' . basename($cleanPath)),
-        storage_path('app/private/' . basename($cleanPath)),
-        base_path('image/' . $cleanPath),
-        base_path('BLOG/' . $cleanPath),
-        base_path('BLOG/' . str_replace('blog/', '', $cleanPath)),
+        public_path('storage/'.$cleanPath),
+        storage_path('app/public/'.$cleanPath),
+        storage_path('app/private/'.$cleanPath),
+        storage_path('app/'.$cleanPath),
+        public_path('storage/media/'.basename($cleanPath)),
+        storage_path('app/public/media/'.basename($cleanPath)),
+        storage_path('app/private/media/'.basename($cleanPath)),
+        public_path('storage/media/animals/'.basename($cleanPath)),
+        storage_path('app/public/media/animals/'.basename($cleanPath)),
+        storage_path('app/private/media/animals/'.basename($cleanPath)),
+        public_path('storage/animals/'.basename($cleanPath)),
+        storage_path('app/public/animals/'.basename($cleanPath)),
+        storage_path('app/private/animals/'.basename($cleanPath)),
+        storage_path('app/public/'.basename($cleanPath)),
+        storage_path('app/private/'.basename($cleanPath)),
+        base_path('image/'.$cleanPath),
+        base_path('BLOG/'.$cleanPath),
+        base_path('BLOG/'.str_replace('blog/', '', $cleanPath)),
     ];
 
     foreach ($possiblePaths as $fullPath) {
-        if (\Illuminate\Support\Facades\File::exists($fullPath) && !\Illuminate\Support\Facades\File::isDirectory($fullPath)) {
+        if (\Illuminate\Support\Facades\File::exists($fullPath) && ! \Illuminate\Support\Facades\File::isDirectory($fullPath)) {
             $mime = @mime_content_type($fullPath) ?: ($ext === 'jfif' || $ext === 'jpg' || $ext === 'jpeg' ? 'image/jpeg' : ($ext === 'png' ? 'image/png' : ($ext === 'webp' ? 'image/webp' : 'application/octet-stream')));
 
             return response()->file($fullPath, [
@@ -141,9 +140,9 @@ Route::match(['get', 'post'], '/check-media', function (\Illuminate\Http\Request
         try {
             \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
             \Illuminate\Support\Facades\Artisan::call('optimize:clear');
-            $migrateOutput = "Sukces! Migracje i czyszczenie pamięci podręcznej (optimize:clear) zostały wykonane:<br><pre style='background:#ecfdf5; padding:10px; border-radius:6px; font-size:12px; margin-top:8px;'>" . e(\Illuminate\Support\Facades\Artisan::output()) . "</pre>";
+            $migrateOutput = "Sukces! Migracje i czyszczenie pamięci podręcznej (optimize:clear) zostały wykonane:<br><pre style='background:#ecfdf5; padding:10px; border-radius:6px; font-size:12px; margin-top:8px;'>".e(\Illuminate\Support\Facades\Artisan::output()).'</pre>';
         } catch (\Throwable $e) {
-            $migrateOutput = "<span style='color:#dc2626;'>Błąd migracji: " . e($e->getMessage()) . "</span>";
+            $migrateOutput = "<span style='color:#dc2626;'>Błąd migracji: ".e($e->getMessage()).'</span>';
         }
     }
 
@@ -152,7 +151,7 @@ Route::match(['get', 'post'], '/check-media', function (\Illuminate\Http\Request
     if (is_link($pubStorage)) {
         @unlink($pubStorage);
     }
-    if (!\Illuminate\Support\Facades\File::isDirectory($pubStorage)) {
+    if (! \Illuminate\Support\Facades\File::isDirectory($pubStorage)) {
         \Illuminate\Support\Facades\File::makeDirectory($pubStorage, 0755, true, true);
     }
 
@@ -166,24 +165,24 @@ Route::match(['get', 'post'], '/check-media', function (\Illuminate\Http\Request
         if (\Illuminate\Support\Facades\File::isDirectory($sDir)) {
             foreach (\Illuminate\Support\Facades\File::allFiles($sDir) as $file) {
                 $rel = str_replace('\\', '/', substr($file->getPathname(), strlen($sDir) + 1));
-                $target = public_path('storage/' . $rel);
+                $target = public_path('storage/'.$rel);
                 $targetDir = dirname($target);
-                if (!\Illuminate\Support\Facades\File::isDirectory($targetDir)) {
+                if (! \Illuminate\Support\Facades\File::isDirectory($targetDir)) {
                     \Illuminate\Support\Facades\File::makeDirectory($targetDir, 0755, true, true);
                 }
-                if (!\Illuminate\Support\Facades\File::exists($target) || \Illuminate\Support\Facades\File::size($target) !== $file->getSize()) {
+                if (! \Illuminate\Support\Facades\File::exists($target) || \Illuminate\Support\Facades\File::size($target) !== $file->getSize()) {
                     @\Illuminate\Support\Facades\File::copy($file->getPathname(), $target);
                     @chmod($target, 0644);
                     $syncedCount++;
                 }
 
                 // Also copy to public/storage/media/<filename> as flat fallback
-                $flatTarget = public_path('storage/media/' . $file->getFilename());
+                $flatTarget = public_path('storage/media/'.$file->getFilename());
                 $flatDir = dirname($flatTarget);
-                if (!\Illuminate\Support\Facades\File::isDirectory($flatDir)) {
+                if (! \Illuminate\Support\Facades\File::isDirectory($flatDir)) {
                     \Illuminate\Support\Facades\File::makeDirectory($flatDir, 0755, true, true);
                 }
-                if (!\Illuminate\Support\Facades\File::exists($flatTarget)) {
+                if (! \Illuminate\Support\Facades\File::exists($flatTarget)) {
                     @\Illuminate\Support\Facades\File::copy($file->getPathname(), $flatTarget);
                     @chmod($flatTarget, 0644);
                 }
@@ -193,19 +192,19 @@ Route::match(['get', 'post'], '/check-media', function (\Illuminate\Http\Request
 
     $animals = \App\Models\Animal::with(['media', 'gallery'])->get();
     $output = "<div style='font-family:sans-serif; padding:30px; max-width:900px; margin:0 auto;'>";
-    $output .= "<h2>Diagnostyka Bazy i Zdjec Kotow</h2>";
+    $output .= '<h2>Diagnostyka Bazy i Zdjec Kotow</h2>';
 
     if ($migrateOutput) {
         $output .= "<div style='background:#f0fdf4; border:1px solid #10b981; color:#065f46; padding:14px; border-radius:8px; margin-bottom:20px;'>{$migrateOutput}</div>";
     }
 
     $output .= "<div style='margin-bottom:20px; display:flex; gap:10px;'>";
-    $output .= "<form method='POST' action='" . url('/check-media') . "'>";
-    $output .= "<input type='hidden' name='_token' value='" . csrf_token() . "'>";
+    $output .= "<form method='POST' action='".url('/check-media')."'>";
+    $output .= "<input type='hidden' name='_token' value='".csrf_token()."'>";
     $output .= "<input type='hidden' name='run_migrate' value='1'>";
     $output .= "<button type='submit' style='background:#10b981; color:#fff; border:none; padding:10px 18px; border-radius:6px; font-weight:bold; cursor:pointer;'>🚀 Uruchom Migracje Bazy (Dodaj nowe kociaki: Candy, Carlos, Carmen, Cyprian)</button>";
-    $output .= "</form>";
-    $output .= "</div>";
+    $output .= '</form>';
+    $output .= '</div>';
 
     $output .= "<table border='1' cellpadding='8' cellspacing='0' style='border-collapse:collapse; width:100%;'>";
     $output .= "<tr style='background:#f3f4f6;'><th>Kot</th><th>Typ</th><th>Sciezka w DB</th><th>Plik fizyczny?</th><th>Podglad</th></tr>";
@@ -217,36 +216,37 @@ Route::match(['get', 'post'], '/check-media', function (\Illuminate\Http\Request
         }
 
         if ($allMedia->isEmpty()) {
-            $output .= "<tr><td><strong>" . e($a->name) . "</strong> (" . e($a->breed) . ")</td><td>-</td><td colspan='3' style='color:red;'>BRAK ZDJEC W BAZIE</td></tr>";
+            $output .= '<tr><td><strong>'.e($a->name).'</strong> ('.e($a->breed).")</td><td>-</td><td colspan='3' style='color:red;'>BRAK ZDJEC W BAZIE</td></tr>";
+
             continue;
         }
 
         foreach ($allMedia as $idx => $m) {
             $isMain = ($a->media && $m->id === $a->media->id);
-            $typeLabel = $isMain ? '<span style="color:#059669; font-weight:bold;">Glowne</span>' : 'Galeria #' . ($idx + 1);
-            $dbPath = ($m->directory ? $m->directory . '/' : '') . $m->filename;
+            $typeLabel = $isMain ? '<span style="color:#059669; font-weight:bold;">Glowne</span>' : 'Galeria #'.($idx + 1);
+            $dbPath = ($m->directory ? $m->directory.'/' : '').$m->filename;
 
-            $storageExists = file_exists(storage_path('app/public/' . $dbPath)) || file_exists(storage_path('app/private/' . $dbPath));
-            $publicExists = file_exists(public_path('storage/' . $dbPath));
-            $mediaExists = file_exists(public_path('storage/media/' . basename($m->filename)));
+            $storageExists = file_exists(storage_path('app/public/'.$dbPath)) || file_exists(storage_path('app/private/'.$dbPath));
+            $publicExists = file_exists(public_path('storage/'.$dbPath));
+            $mediaExists = file_exists(public_path('storage/media/'.basename($m->filename)));
 
             $found = $storageExists || $publicExists || $mediaExists;
             $statusColor = $found ? '#059669' : '#dc2626';
             $statusText = $found ? 'TAK (Istnieje)' : 'NIE (Brak)';
 
-            $output .= "<tr>"
-                . "<td><strong>" . e($a->name) . "</strong> (" . e($a->breed) . ")</td>"
-                . "<td>{$typeLabel}</td>"
-                . "<td><code>" . e($dbPath) . "</code></td>"
-                . "<td style='color:{$statusColor}; font-weight:bold;'>{$statusText}</td>"
-                . "<td><a href='" . e($m->url()) . "' target='_blank' style='color:#2563eb;'>Otworz URL</a></td>"
-                . "</tr>";
+            $output .= '<tr>'
+                .'<td><strong>'.e($a->name).'</strong> ('.e($a->breed).')</td>'
+                ."<td>{$typeLabel}</td>"
+                .'<td><code>'.e($dbPath).'</code></td>'
+                ."<td style='color:{$statusColor}; font-weight:bold;'>{$statusText}</td>"
+                ."<td><a href='".e($m->url())."' target='_blank' style='color:#2563eb;'>Otworz URL</a></td>"
+                .'</tr>';
         }
     }
 
-    $output .= "</table>";
-    $output .= "<p style='margin-top:20px;'><a href='" . url('/dashboard') . "' style='color:#4b5563; text-decoration:none;'>← Wróć do Panelu</a></p>";
-    $output .= "</div>";
+    $output .= '</table>';
+    $output .= "<p style='margin-top:20px;'><a href='".url('/dashboard')."' style='color:#4b5563; text-decoration:none;'>← Wróć do Panelu</a></p>";
+    $output .= '</div>';
 
     return $output;
 })->middleware(['auth', 'verified', 'active']);
@@ -266,7 +266,7 @@ Route::get('/sync-blog-articles', function () {
                 foreach ($sourceFiles as $file) {
                     $ext = strtolower($file->getExtension());
                     if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'jfif'], true)) {
-                        $targetPath = $storagePublicDir . '/' . $file->getFilename();
+                        $targetPath = $storagePublicDir.'/'.$file->getFilename();
                         @\Illuminate\Support\Facades\File::copy($file->getPathname(), $targetPath);
                         @chmod($targetPath, 0644);
                     }
@@ -303,19 +303,20 @@ Route::match(['get', 'post'], '/check-mail', function (\Illuminate\Http\Request 
 
     if ($request->has('clear_cache')) {
         \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+
         return redirect('/check-mail')->with('status_msg', 'Pamięć podręczna konfiguracji została wyczyszczona (optimize:clear)!');
     }
 
     if ($request->has('send_test')) {
         $targetEmail = $request->input('target_email', config('mail.from.address') ?: auth()->user()->email);
         try {
-            \Illuminate\Support\Facades\Mail::raw('To jest testowa wiadomosc z systemu Hodowli Kotow wyslana o ' . now()->toDateTimeString(), function ($msg) use ($targetEmail) {
+            \Illuminate\Support\Facades\Mail::raw('To jest testowa wiadomosc z systemu Hodowli Kotow wyslana o '.now()->toDateTimeString(), function ($msg) use ($targetEmail) {
                 $msg->to($targetEmail)
-                    ->subject('Test konfiguracji poczty SMTP - ' . config('app.name'));
+                    ->subject('Test konfiguracji poczty SMTP - '.config('app.name'));
             });
-            $testResult = "Sukces! Wiadomość testowa została pomyślnie wysłana na adres: <strong>" . e($targetEmail) . "</strong>. Sprawdź skrzynkę odbiorczą oraz folder SPAM.";
+            $testResult = 'Sukces! Wiadomość testowa została pomyślnie wysłana na adres: <strong>'.e($targetEmail).'</strong>. Sprawdź skrzynkę odbiorczą oraz folder SPAM.';
         } catch (\Throwable $e) {
-            $testError = "Błąd wysyłki SMTP: <strong>" . e($e->getMessage()) . "</strong><br><br><pre style='background:#fef2f2; padding:10px; border-radius:6px; overflow:auto; font-size:12px;'>" . e($e->getTraceAsString()) . "</pre>";
+            $testError = 'Błąd wysyłki SMTP: <strong>'.e($e->getMessage())."</strong><br><br><pre style='background:#fef2f2; padding:10px; border-radius:6px; overflow:auto; font-size:12px;'>".e($e->getTraceAsString()).'</pre>';
         }
     }
 
@@ -344,38 +345,38 @@ Route::match(['get', 'post'], '/check-mail', function (\Illuminate\Http\Request 
     $html .= "<div style='background:#f9fafb; border:1px solid #e5e7eb; border-radius:8px; padding:20px; margin-bottom:24px;'>";
     $html .= "<h3 style='margin-top:0;'>Aktualnie załadowane zmienne w Laravel:</h3>";
     $html .= "<ul style='list-style:none; padding-left:0;'>";
-    $html .= "<li><strong>MAIL_MAILER (domyślny sterownik):</strong> <code>" . e($defaultMailer) . "</code> " . ($defaultMailer === 'smtp' ? '✅' : '⚠️ (Ustawione na ' . e($defaultMailer) . ' zamiast smtp!)') . "</li>";
-    $html .= "<li><strong>MAIL_HOST:</strong> <code>" . e($smtp['host'] ?? 'brak') . "</code></li>";
-    $html .= "<li><strong>MAIL_PORT:</strong> <code>" . e($smtp['port'] ?? 'brak') . "</code></li>";
-    $html .= "<li><strong>MAIL_ENCRYPTION:</strong> <code>" . e($smtp['encryption'] ?? ($smtp['scheme'] ?? 'brak')) . "</code></li>";
-    $html .= "<li><strong>MAIL_USERNAME:</strong> <code>" . e($smtp['username'] ?? 'brak') . "</code></li>";
-    $html .= "<li><strong>MAIL_PASSWORD:</strong> <code>" . (!empty($smtp['password']) ? '****** (Ustawione)' : '❌ BRAK HASŁA') . "</code></li>";
-    $html .= "<li><strong>MAIL_FROM_ADDRESS:</strong> <code>" . e($fromAddr) . "</code></li>";
-    $html .= "<li><strong>MAIL_FROM_NAME:</strong> <code>" . e($fromName) . "</code></li>";
-    $html .= "<li><strong>QUEUE_CONNECTION:</strong> <code>" . e($queueDefault) . "</code> " . ($queueDefault === 'sync' ? '✅ (Natychmiast)' : '⚠️ (Zadania mogą czekać w bazie!)') . "</li>";
-    $html .= "</ul>";
-    $html .= "</div>";
+    $html .= '<li><strong>MAIL_MAILER (domyślny sterownik):</strong> <code>'.e($defaultMailer).'</code> '.($defaultMailer === 'smtp' ? '✅' : '⚠️ (Ustawione na '.e($defaultMailer).' zamiast smtp!)').'</li>';
+    $html .= '<li><strong>MAIL_HOST:</strong> <code>'.e($smtp['host'] ?? 'brak').'</code></li>';
+    $html .= '<li><strong>MAIL_PORT:</strong> <code>'.e($smtp['port'] ?? 'brak').'</code></li>';
+    $html .= '<li><strong>MAIL_ENCRYPTION:</strong> <code>'.e($smtp['encryption'] ?? ($smtp['scheme'] ?? 'brak')).'</code></li>';
+    $html .= '<li><strong>MAIL_USERNAME:</strong> <code>'.e($smtp['username'] ?? 'brak').'</code></li>';
+    $html .= '<li><strong>MAIL_PASSWORD:</strong> <code>'.(! empty($smtp['password']) ? '****** (Ustawione)' : '❌ BRAK HASŁA').'</code></li>';
+    $html .= '<li><strong>MAIL_FROM_ADDRESS:</strong> <code>'.e($fromAddr).'</code></li>';
+    $html .= '<li><strong>MAIL_FROM_NAME:</strong> <code>'.e($fromName).'</code></li>';
+    $html .= '<li><strong>QUEUE_CONNECTION:</strong> <code>'.e($queueDefault).'</code> '.($queueDefault === 'sync' ? '✅ (Natychmiast)' : '⚠️ (Zadania mogą czekać w bazie!)').'</li>';
+    $html .= '</ul>';
+    $html .= '</div>';
 
     $html .= "<div style='display:flex; gap:12px; flex-wrap:wrap; margin-bottom:20px;'>";
-    $html .= "<form method='POST' action='" . url('/check-mail') . "' style='flex:1; min-width:280px; background:#fff; border:1px solid #e5e7eb; padding:20px; border-radius:8px;'>";
-    $html .= "<input type='hidden' name='_token' value='" . csrf_token() . "'>";
+    $html .= "<form method='POST' action='".url('/check-mail')."' style='flex:1; min-width:280px; background:#fff; border:1px solid #e5e7eb; padding:20px; border-radius:8px;'>";
+    $html .= "<input type='hidden' name='_token' value='".csrf_token()."'>";
     $html .= "<input type='hidden' name='send_test' value='1'>";
     $html .= "<h4 style='margin-top:0;'>Wyślij e-mail testowy</h4>";
     $html .= "<label style='display:block; margin-bottom:8px; font-weight:bold;'>Adres odbiorcy:</label>";
-    $html .= "<input type='email' name='target_email' value='" . e($fromAddr) . "' style='width:100%; padding:8px 12px; border:1px solid #d1d5db; border-radius:6px; margin-bottom:12px;' required>";
+    $html .= "<input type='email' name='target_email' value='".e($fromAddr)."' style='width:100%; padding:8px 12px; border:1px solid #d1d5db; border-radius:6px; margin-bottom:12px;' required>";
     $html .= "<button type='submit' style='background:#d1ab58; color:#181816; border:none; padding:10px 20px; border-radius:6px; font-weight:bold; cursor:pointer;'>🚀 Wyślij Testowy E-mail</button>";
-    $html .= "</form>";
+    $html .= '</form>';
 
-    $html .= "<form method='POST' action='" . url('/check-mail') . "' style='flex:1; min-width:280px; background:#fff; border:1px solid #e5e7eb; padding:20px; border-radius:8px; display:flex; flex-direction:column; justify-content:space-between;'>";
-    $html .= "<input type='hidden' name='_token' value='" . csrf_token() . "'>";
+    $html .= "<form method='POST' action='".url('/check-mail')."' style='flex:1; min-width:280px; background:#fff; border:1px solid #e5e7eb; padding:20px; border-radius:8px; display:flex; flex-direction:column; justify-content:space-between;'>";
+    $html .= "<input type='hidden' name='_token' value='".csrf_token()."'>";
     $html .= "<input type='hidden' name='clear_cache' value='1'>";
     $html .= "<div><h4 style='margin-top:0;'>Wyczyść Cache Konfiguracji</h4><p style='color:#6b7280; font-size:14px;'>Jeśli zmieniłeś plik .env na serwerze, odśwież konfigurację tym przyciskiem.</p></div>";
     $html .= "<button type='submit' style='background:#3b82f6; color:#fff; border:none; padding:10px 20px; border-radius:6px; font-weight:bold; cursor:pointer;'>🧹 Wyczyść Cache (optimize:clear)</button>";
-    $html .= "</form>";
-    $html .= "</div>";
+    $html .= '</form>';
+    $html .= '</div>';
 
-    $html .= "<p><a href='" . url('/dashboard') . "' style='color:#4b5563; text-decoration:none;'>← Wróć do Panelu</a></p>";
-    $html .= "</div>";
+    $html .= "<p><a href='".url('/dashboard')."' style='color:#4b5563; text-decoration:none;'>← Wróć do Panelu</a></p>";
+    $html .= '</div>';
 
     return $html;
 })->middleware(['auth', 'verified', 'active']);
@@ -392,19 +393,19 @@ Route::get('/fix-storage', function () {
         $pubStorage = public_path('storage');
         if (is_link($pubStorage)) {
             @unlink($pubStorage);
-        } elseif (file_exists($pubStorage) && !is_dir($pubStorage)) {
+        } elseif (file_exists($pubStorage) && ! is_dir($pubStorage)) {
             @unlink($pubStorage);
         }
 
         // Ensure physical directory public/storage/media exists directly on disk
         $pubStorageMedia = public_path('storage/media');
-        if (!\Illuminate\Support\Facades\File::isDirectory($pubStorageMedia)) {
+        if (! \Illuminate\Support\Facades\File::isDirectory($pubStorageMedia)) {
             \Illuminate\Support\Facades\File::makeDirectory($pubStorageMedia, 0755, true, true);
         }
 
         // Ensure storage/app/public/media exists
         $storageAppMedia = storage_path('app/public/media');
-        if (!\Illuminate\Support\Facades\File::isDirectory($storageAppMedia)) {
+        if (! \Illuminate\Support\Facades\File::isDirectory($storageAppMedia)) {
             \Illuminate\Support\Facades\File::makeDirectory($storageAppMedia, 0755, true, true);
         }
 
@@ -446,21 +447,21 @@ Route::get('/fix-storage', function () {
             : "Seeder pominieto - baza zawiera juz {$existingAnimalsCount} rekordow kotow (idempotent, bezpieczne).";
 
         return "<div style='font-family: sans-serif; padding: 30px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; color: #166534; max-width: 600px; margin: 40px auto;'>"
-            . "<h1 style='margin-top:0;'>Sukces Naprawy Zdjec!</h1>"
-            . "<p><strong>1. Utworzono dowiazanie public/storage.</strong></p>"
-            . "<p><strong>2. Przekopiowano zdjecia z folderu image/:</strong> Pomyslnie zapisano {$publicMediaCount} plikow w produkcyjnym katalogu public/storage/media/ na serwerze.</p>"
-            . "<p><strong>3. Polaczono w bazie danych:</strong> Przypisano {$mediaCount} rekordow zdjec do kotow w bazie SQL.</p>"
-            . "<p><strong>4. Status seedera:</strong> {$seederStatus}</p>"
-            . "<hr style='border: 0; border-top: 1px solid #bbf7d0; margin: 20px 0;'>"
-            . "<p style='margin-bottom:0;'><a href='" . url('/') . "' style='display: inline-block; padding: 10px 20px; background: #166534; color: #fff; text-decoration: none; border-radius: 6px; font-weight: bold;'>Wróć na stronę główną i sprawdź zdjęcia</a></p>"
-            . "</div>";
+            ."<h1 style='margin-top:0;'>Sukces Naprawy Zdjec!</h1>"
+            .'<p><strong>1. Utworzono dowiazanie public/storage.</strong></p>'
+            ."<p><strong>2. Przekopiowano zdjecia z folderu image/:</strong> Pomyslnie zapisano {$publicMediaCount} plikow w produkcyjnym katalogu public/storage/media/ na serwerze.</p>"
+            ."<p><strong>3. Polaczono w bazie danych:</strong> Przypisano {$mediaCount} rekordow zdjec do kotow w bazie SQL.</p>"
+            ."<p><strong>4. Status seedera:</strong> {$seederStatus}</p>"
+            ."<hr style='border: 0; border-top: 1px solid #bbf7d0; margin: 20px 0;'>"
+            ."<p style='margin-bottom:0;'><a href='".url('/')."' style='display: inline-block; padding: 10px 20px; background: #166534; color: #fff; text-decoration: none; border-radius: 6px; font-weight: bold;'>Wróć na stronę główną i sprawdź zdjęcia</a></p>"
+            .'</div>';
     } catch (\Throwable $e) {
-        Log::error('Fix-storage execution error: ' . $e->getMessage(), ['exception' => $e]);
+        Log::error('Fix-storage execution error: '.$e->getMessage(), ['exception' => $e]);
 
         return "<div style='font-family: sans-serif; padding: 30px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 12px; color: #991b1b; max-width: 600px; margin: 40px auto;'>"
-            . "<h1 style='margin-top:0;'>Blad Wykonania</h1>"
-            . "<p>Wystąpił błąd podczas wykonywania operacji inicjalizacji storage. Szczegóły zostały zapisane w dzienniku zdarzeń (logach).</p>"
-            . "</div>";
+            ."<h1 style='margin-top:0;'>Blad Wykonania</h1>"
+            .'<p>Wystąpił błąd podczas wykonywania operacji inicjalizacji storage. Szczegóły zostały zapisane w dzienniku zdarzeń (logach).</p>'
+            .'</div>';
     }
 })->middleware(['auth', 'verified', 'active']);
 
@@ -473,22 +474,22 @@ Route::match(['get', 'post'], '/deploy-now', function () {
         \Illuminate\Support\Facades\Artisan::call('optimize:clear');
 
         return "<div style='font-family:sans-serif; padding:30px; background:#ecfdf5; border:1px solid #10b981; border-radius:12px; color:#065f46; max-width:700px; margin:40px auto; font-size:15px; line-height:1.6;'>"
-            . "<h1 style='margin-top:0;'>🚀 Sukces Aktualizacji Hostingu!</h1>"
-            . "<p><strong>1. Pobieranie najnowszego kodu z GitHub (git pull):</strong></p>"
-            . "<pre style='background:#fff; padding:12px; border-radius:6px; border:1px solid #a7f3d0; font-size:13px; color:#047857;'>" . e($gitOutput ?: 'Brak odpowiedzi git (sprawdź czy git jest na ścieżce PATH serwera)') . "</pre>"
-            . "<p><strong>2. Wynik importu artykułów SEO do bazy produkcyjnej:</strong></p>"
-            . "<pre style='background:#fff; padding:12px; border-radius:6px; border:1px solid #a7f3d0; font-size:13px; color:#047857;'>" . e($importOutput ?: 'Pomyślnie przetworzono artykuły!') . "</pre>"
-            . "<hr style='border:0; border-top:1px solid #bbf7d0; margin:20px 0;'>"
-            . "<div style='display:flex; gap:10px;'>"
-            . "<a href='" . url('/blog') . "' style='background:#10b981; color:#fff; padding:12px 22px; text-decoration:none; border-radius:8px; font-weight:bold;'>Przejdź do Bloga (/blog) →</a>"
-            . "<a href='" . url('/backend/posts') . "' style='background:#047857; color:#fff; padding:12px 22px; text-decoration:none; border-radius:8px; font-weight:bold;'>Przejdź do Panelu (/backend/posts) →</a>"
-            . "</div>"
-            . "</div>";
+            ."<h1 style='margin-top:0;'>🚀 Sukces Aktualizacji Hostingu!</h1>"
+            .'<p><strong>1. Pobieranie najnowszego kodu z GitHub (git pull):</strong></p>'
+            ."<pre style='background:#fff; padding:12px; border-radius:6px; border:1px solid #a7f3d0; font-size:13px; color:#047857;'>".e($gitOutput ?: 'Brak odpowiedzi git (sprawdź czy git jest na ścieżce PATH serwera)').'</pre>'
+            .'<p><strong>2. Wynik importu artykułów SEO do bazy produkcyjnej:</strong></p>'
+            ."<pre style='background:#fff; padding:12px; border-radius:6px; border:1px solid #a7f3d0; font-size:13px; color:#047857;'>".e($importOutput ?: 'Pomyślnie przetworzono artykuły!').'</pre>'
+            ."<hr style='border:0; border-top:1px solid #bbf7d0; margin:20px 0;'>"
+            ."<div style='display:flex; gap:10px;'>"
+            ."<a href='".url('/blog')."' style='background:#10b981; color:#fff; padding:12px 22px; text-decoration:none; border-radius:8px; font-weight:bold;'>Przejdź do Bloga (/blog) →</a>"
+            ."<a href='".url('/backend/posts')."' style='background:#047857; color:#fff; padding:12px 22px; text-decoration:none; border-radius:8px; font-weight:bold;'>Przejdź do Panelu (/backend/posts) →</a>"
+            .'</div>'
+            .'</div>';
     } catch (\Throwable $e) {
         return "<div style='font-family:sans-serif; padding:30px; background:#fef2f2; border:1px solid #fecaca; border-radius:12px; color:#991b1b; max-width:600px; margin:40px auto;'>"
-            . "<h1 style='margin-top:0;'>Błąd Wykonania</h1>"
-            . "<p>" . e($e->getMessage()) . "</p>"
-            . "</div>";
+            ."<h1 style='margin-top:0;'>Błąd Wykonania</h1>"
+            .'<p>'.e($e->getMessage()).'</p>'
+            .'</div>';
     }
 });
 
@@ -496,7 +497,6 @@ Route::match(['get', 'post'], '/deploy-now', function () {
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified', 'active'])
     ->name('dashboard');
-
 
 // backend routes
 Route::middleware(['auth', 'verified', 'active'])
@@ -529,6 +529,7 @@ Route::middleware(['auth', 'verified', 'active'])
         // Must be registered BEFORE Route::resource('posts') to avoid conflict with /posts/{post}
         Route::get('posts/ai-studio', function () {
             abort_unless(auth()->user()->can('create', \App\Models\Post::class), 403);
+
             return view('backend.ai-blog-studio.index');
         })->name('posts.ai-studio');
 
@@ -554,15 +555,14 @@ Route::middleware(['auth', 'verified', 'active'])
         Route::resource('media', MediaController::class);
     });
 
-
 // Deployment sync route: pulls latest code from git, runs migrations & clears cache via browser
-Route::get('/deploy-sync', function () {
+Route::get('/deploy-sync', function (\Illuminate\Http\Request $request) {
     try {
         $gitOut = 'Funkcja exec jest wyłączona na serwerze.';
         if (function_exists('exec')) {
             $output = [];
             @exec('git pull origin main 2>&1', $output);
-            $gitOut = !empty($output) ? implode("\n", $output) : 'Git pull wykonany (brak odpowiedzi stdout)';
+            $gitOut = ! empty($output) ? implode("\n", $output) : 'Git pull wykonany (brak odpowiedzi stdout)';
         }
 
         $gitLog = '';
@@ -575,47 +575,50 @@ Route::get('/deploy-sync', function () {
         \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
         $migrateOut = \Illuminate\Support\Facades\Artisan::output();
 
-        // Sync blog assets & articles
-        $blogSyncOut = 'Brak folderu BLOG';
-        $blogPath = base_path('BLOG');
-        if (\Illuminate\Support\Facades\File::isDirectory($blogPath)) {
-            $directories = \Illuminate\Support\Facades\File::directories($blogPath);
-            foreach ($directories as $dirPath) {
-                $folderName = basename($dirPath);
-                $storagePublicDir = public_path("storage/blog/{$folderName}");
-                \Illuminate\Support\Facades\File::ensureDirectoryExists($storagePublicDir);
+        // Sync blog assets & articles ONLY when explicitly requested (?import_blog=1)
+        // to prevent overwriting user edits made in CMS dashboard or DB
+        $blogSyncOut = 'Pominięto (chroniąc edycje z CMS/bazy). Aby wymusić import z plików: dodaj ?import_blog=1';
+        if ($request->boolean('import_blog')) {
+            $blogPath = base_path('BLOG');
+            if (\Illuminate\Support\Facades\File::isDirectory($blogPath)) {
+                $directories = \Illuminate\Support\Facades\File::directories($blogPath);
+                foreach ($directories as $dirPath) {
+                    $folderName = basename($dirPath);
+                    $storagePublicDir = public_path("storage/blog/{$folderName}");
+                    \Illuminate\Support\Facades\File::ensureDirectoryExists($storagePublicDir);
 
-                $sourceFiles = \Illuminate\Support\Facades\File::files($dirPath);
-                foreach ($sourceFiles as $file) {
-                    $ext = strtolower($file->getExtension());
-                    if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'jfif'], true)) {
-                        $targetPath = $storagePublicDir . '/' . $file->getFilename();
-                        @\Illuminate\Support\Facades\File::copy($file->getPathname(), $targetPath);
-                        @chmod($targetPath, 0644);
+                    $sourceFiles = \Illuminate\Support\Facades\File::files($dirPath);
+                    foreach ($sourceFiles as $file) {
+                        $ext = strtolower($file->getExtension());
+                        if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'jfif'], true)) {
+                            $targetPath = $storagePublicDir.'/'.$file->getFilename();
+                            @\Illuminate\Support\Facades\File::copy($file->getPathname(), $targetPath);
+                            @chmod($targetPath, 0644);
+                        }
                     }
                 }
+                \Illuminate\Support\Facades\Artisan::call('seo:import-articles');
+                $blogSyncOut = trim(\Illuminate\Support\Facades\Artisan::output());
             }
-            \Illuminate\Support\Facades\Artisan::call('seo:import-articles');
-            $blogSyncOut = trim(\Illuminate\Support\Facades\Artisan::output());
         }
 
         \Illuminate\Support\Facades\Artisan::call('optimize:clear');
         $clearOut = \Illuminate\Support\Facades\Artisan::output();
 
         return response("<div style='font-family:sans-serif; padding:30px; max-width:700px; margin:40px auto; background:#f0fdf4; border:1px solid #10b981; border-radius:12px;'>"
-            . "<h2 style='color:#065f46; margin-top:0;'>✅ System Zsynchronizowany na Hostingu!</h2>"
-            . "<p>Kod z Git, baza danych, artykuły bloga i pamięć podręczna zostały zaktualizowane.</p>"
-            . "<h4>Aktualny commit:</h4><pre style='background:#fff; padding:10px; border-radius:6px;'>" . e($gitLog) . "</pre>"
-            . "<h4>Git Pull:</h4><pre style='background:#fff; padding:10px; border-radius:6px;'>" . e($gitOut) . "</pre>"
-            . "<h4>Migracje:</h4><pre style='background:#fff; padding:10px; border-radius:6px;'>" . e($migrateOut ?: 'Brak nowych migracji.') . "</pre>"
-            . "<h4>Synchronizacja Bloga:</h4><pre style='background:#fff; padding:10px; border-radius:6px;'>" . e($blogSyncOut ?: 'Zsynchronizowano.') . "</pre>"
-            . "<h4>Kesz (optimize:clear):</h4><pre style='background:#fff; padding:10px; border-radius:6px;'>" . e($clearOut) . "</pre>"
-            . "<a href='" . route('backend.posts.ai-studio') . "' style='display:inline-block; margin-top:15px; background:#059669; color:#fff; padding:10px 20px; border-radius:8px; text-decoration:none; font-weight:bold;'>Przejdź do AI Blog Studio →</a>"
-            . "</div>");
+            ."<h2 style='color:#065f46; margin-top:0;'>✅ System Zsynchronizowany na Hostingu!</h2>"
+            .'<p>Kod z Git, baza danych, artykuły bloga i pamięć podręczna zostały zaktualizowane.</p>'
+            ."<h4>Aktualny commit:</h4><pre style='background:#fff; padding:10px; border-radius:6px;'>".e($gitLog).'</pre>'
+            ."<h4>Git Pull:</h4><pre style='background:#fff; padding:10px; border-radius:6px;'>".e($gitOut).'</pre>'
+            ."<h4>Migracje:</h4><pre style='background:#fff; padding:10px; border-radius:6px;'>".e($migrateOut ?: 'Brak nowych migracji.').'</pre>'
+            ."<h4>Synchronizacja Bloga:</h4><pre style='background:#fff; padding:10px; border-radius:6px;'>".e($blogSyncOut ?: 'Zsynchronizowano.').'</pre>'
+            ."<h4>Kesz (optimize:clear):</h4><pre style='background:#fff; padding:10px; border-radius:6px;'>".e($clearOut).'</pre>'
+            ."<a href='".route('backend.posts.ai-studio')."' style='display:inline-block; margin-top:15px; background:#059669; color:#fff; padding:10px 20px; border-radius:8px; text-decoration:none; font-weight:bold;'>Przejdź do AI Blog Studio →</a>"
+            .'</div>');
     } catch (\Throwable $e) {
         return response("<div style='font-family:sans-serif; padding:30px; max-width:700px; margin:40px auto; background:#fef2f2; border:1px solid #f87171; border-radius:12px; color:#991b1b;'>"
-            . "<h2>❌ Błąd aktualizacji:</h2><pre>" . e($e->getMessage()) . "</pre></div>", 500);
+            .'<h2>❌ Błąd aktualizacji:</h2><pre>'.e($e->getMessage()).'</pre></div>', 500);
     }
 });
 
-require __DIR__ . '/settings.php';
+require __DIR__.'/settings.php';
