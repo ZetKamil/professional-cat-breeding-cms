@@ -86,6 +86,12 @@
                 <span class="text-muted ms-2">({{ $categories->total() }} łącznie)</span>
             </div>
 
+            @if($categories->hasPages())
+                <div class="card-body py-2 border-bottom bg-light">
+                    {{ $categories->links() }}
+                </div>
+            @endif
+
             <div class="table-responsive">
                 <table class="table table-bordered table-striped mb-0">
                     <thead>

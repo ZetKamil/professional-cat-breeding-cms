@@ -44,7 +44,7 @@ class RealKittensAndParentsSeeder extends Seeder
                 'photos' => [
                     base_path('image/Bengale/Reproduktory/Bella/Bella .jpg'),
                 ],
-                'sort_order' => 10,
+                'sort_order' => 50,
             ],
             'luki' => [
                 'name' => 'Luki',
@@ -59,7 +59,7 @@ class RealKittensAndParentsSeeder extends Seeder
                 'photos' => [
                     base_path('image/Bengale/Reproduktory/Luki/Luki.jpg'),
                 ],
-                'sort_order' => 11,
+                'sort_order' => 51,
             ],
             'luna' => [
                 'name' => 'Luna',
@@ -74,7 +74,7 @@ class RealKittensAndParentsSeeder extends Seeder
                 'photos' => [
                     base_path('image/Bengale/Reproduktory/Luna/Luna .jpg'),
                 ],
-                'sort_order' => 12,
+                'sort_order' => 52,
             ],
             'nel_bengal' => [
                 'name' => 'Nel',
@@ -89,7 +89,7 @@ class RealKittensAndParentsSeeder extends Seeder
                 'photos' => [
                     base_path('image/Bengale/Reproduktory/Nel/763944468_1407023464607549_4687163816505510510_n.jpg'),
                 ],
-                'sort_order' => 13,
+                'sort_order' => 53,
             ],
 
             // Brytyjczyki Parents
@@ -107,7 +107,7 @@ class RealKittensAndParentsSeeder extends Seeder
                     base_path('image/Brytyjczyki/Reproduktory/Nel/Nel.jpg'),
                     base_path('image/Brytyjczyki/Reproduktory/Nel/Nel1.jpg'),
                 ],
-                'sort_order' => 13,
+                'sort_order' => 30,
             ],
             'stas' => [
                 'name' => 'Staś',
@@ -123,7 +123,7 @@ class RealKittensAndParentsSeeder extends Seeder
                     base_path('image/Brytyjczyki/Reproduktory/Stas/Stas.jpg'),
                     base_path('image/Brytyjczyki/Reproduktory/Stas/Stas1.jpg'),
                 ],
-                'sort_order' => 14,
+                'sort_order' => 31,
             ],
 
             // Syjamskie Parents
@@ -140,7 +140,7 @@ class RealKittensAndParentsSeeder extends Seeder
                 'photos' => [
                     base_path('image/Syjamy/Reproduktory/Baltazar/Baltazar .jpg'),
                 ],
-                'sort_order' => 15,
+                'sort_order' => 40,
             ],
             'koko' => [
                 'name' => 'Koko',
@@ -155,7 +155,7 @@ class RealKittensAndParentsSeeder extends Seeder
                 'photos' => [
                     base_path('image/Syjamy/Reproduktory/Koko/Koko.jpg'),
                 ],
-                'sort_order' => 16,
+                'sort_order' => 41,
             ],
             'nela' => [
                 'name' => 'Nela',
@@ -174,7 +174,7 @@ class RealKittensAndParentsSeeder extends Seeder
                     base_path('image/Syjamy/Reproduktory/Nela/a1a9a5d9-2be4-4ecd-816a-88485b5ff522.jfif'),
                     base_path('image/Syjamy/Reproduktory/Nela/b774b604-0440-4966-bc3f-582621045f8b.jfif'),
                 ],
-                'sort_order' => 17,
+                'sort_order' => 42,
             ],
         ];
 
@@ -205,7 +205,7 @@ class RealKittensAndParentsSeeder extends Seeder
                 $resolvedPath = $this->resolveSourceFile($sourcePath);
                 if ($resolvedPath) {
                     $ext = strtolower(pathinfo($resolvedPath, PATHINFO_EXTENSION)) ?: 'jpg';
-                    $targetFilename = "parent_{$data['slug']}_" . ($photoIndex + 1) . ".{$ext}";
+                    $targetFilename = "parent_{$data['slug']}_".($photoIndex + 1).".{$ext}";
                     $targetPath = storage_path("app/public/media/{$targetFilename}");
 
                     File::copy($resolvedPath, $targetPath);
@@ -217,7 +217,7 @@ class RealKittensAndParentsSeeder extends Seeder
                         File::makeDirectory($publicMediaDir, 0755, true, true);
                         @chmod($publicMediaDir, 0755);
                     }
-                    $pubTarget = $publicMediaDir . '/' . $targetFilename;
+                    $pubTarget = $publicMediaDir.'/'.$targetFilename;
                     File::copy($resolvedPath, $pubTarget);
                     @chmod($pubTarget, 0644);
 
@@ -371,7 +371,7 @@ class RealKittensAndParentsSeeder extends Seeder
                 $resolvedPath = $this->resolveSourceFile($sourcePath);
                 if ($resolvedPath) {
                     $ext = strtolower(pathinfo($resolvedPath, PATHINFO_EXTENSION)) ?: 'jpg';
-                    $targetFilename = "kitten_{$kData['slug']}_" . ($photoIndex + 1) . ".{$ext}";
+                    $targetFilename = "kitten_{$kData['slug']}_".($photoIndex + 1).".{$ext}";
                     $targetPath = storage_path("app/public/media/{$targetFilename}");
 
                     File::copy($resolvedPath, $targetPath);
@@ -383,7 +383,7 @@ class RealKittensAndParentsSeeder extends Seeder
                         File::makeDirectory($publicMediaDir, 0755, true, true);
                         @chmod($publicMediaDir, 0755);
                     }
-                    $pubTarget = $publicMediaDir . '/' . $targetFilename;
+                    $pubTarget = $publicMediaDir.'/'.$targetFilename;
                     File::copy($resolvedPath, $pubTarget);
                     @chmod($pubTarget, 0644);
 

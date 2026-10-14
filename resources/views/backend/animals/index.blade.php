@@ -112,6 +112,12 @@
                 <span class="text-muted ms-2">({{ $animals->total() }} łącznie)</span>
             </div>
 
+            @if($animals->hasPages())
+                <div class="card-body py-2 border-bottom bg-light">
+                    {{ $animals->links() }}
+                </div>
+            @endif
+
             <div class="table-responsive">
                 <table class="table table-bordered table-striped mb-0">
                     <thead>

@@ -95,6 +95,7 @@ class Animal extends Model
             if ($this->gender === AnimalGender::Male) {
                 return 'Reproduktor';
             }
+
             return 'Kot Hodowlany';
         }
 
@@ -366,5 +367,58 @@ class Animal extends Model
         }
 
         return $diff->d === 1 ? '1 dzień' : $diff->d.' dni';
+    }
+
+    /**
+     * Oblicza następny sugerowany numer sort_order według standardu hodowli:
+     * - 1 - 19: Kocięta do rezerwacji / dostępne (Available / Reserved)
+     * - 20 - 29: Koty w nowych domach (Sold / Alumni)
+     * - 30 - 39: Dorosłe koty hodowlane rasy Kot Brytyjski (Breeding)
+     * - 40 - 49: Dorosłe koty hodowlane rasy Kot Syjamski (Breeding)
+     * - 50 - 59: Dorosłe koty hodowlane rasy Kot Bengalski (Breeding)
+     */
+    public static function nextSortOrderFor(string|AnimalStatus $status, ?string $breed = null): int
+    {
+        $statusValue = $status instanceof AnimalStatus ? $status->value : (string) $status;
+
+        // 1. Koty w nowych domach (Sold): pula 20 - 29
+        if ($statusValue === AnimalStatus::Sold->value) {
+            $max = static::where('status', AnimalStatus::Sold)
+                ->where('sort_order', '>=', 20)
+                ->where('sort_order', '<', 30)
+                ->max('sort_order');
+
+            return $max !== null ? (int) $max + 1 : 20;
+        }
+
+        // 2. Dorosłe koty hodowlane (Breeding): pule rasowe 30+, 40+, 50+
+        if ($statusValue === AnimalStatus::Breeding->value) {
+            $normalizedBreed = mb_strtolower(trim((string) $breed));
+
+            $rangeStart = 30;
+            if (str_contains($normalizedBreed, 'bryt') || str_contains($normalizedBreed, 'brit')) {
+                $rangeStart = 30;
+            } elseif (str_contains($normalizedBreed, 'syjam') || str_contains($normalizedBreed, 'siam')) {
+                $rangeStart = 40;
+            } elseif (str_contains($normalizedBreed, 'bengal')) {
+                $rangeStart = 50;
+            }
+
+            $rangeEnd = $rangeStart + 9;
+
+            $max = static::where('status', AnimalStatus::Breeding)
+                ->whereBetween('sort_order', [$rangeStart, $rangeEnd])
+                ->max('sort_order');
+
+            return $max !== null ? (int) $max + 1 : $rangeStart;
+        }
+
+        // 3. Kocięta (Available / Reserved): pula 1 - 19
+        $max = static::whereIn('status', [AnimalStatus::Available, AnimalStatus::Reserved])
+            ->when($breed, fn ($q) => $q->where('breed', $breed))
+            ->whereBetween('sort_order', [1, 19])
+            ->max('sort_order');
+
+        return $max !== null ? (int) $max + 1 : 1;
     }
 }

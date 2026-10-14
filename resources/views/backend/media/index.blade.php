@@ -195,6 +195,12 @@
                     @endcan
                 </div>
             @else
+                @if($media->hasPages())
+                    <div class="mb-3">
+                        {{ $media->links() }}
+                    </div>
+                @endif
+
                 @if ($filters['view'] === 'list')
                     {{-- LIST VIEW --}}
                     <div class="table-responsive">

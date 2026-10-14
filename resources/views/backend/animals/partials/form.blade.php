@@ -156,9 +156,18 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="sort_order" class="form-label">Kolejność wyświetlania</label>
-                    <input type="number" class="form-control @error('sort_order') is-invalid @enderror" id="sort_order" name="sort_order" value="{{ old('sort_order', $animal->sort_order ?? 0) }}">
-                    <div class="form-text">Niższe liczby pojawiają się jako pierwsze.</div>
+                    <label for="sort_order" class="form-label">Kolejność wyświetlania (sort_order)</label>
+                    <input type="number" class="form-control @error('sort_order') is-invalid @enderror" id="sort_order" name="sort_order" value="{{ old('sort_order', $animal->sort_order ?: '') }}" placeholder="np. 1, 20, 30...">
+                    <div class="form-text">
+                        <div class="d-flex flex-wrap gap-1 my-1">
+                            <span class="badge bg-light text-dark border">1–19 Kocięta</span>
+                            <span class="badge bg-light text-dark border">20+ W nowym domu</span>
+                            <span class="badge bg-light text-dark border">30+ Brytyjczyki</span>
+                            <span class="badge bg-light text-dark border">40+ Syjamy</span>
+                            <span class="badge bg-light text-dark border">50+ Bengale</span>
+                        </div>
+                        <div class="small text-muted">Zostaw puste lub wpisz 0, aby system nadał kolejny numer automatycznie.</div>
+                    </div>
                     @error('sort_order') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
             </div>

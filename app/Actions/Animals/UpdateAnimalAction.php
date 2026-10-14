@@ -35,7 +35,18 @@ class UpdateAnimalAction
                 'is_featured' => $data['is_featured'],
                 'is_published' => $data['is_published'],
                 'published_at' => $data['published_at'] ?? null,
-                'sort_order' => $data['sort_order'] ?? 0,
+                'sort_order' => (function () use ($animal, $data) {
+                    $newStatus = $data['status'] instanceof \App\Enums\AnimalStatus ? $data['status'] : \App\Enums\AnimalStatus::from($data['status']);
+                    $sort = (isset($data['sort_order']) && (int) $data['sort_order'] > 0)
+                        ? (int) $data['sort_order']
+                        : ($animal->sort_order ?: Animal::nextSortOrderFor($data['status'], $data['breed'] ?? $animal->breed));
+
+                    if ($newStatus === \App\Enums\AnimalStatus::Sold && $sort < 20) {
+                        return Animal::nextSortOrderFor(\App\Enums\AnimalStatus::Sold);
+                    }
+
+                    return $sort;
+                })(),
                 'meta_title' => $data['meta_title'] ?? null,
                 'meta_description' => $data['meta_description'] ?? null,
             ]);
@@ -48,7 +59,7 @@ class UpdateAnimalAction
                 );
             }
 
-            if (!empty($data['gallery']) && is_array($data['gallery'])) {
+            if (! empty($data['gallery']) && is_array($data['gallery'])) {
                 foreach ($data['gallery'] as $galleryFile) {
                     if ($galleryFile instanceof UploadedFile) {
                         $this->mediaService->upload($animal, $galleryFile, 'animals');

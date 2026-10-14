@@ -29,7 +29,7 @@ return new class extends Migration
                 'date_of_birth' => Carbon::create(2020, 11, 16),
                 'short_description' => 'Szlachetny reproduktor syjamski o smukłej sylwetce, ubarwieniu Seal Point i zniewalających błękitnych oczach.',
                 'description' => 'Baltazar to nasz flagowy reproduktor rasy Kot Syjamski o klasycznym ubarwieniu Seal Point. Charakteryzuje go ogromna przyjacielskość, wysoki poziom inteligencji oraz głębokie, szafirowe spojrzenie. Rodowód SHiOZ 12371R/2021, mikrochip 616049000054127, urodzony 16.11.2020 r.',
-                'sort_order' => 15,
+                'sort_order' => 40,
                 'is_featured' => true,
                 'is_published' => true,
                 'published_at' => now(),
@@ -42,6 +42,8 @@ return new class extends Migration
                 true,
                 0
             );
+        } else {
+            $baltazar->update(['sort_order' => 40]);
         }
 
         $koko = Animal::where('slug', 'koko')->first();
@@ -57,7 +59,7 @@ return new class extends Migration
                 'date_of_birth' => Carbon::create(2020, 10, 5),
                 'short_description' => 'Urocza, niezwykle opiekuńcza i czuła kotka hodowlana rasy Kot Syjamski o szlachetnym umaszczeniu Seal Point.',
                 'description' => 'Koko to wspaniała kotka hodowlana rasy Kot Syjamski. Wzorcowa matka miotów syjamskich, bezgranicznie oddana człowiekowi, socjalizowana w sercu domu. Rodowód SHiOZ 3311RW/2021, mikrochip 61604901758702, urodzona 05.10.2020 r.',
-                'sort_order' => 16,
+                'sort_order' => 41,
                 'is_featured' => true,
                 'is_published' => true,
                 'published_at' => now(),
@@ -70,6 +72,8 @@ return new class extends Migration
                 true,
                 0
             );
+        } else {
+            $koko->update(['sort_order' => 41]);
         }
 
         // ─────────────────────────────────────────────────────────────
@@ -90,7 +94,7 @@ return new class extends Migration
                 'description' => 'Bars (A-Bars) to nasz wybitny reproduktor rasy Kot Bengalski o rzadkim i pożądanym ubarwieniu srebrzystym cętkowanym z kontrastowymi rozetami (kod EMS: BEN ns 24 – Black Silver Spotted Tabby). Charakteryzuje się harmonijną budową anatomiczną, silnym kośćcem oraz jedwabiście gładką sierścią o naturalnym blasku.
 
 Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowanym reproduktorem w SHiOZ ZOOLANDIA (rodowód (PL) FPL LO 354902, mikrochip nr 900263006037836). Urodzony 9 maja 2024 r. Stanowi dumę i filar naszego programu hodowlanego kotów bengalskich.',
-                'sort_order' => 12,
+                'sort_order' => 54,
                 'is_featured' => true,
                 'is_published' => true,
                 'published_at' => now(),
@@ -119,6 +123,8 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
                 false,
                 2
             );
+        } else {
+            $bars->update(['sort_order' => 54]);
         }
 
         // ─────────────────────────────────────────────────────────────
@@ -130,7 +136,7 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
                 'slug' => 'dafne',
                 'color' => 'Seal Point',
                 'gender' => AnimalGender::Female,
-                'sort_order' => 8,
+                'sort_order' => 1,
                 'short_description' => 'Urocza koteczka syjamska z miotu D o klasycznym ubarwieniu Seal Point i głębokich, błękitnych oczach.',
                 'description' => 'Dafne to przepiękna kotka syjamska z miotu D po utytułowanych rodzicach Koko i Baltazarze. Cechuje ją łagodne usposobienie, wesoła natura i ogromna chęć do pieszczot. Wychowywana w domowym cieple, w pełni nauczona czystości. Urodzona 13 września 2026 r. (SHiOZ ZOOLANDIA). Gotowa do rezerwacji.',
                 'photo' => base_path('image/Syjamy/Kociaki/Dafne/7b7099e2-d8f8-4e8b-8285-539525e1104a.jpg'),
@@ -141,7 +147,7 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
                 'slug' => 'daisy',
                 'color' => 'Seal Point',
                 'gender' => AnimalGender::Female,
-                'sort_order' => 9,
+                'sort_order' => 2,
                 'short_description' => 'Słodka, pełna wdzięku kotka syjamska z miotu D o umaszczeniu Seal Point i wielkim serduszku.',
                 'description' => 'Daisy to pełna uroku koteczka syjamska o klasycznym wybarwieniu Seal Point. Bardzo kontaktowa, ciekawska i uwielbiająca spanie na kolanach. Córka Koko i Baltazara, urodzona 13 września 2026 r. Zarejestrowana w SHiOZ ZOOLANDIA. Gotowa do rezerwacji.',
                 'photo' => base_path('image/Syjamy/Kociaki/Daisy/7b7099e2-d8f8-4e8b-8285-539525e1104a.jpg'),
@@ -152,7 +158,7 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
                 'slug' => 'dakota',
                 'color' => 'Seal Point',
                 'gender' => AnimalGender::Female,
-                'sort_order' => 10,
+                'sort_order' => 3,
                 'short_description' => 'Bystra i energiczna kotka syjamska o pięknej sylwetce i szafirowym spojrzeniu.',
                 'description' => 'Dakota wyróżnia się bystrym spojrzeniem, harmonijną budową i wspaniałym temperamentem. Od pierwszych tygodni socjalizowana z ludźmi i przyzwyczajana do codziennych odgłosów domu. Córka Koko i Baltazara, urodzona 13 września 2026 r. Gotowa do rezerwacji.',
                 'photo' => base_path('image/Syjamy/Kociaki/Dakota/fc2b3579-56d0-484e-9de2-1c77736527fe.jpg'),
@@ -163,7 +169,7 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
                 'slug' => 'diana',
                 'color' => 'Seal Point',
                 'gender' => AnimalGender::Female,
-                'sort_order' => 11,
+                'sort_order' => 4,
                 'short_description' => 'Delikatna i czuła kotka syjamska o arystokratycznym spojrzeniu i wspaniałym kontraście znaczeń.',
                 'description' => 'Diana to mała arystokratka o łagodnym, przyjaznym charakterze. Szuka bliskiego kontaktu z opiekunem, głośno mruczy i zachwyca błękitnymi oczami. Córka Koko i Baltazara, urodzona 13 września 2026 r. Gotowa do rezerwacji.',
                 'photo' => base_path('image/Syjamy/Kociaki/Diana/fc2b3579-56d0-484e-9de2-1c77736527fe.jpg'),
@@ -172,7 +178,8 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
         ];
 
         foreach ($siameseKittens as $kData) {
-            if (! Animal::where('slug', $kData['slug'])->exists()) {
+            $kitten = Animal::where('slug', $kData['slug'])->first();
+            if (! $kitten) {
                 $kitten = Animal::create([
                     'name' => $kData['name'],
                     'slug' => $kData['slug'],
@@ -199,6 +206,8 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
                     true,
                     0
                 );
+            } else {
+                $kitten->update(['sort_order' => $kData['sort_order']]);
             }
         }
 
@@ -221,7 +230,7 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
                 'date_of_birth' => Carbon::create(2025, 10, 31),
                 'short_description' => 'Dostojna kotka hodowlana rasy Kot Brytyjski o klasycznej niebieskiej okrywie i pięknej okrągłej głowie.',
                 'description' => 'Nel to nasza kluczowa kotka hodowlana rasy Kot Brytyjski Krótkowłosy (BSH a). Wzorcowa budowa, pluszowe futro i zrównoważony domowy charakter. Posiada certyfikaty SHiOZ 3331R/2026, mikrochip 900263004298012. Troskliwa matka miotu A.',
-                'sort_order' => 13,
+                'sort_order' => 30,
                 'is_featured' => true,
                 'is_published' => true,
                 'published_at' => now(),
@@ -241,12 +250,15 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
                 false,
                 1
             );
+        } else {
+            $nel->update(['sort_order' => 30]);
         }
 
         // ─────────────────────────────────────────────────────────────
         // 5. ATOS (Brytyjczyk, duży - profil bez zdjęć wg polecenia)
         // ─────────────────────────────────────────────────────────────
-        if (! Animal::where('slug', 'atos')->exists()) {
+        $atos = Animal::where('slug', 'atos')->first();
+        if (! $atos) {
             Animal::create([
                 'name' => 'Atos',
                 'slug' => 'atos',
@@ -259,19 +271,22 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
                 'mother_id' => $nel?->id,
                 'short_description' => 'Dostojny kocur rasy Kot Brytyjski Długowłosy o szlachetnym umaszczeniu colourpoint niebieski (BLH a 33).',
                 'description' => 'Atos to wyjątkowy kocur rasy Kot Brytyjski Długowłosy (British Longhair – BLH a 33) o jasnej szacie ze szlachetnymi niebieskimi znaczeniami i szafirowym spojrzeniu. Charakteryzuje się mocną, masywną budową ciała, gęstym podszerstkiem i oazą spokoju w usposobieniu. Syn naszej kotki Nel. Zarejestrowany w SHiOZ ZOOLANDIA.',
-                'sort_order' => 14,
+                'sort_order' => 32,
                 'is_featured' => true,
                 'is_published' => true,
                 'published_at' => now(),
             ]);
             // Zdjęcia Atosa nie są dodawane (zgodnie z wytyczną: karta miotu wykluczona, a właściwe zdjęcia zostaną dodane w przyszłości)
+        } else {
+            $atos->update(['sort_order' => 32]);
         }
 
         // ─────────────────────────────────────────────────────────────
         // 6. 3 KOCIAKI BRYTYJSKIE (Ada, Alma, Atena - Miot A, ur. 09.09.2026 r.)
         // ─────────────────────────────────────────────────────────────
         // Ada
-        if (! Animal::where('slug', 'ada')->exists()) {
+        $ada = Animal::where('slug', 'ada')->first();
+        if (! $ada) {
             $ada = Animal::create([
                 'name' => 'Ada',
                 'slug' => 'ada',
@@ -284,7 +299,7 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
                 'mother_id' => $nel?->id,
                 'short_description' => 'Pluszowa koteczka brytyjska o klasycznym niebieskim umaszczeniu (BSH a) i czułym serduszku.',
                 'description' => 'Ada to śliczna koteczka rasy Kot Brytyjski Krótkowłosy o tradycyjnym niebieskim ubarwieniu (BSH a). Odznacza się gęstym, aksamitnym futrem i kochanym, spokojnym charakterem. Córka Nel, urodzona 9 września 2026 r. (SHiOZ ZOOLANDIA). Dostępna do rezerwacji.',
-                'sort_order' => 5,
+                'sort_order' => 1,
                 'is_featured' => true,
                 'is_published' => true,
                 'published_at' => now(),
@@ -304,10 +319,13 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
                 false,
                 1
             );
+        } else {
+            $ada->update(['sort_order' => 1]);
         }
 
         // Alma
-        if (! Animal::where('slug', 'alma')->exists()) {
+        $alma = Animal::where('slug', 'alma')->first();
+        if (! $alma) {
             $alma = Animal::create([
                 'name' => 'Alma',
                 'slug' => 'alma',
@@ -320,7 +338,7 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
                 'mother_id' => $nel?->id,
                 'short_description' => 'Puchata koteczka brytyjska długowłosa o unikalnym umaszczeniu colourpoint niebieski (BLH a 33).',
                 'description' => 'Alma to prawdziwa perełka w naszej hodowli – kotka rasy Kot Brytyjski Długowłosy o zjawiskowym umaszczeniu colourpoint niebieski (BLH a 33) i błękitnych oczach. Jej puchata, miękka szata oraz łagodne, urocze spojrzenie natychmiast skradają serce. Córka Nel, urodzona 9 września 2026 r. Dostępna do rezerwacji.',
-                'sort_order' => 6,
+                'sort_order' => 2,
                 'is_featured' => true,
                 'is_published' => true,
                 'published_at' => now(),
@@ -340,10 +358,13 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
                 false,
                 1
             );
+        } else {
+            $alma->update(['sort_order' => 2]);
         }
 
         // Atena
-        if (! Animal::where('slug', 'atena')->exists()) {
+        $atena = Animal::where('slug', 'atena')->first();
+        if (! $atena) {
             $atena = Animal::create([
                 'name' => 'Atena',
                 'slug' => 'atena',
@@ -356,7 +377,7 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
                 'mother_id' => $nel?->id,
                 'short_description' => 'Ciekawska i wesoła kotka brytyjska krótkowłosa o pluszowej niebieskiej okrywie (BSH a).',
                 'description' => 'Atena to energiczna, ciekawa świata koteczka brytyjska krótkowłosa (BSH a) o aksamitnym, sprężystym futerku. Uwielbia zabawy, towarzystwo człowieka i innych zwierząt. Córka Nel, urodzona 9 września 2026 r. Posiada dokumentację SHiOZ ZOOLANDIA. Dostępna do rezerwacji.',
-                'sort_order' => 7,
+                'sort_order' => 3,
                 'is_featured' => true,
                 'is_published' => true,
                 'published_at' => now(),
@@ -390,7 +411,17 @@ Posiada zrównoważony, łagodny i przyjacielski temperament. Jest zarejestrowan
                 false,
                 3
             );
+        } else {
+            $atena->update(['sort_order' => 3]);
         }
+
+        // ─────────────────────────────────────────────────────────────
+        // 7. HARMONIZACJA ISTNIEJĄCYCH KOTÓW WG STANDARDU HODOWLI:
+        //    20+ Koty w nowych domach | 40+ Syjamy hodowlane
+        // ─────────────────────────────────────────────────────────────
+        Animal::where('slug', 'barbie')->update(['sort_order' => 20]);
+        Animal::where('slug', 'nela-syjamska')->orWhere('slug', 'nela')->update(['sort_order' => 42]);
+        Animal::where('slug', 'bella-kociak')->update(['sort_order' => 5]);
     }
 
     public function down(): void

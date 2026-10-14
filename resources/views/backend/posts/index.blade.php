@@ -134,6 +134,12 @@
                 <span class="text-muted ms-2">({{ $posts->total() }} łącznie)</span>
             </div>
 
+            @if($posts->hasPages())
+                <div class="card-body py-2 border-bottom bg-light">
+                    {{ $posts->links() }}
+                </div>
+            @endif
+
             <div class="table-responsive">
                 <table class="table table-bordered table-striped mb-0">
                     <thead>

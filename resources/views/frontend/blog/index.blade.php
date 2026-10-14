@@ -24,6 +24,12 @@
     ============================================================ --}}
     <x-frontend.section class="blog-grid-section">
         @if ($posts->count() > 0)
+            @if ($posts->hasPages())
+                <div class="blog-pagination mb-4">
+                    {{ $posts->links('components.frontend.pagination') }}
+                </div>
+            @endif
+
             <div class="articles-grid">
                 @foreach ($posts as $post)
                     <x-frontend.blog-card :post="$post" />

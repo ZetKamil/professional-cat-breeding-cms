@@ -119,6 +119,12 @@
                 <span class="text-muted ms-2">({{ $users->total() }} łącznie)</span>
             </div>
 
+            @if($users->hasPages())
+                <div class="card-body py-2 border-bottom bg-light">
+                    {{ $users->links() }}
+                </div>
+            @endif
+
             <div class="table-responsive">
                 <table class="table table-bordered table-striped mb-0">
                     <thead>

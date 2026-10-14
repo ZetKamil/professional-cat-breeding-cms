@@ -53,6 +53,12 @@
 
             </div>
 
+            @if($animals->hasPages())
+                <div class="animals-catalog__pagination mb-4">
+                    {{ $animals->links('components.frontend.pagination') }}
+                </div>
+            @endif
+
             {{-- ============================================================
                  3. ANIMALS GRID
                  ============================================================ --}}
