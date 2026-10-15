@@ -1,8 +1,9 @@
 <x-frontend.shell
     title="Dobierz Idealną Rasę Kota w 45 Sekund — Bengalski, Brytyjski czy Syjamski? | Mazowiecka Szwajcaria"
     meta-description="Nie wiesz, jaki kot pasuje do Twojego stylu życia? Wypełnij nasz 45-sekundowy quiz i poznaj rasę idealnie dopasowaną do Ciebie oraz zobacz dostępne maluchy na żywo."
+    nav-theme="dark"
 >
-    <section class="quiz-section" aria-label="Interaktywny quiz doboru rasy kota">
+    <section class="quiz-section hero--dark" data-nav-theme="dark" aria-label="Interaktywny quiz doboru rasy kota">
         <div class="section-inner">
             
             {{-- Quiz Hero Header --}}

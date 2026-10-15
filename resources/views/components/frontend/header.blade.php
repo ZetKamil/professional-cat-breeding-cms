@@ -1,3 +1,7 @@
+@props([
+    'theme' => null,
+])
+
 {{-- 
     Premium Adaptive Glass Navigation — Apple / Aesop inspired
     3-zone layout: Brand | Links | Utilities (Panel + Hamburger)
@@ -6,7 +10,7 @@
 
 <header class="site-header" role="banner">
     {{-- Global Nav Bar --}}
-    <nav class="global-nav global-nav--top" aria-label="Główna nawigacja" id="globalNav">
+    <nav class="global-nav global-nav--top {{ $theme ? 'global-nav--' . $theme : '' }}" aria-label="Główna nawigacja" id="globalNav">
         <div class="global-nav__inner">
             {{-- Zone 1: Logo / Brand --}}
             <a href="{{ route('home') }}" class="global-nav__logo" aria-label="{{ config('app.name', 'Cattery') }} — strona główna">

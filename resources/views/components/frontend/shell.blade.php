@@ -5,6 +5,7 @@
     'ogType' => 'website',
     'canonical' => null,
     'robots' => 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
+    'navTheme' => null,
 ])
 
 @php
@@ -150,7 +151,7 @@
     </a>
 
     {{-- Global Navigation --}}
-    <x-frontend.header />
+    <x-frontend.header :theme="$navTheme" />
 
     {{-- Main Content --}}
     <main id="main-content">

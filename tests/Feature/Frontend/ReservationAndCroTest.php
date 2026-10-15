@@ -78,6 +78,8 @@ class ReservationAndCroTest extends TestCase
         $response->assertOk();
         $response->assertSee('Dobierz Idealną Rasę w 45 Sekund');
         $response->assertSee('Jak wygląda Twój wymarzony dzień z kotem?');
+        $response->assertSee('global-nav--dark');
+        $response->assertSee('data-nav-theme="dark"', false);
     }
 
     public function test_local_seo_city_pages_render_successfully(): void
