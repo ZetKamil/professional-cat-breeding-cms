@@ -449,5 +449,186 @@ class ReservationAndCroTest extends TestCase
 
         \Illuminate\Support\Carbon::setTestNow();
     }
+
+    public function test_cat_status_and_identity_remain_consistent_across_catalogue_profile_and_mobile_bar(): void
+    {
+        $now = \Illuminate\Support\Carbon::parse('2026-10-15 12:00:00');
+        \Illuminate\Support\Carbon::setTestNow($now);
+
+        // 1. Kitten awaiting pickup window (5 weeks old)
+        $earlyCat = Animal::factory()->create([
+            'name'          => 'AdaBrytyjska',
+            'breed'         => 'Kot Brytyjski',
+            'gender'        => \App\Enums\AnimalGender::Female,
+            'status'        => \App\Enums\AnimalStatus::Available,
+            'date_of_birth' => $now->copy()->subWeeks(5),
+            'is_published'  => true,
+            'is_featured'   => true,
+        ]);
+
+        // 2. Kitten in pickup window (13 weeks old)
+        $readyCat = Animal::factory()->create([
+            'name'          => 'CarlosBengalski',
+            'breed'         => 'Kot Bengalski',
+            'gender'        => \App\Enums\AnimalGender::Male,
+            'status'        => \App\Enums\AnimalStatus::Available,
+            'date_of_birth' => $now->copy()->subWeeks(13),
+            'is_published'  => true,
+            'is_featured'   => true,
+        ]);
+
+        // 3. Kitten reserved (even if 13 weeks old)
+        $reservedCat = Animal::factory()->create([
+            'name'          => 'ZafiraZarezerwowana',
+            'breed'         => 'Kot Syjamski',
+            'gender'        => \App\Enums\AnimalGender::Female,
+            'status'        => \App\Enums\AnimalStatus::Reserved,
+            'date_of_birth' => $now->copy()->subWeeks(13),
+            'is_published'  => true,
+            'is_featured'   => true,
+        ]);
+
+        // Catalogue checks
+        $catalogue = $this->get(route('frontend.animals.index'));
+        $catalogue->assertOk();
+        $catalogue->assertSee('AdaBrytyjska');
+        $catalogue->assertSee('Wczesna rezerwacja • za 7 tyg.');
+        $catalogue->assertSee('CarlosBengalski');
+        $catalogue->assertSee('Gotowy do odbioru (12–14 tyg.)');
+        $catalogue->assertSee('ZafiraZarezerwowana');
+        $catalogue->assertSee('Zarezerwowany');
+
+        // Profile checks: Ada
+        $adaProfile = $this->get(route('frontend.animals.show', $earlyCat));
+        $adaProfile->assertOk();
+        $adaProfile->assertSee('AdaBrytyjska');
+        $adaProfile->assertSee('Wczesna rezerwacja • za 7 tyg.');
+        $adaProfile->assertSee($earlyCat->pickupWindowFormatted());
+        $adaProfile->assertSee("window.openReservationModal('AdaBrytyjska', 'Kot Brytyjski', 'Wczesna rezerwacja • za 7 tyg.')", false);
+
+        // Profile checks: Carlos
+        $carlosProfile = $this->get(route('frontend.animals.show', $readyCat));
+        $carlosProfile->assertOk();
+        $carlosProfile->assertSee('CarlosBengalski');
+        $carlosProfile->assertSee('Gotowy do odbioru (12–14 tyg.)');
+        $carlosProfile->assertSee("window.openReservationModal('CarlosBengalski', 'Kot Bengalski', 'Gotowy do odbioru (12–14 tyg.)')", false);
+
+        // Profile checks: Zafira (Reserved)
+        $zafiraProfile = $this->get(route('frontend.animals.show', $reservedCat));
+        $zafiraProfile->assertOk();
+        $zafiraProfile->assertSee('ZafiraZarezerwowana');
+        $zafiraProfile->assertSee('Zarezerwowany');
+        $zafiraProfile->assertSee("window.openReservationModal('ZafiraZarezerwowana', 'Kot Syjamski', 'Zarezerwowany')", false);
+        $this->assertSame('Zarezerwowany', $reservedCat->pickupBadgeLabel());
+
+        \Illuminate\Support\Carbon::setTestNow();
+    }
+
+    public function test_reserved_and_unavailable_kittens_never_represented_as_ready_for_pickup(): void
+    {
+        $now = \Illuminate\Support\Carbon::parse('2026-10-15 12:00:00');
+        \Illuminate\Support\Carbon::setTestNow($now);
+
+        // 1. Reserved cat (older than 14 weeks)
+        $reserved = Animal::factory()->create([
+            'name'          => 'ZarezerwowanyMaluch',
+            'status'        => \App\Enums\AnimalStatus::Reserved,
+            'date_of_birth' => $now->copy()->subWeeks(15),
+            'is_published'  => true,
+        ]);
+
+        $this->assertFalse($reserved->isReadyNow($now));
+        $this->assertFalse($reserved->isInPickupWindow($now));
+        $this->assertFalse($reserved->isEarlyReservation($now));
+        $this->assertSame('Zarezerwowany', $reserved->pickupBadgeLabel($now));
+
+        // 2. Sold cat
+        $sold = Animal::factory()->create([
+            'name'          => 'SprzedanyMaluch',
+            'status'        => \App\Enums\AnimalStatus::Sold,
+            'date_of_birth' => $now->copy()->subWeeks(16),
+            'is_published'  => true,
+        ]);
+
+        $this->assertFalse($sold->isReadyNow($now));
+        $this->assertFalse($sold->isInPickupWindow($now));
+        $this->assertSame('W nowym domu', $sold->pickupBadgeLabel($now));
+
+        // 3. Quiz exclusion: neither reserved nor sold cat appears in quiz
+        $quizResponse = $this->get(route('quiz'));
+        $quizResponse->assertOk();
+        $quizResponse->assertDontSee('ZarezerwowanyMaluch');
+        $quizResponse->assertDontSee('SprzedanyMaluch');
+
+        \Illuminate\Support\Carbon::setTestNow();
+    }
+
+    public function test_homepage_featured_section_strictly_excludes_breeding_parents_and_sold_cats(): void
+    {
+        // 1. Featured breeding parent
+        $breeding = Animal::factory()->create([
+            'name'         => 'BaltazarReproduktor',
+            'status'       => \App\Enums\AnimalStatus::Breeding,
+            'is_published' => true,
+            'is_featured'  => true,
+        ]);
+
+        // 2. Featured sold cat
+        $sold = Animal::factory()->create([
+            'name'         => 'BarbieWNowymDomu',
+            'status'       => \App\Enums\AnimalStatus::Sold,
+            'is_published' => true,
+            'is_featured'  => true,
+        ]);
+
+        // 3. Featured available kitten
+        $available = Animal::factory()->create([
+            'name'         => 'CandyDostepna',
+            'status'       => \App\Enums\AnimalStatus::Available,
+            'is_published' => true,
+            'is_featured'  => true,
+        ]);
+
+        $home = $this->get(route('home'));
+        $home->assertOk();
+        $home->assertSee('CandyDostepna');
+        $home->assertDontSee('BaltazarReproduktor');
+        $home->assertDontSee('BarbieWNowymDomu');
+    }
+
+    public function test_empty_catalogue_and_missing_data_cases_render_gracefully(): void
+    {
+        // 1. Empty catalogue: explicitly delete all seeded animals
+        Animal::query()->delete();
+
+        $home = $this->get(route('home'));
+        $home->assertOk();
+        $home->assertSee('Aktualnie wszystkie kocięta znalazły nowe domy');
+
+        $catalogue = $this->get(route('frontend.animals.index'));
+        $catalogue->assertOk();
+        $catalogue->assertSee('Brak kotów spełniających kryteria');
+
+        $quiz = $this->get(route('quiz'));
+        $quiz->assertOk();
+        $quiz->assertSee('Dobierz Idealną Rasę w 45 Sekund');
+
+        // 2. Animal with missing date_of_birth
+        $animalWithoutDob = Animal::factory()->create([
+            'name'          => 'TajemniczyKot',
+            'status'        => \App\Enums\AnimalStatus::Available,
+            'date_of_birth' => null,
+            'is_published'  => true,
+        ]);
+
+        $this->assertSame('Dostępny do rezerwacji', $animalWithoutDob->pickupBadgeLabel());
+        $this->assertNull($animalWithoutDob->pickupWindowFormatted());
+
+        $profile = $this->get(route('frontend.animals.show', $animalWithoutDob));
+        $profile->assertOk();
+        $profile->assertSee('TajemniczyKot');
+        $profile->assertSee('Dostępny do rezerwacji');
+        $profile->assertDontSee('undefined');
+    }
 }
 

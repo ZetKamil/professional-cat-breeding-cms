@@ -124,7 +124,13 @@
                     @endfor
                 @else
                     {{-- ─── Legacy body (markdown HTML) ─────────────── --}}
-                    {!! Str::markdown($post->body) !!}
+                    @php
+                        $bodyToRender = $post->body ?? '';
+                        if ($globalCta['is_enabled'] ?? true) {
+                            $bodyToRender = preg_replace('/(?:\r?\n)*---\s*(?:\r?\n)*##\s*(?:🐾|Dostępne kocięta|Aktualnie dostępne).*$/su', '', $bodyToRender);
+                        }
+                    @endphp
+                    {!! Str::markdown($bodyToRender) !!}
                 @endif
 
                 {{-- ============================================================
