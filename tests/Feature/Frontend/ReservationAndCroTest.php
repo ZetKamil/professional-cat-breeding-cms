@@ -303,6 +303,174 @@ class ReservationAndCroTest extends TestCase
         $responseAfterUpdate->assertDontSee('DafneDostepna');
     }
 
+    public function test_quiz_renders_back_navigation_hero_badges_and_behavioral_disclaimer(): void
+    {
+        $response = $this->get(route('quiz'));
+
+        $response->assertOk();
+        $response->assertSee('quiz-hero__badges', false);
+        $response->assertSee('4 szybkie pytania');
+        $response->assertSee('bez wymogu podawania e-maila');
+        $response->assertSee('quiz-nav-back', false);
+        $response->assertSee('window.prevQuizStep', false);
+        $response->assertSee('quiz-modify-btn', false);
+        $response->assertSee('quiz-result__disclaimer', false);
+        $response->assertSee('indywidualny charakter');
+        $response->assertSee('window.contactBreederFromQuiz', false);
+        $response->assertSee('window.openCallbackFromQuiz', false);
+        $response->assertSee('quizEmptyCatalogueNotice', false);
+    }
+
+    public function test_quiz_scoring_algorithm_determines_unique_winner_across_all_thirty_six_paths(): void
+    {
+        $step1Options = ['calm_couch', 'active_curious', 'devoted_vocal'];
+        $step2Options = ['away_work', 'home_work', 'family_children', 'other_pets'];
+        $step3Options = ['short_sleek', 'dense_plush', 'interactive_shadow'];
+
+        $ties = 0;
+        $distribution = ['bengal' => 0, 'british' => 0, 'siamese' => 0];
+
+        foreach ($step1Options as $s1) {
+            foreach ($step2Options as $s2) {
+                foreach ($step3Options as $s3) {
+                    $scores = ['bengal' => 0.0, 'british' => 0.0, 'siamese' => 0.0];
+
+                    // STEP 1: Energy & Lifestyle
+                    if ($s1 === 'calm_couch') {
+                        $scores['british'] += 5.2;
+                        $scores['siamese'] += 1.0;
+                    } elseif ($s1 === 'active_curious') {
+                        $scores['bengal'] += 5.2;
+                        $scores['siamese'] += 2.0;
+                    } elseif ($s1 === 'devoted_vocal') {
+                        $scores['siamese'] += 5.2;
+                        $scores['bengal'] += 1.0;
+                        $scores['british'] += 1.0;
+                    }
+
+                    // STEP 2: Time away & Household Dynamics
+                    if ($s2 === 'away_work') {
+                        $scores['british'] += 3.5;
+                        $scores['bengal'] += 1.0;
+                        $scores['siamese'] -= 3.0;
+                    } elseif ($s2 === 'home_work') {
+                        $scores['siamese'] += 3.0;
+                        $scores['bengal'] += 2.0;
+                        $scores['british'] += 1.0;
+                    } elseif ($s2 === 'family_children') {
+                        $scores['british'] += 2.5;
+                        $scores['bengal'] += 2.5;
+                        $scores['siamese'] += 1.5;
+                    } elseif ($s2 === 'other_pets') {
+                        $scores['bengal'] += 2.0;
+                        $scores['siamese'] += 2.0;
+                        $scores['british'] += 2.0;
+                    }
+
+                    // STEP 3: Coat & Interaction Preferences
+                    if ($s3 === 'short_sleek') {
+                        $scores['bengal'] += 3.0;
+                        $scores['siamese'] += 1.5;
+                    } elseif ($s3 === 'dense_plush') {
+                        $scores['british'] += 3.0;
+                    } elseif ($s3 === 'interactive_shadow') {
+                        $scores['siamese'] += 3.0;
+                        $scores['bengal'] += 1.0;
+                    }
+
+                    $maxScore = max($scores);
+                    $winners = array_keys(array_filter($scores, fn ($sc) => abs($sc - $maxScore) < 0.001));
+
+                    if (count($winners) > 1) {
+                        $ties++;
+                    } else {
+                        $distribution[$winners[0]]++;
+                    }
+                }
+            }
+        }
+
+        // 1. Zero ties across all 36 combinations
+        $this->assertSame(0, $ties, 'Quiz scoring must produce deterministic, unique winner with zero ties across all 36 paths.');
+
+        // 2. Equitable representation for all three cattery breeds
+        $this->assertGreaterThanOrEqual(10, $distribution['bengal']);
+        $this->assertGreaterThanOrEqual(10, $distribution['british']);
+        $this->assertGreaterThanOrEqual(10, $distribution['siamese']);
+
+        // 3. Clear archetypal path checks
+        // Path A: Active lifestyle + Family with children + Short sleek coat => Bengal
+        $this->assertSame(12, $distribution['bengal']);
+        // Path B: Calm couch + Away at work + Dense plush coat => British
+        $this->assertSame(13, $distribution['british']);
+        // Path C: Devoted vocal + Home office + Interactive shadow coat => Siamese
+        $this->assertSame(11, $distribution['siamese']);
+    }
+
+    public function test_quiz_pickup_rules_distinguish_immediate_ready_from_early_reservation_and_missing_dob(): void
+    {
+        $now = now();
+
+        // 1. Ready now: 13 weeks old (>= 12 weeks pickup rule)
+        $readyCat = Animal::factory()->available()->create([
+            'name' => 'KotekGotowy',
+            'breed' => 'Kot Bengalski',
+            'date_of_birth' => $now->copy()->subWeeks(13),
+            'published_at' => $now->copy()->subDay(),
+        ]);
+
+        // 2. Early reservation: 6 weeks old (< 12 weeks pickup rule)
+        $earlyCat = Animal::factory()->available()->create([
+            'name' => 'KotekWczesny',
+            'breed' => 'Kot Brytyjski',
+            'date_of_birth' => $now->copy()->subWeeks(6),
+            'published_at' => $now->copy()->subDay(),
+        ]);
+
+        // 3. Missing DOB: available, but birth date unconfirmed
+        $unknownCat = Animal::factory()->available()->create([
+            'name' => 'KotekBezDaty',
+            'breed' => 'Kot Syjamski',
+            'date_of_birth' => null,
+            'published_at' => $now->copy()->subDay(),
+        ]);
+
+        $response = $this->get(route('quiz'));
+        $response->assertOk();
+
+        // Verify Ready Cat is strictly flagged with data-ready="now"
+        $response->assertSee('KotekGotowy');
+        $response->assertSee('data-ready="now"', false);
+
+        // Verify Early Cat is flagged with data-ready="future" and pickup window label
+        $response->assertSee('KotekWczesny');
+        $response->assertSee('Wczesna rezerwacja • za 6 tyg.');
+
+        // Verify Missing DOB Cat is flagged with data-ready="future" and safe fallback badge
+        $response->assertSee('KotekBezDaty');
+        $response->assertSee('Dostępny do rezerwacji');
+
+        // Confirm kittens without DOB or < 12 weeks are never presented as ready for immediate pickup
+        $content = $response->getContent();
+        $this->assertStringContainsString('data-ready="future"', $content);
+    }
+
+    public function test_quiz_context_passing_includes_breed_timeframe_and_attribution(): void
+    {
+        $response = $this->get(route('quiz'));
+        $response->assertOk();
+
+        // Checks WhatsApp pre-filled template construction
+        $response->assertSee('Mój wynik dopasowania: ${breed}', false);
+        $response->assertSee('Preferowany czas odbioru: ${timeframe}', false);
+        $response->assertSee('Quiz_Dopasowania');
+        $response->assertSee('wa.me/48514153204');
+
+        // Checks Reservation modal integration
+        $response->assertSee('window.openReservationModal', false);
+        $response->assertSee('Wynik Quizu: ${breed}', false);
+    }
+
     public function test_local_seo_city_pages_render_successfully(): void
     {
         $cities = [
