@@ -36,7 +36,7 @@
                     <p class="quiz-step__hint">Wybierz atmosferę, która najlepiej pasuje do Ciebie:</p>
 
                     <div class="quiz-options">
-                        <button type="button" class="quiz-option" onclick="window.selectQuizOption(1, 'british')">
+                        <button type="button" class="quiz-option" data-step="1" data-value="british" onclick="window.selectQuizOption(1, 'british')">
                             <span class="quiz-option__icon">🛋️</span>
                             <div class="quiz-option__content">
                                 <strong>Spokojny relaks, cisza i miękki plusz</strong>
@@ -45,7 +45,7 @@
                             <span class="quiz-option__arrow">→</span>
                         </button>
 
-                        <button type="button" class="quiz-option" onclick="window.selectQuizOption(1, 'bengal')">
+                        <button type="button" class="quiz-option" data-step="1" data-value="bengal" onclick="window.selectQuizOption(1, 'bengal')">
                             <span class="quiz-option__icon">🐆</span>
                             <div class="quiz-option__content">
                                 <strong>Dużo zabawy, inteligencja i energia lamparta</strong>
@@ -54,7 +54,7 @@
                             <span class="quiz-option__arrow">→</span>
                         </button>
 
-                        <button type="button" class="quiz-option" onclick="window.selectQuizOption(1, 'siamese')">
+                        <button type="button" class="quiz-option" data-step="1" data-value="siamese" onclick="window.selectQuizOption(1, 'siamese')">
                             <span class="quiz-option__icon">💎</span>
                             <div class="quiz-option__content">
                                 <strong>Niezwykle głęboka więź i kocia rozmowa</strong>
@@ -71,7 +71,7 @@
                     <p class="quiz-step__hint">Wszystkie nasze koty są socjalizowane w domu rodzinnym:</p>
 
                     <div class="quiz-options">
-                        <button type="button" class="quiz-option" onclick="window.selectQuizOption(2, 'single_couple')">
+                        <button type="button" class="quiz-option" data-step="2" data-value="single_couple" onclick="window.selectQuizOption(2, 'single_couple')">
                             <span class="quiz-option__icon">☕</span>
                             <div class="quiz-option__content">
                                 <strong>Singiel lub para</strong>
@@ -80,7 +80,7 @@
                             <span class="quiz-option__arrow">→</span>
                         </button>
 
-                        <button type="button" class="quiz-option" onclick="window.selectQuizOption(2, 'family_kids')">
+                        <button type="button" class="quiz-option" data-step="2" data-value="family_kids" onclick="window.selectQuizOption(2, 'family_kids')">
                             <span class="quiz-option__icon">🏡</span>
                             <div class="quiz-option__content">
                                 <strong>Rodzina z dziećmi</strong>
@@ -89,7 +89,7 @@
                             <span class="quiz-option__arrow">→</span>
                         </button>
 
-                        <button type="button" class="quiz-option" onclick="window.selectQuizOption(2, 'with_pets')">
+                        <button type="button" class="quiz-option" data-step="2" data-value="with_pets" onclick="window.selectQuizOption(2, 'with_pets')">
                             <span class="quiz-option__icon">🐾</span>
                             <div class="quiz-option__content">
                                 <strong>Dom z innymi zwierzętami (pies/kot)</strong>
@@ -106,7 +106,7 @@
                     <p class="quiz-step__hint">Dopasujemy malucha do Twojego terminu gotowości:</p>
 
                     <div class="quiz-options">
-                        <button type="button" class="quiz-option" onclick="window.selectQuizOption(3, 'now')">
+                        <button type="button" class="quiz-option" data-step="3" data-value="now" onclick="window.selectQuizOption(3, 'now')">
                             <span class="quiz-option__icon">🟢</span>
                             <div class="quiz-option__content">
                                 <strong>Jak najszybciej (maluch gotowy do odbioru)</strong>
@@ -115,7 +115,7 @@
                             <span class="quiz-option__arrow">→</span>
                         </button>
 
-                        <button type="button" class="quiz-option" onclick="window.selectQuizOption(3, 'future')">
+                        <button type="button" class="quiz-option" data-step="3" data-value="future" onclick="window.selectQuizOption(3, 'future')">
                             <span class="quiz-option__icon">⏳</span>
                             <div class="quiz-option__content">
                                 <strong>Za 3–6 tygodni (wczesna rezerwacja z nowego miotu)</strong>
@@ -201,7 +201,7 @@
     </section>
 
     {{-- Lightweight Vanilla JS Quiz State Machine --}}
-    @push('scripts')
+    <x-slot:scripts>
     <script>
         (function() {
             const quizState = {
@@ -253,6 +253,12 @@
                 if (fill) fill.style.width = percent;
                 if (label) label.textContent = 'Krok ' + nextStepNumber + ' z 3';
                 if (percentEl) percentEl.textContent = percent;
+
+                // Smooth scroll to container for comfortable viewing
+                const container = document.getElementById('quizContainer');
+                if (container && window.scrollY > 150) {
+                    container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
             }
 
             function showQuizResult() {
@@ -261,14 +267,18 @@
 
                 document.querySelectorAll('.quiz-step').forEach(el => el.style.display = 'none');
                 const resultBox = document.getElementById('quizResult');
-                if (resultBox) resultBox.style.display = 'block';
+                if (resultBox) {
+                    resultBox.style.display = 'block';
+                }
 
                 const matchedBreed = quizState.step1 || 'bengal';
                 const info = breedInfo[matchedBreed] || breedInfo.bengal;
                 window.__quizMatchedBreedName = info.name;
 
-                document.getElementById('quizResultBreedTitle').textContent = info.title;
-                document.getElementById('quizResultBreedDesc').textContent = info.desc;
+                const titleEl = document.getElementById('quizResultBreedTitle');
+                const descEl = document.getElementById('quizResultBreedDesc');
+                if (titleEl) titleEl.textContent = info.title;
+                if (descEl) descEl.textContent = info.desc;
 
                 // Filter matching kittens in DOM
                 const items = document.querySelectorAll('.quiz-cat-item');
@@ -286,6 +296,12 @@
                 // Fallback: if no cats of this breed currently available, show all
                 if (matchCount === 0) {
                     items.forEach(item => item.style.display = 'flex');
+                }
+
+                // Smooth scroll to result
+                const container = document.getElementById('quizContainer');
+                if (container) {
+                    container.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
 
                 // Funnel analytics event
@@ -311,7 +327,20 @@
 
                 goToStep(1, '33%');
             };
+
+            // Event delegation fallback for maximum click reliability across mobile browsers
+            document.addEventListener('DOMContentLoaded', function() {
+                const container = document.getElementById('quizContainer');
+                if (container) {
+                    container.addEventListener('click', function(e) {
+                        const opt = e.target.closest('.quiz-option');
+                        if (opt && opt.dataset.step && opt.dataset.value) {
+                            window.selectQuizOption(parseInt(opt.dataset.step, 10), opt.dataset.value);
+                        }
+                    });
+                }
+            });
         })();
     </script>
-    @endpush
+    </x-slot:scripts>
 </x-frontend.shell>

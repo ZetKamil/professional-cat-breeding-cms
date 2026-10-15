@@ -171,7 +171,8 @@
     {{-- Mobile Sticky Action Bar --}}
     <x-frontend.mobile-sticky-bar />
 
-    {{-- Scripts slot for page-specific JS --}}
+    {{-- Scripts slot and stack for page-specific JS --}}
     {{ $scripts ?? '' }}
+    @stack('scripts')
 </body>
 </html>

@@ -80,6 +80,9 @@ class ReservationAndCroTest extends TestCase
         $response->assertSee('Jak wygląda Twój wymarzony dzień z kotem?');
         $response->assertSee('global-nav--dark');
         $response->assertSee('data-nav-theme="dark"', false);
+        $response->assertSee('window.selectQuizOption', false);
+        $response->assertSee('quizStep2');
+        $response->assertSee('quizStep3');
     }
 
     public function test_local_seo_city_pages_render_successfully(): void
