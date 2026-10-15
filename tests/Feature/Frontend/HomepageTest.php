@@ -43,16 +43,20 @@ class HomepageTest extends TestCase
 
     public function test_homepage_renders_featured_animals_when_available(): void
     {
-        Animal::factory()->create([
-            'name' => 'Luna Royal Bengal',
-            'is_featured' => true,
-            'is_published' => true,
-        ]);
+        for ($i = 1; $i <= 6; $i++) {
+            Animal::factory()->create([
+                'name' => "Kociak Numer {$i}",
+                'is_featured' => true,
+                'is_published' => true,
+            ]);
+        }
 
         $response = $this->get(route('home'));
 
         $response->assertOk();
-        $response->assertSee('Luna Royal Bengal');
+        for ($i = 1; $i <= 6; $i++) {
+            $response->assertSee("Kociak Numer {$i}");
+        }
     }
 
     public function test_homepage_does_not_render_blog_section(): void

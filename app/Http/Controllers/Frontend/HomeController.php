@@ -15,7 +15,7 @@ class HomeController extends Controller
             ->featured()
             ->with('media')
             ->orderedByStatus()
-            ->take(3)
+            ->take(6)
             ->get();
 
         return view('frontend.home', [

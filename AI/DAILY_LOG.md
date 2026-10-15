@@ -4,6 +4,15 @@
 
 ### Completed
 
+✓ Zwiększenie liczby prezentowanych kociąt na Stronie Głównej do 6 (`feat(home)`, `feat(cro)`, `test(home)`)
+  - **Optymalizacja siatki Dostępnych Kociąt:**
+    - W `HomeController.php` zwiększono limit `take(3)` do `take(6)`.
+    - Po odchudzeniu strony głównej z długich sekcji tekstowych zwolniła się przestrzeń na wyeksponowanie pełnej oferty kociąt.
+    - Na desktopie siatka `.animals-grid` układa się teraz w 2 równe rzędy po 3 karty (obecnie wyświetlają się zbalansowane mioty: Ada i Alma - brytyjskie, Dafne i Daisy - syjamskie, Candy i Carlos - bengalskie).
+    - Wszystkie 6 kociąt posiada bezpośrednie przyciski wideo-rozmowy na żywo i rezerwacji.
+  - **Pokrycie testami:**
+    - Rozszerzono `test_homepage_renders_featured_animals_when_available` w `tests/Feature/Frontend/HomepageTest.php`, aby weryfikować renderowanie 6 kociąt w rzędzie (4/4 testy pass, 27 asercji).
+
 ✓ Ujednolicenie Dolnego CTA w całym serwisie & Przeniesienie Opinii do „O Hodowli” (`feat(cta)`, `feat(cro)`, `refactor(views)`)
   - **Przeniesienie sekcji „Historie Opiekunów Naszych Kotów” do „O Hodowli” (`cattery.blade.php`):**
     - Zdjęto sekcję `#opinie` z `home.blade.php`, maksymalnie odchudzając stronę główną i skupiając ją na bezpośrednim procesie: *Hero → Dostępne Kocięta → Domowa Socjalizacja → Wideo-rozmowa / WhatsApp*.
