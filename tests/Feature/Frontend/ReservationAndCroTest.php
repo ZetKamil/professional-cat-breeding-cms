@@ -71,6 +71,31 @@ class ReservationAndCroTest extends TestCase
         });
     }
 
+    public function test_quick_callback_delivers_notification_to_breeder_via_existing_mechanism(): void
+    {
+        \Illuminate\Support\Facades\Notification::fake();
+
+        $response = $this->postJson('/api/quick-callback', [
+            'phone'          => '+48 514 153 204',
+            'cat_name'       => 'Baron',
+            'cat_breed'      => 'Kot Bengalski',
+            'traffic_source' => 'FB_Ads_bengale',
+        ]);
+
+        $response->assertOk();
+
+        \Illuminate\Support\Facades\Notification::assertSentTo(
+            new \Illuminate\Notifications\AnonymousNotifiable(),
+            \App\Notifications\ContactMessageNotification::class,
+            function ($notification) {
+                return $notification->data['phone'] === '+48 514 153 204'
+                    && str_contains($notification->data['subject'], 'Baron')
+                    && str_contains($notification->data['message'], 'FB_Ads_bengale')
+                    && str_contains($notification->data['message'], 'Data zgłoszenia:');
+            }
+        );
+    }
+
     public function test_breed_matcher_quiz_page_renders_successfully(): void
     {
         $response = $this->get(route('quiz'));

@@ -111,6 +111,26 @@ export function getTrafficSourceLabel() {
 
 window.getTrafficSourceLabel = getTrafficSourceLabel;
 
+/**
+ * Strips any potential Personally Identifiable Information (PII) before transmission.
+ *
+ * @param {Object} raw
+ * @returns {Object}
+ */
+export function sanitizeAnalyticsParams(raw) {
+    const clean = Object.assign({}, raw || {});
+    delete clean.phone;
+    delete clean.email;
+    delete clean.name;
+    delete clean.message;
+    delete clean.telephone;
+    delete clean._hp_website;
+    delete clean._token;
+    return clean;
+}
+
+window.sanitizeAnalyticsParams = sanitizeAnalyticsParams;
+
 /* ─────────────────────────────────────────────────────────────────
    2. Unified Funnel Dispatcher (GA4 + Meta Pixel)
 ───────────────────────────────────────────────────────────────── */
@@ -118,35 +138,70 @@ window.getTrafficSourceLabel = getTrafficSourceLabel;
 /**
  * Dispatches conversion funnel events to both GA4 and Meta Pixel.
  *
+ * 3-Level Conversion Architecture:
+ *   Level 1: contact_cta_click  — User clicked a contact CTA (WhatsApp, Messenger, Phone, Video-Visit).
+ *                                  Tracked in Meta as Contact (NOT Lead) to avoid false positive leads.
+ *   Level 2: callback_submitted — Valid callback request or form submission accepted by server.
+ *                                  Tracked in Meta as Lead (actual submission).
+ *   Level 3: qualified_lead     — Real prospect interaction confirmed offline/by breeder.
+ *
  * @param {string} eventName
  * @param {Object} [params]
  */
 export function trackFunnelStep(eventName, params) {
-    params = params || {};
-    params.traffic_source = getTrafficSourceLabel();
+    try {
+        const cleanParams = sanitizeAnalyticsParams(params);
+        cleanParams.traffic_source = getTrafficSourceLabel();
 
-    // 1. Google Analytics 4
-    if (typeof window.gtag === 'function') {
-        window.gtag('event', eventName, params);
-    }
-
-    // 2. Meta Pixel (fbq)
-    if (typeof window.fbq === 'function') {
-        const leadEvents = [
-            'click_whatsapp_lead',
-            'click_messenger_lead',
-            'click_phone_lead',
-            'submit_callback_number'
-        ];
-
-        if (leadEvents.includes(eventName)) {
-            window.fbq('track', 'Lead', {
-                content_name: eventName,
-                status: params.cat_name || 'Ogólne',
-            });
+        // 1. Google Analytics 4 (Safe Execution)
+        if (typeof window.gtag === 'function') {
+            try {
+                window.gtag('event', eventName, cleanParams);
+            } catch (err) {
+                // Silently swallow third-party tracking errors
+            }
         }
 
-        window.fbq('trackCustom', eventName, params);
+        // 2. Meta Pixel (Safe Execution)
+        if (typeof window.fbq === 'function') {
+            try {
+                // Level 1: Contact CTA Click (Meta Standard 'Contact', NOT 'Lead')
+                if (
+                    eventName === 'contact_cta_click' ||
+                    eventName === 'click_whatsapp_lead' ||
+                    eventName === 'click_messenger_lead' ||
+                    eventName === 'click_phone_lead'
+                ) {
+                    window.fbq('track', 'Contact', {
+                        content_name: 'contact_cta_click',
+                        channel: cleanParams.channel || eventName,
+                        status: cleanParams.cat_name || 'General',
+                    });
+                } 
+                // Level 2: Server-Accepted Callback / Form Submission (True Meta 'Lead')
+                else if (
+                    eventName === 'callback_submitted' ||
+                    eventName === 'submit_callback_number' ||
+                    eventName === 'contact_submit'
+                ) {
+                    window.fbq('track', 'Lead', {
+                        content_name: 'callback_submitted',
+                        status: cleanParams.cat_name || 'General',
+                    });
+                } 
+                // Level 3: Qualified prospect inquiry confirmed in practice
+                else if (eventName === 'qualified_lead') {
+                    window.fbq('trackCustom', 'qualified_lead', cleanParams);
+                }
+
+                // Custom event for DebugView & Meta Events Manager granular visibility
+                window.fbq('trackCustom', eventName, cleanParams);
+            } catch (err) {
+                // Silently swallow pixel errors
+            }
+        }
+    } catch (e) {
+        console.warn('Analytics dispatch error:', e);
     }
 }
 
@@ -214,15 +269,16 @@ function initContactSubmit() {
     if (isEventSentThisSession(SESSION_KEY)) return;
     markEventSent(SESSION_KEY);
 
-    trackFunnelStep('contact_submit', {
-        method: 'traditional_form',
+    trackFunnelStep('callback_submitted', {
+        channel: 'traditional_form',
     });
 }
 
 function initPhoneClick() {
     document.querySelectorAll('a[href^="tel:"]').forEach(function (link) {
         link.addEventListener('click', function () {
-            trackFunnelStep('click_phone_lead', {
+            trackFunnelStep('contact_cta_click', {
+                channel: 'phone',
                 link_type: 'phone_tag',
             });
         });

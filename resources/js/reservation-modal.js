@@ -63,14 +63,14 @@ window.openReservationModal = function (catName, catBreed, statusLabel) {
     }
 
     if (catName) {
-        titleEl.textContent = `Rezerwacja i Wideo-wizyta: ${catName}`;
+        titleEl.textContent = `Rozmowa i Wideo-wizyta: ${catName}`;
         if (badgeTextEl) {
-            badgeTextEl.textContent = statusLabel ? `${statusLabel} • Wideo-wizyta` : `Kociak: ${catName}`;
+            badgeTextEl.textContent = statusLabel ? `${statusLabel} • Kontakt z hodowcą` : `Kociak: ${catName}`;
         }
     } else {
-        titleEl.textContent = 'Rezerwacja i Wideo-wizyta na żywo';
+        titleEl.textContent = 'Rozmowa i Wideo-wizyta na żywo';
         if (badgeTextEl) {
-            badgeTextEl.textContent = 'Wideo-wizyta na żywo';
+            badgeTextEl.textContent = 'Kontakt z hodowcą';
         }
     }
 
@@ -82,7 +82,7 @@ window.openReservationModal = function (catName, catBreed, statusLabel) {
         if (catName) {
             messageText = `Dzień dobry! Piszę ze strony kotyzmazowieckiejszwajcarii.pl. Interesuje mnie kotek ${catName}` + 
                           (catBreed ? ` (${catBreed})` : '') + 
-                          `. Chciał(a)bym umówić 5-minutową wideo-wizytę na żywo przez kamerę w telefonie i porozmawiać o rezerwacji. [Kod: ${attributionCode}]`;
+                          `. Chciał(a)bym porozmawiać z hodowcą i zobaczyć malucha na żywo przez kamerę w telefonie. [Kod: ${attributionCode}]`;
         } else {
             messageText = `Dzień dobry! Piszę ze strony kotyzmazowieckiejszwajcarii.pl. Chciał(a)bym zapytać o dostępne kocięta i umówić wideo-wizytę na żywo. [Kod: ${attributionCode}]`;
         }
@@ -187,8 +187,10 @@ window.handleQuickCallbackSubmit = function (event) {
         phoneInput.value = '';
 
         if (typeof window.trackFunnelStep === 'function') {
-            window.trackFunnelStep('submit_callback_number', {
+            window.trackFunnelStep('callback_submitted', {
+                channel: 'quick_callback',
                 cat_name: cat.name || 'Ogólne',
+                cat_breed: cat.breed || 'Nieokreślona',
             });
         }
 

@@ -29,7 +29,7 @@
         <a 
             href="tel:+48514153204" 
             class="mobile-sticky-bar__btn mobile-sticky-bar__btn--phone"
-            onclick="if(window.trackFunnelStep){ window.trackFunnelStep('click_phone_lead', { location: 'sticky_bar' }); }"
+            onclick="if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'phone', location: 'sticky_bar' }); }"
         >
             <span class="mobile-sticky-bar__icon" aria-hidden="true">📞</span>
             <span class="mobile-sticky-bar__label">

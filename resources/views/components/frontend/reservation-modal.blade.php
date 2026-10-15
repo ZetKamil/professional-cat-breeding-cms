@@ -22,12 +22,12 @@
         <div class="res-modal__header">
             <div class="res-modal__badge" id="res-modal-badge">
                 <span class="res-modal__badge-dot"></span>
-                <span id="res-modal-badge-text">Wideo-wizyta na żywo</span>
+                <span id="res-modal-badge-text">Kontakt & Wideo-wizyta</span>
             </div>
-            <h2 id="res-modal-title" class="res-modal__title">Rezerwacja i Wideo-wizyta</h2>
+            <h2 id="res-modal-title" class="res-modal__title">Rozmowa i Wideo-wizyta</h2>
             <p id="res-modal-subtitle" class="res-modal__subtitle">
-                Zobacz kociaka na żywo przez kamerę w telefonie (WhatsApp lub Messenger) albo porozmawiajmy głosowo. 
-                Pokażemy Ci malucha w domowych warunkach, odpowiemy na pytania i wspólnie ustalimy szczegóły.
+                Połącz się bezpośrednio z hodowcą na żywo (WhatsApp lub Messenger) albo porozmawiajmy telefonicznie. 
+                Pokażemy malucha w domowych warunkach, odpowiemy na pytania i wspólnie omówimy szczegóły ewentualnej rezerwacji. Rozmowa nie zobowiązuje do zakupu.
             </p>
         </div>
 
@@ -51,7 +51,7 @@
         <div class="res-modal__actions">
             
             {{-- 1. WhatsApp Video CTA (Primary) --}}
-            <a id="res-modal-whatsapp" href="https://wa.me/48514153204" target="_blank" rel="noopener noreferrer" class="res-action-btn res-action-btn--whatsapp" onclick="if(window.trackFunnelStep){ window.trackFunnelStep('click_whatsapp_lead', { cat_name: window.__currentReservationCat?.name || 'Ogólne' }); }">
+            <a id="res-modal-whatsapp" href="https://wa.me/48514153204" target="_blank" rel="noopener noreferrer" class="res-action-btn res-action-btn--whatsapp" onclick="if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'whatsapp', cat_name: window.__currentReservationCat?.name || 'Ogólne' }); }">
                 <span class="res-action-btn__icon">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
@@ -65,7 +65,7 @@
             </a>
 
             {{-- 2. Direct Phone Call CTA --}}
-            <a id="res-modal-phone" href="tel:+48514153204" class="res-action-btn res-action-btn--phone" onclick="if(window.trackFunnelStep){ window.trackFunnelStep('click_phone_lead', { cat_name: window.__currentReservationCat?.name || 'Ogólne' }); }">
+            <a id="res-modal-phone" href="tel:+48514153204" class="res-action-btn res-action-btn--phone" onclick="if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'phone', cat_name: window.__currentReservationCat?.name || 'Ogólne' }); }">
                 <span class="res-action-btn__icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
@@ -79,7 +79,7 @@
             </a>
 
             {{-- 3. Facebook Messenger CTA --}}
-            <a id="res-modal-messenger" href="https://m.me/61580668026948" target="_blank" rel="noopener noreferrer" class="res-action-btn res-action-btn--messenger" onclick="if(window.trackFunnelStep){ window.trackFunnelStep('click_messenger_lead', { cat_name: window.__currentReservationCat?.name || 'Ogólne' }); }">
+            <a id="res-modal-messenger" href="https://m.me/61580668026948" target="_blank" rel="noopener noreferrer" class="res-action-btn res-action-btn--messenger" onclick="if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'messenger', cat_name: window.__currentReservationCat?.name || 'Ogólne' }); }">
                 <span class="res-action-btn__icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 2C6.48 2 2 6.03 2 11c0 2.87 1.5 5.43 3.84 7.07L5 22l4.13-1.81C10.05 20.35 11 20.48 12 20.48c5.52 0 10-4.03 10-9s-4.48-9.48-10-9.48z"></path>
@@ -131,9 +131,9 @@
             </form>
         </div>
 
-        {{-- Footer trust note --}}
+        {{-- Footer trust & privacy note --}}
         <div class="res-modal__footer-note">
-            <span>🔒 Bez spamu. Twój numer służy wyłącznie do jednorazowego kontaktu w sprawie kociaka.</span>
+            <span>🔒 Twój numer służy wyłącznie do jednorazowego kontaktu w sprawie wybranego kociaka. Nie pobieramy żadnych opłat na stronie.</span>
         </div>
 
     </div>
