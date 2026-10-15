@@ -34,6 +34,7 @@ Route::get('/hodowla-kotow-warszawa', [\App\Http\Controllers\Frontend\LocalSeoCo
 Route::get('/hodowla-kotow-lodz', [\App\Http\Controllers\Frontend\LocalSeoController::class, 'show'])->defaults('cityKey', 'lodz')->name('seo.lodz');
 Route::get('/hodowla-kotow-torun', [\App\Http\Controllers\Frontend\LocalSeoController::class, 'show'])->defaults('cityKey', 'torun')->name('seo.torun');
 Route::get('/hodowla-kotow-bydgoszcz', [\App\Http\Controllers\Frontend\LocalSeoController::class, 'show'])->defaults('cityKey', 'bydgoszcz')->name('seo.bydgoszcz');
+Route::get('/hodowla-kotow-wloclawek', [\App\Http\Controllers\Frontend\LocalSeoController::class, 'show'])->defaults('cityKey', 'wloclawek')->name('seo.wloclawek');
 Route::view('/o-nas', 'frontend.about')->name('about');
 Route::view('/o-hodowli', 'frontend.cattery')->name('cattery');
 Route::view('/polityka-prywatnosci', 'frontend.privacy')->name('privacy');

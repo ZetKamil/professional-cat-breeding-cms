@@ -119,7 +119,9 @@ Calm, minimal, trust-building
                 <span class="footer-legal__sep" aria-hidden="true">·</span>
                 <a href="{{ route('seo.torun') }}" class="footer-link">Toruń</a>
                 <span class="footer-legal__sep" aria-hidden="true">·</span>
-                <a href="{{ route('seo.bydgoszcz') }}" class="footer-link">Bydgoszcz i Włocławek</a>
+                <a href="{{ route('seo.wloclawek') }}" class="footer-link">Włocławek</a>
+                <span class="footer-legal__sep" aria-hidden="true">·</span>
+                <a href="{{ route('seo.bydgoszcz') }}" class="footer-link">Bydgoszcz</a>
             </div>
 
             {{-- Bottom Bar --}}

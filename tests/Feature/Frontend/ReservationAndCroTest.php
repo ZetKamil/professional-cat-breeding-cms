@@ -108,6 +108,9 @@ class ReservationAndCroTest extends TestCase
         $response->assertSee('window.selectQuizOption', false);
         $response->assertSee('quizStep2');
         $response->assertSee('quizStep3');
+        $response->assertSee('quizStep4');
+        $response->assertSee('calculateWinningBreed', false);
+        $response->assertSee('contactBreederFromQuiz', false);
     }
 
     public function test_local_seo_city_pages_render_successfully(): void
@@ -116,6 +119,7 @@ class ReservationAndCroTest extends TestCase
             'seo.warszawa' => 'Warszawa',
             'seo.lodz' => 'Łódź',
             'seo.torun' => 'Toruń',
+            'seo.wloclawek' => 'Włocławek',
             'seo.bydgoszcz' => 'Bydgoszcz',
         ];
 
@@ -123,7 +127,10 @@ class ReservationAndCroTest extends TestCase
             $response = $this->get(route($routeName));
             $response->assertOk();
             $response->assertSee($cityName);
+            $response->assertSee('Sikórz');
             $response->assertSee('Wideo-wizyta');
+            $response->assertSee('Pytania i Odpowiedzi');
+            $response->assertDontSee('ciasnych hodowli w miejskich blokach');
         }
     }
 }

@@ -1,6 +1,6 @@
 <x-frontend.shell
     title="Dobierz Idealną Rasę Kota w 45 Sekund — Bengalski, Brytyjski czy Syjamski? | Mazowiecka Szwajcaria"
-    meta-description="Nie wiesz, jaki kot pasuje do Twojego stylu życia? Wypełnij nasz 45-sekundowy quiz i poznaj rasę idealnie dopasowaną do Ciebie oraz zobacz dostępne maluchy na żywo."
+    meta-description="Nie wiesz, jaki kot pasuje do Twojego stylu życia? Wypełnij nasz 4-etapowy quiz behawioralny i poznaj rasę dopasowaną do Ciebie oraz zobacz dostępne maluchy na żywo."
     nav-theme="dark"
 >
     <section class="quiz-section hero--dark" data-nav-theme="dark" aria-label="Interaktywny quiz doboru rasy kota">
@@ -11,8 +11,8 @@
                 <span class="quiz-hero__eyebrow">Dopasowanie Behawioralne & Styl Życia</span>
                 <h1 class="quiz-hero__title">Dobierz Idealną Rasę w 45 Sekund</h1>
                 <p class="quiz-hero__lead">
-                    Odpowiedz na 3 szybkie pytania o Twoje oczekiwania, dom i codzienny rytm dnia. 
-                    Pokażemy Ci rasę dopasowaną do Twojego serca oraz dostępne kocięta gotowe do wideo-wizyty na żywo.
+                    Odpowiedz na 4 pytania o Twój rytm dnia, domowników i oczekiwania. 
+                    Nasz algorytm behawioralny wskaże rasę najlepiej dopasowaną do Twojego życia oraz sprawdzi aktualną dostępność kociąt w hodowli.
                 </p>
             </div>
 
@@ -22,30 +22,30 @@
                 {{-- Progress Bar --}}
                 <div class="quiz-progress-wrap" id="quizProgressWrap">
                     <div class="quiz-progress-info">
-                        <span id="quizStepLabel">Krok 1 z 3</span>
-                        <span id="quizStepPercent">33%</span>
+                        <span id="quizStepLabel">Krok 1 z 4</span>
+                        <span id="quizStepPercent">25%</span>
                     </div>
                     <div class="quiz-progress-bar">
-                        <div class="quiz-progress-fill" id="quizProgressFill" style="width: 33%;"></div>
+                        <div class="quiz-progress-fill" id="quizProgressFill" style="width: 25%;"></div>
                     </div>
                 </div>
 
                 {{-- STEP 1: Lifestyle and Energy Level --}}
                 <div class="quiz-step is-active" id="quizStep1" data-step="1">
-                    <h2 class="quiz-step__question">Jak wygląda Twój wymarzony dzień z kotem?</h2>
-                    <p class="quiz-step__hint">Wybierz atmosferę, która najlepiej pasuje do Ciebie:</p>
+                    <h2 class="quiz-step__question">1. Jak wygląda Twój wymarzony dzień z kotem?</h2>
+                    <p class="quiz-step__hint">Wybierz atmosferę, która najlepiej oddaje Twoje oczekiwania:</p>
 
                     <div class="quiz-options">
-                        <button type="button" class="quiz-option" data-step="1" data-value="british" onclick="window.selectQuizOption(1, 'british')">
+                        <button type="button" class="quiz-option" data-step="1" data-value="calm_couch" onclick="window.selectQuizOption(1, 'calm_couch')">
                             <span class="quiz-option__icon">🛋️</span>
                             <div class="quiz-option__content">
                                 <strong>Spokojny relaks, cisza i miękki plusz</strong>
-                                <small>Kot, który ceni zrównoważony rytm, odpoczywa obok na kanapie i nie domaga się nieustannej uwagi.</small>
+                                <small>Kot, który ceni zrównoważony rytm, odpoczywa obok na kanapie i nie wymaga nieustannej uwagi.</small>
                             </div>
                             <span class="quiz-option__arrow">→</span>
                         </button>
 
-                        <button type="button" class="quiz-option" data-step="1" data-value="bengal" onclick="window.selectQuizOption(1, 'bengal')">
+                        <button type="button" class="quiz-option" data-step="1" data-value="active_curious" onclick="window.selectQuizOption(1, 'active_curious')">
                             <span class="quiz-option__icon">🐆</span>
                             <div class="quiz-option__content">
                                 <strong>Dużo zabawy, inteligencja i energia lamparta</strong>
@@ -54,59 +54,103 @@
                             <span class="quiz-option__arrow">→</span>
                         </button>
 
-                        <button type="button" class="quiz-option" data-step="1" data-value="siamese" onclick="window.selectQuizOption(1, 'siamese')">
+                        <button type="button" class="quiz-option" data-step="1" data-value="devoted_vocal" onclick="window.selectQuizOption(1, 'devoted_vocal')">
                             <span class="quiz-option__icon">💎</span>
                             <div class="quiz-option__content">
                                 <strong>Niezwykle głęboka więź i kocia rozmowa</strong>
-                                <small>Kot, który chodzi za Tobą krok w krok, uwielbia spać pod kołdrą i odpowiada swoim melodyjnym głosem.</small>
+                                <small>Kot, który chodzi za Tobą krok w krok, uwielbia spać pod kołdrą i odpowiada melodyjnym głosem.</small>
                             </div>
                             <span class="quiz-option__arrow">→</span>
                         </button>
                     </div>
                 </div>
 
-                {{-- STEP 2: Household members --}}
+                {{-- STEP 2: Time away & Household Dynamics --}}
                 <div class="quiz-step" id="quizStep2" data-step="2" style="display:none;">
-                    <h2 class="quiz-step__question">Kto tworzy Twoje domowe ognisko?</h2>
-                    <p class="quiz-step__hint">Wszystkie nasze koty są socjalizowane w domu rodzinnym:</p>
+                    <h2 class="quiz-step__question">2. Twój dom i czas spędzany poza nim</h2>
+                    <p class="quiz-step__hint">Wskaż sytuację, która najlepiej opisuje Twój dom:</p>
 
                     <div class="quiz-options">
-                        <button type="button" class="quiz-option" data-step="2" data-value="single_couple" onclick="window.selectQuizOption(2, 'single_couple')">
-                            <span class="quiz-option__icon">☕</span>
+                        <button type="button" class="quiz-option" data-step="2" data-value="away_work" onclick="window.selectQuizOption(2, 'away_work')">
+                            <span class="quiz-option__icon">🏢</span>
                             <div class="quiz-option__content">
-                                <strong>Singiel lub para</strong>
-                                <small>Szukam wiernego przyjaciela do wspólnego, spokojnego mieszkania i wieczorów po pracy.</small>
+                                <strong>Często pracuję poza domem (7–9 godz. dziennie)</strong>
+                                <small>Kot musi ze spokojem i bez lęku separacyjnego znosić chwile samotności.</small>
                             </div>
                             <span class="quiz-option__arrow">→</span>
                         </button>
 
-                        <button type="button" class="quiz-option" data-step="2" data-value="family_kids" onclick="window.selectQuizOption(2, 'family_kids')">
+                        <button type="button" class="quiz-option" data-step="2" data-value="home_work" onclick="window.selectQuizOption(2, 'home_work')">
+                            <span class="quiz-option__icon">💻</span>
+                            <div class="quiz-option__content">
+                                <strong>Praca zdalna / stale ktoś jest w domu</strong>
+                                <small>Szukam kota, który będzie moim kompanem podczas dnia i lubi bliski kontakt z człowiekiem.</small>
+                            </div>
+                            <span class="quiz-option__arrow">→</span>
+                        </button>
+
+                        <button type="button" class="quiz-option" data-step="2" data-value="family_children" onclick="window.selectQuizOption(2, 'family_children')">
                             <span class="quiz-option__icon">🏡</span>
                             <div class="quiz-option__content">
                                 <strong>Rodzina z dziećmi</strong>
-                                <small>Ważny jest stabilny, zrównoważony charakter, cierpliwość i przyjazne nastawienie do maluchów.</small>
+                                <small>Kluczowy jest stabilny układ nerwowy, cierpliwość oraz przyjazne nastawienie do maluchów.</small>
                             </div>
                             <span class="quiz-option__arrow">→</span>
                         </button>
 
-                        <button type="button" class="quiz-option" data-step="2" data-value="with_pets" onclick="window.selectQuizOption(2, 'with_pets')">
+                        <button type="button" class="quiz-option" data-step="2" data-value="other_pets" onclick="window.selectQuizOption(2, 'other_pets')">
                             <span class="quiz-option__icon">🐾</span>
                             <div class="quiz-option__content">
-                                <strong>Dom z innymi zwierzętami (pies/kot)</strong>
-                                <small>Zależy mi na otwartym kocie, który łatwo odnajdzie się w stadzie po prawidłowej socjalizacji z zapachem.</small>
+                                <strong>Dom z innymi zwierzętami (pies / inny kot)</strong>
+                                <small>Zależy mi na otwartym kocie, który łatwo odnajdzie się w stadzie po prawidłowej socjalizacji.</small>
                             </div>
                             <span class="quiz-option__arrow">→</span>
                         </button>
                     </div>
                 </div>
 
-                {{-- STEP 3: Timeline & Arrival --}}
+                {{-- STEP 3: Coat, Grooming & Interaction Preferences --}}
                 <div class="quiz-step" id="quizStep3" data-step="3" style="display:none;">
-                    <h2 class="quiz-step__question">Kiedy chciałbyś powitać kociaka w swoim domu?</h2>
-                    <p class="quiz-step__hint">Dopasujemy malucha do Twojego terminu gotowości:</p>
+                    <h2 class="quiz-step__question">3. Jakie cechy wyglądu i pielęgnacji preferujesz?</h2>
+                    <p class="quiz-step__hint">Wybierz to, co sprawi Ci najwięcej radości w codziennej opiece:</p>
 
                     <div class="quiz-options">
-                        <button type="button" class="quiz-option" data-step="3" data-value="now" onclick="window.selectQuizOption(3, 'now')">
+                        <button type="button" class="quiz-option" data-step="3" data-value="short_sleek" onclick="window.selectQuizOption(3, 'short_sleek')">
+                            <span class="quiz-option__icon">✨</span>
+                            <div class="quiz-option__content">
+                                <strong>Krótka, gładka sierść bez podszerstka (zero czesania)</strong>
+                                <small>Jedwabista w dotyku, lśniąca szata z dzikim rysunkiem rozet, minimalna pielęgnacja.</small>
+                            </div>
+                            <span class="quiz-option__arrow">→</span>
+                        </button>
+
+                        <button type="button" class="quiz-option" data-step="3" data-value="dense_plush" onclick="window.selectQuizOption(3, 'dense_plush')">
+                            <span class="quiz-option__icon">🧸</span>
+                            <div class="quiz-option__content">
+                                <strong>Gęsty, miękki plusz jak u pluszowego niedźwiadka</strong>
+                                <small>Okrągłe policzki, aksamitna podwójna okrywa, uwielbiam relaksujące czesanie szczotką.</small>
+                            </div>
+                            <span class="quiz-option__arrow">→</span>
+                        </button>
+
+                        <button type="button" class="quiz-option" data-step="3" data-value="interactive_shadow" onclick="window.selectQuizOption(3, 'interactive_shadow')">
+                            <span class="quiz-option__icon">💙</span>
+                            <div class="quiz-option__content">
+                                <strong>Smukła, orientalna sylwetka i żywy dialog</strong>
+                                <small>Błękitne migdałowe oczy, kot reagujący na każde Twoje słowo i obecny w każdej czynności.</small>
+                            </div>
+                            <span class="quiz-option__arrow">→</span>
+                        </button>
+                    </div>
+                </div>
+
+                {{-- STEP 4: Timeline & Readiness --}}
+                <div class="quiz-step" id="quizStep4" data-step="4" style="display:none;">
+                    <h2 class="quiz-step__question">4. Kiedy chciałbyś powitać kociaka w swoim domu?</h2>
+                    <p class="quiz-step__hint">Dopasujemy kocięta do Twojego planu i gotowości:</p>
+
+                    <div class="quiz-options">
+                        <button type="button" class="quiz-option" data-step="4" data-value="ready_now" onclick="window.selectQuizOption(4, 'ready_now')">
                             <span class="quiz-option__icon">🟢</span>
                             <div class="quiz-option__content">
                                 <strong>Jak najszybciej (maluch gotowy do odbioru)</strong>
@@ -115,11 +159,20 @@
                             <span class="quiz-option__arrow">→</span>
                         </button>
 
-                        <button type="button" class="quiz-option" data-step="3" data-value="future" onclick="window.selectQuizOption(3, 'future')">
+                        <button type="button" class="quiz-option" data-step="4" data-value="ready_future" onclick="window.selectQuizOption(4, 'ready_future')">
                             <span class="quiz-option__icon">⏳</span>
                             <div class="quiz-option__content">
                                 <strong>Za 3–6 tygodni (wczesna rezerwacja z nowego miotu)</strong>
-                                <small>Chcę spokojnie przygotować wyprawkę i z radością obserwować jak rośnie mój maluszek.</small>
+                                <small>Chcę spokojnie skompletować wyprawkę i obserwować rozwój maluszka z hodowcą.</small>
+                            </div>
+                            <span class="quiz-option__arrow">→</span>
+                        </button>
+
+                        <button type="button" class="quiz-option" data-step="4" data-value="ready_flexible" onclick="window.selectQuizOption(4, 'ready_flexible')">
+                            <span class="quiz-option__icon">🌿</span>
+                            <div class="quiz-option__content">
+                                <strong>Elastycznie – liczy się idealne dopasowanie charakteru</strong>
+                                <small>Mogę poczekać na malucha, który skradnie moje serce.</small>
                             </div>
                             <span class="quiz-option__arrow">→</span>
                         </button>
@@ -129,15 +182,21 @@
                 {{-- RESULT SCREEN --}}
                 <div class="quiz-result" id="quizResult" style="display:none;">
                     <div class="quiz-result__badge">
-                        <span>✨ Twoje Idealne Dopasowanie:</span>
+                        <span>✨ Twoje Behawioralne Dopasowanie:</span>
                     </div>
 
                     <h2 class="quiz-result__title" id="quizResultBreedTitle">Kot Bengalski</h2>
                     <p class="quiz-result__desc" id="quizResultBreedDesc"></p>
 
+                    {{-- Personalized Behavioral Note --}}
+                    <div id="quizBehavioralNoteBox" style="background: rgba(200, 157, 92, 0.12); border-left: 4px solid var(--color-gold, #c89d5c); padding: 14px 18px; border-radius: 8px; margin: 18px 0 24px; text-align: left; font-size: 0.92rem; line-height: 1.55; color: #2a2a2a;">
+                        <strong id="quizBehavioralNoteTitle" style="color: #1a1a1a;">💡 Dlaczego ten wybór pasuje do Twojego rytmu dnia:</strong>
+                        <p id="quizBehavioralNoteText" style="margin: 6px 0 0; color: #3a3a3a;"></p>
+                    </div>
+
                     {{-- Matched kittens from database --}}
                     <div class="quiz-result__cats-box">
-                        <h3 class="quiz-result__cats-heading">Dostępne maluchy tej rasy w naszej hodowli:</h3>
+                        <h3 class="quiz-result__cats-heading">Aktualnie dostępne maluchy tej rasy w hodowli:</h3>
                         
                         <div class="quiz-cats-grid" id="quizMatchingCatsGrid">
                             @foreach($animals as $animal)
@@ -149,7 +208,7 @@
                                     elseif (str_contains($bLower, 'syjam') || str_contains($bLower, 'siam')) $breedCategory = 'siamese';
 
                                     $weeksOld = $animal->date_of_birth ? (int)$animal->date_of_birth->diffInWeeks(now()) : 99;
-                                    $isReadyNow = $weeksOld >= 12;
+                                    $isReadyNow = $weeksOld >= 12 && $animal->status->value === 'available';
                                 @endphp
                                 <div class="quiz-cat-item" 
                                      data-breed="{{ $breedCategory }}" 
@@ -176,16 +235,29 @@
                                 </div>
                             @endforeach
                         </div>
+
+                        {{-- Alert when no kitten of this breed matches the requested timeline --}}
+                        <div id="quizNoMatchingCatsNotice" style="display:none; background: #ffffff; border: 1px solid rgba(200, 157, 92, 0.4); border-radius: 12px; padding: 22px; text-align: center; margin-top: 16px;">
+                            <span style="font-size: 2rem; display: block; margin-bottom: 8px;">🗓️</span>
+                            <h4 style="font-size: 1.05rem; font-weight: 700; color: #1a1a1a; margin-bottom: 6px;">Brak dostępnych maluchów w wybranym terminie</h4>
+                            <p style="font-size: 0.9rem; color: #4a4a4a; line-height: 1.55; margin-bottom: 16px;">
+                                Aktualnie maluchy tej rasy z tego terminu znalazły już domy lub oczekujemy na najbliższy planowany miot.
+                                Skontaktuj się z nami, aby zapisać się na listę oczekujących lub porozmawiać o planowanych kryciach!
+                            </p>
+                            <button type="button" class="btn btn-primary" onclick="window.contactBreederFromQuiz()">
+                                📹 Zapytaj o planowany miot na WhatsApp
+                            </button>
+                        </div>
                     </div>
 
                     {{-- Primary actions after quiz completion --}}
-                    <div class="quiz-result__actions">
-                        <button type="button" id="quizPrimaryCta" class="quiz-cta-btn quiz-cta-btn--primary" onclick="window.openReservationModal(window.__quizMatchedBreedName, '', '')">
-                            📹 Umów wideo-wizytę na żywo (WhatsApp)
+                    <div class="quiz-result__actions" style="margin-top: 28px;">
+                        <button type="button" id="quizPrimaryCta" class="quiz-cta-btn quiz-cta-btn--primary" onclick="window.contactBreederFromQuiz()">
+                            📹 Porozmawiaj z hodowcą o dopasowaniu (WhatsApp)
                         </button>
-                        <a href="tel:+48514153204" class="quiz-cta-btn quiz-cta-btn--secondary">
-                            📞 Zadzwoń do hodowcy: +48 514 153 204
-                        </a>
+                        <button type="button" class="quiz-cta-btn quiz-cta-btn--secondary" onclick="window.openCallbackFromQuiz()">
+                            📞 Poproś o szybkie oddzwonienie
+                        </button>
                     </div>
 
                     <div style="text-align: center; margin-top: 24px;">
@@ -200,30 +272,31 @@
         </div>
     </section>
 
-    {{-- Lightweight Vanilla JS Quiz State Machine --}}
+    {{-- Multi-Criteria Vanilla JS Quiz State Machine --}}
     <x-slot:scripts>
     <script>
         (function() {
             const quizState = {
-                step1: null,
-                step2: null,
-                step3: null,
+                step1: null, // energy & lifestyle
+                step2: null, // household & time away
+                step3: null, // coat & interaction
+                step4: null, // timeline
             };
 
             const breedInfo = {
                 bengal: {
-                    title: 'Kot Bengalski (Przygoda, Elegancja i Dzikie Piękno)',
-                    desc: 'Twoje odpowiedzi wskazują, że pokochasz kota bengalskiego! To pełen pasji, inteligentny i aktywny przyjaciel, który wniesie do Twojego domu urok dzikiego kota w połączeniu z przyjaznym, pieszczotliwym charakterem domowego pupila. Nasze bengale pochodzą ze sprawdzonych linii, z ujemnymi badaniami genetycznymi PRA-b i PK-Def.',
+                    title: 'Kot Bengalski (Przygoda, Inteligencja i Dzikie Piękno)',
+                    desc: 'Twoje odpowiedzi wskazują, że pokochasz kota bengalskiego! To pełen pasji, bystry i towarzyski przyjaciel, który łączy urok miniaturowego lamparta z ogromną miłością do człowieka. Wychowując się w naszym domu, bengale doskonale reagują na zabawy z wędką, aportowanie i wspólne odkrywanie zakamarków.',
                     name: 'Kot Bengalski'
                 },
                 british: {
                     title: 'Kot Brytyjski Krótkowłosy (Arystokratyczny Spokój i Plusz)',
-                    desc: 'Dla Ciebie stworzony jest kot brytyjski! To uosobienie domowego ciepła, łagodności i pluszowej elegancji. Doskonale radzi sobie zarówno podczas chwil samotności, jak i leniwych popołudni na kanapie. Nasze maluchy są po przebadanych kardiologicznie i genetycznie (PKD n/n) rodzicach.',
+                    desc: 'Dla Twojego stylu życia stworzony jest kot brytyjski! To uosobienie domowego spokoju, łagodności i pluszowego ciepła. Doskonale radzi sobie zarówno podczas chwil samotności, jak i leniwych wieczorów. Nie narzuca się, lecz z uwielbieniem czuwa w pobliżu swojego człowieka.',
                     name: 'Kot Brytyjski'
                 },
                 siamese: {
-                    title: 'Kot Syjamski (Niezrównana Więź i Głębokie Porozumienie)',
-                    desc: 'Twoim wymarzonym kompanem jest kot syjamski! Jeśli pragniesz kota, który naprawdę uczestniczy w Twoim życiu, chodzi krok w krok, rozmawia z Tobą i obdarza Cię bezgraniczną miłością — ta rasa skradnie Twoje serce bez reszty.',
+                    title: 'Kot Syjamski (Niezrównana Więź, Cień Człowieka i Dialog)',
+                    desc: 'Twoim idealnym kompanem jest kot syjamski! Jeśli pragniesz przyjaciela, który naprawdę uczestniczy w każdej chwili Twojego dnia, chodzi za Tobą krok w krok, rozmawia melodyjnym głosem i śpi przytulony do ramienia — ta rasa skradnie Twoje serce bez reszty.',
                     name: 'Kot Syjamski'
                 }
             };
@@ -232,10 +305,12 @@
                 quizState['step' + step] = value;
 
                 if (step === 1) {
-                    goToStep(2, '66%');
+                    goToStep(2, '50%');
                 } else if (step === 2) {
-                    goToStep(3, '100%');
+                    goToStep(3, '75%');
                 } else if (step === 3) {
+                    goToStep(4, '100%');
+                } else if (step === 4) {
                     showQuizResult();
                 }
             };
@@ -251,7 +326,7 @@
                 const percentEl = document.getElementById('quizStepPercent');
 
                 if (fill) fill.style.width = percent;
-                if (label) label.textContent = 'Krok ' + nextStepNumber + ' z 3';
+                if (label) label.textContent = 'Krok ' + nextStepNumber + ' z 4';
                 if (percentEl) percentEl.textContent = percent;
 
                 // Smooth scroll to container for comfortable viewing
@@ -259,6 +334,92 @@
                 if (container && window.scrollY > 150) {
                     container.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
+            }
+
+            function calculateWinningBreed() {
+                const scores = {
+                    bengal: 0,
+                    british: 0,
+                    siamese: 0
+                };
+
+                // STEP 1: Energy & Lifestyle
+                if (quizState.step1 === 'calm_couch') {
+                    scores.british += 4;
+                    scores.siamese += 1;
+                } else if (quizState.step1 === 'active_curious') {
+                    scores.bengal += 4;
+                    scores.siamese += 2;
+                } else if (quizState.step1 === 'devoted_vocal') {
+                    scores.siamese += 4;
+                    scores.bengal += 1;
+                    scores.british += 1;
+                }
+
+                // STEP 2: Time away & Household (Realistic Behavioral Adaptation)
+                if (quizState.step2 === 'away_work') {
+                    scores.british += 4; // British handles alone time well
+                    scores.bengal += 1;
+                    scores.siamese -= 3; // Siamese suffer from separation anxiety when left alone for long periods
+                } else if (quizState.step2 === 'home_work') {
+                    scores.siamese += 3;
+                    scores.bengal += 2;
+                    scores.british += 1;
+                } else if (quizState.step2 === 'family_children') {
+                    scores.british += 3; // Stoic, calm
+                    scores.bengal += 3;  // Playful with children
+                    scores.siamese += 1;
+                } else if (quizState.step2 === 'other_pets') {
+                    scores.bengal += 2;
+                    scores.siamese += 2;
+                    scores.british += 2;
+                }
+
+                // STEP 3: Coat & Interaction
+                if (quizState.step3 === 'short_sleek') {
+                    scores.bengal += 4;
+                    scores.siamese += 2;
+                } else if (quizState.step3 === 'dense_plush') {
+                    scores.british += 4;
+                } else if (quizState.step3 === 'interactive_shadow') {
+                    scores.siamese += 4;
+                    scores.bengal += 1;
+                }
+
+                // Determine winner
+                let bestBreed = 'bengal';
+                let highestScore = -999;
+                for (const [breed, score] of Object.entries(scores)) {
+                    if (score > highestScore) {
+                        highestScore = score;
+                        bestBreed = breed;
+                    }
+                }
+
+                return bestBreed;
+            }
+
+            function getBehavioralNote(breed) {
+                if (breed === 'british') {
+                    if (quizState.step2 === 'away_work') {
+                        return 'Z uwagi na to, że pracujesz poza domem, kot brytyjski to wybór doskonały. W przeciwieństwie do ras orientalnych znakomicie radzi sobie ze spokojnym oczekiwaniem na Twój powrót i nie cierpi na lęk separacyjny.';
+                    }
+                    if (quizState.step2 === 'family_children') {
+                        return 'W domu z dziećmi kot brytyjski wyróżnia się niezwykłą cierpliwością, stabilnym układem nerwowym i zrównoważonym temperamentem.';
+                    }
+                    return 'Kot brytyjski idealnie komponuje się ze zrównoważonym rytmem domowym, oferując aksamitną miękkość i arystokratyczną dyskrecję.';
+                } else if (breed === 'bengal') {
+                    if (quizState.step1 === 'active_curious') {
+                        return 'Twoja chęć aktywnej zabawy i nauki sztuczek idealnie odpowiada inteligencji kota bengalskiego. Bengale to żywiołowe, pełne energii koty, które uwielbiają interakcję z opiekunem.';
+                    }
+                    return 'Bengale łączą zjawiskowy rysunek rozet z niezwykłą domową czułością. Odpowiednia dawka zabawy zapewni mu szczęśliwe, spełnione życie w Twoim domu.';
+                } else if (breed === 'siamese') {
+                    if (quizState.step2 === 'home_work') {
+                        return 'Ponieważ pracujesz zdalnie lub często przebywasz w domu, kot syjamski będzie zachwycony. Syjamy potrzebują bliskiej obecności człowieka, odwdzięczając się bezgranicznym przywiązaniem.';
+                    }
+                    return 'Syjam to kot o unikalnej osobowości – uwielbia wokalny dialog i tworzy z wybranym opiekunem więź głębszą niż większość domowych pupili.';
+                }
+                return '';
             }
 
             function showQuizResult() {
@@ -271,21 +432,42 @@
                     resultBox.style.display = 'block';
                 }
 
-                const matchedBreed = quizState.step1 || 'bengal';
+                const matchedBreed = calculateWinningBreed();
                 const info = breedInfo[matchedBreed] || breedInfo.bengal;
                 window.__quizMatchedBreedName = info.name;
+                window.__quizMatchedBreedKey = matchedBreed;
 
                 const titleEl = document.getElementById('quizResultBreedTitle');
                 const descEl = document.getElementById('quizResultBreedDesc');
                 if (titleEl) titleEl.textContent = info.title;
                 if (descEl) descEl.textContent = info.desc;
 
-                // Filter matching kittens in DOM
+                // Personalized behavioral explanation
+                const noteBox = document.getElementById('quizBehavioralNoteBox');
+                const noteText = document.getElementById('quizBehavioralNoteText');
+                const note = getBehavioralNote(matchedBreed);
+                if (note && noteBox && noteText) {
+                    noteText.textContent = note;
+                    noteBox.style.display = 'block';
+                } else if (noteBox) {
+                    noteBox.style.display = 'none';
+                }
+
+                // Filter matching kittens in DOM by breed and timeline
                 const items = document.querySelectorAll('.quiz-cat-item');
+                const timeline = quizState.step4; // 'ready_now', 'ready_future', 'ready_flexible'
                 let matchCount = 0;
+
                 items.forEach(item => {
                     const breed = item.dataset.breed;
-                    if (breed === matchedBreed) {
+                    const ready = item.dataset.ready; // 'now' or 'future'
+                    const matchesBreed = (breed === matchedBreed);
+                    
+                    let matchesTimeline = true;
+                    if (timeline === 'ready_now' && ready !== 'now') matchesTimeline = false;
+                    if (timeline === 'ready_future' && ready !== 'future') matchesTimeline = false;
+
+                    if (matchesBreed && matchesTimeline) {
                         item.style.display = 'flex';
                         matchCount++;
                     } else {
@@ -293,9 +475,14 @@
                     }
                 });
 
-                // Fallback: if no cats of this breed currently available, show all
-                if (matchCount === 0) {
-                    items.forEach(item => item.style.display = 'flex');
+                // Honest feedback if no cat of this breed currently matches the timeline
+                const noCatsNotice = document.getElementById('quizNoMatchingCatsNotice');
+                if (noCatsNotice) {
+                    if (matchCount === 0) {
+                        noCatsNotice.style.display = 'block';
+                    } else {
+                        noCatsNotice.style.display = 'none';
+                    }
                 }
 
                 // Smooth scroll to result
@@ -308,16 +495,49 @@
                 if (typeof window.trackFunnelStep === 'function') {
                     window.trackFunnelStep('quiz_completed', {
                         matched_breed: info.name,
-                        timeline: quizState.step3 || '',
+                        lifestyle: quizState.step1 || '',
                         household: quizState.step2 || '',
+                        coat: quizState.step3 || '',
+                        timeline: quizState.step4 || '',
                     });
                 }
             }
+
+            window.contactBreederFromQuiz = function() {
+                const breed = window.__quizMatchedBreedName || 'Kot Rasowy';
+                let attributionCode = 'Quiz_Dopasowania';
+                try {
+                    if (typeof window.getTrafficSourceLabel === 'function') {
+                        attributionCode = window.getTrafficSourceLabel();
+                    }
+                } catch(e) {}
+
+                const msg = `Dzień dobry! Rozwiązałem/am quiz doboru rasy na kotyzmazowieckiejszwajcarii.pl. Mój wynik dopasowania to: ${breed}. Chciał(a)bym porozmawiać z hodowcą o dostępności i wideo-wizycie. [Kod: ${attributionCode}]`;
+                
+                // Track contact click
+                if (typeof window.trackFunnelStep === 'function') {
+                    window.trackFunnelStep('contact_cta_click', {
+                        channel: 'whatsapp',
+                        origin: 'quiz_result',
+                        matched_breed: breed
+                    });
+                }
+
+                window.open(`https://wa.me/48514153204?text=${encodeURIComponent(msg)}`, '_blank');
+            };
+
+            window.openCallbackFromQuiz = function() {
+                const breed = window.__quizMatchedBreedName || 'Kot Rasowy';
+                if (typeof window.openReservationModal === 'function') {
+                    window.openReservationModal('Wynik Quizu: ' + breed, breed, 'Zgłoszenie z Quizu');
+                }
+            };
 
             window.restartQuiz = function() {
                 quizState.step1 = null;
                 quizState.step2 = null;
                 quizState.step3 = null;
+                quizState.step4 = null;
 
                 const wrap = document.getElementById('quizProgressWrap');
                 if (wrap) wrap.style.display = 'block';
@@ -325,10 +545,10 @@
                 const resultBox = document.getElementById('quizResult');
                 if (resultBox) resultBox.style.display = 'none';
 
-                goToStep(1, '33%');
+                goToStep(1, '25%');
             };
 
-            // Event delegation fallback for maximum click reliability across mobile browsers
+            // Event delegation fallback
             document.addEventListener('DOMContentLoaded', function() {
                 const container = document.getElementById('quizContainer');
                 if (container) {

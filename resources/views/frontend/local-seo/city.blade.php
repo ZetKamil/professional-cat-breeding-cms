@@ -116,21 +116,28 @@
     </section>
 
     {{-- ============================================================
-    2. VALUE PROPOSITION — CALM COUNTRYSIDE VS CITY STRESS
+    2. VALUE PROPOSITION — NATURAL COUNTRYSIDE ENVIRONMENT
     ============================================================ --}}
     <x-frontend.section id="dlaczego-my" padding="default" class="reveal-up">
         <x-frontend.section-header 
             eyebrow="Dlaczego Warto Przyjechać do Sikorza" 
-            headline="Spokój Mazowieckiej Szwajcarii zamiast Miejskiego Zgiełku"
-            description="Dlaczego coraz więcej rodzin i pasjonatów z {{ $city['name_genitive'] }} wybiera naszą hodowlę zamiast ciasnych hodowli w miejskich blokach?"
+            headline="Naturalne Środowisko i Spokój Mazowieckiej Szwajcarii"
+            description="Dlaczego przyszli opiekunowie z {{ $city['name_genitive'] }} wybierają naszą domową hodowlę w Sikorzu k. Płocka?"
         />
+
+        {{-- Honest Location Clarification Box --}}
+        <div style="background: rgba(200, 157, 92, 0.08); border-left: 4px solid var(--color-gold, #c89d5c); padding: 16px 20px; border-radius: 8px; margin-bottom: 32px; font-size: 0.92rem; line-height: 1.6; color: #333;">
+            <strong style="color: #1a1a1a;">📍 Rzetelna Informacja o Lokalizacji:</strong> 
+            Nasza hodowla mieści się fizycznie w <strong>Sikorzu 56A k. Płocka (woj. mazowieckie)</strong>. 
+            Nie tworzymy fikcyjnych oddziałów ani punktów handlowych w {{ $city['name_locative'] }}. Zapraszamy do poznania naszych kociąt przez wygodną wideo-wizytę na WhatsApp lub Messengerze, a następnie do osobistego odbioru malucha w jego prawdziwym, domowym otoczeniu.
+        </div>
 
         <div class="collection-grid" role="list">
             <div class="collection-card" role="listitem">
                 <div>
                     <h3 class="collection-card__title">100% Warunki Domowe</h3>
                     <p class="collection-card__quote">
-                        Nasze koty nie żyją w klatkach ani zamkniętych boksach. Wychowują się z nami w przestronnym domu w otoczeniu Brudzeńskiego Parku Krajobrazowego, mając stały kontakt z człowiekiem i domowymi dźwiękami.
+                        Nasze koty nie żyją w klatkach ani zamkniętych boksach. Wychowują się z nami w przestronnym domu w otoczeniu Brudzeńskiego Parku Krajobrazowego, mając stały kontakt z człowiekiem, dziećmi i domowymi dźwiękami.
                     </p>
                 </div>
             </div>
@@ -139,20 +146,30 @@
                 <div>
                     <h3 class="collection-card__title">Pewne Badania Genetyczne</h3>
                     <p class="collection-card__quote">
-                        Kupując kota z {{ $city['name_genitive'] }}, oczekujesz pewności. Każdy z rodziców naszych miotów przechodzi regularne badania kardiologiczne echo serca oraz testy genetyczne dedykowane dla rasy (HCM, PKD, PRA-b, PK-Def, FIV/FeLV).
+                        Kupując kota z {{ $city['name_genitive'] }}, oczekujesz pewności. Każdy z rodziców naszych miotów przechodzi regularne badania kardiologiczne echo serca (HCM) oraz testy genetyczne (PKD, PRA-b, PK-Def, FIV/FeLV).
                     </p>
                 </div>
             </div>
 
             <div class="collection-card" role="listitem">
                 <div>
-                    <h3 class="collection-card__title">Komfortowy Dojazd ({{ $city['distance_time'] }})</h3>
+                    <h3 class="collection-card__title">Dogodny Dojazd ({{ $city['distance_time'] }})</h3>
                     <p class="collection-card__quote">
-                        Sikórz 56A znajduje się zaledwie {{ $city['distance_time'] }} od {{ $city['name_genitive'] }} ({{ $city['route_desc'] }}). Po wcześniejszym poznaniu kociaka na wideo-wizycie, przyjazd po odbiór staje się przyjemną, bezstresową wycieczką.
+                        Sikórz znajduje się {{ $city['distance_time'] }} od {{ $city['name_genitive'] }} ({{ $city['route_desc'] }}). Po wcześniejszym poznaniu kociaka na wideo-wizycie, przyjazd po odbiór staje się przyjemną, bezstresową wycieczką.
                     </p>
                 </div>
             </div>
         </div>
+
+        @if(!empty($city['travel_tips']))
+            <div style="margin-top: 36px; background: #ffffff; border: 1px solid rgba(0,0,0,0.08); border-radius: 14px; padding: 24px; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
+                <h3 style="font-size: 1.1rem; color: #1a1a1a; margin-bottom: 8px;">🚗 Wskazówki dojazdu i transportu dla opiekunów z {{ $city['name_genitive'] }}:</h3>
+                <p style="font-size: 0.92rem; color: #4a4a4a; line-height: 1.6; margin-bottom: 12px;">{{ $city['travel_tips'] }}</p>
+                @if(!empty($city['local_context']))
+                    <p style="font-size: 0.92rem; color: #4a4a4a; line-height: 1.6; margin: 0;">{{ $city['local_context'] }}</p>
+                @endif
+            </div>
+        @endif
     </x-frontend.section>
 
     {{-- ============================================================
@@ -214,6 +231,28 @@
             @endforelse
         </div>
     </x-frontend.section>
+
+    @if(!empty($city['faq']))
+        {{-- ============================================================
+        4b. LOCAL FAQ FOR CITY RESIDENTS
+        ============================================================ --}}
+        <x-frontend.section padding="compact" class="reveal-up">
+            <x-frontend.section-header 
+                eyebrow="Pytania i Odpowiedzi" 
+                headline="Częste Pytania Opiekunów z {{ $city['name_genitive'] }}"
+                description="Wszystko, co warto wiedzieć przed wyruszeniem w drogę do Sikorza."
+            />
+
+            <div style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px;">
+                @foreach($city['faq'] as $faqItem)
+                    <div style="background: #ffffff; border: 1px solid rgba(200, 157, 92, 0.25); border-radius: 12px; padding: 20px 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+                        <h4 style="font-size: 1.05rem; font-weight: 700; color: #1a1a1a; margin-bottom: 8px;">❓ {{ $faqItem['q'] }}</h4>
+                        <p style="font-size: 0.92rem; color: #4a4a4a; line-height: 1.6; margin: 0;">{{ $faqItem['a'] }}</p>
+                    </div>
+                @endforeach
+            </div>
+        </x-frontend.section>
+    @endif
 
     {{-- ============================================================
     5. FINAL LOCAL CTA

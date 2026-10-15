@@ -28,6 +28,12 @@
     }
 }
 
+/* Hide sticky bar when reservation modal is active to prevent obscuring inputs */
+body.is-modal-open .mobile-sticky-bar,
+body.modal-open .mobile-sticky-bar {
+    display: none !important;
+}
+
 .mobile-sticky-bar__inner {
     max-width: 500px;
     margin: 0 auto;

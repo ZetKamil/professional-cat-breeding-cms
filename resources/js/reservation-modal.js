@@ -108,6 +108,7 @@ window.openReservationModal = function (catName, catBreed, statusLabel) {
     backdrop.style.display = 'flex';
     requestAnimationFrame(() => {
         backdrop.classList.add('is-open');
+        document.body.classList.add('is-modal-open');
         document.body.style.overflow = 'hidden';
         if (phoneInput && window.innerWidth > 768) {
             phoneInput.focus();
@@ -123,6 +124,7 @@ window.closeReservationModal = function () {
     if (!backdrop) return;
 
     backdrop.classList.remove('is-open');
+    document.body.classList.remove('is-modal-open');
     setTimeout(() => {
         backdrop.style.display = 'none';
         document.body.style.overflow = '';
