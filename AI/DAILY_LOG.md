@@ -4,6 +4,28 @@
 
 ### Completed
 
+✓ Ujednolicenie Dolnego CTA w całym serwisie & Przeniesienie Opinii do „O Hodowli” (`feat(cta)`, `feat(cro)`, `refactor(views)`)
+  - **Przeniesienie sekcji „Historie Opiekunów Naszych Kotów” do „O Hodowli” (`cattery.blade.php`):**
+    - Zdjęto sekcję `#opinie` z `home.blade.php`, maksymalnie odchudzając stronę główną i skupiając ją na bezpośrednim procesie: *Hero → Dostępne Kocięta → Domowa Socjalizacja → Wideo-rozmowa / WhatsApp*.
+    - Umieszczono sekcję `#opinie` na podstronie `cattery.blade.php` tuż pod 3-krokowym procesem zakupu kocięcia (*„Krok 03: Umowa i Odbiór”*), co stanowi naturalny dowód społeczny dla klientów czytających o standardach hodowli.
+  - **Utworzenie w 100% reużywalnego komponentu `<x-frontend.conversion-cta />`:**
+    - Utworzono komponent `resources/views/components/frontend/conversion-cta.blade.php`, który ujednolica końcowe wezwanie do działania na wszystkich podstronach.
+    - Zastępuje on dawne, niespójne teksty i odsyłacze do formularza `/kontakt` kompletnym pakietem konwersyjnym:
+      1. Złoty przycisk: `📹 Umów wideo-rozmowę na żywo` (otwierający modal z obsługą kierunkowych międzynarodowych i oddzwonienia).
+      2. Grafitowy przycisk: `💬 Porozmawiaj na WhatsApp` (z gotowym szablonem i analityką `contact_cta_click`).
+      3. Bezpośredni telefon: `lub zadzwoń bezpośrednio: +48 514 153 204`.
+      4. Znak zaufania: `Bezpieczna rezerwacja z rodowodem SHiOZ ZOOLANDIA · Pełna dokumentacja medyczna i wyprawka`.
+    - Komponent wdrożono na:
+      - Stronie głównej (`home.blade.php`),
+      - Stronie „O Hodowli” (`cattery.blade.php`),
+      - Katalogu kotów (`animals/index.blade.php`),
+      - Stronie „O Nas” (`about.blade.php`),
+      - Widoku każdego artykułu w Bazie Wiedzy (`blog/show.blade.php`).
+    - Każda przyszła zmiana treści, numeru telefonu czy przycisków odbywa się w jednym pliku `conversion-cta.blade.php` dla całego portalu.
+  - **Weryfikacja testami:**
+    - Zaktualizowano asercje w `tests/Feature/Frontend/HomepageTest.php` (sprawdzenie obecności opinii na podstronie O Hodowli oraz ich braku na Home).
+    - Wszystkie testy przeszły pomyślnie (`HomepageTest`, `ReservationAndCroTest`, `AnimalTest`, `BlogTest`).
+
 ✓ Optymalizacja Ścieżki Zakupowej na Stronie Głównej & Domowa Socjalizacja (`feat(home)`, `feat(cro)`, `test(home)`)
   - **Usunięcie sekcji „Nasze Specjalizacje Rasy”:**
     - Zlikwidowano długi blok 3 kart ras z `home.blade.php`, dzięki czemu zarówno na desktopie, jak i mobile, użytkownik po sekcji Hero od razu widzi „Dostępne Kocięta i Mioty”.

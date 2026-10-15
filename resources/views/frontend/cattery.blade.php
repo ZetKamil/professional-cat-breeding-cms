@@ -162,11 +162,68 @@
     </x-frontend.section>
 
     {{-- ============================================================
-    5. FINAL INVITATION — LUXURY CONCIERGE CTA MONOLITH
+    5. VERIFIED PATRON STORIES — EDITORIAL QUOTE MONOLITHS
     ============================================================ --}}
-    <div class="reveal-up">
-        <x-frontend.cta tile="parchment" eyebrow="Zaproszenie do Kontaktu" headline="Zaplanuj Rozmowę"
-            description="Napisz do nas — chętnie odpowiemy na wszystkie pytania, doradzimy w wyborze linii genetycznej i umówimy kameralne spotkanie w naszej hodowli."
-            buttonText="Skontaktuj się z nami" buttonHref="{{ route('contact') }}" />
-    </div>
+    <x-frontend.section tile="parchment" id="opinie" class="reveal-up">
+        <x-frontend.section-header eyebrow="Rekomendacje i Zaufanie" headline="Historie Opiekunów Naszych Kotów"
+            description="Opinie i wrażenia nowych opiekunów kotów pochodzących z naszej hodowli po przejściu procesu adopcji." />
+
+        <div class="patrons-grid" role="list" aria-label="Rekomendacje opiekunów">
+            <div class="patron-monolith" role="listitem">
+                <p class="patron-monolith__quote">
+                    „Luna jest cudowna — zdrowa, zadbana i przepiękna. Od pierwszych dni widać, że wyrosła w kochającym
+                    domowym otoczeniu. Hodowla godna polecenia z całego serca.”
+                </p>
+                <div class="patron-monolith__author">
+                    <div>
+                        <strong class="block text-ink">Anna K.</strong>
+                        <span class="text-xs text-ink-muted-48">Opiekunka Luny · Kot Brytyjski</span>
+                    </div>
+                    <span class="patron-monolith__badge">
+                        <i data-lucide="check-circle-2" class="w-4 h-4" aria-hidden="true"></i>
+                        Rodowód SHiOZ ZOOLANDIA
+                    </span>
+                </div>
+            </div>
+
+            <div class="patron-monolith" role="listitem">
+                <p class="patron-monolith__quote">
+                    „Profesjonalne podejście na każdym etapie, pełna dokumentacja medyczna oraz cierpliwe odpowiadanie
+                    na wszystkie nasze pytania. Polecam bez wahania!”
+                </p>
+                <div class="patron-monolith__author">
+                    <div>
+                        <strong class="block text-ink">Marek W.</strong>
+                        <span class="text-xs text-ink-muted-48">Opiekun Simby · Kot Bengalski</span>
+                    </div>
+                    <span class="patron-monolith__badge">
+                        <i data-lucide="check-circle-2" class="w-4 h-4" aria-hidden="true"></i>
+                        Rodowód SHiOZ ZOOLANDIA
+                    </span>
+                </div>
+            </div>
+
+            <div class="patron-monolith" role="listitem">
+                <p class="patron-monolith__quote">
+                    „Widać, że koty w tej hodowli są prawdziwie kochane. Nasz Mruczek był natychmiast oswojony, ufny i
+                    szczęśliwy w nowym domu od pierwszego dnia.”
+                </p>
+                <div class="patron-monolith__author">
+                    <div>
+                        <strong class="block text-ink">Katarzyna M.</strong>
+                        <span class="text-xs text-ink-muted-48">Opiekunka Mruczka · Kot Syjamski</span>
+                    </div>
+                    <span class="patron-monolith__badge">
+                        <i data-lucide="check-circle-2" class="w-4 h-4" aria-hidden="true"></i>
+                        Rodowód SHiOZ ZOOLANDIA
+                    </span>
+                </div>
+            </div>
+        </div>
+    </x-frontend.section>
+
+    {{-- ============================================================
+    6. FINAL INVITATION — REUSABLE CONVERSION CTA
+    ============================================================ --}}
+    <x-frontend.conversion-cta source-context="O Hodowli" />
 </x-frontend.shell>

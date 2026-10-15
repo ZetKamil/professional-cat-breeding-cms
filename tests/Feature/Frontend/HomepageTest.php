@@ -20,7 +20,6 @@ class HomepageTest extends TestCase
         $response->assertSee('SHiOZ ZOOLANDIA');
         $response->assertSee('Badania Genetyczne Rodziców');
         $response->assertSee('Dostępne Kocięta i Mioty');
-        $response->assertSee('Historie Opiekunów Naszych Kotów');
         $response->assertSee('Domowa Socjalizacja');
         $response->assertSee('Zero klatek, 100% życia z nami');
         $response->assertSee('Umów wideo-rozmowę na żywo');
@@ -38,6 +37,8 @@ class HomepageTest extends TestCase
         $response->assertSee('Kontakt i Wybór Kocięcia');
         $response->assertSee('Wizyta w Hodowli');
         $response->assertSee('Umowa i Odbiór');
+        $response->assertSee('Historie Opiekunów Naszych Kotów');
+        $response->assertSee('Umów wideo-rozmowę na żywo');
     }
 
     public function test_homepage_renders_featured_animals_when_available(): void

@@ -237,24 +237,7 @@
     {{-- ============================================================
          6. CTA SECTION
          ============================================================ --}}
-    <x-frontend.section class="article-cta-section">
-        <div class="article-cta-box">
-            <div class="article-cta-box__content">
-                <h2 class="text-display">Masz pytania dotyczące naszych kociąt?</h2>
-                <p class="text-intro">
-                    Chętnie doradzimy w kwestii rezerwacji miotu, wyprawki lub wyboru odpowiedniej rasy do Twojego stylu życia.
-                </p>
-                <div class="article-cta-box__actions">
-                    <x-frontend.button variant="primary" href="{{ route('contact') }}">
-                        Skontaktuj się z nami
-                    </x-frontend.button>
-                    <x-frontend.button variant="secondary" href="{{ route('frontend.animals.index') }}">
-                        Zobacz dostępne koty
-                    </x-frontend.button>
-                </div>
-            </div>
-        </div>
-    </x-frontend.section>
+    <x-frontend.conversion-cta source-context="Artykuł bloga: {{ addslashes($post->title) }}" />
 
     @push('schema')
     <script type="application/ld+json">

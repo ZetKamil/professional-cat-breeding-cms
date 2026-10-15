@@ -136,66 +136,6 @@
         @endif
     </x-frontend.section>
 
-    {{-- ============================================================
-    4. VERIFIED PATRON STORIES — EDITORIAL QUOTE MONOLITHS
-    ============================================================ --}}
-    <x-frontend.section tile="parchment" id="opinie" class="reveal-up home-section--opinie">
-        <x-frontend.section-header eyebrow="Rekomendacje i Zaufanie" headline="Historie Opiekunów Naszych Kotów"
-            description="Opinie i wrażenia nowych opiekunów kotów pochodzących z naszej hodowli." />
-
-        <div class="patrons-grid" role="list" aria-label="Rekomendacje opiekunów">
-            <div class="patron-monolith" role="listitem">
-                <p class="patron-monolith__quote">
-                    „Luna jest cudowna — zdrowa, zadbana i przepiękna. Od pierwszych dni widać, że wyrosła w kochającym
-                    domowym otoczeniu. Hodowla godna polecenia z całego serca.”
-                </p>
-                <div class="patron-monolith__author">
-                    <div>
-                        <strong class="block text-ink">Anna K.</strong>
-                        <span class="text-xs text-ink-muted-48">Opiekunka Luny · Kot Brytyjski</span>
-                    </div>
-                    <span class="patron-monolith__badge">
-                        <i data-lucide="check-circle-2" class="w-4 h-4" aria-hidden="true"></i>
-                        Rodowód SHiOZ ZOOLANDIA
-                    </span>
-                </div>
-            </div>
-
-            <div class="patron-monolith" role="listitem">
-                <p class="patron-monolith__quote">
-                    „Profesjonalne podejście na każdym etapie, pełna dokumentacja medyczna oraz cierpliwe odpowiadanie
-                    na wszystkie nasze pytania. Polecam bez wahania!”
-                </p>
-                <div class="patron-monolith__author">
-                    <div>
-                        <strong class="block text-ink">Marek W.</strong>
-                        <span class="text-xs text-ink-muted-48">Opiekun Simby · Kot Bengalski</span>
-                    </div>
-                    <span class="patron-monolith__badge">
-                        <i data-lucide="check-circle-2" class="w-4 h-4" aria-hidden="true"></i>
-                        Rodowód SHiOZ ZOOLANDIA
-                    </span>
-                </div>
-            </div>
-
-            <div class="patron-monolith" role="listitem">
-                <p class="patron-monolith__quote">
-                    „Widać, że koty w tej hodowli są prawdziwie kochane. Nasz Mruczek był natychmiast oswojony, ufny i
-                    szczęśliwy w nowym domu od pierwszego dnia.”
-                </p>
-                <div class="patron-monolith__author">
-                    <div>
-                        <strong class="block text-ink">Katarzyna M.</strong>
-                        <span class="text-xs text-ink-muted-48">Opiekunka Mruczka · Kot Syjamski</span>
-                    </div>
-                    <span class="patron-monolith__badge">
-                        <i data-lucide="check-circle-2" class="w-4 h-4" aria-hidden="true"></i>
-                        Rodowód SHiOZ ZOOLANDIA
-                    </span>
-                </div>
-            </div>
-        </div>
-    </x-frontend.section>
 
     {{-- ============================================================
     5. DOMESTIC SOCIALIZATION & DAILY LIFE (OPTION A)
@@ -301,35 +241,9 @@
     </x-frontend.section>
 
     {{-- ============================================================
-    6. FINAL INVITATION — DIRECT VIDEO CONCIERGE & WHATSAPP ACTIONS
+    4. FINAL INVITATION — REUSABLE CONVERSION CTA
     ============================================================ --}}
-    <div class="reveal-up home-section--cta">
-        <x-frontend.cta tile="parchment" eyebrow="Zaproszenie do Kontaktu i Rezerwacji" headline="Zaplanuj Rozmowę lub Wideo-Wizytę"
-            description="Chcesz poznać nasze kocięta na żywo? Włączamy kamerę w naszym salonie i odpowiadamy na wszystkie pytania — bez pośpiechu i bez zobowiązań."
-            note="Bezpieczna rezerwacja z rodowodem SHiOZ ZOOLANDIA · Pełna dokumentacja medyczna i wyprawka">
-            <div class="cta-block__actions-row">
-                <x-frontend.button
-                    type="button"
-                    variant="primary"
-                    onclick="window.openReservationModal('', '', '')"
-                    icon="video"
-                    class="cta-block__btn">
-                    📹 Umów wideo-rozmowę na żywo
-                </x-frontend.button>
-                <x-frontend.button
-                    type="button"
-                    variant="secondary"
-                    onclick="if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'whatsapp', cat_name: 'Ogólne zapytanie' }); } window.open('https://wa.me/48514153204?text=' + encodeURIComponent('Dzień dobry! Piszę ze strony głównej hodowli Mazowiecka Szwajcaria. Chciałbym zapytać o rezerwację kociąt i wideo-wizytę na żywo.'), '_blank');"
-                    icon="message-circle"
-                    class="cta-block__btn">
-                    💬 Porozmawiaj na WhatsApp
-                </x-frontend.button>
-            </div>
-            <a href="tel:+48514153204" class="cta-block__direct-phone">
-                lub zadzwoń bezpośrednio: <strong>+48 514 153 204</strong>
-            </a>
-        </x-frontend.cta>
-    </div>
+    <x-frontend.conversion-cta source-context="Strona główna" />
 
     @push('schema')
     <script type="application/ld+json">

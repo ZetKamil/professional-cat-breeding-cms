@@ -233,15 +233,6 @@
     {{-- ============================================================
          8. CONTACT CTA
          ============================================================ --}}
-    <div class="reveal-up">
-        <x-frontend.cta
-            tile="parchment"
-            eyebrow="Rozmowa i Kontakt"
-            headline="Chcesz poznać nas bliżej?"
-            description="Zapraszamy do kontaktu — chętnie opowiemy więcej o naszej hodowli, doradzimy i odpowiemy na wszystkie pytania."
-            buttonText="Skontaktuj się z nami"
-            buttonHref="{{ route('contact') }}"
-        />
-    </div>
+    <x-frontend.conversion-cta source-context="O Nas" />
 
 </x-frontend.shell>

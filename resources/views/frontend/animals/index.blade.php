@@ -96,14 +96,5 @@
     {{-- ============================================================
          4. CONTACT CTA
          ============================================================ --}}
-    <div class="reveal-up">
-        <x-frontend.cta
-            tile="parchment"
-            eyebrow="Kontakt i Doradztwo"
-            headline="Szukasz wymarzonego kociaka?"
-            description="Napisz do nas — chętnie opowiemy o naszych rasach i doradzimy, który kot najlepiej pasuje do Twojego domu."
-            buttonText="Zapytaj o kocięta"
-            buttonHref="{{ route('contact') }}"
-        />
-    </div>
+    <x-frontend.conversion-cta source-context="Katalog kotów" />
 </x-frontend.shell>
