@@ -301,6 +301,64 @@
     gap: 8px;
 }
 
+.res-modal__phone-group {
+    display: flex;
+    flex-grow: 1;
+    background: #0d0d0e;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.res-modal__phone-group:focus-within {
+    border-color: #c89d5c;
+    box-shadow: 0 0 0 3px rgba(200, 157, 92, 0.2);
+}
+
+.res-modal__country-wrap {
+    position: relative;
+    background: rgba(255, 255, 255, 0.05);
+    border-right: 1px solid rgba(255, 255, 255, 0.12);
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.res-modal__country-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: transparent;
+    color: #e5c38c;
+    font-size: 0.88rem;
+    font-weight: 600;
+    padding: 12px 24px 12px 10px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-family: inherit;
+    line-height: 1;
+}
+
+.res-modal__country-wrap::after {
+    content: '▾';
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.7rem;
+    color: #c89d5c;
+    pointer-events: none;
+}
+
+.res-modal__country-select option {
+    background: #1a1a1c;
+    color: #ffffff;
+    font-size: 0.9rem;
+    padding: 6px 10px;
+}
+
 .res-modal__input-wrapper {
     position: relative;
     flex-grow: 1;
@@ -308,31 +366,20 @@
     align-items: center;
 }
 
-.res-modal__input-prefix {
-    position: absolute;
-    left: 12px;
-    font-size: 0.88rem;
-    font-weight: 600;
-    color: #8e8e93;
-    pointer-events: none;
-}
-
 .res-modal__input-wrapper input {
     width: 100%;
-    background: #0d0d0e;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 10px;
-    padding: 12px 12px 12px 42px;
+    background: transparent;
+    border: none;
+    padding: 12px 12px;
     color: #ffffff;
     font-size: 0.95rem;
     box-sizing: border-box;
     outline: none;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.res-modal__input-wrapper input:focus {
-    border-color: #c89d5c;
-    box-shadow: 0 0 0 3px rgba(200, 157, 92, 0.2);
+.res-modal__input-wrapper input::placeholder {
+    color: #71717a;
+    font-size: 0.9rem;
 }
 
 .res-modal__submit-btn {

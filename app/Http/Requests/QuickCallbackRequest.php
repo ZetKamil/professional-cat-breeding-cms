@@ -24,7 +24,7 @@ class QuickCallbackRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'phone'          => ['required', 'string', 'min:9', 'max:25', 'regex:/^[0-9\s\-+()]{9,25}$/'],
+            'phone'          => ['required', 'string', 'min:7', 'max:30', 'regex:/^[0-9\s\-+()]{7,30}$/'],
             'cat_name'       => ['nullable', 'string', 'max:100'],
             'cat_breed'      => ['nullable', 'string', 'max:100'],
             'traffic_source' => ['nullable', 'string', 'max:100'],
@@ -41,9 +41,9 @@ class QuickCallbackRequest extends FormRequest
     {
         return [
             'phone.required'         => 'Prosimy o podanie numeru telefonu.',
-            'phone.min'              => 'Numer telefonu musi mieć co najmniej 9 cyfr.',
+            'phone.min'              => 'Numer telefonu jest zbyt krótki.',
             'phone.max'              => 'Wprowadzony numer telefonu jest zbyt długi.',
-            'phone.regex'            => 'Numer telefonu może zawierać tylko cyfry, spacje i znak +.',
+            'phone.regex'            => 'Numer telefonu może zawierać tylko cyfry, spacje, nawiasy i znak +.',
             '_hp_website.prohibited' => 'Wykryto niedozwoloną aktywność automatyczną (spam).',
         ];
     }

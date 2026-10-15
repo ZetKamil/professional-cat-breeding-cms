@@ -96,6 +96,38 @@ class ReservationAndCroTest extends TestCase
         );
     }
 
+    public function test_quick_callback_supports_international_phone_numbers(): void
+    {
+        $internationalNumbers = [
+            '+49 151 2345678', // Germany
+            '+44 7911 123456', // UK
+            '+47 12 34 56 78', // Norway
+            '+31 6 12345678',  // Netherlands
+            '+1 555 123 4567', // US
+        ];
+
+        foreach ($internationalNumbers as $phone) {
+            $response = $this->postJson('/api/quick-callback', [
+                'phone' => $phone,
+            ]);
+
+            $response->assertOk();
+            $response->assertJson(['success' => true]);
+        }
+    }
+
+    public function test_reservation_modal_renders_international_country_selector(): void
+    {
+        $response = $this->get(route('home'));
+
+        $response->assertOk();
+        $response->assertSee('res-modal-country-code');
+        $response->assertSee('+48');
+        $response->assertSee('+49');
+        $response->assertSee('+44');
+        $response->assertSee('+47');
+    }
+
     public function test_breed_matcher_quiz_page_renders_successfully(): void
     {
         $response = $this->get(route('quiz'));

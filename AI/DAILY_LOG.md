@@ -4,6 +4,48 @@
 
 ### Completed
 
+✓ Międzynarodowe Kierunkowe i Walidacja Telefonów w Formularzu Oddzwonienia (`feat(callback)`, `feat(mobile)`, `test(cro)`)
+  - **Wybór kierunkowego kraju dla klientów zagranicznych:**
+    - Zastąpiono sztywny prefiks `+48` interaktywnym, mobilnym selektorem kierunkowych w `<x-frontend.reservation-modal />`.
+    - Dodano listę najczęstszych kierunków zagranicznych (🇵🇱 Polska +48 jako domyślny, 🇩🇪 Niemcy +49, 🇬🇧 UK +44, 🇳🇴 Norwegia +47, 🇳🇱 Holandia +31, 🇸🇪 Szwecja +46, 🇦🇹 Austria +43, 🇨🇭 Szwajcaria +41, 🇧🇪 Belgia +32, 🇮🇪 Irlandia +353, 🇫🇷 Francja +33, 🇩🇰 Dania +45, 🇺🇸 USA/Kanada +1, 🇨🇿 Czechy +420, 🇸🇰 Słowacja +421, 🇮🇹 Włochy +39, 🇪🇸 Hiszpania +34, 🇺🇦 Ukraina +380, 🇱🇹 Litwa +370, 🇫🇮 Finlandia +358 oraz opcja 🌐 Inny).
+    - Zachowano luksusowy design (złota strzałka, ciemne tło pergaminowe, separator, wsparcie systemowego pickera iOS/Android bez uciążliwych popupów).
+  - **Inteligentne łączenie numerów w JavaScript (`reservation-modal.js`):**
+    - Jeśli użytkownik wklei numer z prefiksem `+` lub `00` (np. `+49 170...`), system automatycznie zachowuje wpisany kierunek bez dublowania prefiksu.
+    - Jeśli użytkownik wpisze numer lokalny, pobierany jest prefiks z selektora.
+  - **Uelastycznienie walidacji backendowej (`QuickCallbackRequest.php`):**
+    - Zmiana reguły długości z `min:9, max:25` na `min:7, max:30` z dopuszczeniem międzynarodowych formatów ze spacjami i myślnikami (`/^[0-9\s\-+()]{7,30}$/`).
+  - **Testy jednostkowe i integracyjne (`ReservationAndCroTest.php`):**
+    - Dodano testy `test_quick_callback_supports_international_phone_numbers` (weryfikacja formatów DE, UK, NO, NL, US) oraz `test_reservation_modal_renders_international_country_selector`.
+    - Wszystkie testy przeszły pomyślnie (9/9 pass, 72 asercje).
+
+✓ Zaawansowane dopracowanie Lokalnego SEO, Behawioralnego Quizu oraz Zasad Bezpiecznego Wdrożenia (`feat(seo)`, `feat(quiz)`, `docs(governance)`)
+  - **Lokalne SEO dla Miast Satelickich (Punkt 6):**
+    - Dodano dedykowaną podstronę `/hodowla-kotow-wloclawek` (najbliższe duże miasto, ~35-40 min trasą DK62 wzdłuż Wisły) obok Warszawy (~80-90 min), Łodzi (~80-90 min przez A1/DK60), Torunia (~70-75 min przez DK91/DK62) i Bydgoszczy.
+    - Całkowicie wyeliminowano sformułowania o „ciasnych hodowlach w miejskich blokach” i porównania z konkurencją – zastąpiono je rzetelnymi atutami własnej domowej hodowli w otoczeniu Brudzeńskiego Parku Krajobrazowego.
+    - Dodano jasny komunikat o rzeczywistej lokalizacji: Sikórz 56A k. Płocka (woj. mazowieckie), bez tworzenia fikcyjnych placówek czy wizytówek.
+    - Każde miasto otrzymało unikalne opisy dojazdu, wskazówki dotyczące bezpiecznego transportu kociaka w transporterze oraz unikalną sekcję FAQ.
+    - Zaktualizowano linkowanie wewnętrzne w stopce serwisu.
+  - **Behawioralny Quiz Doboru Rasy (Punkt 7):**
+    - Wdrożono 4-etapowy model wielokryterialnego dopasowania:
+      1. Poziom energii i styl spędzania czasu (relaks na kanapie / eksploracja i zabawa lamparta / głęboki dialog i więź).
+      2. Czas poza domem i struktura domowników (praca poza domem 7-9h – kot brytyjski znosi to doskonale, syjam cierpi na lęk separacyjny; praca zdalna; rodzina z dziećmi; inne zwierzęta).
+      3. Preferencje dotyczące pielęgnacji i szaty (krótka gładka sierść bez czesania / gęsty plusz / smukły kot orientalny).
+      4. Horyzont czasowy (gotowy od zaraz / wczesna rezerwacja z nowego miotu za 3-6 tyg. / elastycznie).
+    - Algorytm wylicza ważoną punktację dla ras Bengal, British i Siamese, generując spersonalizowane uzasadnienie behawioralne.
+    - Weryfikacja rzeczywistej dostępności w CMS: jeśli w bazie nie ma kociąt spełniających kryteria, wyświetla się rzetelny komunikat o braku maluchów w danym terminie z zaproszeniem do zapisu na listę oczekujących na WhatsApp.
+    - Przekazywanie wyniku do WhatsApp (pre-filled tekst z rasą i kodem źródła) oraz do modalu szybkiego oddzwonienia.
+    - Quiz działa w 100% bez logowania i bez konieczności podawania danych osobowych.
+  - **Pasek Sticky Bar & Ergonomia Mobilna:**
+    - Dodano klasę `is-modal-open` wyłączającą dolny pasek sticky bar podczas otwartego modalu rezerwacji, zapobiegając zasłanianiu pól i klawiatury mobilnej.
+  - **Filary Zarządzania, Wdrożenia i Raportowania Biznesowego:**
+    - Zapisano w `AI/Plannadzis.md` procedury bezpiecznego wdrożenia produkcyjnego (osobna gałąź Git, weryfikacja `git status`, backup bazy i zdjęć, zakaz modyfikacji `.env`, brak nieautoryzowanych migracji).
+    - Zdefiniowano kryteria odbioru (RWD 320/375/390 px, brak overflow-x, poprawne formularze, linki, brak błędów w konsoli, zero regresji).
+    - Ustalono ramy raportowania ROI (wydatki reklamowe, wartościowe zapytania `callback_submitted`, wideo-wizyty, rezerwacje i sprzedaż).
+  - **Testy i Kompilacja:**
+    - Pełny zestaw testów (132 testy, 758 asercji) zakończony z kodem 0.
+    - Zbudowano bundle Vite produkcyjny (`npm run build`).
+    - Zmiany zacommitowane i wypchnięte do gałęzi `main`.
+
 ✓ Pełne wdrożenie Optymalizacji Konwersji Dolnego Odcinka Lejka Sprzedażowego (CRO) & Live Video-Visits (`feat(cro)`, `feat(analytics)`, `feat(seo)`)
   - **Faza 3: Modal Rezerwacji i Wideo-Wizyt na żywo (Reservation Modal):**
     - Utworzono komponent `<x-frontend.reservation-modal />` z 4 ścieżkami kontaktu: WhatsApp Video (z pre-filled textem i kodem atrybucji), bezpośredni telefon, Facebook Messenger (`m.me/61580668026948`) oraz 1-polowy formularz szybkiego oddzwonienia.

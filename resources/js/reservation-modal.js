@@ -80,9 +80,9 @@ window.openReservationModal = function (catName, catBreed, statusLabel) {
         let messageText = '';
 
         if (catName) {
-            messageText = `Dzień dobry! Piszę ze strony kotyzmazowieckiejszwajcarii.pl. Interesuje mnie kotek ${catName}` + 
-                          (catBreed ? ` (${catBreed})` : '') + 
-                          `. Chciał(a)bym porozmawiać z hodowcą i zobaczyć malucha na żywo przez kamerę w telefonie. [Kod: ${attributionCode}]`;
+            messageText = `Dzień dobry! Piszę ze strony kotyzmazowieckiejszwajcarii.pl. Interesuje mnie kotek ${catName}` +
+                (catBreed ? ` (${catBreed})` : '') +
+                `. Chciał(a)bym porozmawiać z hodowcą i zobaczyć malucha na żywo przez kamerę w telefonie. [Kod: ${attributionCode}]`;
         } else {
             messageText = `Dzień dobry! Piszę ze strony kotyzmazowieckiejszwajcarii.pl. Chciał(a)bym zapytać o dostępne kocięta i umówić wideo-wizytę na żywo. [Kod: ${attributionCode}]`;
         }
@@ -141,17 +141,30 @@ window.handleQuickCallbackSubmit = function (event) {
 
     const form = event.target;
     const phoneInput = form.querySelector('input[name="phone"]');
+    const countryCodeSelect = form.querySelector('select[name="country_code"]');
     const submitBtn = form.querySelector('button[type="submit"]');
     const feedback = document.getElementById('res-modal-callback-feedback');
     const hpInput = form.querySelector('input[name="_hp_website"]');
 
     if (!phoneInput || !phoneInput.value.trim()) return;
 
-    const phone = phoneInput.value.trim();
+    let rawPhone = phoneInput.value.trim();
+    const countryCode = countryCodeSelect ? countryCodeSelect.value.trim() : '+48';
+    let fullPhone = rawPhone;
+
+    // Smart formatting: if user already typed leading + or 00, respect it
+    if (rawPhone.startsWith('+')) {
+        fullPhone = rawPhone;
+    } else if (rawPhone.startsWith('00')) {
+        fullPhone = '+' + rawPhone.slice(2).trim();
+    } else if (countryCode) {
+        fullPhone = countryCode + ' ' + rawPhone;
+    }
+
     const cat = window.__currentReservationCat || {};
     const attribution = getTrafficAttributionCode();
-    const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') 
-               || form.querySelector('input[name="_token"]')?.value;
+    const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
+        || form.querySelector('input[name="_token"]')?.value;
 
     if (submitBtn) {
         submitBtn.disabled = true;
@@ -166,53 +179,53 @@ window.handleQuickCallbackSubmit = function (event) {
             'X-CSRF-TOKEN': token || '',
         },
         body: JSON.stringify({
-            phone: phone,
+            phone: fullPhone,
             cat_name: cat.name || null,
             cat_breed: cat.breed || null,
             traffic_source: attribution,
             _hp_website: hpInput ? hpInput.value : '',
         }),
     })
-    .then(async response => {
-        const data = await response.json();
-        if (!response.ok) {
-            throw new Error(data.message || 'Wystąpił błąd podczas wysyłania.');
-        }
-        return data;
-    })
-    .then(data => {
-        if (feedback) {
-            feedback.style.display = 'block';
-            feedback.className = 'res-modal__feedback res-modal__feedback--success';
-            feedback.textContent = data.message || 'Dziękujemy! Skontaktujemy się telefonicznie tak szybko, jak to możliwe.';
-        }
-        phoneInput.value = '';
+        .then(async response => {
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.message || 'Wystąpił błąd podczas wysyłania.');
+            }
+            return data;
+        })
+        .then(data => {
+            if (feedback) {
+                feedback.style.display = 'block';
+                feedback.className = 'res-modal__feedback res-modal__feedback--success';
+                feedback.textContent = data.message || 'Dziękujemy! Skontaktujemy się telefonicznie tak szybko, jak to możliwe.';
+            }
+            phoneInput.value = '';
 
-        if (typeof window.trackFunnelStep === 'function') {
-            window.trackFunnelStep('callback_submitted', {
-                channel: 'quick_callback',
-                cat_name: cat.name || 'Ogólne',
-                cat_breed: cat.breed || 'Nieokreślona',
-            });
-        }
+            if (typeof window.trackFunnelStep === 'function') {
+                window.trackFunnelStep('callback_submitted', {
+                    channel: 'quick_callback',
+                    cat_name: cat.name || 'Ogólne',
+                    cat_breed: cat.breed || 'Nieokreślona',
+                });
+            }
 
-        setTimeout(() => {
-            window.closeReservationModal();
-        }, 3500);
-    })
-    .catch(error => {
-        if (feedback) {
-            feedback.style.display = 'block';
-            feedback.className = 'res-modal__feedback res-modal__feedback--error';
-            feedback.textContent = error.message || 'Wystąpił błąd. Zadzwoń pod numer +48 514 153 204.';
-        }
-    })
-    .finally(() => {
-        if (submitBtn) {
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = '<span>Poproś o kontakt</span>';
-        }
-    });
+            setTimeout(() => {
+                window.closeReservationModal();
+            }, 3500);
+        })
+        .catch(error => {
+            if (feedback) {
+                feedback.style.display = 'block';
+                feedback.className = 'res-modal__feedback res-modal__feedback--error';
+                feedback.textContent = error.message || 'Wystąpił błąd. Zadzwoń pod numer +48 514 153 204.';
+            }
+        })
+        .finally(() => {
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span>Poproś o kontakt</span>';
+            }
+        });
 };
 
 // Global event listeners (backdrop click, Escape key)

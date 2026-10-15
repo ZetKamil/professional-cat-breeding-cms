@@ -109,18 +109,49 @@
                 </div>
 
                 <div class="res-modal__form-row">
-                    <div class="res-modal__input-wrapper">
-                        <span class="res-modal__input-prefix">+48</span>
-                        <input 
-                            type="tel" 
-                            id="res-modal-phone-input" 
-                            name="phone" 
-                            required 
-                            placeholder="np. 514 153 204" 
-                            pattern="[0-9\s\-+]{9,20}"
-                            autocomplete="tel"
-                            aria-label="Twój numer telefonu"
-                        >
+                    <div class="res-modal__phone-group">
+                        <div class="res-modal__country-wrap">
+                            <select 
+                                id="res-modal-country-code" 
+                                name="country_code" 
+                                class="res-modal__country-select"
+                                aria-label="Wybierz numer kierunkowy kraju"
+                            >
+                                <option value="+48" selected>🇵🇱 +48</option>
+                                <option value="+49">🇩🇪 +49</option>
+                                <option value="+44">🇬🇧 +44</option>
+                                <option value="+47">🇳🇴 +47</option>
+                                <option value="+31">🇳🇱 +31</option>
+                                <option value="+46">🇸🇪 +46</option>
+                                <option value="+43">🇦🇹 +43</option>
+                                <option value="+41">🇨🇭 +41</option>
+                                <option value="+32">🇧🇪 +32</option>
+                                <option value="+353">🇮🇪 +353</option>
+                                <option value="+33">🇫🇷 +33</option>
+                                <option value="+45">🇩🇰 +45</option>
+                                <option value="+1">🇺🇸 +1</option>
+                                <option value="+420">🇨🇿 +420</option>
+                                <option value="+421">🇸🇰 +421</option>
+                                <option value="+39">🇮🇹 +39</option>
+                                <option value="+34">🇪🇸 +34</option>
+                                <option value="+380">🇺🇦 +380</option>
+                                <option value="+370">🇱🇹 +370</option>
+                                <option value="+358">🇫🇮 +358</option>
+                                <option value="">🌐 Inny</option>
+                            </select>
+                        </div>
+                        <div class="res-modal__input-wrapper">
+                            <input 
+                                type="tel" 
+                                id="res-modal-phone-input" 
+                                name="phone" 
+                                required 
+                                placeholder="np. 514 153 204" 
+                                pattern="[0-9\s\-+()]{6,25}"
+                                autocomplete="tel"
+                                aria-label="Twój numer telefonu"
+                            >
+                        </div>
                     </div>
                     <button type="submit" id="res-modal-submit-btn" class="res-modal__submit-btn">
                         <span>Poproś o kontakt</span>
