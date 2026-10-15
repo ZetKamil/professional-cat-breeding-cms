@@ -100,79 +100,8 @@
         </div>
     </section>
 
-    {{-- Mobile section reordering wrapper (prioritizes available kittens over breed descriptions on mobile) --}}
-    <div class="home-sections-flow">
-
     {{-- ============================================================
-    2. IMMERSIVE BREED SHOWCASE — THE THREE COLLECTIONS
-    ============================================================ --}}
-    <x-frontend.section id="specjalizacje" class="reveal-up home-section--specjalizacje">
-        <x-frontend.section-header eyebrow="Kolekcje Hodowlane" headline="Nasze Specjalizacje Rasy"
-            description="Wyselekcjonowane linie felinologiczne prowadzone zgodnie ze standardami stowarzyszenia SHiOZ ZOOLANDIA." />
-
-        <div class="collection-grid" role="list" aria-label="Specjalizacje rasy">
-            <a href="{{ route('frontend.animals.index', ['breed' => 'bengal']) }}" class="collection-card"
-                role="listitem">
-                <div>
-                    <h3 class="collection-card__title">Koty Bengalskie</h3>
-                    <p class="collection-card__quote">
-                        Dzikie spojrzenie, wyraźna atłasowa rozeta i niezwykle inteligentny, aktywny temperament.
-                    </p>
-                    <div class="collection-card__tags">
-                        <span class="collection-tag">Aktywność: Wysoka</span>
-                        <span class="collection-tag">Rozeta na złocie</span>
-                        <span class="collection-tag">Rodowód SHiOZ ZOOLANDIA</span>
-                    </div>
-                </div>
-                <span class="collection-card__cta">
-                    Poznaj kolekcję bengalską
-                    <i data-lucide="arrow-up-right" class="w-4 h-4 text-primary" aria-hidden="true"></i>
-                </span>
-            </a>
-
-            <a href="{{ route('frontend.animals.index', ['breed' => 'british']) }}" class="collection-card"
-                role="listitem">
-                <div>
-                    <h3 class="collection-card__title">Koty Brytyjskie</h3>
-                    <p class="collection-card__quote">
-                        Aksamitne futro, zrównoważony spokój i klasyczna, brytyjska elegancja w każdym ruchu.
-                    </p>
-                    <div class="collection-card__tags">
-                        <span class="collection-tag">Temperament: Spokojny</span>
-                        <span class="collection-tag">Pluszowa okrywa</span>
-                        <span class="collection-tag">Rodowód SHiOZ ZOOLANDIA</span>
-                    </div>
-                </div>
-                <span class="collection-card__cta">
-                    Poznaj kolekcję brytyjską
-                    <i data-lucide="arrow-up-right" class="w-4 h-4 text-primary" aria-hidden="true"></i>
-                </span>
-            </a>
-
-            <a href="{{ route('frontend.animals.index', ['breed' => 'siamese']) }}" class="collection-card"
-                role="listitem">
-                <div>
-                    <h3 class="collection-card__title">Koty Syjamskie</h3>
-                    <p class="collection-card__quote">
-                        Szafirowe spojrzenie, smukła sylwetka oraz wyjątkowe przywiązanie i komunikatywność z
-                        człowiekiem.
-                    </p>
-                    <div class="collection-card__tags">
-                        <span class="collection-tag">Wysoka inteligencja</span>
-                        <span class="collection-tag">Oczy szafirowe</span>
-                        <span class="collection-tag">Linie europejskie</span>
-                    </div>
-                </div>
-                <span class="collection-card__cta">
-                    Poznaj kolekcję syjamską
-                    <i data-lucide="arrow-up-right" class="w-4 h-4 text-primary" aria-hidden="true"></i>
-                </span>
-            </a>
-        </div>
-    </x-frontend.section>
-
-    {{-- ============================================================
-    3. CURATED KITTENS & SELECTION ASSURANCE
+    2. CURATED KITTENS & SELECTION ASSURANCE (PRIORITIZED FOR CRO)
     ============================================================ --}}
     <x-frontend.section id="nasze-koty" tile="parchment" class="reveal-up home-section--nasze-koty">
         <x-frontend.section-header eyebrow="Selekcja 2026" headline="Dostępne Kocięta i Mioty"
@@ -206,7 +135,6 @@
             </div>
         @endif
     </x-frontend.section>
-    </div>
 
     {{-- ============================================================
     4. VERIFIED PATRON STORIES — EDITORIAL QUOTE MONOLITHS
@@ -270,35 +198,71 @@
     </x-frontend.section>
 
     {{-- ============================================================
-    5. DAILY LIFE IN THE CATTERY — EDITORIAL FACEBOOK DISCOVERY
+    5. DOMESTIC SOCIALIZATION & DAILY LIFE (OPTION A)
     ============================================================ --}}
     <x-frontend.section id="codziennosc" class="reveal-up home-section--codziennosc">
         <div class="daily-life-grid">
             <div class="daily-life__left">
-                <h2 class="daily-life__headline">Codzienność w hodowli</h2>
+                <span class="daily-life__eyebrow" style="display: inline-block; margin-bottom: 12px;">
+                    Domowa Socjalizacja • Sikórz k. Płocka
+                </span>
+                <h2 class="daily-life__headline">Czułość i życie bez klatek od pierwszego dnia.</h2>
                 <p class="daily-life__desc">
-                    Nie pokazujemy tylko efektu końcowego.
-                    Dzielimy się również codziennym życiem naszych kotów — zdjęciami, filmami, rozwojem kociąt i
-                    chwilami zza kulis.
+                    Wierzymy, że stabilny i ufny charakter kota kształtuje się w pierwszych 12 tygodniach życia. Nasze koty nie mieszkają w odizolowanych boksach ani klatkach — dorastają w samym sercu naszego domu, otoczone miłością, dźwiękami codzienności i stałą opieką weterynaryjną.
                 </p>
-                <div class="daily-life__frequency">
-                    <span class="daily-life__badge">Nowe relacje praktycznie codziennie</span>
-                    <span class="daily-life__subtext">Zdjęcia • Filmy • Kulisy hodowli</span>
+
+                <div class="daily-life__pillars" role="list" aria-label="Filary domowej socjalizacji">
+                    <div class="daily-life__pillar" role="listitem">
+                        <div class="daily-life__pillar-icon" aria-hidden="true">
+                            <i data-lucide="home"></i>
+                        </div>
+                        <div>
+                            <h3 class="daily-life__pillar-title">Zero klatek, 100% życia z nami</h3>
+                            <p class="daily-life__pillar-text">Salon i sypialnia to ich naturalna przestrzeń. Naturalnie oswajają się z odkurzaczem, telewizorem i gośćmi.</p>
+                        </div>
+                    </div>
+                    <div class="daily-life__pillar" role="listitem">
+                        <div class="daily-life__pillar-icon" aria-hidden="true">
+                            <i data-lucide="heart"></i>
+                        </div>
+                        <div>
+                            <h3 class="daily-life__pillar-title">Czuły kontakt z człowiekiem</h3>
+                            <p class="daily-life__pillar-text">Codzienne branie na ręce, głaskanie i zabawa sprawiają, że koty same szukają kolan i głośno mruczą.</p>
+                        </div>
+                    </div>
+                    <div class="daily-life__pillar" role="listitem">
+                        <div class="daily-life__pillar-icon" aria-hidden="true">
+                            <i data-lucide="video"></i>
+                        </div>
+                        <div>
+                            <h3 class="daily-life__pillar-title">Prywatne relacje wideo po rezerwacji</h3>
+                            <p class="daily-life__pillar-text">Po rezerwacji malucha regularnie otrzymujesz prywatne filmiki i zdjęcia, pokazujące każdy etap jego rozwoju.</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="daily-life__cta">
-                    <x-frontend.button variant="secondary" href="https://www.facebook.com/profile.php?id=61580668026948"
-                        target="_blank" rel="noopener">
-                        Obserwuj nas na Facebooku →
+
+                <div class="daily-life__actions">
+                    <x-frontend.button
+                        type="button"
+                        variant="primary"
+                        onclick="window.openReservationModal('', '', '')"
+                        icon="video">
+                        📹 Zobacz maluchy na żywo
                     </x-frontend.button>
+                    <a href="https://www.facebook.com/profile.php?id=61580668026948"
+                        target="_blank" rel="noopener"
+                        class="daily-life__fb-link">
+                        Codzienne kulisy na Facebooku →
+                    </a>
                 </div>
             </div>
 
             <div class="daily-life__right">
-                <div class="daily-life__gallery" role="group" aria-label="Codzienne życie hodowli">
+                <div class="daily-life__gallery" role="group" aria-label="Domowe otoczenie i relacje z kotami">
                     <div class="daily-life__image-wrap daily-life__image-wrap--main">
                         <x-frontend.picture
-                            src="{{ asset('image/hero/stas_studio.jpg') }}"
-                            alt="Staś – kocur brytyjski (BLH a 33), reproduktor hodowli Mazowiecka Szwajcaria"
+                            src="{{ asset('image/about/story_care.jpg') }}"
+                            alt="Czuła opieka i socjalizacja kotów w domowej hodowli Mazowiecka Szwajcaria"
                             width="800"
                             height="800"
                             decoding="async"
@@ -309,8 +273,8 @@
                     </div>
                     <div class="daily-life__image-wrap daily-life__image-wrap--sub1">
                         <x-frontend.picture
-                            src="{{ asset('image/hero/baltazar_studio.jpg') }}"
-                            alt="Baltazar – kot syjamski seal point, reproduktor hodowli Mazowiecka Szwajcaria"
+                            src="{{ asset('image/hero/stas_studio.jpg') }}"
+                            alt="Staś – kocur brytyjski, domowy spokój i ufność"
                             width="600"
                             height="600"
                             decoding="async"
@@ -322,7 +286,7 @@
                     <div class="daily-life__image-wrap daily-life__image-wrap--sub2">
                         <x-frontend.picture
                             src="{{ asset('image/hero/bars_studio.jpg') }}"
-                            alt="Bars – kot bengalski z rodowodem, reproduktor hodowli Mazowiecka Szwajcaria"
+                            alt="Bars – kot bengalski, zabawa i energia w domowym otoczeniu"
                             width="600"
                             height="600"
                             decoding="async"
@@ -336,15 +300,35 @@
         </div>
     </x-frontend.section>
 
-
-
     {{-- ============================================================
-    7. FINAL INVITATION — LUXURY CONCIERGE CTA MONOLITH
+    6. FINAL INVITATION — DIRECT VIDEO CONCIERGE & WHATSAPP ACTIONS
     ============================================================ --}}
     <div class="reveal-up home-section--cta">
-        <x-frontend.cta tile="parchment" eyebrow="Zaproszenie do Kontaktu" headline="Zaplanuj Rozmowę"
-            description="Napisz do nas — chętnie odpowiemy na wszystkie pytania, doradzimy w wyborze linii genetycznej i umówimy kameralne spotkanie w naszej hodowli."
-            buttonText="Skontaktuj się z nami" buttonHref="{{ route('contact') }}" />
+        <x-frontend.cta tile="parchment" eyebrow="Zaproszenie do Kontaktu i Rezerwacji" headline="Zaplanuj Rozmowę lub Wideo-Wizytę"
+            description="Chcesz poznać nasze kocięta na żywo? Włączamy kamerę w naszym salonie i odpowiadamy na wszystkie pytania — bez pośpiechu i bez zobowiązań."
+            note="Bezpieczna rezerwacja z rodowodem SHiOZ ZOOLANDIA · Pełna dokumentacja medyczna i wyprawka">
+            <div class="cta-block__actions-row">
+                <x-frontend.button
+                    type="button"
+                    variant="primary"
+                    onclick="window.openReservationModal('', '', '')"
+                    icon="video"
+                    class="cta-block__btn">
+                    📹 Umów wideo-rozmowę na żywo
+                </x-frontend.button>
+                <x-frontend.button
+                    type="button"
+                    variant="secondary"
+                    onclick="if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'whatsapp', cat_name: 'Ogólne zapytanie' }); } window.open('https://wa.me/48514153204?text=' + encodeURIComponent('Dzień dobry! Piszę ze strony głównej hodowli Mazowiecka Szwajcaria. Chciałbym zapytać o rezerwację kociąt i wideo-wizytę na żywo.'), '_blank');"
+                    icon="message-circle"
+                    class="cta-block__btn">
+                    💬 Porozmawiaj na WhatsApp
+                </x-frontend.button>
+            </div>
+            <a href="tel:+48514153204" class="cta-block__direct-phone">
+                lub zadzwoń bezpośrednio: <strong>+48 514 153 204</strong>
+            </a>
+        </x-frontend.cta>
     </div>
 
     @push('schema')

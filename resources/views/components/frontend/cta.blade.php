@@ -41,9 +41,13 @@
         @endif
 
         <div class="cta-block__action">
-            <x-frontend.button :variant="$buttonVariant" :href="$buttonHref" icon="arrow-right" class="cta-block__btn">
-                {{ $buttonText }}
-            </x-frontend.button>
+            @if(isset($slot) && $slot->isNotEmpty())
+                {{ $slot }}
+            @elseif($buttonText)
+                <x-frontend.button :variant="$buttonVariant" :href="$buttonHref" icon="arrow-right" class="cta-block__btn">
+                    {{ $buttonText }}
+                </x-frontend.button>
+            @endif
         </div>
 
         @if($note)

@@ -19,12 +19,11 @@ class HomepageTest extends TestCase
         $response->assertSee('Hodowla Kotów Rasowych z Rodowodem');
         $response->assertSee('SHiOZ ZOOLANDIA');
         $response->assertSee('Badania Genetyczne Rodziców');
-        $response->assertSee('Nasze Specjalizacje Rasy');
-        $response->assertSee('Koty Bengalskie');
-        $response->assertSee('Koty Brytyjskie');
-        $response->assertSee('Koty Syjamskie');
+        $response->assertSee('Dostępne Kocięta i Mioty');
         $response->assertSee('Historie Opiekunów Naszych Kotów');
-        $response->assertSee('Codzienność w hodowli');
+        $response->assertSee('Domowa Socjalizacja');
+        $response->assertSee('Zero klatek, 100% życia z nami');
+        $response->assertSee('Umów wideo-rozmowę na żywo');
     }
 
     public function test_cattery_page_renders_successfully_with_philosophy_code_and_process_journey(): void

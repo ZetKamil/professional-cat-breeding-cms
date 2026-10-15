@@ -4,6 +4,23 @@
 
 ### Completed
 
+✓ Optymalizacja Ścieżki Zakupowej na Stronie Głównej & Domowa Socjalizacja (`feat(home)`, `feat(cro)`, `test(home)`)
+  - **Usunięcie sekcji „Nasze Specjalizacje Rasy”:**
+    - Zlikwidowano długi blok 3 kart ras z `home.blade.php`, dzięki czemu zarówno na desktopie, jak i mobile, użytkownik po sekcji Hero od razu widzi „Dostępne Kocięta i Mioty”.
+    - Usunięto niepotrzebny wrapper `.home-sections-flow`, maksymalizując szybkość i eliminując niepotrzebne scrollowanie.
+  - **Przebudowa sekcji „Codzienność w hodowli” na Opcję A (Domowa Socjalizacja):**
+    - Zastąpiono powierzchowną sekcję odsyłającą do Facebooka merytorycznym blokiem budującym zaufanie: *„Czułość i życie bez klatek od pierwszego dnia”*.
+    - Wdrożono 3 filary domowej socjalizacji: *Zero klatek, 100% życia z nami*, *Czuły kontakt z człowiekiem*, *Prywatne relacje wideo po rezerwacji*.
+    - Dodano główny przycisk wywołujący modal wideo-wizyty na żywo (`window.openReservationModal`) oraz dyskretny odnośnik do relacji na Facebooku.
+    - Zaktualizowano galerię zdjęć na autentyczne ujęcia domowej opieki i reproduktorów (`story_care.jpg`, `stas_studio.jpg`, `bars_studio.jpg`).
+  - **Wzmocnienie Dolnego CTA dla Użytkowników Desktopowych:**
+    - Zaktualizowano komponent `<x-frontend.cta />` o obsługę slotu dla podwójnych przycisków akcji.
+    - Zastąpiono przekierowanie na statyczną podstronę `/kontakt` dwoma bezpośrednimi akcjami: złotym przyciskiem `📹 Umów wideo-rozmowę na żywo` (otwierającym modal rezerwacji/oddzwonienia) oraz `💬 Porozmawiaj na WhatsApp` (z gotowym szablonem i trackingiem zdarzenia `contact_cta_click`), wraz z bezpośrednim numerem telefonu `+48 514 153 204`.
+  - **Weryfikacja testami i kompilacja:**
+    - Zaktualizowano asercje w `tests/Feature/Frontend/HomepageTest.php` (4/4 testy pass).
+    - `ReservationAndCroTest.php` przeszedł pomyślnie (9/9 pass).
+    - Zbudowano produkcyjne assety Vite (`npm run build`).
+
 ✓ Międzynarodowe Kierunkowe i Walidacja Telefonów w Formularzu Oddzwonienia (`feat(callback)`, `feat(mobile)`, `test(cro)`)
   - **Wybór kierunkowego kraju dla klientów zagranicznych:**
     - Zastąpiono sztywny prefiks `+48` interaktywnym, mobilnym selektorem kierunkowych w `<x-frontend.reservation-modal />`.

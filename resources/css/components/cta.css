@@ -61,6 +61,31 @@
     gap: var(--sp-sm);
 }
 
+.cta-block__actions-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    width: 100%;
+}
+
+.cta-block__direct-phone {
+    font-size: 0.9rem;
+    color: var(--color-ink-muted-80, #515154);
+    text-decoration: none;
+    margin-top: 8px;
+    transition: color 0.2s ease;
+}
+
+.cta-block__direct-phone strong {
+    color: var(--color-primary, #c8a04a);
+}
+
+.cta-block__direct-phone:hover {
+    color: var(--color-ink, #1d1d1f);
+}
+
 .cta-block__btn {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     transition: transform var(--duration-normal) cubic-bezier(0.16, 1, 0.3, 1),
