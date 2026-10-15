@@ -72,6 +72,13 @@
                 <div class="mb-3">
                     <label for="date_of_birth" class="form-label">Data urodzenia</label>
                     <input type="date" class="form-control @error('date_of_birth') is-invalid @enderror" id="date_of_birth" name="date_of_birth" value="{{ old('date_of_birth', optional($animal->date_of_birth)->format('Y-m-d')) }}">
+                    <div class="form-text">
+                        Zasada hodowli: kocięta wyjeżdżają do nowych domów w wieku 12–14 tygodni, po potwierdzeniu gotowości konkretnego kociaka.
+                        @if($animal->date_of_birth)
+                            <br><strong>Obliczone okno odbioru (12–14 tyg.):</strong> {{ $animal->pickupWindowFormatted() }}
+                            (Wiek: {{ $animal->ageInWeeks() }} tyg. &bull; Status wizytówki: {{ $animal->pickupBadgeLabel() }})
+                        @endif
+                    </div>
                     @error('date_of_birth') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
             </div>

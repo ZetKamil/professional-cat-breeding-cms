@@ -197,7 +197,7 @@
                     W jakim wieku kocięta opuszczają hodowlę?
                 </summary>
                 <p class="faq-item__answer text-body">
-                    Kocięta opuszczają hodowlę po ukończeniu 14. tygodnia życia,
+                    Kocięta mogą wyjeżdżać do nowych domów w wieku 12–14 tygodni, po potwierdzeniu gotowości konkretnego kociaka,
                     po przejściu 2 szczepień, 2 odrobaczeń, zachipowaniu i pełnej domowej socjalizacji.
                 </p>
             </details>

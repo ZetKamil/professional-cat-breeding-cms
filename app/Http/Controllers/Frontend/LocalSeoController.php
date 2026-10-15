@@ -77,7 +77,7 @@ class LocalSeoController extends Controller
             'faq' => [
                 [
                     'q' => 'W jakim wieku kociak może wyruszyć do domu w Toruniu?',
-                    'a' => 'Kocięta opuszczają naszą hodowlę najwcześniej w 12.–14. tygodniu życia, po dwukrotnym zaszczepieniu, trzykrotnym odrobaczeniu, zaczipowaniu i pełnej socjalizacji kuwetowej.',
+                    'a' => 'Kocięta mogą wyjeżdżać do nowych domów w wieku 12–14 tygodni, po potwierdzeniu gotowości konkretnego kociaka, po dwukrotnym zaszczepieniu, dwukrotnym odrobaczeniu, zaczipowaniu i pełnej socjalizacji kuwetowej.',
                 ],
                 [
                     'q' => 'Jakie dokumenty otrzymuję przy odbiorze?',

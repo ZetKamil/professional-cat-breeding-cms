@@ -178,8 +178,8 @@
                 <div class="animal-profile__info">
                     <div class="animal-profile__header">
                         <div class="animal-profile__badges">
-                            <x-frontend.badge :variant="$animal->status->badgeVariant()">
-                                {{ $animal->statusLabel() }}
+                            <x-frontend.badge :variant="$animal->pickupBadgeVariant()">
+                                {{ $animal->pickupBadgeLabel() }}
                             </x-frontend.badge>
                             <span class="animal-profile__badge-gender text-ink-muted-80">
                                 {{ $animal->gender->symbol() }} {{ $animal->gender->label() }}
@@ -214,6 +214,8 @@
                             <span aria-hidden="true">·</span>
                             @if($isBreeding)
                                 <span title="Badania dedykowane dla rasy">{{ $breedHealthText }}</span>
+                            @elseif($animal->isEarlyReservation() || $animal->isInPickupWindow())
+                                <span>Linia po przebadanych rodzicach (profil rasy) • 2x szczepienie, 2x odrobaczenie, microchip i rodowód • Odbiór w wieku 12–14 tyg. ({{ $animal->pickupWindowFormatted() }})</span>
                             @else
                                 <span>Linia po przebadanych rodzicach (profil rasy) • 2x szczepienie, 2x odrobaczenie, microchip i rodowód</span>
                             @endif
@@ -255,8 +257,17 @@
                                 <span class="animal-spec-card__label">Status</span>
                                 <i data-lucide="shield-check" class="animal-spec-card__icon" aria-hidden="true"></i>
                             </div>
-                            <span class="animal-spec-card__value">{{ $animal->statusLabel() }}</span>
+                            <span class="animal-spec-card__value">{{ $animal->pickupBadgeLabel() }}</span>
                         </div>
+                        @if($animal->pickupWindowFormatted() && ($animal->isEarlyReservation() || $animal->isInPickupWindow()))
+                            <div class="animal-spec-card" role="listitem">
+                                <div class="animal-spec-card__top">
+                                    <span class="animal-spec-card__label">Okno odbioru (12–14 tyg.)</span>
+                                    <i data-lucide="calendar-check" class="animal-spec-card__icon" aria-hidden="true"></i>
+                                </div>
+                                <span class="animal-spec-card__value">{{ $animal->pickupWindowFormatted() }}</span>
+                            </div>
+                        @endif
                     </div>
 
                     {{-- Description --}}
@@ -270,6 +281,15 @@
                                 {{ $animal->short_description }}
                             </p>
                         @endif
+
+                        @if($animal->isEarlyReservation() || $animal->isInPickupWindow())
+                            <div style="margin-top: 14px; padding: 12px 16px; background: rgba(200, 157, 92, 0.08); border-left: 3px solid var(--color-gold, #c89d5c); border-radius: 6px; font-size: 0.88rem; line-height: 1.5; color: var(--color-ink-muted-80, #d1cfc7);">
+                                <strong>Zasada odbioru:</strong> Kocięta mogą wyjeżdżać do nowych domów w wieku 12–14 tygodni, po potwierdzeniu gotowości konkretnego kociaka.
+                                @if($animal->pickupWindowFormatted())
+                                    Przewidywane okno odbioru: <strong>{{ $animal->pickupWindowFormatted() }}</strong>.
+                                @endif
+                            </div>
+                        @endif
                     </div>
 
                     {{-- Actions --}}
@@ -278,7 +298,7 @@
                             type="button"
                             variant="primary"
                             icon="arrow-right"
-                            onclick="window.openReservationModal('{{ addslashes($animal->name) }}', '{{ addslashes($animal->breed) }}', '{{ addslashes($animal->statusLabel()) }}')">
+                            onclick="window.openReservationModal('{{ addslashes($animal->name) }}', '{{ addslashes($animal->breed) }}', '{{ addslashes($animal->pickupBadgeLabel()) }}')">
                             📹 Wideo-wizyta & Rezerwacja
                         </x-frontend.button>
 
@@ -307,7 +327,7 @@
                         <button type="button" 
                             class="btn btn-secondary" 
                             style="font-size: 0.82rem; padding: 8px 14px; white-space: nowrap;"
-                            onclick="window.openReservationModal('{{ addslashes($animal->name) }}', '{{ addslashes($animal->breed) }}', '{{ addslashes($animal->statusLabel()) }}')">
+                            onclick="window.openReservationModal('{{ addslashes($animal->name) }}', '{{ addslashes($animal->breed) }}', '{{ addslashes($animal->pickupBadgeLabel()) }}')">
                             Połącz się teraz →
                         </button>
                     </div>
@@ -385,7 +405,7 @@
                         type="button"
                         variant="primary"
                         icon="arrow-right"
-                        onclick="window.openReservationModal('{{ addslashes($animal->name) }}', '{{ addslashes($animal->breed) }}', '{{ addslashes($animal->statusLabel()) }}')">
+                        onclick="window.openReservationModal('{{ addslashes($animal->name) }}', '{{ addslashes($animal->breed) }}', '{{ addslashes($animal->pickupBadgeLabel()) }}')">
                         📹 Umów wideo-wizytę / Zarezerwuj
                     </x-frontend.button>
                     <x-frontend.button

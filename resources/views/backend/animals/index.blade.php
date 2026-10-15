@@ -157,9 +157,12 @@
                             <td>{{ $animal->gender->label() }}</td>
                             
                             <td>
-                                <span class="badge bg-{{ $animal->status->badgeVariant() }} text-dark border">
-                                    {{ $animal->status->label() }}
+                                <span class="badge bg-{{ $animal->pickupBadgeVariant() }} text-dark border">
+                                    {{ $animal->pickupBadgeLabel() }}
                                 </span>
+                                @if($animal->pickupWindowFormatted() && ($animal->isEarlyReservation() || $animal->isInPickupWindow()))
+                                    <br><small class="text-muted">Okno: {{ $animal->pickupWindowFormatted() }}</small>
+                                @endif
                             </td>
 
                             <td>

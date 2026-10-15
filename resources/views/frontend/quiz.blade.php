@@ -203,7 +203,7 @@
                             <div style="display: flex; align-items: flex-start; gap: 12px;">
                                 <span style="font-size: 1.6rem; line-height: 1;">⏳</span>
                                 <div>
-                                    <strong style="color: var(--color-gold, #c89d5c); display: block; font-size: 0.98rem; margin-bottom: 4px;">Szukasz kociaka od zaraz? Maluchy tej rasy będą gotowe do odbioru za ok. 3–4 tygodnie!</strong>
+                                    <strong style="color: var(--color-gold, #c89d5c); display: block; font-size: 0.98rem; margin-bottom: 4px;">Szukasz kociaka od zaraz? Kocięta mogą wyjeżdżać do nowych domów w wieku 12–14 tygodni, po potwierdzeniu gotowości konkretnego kociaka.</strong>
                                     Maluszki z tego miotu są obecnie pod troskliwą opieką mamy i przechodzą program domowej socjalizacji. Już teraz możesz połączyć się na żywo na WhatsApp, zobaczyć je podczas zabawy i dokonać wczesnej rezerwacji swojego ulubieńca.
                                 </div>
                             </div>
@@ -219,15 +219,14 @@
                                         elseif (str_contains($bLower, 'brytyj') || str_contains($bLower, 'british')) $breedCategory = 'british';
                                         elseif (str_contains($bLower, 'syjam') || str_contains($bLower, 'siam')) $breedCategory = 'siamese';
 
-                                        $weeksOld = $animal->date_of_birth ? (int)$animal->date_of_birth->diffInWeeks(now()) : 99;
-                                        $isReadyNow = $weeksOld >= 12;
-                                        $weeksRemaining = max(1, 12 - $weeksOld);
+                                        $isReadyNow = $animal->isReadyNow();
+                                        $badgeLabel = $animal->pickupBadgeLabel();
                                     @endphp
                                     <div class="quiz-cat-item" 
                                          data-breed="{{ $breedCategory }}" 
                                          data-status="available"
                                          data-ready="{{ $isReadyNow ? 'now' : 'future' }}">
-                                        <div class="quiz-cat-item__img">
+                                         <div class="quiz-cat-item__img">
                                             @if($animal->media)
                                                 <img src="{{ $animal->media->url() }}" alt="{{ $animal->name }}" loading="lazy">
                                             @else
@@ -238,12 +237,12 @@
                                             <h4>{{ $animal->name }}</h4>
                                             <p>{{ $animal->breed }} • {{ $animal->gender->label() }}</p>
                                             <span class="quiz-cat-item__status">
-                                                {{ $isReadyNow ? '🟢 Gotowy do odbioru od zaraz' : "⏳ Wczesna rezerwacja • za {$weeksRemaining} tyg." }}
+                                                {{ $isReadyNow ? '🟢 ' . $badgeLabel : '⏳ ' . $badgeLabel }}
                                             </span>
                                         </div>
                                         <button type="button" 
                                                 class="quiz-cat-item__btn" 
-                                                onclick="window.openReservationModal('{{ addslashes($animal->name) }}', '{{ addslashes($animal->breed) }}', '{{ addslashes($animal->statusLabel()) }}')">
+                                                onclick="window.openReservationModal('{{ addslashes($animal->name) }}', '{{ addslashes($animal->breed) }}', '{{ addslashes($badgeLabel) }}')">
                                             📹 Zobacz na żywo
                                         </button>
                                     </div>

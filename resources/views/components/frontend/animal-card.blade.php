@@ -4,21 +4,8 @@
 ])
 
 @php
-    $isAvailable = $animal->status === \App\Enums\AnimalStatus::Available;
-    $weeksOld = $animal->date_of_birth ? (int) $animal->date_of_birth->diffInWeeks(now()) : 99;
-    $isEarlyReservation = $isAvailable && $weeksOld < 12;
-    $weeksUntilReady = max(1, 12 - $weeksOld);
-
-    if ($isEarlyReservation) {
-        $cardStatusLabel = "Wczesna rezerwacja • za {$weeksUntilReady} tyg.";
-        $badgeVariant = 'warning';
-    } elseif ($isAvailable) {
-        $cardStatusLabel = 'Gotowy do odbioru';
-        $badgeVariant = 'gold';
-    } else {
-        $cardStatusLabel = $animal->statusLabel();
-        $badgeVariant = $animal->status->badgeVariant();
-    }
+    $cardStatusLabel = $animal->pickupBadgeLabel();
+    $badgeVariant = $animal->pickupBadgeVariant();
 @endphp
 
 <x-frontend.card :href="route('frontend.animals.show', $animal)" hoverable class="animal-card" aria-label="Profil kota: {{ $animal->name }} ({{ $animal->breed }})">

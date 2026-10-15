@@ -105,7 +105,7 @@
     ============================================================ --}}
     <x-frontend.section id="nasze-koty" tile="parchment" class="reveal-up home-section--nasze-koty">
         <x-frontend.section-header eyebrow="Selekcja 2026" headline="Dostępne Kocięta i Mioty"
-            description="Lista kociąt gotowych do rezerwacji. Wszystkie nasze kocięta opuszczają hodowlę z aktualną książeczką zdrowia z dwoma szczepieniami, odrobaczeniem, microchipem oraz rodowodem SHiOZ ZOOLANDIA." />
+            description="Lista kociąt gotowych do rezerwacji. Wszystkie nasze kocięta opuszczają hodowlę z aktualną książeczką zdrowia z dwoma szczepieniami, dwukrotnym odrobaczeniem, microchipem oraz rodowodem SHiOZ ZOOLANDIA." />
 
         <div class="animals-grid">
             @forelse($featuredAnimals as $animal)

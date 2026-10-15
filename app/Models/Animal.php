@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 /**
@@ -344,7 +345,7 @@ class Animal extends Model
         });
     }
 
-    // ─── Computed Helpers ────────────────────────────────────────────
+    // ─── Computed Helpers & Pickup Rules ─────────────────────────────
 
     /**
      * Calculate age from date_of_birth.
@@ -367,6 +368,186 @@ class Animal extends Model
         }
 
         return $diff->d === 1 ? '1 dzień' : $diff->d.' dni';
+    }
+
+    /**
+     * Calculate age in complete weeks from date_of_birth.
+     * Returns null if date_of_birth is missing.
+     */
+    public function ageInWeeks(?Carbon $targetDate = null): ?int
+    {
+        if (! $this->date_of_birth) {
+            return null;
+        }
+
+        $target = $targetDate ? Carbon::instance($targetDate) : Carbon::now();
+
+        if ($target->lt($this->date_of_birth)) {
+            return 0;
+        }
+
+        return (int) $this->date_of_birth->diffInWeeks($target);
+    }
+
+    /**
+     * Expected pickup window [start, end] corresponding to kitten reaching
+     * 12 weeks (start) and 14 weeks (end) of age.
+     *
+     * @return array{start: Carbon, end: Carbon}|null
+     */
+    public function pickupWindow(): ?array
+    {
+        if (! $this->date_of_birth) {
+            return null;
+        }
+
+        return [
+            'start' => $this->date_of_birth->copy()->addWeeks(12),
+            'end'   => $this->date_of_birth->copy()->addWeeks(14),
+        ];
+    }
+
+    /**
+     * Formatted string of the expected pickup window (e.g. "02.12.2026 – 16.12.2026").
+     */
+    public function pickupWindowFormatted(string $format = 'd.m.Y'): ?string
+    {
+        $window = $this->pickupWindow();
+
+        if ($window === null) {
+            return null;
+        }
+
+        return $window['start']->format($format) . ' – ' . $window['end']->format($format);
+    }
+
+    /**
+     * Number of complete weeks remaining until reaching the minimum 12-week pickup age.
+     * Returns 0 if the kitten is already 12 weeks or older.
+     */
+    public function weeksUntilPickupWindow(?Carbon $targetDate = null): ?int
+    {
+        if (! $this->date_of_birth) {
+            return null;
+        }
+
+        $target = $targetDate ? Carbon::instance($targetDate) : Carbon::now();
+        $pickupStart = $this->date_of_birth->copy()->addWeeks(12);
+
+        if ($target->gte($pickupStart)) {
+            return 0;
+        }
+
+        $weeks = (int) ceil($target->diffInDays($pickupStart) / 7);
+
+        return max(1, $weeks);
+    }
+
+    /**
+     * Whether this animal is an available kitten younger than 12 weeks (early reservation stage).
+     */
+    public function isEarlyReservation(?Carbon $targetDate = null): bool
+    {
+        if ($this->status !== AnimalStatus::Available) {
+            return false;
+        }
+
+        $age = $this->ageInWeeks($targetDate);
+
+        return $age !== null && $age < 12;
+    }
+
+    /**
+     * Whether this animal is an available kitten currently within the 12–14-week pickup window.
+     */
+    public function isInPickupWindow(?Carbon $targetDate = null): bool
+    {
+        if ($this->status !== AnimalStatus::Available) {
+            return false;
+        }
+
+        $age = $this->ageInWeeks($targetDate);
+
+        return $age !== null && $age >= 12 && $age <= 14;
+    }
+
+    /**
+     * Whether this animal is available and at or above pickup age (>= 12 weeks, or adult without DOB).
+     */
+    public function isReadyNow(?Carbon $targetDate = null): bool
+    {
+        if ($this->status !== AnimalStatus::Available) {
+            return false;
+        }
+
+        $age = $this->ageInWeeks($targetDate);
+
+        return $age === null || $age >= 12;
+    }
+
+    /**
+     * Whether this animal is available and older than the initial 14-week pickup window.
+     */
+    public function isOdchowany(?Carbon $targetDate = null): bool
+    {
+        if ($this->status !== AnimalStatus::Available) {
+            return false;
+        }
+
+        $age = $this->ageInWeeks($targetDate);
+
+        return $age !== null && $age > 14;
+    }
+
+    /**
+     * Unified, rule-compliant badge label for public cards, profiles, and admin tables.
+     *
+     * Rules:
+     * - Non-available animals retain their domain status (e.g., Zarezerwowany, Kotka Hodowlana, W nowym domu).
+     * - Available kittens < 12 weeks: "Wczesna rezerwacja • za X tyg."
+     * - Available kittens 12–14 weeks: "Gotowy do odbioru (12–14 tyg.)"
+     * - Available kittens > 14 weeks: "Gotowy do odbioru • Odchowany"
+     * - Available without DOB: safe fallback "Dostępny do rezerwacji"
+     */
+    public function pickupBadgeLabel(?Carbon $targetDate = null): string
+    {
+        if ($this->status !== AnimalStatus::Available) {
+            return $this->statusLabel();
+        }
+
+        if (! $this->date_of_birth) {
+            return 'Dostępny do rezerwacji';
+        }
+
+        $age = $this->ageInWeeks($targetDate);
+
+        if ($age === null) {
+            return 'Dostępny do rezerwacji';
+        }
+
+        if ($age < 12) {
+            $weeksUntil = $this->weeksUntilPickupWindow($targetDate);
+
+            return "Wczesna rezerwacja • za {$weeksUntil} tyg.";
+        }
+
+        if ($age <= 14) {
+            return 'Gotowy do odbioru (12–14 tyg.)';
+        }
+
+        return 'Gotowy do odbioru • Odchowany';
+    }
+
+    /**
+     * Badge visual variant matching <x-frontend.badge variant="...">
+     */
+    public function pickupBadgeVariant(?Carbon $targetDate = null): string
+    {
+        if ($this->isEarlyReservation($targetDate)) {
+            return 'warning';
+        }
+
+        return $this->status?->badgeVariant() ?? 'gold';
     }
 
     /**
