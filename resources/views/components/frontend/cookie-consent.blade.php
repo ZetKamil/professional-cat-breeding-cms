@@ -1,12 +1,12 @@
 {{--
     Cookie Consent Banner — Mazowiecka Szwajcaria
     ─────────────────────────────────────────────────────────────────
-    Lekki, czytelny i luksusowy baner RODO / GA4 Consent Mode v2.
-    • Czysty Vanilla JS (zero zależności od Alpine.js — działa natychmiast)
-    • Dedykowany styl o wysokim kontraście (czytelny biały/złoty tekst na ciemnym szkle)
-    • Zapamiętywanie w LocalStorage ('katten_cookie_consent': 'accepted' | 'declined')
-    • Po akceptacji: gtag('consent', 'update', { 'analytics_storage': 'granted' })
-    • Responsywny (mobilny + desktop), nie zasłania krytycznych elementów
+    Lightweight, high-contrast GDPR / GA4 Consent Mode v2 banner.
+    • Pure Vanilla JS (zero Alpine.js dependency — executes immediately)
+    • High-contrast styling (clear white/gold typography on dark frosted glass)
+    • LocalStorage persistence ('katten_cookie_consent': 'accepted' | 'declined')
+    • On accept: gtag consent update & Meta Pixel consent grant
+    • Responsive layout (mobile + desktop) avoiding critical CTA obstruction
 --}}
 
 <div
@@ -245,12 +245,12 @@
                 consent = localStorage.getItem(STORAGE_KEY);
             } catch (e) {}
 
-            // Jeśli użytkownik już zdecydował, nic nie pokazuj
+            // If user has already made a choice, do not show banner
             if (consent === 'accepted' || consent === 'declined') {
                 return;
             }
 
-            // Pokaż z delikatnym opóźnieniem dla elegancji
+            // Display banner with smooth micro-delay for polished entrance
             banner.style.display = 'block';
             requestAnimationFrame(function () {
                 setTimeout(function () {
@@ -258,7 +258,7 @@
                 }, 400);
             });
 
-            // Podpięcie przycisków przez listener (dla maksymalnej pewności)
+            // Bind click handlers explicitly to ensure reliable event handling
             const acceptBtn = document.getElementById('cookie-consent-accept');
             const declineBtn = document.getElementById('cookie-consent-decline');
 
@@ -284,8 +284,15 @@
 
             if (typeof gtag === 'function') {
                 gtag('consent', 'update', {
-                    'analytics_storage': 'granted'
+                    'analytics_storage': 'granted',
+                    'ad_storage': 'granted',
+                    'ad_user_data': 'granted',
+                    'ad_personalization': 'granted'
                 });
+            }
+
+            if (typeof fbq === 'function') {
+                fbq('consent', 'grant');
             }
 
             hideCookieBanner();
@@ -295,6 +302,10 @@
             try {
                 localStorage.setItem(STORAGE_KEY, 'declined');
             } catch (e) {}
+
+            if (typeof fbq === 'function') {
+                fbq('consent', 'revoke');
+            }
 
             hideCookieBanner();
         };

@@ -37,11 +37,14 @@
                             Nasze koty rozwijają się w bezpiecznych, pełnych miłości warunkach domowych, z regularną kontrolą kardiologiczną (echo serca) i badaniami genetycznymi rodziców dobranymi do danej rasy.
                         </p>
                         <div class="hero-split__actions" style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
-                            <x-frontend.button href="{{ route('frontend.animals.index') }}" icon="arrow-right">
+                            <x-frontend.button href="#nasze-koty" icon="arrow-right">
                                 Zobacz dostępne kocięta
                             </x-frontend.button>
-                            <x-frontend.button href="{{ route('contact') }}" variant="secondary" icon="mail">
-                                Skontaktuj się z nami
+                            <x-frontend.button 
+                                type="button" 
+                                variant="secondary"
+                                onclick="window.openReservationModal('', '', '')">
+                                📹 Wideo-wizyta na żywo
                             </x-frontend.button>
                         </div>
                         <div style="margin-top: 14px;">
@@ -86,16 +89,19 @@
                     </div>
                     <div class="hero__trust-item" role="listitem">
                         <i data-lucide="dna" class="hero__trust-icon" aria-hidden="true"></i>
-                        <span>Badania Genetyczne Rodziców (Dla Rasy)</span>
+                        <span>Badania Genetyczne Rodziców (HCM/PKD)</span>
                     </div>
                     <div class="hero__trust-item" role="listitem">
                         <i data-lucide="heart-handshake" class="hero__trust-icon" aria-hidden="true"></i>
-                        <span>Domowa Socjalizacja</span>
+                        <span>Wideo-wizyty na żywo</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+    {{-- Mobile section reordering wrapper (prioritizes available kittens over breed descriptions on mobile) --}}
+    <div class="home-sections-flow">
 
     {{-- ============================================================
     2. IMMERSIVE BREED SHOWCASE — THE THREE COLLECTIONS
@@ -200,6 +206,7 @@
             </div>
         @endif
     </x-frontend.section>
+    </div>
 
     {{-- ============================================================
     4. VERIFIED PATRON STORIES — EDITORIAL QUOTE MONOLITHS

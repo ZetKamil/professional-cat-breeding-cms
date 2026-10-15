@@ -1,45 +1,166 @@
 /**
- * analytics.js — GA4 Conversion Tracking
- * Hodowla Kotów z Mazowieckiej Szwajcarii
+ * analytics.js — GA4 & Meta Pixel Funnel Conversion Tracking & Attribution
+ * Cattery of Mazovian Switzerland (Hodowla Kotów z Mazowieckiej Szwajcarii)
  *
- * Events zaimplementowane:
- *   contact_start      — pierwsze wejście w interakcję z formularzem
- *   contact_submit     — pomyślne wysłanie formularza (tylko po sukcesie serwera)
- *   phone_click        — kliknięcie linku tel:
- *   email_click        — kliknięcie linku mailto:
- *   animal_view        — wejście na stronę konkretnego kota
- *   animal_list_view   — wejście na stronę listy kotów
+ * Implemented events:
+ *   view_cat_profile       — viewing a specific cat profile (with attribution)
+ *   open_reservation_modal — opening the reservation / video-visit modal
+ *   click_whatsapp_lead    — clicking WhatsApp lead contact
+ *   click_messenger_lead   — clicking Messenger lead contact
+ *   click_phone_lead       — clicking direct phone call lead
+ *   submit_callback_number — submitting phone number in quick callback form (lead)
+ *   contact_start          — first interaction with traditional contact form
+ *   contact_submit         — successful traditional form submission
+ *   animal_list_view       — viewing the cat listing catalog
  *
- * Gwarancje bezpieczeństwa:
- *   • ŻADNYCH PII (imię, email, telefon, treść) w payloadach
- *   • Eventy nie wysyłają się wielokrotnie (sessionStorage guard)
- *   • contact_submit tylko przy faktycznym sukcesie (detekcja .form-alert--success)
- *   • Kompatybilność z GA4 Consent Mode v2 (gtag buforuje eventy gdy consent 'denied')
+ * Privacy & Security guarantees:
+ *   • NO PII (name, email, phone number, message text) in GA4 / Meta Pixel payloads
+ *   • Idempotent events prevented from duplicate triggers (sessionStorage guard)
+ *   • Full compatibility with Consent Mode v2 and GDPR
  */
 
 /* ─────────────────────────────────────────────────────────────────
-   Helpers
+   1. UTM & Traffic Attribution Engine
 ───────────────────────────────────────────────────────────────── */
 
 /**
- * Bezpieczne wysłanie eventu do GA4.
- * Jeśli gtag niedostępne (brak skryptu, AdBlocker) — ciche pominięcie.
+ * Captures UTM parameters and fbclid from current URL and persists in session.
+ */
+export function captureTrafficSource() {
+    try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const keys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'fbclid'];
+        let hasNewParams = false;
+
+        keys.forEach(key => {
+            if (urlParams.has(key)) {
+                const val = urlParams.get(key);
+                if (val) {
+                    sessionStorage.setItem('katten_' + key, val);
+                    try {
+                        localStorage.setItem('katten_' + key, val);
+                        localStorage.setItem('katten_' + key + '_ts', Date.now().toString());
+                    } catch (e) {}
+                    hasNewParams = true;
+                }
+            }
+        });
+
+        // Fallback from localStorage (up to 7 days old) if current session is empty
+        if (!hasNewParams) {
+            keys.forEach(key => {
+                if (!sessionStorage.getItem('katten_' + key)) {
+                    try {
+                        const lsVal = localStorage.getItem('katten_' + key);
+                        const ts = localStorage.getItem('katten_' + key + '_ts');
+                        if (lsVal && ts && (Date.now() - parseInt(ts, 10)) < 7 * 24 * 60 * 60 * 1000) {
+                            sessionStorage.setItem('katten_' + key, lsVal);
+                        }
+                    } catch (e) {}
+                }
+            });
+        }
+    } catch (e) {
+        console.warn('UTM capture error:', e);
+    }
+}
+
+/**
+ * Returns a human-readable traffic source label for WhatsApp attribution and analytics.
+ *
+ * @returns {string}
+ */
+export function getTrafficSourceLabel() {
+    try {
+        const fbclid = sessionStorage.getItem('katten_fbclid');
+        const source = sessionStorage.getItem('katten_utm_source') || '';
+        const medium = sessionStorage.getItem('katten_utm_medium') || '';
+        const campaign = sessionStorage.getItem('katten_utm_campaign') || '';
+
+        if (fbclid || medium === 'cpc' || medium === 'paid' || source.toLowerCase().includes('fb_ad') || source.toLowerCase().includes('meta_ad')) {
+            return 'FB_Ads' + (campaign ? '_' + campaign : '');
+        }
+
+        if (source.toLowerCase() === 'facebook' || source.toLowerCase() === 'fb') {
+            return 'FB_Post' + (campaign ? '_' + campaign : '');
+        }
+
+        if (source.toLowerCase() === 'google') {
+            return medium ? 'Google_' + medium : 'Google';
+        }
+
+        if (source) {
+            return source + (campaign ? '_' + campaign : '');
+        }
+
+        // Check document.referrer
+        if (document.referrer) {
+            if (document.referrer.includes('facebook.com') || document.referrer.includes('instagram.com')) {
+                return 'FB_Social';
+            }
+            if (document.referrer.includes('google.')) {
+                return 'Google_Organiczny';
+            }
+        }
+
+        return 'Organiczny';
+    } catch (e) {
+        return 'Bezposredni';
+    }
+}
+
+window.getTrafficSourceLabel = getTrafficSourceLabel;
+
+/* ─────────────────────────────────────────────────────────────────
+   2. Unified Funnel Dispatcher (GA4 + Meta Pixel)
+───────────────────────────────────────────────────────────────── */
+
+/**
+ * Dispatches conversion funnel events to both GA4 and Meta Pixel.
  *
  * @param {string} eventName
  * @param {Object} [params]
  */
-function sendGaEvent(eventName, params) {
-    if (typeof gtag !== 'function') return;
-    gtag('event', eventName, params || {});
+export function trackFunnelStep(eventName, params) {
+    params = params || {};
+    params.traffic_source = getTrafficSourceLabel();
+
+    // 1. Google Analytics 4
+    if (typeof window.gtag === 'function') {
+        window.gtag('event', eventName, params);
+    }
+
+    // 2. Meta Pixel (fbq)
+    if (typeof window.fbq === 'function') {
+        const leadEvents = [
+            'click_whatsapp_lead',
+            'click_messenger_lead',
+            'click_phone_lead',
+            'submit_callback_number'
+        ];
+
+        if (leadEvents.includes(eventName)) {
+            window.fbq('track', 'Lead', {
+                content_name: eventName,
+                status: params.cat_name || 'Ogólne',
+            });
+        }
+
+        window.fbq('trackCustom', eventName, params);
+    }
 }
 
-/**
- * Czy event został już wysłany w bieżącej sesji?
- * Zapobiega wielokrotnemu wysyłaniu przy powrocie do strony w SPA.
- *
- * @param {string} key
- * @returns {boolean}
- */
+window.trackFunnelStep = trackFunnelStep;
+
+/* ─────────────────────────────────────────────────────────────────
+   3. Session Helpers
+───────────────────────────────────────────────────────────────── */
+
+function sendGaEvent(eventName, params) {
+    if (typeof window.gtag !== 'function') return;
+    window.gtag('event', eventName, params || {});
+}
+
 function isEventSentThisSession(key) {
     try {
         return !!sessionStorage.getItem('ga_sent_' + key);
@@ -48,7 +169,6 @@ function isEventSentThisSession(key) {
     }
 }
 
-/** @param {string} key */
 function markEventSent(key) {
     try {
         sessionStorage.setItem('ga_sent_' + key, '1');
@@ -56,10 +176,9 @@ function markEventSent(key) {
 }
 
 /* ─────────────────────────────────────────────────────────────────
-   1. contact_start
-   Wysyłany raz, gdy użytkownik po raz pierwszy wchodzi w interakcję
-   z formularzem kontaktowym (focus lub input na polu formularza).
+   4. Traditional Contact Form Tracking
 ───────────────────────────────────────────────────────────────── */
+
 function initContactStart() {
     const form = document.getElementById('contactForm');
     if (!form) return;
@@ -74,7 +193,6 @@ function initContactStart() {
             form_location: 'contact_page',
         });
 
-        // Usuń listenery po pierwszym wysłaniu
         form.removeEventListener('focusin', onContactInteraction);
         form.removeEventListener('input', onContactInteraction);
     }
@@ -83,52 +201,34 @@ function initContactStart() {
     form.addEventListener('input', onContactInteraction, { passive: true });
 }
 
-/* ─────────────────────────────────────────────────────────────────
-   2. contact_submit
-   Wysyłany WYŁĄCZNIE gdy serwer zwrócił sukces (session('status')).
-   Wykrywamy obecność elementu .form-alert--success w DOM.
-   NIE wysyła się przy błędzie walidacji (brak alertu sukcesu).
-───────────────────────────────────────────────────────────────── */
 function initContactSubmit() {
-    // Sprawdzamy obecność alertu sukcesu — renderowanego przez Blade po przekierowaniu
     const successAlert = document.querySelector('.form-alert--success');
     if (!successAlert) return;
 
-    // Dodatkowe zabezpieczenie: sprawdź że jesteśmy na stronie /contact
-    // (nie chcemy fałszywie triggerować na innej stronie)
     const isContactPage = !!document.getElementById('contactForm') ||
-                          window.location.pathname.includes('contact');
+                          window.location.pathname.includes('contact') ||
+                          window.location.pathname.includes('kontakt');
     if (!isContactPage) return;
 
     const SESSION_KEY = 'contact_submit';
     if (isEventSentThisSession(SESSION_KEY)) return;
     markEventSent(SESSION_KEY);
 
-    sendGaEvent('contact_submit', {
-        method: 'form',
+    trackFunnelStep('contact_submit', {
+        method: 'traditional_form',
     });
 }
 
-/* ─────────────────────────────────────────────────────────────────
-   3. phone_click
-   Wysyłany po kliknięciu linku tel:.
-   NIE przesyłamy numeru telefonu (PII).
-───────────────────────────────────────────────────────────────── */
 function initPhoneClick() {
     document.querySelectorAll('a[href^="tel:"]').forEach(function (link) {
         link.addEventListener('click', function () {
-            sendGaEvent('phone_click', {
-                link_type: 'phone',
+            trackFunnelStep('click_phone_lead', {
+                link_type: 'phone_tag',
             });
         });
     });
 }
 
-/* ─────────────────────────────────────────────────────────────────
-   4. email_click
-   Wysyłany po kliknięciu linku mailto:.
-   NIE przesyłamy adresu e-mail (PII).
-───────────────────────────────────────────────────────────────── */
 function initEmailClick() {
     document.querySelectorAll('a[href^="mailto:"]').forEach(function (link) {
         link.addEventListener('click', function () {
@@ -140,40 +240,29 @@ function initEmailClick() {
 }
 
 /* ─────────────────────────────────────────────────────────────────
-   5. animal_view
-   Wysyłany raz na stronie konkretnego kota.
-   Dane pobierane z data atrybutów na sekcji profilu — bez PII.
-   Parametry: animal_breed, animal_status (nie animal_name — ostrożność)
+   5. Animal View Events
 ───────────────────────────────────────────────────────────────── */
+
 function initAnimalView() {
     const profileSection = document.querySelector('[data-ga-page="animal_view"]');
     if (!profileSection) return;
 
-    const SESSION_KEY = 'animal_view_' + (profileSection.dataset.gaAnimalSlug || window.location.pathname);
+    const slug = profileSection.dataset.gaAnimalSlug || window.location.pathname;
+    const SESSION_KEY = 'animal_view_' + slug;
     if (isEventSentThisSession(SESSION_KEY)) return;
     markEventSent(SESSION_KEY);
-
-    const params = {};
 
     const breed = profileSection.dataset.gaAnimalBreed;
     const status = profileSection.dataset.gaAnimalStatus;
     const name = profileSection.dataset.gaAnimalName;
 
-    // animal_breed: np. "Bengalski" — nie jest PII
-    if (breed) params.animal_breed = breed;
-    // animal_status: np. "Hodowlany", "Dostępny" — nie jest PII
-    if (status) params.animal_status = status;
-    // animal_name: imię kota — nie jest danową osobową (to imię zwierzęcia, nie człowieka)
-    if (name) params.animal_name = name;
-
-    sendGaEvent('animal_view', params);
+    trackFunnelStep('view_cat_profile', {
+        cat_name: name || 'Nieznany',
+        cat_breed: breed || 'Nieznana',
+        availability_status: status || '',
+    });
 }
 
-/* ─────────────────────────────────────────────────────────────────
-   6. animal_list_view
-   Wysyłany raz na stronie listy kotów.
-   Parametry: breed_filter (aktywny filtr rasy lub 'all')
-───────────────────────────────────────────────────────────────── */
 function initAnimalListView() {
     const listSection = document.querySelector('[data-ga-page="animal_list"]');
     if (!listSection) return;
@@ -190,9 +279,11 @@ function initAnimalListView() {
 }
 
 /* ─────────────────────────────────────────────────────────────────
-   Boot — inicjalizacja po załadowaniu DOM
+   6. Boot Analytics
 ───────────────────────────────────────────────────────────────── */
-function bootAnalytics() {
+
+export function bootAnalytics() {
+    captureTrafficSource();
     initContactStart();
     initContactSubmit();
     initPhoneClick();
@@ -205,14 +296,4 @@ if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', bootAnalytics);
 } else {
     bootAnalytics();
-}
-
-// Eksport dla testów jednostkowych (jeśli środowisko na to pozwala)
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-        sendGaEvent,
-        isEventSentThisSession,
-        markEventSent,
-        bootAnalytics,
-    };
 }

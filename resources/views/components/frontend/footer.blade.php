@@ -73,8 +73,9 @@ Calm, minimal, trust-building
                         <li><a href="{{ route('frontend.animals.index') }}" class="footer-link">Nasze Koty</a></li>
                         <li><a href="{{ route('cattery') }}" class="footer-link">O Hodowli</a></li>
                         <li><a href="{{ route('about') }}" class="footer-link">O Nas</a></li>
-                        <li><a href="{{ route('frontend.blog.index') }}" class="footer-link">Blog</a></li>
+                        <li><a href="{{ route('frontend.blog.index') }}" class="footer-link">Baza Wiedzy</a></li>
                         <li><a href="{{ route('contact') }}" class="footer-link">Kontakt</a></li>
+                        <li><a href="{{ route('quiz') }}" class="footer-link" style="color: var(--color-gold, #c89d5c); font-weight: 600;">✨ Dobierz Rasę (Quiz)</a></li>
                     </ul>
                 </div>
 
@@ -107,6 +108,18 @@ Calm, minimal, trust-building
                         </a>
                     </div>
                 </div>
+            </div>
+
+            {{-- Local SEO Regional Strip --}}
+            <div class="footer-regional-links" style="border-top: 1px solid var(--color-hairline, rgba(0,0,0,0.08)); padding: 18px 0 6px; margin-top: 24px; font-size: 0.82rem; color: var(--color-ink-muted-80);">
+                <span style="font-weight: 600; margin-right: 8px;">Hodowla dla opiekunów z regionu:</span>
+                <a href="{{ route('seo.warszawa') }}" class="footer-link">Warszawa</a>
+                <span class="footer-legal__sep" aria-hidden="true">·</span>
+                <a href="{{ route('seo.lodz') }}" class="footer-link">Łódź</a>
+                <span class="footer-legal__sep" aria-hidden="true">·</span>
+                <a href="{{ route('seo.torun') }}" class="footer-link">Toruń</a>
+                <span class="footer-legal__sep" aria-hidden="true">·</span>
+                <a href="{{ route('seo.bydgoszcz') }}" class="footer-link">Bydgoszcz i Włocławek</a>
             </div>
 
             {{-- Bottom Bar --}}

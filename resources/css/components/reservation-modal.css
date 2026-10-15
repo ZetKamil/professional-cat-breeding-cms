@@ -1,0 +1,412 @@
+/**
+ * reservation-modal.css
+ * Hodowla Kotów z Mazowieckiej Szwajcarii
+ * Mobile-First, Luxury Glassmorphism & High-Contrast Touch Targets
+ */
+
+.res-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(10, 10, 10, 0.78);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    box-sizing: border-box;
+    opacity: 0;
+    transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.res-modal-backdrop.is-open {
+    opacity: 1;
+}
+
+.res-modal {
+    background: #141414;
+    background: linear-gradient(180deg, #1c1c1e 0%, #121213 100%);
+    color: #f5f5f7;
+    width: 100%;
+    max-width: 520px;
+    max-height: 90vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 20px;
+    border: 1px solid rgba(200, 157, 92, 0.3);
+    box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.75), 0 0 30px rgba(200, 157, 92, 0.12);
+    position: relative;
+    padding: 24px;
+    box-sizing: border-box;
+    transform: translateY(20px) scale(0.97);
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.res-modal-backdrop.is-open .res-modal {
+    transform: translateY(0) scale(1);
+}
+
+/* Close button */
+.res-modal__close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #e5e5e7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+}
+
+.res-modal__close:hover,
+.res-modal__close:focus-visible {
+    background: rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+    transform: scale(1.05);
+    outline: none;
+}
+
+/* Modal header */
+.res-modal__header {
+    margin-bottom: 18px;
+    padding-right: 32px;
+}
+
+.res-modal__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(200, 157, 92, 0.15);
+    border: 1px solid rgba(200, 157, 92, 0.35);
+    color: #d8b273;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 10px;
+}
+
+.res-modal__badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #22c55e;
+    box-shadow: 0 0 8px #22c55e;
+    animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.res-modal__title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 0 0 8px 0;
+    color: #ffffff;
+    letter-spacing: -0.01em;
+}
+
+.res-modal__subtitle {
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: #a1a1a6;
+    margin: 0;
+}
+
+/* Trust Strip */
+.res-modal__trust-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+    padding: 10px 14px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.res-modal__trust-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.76rem;
+    font-weight: 500;
+    color: #d1d1d6;
+}
+
+/* Action Buttons */
+.res-modal__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.res-action-btn {
+    display: flex;
+    align-items: center;
+    padding: 14px 16px;
+    border-radius: 14px;
+    text-decoration: none;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-sizing: border-box;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+
+.res-action-btn:active {
+    transform: scale(0.98);
+}
+
+.res-action-btn__icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-right: 14px;
+}
+
+.res-action-btn__text {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.res-action-btn__text strong {
+    font-size: 0.98rem;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.res-action-btn__text small {
+    font-size: 0.78rem;
+    opacity: 0.82;
+    line-height: 1.3;
+    margin-top: 2px;
+}
+
+.res-action-btn__arrow {
+    font-size: 1.2rem;
+    opacity: 0.6;
+    margin-left: 10px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.res-action-btn:hover .res-action-btn__arrow {
+    transform: translateX(3px);
+    opacity: 1;
+}
+
+/* WhatsApp Variant (Primary) */
+.res-action-btn--whatsapp {
+    background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+    color: #ffffff;
+    box-shadow: 0 8px 20px -4px rgba(37, 211, 102, 0.35);
+}
+
+.res-action-btn--whatsapp .res-action-btn__icon {
+    background: rgba(0, 0, 0, 0.15);
+}
+
+.res-action-btn--whatsapp:hover {
+    box-shadow: 0 10px 24px -2px rgba(37, 211, 102, 0.45);
+    filter: brightness(1.05);
+}
+
+/* Phone Call Variant */
+.res-action-btn--phone {
+    background: rgba(200, 157, 92, 0.12);
+    border: 1px solid rgba(200, 157, 92, 0.4);
+    color: #f7e6cc;
+}
+
+.res-action-btn--phone .res-action-btn__icon {
+    background: rgba(200, 157, 92, 0.2);
+    color: #e5c38c;
+}
+
+.res-action-btn--phone:hover {
+    background: rgba(200, 157, 92, 0.18);
+    border-color: rgba(200, 157, 92, 0.6);
+    color: #ffffff;
+}
+
+/* Messenger Variant */
+.res-action-btn--messenger {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #e5e5ea;
+}
+
+.res-action-btn--messenger .res-action-btn__icon {
+    background: rgba(0, 132, 255, 0.18);
+    color: #0084ff;
+}
+
+.res-action-btn--messenger:hover {
+    background: rgba(255, 255, 255, 0.09);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+}
+
+/* Quick 1-field phone callback */
+.res-modal__callback {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 14px;
+}
+
+.res-modal__callback-title {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+}
+
+.res-modal__callback-title span {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.res-modal__callback-title small {
+    font-size: 0.77rem;
+    color: #98989d;
+    margin-top: 2px;
+}
+
+.res-modal__form-row {
+    display: flex;
+    gap: 8px;
+}
+
+.res-modal__input-wrapper {
+    position: relative;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+}
+
+.res-modal__input-prefix {
+    position: absolute;
+    left: 12px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #8e8e93;
+    pointer-events: none;
+}
+
+.res-modal__input-wrapper input {
+    width: 100%;
+    background: #0d0d0e;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    padding: 12px 12px 12px 42px;
+    color: #ffffff;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.res-modal__input-wrapper input:focus {
+    border-color: #c89d5c;
+    box-shadow: 0 0 0 3px rgba(200, 157, 92, 0.2);
+}
+
+.res-modal__submit-btn {
+    background: #c89d5c;
+    color: #0d0d0d;
+    font-weight: 600;
+    font-size: 0.88rem;
+    border: none;
+    border-radius: 10px;
+    padding: 0 16px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.res-modal__submit-btn:hover {
+    background: #dbb374;
+    transform: translateY(-1px);
+}
+
+.res-modal__submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Post-submission feedback */
+.res-modal__feedback {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    line-height: 1.4;
+}
+
+.res-modal__feedback--success {
+    background: rgba(34, 197, 94, 0.15);
+    border: 1px solid rgba(34, 197, 94, 0.4);
+    color: #4ade80;
+}
+
+.res-modal__feedback--error {
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    color: #f87171;
+}
+
+.res-modal__footer-note {
+    text-align: center;
+    font-size: 0.72rem;
+    color: #8e8e93;
+    line-height: 1.4;
+}
+
+/* Mobile Optimizations */
+@media (max-width: 480px) {
+    .res-modal {
+        padding: 20px 16px;
+        border-radius: 18px 18px 0 0;
+        max-height: 94vh;
+    }
+
+    .res-modal-backdrop {
+        padding: 0;
+        align-items: flex-end;
+    }
+
+    .res-modal__form-row {
+        flex-direction: column;
+    }
+
+    .res-modal__submit-btn {
+        padding: 12px;
+        width: 100%;
+    }
+}

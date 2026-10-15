@@ -3,6 +3,24 @@
     'showAge' => true,
 ])
 
+@php
+    $isAvailable = $animal->status === \App\Enums\AnimalStatus::Available;
+    $weeksOld = $animal->date_of_birth ? (int) $animal->date_of_birth->diffInWeeks(now()) : 99;
+    $isEarlyReservation = $isAvailable && $weeksOld < 12;
+    $weeksUntilReady = max(1, 12 - $weeksOld);
+
+    if ($isEarlyReservation) {
+        $cardStatusLabel = "Wczesna rezerwacja • za {$weeksUntilReady} tyg.";
+        $badgeVariant = 'warning';
+    } elseif ($isAvailable) {
+        $cardStatusLabel = 'Gotowy do odbioru';
+        $badgeVariant = 'gold';
+    } else {
+        $cardStatusLabel = $animal->statusLabel();
+        $badgeVariant = $animal->status->badgeVariant();
+    }
+@endphp
+
 <x-frontend.card :href="route('frontend.animals.show', $animal)" hoverable class="animal-card" aria-label="Profil kota: {{ $animal->name }} ({{ $animal->breed }})">
     <x-slot:image>
         <div class="animal-card__media-wrapper">
@@ -31,8 +49,8 @@
             @endif
 
             <div class="animal-card__badge-overlay">
-                <x-frontend.badge :variant="$animal->status->badgeVariant()">
-                    {{ $animal->statusLabel() }}
+                <x-frontend.badge :variant="$badgeVariant">
+                    {{ $cardStatusLabel }}
                 </x-frontend.badge>
             </div>
         </div>
@@ -48,12 +66,19 @@
         <h3 class="animal-card__name">{{ $animal->name }}</h3>
 
         <div class="animal-card__footer">
-            @if($showAge && $animal->date_of_birth)
-                <span class="animal-card__age">Ur. {{ $animal->date_of_birth->format('d.m.Y') }}</span>
-            @endif
+            <span class="animal-card__quick-reserve"
+                  role="button"
+                  tabindex="0"
+                  title="Umów wideo-wizytę na żywo"
+                  onclick="event.preventDefault(); event.stopPropagation(); window.openReservationModal('{{ addslashes($animal->name) }}', '{{ addslashes($animal->breed) }}', '{{ addslashes($cardStatusLabel) }}');"
+                  onkeydown="if(event.key === 'Enter' || event.key === ' '){ event.preventDefault(); event.stopPropagation(); window.openReservationModal('{{ addslashes($animal->name) }}', '{{ addslashes($animal->breed) }}', '{{ addslashes($cardStatusLabel) }}'); }">
+                <span class="animal-card__quick-reserve-dot"></span>
+                <span>Wideo-wizyta</span>
+            </span>
+
             <span class="animal-card__cta">
-                Zobacz profil
-                <i data-lucide="arrow-up-right" class="w-4 h-4 text-primary" aria-hidden="true"></i>
+                Profil
+                <i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-primary" aria-hidden="true"></i>
             </span>
         </div>
     </div>

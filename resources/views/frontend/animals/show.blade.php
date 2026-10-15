@@ -275,9 +275,11 @@
                     {{-- Actions --}}
                     <div class="animal-profile__actions">
                         <x-frontend.button
-                            href="{{ route('contact', ['subject' => 'Zapytanie o kota: ' . $animal->name]) }}"
-                            icon="mail">
-                            Zapytaj o tego kota
+                            type="button"
+                            variant="primary"
+                            icon="arrow-right"
+                            onclick="window.openReservationModal('{{ addslashes($animal->name) }}', '{{ addslashes($animal->breed) }}', '{{ addslashes($animal->statusLabel()) }}')">
+                            📹 Wideo-wizyta & Rezerwacja
                         </x-frontend.button>
 
                         @if(isset($children) && $children->isNotEmpty())
@@ -291,6 +293,23 @@
                                 Zobacz rodowód
                             </x-frontend.button>
                         @endif
+                    </div>
+
+                    {{-- 5-min Live Video-Visit Callout Box --}}
+                    <div class="animal-profile__video-callout" style="margin-top: 18px; padding: 14px 18px; background: rgba(200, 157, 92, 0.08); border: 1px solid rgba(200, 157, 92, 0.28); border-radius: 12px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <span style="font-size: 1.5rem; line-height: 1;">📹</span>
+                            <div>
+                                <strong style="display: block; font-size: 0.95rem; color: var(--color-ink, #ffffff);">Umów 5-minutową Wideo-wizytę na żywo</strong>
+                                <span style="font-size: 0.82rem; color: var(--color-ink-muted-80, #a1a1a6);">Zobacz malucha przez WhatsApp lub Messenger prosto z domowego otoczenia</span>
+                            </div>
+                        </div>
+                        <button type="button" 
+                            class="btn btn-secondary" 
+                            style="font-size: 0.82rem; padding: 8px 14px; white-space: nowrap;"
+                            onclick="window.openReservationModal('{{ addslashes($animal->name) }}', '{{ addslashes($animal->breed) }}', '{{ addslashes($animal->statusLabel()) }}')">
+                            Połącz się teraz →
+                        </button>
                     </div>
 
                     {{-- Contextual Facebook Daily Life Discovery --}}
@@ -349,15 +368,39 @@
         </x-frontend.section>
     @endif
 
-    {{-- ============================================================
-    5. FINAL CTA
-    ============================================================ --}}
     <div class="reveal-up">
-        <x-frontend.cta tile="parchment" eyebrow="Kontakt i Rezerwacja"
-            headline="Zainteresowany kotem {{ $animal->name }}?"
-            description="Napisz do nas — z przyjemnością odpowiemy na wszystkie pytania na temat wybranego kota, przedstawimy certyfikaty zdrowia rodziców i zaprosimy Cię na spotkanie."
-            buttonText="Zapytaj o {{ $animal->name }}"
-            buttonHref="{{ route('contact', ['subject' => 'Zapytanie o kota: ' . $animal->name]) }}" />
+        <x-frontend.section tile="parchment" padding="default" class="cta-section">
+            <div class="cta-block">
+                <div class="cta-block__eyebrow">
+                    <span>Wideo-Wizyta na żywo & Rezerwacja</span>
+                </div>
+                <h2 class="cta-block__headline">
+                    Zainteresowany kotem {{ $animal->name }}?
+                </h2>
+                <p class="cta-block__description">
+                    Połącz się z nami na 5-minutową wideo-wizytę na żywo (WhatsApp lub Messenger) albo porozmawiajmy telefonicznie. Chętnie pokażemy malucha w domowym otoczeniu, przedstawimy certyfikaty zdrowia rodziców i odpowiemy na wszystkie Twoje pytania.
+                </p>
+                <div class="cta-block__action" style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                    <x-frontend.button
+                        type="button"
+                        variant="primary"
+                        icon="arrow-right"
+                        onclick="window.openReservationModal('{{ addslashes($animal->name) }}', '{{ addslashes($animal->breed) }}', '{{ addslashes($animal->statusLabel()) }}')">
+                        📹 Umów wideo-wizytę / Zarezerwuj
+                    </x-frontend.button>
+                    <x-frontend.button
+                        href="tel:+48514153204"
+                        variant="secondary"
+                        icon="phone">
+                        Zadzwoń: +48 514 153 204
+                    </x-frontend.button>
+                </div>
+                <p class="cta-block__note" role="note" style="margin-top: 16px;">
+                    <i data-lucide="shield-check" aria-hidden="true" class="cta-block__note-icon"></i>
+                    <span>Certyfikat SHiOZ ZOOLANDIA (58/CW/2025) · Czysta linia hodowlana z rodowodem</span>
+                </p>
+            </div>
+        </x-frontend.section>
     </div>
 
     @push('schema')

@@ -1,12 +1,26 @@
-# Sprint 7 — Production Release (COMPLETED)
+# Sprint CRO — Sales Funnel Bottom & Live Video-Visits (COMPLETED)
 
 ## Status
+- **Sprint CRO**: COMPLETED (2026-10-15) — Reservation Modal, Mobile Sticky Bar, Attribution & Local SEO
 - **Sprint 7**: COMPLETED — Security, SEO, Forms & Final Production QA (2026-08-11)
 - **Sprint 6.8**: COMPLETED
 - **Sprint 6.5**: COMPLETED
 - **Sprint 6**: IN PROGRESS
 - **Sprint 5**: COMPLETED
 - **Sprint 4**: COMPLETED
+
+## Sprint CRO Tasks (2026-10-15)
+- [x] `feat(cro): reservation modal` — Added `<x-frontend.reservation-modal />` with WhatsApp Video, Phone, Messenger & 1-field Quick Callback
+- [x] `feat(cro): quick callback api` — Created `CallbackController.php` with POST `/api/quick-callback`, throttling and bot honeypot
+- [x] `feat(cro): mobile sticky bar` — Added `<x-frontend.mobile-sticky-bar />` for thumb-zone WhatsApp & call access on mobile
+- [x] `feat(analytics): utm attribution` — Added UTM & fbclid capture into sessionStorage/localStorage with source code in WhatsApp
+- [x] `feat(analytics): meta pixel & consent` — Added Meta Pixel integration with Consent Mode v2 support in `shell.blade.php` and cookie consent
+- [x] `feat(cro): mobile homepage refactor` — Reordered kittens section above breed showcase on mobile devices via CSS flexbox
+- [x] `feat(cro): early reservation badges` — Implemented automatic `< 12 weeks` calculation for "Wczesna rezerwacja • za X tyg."
+- [x] `feat(cro): breed matcher quiz` — Created interactive 3-step quiz at `/dobierz-rase` with live matching and video-visit triggers
+- [x] `feat(seo): programmatic local seo` — Created SSR landing pages for Warszawa, Łódź, Toruń, Bydgoszcz with Schema.org LocalBusiness
+- [x] `test(cro): automated test suite` — Verified all routes, validation and security via `ReservationAndCroTest` (6 passed, 25 assertions)
+
 
 ## Sprint 7 Tasks
 - [x] `fix(mobile): safe-area support` — Added `env(safe-area-inset-top)` to `.site-header`, `env(safe-area-inset-bottom)` to mobile menu footer and `.footer-bottom`

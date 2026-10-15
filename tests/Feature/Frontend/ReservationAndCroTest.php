@@ -1,0 +1,99 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Tests\Feature\Frontend;
+
+use App\Events\ContactMessageSent;
+use App\Models\Animal;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Event;
+use Tests\TestCase;
+
+/**
+ * Feature tests covering Conversion Rate Optimization (CRO) additions:
+ * - 1-field quick callback API with honeypot bot validation and event dispatching
+ * - Interactive Breed Matcher Quiz rendering
+ * - Programmatic Local SEO landing pages (Warsaw, Lodz, Torun, Bydgoszcz)
+ */
+class ReservationAndCroTest extends TestCase
+{
+    use RefreshDatabase;
+
+    public function test_quick_callback_validates_required_phone(): void
+    {
+        $response = $this->postJson('/api/quick-callback', []);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['phone']);
+    }
+
+    public function test_quick_callback_validates_minimum_digits(): void
+    {
+        $response = $this->postJson('/api/quick-callback', [
+            'phone' => '1234',
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['phone']);
+    }
+
+    public function test_quick_callback_rejects_bot_with_honeypot(): void
+    {
+        $response = $this->postJson('/api/quick-callback', [
+            'phone'       => '514 153 204',
+            '_hp_website' => 'http://spam-bot.com',
+        ]);
+
+        $response->assertStatus(422);
+    }
+
+    public function test_quick_callback_succeeds_and_dispatches_event(): void
+    {
+        Event::fake([ContactMessageSent::class]);
+
+        $response = $this->postJson('/api/quick-callback', [
+            'phone'          => '514 153 204',
+            'cat_name'       => 'Baron',
+            'cat_breed'      => 'Kot Bengalski',
+            'traffic_source' => 'FB_Ads_bengale',
+        ]);
+
+        $response->assertOk();
+        $response->assertJson([
+            'success' => true,
+        ]);
+
+        Event::assertDispatched(ContactMessageSent::class, function ($event) {
+            return $event->data['phone'] === '514 153 204'
+                && str_contains($event->data['subject'], 'Baron')
+                && str_contains($event->data['message'], 'FB_Ads_bengale');
+        });
+    }
+
+    public function test_breed_matcher_quiz_page_renders_successfully(): void
+    {
+        $response = $this->get(route('quiz'));
+
+        $response->assertOk();
+        $response->assertSee('Dobierz Idealną Rasę w 45 Sekund');
+        $response->assertSee('Jak wygląda Twój wymarzony dzień z kotem?');
+    }
+
+    public function test_local_seo_city_pages_render_successfully(): void
+    {
+        $cities = [
+            'seo.warszawa' => 'Warszawa',
+            'seo.lodz' => 'Łódź',
+            'seo.torun' => 'Toruń',
+            'seo.bydgoszcz' => 'Bydgoszcz',
+        ];
+
+        foreach ($cities as $routeName => $cityName) {
+            $response = $this->get(route($routeName));
+            $response->assertOk();
+            $response->assertSee($cityName);
+            $response->assertSee('Wideo-wizyta');
+        }
+    }
+}

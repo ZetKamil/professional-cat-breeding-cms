@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CallbackController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
@@ -23,6 +24,16 @@ Route::get('/kontakt', [ContactController::class, 'create'])->name('contact');
 Route::post('/kontakt', [ContactController::class, 'store'])
     ->middleware('throttle:5,1')
     ->name('frontend.contact.store');
+Route::post('/api/quick-callback', [CallbackController::class, 'store'])
+    ->middleware('throttle:5,1')
+    ->name('api.quick-callback');
+Route::get('/dobierz-rase', [\App\Http\Controllers\Frontend\QuizController::class, 'index'])->name('quiz');
+
+// Programmatic Local SEO Landing Pages (Satellite Cities)
+Route::get('/hodowla-kotow-warszawa', [\App\Http\Controllers\Frontend\LocalSeoController::class, 'show'])->defaults('cityKey', 'warszawa')->name('seo.warszawa');
+Route::get('/hodowla-kotow-lodz', [\App\Http\Controllers\Frontend\LocalSeoController::class, 'show'])->defaults('cityKey', 'lodz')->name('seo.lodz');
+Route::get('/hodowla-kotow-torun', [\App\Http\Controllers\Frontend\LocalSeoController::class, 'show'])->defaults('cityKey', 'torun')->name('seo.torun');
+Route::get('/hodowla-kotow-bydgoszcz', [\App\Http\Controllers\Frontend\LocalSeoController::class, 'show'])->defaults('cityKey', 'bydgoszcz')->name('seo.bydgoszcz');
 Route::view('/o-nas', 'frontend.about')->name('about');
 Route::view('/o-hodowli', 'frontend.cattery')->name('cattery');
 Route::view('/polityka-prywatnosci', 'frontend.privacy')->name('privacy');

@@ -17,6 +17,8 @@
 @import './components/trust.css';
 @import './components/articles.css';
 @import './components/skeleton.css';
+@import './components/reservation-modal.css';
+@import './components/mobile-sticky-bar.css';
 
 /* Frontend page modules */
 @import './pages/about.css';
@@ -26,6 +28,7 @@
 @import './pages/blog-page.css';
 @import './pages/home-page.css';
 @import './pages/legal-page.css';
+@import './pages/quiz.css';
 
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';

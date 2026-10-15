@@ -1,0 +1,111 @@
+/**
+ * mobile-sticky-bar.css
+ * Hodowla Kotów z Mazowieckiej Szwajcarii
+ * Mobile Sticky Action Bar in Thumb Zone
+ */
+
+.mobile-sticky-bar {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9990;
+    background: rgba(14, 14, 15, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-top: 1px solid rgba(200, 157, 92, 0.3);
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.5);
+    padding: 10px 14px;
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+    box-sizing: border-box;
+}
+
+/* Hide on desktop and larger tablets */
+@media (min-width: 768px) {
+    .mobile-sticky-bar {
+        display: none !important;
+    }
+}
+
+.mobile-sticky-bar__inner {
+    max-width: 500px;
+    margin: 0 auto;
+    display: flex;
+    gap: 10px;
+}
+
+.mobile-sticky-bar__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-family: inherit;
+    border: none;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: transform 0.15s ease, filter 0.15s ease;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-sticky-bar__btn:active {
+    transform: scale(0.97);
+}
+
+.mobile-sticky-bar__icon {
+    font-size: 1.25rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.mobile-sticky-bar__label {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    line-height: 1.15;
+}
+
+.mobile-sticky-bar__label strong {
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.mobile-sticky-bar__label small {
+    font-size: 0.68rem;
+    opacity: 0.85;
+    margin-top: 1px;
+}
+
+/* Live Video-Visit Button (Primary - WhatsApp) */
+.mobile-sticky-bar__btn--video {
+    flex: 1.25;
+    background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
+}
+
+/* Phone Call Button (Gold / Dark) */
+.mobile-sticky-bar__btn--phone {
+    flex: 1;
+    background: rgba(200, 157, 92, 0.16);
+    border: 1px solid rgba(200, 157, 92, 0.45);
+    color: #f7e6cc;
+}
+
+.mobile-sticky-bar__btn--phone:hover,
+.mobile-sticky-bar__btn--phone:active {
+    background: rgba(200, 157, 92, 0.25);
+    color: #ffffff;
+}
+
+/* Extra bottom offset to prevent sticky bar from obstructing footer content */
+@media (max-width: 767px) {
+    .site-footer {
+        padding-bottom: calc(74px + env(safe-area-inset-bottom, 12px)) !important;
+    }
+}

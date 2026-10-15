@@ -24,6 +24,7 @@
     <meta name="description" content="{{ $metaDescription }}">
     <meta name="robots" content="{{ $robots }}">
     <meta name="theme-color" content="#0d0d0d">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     {{-- Canonical URL --}}
     <link rel="canonical" href="{{ $canonicalUrl }}">
@@ -93,6 +94,41 @@
         <meta name="ga-measurement-id" content="{{ $gaId }}">
     @endif
 
+    {{-- Meta Pixel — Consent Mode Integration --}}
+    @php
+        $metaPixelId = config('services.meta.pixel_id') ?: env('META_PIXEL_ID', env('VITE_META_PIXEL_ID', ''));
+    @endphp
+    @if($metaPixelId)
+        <script>
+            !function(f,b,e,v,n,t,s)
+            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+            n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t,s)}(window, document,'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+
+            fbq('consent', 'revoke');
+
+            (function() {
+                try {
+                    var saved = localStorage.getItem('katten_cookie_consent');
+                    if (saved === 'accepted') {
+                        fbq('consent', 'grant');
+                    }
+                } catch(e) {}
+            })();
+
+            fbq('init', '{{ $metaPixelId }}');
+            fbq('track', 'PageView');
+        </script>
+        <noscript>
+            <img height="1" width="1" style="display:none" alt=""
+                src="https://www.facebook.com/tr?id={{ $metaPixelId }}&ev=PageView&noscript=1"/>
+        </noscript>
+    @endif
+
     {{-- Self-hosted Inter: preload critical Latin & Latin-Extended (Polish) subsets to minimise FOUT --}}
     <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/inter-latin-ext.woff2" as="font" type="font/woff2" crossorigin>
@@ -127,6 +163,12 @@
 
     {{-- Cookie Consent Banner --}}
     <x-frontend.cookie-consent />
+
+    {{-- Reservation & Video-Visit Modal --}}
+    <x-frontend.reservation-modal />
+
+    {{-- Mobile Sticky Action Bar --}}
+    <x-frontend.mobile-sticky-bar />
 
     {{-- Scripts slot for page-specific JS --}}
     {{ $scripts ?? '' }}

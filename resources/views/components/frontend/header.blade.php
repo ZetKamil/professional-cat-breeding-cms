@@ -61,7 +61,7 @@
                     <a href="{{ route('frontend.blog.index') }}"
                        class="global-nav__link {{ request()->routeIs('frontend.blog.*') ? 'is-active' : '' }}"
                        {{ request()->routeIs('frontend.blog.*') ? 'aria-current=page' : '' }}>
-                        Blog
+                        Baza Wiedzy
                     </a>
                 </li>
                 <li>
@@ -152,7 +152,7 @@
                 </li>
                 <li>
                     <a href="{{ route('frontend.blog.index') }}" class="mobile-menu__link {{ request()->routeIs('frontend.blog.*') ? 'is-active' : '' }}">
-                        Blog
+                        Baza Wiedzy
                     </a>
                 </li>
                 <li>

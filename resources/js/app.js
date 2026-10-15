@@ -192,6 +192,7 @@ if (document.readyState === 'loading') {
 }
 
 // ==========================================================================
-// GA4 ANALYTICS EVENTS
+// GA4 ANALYTICS EVENTS & CRO RESERVATION
 // ==========================================================================
 import './analytics';
+import './reservation-modal';

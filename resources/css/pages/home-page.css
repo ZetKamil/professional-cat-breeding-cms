@@ -1042,3 +1042,22 @@
         padding-bottom: 36px;
     }
 }
+
+/* ==========================================================================
+   MOBILE SECTION REORDER — Available kittens elevated for mobile ad traffic
+   ========================================================================== */
+@media (max-width: 767px) {
+    .home-sections-flow {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .home-section--nasze-koty {
+        order: 1;
+    }
+
+    .home-section--specjalizacje {
+        order: 2;
+    }
+}
+

@@ -270,3 +270,43 @@
         gap: var(--sp-md);
     }
 }
+
+/* Quick Reserve trigger button on animal cards */
+.animal-card__quick-reserve {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: rgba(37, 211, 102, 0.12);
+    border: 1px solid rgba(37, 211, 102, 0.35);
+    border-radius: 999px;
+    color: #1a7a3e;
+    font-size: 0.76rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.animal-card__quick-reserve:hover {
+    background: #25d366;
+    color: #ffffff;
+    border-color: #25d366;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+}
+
+.animal-card__quick-reserve-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #25d366;
+    display: inline-block;
+    box-shadow: 0 0 6px #25d366;
+}
+
+.animal-card__quick-reserve:hover .animal-card__quick-reserve-dot {
+    background-color: #ffffff;
+    box-shadow: 0 0 6px #ffffff;
+}
+

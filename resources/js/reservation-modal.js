@@ -1,0 +1,233 @@
+/**
+ * reservation-modal.js
+ * Cattery of Mazovian Switzerland (Hodowla Kotów z Mazowieckiej Szwajcarii)
+ * Interactive logic for the Reservation & Live Video-Visit Modal.
+ */
+
+window.__currentReservationCat = null;
+
+/**
+ * Retrieves the formatted traffic attribution code (tag for the breeder).
+ * Appended to WhatsApp messages so the breeder immediately sees the lead source.
+ *
+ * @returns {string}
+ */
+function getTrafficAttributionCode() {
+    try {
+        if (typeof window.getTrafficSourceLabel === 'function') {
+            return window.getTrafficSourceLabel();
+        }
+        const fbclid = sessionStorage.getItem('katten_fbclid') || (new URLSearchParams(window.location.search)).get('fbclid');
+        const source = sessionStorage.getItem('katten_utm_source') || (new URLSearchParams(window.location.search)).get('utm_source');
+        const campaign = sessionStorage.getItem('katten_utm_campaign') || (new URLSearchParams(window.location.search)).get('utm_campaign');
+
+        if (fbclid) return 'FB_Ads' + (campaign ? '_' + campaign : '');
+        if (source === 'facebook') return 'FB_Post';
+        if (source === 'google') return 'Google';
+        if (source) return source;
+        return 'Organiczny';
+    } catch (e) {
+        return 'Strona_Glowna';
+    }
+}
+
+/**
+ * Opens the reservation modal and populates it with selected cat details.
+ *
+ * @param {string|null} catName
+ * @param {string|null} catBreed
+ * @param {string|null} statusLabel
+ */
+window.openReservationModal = function (catName, catBreed, statusLabel) {
+    const backdrop = document.getElementById('reservation-modal-backdrop');
+    if (!backdrop) return;
+
+    window.__currentReservationCat = {
+        name: catName || null,
+        breed: catBreed || null,
+        status: statusLabel || null,
+    };
+
+    // Text & DOM elements
+    const titleEl = document.getElementById('res-modal-title');
+    const badgeTextEl = document.getElementById('res-modal-badge-text');
+    const whatsappBtn = document.getElementById('res-modal-whatsapp');
+    const messengerBtn = document.getElementById('res-modal-messenger');
+    const phoneInput = document.getElementById('res-modal-phone-input');
+    const feedback = document.getElementById('res-modal-callback-feedback');
+
+    if (feedback) {
+        feedback.style.display = 'none';
+        feedback.className = 'res-modal__feedback';
+        feedback.textContent = '';
+    }
+
+    if (catName) {
+        titleEl.textContent = `Rezerwacja i Wideo-wizyta: ${catName}`;
+        if (badgeTextEl) {
+            badgeTextEl.textContent = statusLabel ? `${statusLabel} • Wideo-wizyta` : `Kociak: ${catName}`;
+        }
+    } else {
+        titleEl.textContent = 'Rezerwacja i Wideo-wizyta na żywo';
+        if (badgeTextEl) {
+            badgeTextEl.textContent = 'Wideo-wizyta na żywo';
+        }
+    }
+
+    // Dynamic WhatsApp deep link
+    if (whatsappBtn) {
+        const attributionCode = getTrafficAttributionCode();
+        let messageText = '';
+
+        if (catName) {
+            messageText = `Dzień dobry! Piszę ze strony kotyzmazowieckiejszwajcarii.pl. Interesuje mnie kotek ${catName}` + 
+                          (catBreed ? ` (${catBreed})` : '') + 
+                          `. Chciał(a)bym umówić 5-minutową wideo-wizytę na żywo przez kamerę w telefonie i porozmawiać o rezerwacji. [Kod: ${attributionCode}]`;
+        } else {
+            messageText = `Dzień dobry! Piszę ze strony kotyzmazowieckiejszwajcarii.pl. Chciał(a)bym zapytać o dostępne kocięta i umówić wideo-wizytę na żywo. [Kod: ${attributionCode}]`;
+        }
+
+        whatsappBtn.href = `https://wa.me/48514153204?text=${encodeURIComponent(messageText)}`;
+    }
+
+    // Dynamic Facebook Messenger link
+    if (messengerBtn) {
+        messengerBtn.href = 'https://m.me/61580668026948';
+    }
+
+    // Analytics event - modal opened
+    if (typeof window.trackFunnelStep === 'function') {
+        window.trackFunnelStep('open_reservation_modal', {
+            cat_name: catName || 'Ogólne',
+            cat_breed: catBreed || 'Nieokreślona',
+            status_label: statusLabel || '',
+        });
+    }
+
+    // Smooth reveal animation
+    backdrop.style.display = 'flex';
+    requestAnimationFrame(() => {
+        backdrop.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+        if (phoneInput && window.innerWidth > 768) {
+            phoneInput.focus();
+        }
+    });
+};
+
+/**
+ * Closes the reservation modal.
+ */
+window.closeReservationModal = function () {
+    const backdrop = document.getElementById('reservation-modal-backdrop');
+    if (!backdrop) return;
+
+    backdrop.classList.remove('is-open');
+    setTimeout(() => {
+        backdrop.style.display = 'none';
+        document.body.style.overflow = '';
+    }, 250);
+};
+
+/**
+ * Handles the 1-field quick callback AJAX submission.
+ *
+ * @param {Event} event
+ */
+window.handleQuickCallbackSubmit = function (event) {
+    event.preventDefault();
+
+    const form = event.target;
+    const phoneInput = form.querySelector('input[name="phone"]');
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const feedback = document.getElementById('res-modal-callback-feedback');
+    const hpInput = form.querySelector('input[name="_hp_website"]');
+
+    if (!phoneInput || !phoneInput.value.trim()) return;
+
+    const phone = phoneInput.value.trim();
+    const cat = window.__currentReservationCat || {};
+    const attribution = getTrafficAttributionCode();
+    const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') 
+               || form.querySelector('input[name="_token"]')?.value;
+
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span>Wysyłanie...</span>';
+    }
+
+    fetch('/api/quick-callback', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': token || '',
+        },
+        body: JSON.stringify({
+            phone: phone,
+            cat_name: cat.name || null,
+            cat_breed: cat.breed || null,
+            traffic_source: attribution,
+            _hp_website: hpInput ? hpInput.value : '',
+        }),
+    })
+    .then(async response => {
+        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(data.message || 'Wystąpił błąd podczas wysyłania.');
+        }
+        return data;
+    })
+    .then(data => {
+        if (feedback) {
+            feedback.style.display = 'block';
+            feedback.className = 'res-modal__feedback res-modal__feedback--success';
+            feedback.textContent = data.message || 'Dziękujemy! Skontaktujemy się telefonicznie tak szybko, jak to możliwe.';
+        }
+        phoneInput.value = '';
+
+        if (typeof window.trackFunnelStep === 'function') {
+            window.trackFunnelStep('submit_callback_number', {
+                cat_name: cat.name || 'Ogólne',
+            });
+        }
+
+        setTimeout(() => {
+            window.closeReservationModal();
+        }, 3500);
+    })
+    .catch(error => {
+        if (feedback) {
+            feedback.style.display = 'block';
+            feedback.className = 'res-modal__feedback res-modal__feedback--error';
+            feedback.textContent = error.message || 'Wystąpił błąd. Zadzwoń pod numer +48 514 153 204.';
+        }
+    })
+    .finally(() => {
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<span>Poproś o kontakt</span>';
+        }
+    });
+};
+
+// Global event listeners (backdrop click, Escape key)
+document.addEventListener('DOMContentLoaded', () => {
+    const backdrop = document.getElementById('reservation-modal-backdrop');
+    if (backdrop) {
+        backdrop.addEventListener('click', (e) => {
+            if (e.target === backdrop) {
+                window.closeReservationModal();
+            }
+        });
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            const openBackdrop = document.getElementById('reservation-modal-backdrop');
+            if (openBackdrop && openBackdrop.style.display !== 'none') {
+                window.closeReservationModal();
+            }
+        }
+    });
+});

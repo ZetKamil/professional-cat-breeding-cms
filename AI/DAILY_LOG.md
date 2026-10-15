@@ -1,5 +1,44 @@
 # DAILY_LOG.md
 
+## 2026-10-15
+
+### Completed
+
+✓ Pełne wdrożenie Optymalizacji Konwersji Dolnego Odcinka Lejka Sprzedażowego (CRO) & Live Video-Visits (`feat(cro)`, `feat(analytics)`, `feat(seo)`)
+  - **Faza 3: Modal Rezerwacji i Wideo-Wizyt na żywo (Reservation Modal):**
+    - Utworzono komponent `<x-frontend.reservation-modal />` z 4 ścieżkami kontaktu: WhatsApp Video (z pre-filled textem i kodem atrybucji), bezpośredni telefon, Facebook Messenger (`m.me/61580668026948`) oraz 1-polowy formularz szybkiego oddzwonienia.
+    - Zero wzmianek o zadatku / cenie w UI modala (zgodnie z polityką hodowli).
+    - Utworzono kontroler `app/Http/Controllers/CallbackController.php` z endpointem POST `/api/quick-callback` (walidacja numeru, throttling `5,1`, honeypot przeciw botom).
+    - Dedykowane style w `resources/css/components/reservation-modal.css` i logika JS w `resources/js/reservation-modal.js`.
+    - Podpięto modal pod profil kota (`animals/show.blade.php`), karty kotów (`animal-card.blade.php`) i stronę główną.
+  - **Faza 2: Mobile Sticky Action Bar w strefie kciuka:**
+    - Utworzono komponent `<x-frontend.mobile-sticky-bar />` z przyciskami "📹 Wideo-wizyta" i "📞 Zadzwoń", widoczny wyłącznie na urządzeniach mobilnych (`@media (max-width: 767px)`).
+    - Dedykowany arkusz `resources/css/components/mobile-sticky-bar.css` ze wsparciem dla safe-area na iOS i marginesem dla stopki.
+  - **Faza 1: Attribution Engine & Funnel Analytics (GA4 + Meta Pixel):**
+    - Rozbudowano `resources/js/analytics.js` o automatyczne przechwytywanie parametrów URL (`utm_source`, `utm_medium`, `utm_campaign`, `fbclid`) do `sessionStorage` z fallbackiem w `localStorage`.
+    - Wdrożono formatowanie etykiety źródła `getTrafficSourceLabel()` dopisywanej dyskretnie do wiadomości WhatsApp (`[Kod: ...]`).
+    - Zaimplementowano uniwersalny dispatcher zdarzeń `trackFunnelStep()` obsługujący GA4 i Meta Pixel (`fbq('track', 'Lead')`).
+    - Zintegrowano Meta Pixel z Consent Mode v2 w `shell.blade.php` i `cookie-consent.blade.php`.
+  - **Faza 4: Homepage Mobile Refactor & Status Badges:**
+    - Zmiana kolejności na mobile za pomocą CSS flexbox (`.home-sections-flow`): sekcja kociąt wyświetla się przed opisami ras.
+    - Odświeżono nagłówek Hero i pasek zaufania o bezpośrednie wideo-wizyty.
+    - Wdrożono dynamiczne rozróżnienie kociąt w wieku < 12 tyg jako `⏳ Wczesna rezerwacja • za X tyg.` oraz >= 12 tyg jako `🟢 Gotowy do odbioru`.
+    - Ujednolicono nawigację na "Baza Wiedzy" w nagłówku i stopce.
+  - **Faza 5: Interaktywny Quiz Doboru Rasy (`/dobierz-rase`):**
+    - Utworzono dedykowaną stronę `/dobierz-rase`, kontroler `QuizController` oraz widok `quiz.blade.php`.
+    - 3-krokowy quiz dopasowujący styl życia i oczekiwania do rasy (Bengalski, Brytyjski, Syjamski) z natychmiastowym filtrowaniem dostępnych kociąt i triggerem wideo-wizyty.
+  - **Faza 6: Programmatic Local SEO dla Miast Satelickich:**
+    - Utworzono kontroler `LocalSeoController` i dedykowane strony lądowania SSR dla 4 kluczowych miast:
+      - `/hodowla-kotow-warszawa`
+      - `/hodowla-kotow-lodz`
+      - `/hodowla-kotow-torun`
+      - `/hodowla-kotow-bydgoszcz`
+    - Każda strona zawiera Schema.org `LocalBusiness` z polem `areaServed`, dynamiczną listę kociąt z bazy i opis dojazdu do Sikorza.
+    - Dodano regionalny pasek linków wewnętrznych w stopce serwisu.
+  - **Weryfikacja jakościowa:**
+    - `npm run build`: kompilacja Vite zakończona z kodem 0.
+    - `php artisan test`: wszystkie testy jednostkowe i integracyjne przeszły pomyślnie (PASS), w tym dedykowany zestaw `ReservationAndCroTest`.
+
 ## 2026-10-14
 
 ### Completed
