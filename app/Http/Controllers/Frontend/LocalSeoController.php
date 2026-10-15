@@ -34,8 +34,12 @@ class LocalSeoController extends Controller
                     'a' => 'Nie ma takiej konieczności. Zanim podejmiesz decyzję, łączymy się na niezobowiązującą wideo-wizytę przez WhatsApp lub Messenger. Możesz zobaczyć kociaka, jego mamę i warunki domowe ze swojej kanapy w Warszawie.',
                 ],
                 [
+                    'q' => 'W jakim wieku kociak może zamieszkać w Warszawie i jakie zabiegi przechodzi?',
+                    'a' => 'Kocięta opuszczają naszą hodowlę w wieku 12–14 tygodni. Każdy maluch wyrusza do nowego domu po dwukrotnym odrobaczeniu, dwukrotnym zaszczepieniu, zachipowaniu i kontroli weterynaryjnej, w pełni nauczony korzystania z kuwety i drapaka.',
+                ],
+                [
                     'q' => 'Jak wygląda odbiór i przygotowanie kociaka do podróży do Warszawy?',
-                    'a' => 'Po wcześniejszym umówieniu terminu przyjeżdżasz do Sikorza. Przekazujemy rodowód SHiOZ ZOOLANDIA, książeczkę zdrowia, chip oraz kompletną wyprawkę z instrukcją żywieniową i adaptacyjną.',
+                    'a' => 'Po wcześniejszym umówieniu terminu przyjeżdżasz do Sikorza. Przekazujemy wielopokoleniowy rodowód SHiOZ ZOOLANDIA (Certyfikat 58/CW/2025), książeczkę zdrowia, chip oraz kompletną wyprawkę z instrukcją żywieniową i adaptacyjną.',
                 ],
             ],
         ],
@@ -55,6 +59,10 @@ class LocalSeoController extends Controller
                 [
                     'q' => 'Jak zorganizować transport kociaka do Łodzi?',
                     'a' => 'Najbardziej rekomendujemy odbiór osobisty w naszej hodowli w Sikorzu (~85 minut drogi z Łodzi). Umożliwia to osobiste poznanie hodowcy, odbiór wyprawki i bezpośredni instruktaż pielęgnacyjny.',
+                ],
+                [
+                    'q' => 'Kiedy kociak może pojechać do nowego domu w Łodzi?',
+                    'a' => 'Kocięta przekazujemy w wieku około 12–14 tygodni, po potwierdzeniu ich samodzielności i odporności. Maluch wyrusza do Łodzi po dwukrotnym odrobaczeniu, dwukrotnym zaszczepieniu i zachipowaniu, wraz z rodowodem SHiOZ ZOOLANDIA i książeczką zdrowia.',
                 ],
                 [
                     'q' => 'Czy przed przyjazdem z Łodzi mogę zobaczyć malucha na żywo?',
@@ -83,6 +91,10 @@ class LocalSeoController extends Controller
                     'q' => 'Jakie dokumenty otrzymuję przy odbiorze?',
                     'a' => 'Każdy kotek otrzymuje wielopokoleniowy rodowód SHiOZ ZOOLANDIA (Certyfikat 58/CW/2025), książeczkę zdrowia z wpisami weterynaryjnymi, umowę kupna-sprzedaży oraz certyfikaty badań rodziców.',
                 ],
+                [
+                    'q' => 'Czy z Torunia mogę najpierw zobaczyć kociaka online?',
+                    'a' => 'Tak, zapraszamy na wideo-wizytę na WhatsApp lub Messengerze. Zobaczysz kociaka w zabawie i poznasz nas bez konieczności wcześniejszego pokonywania trasy.',
+                ],
             ],
         ],
         'wloclawek' => [
@@ -101,6 +113,10 @@ class LocalSeoController extends Controller
                 [
                     'q' => 'Czy z Włocławka mogę przyjechać na niezobowiązujące spotkanie?',
                     'a' => 'Jak najbardziej. Ponieważ dzieli nas tylko 35 minut drogi, po wcześniejszym ustaleniu terminu zapraszamy serdecznie do naszego domu w Sikorzu, aby poznać koty w ich naturalnym otoczeniu.',
+                ],
+                [
+                    'q' => 'W jakim wieku kociak jest gotowy do odbioru i jakie ma zabiegi?',
+                    'a' => 'Kocięta przekazujemy w wieku 12–14 tygodni. Każdy kotek trafia do nowego opiekuna po dwukrotnym odrobaczeniu, dwukrotnym zaszczepieniu, zachipowaniu i weterynaryjnej kontroli stanu zdrowia.',
                 ],
                 [
                     'q' => 'Jak przygotować auto na krótki powrót do Włocławka?',
@@ -122,6 +138,10 @@ class LocalSeoController extends Controller
             'meta_description' => 'Kot rasowy z rodowodem dla mieszkańców Bydgoszczy i regionu. Certyfikat SHiOZ ZOOLANDIA, badania genetyczne HCM/PKD i 5-minutowe wideo-wizyty na żywo.',
             'faq' => [
                 [
+                    'q' => 'W jakim wieku kociak może wyruszyć w podróż do Bydgoszczy?',
+                    'a' => 'Standardowy wiek odbioru to 12–14 tygodni życia. W tym wieku maluch jest w pełni samodzielny, po dwukrotnym zaszczepieniu, dwukrotnym odrobaczeniu i zachipowaniu, gotowy na bezpieczną podróż do nowego domu.',
+                ],
+                [
                     'q' => 'Czy przed podróżą z Bydgoszczy mogę sprawdzić wyniki badań rodziców?',
                     'a' => 'Oczywiście. Wszystkie certyfikaty badań kardiologicznych (echo serca HCM) oraz testy genetyczne (PKD, PRA-b, PK-Def) okazujemy podczas wideo-wizyty i dołączamy ich kopie do dokumentacji kociaka.',
                 ],
@@ -132,6 +152,14 @@ class LocalSeoController extends Controller
             ],
         ],
     ];
+
+    /**
+     * Return all configured city definitions.
+     */
+    public function getCities(): array
+    {
+        return $this->cities;
+    }
 
     /**
      * Render the dedicated city landing page with real-time SSR animal data.

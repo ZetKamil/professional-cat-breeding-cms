@@ -63,6 +63,12 @@ Route::get('/sitemap.xml', function () {
     $staticPages = [
         ['url' => $baseUrl.'/', 'priority' => '1.0', 'changefreq' => 'weekly', 'lastmod' => now()->toDateString()],
         ['url' => $baseUrl.'/koty', 'priority' => '0.9', 'changefreq' => 'weekly', 'lastmod' => now()->toDateString()],
+        ['url' => $baseUrl.'/dobierz-rase', 'priority' => '0.8', 'changefreq' => 'monthly', 'lastmod' => now()->toDateString()],
+        ['url' => $baseUrl.'/hodowla-kotow-warszawa', 'priority' => '0.8', 'changefreq' => 'weekly', 'lastmod' => now()->toDateString()],
+        ['url' => $baseUrl.'/hodowla-kotow-lodz', 'priority' => '0.8', 'changefreq' => 'weekly', 'lastmod' => now()->toDateString()],
+        ['url' => $baseUrl.'/hodowla-kotow-torun', 'priority' => '0.8', 'changefreq' => 'weekly', 'lastmod' => now()->toDateString()],
+        ['url' => $baseUrl.'/hodowla-kotow-bydgoszcz', 'priority' => '0.8', 'changefreq' => 'weekly', 'lastmod' => now()->toDateString()],
+        ['url' => $baseUrl.'/hodowla-kotow-wloclawek', 'priority' => '0.8', 'changefreq' => 'weekly', 'lastmod' => now()->toDateString()],
         ['url' => $baseUrl.'/o-hodowli', 'priority' => '0.8', 'changefreq' => 'monthly', 'lastmod' => '2026-08-11'],
         ['url' => $baseUrl.'/o-nas', 'priority' => '0.8', 'changefreq' => 'monthly', 'lastmod' => '2026-08-11'],
         ['url' => $baseUrl.'/blog', 'priority' => '0.8', 'changefreq' => 'weekly', 'lastmod' => now()->toDateString()],

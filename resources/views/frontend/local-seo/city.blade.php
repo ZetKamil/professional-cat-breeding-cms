@@ -20,16 +20,49 @@
                 'addressRegion' => 'Mazowieckie',
                 'addressCountry' => 'PL',
             ],
+            'geo' => [
+                '@type' => 'GeoCoordinates',
+                'latitude' => 52.6074,
+                'longitude' => 19.5786,
+            ],
+            'openingHoursSpecification' => [
+                [
+                    '@type' => 'OpeningHoursSpecification',
+                    'dayOfWeek' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+                    'opens' => '09:00',
+                    'closes' => '20:00',
+                ],
+            ],
             'areaServed' => [
                 '@type' => 'City',
                 'name' => $city['name'],
             ],
             'priceRange' => '$$$',
         ];
+
+        $faqSchema = !empty($city['faq']) ? [
+            '@context' => 'https://schema.org',
+            '@type' => 'FAQPage',
+            'mainEntity' => array_map(function($faq) {
+                return [
+                    '@type' => 'Question',
+                    'name' => $faq['q'],
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => $faq['a'],
+                    ],
+                ];
+            }, $city['faq']),
+        ] : null;
     @endphp
     <script type="application/ld+json">
     {!! json_encode($localSchema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}
     </script>
+    @if($faqSchema)
+    <script type="application/ld+json">
+    {!! json_encode($faqSchema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}
+    </script>
+    @endif
     @endpush
 
     {{-- ============================================================
@@ -198,7 +231,7 @@
                 <span style="font-size: 2rem; display: block; margin-bottom: 12px;">🚗</span>
                 <strong style="display: block; font-size: 1.15rem; color: #1a1a1a; margin-bottom: 8px;">Krok 2: Spokojny odbiór w Sikorzu</strong>
                 <p style="font-size: 0.9rem; line-height: 1.6; color: #4a4a4a; margin: 0 0 16px;">
-                    Gdy maluch osiągnie gotowość i zakochasz się w nim bez pamięci, przyjeżdżasz do naszej hodowli ({{ $city['distance_time'] }} z {{ $city['name_genitive'] }}). Otrzymujesz rodowód, książeczkę, microchip i pełną wyprawkę.
+                    Gdy maluch osiągnie gotowość do odbioru (w wieku 12–14 tygodni) i wybierzesz swojego wymarzonego przyjaciela, przyjeżdżasz do naszej hodowli w Sikorzu ({{ $city['distance_time'] }} z {{ $city['name_genitive'] }}). Otrzymujesz rodowód SHiOZ ZOOLANDIA, książeczkę zdrowia (po dwukrotnym zaszczepieniu i dwukrotnym odrobaczeniu), microchip oraz kompletną wyprawkę.
                 </p>
                 <a href="tel:+48514153204" class="btn btn-secondary" style="font-size: 0.85rem;">
                     📞 Zadzwoń: +48 514 153 204

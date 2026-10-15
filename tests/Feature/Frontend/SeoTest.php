@@ -44,6 +44,12 @@ class SeoTest extends TestCase
 
         // Check public static routes
         $this->assertStringContainsString('/koty</loc>', $content);
+        $this->assertStringContainsString('/dobierz-rase</loc>', $content);
+        $this->assertStringContainsString('/hodowla-kotow-warszawa</loc>', $content);
+        $this->assertStringContainsString('/hodowla-kotow-lodz</loc>', $content);
+        $this->assertStringContainsString('/hodowla-kotow-torun</loc>', $content);
+        $this->assertStringContainsString('/hodowla-kotow-bydgoszcz</loc>', $content);
+        $this->assertStringContainsString('/hodowla-kotow-wloclawek</loc>', $content);
         $this->assertStringContainsString('/o-hodowli</loc>', $content);
         $this->assertStringContainsString('/o-nas</loc>', $content);
         $this->assertStringContainsString('/blog</loc>', $content);
