@@ -189,15 +189,26 @@
                     <p class="quiz-result__desc" id="quizResultBreedDesc"></p>
 
                     {{-- Personalized Behavioral Note --}}
-                    <div id="quizBehavioralNoteBox" style="background: rgba(200, 157, 92, 0.12); border-left: 4px solid var(--color-gold, #c89d5c); padding: 14px 18px; border-radius: 8px; margin: 18px 0 24px; text-align: left; font-size: 0.92rem; line-height: 1.55; color: #2a2a2a;">
-                        <strong id="quizBehavioralNoteTitle" style="color: #1a1a1a;">💡 Dlaczego ten wybór pasuje do Twojego rytmu dnia:</strong>
-                        <p id="quizBehavioralNoteText" style="margin: 6px 0 0; color: #3a3a3a;"></p>
+                    <div id="quizBehavioralNoteBox" style="background: rgba(200, 157, 92, 0.14); border: 1px solid rgba(200, 157, 92, 0.35); border-left: 4px solid var(--color-gold, #c89d5c); padding: 16px 20px; border-radius: 10px; margin: 18px 0 24px; text-align: left; font-size: 0.95rem; line-height: 1.6;">
+                        <strong id="quizBehavioralNoteTitle" style="color: var(--color-gold, #c89d5c); display: block; font-size: 1rem; margin-bottom: 6px;">💡 Dlaczego ten wybór pasuje do Twojego rytmu dnia:</strong>
+                        <p id="quizBehavioralNoteText" style="margin: 0; color: #f5f0e8; font-weight: 400;"></p>
                     </div>
 
                     {{-- Matched kittens from database --}}
                     <div class="quiz-result__cats-box">
-                        <h3 class="quiz-result__cats-heading">Aktualnie dostępne maluchy tej rasy w hodowli:</h3>
+                        <h3 class="quiz-result__cats-heading" id="quizMatchedCatsHeading">Aktualnie dostępne maluchy tej rasy w hodowli:</h3>
                         
+                        {{-- Notice if user chose 'ready_now' but matched breed is in early reservation (like British kittens) --}}
+                        <div id="quizFutureNoticeForNow" style="display:none; background: rgba(200, 157, 92, 0.15); border: 1px solid rgba(200, 157, 92, 0.4); border-radius: 12px; padding: 16px 20px; margin-bottom: 20px; text-align: left; font-size: 0.92rem; line-height: 1.55; color: #f5f0e8;">
+                            <div style="display: flex; align-items: flex-start; gap: 12px;">
+                                <span style="font-size: 1.6rem; line-height: 1;">⏳</span>
+                                <div>
+                                    <strong style="color: var(--color-gold, #c89d5c); display: block; font-size: 0.98rem; margin-bottom: 4px;">Szukasz kociaka od zaraz? Maluchy tej rasy będą gotowe do odbioru za ok. 3–4 tygodnie!</strong>
+                                    Maluszki z tego miotu są obecnie pod troskliwą opieką mamy i przechodzą program domowej socjalizacji. Już teraz możesz połączyć się na żywo na WhatsApp, zobaczyć je podczas zabawy i dokonać wczesnej rezerwacji swojego ulubieńca.
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="quiz-cats-grid" id="quizMatchingCatsGrid">
                             @foreach($animals as $animal)
                                 @php
@@ -224,7 +235,7 @@
                                         <h4>{{ $animal->name }}</h4>
                                         <p>{{ $animal->breed }} • {{ $animal->gender->label() }}</p>
                                         <span class="quiz-cat-item__status">
-                                            {{ $isReadyNow ? '🟢 Gotowy do odbioru' : '⏳ Wczesna rezerwacja' }}
+                                            {{ $isReadyNow ? '🟢 Gotowy do odbioru od zaraz' : '⏳ Wczesna rezerwacja • za 3–4 tyg.' }}
                                         </span>
                                     </div>
                                     <button type="button" 
@@ -236,17 +247,29 @@
                             @endforeach
                         </div>
 
-                        {{-- Alert when no kitten of this breed matches the requested timeline --}}
-                        <div id="quizNoMatchingCatsNotice" style="display:none; background: #ffffff; border: 1px solid rgba(200, 157, 92, 0.4); border-radius: 12px; padding: 22px; text-align: center; margin-top: 16px;">
+                        {{-- Alert when 0 kittens of this breed exist in database --}}
+                        <div id="quizNoMatchingCatsNotice" style="display:none; background: rgba(200, 157, 92, 0.12); border: 1px solid rgba(200, 157, 92, 0.35); border-radius: 12px; padding: 22px; text-align: center; margin-top: 16px; color: #f5f0e8;">
                             <span style="font-size: 2rem; display: block; margin-bottom: 8px;">🗓️</span>
-                            <h4 style="font-size: 1.05rem; font-weight: 700; color: #1a1a1a; margin-bottom: 6px;">Brak dostępnych maluchów w wybranym terminie</h4>
-                            <p style="font-size: 0.9rem; color: #4a4a4a; line-height: 1.55; margin-bottom: 16px;">
-                                Aktualnie maluchy tej rasy z tego terminu znalazły już domy lub oczekujemy na najbliższy planowany miot.
-                                Skontaktuj się z nami, aby zapisać się na listę oczekujących lub porozmawiać o planowanych kryciach!
+                            <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--color-gold, #c89d5c); margin-bottom: 6px;">Planujemy nowy miot tej rasy</h4>
+                            <p style="font-size: 0.92rem; color: #e8e3d8; line-height: 1.6; margin-bottom: 16px;">
+                                Aktualnie maluchy tej rasy z obecnych miotów znalazły już domy. Skontaktuj się z nami, aby zapisać się na listę oczekujących na WhatsApp na najbliższe narodziny!
                             </p>
                             <button type="button" class="btn btn-primary" onclick="window.contactBreederFromQuiz()">
                                 📹 Zapytaj o planowany miot na WhatsApp
                             </button>
+                        </div>
+
+                        {{-- Alternative recommendations if user wanted ready_now and matched breed isn't ready today, OR if 0 kittens matched --}}
+                        <div id="quizAlternativesBox" style="display:none; margin-top: 28px; padding-top: 22px; border-top: 1px solid rgba(255, 255, 255, 0.12);">
+                            <div style="background: rgba(37, 211, 102, 0.1); border: 1px solid rgba(37, 211, 102, 0.3); border-radius: 12px; padding: 14px 18px; margin-bottom: 16px; text-align: left;">
+                                <strong style="color: #25d366; font-size: 0.96rem; display: flex; align-items: center; gap: 8px;">
+                                    <span>⚡</span> Zależy Ci na odbiorze kociaka już w ten weekend?
+                                </strong>
+                                <p style="margin: 4px 0 0; font-size: 0.88rem; color: #e6f7ec; line-height: 1.5;">
+                                    Poznaj nasze w pełni odchowane maluchy innych ras, które są po komplecie szczepień, zaczipowane i nauczone czystości, gotowe do odbioru od ręki:
+                                </p>
+                            </div>
+                            <div class="quiz-cats-grid" id="quizAlternativeCatsGrid"></div>
                         </div>
                     </div>
 
@@ -453,35 +476,83 @@
                     noteBox.style.display = 'none';
                 }
 
-                // Filter matching kittens in DOM by breed and timeline
-                const items = document.querySelectorAll('.quiz-cat-item');
+                // 1. Show all kittens of the matched breed in the primary grid
+                const items = document.querySelectorAll('#quizMatchingCatsGrid .quiz-cat-item');
                 const timeline = quizState.step4; // 'ready_now', 'ready_future', 'ready_flexible'
-                let matchCount = 0;
+                let matchedCount = 0;
+                let hasReadyNowInMatched = false;
 
                 items.forEach(item => {
                     const breed = item.dataset.breed;
                     const ready = item.dataset.ready; // 'now' or 'future'
-                    const matchesBreed = (breed === matchedBreed);
-                    
-                    let matchesTimeline = true;
-                    if (timeline === 'ready_now' && ready !== 'now') matchesTimeline = false;
-                    if (timeline === 'ready_future' && ready !== 'future') matchesTimeline = false;
 
-                    if (matchesBreed && matchesTimeline) {
+                    if (breed === matchedBreed) {
                         item.style.display = 'flex';
-                        matchCount++;
+                        matchedCount++;
+                        if (ready === 'now') {
+                            hasReadyNowInMatched = true;
+                        }
                     } else {
                         item.style.display = 'none';
                     }
                 });
 
-                // Honest feedback if no cat of this breed currently matches the timeline
+                // Update heading with matched breed name
+                const headingEl = document.getElementById('quizMatchedCatsHeading');
+                if (headingEl) {
+                    headingEl.textContent = `Dostępne maluchy rasy ${info.name} w naszej hodowli:`;
+                }
+
+                // 2. If user chose 'ready_now', but matched breed kittens are in early reservation (e.g. British Ada, Alma, Atena)
+                const futureNotice = document.getElementById('quizFutureNoticeForNow');
+                if (futureNotice) {
+                    if (timeline === 'ready_now' && matchedCount > 0 && !hasReadyNowInMatched) {
+                        futureNotice.style.display = 'block';
+                    } else {
+                        futureNotice.style.display = 'none';
+                    }
+                }
+
+                // 3. Alert when zero kittens of this breed exist in database
                 const noCatsNotice = document.getElementById('quizNoMatchingCatsNotice');
                 if (noCatsNotice) {
-                    if (matchCount === 0) {
+                    if (matchedCount === 0) {
                         noCatsNotice.style.display = 'block';
                     } else {
                         noCatsNotice.style.display = 'none';
+                    }
+                }
+
+                // 4. Show ready alternatives if user wanted ready_now and matched breed isn't ready today, OR if matchedCount === 0
+                const altBox = document.getElementById('quizAlternativesBox');
+                const altGrid = document.getElementById('quizAlternativeCatsGrid');
+                if (altBox && altGrid) {
+                    altGrid.innerHTML = '';
+                    let altCount = 0;
+
+                    items.forEach(item => {
+                        if (item.dataset.breed !== matchedBreed) {
+                            const isReady = item.dataset.ready === 'now';
+                            // If user wanted ready_now and matched breed wasn't ready now -> show ready kittens of other breeds
+                            // If matchedCount was 0 -> show any available kittens of other breeds
+                            if ((timeline === 'ready_now' && !hasReadyNowInMatched && isReady) || (matchedCount === 0)) {
+                                const clone = item.cloneNode(true);
+                                clone.style.display = 'flex';
+                                const btn = clone.querySelector('.quiz-cat-item__btn');
+                                const origBtn = item.querySelector('.quiz-cat-item__btn');
+                                if (btn && origBtn && origBtn.getAttribute('onclick')) {
+                                    btn.setAttribute('onclick', origBtn.getAttribute('onclick'));
+                                }
+                                altGrid.appendChild(clone);
+                                altCount++;
+                            }
+                        }
+                    });
+
+                    if (altCount > 0 && ((timeline === 'ready_now' && !hasReadyNowInMatched) || matchedCount === 0)) {
+                        altBox.style.display = 'block';
+                    } else {
+                        altBox.style.display = 'none';
                     }
                 }
 
@@ -544,6 +615,15 @@
 
                 const resultBox = document.getElementById('quizResult');
                 if (resultBox) resultBox.style.display = 'none';
+
+                const futureNotice = document.getElementById('quizFutureNoticeForNow');
+                if (futureNotice) futureNotice.style.display = 'none';
+
+                const noCatsNotice = document.getElementById('quizNoMatchingCatsNotice');
+                if (noCatsNotice) noCatsNotice.style.display = 'none';
+
+                const altBox = document.getElementById('quizAlternativesBox');
+                if (altBox) altBox.style.display = 'none';
 
                 goToStep(1, '25%');
             };

@@ -111,6 +111,9 @@ class ReservationAndCroTest extends TestCase
         $response->assertSee('quizStep4');
         $response->assertSee('calculateWinningBreed', false);
         $response->assertSee('contactBreederFromQuiz', false);
+        $response->assertSee('quizFutureNoticeForNow');
+        $response->assertSee('quizAlternativesBox');
+        $response->assertSee('quizAlternativeCatsGrid');
     }
 
     public function test_local_seo_city_pages_render_successfully(): void
