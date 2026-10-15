@@ -18,9 +18,9 @@ class QuizController extends Controller
     {
         $availableAnimals = Animal::query()
             ->published()
-            ->whereIn('status', [AnimalStatus::Available, AnimalStatus::Reserved])
+            ->where('status', AnimalStatus::Available)
+            ->where('type', \App\Enums\AnimalType::Cat)
             ->with(['media'])
-            ->orderByRaw("CASE WHEN status = 'available' THEN 1 ELSE 2 END ASC")
             ->orderBy('sort_order', 'asc')
             ->get();
 

@@ -148,6 +148,48 @@ class ReservationAndCroTest extends TestCase
         $response->assertSee('quizAlternativeCatsGrid');
     }
 
+    public function test_quiz_strictly_excludes_reserved_sold_and_breeding_animals(): void
+    {
+        $availableCat = Animal::factory()->available()->create([
+            'name' => 'DafneDostepna',
+            'breed' => 'Kot Syjamski',
+            'published_at' => now()->subDay(),
+        ]);
+
+        $reservedCat = Animal::factory()->reserved()->create([
+            'name' => 'RezerwowanyKotek',
+            'breed' => 'Kot Syjamski',
+            'published_at' => now()->subDay(),
+        ]);
+
+        $soldCat = Animal::factory()->sold()->create([
+            'name' => 'WNowymDomuKotek',
+            'breed' => 'Kot Syjamski',
+            'published_at' => now()->subDay(),
+        ]);
+
+        $breedingCat = Animal::factory()->breeding()->create([
+            'name' => 'KrolowaMatka',
+            'breed' => 'Kot Syjamski',
+            'published_at' => now()->subDay(),
+        ]);
+
+        $response = $this->get(route('quiz'));
+
+        $response->assertOk();
+        $response->assertSee('DafneDostepna');
+        $response->assertDontSee('RezerwowanyKotek');
+        $response->assertDontSee('WNowymDomuKotek');
+        $response->assertDontSee('KrolowaMatka');
+
+        // Verify dynamic update: if available cat becomes reserved, it disappears from quiz
+        $availableCat->update(['status' => \App\Enums\AnimalStatus::Reserved]);
+
+        $responseAfterUpdate = $this->get(route('quiz'));
+        $responseAfterUpdate->assertOk();
+        $responseAfterUpdate->assertDontSee('DafneDostepna');
+    }
+
     public function test_local_seo_city_pages_render_successfully(): void
     {
         $cities = [
