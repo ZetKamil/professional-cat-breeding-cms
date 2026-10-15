@@ -11,6 +11,7 @@
         title="Hodowla z pasją<br>i pełną troską."
         lead="Każdy kot, który opuszcza naszą hodowlę, niesie ze sobą doświadczenie, miłość i bezkompromisową troskę o zdrowie i rozwój."
         image-url="{{ asset('image/about/hero_bg.jpg') }}"
+        image-position="center 60%"
         image-alt="Ciepła i jasna przestrzeń domowa hodowli kotów rasowych z kotem bengalskim"
         scroll-target="#nasza-filozofia"
         size="large"

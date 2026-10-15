@@ -7,6 +7,7 @@
     <x-frontend.hero eyebrow="Felinologia i Standardy" title="O Hodowli.<br>Bezkompromisowa Etyka."
         lead="Poznaj naszą filozofię opieki, Kodeks Zaufania oraz jasny, przejrzysty proces zakupu i dołączenia kocięcia do Twojego domu."
         image-url="{{ asset('image/cattery/hero_bg.jpg') }}"
+        image-position="center 68%"
         image-alt="Arystokratyczny kot brytyjski długowłosy colourpoint w eleganckim wnętrzu hodowli" scroll-target="#filozofia" size="large"
         data-nav-theme="dark" />
 

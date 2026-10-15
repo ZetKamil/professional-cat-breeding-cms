@@ -17,6 +17,7 @@
     'lead' => null,
     'imageUrl' => null,
     'imageAlt' => 'Piękny kot rasowy w hodowli',
+    'imagePosition' => 'center 65%',
     'scrollTarget' => '#o-nas',
     'align' => 'left',
     'size' => 'full',
@@ -28,7 +29,7 @@
     $resolvedImageUrl = $imageUrl ?: asset('image/hero/cinematic_bg.jpg');
 @endphp
 
-<section {{ $attributes->merge(['class' => "hero {$alignClass} {$sizeClass}", 'data-nav-theme' => 'dark']) }} aria-label="Powitanie">
+<section {{ $attributes->merge(['class' => "hero {$alignClass} {$sizeClass}", 'data-nav-theme' => 'dark']) }} style="--hero-image-position: {{ $imagePosition }};" aria-label="Powitanie">
     {{-- Background Photography --}}
     <div class="hero__bg">
         <x-frontend.picture 

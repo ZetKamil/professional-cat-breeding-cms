@@ -38,7 +38,7 @@
                     >
                         <div class="pedigree-card__icon" aria-hidden="true">
                             @if($mother->media)
-                                <img src="{{ $mother->media->url() }}" alt="{{ $mother->name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 9999px;">
+                                <img src="{{ $mother->media->url() }}" alt="{{ $mother->name }}" style="width: 100%; height: 100%; object-fit: cover; object-position: center 20%; border-radius: 9999px;">
                             @else
                                 <i data-lucide="heart" aria-hidden="true"></i>
                             @endif
@@ -70,7 +70,7 @@
                     >
                         <div class="pedigree-card__icon" aria-hidden="true">
                             @if($father->media)
-                                <img src="{{ $father->media->url() }}" alt="{{ $father->name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 9999px;">
+                                <img src="{{ $father->media->url() }}" alt="{{ $father->name }}" style="width: 100%; height: 100%; object-fit: cover; object-position: center 20%; border-radius: 9999px;">
                             @else
                                 <i data-lucide="shield" aria-hidden="true"></i>
                             @endif

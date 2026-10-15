@@ -4,6 +4,25 @@
 
 ### Completed
 
+✓ Kompleksowa Naprawa Kadrowania i Rozmiarów Zdjęć Kotów (`fix(ui)`, `style(images)`, `perf(rwd)`)
+  - **Eliminacja ucinania głów i uszu w Kartach Kotów (`animal-card`):**
+    - **Diagnoza problemu:** Zdjęcia kociąt wgrywane z telefonów są w formacie pionowym (3:4, np. 1536x2048). Sztywny poziomy kontener `aspect-ratio: 4 / 3` oraz wyśrodkowanie `object-position: center (50%)` obcinało aż 30% góry i dołu zdjęcia, ścinając kotom głowy na wysokości czoła.
+    - **Wdrożone rozwiązanie:**
+      1. Zmieniono proporcje `.animal-card__media-wrapper` ze spłaszczonego 4:3 na **idealny kwadrat `1 / 1`** (standard Instagrama / Apple), co daje o 33% więcej przestrzeni pionowej na sylwetkę kota.
+      2. Wprowadzono inteligentne pozycjonowanie **`object-position: center 18%`**, które traktuje górną część zdjęcia jako punkt skupienia, zabezpieczając 100% uszu, oczu i pyszczka kociaka.
+      3. Zsynchronizowano szkielet ładowania `.skeleton-card__image` do `aspect-ratio: 1 / 1` oraz wymiary obrazów na `800x800` (eliminacja CLS).
+  - **Naprawa ucinania kota w sekcjach Hero (np. „O Hodowli”, „O Nas”):**
+    - **Diagnoza problemu:** W `hero.css` reguła `.hero__image` miała sztywne `object-position: center 30%`, przez co przeglądarka kadrowała na sufit i wazony, a kot siedzący na stole w dolnej części kadru był odcięty w pasie przy krawędzi ekranu.
+    - **Wdrożone rozwiązanie:**
+      1. Wprowadzono zmienną CSS `var(--hero-image-position, center 65%)` w `hero.css`.
+      2. Dodano prop `imagePosition` do komponentu `<x-frontend.hero />`.
+      3. Ustawiono `image-position="center 68%"` w `cattery.blade.php` oraz `center 60%` w `about.blade.php`, co przeniosło środek kadru idealnie na kota, eksponując go w całości.
+      4. Zabezpieczono kadr reproduktora Barsa w Hero strony głównej (`.hero-split__image` z `object-position: center 25%`).
+      5. Zabezpieczono okrągłe awatary rodziców w rodowodzie (`animal-pedigree.blade.php` z `object-position: center 20%`).
+  - **Kompilacja i testy:**
+    - Zrekompilowano pakiety Vite (`npm run build`).
+    - Wszystkie testy automatyczne przeszły pomyślnie (`HomepageTest`, `AnimalTest`).
+
 ✓ Zwiększenie liczby prezentowanych kociąt na Stronie Głównej do 6 (`feat(home)`, `feat(cro)`, `test(home)`)
   - **Optymalizacja siatki Dostępnych Kociąt:**
     - W `HomeController.php` zwiększono limit `take(3)` do `take(6)`.
