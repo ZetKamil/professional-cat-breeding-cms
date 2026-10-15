@@ -25,9 +25,9 @@ function getTrafficAttributionCode() {
         if (source === 'facebook') return 'FB_Post';
         if (source === 'google') return 'Google';
         if (source) return source;
-        return 'Organiczny';
+        return 'Bezposredni';
     } catch (e) {
-        return 'Strona_Glowna';
+        return 'Bezposredni';
     }
 }
 

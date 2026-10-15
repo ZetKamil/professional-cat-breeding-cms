@@ -40,7 +40,7 @@
                     <x-frontend.button
                         type="button"
                         variant="secondary"
-                        onclick="if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'whatsapp', cat_name: '{{ addslashes($sourceContext) }}' }); } window.open('https://wa.me/48514153204?text=' + encodeURIComponent('Dzień dobry! Piszę ze strony hodowli Mazowiecka Szwajcaria. Chciałbym zapytać o rezerwację kociąt i wideo-wizytę na żywo.'), '_blank');"
+                        onclick="if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'whatsapp', cat_name: '{{ addslashes($sourceContext) }}' }); } var src = (typeof window.getTrafficSourceLabel === 'function') ? ' [Źródło: ' + window.getTrafficSourceLabel() + ']' : ''; window.open('https://wa.me/48514153204?text=' + encodeURIComponent('Dzień dobry! Piszę ze strony hodowli Mazowiecka Szwajcaria. Chciałbym zapytać o rezerwację kociąt i wideo-wizytę na żywo.' + src), '_blank');"
                         icon="message-circle"
                         class="cta-block__btn">
                         💬 Porozmawiaj na WhatsApp

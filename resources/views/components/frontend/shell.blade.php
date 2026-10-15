@@ -81,7 +81,12 @@
                 try {
                     var saved = localStorage.getItem('katten_cookie_consent');
                     if (saved === 'accepted') {
-                        gtag('consent', 'update', { 'analytics_storage': 'granted' });
+                        gtag('consent', 'update', {
+                            'analytics_storage': 'granted',
+                            'ad_storage': 'granted',
+                            'ad_user_data': 'granted',
+                            'ad_personalization': 'granted'
+                        });
                     }
                 } catch(e) {}
             })();

@@ -376,6 +376,16 @@
             window.selectQuizOption = function(step, value) {
                 quizState['step' + step] = value;
 
+                // Track quiz start once when first option is clicked
+                if (step === 1 && !quizState._startedTracked) {
+                    quizState._startedTracked = true;
+                    if (typeof window.trackFunnelStep === 'function') {
+                        window.trackFunnelStep('quiz_started', {
+                            first_choice: value
+                        });
+                    }
+                }
+
                 // Visual feedback on selected option
                 const stepEl = document.getElementById('quizStep' + step);
                 if (stepEl) {

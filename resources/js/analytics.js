@@ -2,21 +2,31 @@
  * analytics.js — GA4 & Meta Pixel Funnel Conversion Tracking & Attribution
  * Cattery of Mazovian Switzerland (Hodowla Kotów z Mazowieckiej Szwajcarii)
  *
- * Implemented events:
- *   view_cat_profile       — viewing a specific cat profile (with attribution)
- *   open_reservation_modal — opening the reservation / video-visit modal
- *   click_whatsapp_lead    — clicking WhatsApp lead contact
- *   click_messenger_lead   — clicking Messenger lead contact
- *   click_phone_lead       — clicking direct phone call lead
- *   submit_callback_number — submitting phone number in quick callback form (lead)
- *   contact_start          — first interaction with traditional contact form
- *   contact_submit         — successful traditional form submission
- *   animal_list_view       — viewing the cat listing catalog
+ * Core Principles:
+ *   1. Strict Separation of Intent from Real Outcomes:
+ *      • view_cat_profile    — genuine cat profile view
+ *      • quiz_started        — visitor began the quiz
+ *      • quiz_completed      — visitor received a valid recommendation
+ *      • contact_cta_click   — user clicked a contact CTA (WhatsApp, Phone, Messenger, Modal)
+ *                              -> Mapped in Meta Pixel to standard 'Contact' (NEVER 'Lead')
+ *      • callback_submitted  — server accepted a valid callback / form submission (HTTP 200)
+ *                              -> Mapped in Meta Pixel to standard 'Lead'
+ *      • qualified_lead      — verified inquiry qualified by breeder offline/CRM
+ *      • sale_completed      — confirmed kitten sale/reservation recorded via breeder process
+ *                              -> Mapped in Meta Pixel to standard 'Purchase'
  *
- * Privacy & Security guarantees:
- *   • NO PII (name, email, phone number, message text) in GA4 / Meta Pixel payloads
- *   • Idempotent events prevented from duplicate triggers (sessionStorage guard)
- *   • Full compatibility with Consent Mode v2 and GDPR
+ *   2. Zero PII Guarantee:
+ *      • Phone numbers, emails, customer names, and message bodies are scrubbed
+ *        before any event payload is sent to GA4 or Meta Pixel.
+ *
+ *   3. Truthful Attribution & Safe Fallback:
+ *      • Malicious characters in UTM parameters are stripped.
+ *      • Unidentified visits fallback to 'Bezposredni' (Direct), NEVER falsely labelled as 'Organiczny'.
+ *      • 'Organiczny' is reserved strictly for verifiable search engine referrers.
+ *
+ *   4. Duplicate & Re-render Protection:
+ *      • Global event delegation on document prevents duplicate listeners from Livewire updates.
+ *      • In-memory debouncer prevents duplicate rapid dispatches (< 600ms).
  */
 
 /* ─────────────────────────────────────────────────────────────────
@@ -24,7 +34,25 @@
 ───────────────────────────────────────────────────────────────── */
 
 /**
- * Captures UTM parameters and fbclid from current URL and persists in session.
+ * Sanitizes untrusted query string values to prevent XSS or broken payloads.
+ * Restricts to alphanumeric, underscore, hyphen, and dot; max 80 chars.
+ *
+ * @param {string|null} val
+ * @returns {string}
+ */
+export function sanitizeUtmValue(val) {
+    if (!val || typeof val !== 'string') return '';
+    // Strip HTML/script tags and unsafe characters
+    let clean = val.replace(/[<>"'`;\\{}()=]/g, '').trim();
+    // Allow standard alphanumeric, polish characters, hyphens, underscores and dots
+    clean = clean.replace(/[^\w\s\-.\u0100-\u017F]/g, '');
+    return clean.slice(0, 80);
+}
+
+window.sanitizeUtmValue = sanitizeUtmValue;
+
+/**
+ * Captures UTM parameters and fbclid from current URL and persists in session/localStorage.
  */
 export function captureTrafficSource() {
     try {
@@ -34,11 +62,12 @@ export function captureTrafficSource() {
 
         keys.forEach(key => {
             if (urlParams.has(key)) {
-                const val = urlParams.get(key);
-                if (val) {
-                    sessionStorage.setItem('katten_' + key, val);
+                const rawVal = urlParams.get(key);
+                const safeVal = sanitizeUtmValue(rawVal);
+                if (safeVal) {
+                    sessionStorage.setItem('katten_' + key, safeVal);
                     try {
-                        localStorage.setItem('katten_' + key, val);
+                        localStorage.setItem('katten_' + key, safeVal);
                         localStorage.setItem('katten_' + key + '_ts', Date.now().toString());
                     } catch (e) {}
                     hasNewParams = true;
@@ -46,7 +75,7 @@ export function captureTrafficSource() {
             }
         });
 
-        // Fallback from localStorage (up to 7 days old) if current session is empty
+        // Fallback from localStorage (up to 7 days old) if current session has no UTMs
         if (!hasNewParams) {
             keys.forEach(key => {
                 if (!sessionStorage.getItem('katten_' + key)) {
@@ -54,7 +83,7 @@ export function captureTrafficSource() {
                         const lsVal = localStorage.getItem('katten_' + key);
                         const ts = localStorage.getItem('katten_' + key + '_ts');
                         if (lsVal && ts && (Date.now() - parseInt(ts, 10)) < 7 * 24 * 60 * 60 * 1000) {
-                            sessionStorage.setItem('katten_' + key, lsVal);
+                            sessionStorage.setItem('katten_' + key, sanitizeUtmValue(lsVal));
                         }
                     } catch (e) {}
                 }
@@ -66,44 +95,90 @@ export function captureTrafficSource() {
 }
 
 /**
- * Returns a human-readable traffic source label for WhatsApp attribution and analytics.
+ * Returns a human-readable, safe traffic source label for WhatsApp attribution and analytics.
+ * Fallback policy:
+ *   - Verifiable Meta ads/FB click -> 'FB_Ads[_Campaign]'
+ *   - Verifiable Facebook post/organic -> 'FB_Post[_Campaign]'
+ *   - Verifiable Google Paid -> 'Google_Ads[_Campaign]'
+ *   - Verifiable Custom UTM -> '[Source]_[Campaign]'
+ *   - Verifiable Social referrer -> 'Social_[Network]'
+ *   - Verifiable Search referrer -> 'Google_Organiczny' or 'Search_Organiczny'
+ *   - Verifiable External referrer -> 'Odsylacz_[Domain]'
+ *   - Unidentified visit (no referrer, no UTM) -> 'Bezposredni' (NEVER assumed as organic)
  *
  * @returns {string}
  */
 export function getTrafficSourceLabel() {
     try {
         const fbclid = sessionStorage.getItem('katten_fbclid');
-        const source = sessionStorage.getItem('katten_utm_source') || '';
-        const medium = sessionStorage.getItem('katten_utm_medium') || '';
+        const source = (sessionStorage.getItem('katten_utm_source') || '').toLowerCase().trim();
+        const medium = (sessionStorage.getItem('katten_utm_medium') || '').toLowerCase().trim();
         const campaign = sessionStorage.getItem('katten_utm_campaign') || '';
+        const safeCampaign = sanitizeUtmValue(campaign);
 
-        if (fbclid || medium === 'cpc' || medium === 'paid' || source.toLowerCase().includes('fb_ad') || source.toLowerCase().includes('meta_ad')) {
-            return 'FB_Ads' + (campaign ? '_' + campaign : '');
+        // 1. Meta / Facebook Paid Ads
+        if (fbclid || medium === 'cpc' || medium === 'paid' || source.includes('fb_ad') || source.includes('meta_ad')) {
+            return 'FB_Ads' + (safeCampaign ? '_' + safeCampaign : '');
         }
 
-        if (source.toLowerCase() === 'facebook' || source.toLowerCase() === 'fb') {
-            return 'FB_Post' + (campaign ? '_' + campaign : '');
+        // 2. Facebook Organic Posts
+        if (source === 'facebook' || source === 'fb') {
+            return 'FB_Post' + (safeCampaign ? '_' + safeCampaign : '');
         }
 
-        if (source.toLowerCase() === 'google') {
-            return medium ? 'Google_' + medium : 'Google';
+        // 3. Google Ads
+        if (source === 'google' && (medium === 'cpc' || medium === 'paid')) {
+            return 'Google_Ads' + (safeCampaign ? '_' + safeCampaign : '');
         }
 
+        // 4. Custom specified UTM Source
         if (source) {
-            return source + (campaign ? '_' + campaign : '');
+            const safeSource = sanitizeUtmValue(source);
+            return safeSource + (safeCampaign ? '_' + safeCampaign : '');
         }
 
-        // Check document.referrer
+        // 5. Referrer Inspection
         if (document.referrer) {
-            if (document.referrer.includes('facebook.com') || document.referrer.includes('instagram.com')) {
-                return 'FB_Social';
-            }
-            if (document.referrer.includes('google.')) {
-                return 'Google_Organiczny';
+            try {
+                const refUrl = new URL(document.referrer);
+                const host = refUrl.hostname.toLowerCase();
+
+                // If same origin (internal navigation), check if we already have an attribution
+                if (host === window.location.hostname) {
+                    return 'Bezposredni';
+                }
+
+                // Social Networks
+                if (host.includes('facebook.com') || host.includes('instagram.com') || host.includes('m.me')) {
+                    return 'FB_Social';
+                }
+                if (host.includes('t.co') || host.includes('twitter.com') || host.includes('x.com')) {
+                    return 'Twitter_Social';
+                }
+                if (host.includes('tiktok.com')) {
+                    return 'TikTok_Social';
+                }
+                if (host.includes('youtube.com')) {
+                    return 'YouTube_Social';
+                }
+
+                // Search Engines (Genuine Organic Search)
+                if (host.includes('google.')) {
+                    return 'Google_Organiczny';
+                }
+                if (host.includes('bing.') || host.includes('duckduckgo.') || host.includes('yahoo.')) {
+                    return 'Search_Organiczny';
+                }
+
+                // Generic External Referral
+                return 'Odsylacz';
+            } catch (e) {
+                // If URL parsing fails, continue to direct
             }
         }
 
-        return 'Organiczny';
+        // 6. Safe Truthful Fallback for missing UTMs and empty referrer
+        return 'Bezposredni';
     } catch (e) {
         return 'Bezposredni';
     }
@@ -111,45 +186,86 @@ export function getTrafficSourceLabel() {
 
 window.getTrafficSourceLabel = getTrafficSourceLabel;
 
+/* ─────────────────────────────────────────────────────────────────
+   2. Zero-PII Data Sanitization
+───────────────────────────────────────────────────────────────── */
+
 /**
- * Strips any potential Personally Identifiable Information (PII) before transmission.
+ * Strips all Personally Identifiable Information (PII) before transmission to analytics.
+ * Removes phone, email, name, message fields and any string containing emails or phone numbers.
  *
  * @param {Object} raw
  * @returns {Object}
  */
 export function sanitizeAnalyticsParams(raw) {
-    const clean = Object.assign({}, raw || {});
-    delete clean.phone;
-    delete clean.email;
-    delete clean.name;
-    delete clean.message;
-    delete clean.telephone;
-    delete clean._hp_website;
-    delete clean._token;
+    if (!raw || typeof raw !== 'object') return {};
+
+    const clean = {};
+    const piiKeyPattern = /^(phone|tel|email|mail|imie|nazwisk|address|adres|wiadomosc|message|fullphone|rawphone|_token|_hp)/i;
+    const emailPattern = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
+    const phonePattern = /(?:\+?48)?(?:\s|-)?(?:[0-9]{3})(?:\s|-)?(?:[0-9]{3})(?:\s|-)?(?:[0-9]{3})/;
+
+    Object.keys(raw).forEach(key => {
+        // Drop any PII key
+        if (piiKeyPattern.test(key)) {
+            return;
+        }
+
+        const val = raw[key];
+
+        // Scrub string values that might accidentally contain email or phone
+        if (typeof val === 'string') {
+            if (emailPattern.test(val) || phonePattern.test(val)) {
+                return; // Drop values with embedded PII
+            }
+            // Strip potential control characters
+            clean[key] = val.replace(/[<>"'`]/g, '').trim().slice(0, 120);
+        } else if (typeof val === 'number' || typeof val === 'boolean') {
+            clean[key] = val;
+        }
+    });
+
     return clean;
 }
 
 window.sanitizeAnalyticsParams = sanitizeAnalyticsParams;
 
 /* ─────────────────────────────────────────────────────────────────
-   2. Unified Funnel Dispatcher (GA4 + Meta Pixel)
+   3. Unified Funnel Dispatcher (GA4 + Meta Pixel)
 ───────────────────────────────────────────────────────────────── */
 
+const recentDispatches = new Map();
+
 /**
- * Dispatches conversion funnel events to both GA4 and Meta Pixel.
+ * Dispatches conversion funnel events to both GA4 and Meta Pixel with deduplication.
  *
- * 3-Level Conversion Architecture:
- *   Level 1: contact_cta_click  — User clicked a contact CTA (WhatsApp, Messenger, Phone, Video-Visit).
- *                                  Tracked in Meta as Contact (NOT Lead) to avoid false positive leads.
- *   Level 2: callback_submitted — Valid callback request or form submission accepted by server.
- *                                  Tracked in Meta as Lead (actual submission).
- *   Level 3: qualified_lead     — Real prospect interaction confirmed offline/by breeder.
+ * Distinct Event Meanings:
+ *   • view_cat_profile   — genuine cat profile view
+ *   • quiz_started       — visitor started the quiz
+ *   • quiz_completed     — visitor received result
+ *   • contact_cta_click  — user clicked contact CTA (mapped to Meta 'Contact', NOT 'Lead')
+ *   • callback_submitted — server confirmed acceptance of callback request (mapped to Meta 'Lead')
+ *   • qualified_lead     — breeder verified qualified inquiry
+ *   • sale_completed     — breeder confirmed kitten sale / reservation
  *
  * @param {string} eventName
  * @param {Object} [params]
  */
 export function trackFunnelStep(eventName, params) {
     try {
+        if (!eventName || typeof eventName !== 'string') return;
+
+        // In-memory debouncer: prevent duplicate rapid dispatches (< 600ms)
+        const channelKey = params?.channel || params?.location || '';
+        const catKey = params?.cat_name || '';
+        const dedupeKey = `${eventName}_${channelKey}_${catKey}`;
+        const now = Date.now();
+
+        if (recentDispatches.has(dedupeKey) && (now - recentDispatches.get(dedupeKey) < 600)) {
+            return;
+        }
+        recentDispatches.set(dedupeKey, now);
+
         const cleanParams = sanitizeAnalyticsParams(params);
         cleanParams.traffic_source = getTrafficSourceLabel();
 
@@ -162,36 +278,36 @@ export function trackFunnelStep(eventName, params) {
             }
         }
 
-        // 2. Meta Pixel (Safe Execution)
+        // 2. Meta Pixel (Safe Execution with strict standard event mapping)
         if (typeof window.fbq === 'function') {
             try {
-                // Level 1: Contact CTA Click (Meta Standard 'Contact', NOT 'Lead')
-                if (
-                    eventName === 'contact_cta_click' ||
-                    eventName === 'click_whatsapp_lead' ||
-                    eventName === 'click_messenger_lead' ||
-                    eventName === 'click_phone_lead'
-                ) {
+                // Intent Level: Contact CTA click (Meta Standard 'Contact', NEVER 'Lead')
+                if (eventName === 'contact_cta_click') {
                     window.fbq('track', 'Contact', {
                         content_name: 'contact_cta_click',
-                        channel: cleanParams.channel || eventName,
-                        status: cleanParams.cat_name || 'General',
+                        channel: cleanParams.channel || 'general',
+                        cat_name: cleanParams.cat_name || 'General',
                     });
                 } 
-                // Level 2: Server-Accepted Callback / Form Submission (True Meta 'Lead')
-                else if (
-                    eventName === 'callback_submitted' ||
-                    eventName === 'submit_callback_number' ||
-                    eventName === 'contact_submit'
-                ) {
+                // Conversion Level: Server-accepted callback or form submission (Meta Standard 'Lead')
+                else if (eventName === 'callback_submitted') {
                     window.fbq('track', 'Lead', {
                         content_name: 'callback_submitted',
-                        status: cleanParams.cat_name || 'General',
+                        channel: cleanParams.channel || 'quick_callback',
+                        cat_name: cleanParams.cat_name || 'General',
                     });
-                } 
-                // Level 3: Qualified prospect inquiry confirmed in practice
+                }
+                // Qualification Level: Breeder-verified qualified inquiry
                 else if (eventName === 'qualified_lead') {
                     window.fbq('trackCustom', 'qualified_lead', cleanParams);
+                }
+                // Outcome Level: Confirmed kitten sale / reservation
+                else if (eventName === 'sale_completed') {
+                    window.fbq('track', 'Purchase', {
+                        content_name: cleanParams.cat_name || 'Kitten Reservation',
+                        content_type: 'product',
+                        currency: 'PLN',
+                    });
                 }
 
                 // Custom event for DebugView & Meta Events Manager granular visibility
@@ -208,13 +324,36 @@ export function trackFunnelStep(eventName, params) {
 window.trackFunnelStep = trackFunnelStep;
 
 /* ─────────────────────────────────────────────────────────────────
-   3. Session Helpers
+   4. Verified Outcome Tracking (Breeder Confirmation)
 ───────────────────────────────────────────────────────────────── */
 
-function sendGaEvent(eventName, params) {
-    if (typeof window.gtag !== 'function') return;
-    window.gtag('event', eventName, params || {});
+/**
+ * Records a genuinely verified qualified lead.
+ * To be invoked ONLY when an inquiry is verified by breeder process.
+ *
+ * @param {Object} [details]
+ */
+export function trackQualifiedLead(details) {
+    trackFunnelStep('qualified_lead', details || {});
 }
+
+window.trackQualifiedLead = trackQualifiedLead;
+
+/**
+ * Records a genuinely confirmed kitten sale or formal reservation.
+ * To be invoked ONLY when confirmed through breeder / admin procedure.
+ *
+ * @param {Object} [details]
+ */
+export function trackSaleCompleted(details) {
+    trackFunnelStep('sale_completed', details || {});
+}
+
+window.trackSaleCompleted = trackSaleCompleted;
+
+/* ─────────────────────────────────────────────────────────────────
+   5. Session Helpers
+───────────────────────────────────────────────────────────────── */
 
 function isEventSentThisSession(key) {
     try {
@@ -231,10 +370,59 @@ function markEventSent(key) {
 }
 
 /* ─────────────────────────────────────────────────────────────────
-   4. Traditional Contact Form Tracking
+   6. Automated Event Initializers (Using Safe Global Delegation)
 ───────────────────────────────────────────────────────────────── */
 
-function initContactStart() {
+let isDelegationBound = false;
+
+function bindGlobalClickDelegation() {
+    if (isDelegationBound) return;
+    isDelegationBound = true;
+
+    document.addEventListener('click', function (e) {
+        // Direct Phone Link Click
+        const phoneLink = e.target.closest('a[href^="tel:"]');
+        if (phoneLink) {
+            trackFunnelStep('contact_cta_click', {
+                channel: 'phone',
+                link_type: 'tel_tag',
+            });
+            return;
+        }
+
+        // Direct Email Link Click
+        const emailLink = e.target.closest('a[href^="mailto:"]');
+        if (emailLink) {
+            if (typeof window.gtag === 'function') {
+                try {
+                    window.gtag('event', 'email_click', { link_type: 'mailto_tag' });
+                } catch (err) {}
+            }
+            return;
+        }
+
+        // Direct WhatsApp Link Click (outside modal)
+        const waLink = e.target.closest('a[href*="wa.me"]');
+        if (waLink && !waLink.id.includes('res-modal')) {
+            trackFunnelStep('contact_cta_click', {
+                channel: 'whatsapp',
+                link_type: 'direct_link',
+            });
+            return;
+        }
+
+        // Direct Messenger Link Click (outside modal)
+        const fbLink = e.target.closest('a[href*="m.me"]');
+        if (fbLink && !fbLink.id.includes('res-modal')) {
+            trackFunnelStep('contact_cta_click', {
+                channel: 'messenger',
+                link_type: 'direct_link',
+            });
+        }
+    }, { passive: true });
+}
+
+function initContactFormTracking() {
     const form = document.getElementById('contactForm');
     if (!form) return;
 
@@ -244,8 +432,9 @@ function initContactStart() {
         if (isEventSentThisSession(SESSION_KEY)) return;
         markEventSent(SESSION_KEY);
 
-        sendGaEvent('contact_start', {
-            form_location: 'contact_page',
+        trackFunnelStep('contact_cta_click', {
+            channel: 'traditional_form',
+            location: 'contact_page',
         });
 
         form.removeEventListener('focusin', onContactInteraction);
@@ -256,7 +445,7 @@ function initContactStart() {
     form.addEventListener('input', onContactInteraction, { passive: true });
 }
 
-function initContactSubmit() {
+function initContactSuccessCheck() {
     const successAlert = document.querySelector('.form-alert--success');
     if (!successAlert) return;
 
@@ -265,7 +454,7 @@ function initContactSubmit() {
                           window.location.pathname.includes('kontakt');
     if (!isContactPage) return;
 
-    const SESSION_KEY = 'contact_submit';
+    const SESSION_KEY = 'contact_submit_done';
     if (isEventSentThisSession(SESSION_KEY)) return;
     markEventSent(SESSION_KEY);
 
@@ -273,31 +462,6 @@ function initContactSubmit() {
         channel: 'traditional_form',
     });
 }
-
-function initPhoneClick() {
-    document.querySelectorAll('a[href^="tel:"]').forEach(function (link) {
-        link.addEventListener('click', function () {
-            trackFunnelStep('contact_cta_click', {
-                channel: 'phone',
-                link_type: 'phone_tag',
-            });
-        });
-    });
-}
-
-function initEmailClick() {
-    document.querySelectorAll('a[href^="mailto:"]').forEach(function (link) {
-        link.addEventListener('click', function () {
-            sendGaEvent('email_click', {
-                link_type: 'email',
-            });
-        });
-    });
-}
-
-/* ─────────────────────────────────────────────────────────────────
-   5. Animal View Events
-───────────────────────────────────────────────────────────────── */
 
 function initAnimalView() {
     const profileSection = document.querySelector('[data-ga-page="animal_view"]');
@@ -329,27 +493,40 @@ function initAnimalListView() {
 
     const breedFilter = listSection.dataset.gaBreedFilter || 'all';
 
-    sendGaEvent('animal_list_view', {
-        breed_filter: breedFilter,
-    });
+    if (typeof window.gtag === 'function') {
+        try {
+            window.gtag('event', 'animal_list_view', { breed_filter: breedFilter });
+        } catch (err) {}
+    }
 }
 
 /* ─────────────────────────────────────────────────────────────────
-   6. Boot Analytics
+   7. Boot Analytics
 ───────────────────────────────────────────────────────────────── */
 
 export function bootAnalytics() {
     captureTrafficSource();
-    initContactStart();
-    initContactSubmit();
-    initPhoneClick();
-    initEmailClick();
+    bindGlobalClickDelegation();
+    initContactFormTracking();
+    initContactSuccessCheck();
     initAnimalView();
     initAnimalListView();
 }
 
+// Initial Boot
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', bootAnalytics);
 } else {
     bootAnalytics();
+}
+
+// Livewire Navigation Support
+if (typeof document !== 'undefined') {
+    document.addEventListener('livewire:navigated', () => {
+        captureTrafficSource();
+        initContactFormTracking();
+        initContactSuccessCheck();
+        initAnimalView();
+        initAnimalListView();
+    });
 }
