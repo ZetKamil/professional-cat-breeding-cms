@@ -33,6 +33,32 @@
                         </li>
 
                         <li>
+                            <a href="https://wa.me/48514153204?text={{ rawurlencode('Dzień dobry! Piszę ze strony kotyzmazowieckiejszwajcarii.pl. Chciał(a)bym porozmawiać o kociętach i umówić wideo-wizytę na żywo.') }}" target="_blank" rel="noopener noreferrer" class="contact-fast-link">
+                                <div class="contact-fast-link__icon" style="background: rgba(37, 211, 102, 0.12); color: #25d366;">
+                                    <i data-lucide="message-circle" aria-hidden="true"></i>
+                                </div>
+                                <div class="contact-fast-link__body">
+                                    <span class="contact-fast-link__label">Napisz na WhatsApp</span>
+                                    <span class="contact-fast-link__val">+48 514 153 204</span>
+                                    <span class="contact-fast-link__hint">Wideo-wizyta na żywo • Czat WhatsApp</span>
+                                </div>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="https://m.me/61580668026948" target="_blank" rel="noopener noreferrer" class="contact-fast-link">
+                                <div class="contact-fast-link__icon" style="background: rgba(0, 132, 255, 0.12); color: #0084ff;">
+                                    <i data-lucide="messages-square" aria-hidden="true"></i>
+                                </div>
+                                <div class="contact-fast-link__body">
+                                    <span class="contact-fast-link__label">Facebook Messenger</span>
+                                    <span class="contact-fast-link__val">Koty z Mazowieckiej Szwajcarii</span>
+                                    <span class="contact-fast-link__hint">Wiadomość przez profil hodowli</span>
+                                </div>
+                            </a>
+                        </li>
+
+                        <li>
                             <a href="mailto:biuro@kotyzmazowieckiejszwajcarii.pl" class="contact-fast-link">
                                 <div class="contact-fast-link__icon">
                                     <i data-lucide="mail" aria-hidden="true"></i>

@@ -56,6 +56,7 @@ class ReservationAndCroTest extends TestCase
             'phone'          => '514 153 204',
             'cat_name'       => 'Baron',
             'cat_breed'      => 'Kot Bengalski',
+            'page_url'       => 'https://kotyzmazowieckiejszwajcarii.pl/koty/baron',
             'traffic_source' => 'FB_Ads_bengale',
         ]);
 
@@ -65,10 +66,120 @@ class ReservationAndCroTest extends TestCase
         ]);
 
         Event::assertDispatched(ContactMessageSent::class, function ($event) {
-            return $event->data['phone'] === '514 153 204'
+            return $event->data['phone'] === '+48 514 153 204'
                 && str_contains($event->data['subject'], 'Baron')
-                && str_contains($event->data['message'], 'FB_Ads_bengale');
+                && str_contains($event->data['message'], 'FB_Ads_bengale')
+                && str_contains($event->data['message'], 'https://kotyzmazowieckiejszwajcarii.pl/koty/baron');
         });
+    }
+
+    public function test_quick_callback_normalizes_various_polish_phone_formats(): void
+    {
+        $this->withoutMiddleware(\Illuminate\Routing\Middleware\ThrottleRequests::class);
+
+        $formats = [
+            '514153204',
+            '514 153 204',
+            '514-153-204',
+            '514.153.204',
+            '+48514153204',
+            '0048 514 153 204',
+            '+48 (514) 153-204',
+        ];
+
+        foreach ($formats as $inputPhone) {
+            Event::fake([ContactMessageSent::class]);
+
+            $response = $this->postJson('/api/quick-callback', [
+                'phone' => $inputPhone,
+            ]);
+
+            $response->assertOk();
+            $response->assertJson(['success' => true]);
+
+            Event::assertDispatched(ContactMessageSent::class, function ($event) {
+                return $event->data['phone'] === '+48 514 153 204';
+            });
+        }
+    }
+
+    public function test_quick_callback_rejects_insufficient_digits_or_invalid_characters(): void
+    {
+        // 1. Minimum 7 digits required (reject formatting without enough digits)
+        $resp1 = $this->postJson('/api/quick-callback', ['phone' => '+48 () --']);
+        $resp1->assertStatus(422);
+        $resp1->assertJsonValidationErrors(['phone']);
+
+        // 2. Letters not allowed
+        $resp2 = $this->postJson('/api/quick-callback', ['phone' => '514abc153204']);
+        $resp2->assertStatus(422);
+        $resp2->assertJsonValidationErrors(['phone']);
+
+        // 3. Exceeds 15 digits
+        $resp3 = $this->postJson('/api/quick-callback', ['phone' => '+48 1234567890123456']);
+        $resp3->assertStatus(422);
+        $resp3->assertJsonValidationErrors(['phone']);
+    }
+
+    public function test_quick_callback_handles_notification_failure_gracefully_without_exposing_errors(): void
+    {
+        // Simulate notification dispatch failure (e.g., mail server unreachable)
+        \Illuminate\Support\Facades\Event::listen(ContactMessageSent::class, function () {
+            throw new \RuntimeException('Connection refused to SMTP server: 127.0.0.1:25');
+        });
+
+        $response = $this->postJson('/api/quick-callback', [
+            'phone' => '514 153 204',
+        ]);
+
+        $response->assertStatus(500);
+        $response->assertJson([
+            'success' => false,
+        ]);
+        // Asserts internal technical error is never exposed to visitor
+        $response->assertDontSee('SMTP server');
+        $response->assertDontSee('RuntimeException');
+        $response->assertSee('+48 514 153 204');
+    }
+
+    public function test_quick_callback_throttles_excessive_submissions(): void
+    {
+        Event::fake([ContactMessageSent::class]);
+
+        // Send 5 valid requests (rate limit is 5 per minute)
+        for ($i = 0; $i < 5; $i++) {
+            $response = $this->postJson('/api/quick-callback', [
+                'phone' => '514 153 20' . $i,
+            ]);
+            $response->assertOk();
+        }
+
+        // 6th request must be throttled with HTTP 429
+        $response6 = $this->postJson('/api/quick-callback', [
+            'phone' => '514 153 209',
+        ]);
+        $response6->assertStatus(429);
+    }
+
+    public function test_contact_page_renders_all_primary_business_contact_options(): void
+    {
+        $response = $this->get(route('contact'));
+        $response->assertOk();
+
+        // 1. Direct phone call
+        $response->assertSee('tel:+48514153204');
+        $response->assertSee('+48 514 153 204');
+
+        // 2. WhatsApp
+        $response->assertSee('https://wa.me/48514153204');
+        $response->assertSee('Napisz na WhatsApp');
+
+        // 3. Facebook Messenger
+        $response->assertSee('https://m.me/61580668026948');
+        $response->assertSee('Facebook Messenger');
+
+        // 4. Formularz kontaktowy
+        $response->assertSee('Formularz kontaktowy');
     }
 
     public function test_quick_callback_delivers_notification_to_breeder_via_existing_mechanism(): void
@@ -98,6 +209,8 @@ class ReservationAndCroTest extends TestCase
 
     public function test_quick_callback_supports_international_phone_numbers(): void
     {
+        $this->withoutMiddleware(\Illuminate\Routing\Middleware\ThrottleRequests::class);
+
         $internationalNumbers = [
             '+49 151 2345678', // Germany
             '+44 7911 123456', // UK

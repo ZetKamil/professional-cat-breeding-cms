@@ -182,14 +182,19 @@ window.handleQuickCallbackSubmit = function (event) {
             phone: fullPhone,
             cat_name: cat.name || null,
             cat_breed: cat.breed || null,
+            page_url: window.location.href,
             traffic_source: attribution,
             _hp_website: hpInput ? hpInput.value : '',
         }),
     })
         .then(async response => {
-            const data = await response.json();
+            const data = await response.json().catch(() => ({}));
             if (!response.ok) {
-                throw new Error(data.message || 'Wystąpił błąd podczas wysyłania.');
+                let errMsg = data.message || 'Wystąpił problem podczas wysyłania zgłoszenia.';
+                if (data.errors && data.errors.phone) {
+                    errMsg = Array.isArray(data.errors.phone) ? data.errors.phone[0] : data.errors.phone;
+                }
+                throw new Error(errMsg);
             }
             return data;
         })

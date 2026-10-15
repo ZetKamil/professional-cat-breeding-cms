@@ -19,10 +19,15 @@ class CallbackController extends Controller
     {
         $validated = $request->validated();
 
-        $phone = strip_tags(trim($validated['phone']));
+        $rawPhone = strip_tags(trim($validated['phone']));
+        $phone = $this->normalizePhoneNumber($rawPhone);
+
         $catName = ! empty($validated['cat_name']) ? strip_tags(trim($validated['cat_name'])) : null;
         $catBreed = ! empty($validated['cat_breed']) ? strip_tags(trim($validated['cat_breed'])) : null;
         $source = ! empty($validated['traffic_source']) ? strip_tags(trim($validated['traffic_source'])) : 'Bezpośredni / Nieznane';
+        $pageUrl = ! empty($validated['page_url'])
+            ? strip_tags(trim($validated['page_url']))
+            : ($request->headers->get('referer') ?: url()->previous());
 
         $subject = 'Prośba o szybki kontakt' . ($catName ? ": {$catName}" : '');
         $catInfo = $catName ? "{$catName}" . ($catBreed ? " ({$catBreed})" : '') : 'Ogólne zapytanie o kocięta';
@@ -31,6 +36,7 @@ class CallbackController extends Controller
         $message = "Prośba o szybki kontakt telefoniczny / WhatsApp z modalnej rezerwacji na stronie.\n\n"
             . "Numer telefonu: {$phone}\n"
             . "Zainteresowanie: {$catInfo}\n"
+            . "Podstrona: {$pageUrl}\n"
             . "Źródło ruchu: {$source}\n"
             . "Data zgłoszenia: {$submissionTime}";
 
@@ -49,14 +55,47 @@ class CallbackController extends Controller
                 'message' => 'Dziękujemy! Otrzymaliśmy Twój numer. Skontaktujemy się telefonicznie lub przez WhatsApp tak szybko, jak to możliwe.',
             ]);
         } catch (\Throwable $e) {
+            // Mask phone for GDPR/privacy compliance in log files (e.g. +48 514 *** *04)
+            $maskedPhone = preg_replace('/(\+?\d{2,3}\s*\d{3})\d{3}(\d{2})/', '$1 *** *$2', $phone) ?: '***';
+
             Log::error('Quick callback submission failed: ' . $e->getMessage(), [
-                'exception' => $e,
+                'exception_class' => get_class($e),
+                'cat'             => $catName,
+                'phone_mask'      => $maskedPhone,
             ]);
 
             return response()->json([
                 'success' => false,
-                'message' => 'Wystąpił problem techniczny. Zadzwoń bezpośrednio pod numer: +48 514 153 204.',
+                'message' => 'Wystąpił problem techniczny podczas rejestracji numeru. Prosimy o bezpośredni kontakt telefoniczny pod numerem +48 514 153 204.',
             ], 500);
         }
+    }
+
+    /**
+     * Normalize Polish and international phone numbers into clean, human-readable format.
+     */
+    protected function normalizePhoneNumber(string $phone): string
+    {
+        $trimmed = trim($phone);
+        $digitsOnly = preg_replace('/\D/', '', $trimmed);
+
+        // International 00 prefix -> +
+        if (str_starts_with($trimmed, '00')) {
+            $trimmed = '+' . substr($trimmed, 2);
+        }
+
+        // Standard Polish 9-digit format without country code (e.g., 514153204 or 514 153 204)
+        if (strlen($digitsOnly) === 9 && ! str_starts_with($trimmed, '+')) {
+            return '+48 ' . substr($digitsOnly, 0, 3) . ' ' . substr($digitsOnly, 3, 3) . ' ' . substr($digitsOnly, 6, 3);
+        }
+
+        // Polish number with country code +48 and 9 subsequent digits (+48514153204 -> +48 514 153 204)
+        if (str_starts_with($trimmed, '+48') && strlen($digitsOnly) === 11) {
+            $local = substr($digitsOnly, 2);
+            return '+48 ' . substr($local, 0, 3) . ' ' . substr($local, 3, 3) . ' ' . substr($local, 6, 3);
+        }
+
+        // Standard clean spaces for international numbers
+        return preg_replace('/\s+/', ' ', $trimmed);
     }
 }

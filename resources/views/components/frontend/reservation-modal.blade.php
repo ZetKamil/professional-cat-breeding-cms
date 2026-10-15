@@ -97,8 +97,8 @@
         {{-- 4. 1-Field Callback Form --}}
         <div class="res-modal__callback">
             <div class="res-modal__callback-title">
-                <span>Nie możesz teraz rozmawiać?</span>
-                <small>Zostaw sam numer telefonu — oddzwonimy lub napiszemy na WhatsApp.</small>
+                <strong>Zostaw numer telefonu — skontaktujemy się z Tobą.</strong>
+                <small>Nie możesz teraz rozmawiać? Oddzwonimy lub napiszemy na WhatsApp w dogodnej chwili.</small>
             </div>
 
             <form id="res-modal-callback-form" onsubmit="window.handleQuickCallbackSubmit(event)">
@@ -147,7 +147,7 @@
                                 name="phone" 
                                 required 
                                 placeholder="np. 514 153 204" 
-                                pattern="[0-9\s\-+()]{6,25}"
+                                pattern="[0-9\s\-+().]{6,25}"
                                 autocomplete="tel"
                                 aria-label="Twój numer telefonu"
                             >
@@ -164,7 +164,7 @@
 
         {{-- Footer trust & privacy note --}}
         <div class="res-modal__footer-note">
-            <span>🔒 Twój numer służy wyłącznie do jednorazowego kontaktu w sprawie wybranego kociaka. Nie pobieramy żadnych opłat na stronie.</span>
+            <span>🔒 Twój numer przetwarzamy wyłącznie w celu udzielenia odpowiedzi na zapytanie o kociaka. Szczegółowe informacje o ochronie danych znajdziesz w <a href="{{ route('privacy') }}" target="_blank" rel="noopener" style="color: inherit; text-decoration: underline;">Polityce Prywatności</a>. Rozmowa nie zobowiązuje do rezerwacji.</span>
         </div>
 
     </div>
