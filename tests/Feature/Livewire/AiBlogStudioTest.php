@@ -8,7 +8,11 @@ use App\Models\Animal;
 use Livewire\Livewire;
 
 beforeEach(function () {
-    $this->user = User::factory()->create();
+    $adminRole = \App\Models\Role::firstOrCreate(['name' => 'admin']);
+    $this->user = User::factory()->create([
+        'role_id' => $adminRole->id,
+        'is_active' => true,
+    ]);
     $this->actingAs($this->user);
 });
 

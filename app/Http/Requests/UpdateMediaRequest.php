@@ -14,7 +14,7 @@ class UpdateMediaRequest extends FormRequest
     {
         $media = $this->route('medium') ?: $this->route('media');
 
-        return $this->user()?->can('update', $media instanceof Media ? $media : Media::findOrFail($media)) ?? true;
+        return $media ? ($this->user()?->can('update', $media instanceof Media ? $media : Media::findOrFail($media)) ?? false) : false;
     }
 
     protected function prepareForValidation(): void

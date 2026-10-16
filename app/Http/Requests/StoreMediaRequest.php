@@ -12,7 +12,7 @@ class StoreMediaRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()?->can('create', Media::class) ?? true;
+        return $this->user()?->can('create', Media::class) ?? false;
     }
 
     protected function prepareForValidation(): void

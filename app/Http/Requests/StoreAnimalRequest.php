@@ -13,7 +13,7 @@ class StoreAnimalRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return $this->user()?->can('create', \App\Models\Animal::class) ?? false;
     }
 
     protected function prepareForValidation(): void

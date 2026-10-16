@@ -105,6 +105,10 @@ class SecurityHardeningTest extends TestCase
 
         $responseJson = $this->get('/storage/media/composer.json');
         $this->assertTrue(in_array($responseJson->status(), [403, 404], true));
+
+        // Directory traversal attempts with .. or %2e%2e must be rejected (403 or 404)
+        $this->assertTrue(in_array($this->get('/storage/../../../../something.jpg')->status(), [403, 404], true));
+        $this->assertTrue(in_array($this->get('/storage/%2e%2e/%2e%2e/something.png')->status(), [403, 404], true));
     }
 
     public function test_contact_form_rate_limiting(): void

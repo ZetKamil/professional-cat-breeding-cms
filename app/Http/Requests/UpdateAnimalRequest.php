@@ -13,7 +13,9 @@ class UpdateAnimalRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        $animal = $this->route('animal');
+
+        return $animal ? ($this->user()?->can('update', $animal) ?? false) : false;
     }
 
     protected function prepareForValidation(): void

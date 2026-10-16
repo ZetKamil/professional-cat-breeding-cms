@@ -8,11 +8,9 @@ class UserUpdateRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        /**
-         * Later vervangen we dit door policies.
-         * Nu laten we update toe zolang auth/verified middleware actief is.
-         */
-        return true;
+        $user = $this->route('user');
+
+        return $user ? ($this->user()?->can('update', $user) ?? false) : false;
     }
 
     protected function prepareForValidation(): void

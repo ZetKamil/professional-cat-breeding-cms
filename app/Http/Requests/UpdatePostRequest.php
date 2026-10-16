@@ -10,7 +10,9 @@ class UpdatePostRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        $post = $this->route('post');
+
+        return $post ? ($this->user()?->can('update', $post) ?? false) : false;
     }
 
     /**

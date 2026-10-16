@@ -64,6 +64,11 @@ class AiBlogStudio extends Component
     public string  $topicSource = 'none';
     public ?string $topicDate   = null;
 
+    public function boot(): void
+    {
+        abort_unless(Auth::user()?->can('create', \App\Models\Post::class), 403);
+    }
+
     public function mount(): void
     {
         $topicService       = app(TopicSuggesterService::class);

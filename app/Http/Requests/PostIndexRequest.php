@@ -9,8 +9,7 @@ class PostIndexRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        // Later kan dit naar policies verhuizen.
-        return true;
+        return $this->user()?->can('viewAny', \App\Models\Post::class) ?? false;
     }
 
     public function rules(): array

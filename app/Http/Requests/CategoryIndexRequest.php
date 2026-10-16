@@ -9,7 +9,7 @@ class CategoryIndexRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return $this->user()?->can('viewAny', \App\Models\Category::class) ?? false;
     }
 
     public function rules(): array

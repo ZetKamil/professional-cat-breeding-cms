@@ -84,11 +84,32 @@ Route::get('/sitemap.xml', function () {
 // Direct media streaming route to bypass Apache 403 Forbidden symlink restrictions on shared hosting
 Route::get('/storage/{path}', function ($path) {
     $cleanPath = trim(parse_url($path, PHP_URL_PATH), '/');
+
+    // SECURITY: Reject path traversal attempts (.. or backslash)
+    if (str_contains($cleanPath, '..') || str_contains($cleanPath, '\\')) {
+        abort(404);
+    }
+
     $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp', 'svg', 'gif', 'ico', 'pdf', 'mp4', 'webm', 'jfif', 'bmp', 'avif', 'heic', 'heif'];
     $ext = strtolower(pathinfo($cleanPath, PATHINFO_EXTENSION));
     if ($ext !== '' && ! in_array($ext, $allowedExtensions, true)) {
         abort(404);
     }
+
+    $buildHeaders = function (string $mime, string $ext): array {
+        $headers = [
+            'Content-Type' => $mime,
+            'Cache-Control' => 'public, max-age=31536000',
+            'X-Content-Type-Options' => 'nosniff',
+        ];
+
+        // SECURITY: If SVG, enforce strict CSP sandbox to prevent embedded script execution
+        if ($ext === 'svg' || str_contains($mime, 'svg')) {
+            $headers['Content-Security-Policy'] = "default-src 'none'; style-src 'unsafe-inline'";
+        }
+
+        return $headers;
+    };
 
     $possiblePaths = [
         public_path('storage/'.$cleanPath),
@@ -115,10 +136,7 @@ Route::get('/storage/{path}', function ($path) {
         if (\Illuminate\Support\Facades\File::exists($fullPath) && ! \Illuminate\Support\Facades\File::isDirectory($fullPath)) {
             $mime = @mime_content_type($fullPath) ?: ($ext === 'jfif' || $ext === 'jpg' || $ext === 'jpeg' ? 'image/jpeg' : ($ext === 'png' ? 'image/png' : ($ext === 'webp' ? 'image/webp' : 'application/octet-stream')));
 
-            return response()->file($fullPath, [
-                'Content-Type' => $mime,
-                'Cache-Control' => 'public, max-age=31536000',
-            ]);
+            return response()->file($fullPath, $buildHeaders($mime, $ext));
         }
     }
 
@@ -139,10 +157,7 @@ Route::get('/storage/{path}', function ($path) {
                 if (strtolower($f->getFilename()) === $filenameLower) {
                     $mime = @mime_content_type($f->getPathname()) ?: ($ext === 'jfif' || $ext === 'jpg' || $ext === 'jpeg' ? 'image/jpeg' : ($ext === 'png' ? 'image/png' : ($ext === 'webp' ? 'image/webp' : 'application/octet-stream')));
 
-                    return response()->file($f->getPathname(), [
-                        'Content-Type' => $mime,
-                        'Cache-Control' => 'public, max-age=31536000',
-                    ]);
+                    return response()->file($f->getPathname(), $buildHeaders($mime, $ext));
                 }
             }
         }

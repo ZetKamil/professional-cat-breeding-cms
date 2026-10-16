@@ -9,8 +9,7 @@ class UserIndexRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        // Later kan je hier policies toepassen.
-        return true;
+        return $this->user()?->can('viewAny', \App\Models\User::class) ?? false;
     }
 
     public function rules(): array

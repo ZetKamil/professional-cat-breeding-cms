@@ -11,12 +11,7 @@ class UserStoreRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        /**
-         * authorize() bepaalt toegangsrechten.
-         * Later kan je dit koppelen aan policies/gates.
-         * Voor nu true zodat je CRUD kan bouwen.
-         */
-        return true;
+        return $this->user()?->can('create', \App\Models\User::class) ?? false;
     }
 
     protected function prepareForValidation(): void
