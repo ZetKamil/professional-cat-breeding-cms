@@ -1,8 +1,20 @@
-# Sprint CRO — Sales Funnel Bottom & Live Video-Visits (COMPLETED)
+# Sprint Media Cropping — Reusable Profile Framing & Cropper Module (COMPLETED)
 
 ## Status
+- **Sprint Cropper**: COMPLETED (2026-10-16) — Reusable Image Cropper, Live Card Preview, Base64 & File Bag Pipeline
 - **Sprint CRO**: COMPLETED (2026-10-15) — Reservation Modal, Mobile Sticky Bar, Attribution & Local SEO
 - **Sprint 7**: COMPLETED — Security, SEO, Forms & Final Production QA (2026-08-11)
+
+## Sprint Media Cropping Tasks (2026-10-16)
+- [x] `feat(cms): blade image cropper` — Created `<x-backend.image-cropper />` with Cropper.js, 1:1/4:3/16:9/free ratios, live dual card/avatar preview and global JS API
+- [x] `feat(cms): animal form integration` — Added `[ ✂ Dopasuj kadr obecnego zdjęcia ]` and automatic file selection interception with live card preview
+- [x] `feat(backend): cropped image pipeline` — Added base64 decoding in `StoreAnimalRequest` and `UpdateAnimalRequest` with automatic `UploadedFile` file bag binding
+- [x] `feat(media): featured image preservation` — Updated `MediaService::replace()` to ensure `is_featured = true` for primary animal photo
+- [x] `fix(ui): natural 1:1 card framing` — Updated `animals.css` to `object-position: var(--animal-card-img-position, center center)`
+- [x] `fix(data): daisy portrait crop` — Re-cropped vertical 1536x2048 photo to exact 1:1 square (1536x1536) with full ears and face preservation
+- [x] `test(backend): image crop test suite` — Verified with `AnimalImageCropTest.php` (2 tests, 10 assertions, 100% PASS)
+
+# Sprint CRO — Sales Funnel Bottom & Live Video-Visits (COMPLETED)
 - **Sprint 6.8**: COMPLETED
 - **Sprint 6.5**: COMPLETED
 - **Sprint 6**: IN PROGRESS

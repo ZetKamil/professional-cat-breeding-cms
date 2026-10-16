@@ -2,6 +2,37 @@
 
 ---
 
+## 2026-10-16 — Reusable Image Cropper Module & Profile Photo Framing (`feat(cms)`, `feat(ui)`, `test(backend)`)
+
+### Context
+User reported a critical visual defect on kitten cards (specifically kitten Daisy): taller portrait photos (3:4 aspect ratio, e.g. 1536x2048) were severely truncated at the top, cutting off the kitten's ears and head due to rigid CSS rules (`aspect-ratio: 1/1` + hardcoded `object-position: center 18%`) and the complete absence of a photo framing/cropping tool in the CMS.
+User requested analyzing all AI documentation and implementing a fully reusable, modular photo cropping system allowing the breeder to choose and adjust the exact framing of profile and card photos.
+
+### Technical & Creative Implementation
+1. **Reusable Blade Cropper Component (`resources/views/components/backend/image-cropper.blade.php`)**:
+   - Built a luxury, accessible Bootstrap 5 modal component powered by Cropper.js with zero external framework baggage.
+   - Configurable aspect-ratio presets: **1:1 Square (Animal Card / Profile — default)**, **4:3 Portrait (Gallery)**, **16:9 Landscape (Banner / Blog)**, and **Freeform**.
+   - Rich interactive controls: smooth zoom (+/-), 90° left/right rotation, horizontal flip, and reset to original.
+   - Real-time split preview: dual live previews displaying the exact rounded kitten card (14px radius, shadow) and circular avatar with dynamic resolution indicators (`Math.round(w) x Math.round(h) px`).
+   - Exposes a clean global JS API `window.openImageCropper({ imageSrc, title, aspectRatio, onCrop, onCancel })` allowing any button or form across the CMS to invoke the cropper on demand.
+2. **Animal Edit & Create Form Integration (`form.blade.php`)**:
+   - Added button `[ ✂ Dopasuj kadr obecnego zdjęcia ]` for existing animals, allowing the breeder to re-frame existing photos without searching for the original file.
+   - Automatically intercepts new file selections in `#image`, opening the 1:1 cropper with immediate live card preview.
+   - Added `[ ✂ Popraw / Zmień kadr ]` button to re-open the cropper with memory of the uncropped source image.
+   - Dual transport payload: sets cropped file in native `#image.files` via `DataTransfer` + fallback base64 payload in hidden `#cropped_image`.
+3. **Backend Form Requests & Action Optimization**:
+   - Updated `StoreAnimalRequest` and `UpdateAnimalRequest` `prepareForValidation` to transparently decode base64 payloads into safe `UploadedFile` instances and bind them to the file bag.
+   - Refined `MediaService::replace()` to ensure primary animal photos receive `is_featured = true`.
+4. **CSS Normalization (`animals.css`)**:
+   - Replaced rigid `object-position: center 18%` with `object-position: var(--animal-card-img-position, center center)`, ensuring 1:1 cropped square images are displayed in their entirety without arbitrary top cut-off.
+5. **Daisy Profile Photo Rectification**:
+   - Re-cropped Daisy's source photo (1536x2048) to an exact 1:1 square (1536x1536), fully preserving her ears, eyes, and facial symmetry.
+6. **Testing & QA**:
+   - Created `tests/Feature/Backend/AnimalImageCropTest.php` covering both update and creation flows with base64 payload (10 assertions, 100% PASS).
+   - Verified regression safety with existing suites (`AnimalGalleryUploadTest`, `MediaLibraryTest`, `AnimalTest`, `ReservationAndCroTest`). All passing.
+
+---
+
 ## 2026-10-14 — Animal Domain Expansion: Bengal Bars, Siamese & British Litters Media & Profiles (`feat(animals)`, `feat(media)`)
 
 ### Context

@@ -24,6 +24,37 @@ class UpdateAnimalRequest extends FormRequest
         $isFeatured = $this->boolean('is_featured');
         $publishedAt = $this->input('published_at');
 
+        $cropped = $this->input('cropped_image');
+        if (is_string($cropped) && str_starts_with($cropped, 'data:image/')) {
+            $dataPos = strpos($cropped, ',');
+            if ($dataPos !== false) {
+                $base64Data = substr($cropped, $dataPos + 1);
+                $decoded = base64_decode($base64Data);
+                if ($decoded !== false) {
+                    $tmpFilePath = tempnam(sys_get_temp_dir(), 'crop_img_');
+                    file_put_contents($tmpFilePath, $decoded);
+
+                    preg_match('/^data:(image\/[a-zA-Z0-9\+\-]+);base64/', $cropped, $matches);
+                    $mimeType = $matches[1] ?? 'image/jpeg';
+                    $ext = match ($mimeType) {
+                        'image/png' => 'png',
+                        'image/webp' => 'webp',
+                        default => 'jpg',
+                    };
+
+                    $file = new \Illuminate\Http\UploadedFile(
+                        $tmpFilePath,
+                        'cropped_' . uniqid() . '.' . $ext,
+                        $mimeType,
+                        null,
+                        true
+                    );
+
+                    $this->files->set('image', $file);
+                }
+            }
+        }
+
         $this->merge([
             'name' => $name,
             'slug' => $slug !== '' ? Str::slug($slug) : Str::slug($name),
@@ -60,6 +91,7 @@ class UpdateAnimalRequest extends FormRequest
             'meta_title' => ['nullable', 'string', 'max:255'],
             'meta_description' => ['nullable', 'string', 'max:255'],
 
+            'cropped_image' => ['nullable', 'string'],
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,jfif', 'max:20480'],
             'gallery' => ['nullable', 'array', 'max:50'],
             'gallery.*' => ['image', 'mimes:jpg,jpeg,png,webp,jfif', 'max:20480'],

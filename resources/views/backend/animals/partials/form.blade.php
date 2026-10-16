@@ -191,33 +191,54 @@
                 @endif
             </div>
             <div class="card-body">
+                {{-- Hidden input for cropped base64 image data --}}
+                <input type="hidden" name="cropped_image" id="cropped_image" value="">
+
                 @if($animal->media)
                     <div class="mb-3" id="current-main-image-container">
                         <div class="small text-muted mb-1">Obecne zdjęcie główne:</div>
-                        <img src="{{ $animal->media->url() }}" class="img-fluid rounded border mb-2" alt="Current image" style="max-height: 180px; object-fit: cover;">
-                        <div class="form-text">Wgranie nowego zdjęcia zastąpi obecne zdjęcie główne.</div>
+                        <div class="d-flex align-items-start gap-3 flex-wrap">
+                            <img src="{{ $animal->media->url() }}" id="current-main-img" class="img-fluid rounded border mb-2 shadow-sm" alt="Obecne zdjęcie" style="max-height: 160px; max-width: 160px; object-fit: cover;">
+                            <div class="flex-grow-1">
+                                <button type="button" class="btn btn-sm btn-outline-primary mb-2 shadow-sm" id="btn-crop-existing-main">
+                                    <i class="fas fa-crop-alt me-1"></i> Dopasuj kadr obecnego zdjęcia
+                                </button>
+                                <div class="form-text small text-muted" style="line-height: 1.4;">
+                                    Możesz w każdej chwili poprawić kadr, przybliżyć lub przesunąć obecne zdjęcie kota bez ponownego wgrywania pliku.
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 @endif
 
-                {{-- Live Preview for newly selected main image --}}
+                {{-- Live Preview for newly selected/cropped main image --}}
                 <div class="mb-3 d-none" id="new-main-preview-container">
-                    <div class="small text-success fw-bold mb-1"><i class="fas fa-check-circle me-1"></i>Nowe zdjęcie główne (podgląd):</div>
+                    <div class="small text-success fw-bold mb-1 d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-check-circle me-1"></i>Nowe zdjęcie główne (podgląd kadru):</span>
+                        <span class="badge bg-success" id="cropped-status-badge"><i class="fas fa-crop-alt me-1"></i>Wykadrowane (1:1)</span>
+                    </div>
                     <div class="position-relative d-inline-block">
-                        <img src="" id="new-main-preview-img" class="img-thumbnail rounded" style="max-height: 180px; object-fit: cover;">
+                        <img src="" id="new-main-preview-img" class="img-thumbnail rounded shadow-sm" style="width: 160px; height: 160px; object-fit: cover;">
                         <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1 rounded-circle p-1" style="width: 26px; height: 26px; line-height: 1;" id="cancel-new-main" title="Anuluj zmianę zdjęcia">
                             <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="mt-2 d-flex gap-2">
+                        <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-recrop-main">
+                            <i class="fas fa-crop-alt me-1"></i> Popraw / Zmień kadr
                         </button>
                     </div>
                     <div class="small text-muted mt-1" id="new-main-info"></div>
                 </div>
                 
                 <div class="mb-2">
-                    <label for="image" class="form-label">Zmień / Wgraj zdjęcie główne</label>
+                    <label for="image" class="form-label">Wgraj / Zmień zdjęcie główne</label>
                     <input class="form-control @error('image') is-invalid @enderror" type="file" id="image" name="image" accept="image/jpeg,image/png,image/webp,image/jfif,image/*">
                     @error('image') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     <div class="form-text text-wrap" style="white-space: normal !important; line-height: 1.4;">
                         Maksymalnie 20 MB (JPG, PNG, WEBP, JFIF).<br>
-                        <span class="text-success fw-semibold"><i class="fas fa-magic me-1"></i>Automatyczna optymalizacja / kompresja w locie</span>
+                        <span class="text-primary fw-semibold"><i class="fas fa-crop-alt me-1"></i>Po wybraniu pliku otworzy się interaktywny kadrownik 1:1</span> &bull; 
+                        <span class="text-success fw-semibold"><i class="fas fa-magic me-1"></i>Automatyczna optymalizacja w locie</span>
                     </div>
                 </div>
             </div>
@@ -473,35 +494,140 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Main Image Live Preview
+    // ─── Main Image Interactive Cropping & Live Preview ───────────────
     const mainInput = document.getElementById('image');
+    const croppedInput = document.getElementById('cropped_image');
     const mainPreviewContainer = document.getElementById('new-main-preview-container');
     const mainPreviewImg = document.getElementById('new-main-preview-img');
     const mainPreviewInfo = document.getElementById('new-main-info');
     const cancelMainBtn = document.getElementById('cancel-new-main');
+    const btnCropExisting = document.getElementById('btn-crop-existing-main');
+    const btnRecrop = document.getElementById('btn-recrop-main');
+    const currentContainer = document.getElementById('current-main-image-container');
 
-    if (mainInput && mainPreviewContainer && mainPreviewImg) {
+    // Keep memory of the raw uncropped file to allow re-cropping without re-selecting
+    let currentRawImageSrc = null;
+    let currentRawFileName = '{{ $animal->slug ?: "cat" }}_photo.jpg';
+
+    function applyCroppedResult(blob, dataUrl) {
+        if (!mainPreviewImg || !mainPreviewContainer) return;
+
+        mainPreviewImg.src = dataUrl;
+        mainPreviewContainer.classList.remove('d-none');
+
+        if (croppedInput) {
+            croppedInput.value = dataUrl;
+        }
+
+        if (currentContainer) {
+            currentContainer.classList.add('opacity-50');
+        }
+
+        // Try to update the native file input with a real File object for maximum compatibility
+        try {
+            const dt = new DataTransfer();
+            const croppedFile = new File([blob], 'cropped_' + currentRawFileName, { type: 'image/jpeg' });
+            dt.items.add(croppedFile);
+            mainInput.files = dt.files;
+        } catch (err) {
+            console.warn('DataTransfer not supported, falling back to base64 payload:', err);
+        }
+
+        const k = 1024;
+        const sizeStr = blob.size > k * k 
+            ? (blob.size / (k * k)).toFixed(1) + ' MB'
+            : (blob.size / k).toFixed(0) + ' KB';
+
+        if (mainPreviewInfo) {
+            mainPreviewInfo.innerHTML = `
+                <div class="text-success fw-bold mt-1">
+                    <i class="fas fa-check-circle me-1"></i> Kadr 1:1 zatwierdzony (${sizeStr})
+                </div>
+                <div class="text-muted" style="font-size: 11px;">
+                    Zapisz formularz na dole strony („Zaktualizuj dane kota”), aby zachować zmiany.
+                </div>
+            `;
+        }
+    }
+
+    // 1. When user clicks "Dopasuj kadr obecnego zdjęcia"
+    if (btnCropExisting) {
+        btnCropExisting.addEventListener('click', function() {
+            @if($animal->media)
+                const existingUrl = '{{ $animal->media->url() }}';
+                currentRawImageSrc = existingUrl;
+                currentRawFileName = '{{ basename($animal->media->filename) }}';
+
+                if (typeof window.openImageCropper === 'function') {
+                    window.openImageCropper({
+                        imageSrc: existingUrl,
+                        title: 'Kadrowanie obecnego zdjęcia: {{ addslashes($animal->name) }}',
+                        aspectRatio: 1,
+                        onCrop: applyCroppedResult
+                    });
+                }
+            @endif
+        });
+    }
+
+    // 2. When user selects a new file from disk
+    if (mainInput) {
         mainInput.addEventListener('change', function() {
             if (mainInput.files && mainInput.files[0]) {
                 const file = mainInput.files[0];
-                mainPreviewImg.src = URL.createObjectURL(file);
-                const k = 1024;
-                const sizeStr = file.size > k * k 
-                    ? (file.size / (k * k)).toFixed(1) + ' MB'
-                    : (file.size / k).toFixed(0) + ' KB';
-                mainPreviewInfo.textContent = `${file.name} (${sizeStr})`;
-                mainPreviewContainer.classList.remove('d-none');
-            } else {
-                mainPreviewContainer.classList.add('d-none');
+                currentRawFileName = file.name;
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentRawImageSrc = e.target.result;
+
+                    // Automatically open cropper on file select
+                    if (typeof window.openImageCropper === 'function') {
+                        window.openImageCropper({
+                            imageSrc: currentRawImageSrc,
+                            title: 'Dopasuj kadr nowego zdjęcia: ' + file.name,
+                            aspectRatio: 1,
+                            onCrop: applyCroppedResult
+                        });
+                    } else {
+                        // Fallback simple preview if cropper is not ready
+                        mainPreviewImg.src = currentRawImageSrc;
+                        mainPreviewContainer.classList.remove('d-none');
+                    }
+                };
+                reader.readAsDataURL(file);
             }
         });
+    }
 
-        if (cancelMainBtn) {
-            cancelMainBtn.addEventListener('click', function() {
-                mainInput.value = '';
-                mainPreviewContainer.classList.add('d-none');
-            });
-        }
+    // 3. When user clicks "Popraw / Zmień kadr"
+    if (btnRecrop) {
+        btnRecrop.addEventListener('click', function() {
+            const srcToCrop = currentRawImageSrc || (mainPreviewImg ? mainPreviewImg.src : null);
+            if (srcToCrop && typeof window.openImageCropper === 'function') {
+                window.openImageCropper({
+                    imageSrc: srcToCrop,
+                    title: 'Dostosuj kadr zdjęcia',
+                    aspectRatio: 1,
+                    onCrop: applyCroppedResult
+                });
+            }
+        });
+    }
+
+    // 4. Cancel / reset new crop
+    if (cancelMainBtn) {
+        cancelMainBtn.addEventListener('click', function() {
+            if (mainInput) mainInput.value = '';
+            if (croppedInput) croppedInput.value = '';
+            currentRawImageSrc = null;
+            if (mainPreviewContainer) mainPreviewContainer.classList.add('d-none');
+            if (currentContainer) currentContainer.classList.remove('opacity-50');
+        });
     }
 });
 </script>
+
+{{-- Reusable Cropper Modal Component --}}
+<x-backend.image-cropper id="animalImageCropper" />
+

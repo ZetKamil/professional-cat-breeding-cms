@@ -39,10 +39,10 @@ class MediaService
     public function replace($model, UploadedFile $file, ?string $directory = null): Media
     {
         if ($model->media) {
-            return $this->replaceAction->handle($model->media, $file);
+            return $this->replaceAction->handle($model->media, $file, ['is_featured' => true]);
         }
 
-        return $this->upload($model, $file, $directory);
+        return $this->upload($model, $file, $directory, true);
     }
 
     /**

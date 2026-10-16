@@ -1,5 +1,29 @@
 # DAILY_LOG.md
 
+## 2026-10-16
+
+### Completed
+
+✓ Wdrożenie Reużywalnego Modułu Kadrowania Zdjęć (Image Cropper Module) w CMS (`feat(cms)`, `feat(ui)`, `test(backend)`)
+  - **Reużywalny Komponent Blade `<x-backend.image-cropper>`:**
+    - Utworzono uniwersalny komponent modalu kadrowania bazujący na bibliotece Cropper.js z globalnym interfejsem JavaScript `window.openImageCropper(...)`.
+    - Obsługa predefiniowanych proporcji: **1:1 Kwadrat (Wizytówka / Profilowe)**, **4:3 Portret (Galeria)**, **16:9 (Baner / Blog)** oraz **Swobodny**.
+    - Interaktywne narzędzia manipulacji: płynny zoom (+/-), obrót o 90° w lewo/prawo, odbicie lustrzane w poziomie (Flip H) oraz reset do oryginału.
+    - **Podgląd na żywo (Live Preview):** Równoległy podgląd w kształcie karty kota (zaokrąglenie rogów 14px, cień) oraz okrągłego awatara z wyświetlaniem wymiarów kadru w czasie rzeczywistym.
+  - **Integracja z Formularzem Kota (`form.blade.php`):**
+    - Dodano przycisk `[ ✂ Dopasuj kadr obecnego zdjęcia ]` przy głównym zdjęciu kota – hodowca może w dowolnej chwili skorygować kadr bez konieczności ponownego wyszukiwania i wgrywania pliku z telefonu.
+    - Automatyczne wywoływanie kadrownika 1:1 natychmiast po wybraniu nowego pliku z dysku z możliwością późniejszej korekty przyciskiem `[ ✂ Popraw / Zmień kadr ]`.
+    - Płynny eksport do formatu JPEG/WebP o wysokiej rozdzielczości (Blob + File API DataTransfer z bezpiecznym fallbackiem base64 `cropped_image`).
+  - **Backend & Walidacja (`StoreAnimalRequest`, `UpdateAnimalRequest`, `MediaService`):**
+    - Wzbogacono FormRequesty o dekodowanie payloadu `cropped_image` w `prepareForValidation` i automatyczne wstrzykiwanie bezpiecznego obiektu `UploadedFile` do kolekcji plików walidacji.
+    - `MediaService->replace()` zapewnia flagę `is_featured = true` dla głównego zdjęcia oraz automatyczne przejście przez `ImageOptimizerService`.
+  - **Aktualizacja Stylów Wizytówek (`animals.css`):**
+    - Zastąpiono sztywne `object-position: center 18%` elastyczną zmienną `var(--animal-card-img-position, center center)`, co w połączeniu z wykadrowanym plikiem 1:1 gwarantuje 100% widoczności sylwetki, uszu i pyszczka bez ucinania.
+  - **Rozwiązanie problemu kotki Daisy:**
+    - Wykadrowano pionowe zdjęcie Daisy (1536x2048) do idealnego kwadratu 1536x1536 z pełnym wyeksponowaniem uszu i pyszczka.
+  - **Testy automatyczne:**
+    - Utworzono testy funkcjonalne w `tests/Feature/Backend/AnimalImageCropTest.php` (100% PASS, 10 asercji).
+
 ## 2026-10-15
 
 ### Completed
