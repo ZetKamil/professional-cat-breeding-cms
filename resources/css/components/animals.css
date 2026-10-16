@@ -130,6 +130,24 @@
     line-height: 1.25;
 }
 
+.animal-card__timeline {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-ink-muted-80);
+    margin-top: 4px;
+    line-height: 1.3;
+}
+
+.animal-card__timeline-icon {
+    width: 14px;
+    height: 14px;
+    color: var(--color-gold, #c89d5c);
+    flex-shrink: 0;
+}
+
 .animal-card__footer {
     display: flex;
     align-items: center;

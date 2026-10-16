@@ -6,6 +6,7 @@
 @php
     $cardStatusLabel = $animal->pickupBadgeLabel();
     $badgeVariant = $animal->pickupBadgeVariant();
+    $timelineLabel = $animal->pickupTimelineLabel();
 @endphp
 
 <x-frontend.card :href="route('frontend.animals.show', $animal)" hoverable class="animal-card" aria-label="Profil kota: {{ $animal->name }} ({{ $animal->breed }})">
@@ -51,6 +52,13 @@
         </div>
 
         <h3 class="animal-card__name">{{ $animal->name }}</h3>
+
+        @if($timelineLabel)
+            <div class="animal-card__timeline">
+                <i data-lucide="calendar" class="animal-card__timeline-icon" aria-hidden="true"></i>
+                <span class="animal-card__timeline-text">{{ $timelineLabel }}</span>
+            </div>
+        @endif
 
         <div class="animal-card__footer">
             <span class="animal-card__quick-reserve"

@@ -181,6 +181,12 @@
                             <x-frontend.badge :variant="$animal->pickupBadgeVariant()">
                                 {{ $animal->pickupBadgeLabel() }}
                             </x-frontend.badge>
+                            @if($timeline = $animal->pickupTimelineLabel())
+                                <span class="animal-profile__badge-timeline">
+                                    <i data-lucide="calendar" class="w-3.5 h-3.5" aria-hidden="true"></i>
+                                    {{ $timeline }}
+                                </span>
+                            @endif
                             <span class="animal-profile__badge-gender text-ink-muted-80">
                                 {{ $animal->gender->symbol() }} {{ $animal->gender->label() }}
                             </span>
@@ -259,13 +265,20 @@
                             </div>
                             <span class="animal-spec-card__value">{{ $animal->pickupBadgeLabel() }}</span>
                         </div>
-                        @if($animal->pickupWindowFormatted() && ($animal->isEarlyReservation() || $animal->isInPickupWindow()))
+                        @if($animal->pickupTimelineLabel())
                             <div class="animal-spec-card" role="listitem">
                                 <div class="animal-spec-card__top">
-                                    <span class="animal-spec-card__label">Okno odbioru (12–14 tyg.)</span>
+                                    <span class="animal-spec-card__label">Termin odbioru</span>
                                     <i data-lucide="calendar-check" class="animal-spec-card__icon" aria-hidden="true"></i>
                                 </div>
-                                <span class="animal-spec-card__value">{{ $animal->pickupWindowFormatted() }}</span>
+                                <span class="animal-spec-card__value">
+                                    {{ $animal->pickupTimelineLabel() }}
+                                    @if($animal->pickupWindowFormatted())
+                                        <small style="display:block; font-size:0.75rem; color:var(--color-ink-muted-80); margin-top:2px;">
+                                            (Okno 12–14 tyg.: {{ $animal->pickupWindowFormatted() }})
+                                        </small>
+                                    @endif
+                                </span>
                             </div>
                         @endif
                     </div>
@@ -284,9 +297,14 @@
 
                         @if($animal->isEarlyReservation() || $animal->isInPickupWindow())
                             <div style="margin-top: 14px; padding: 12px 16px; background: rgba(200, 157, 92, 0.08); border-left: 3px solid var(--color-gold, #c89d5c); border-radius: 6px; font-size: 0.88rem; line-height: 1.5; color: var(--color-ink-muted-80, #d1cfc7);">
-                                <strong>Zasada odbioru:</strong> Kocięta mogą wyjeżdżać do nowych domów w wieku 12–14 tygodni, po potwierdzeniu gotowości konkretnego kociaka.
-                                @if($animal->pickupWindowFormatted())
-                                    Przewidywane okno odbioru: <strong>{{ $animal->pickupWindowFormatted() }}</strong>.
+                                <strong>Zasada odbioru:</strong> Zgodnie ze standardami felinologii kocięta mogą wyjeżdżać do nowych domów w wieku 12–14 tygodni, po pełnej domowej socjalizacji i komplecie szczepień.
+                                @if($animal->isEarlyReservation())
+                                    Kotek jest obecnie dostępny do rezerwacji — <strong>{{ mb_strtolower($animal->pickupTimelineLabel()) }}</strong>
+                                    @if($animal->pickupWindowFormatted())
+                                        (przewidywane okno odbioru: <strong>{{ $animal->pickupWindowFormatted() }}</strong>).
+                                    @endif
+                                @else
+                                    Kotek ukończył już 12. tydzień życia i jest <strong>gotowy do odbioru od zaraz</strong>.
                                 @endif
                             </div>
                         @endif

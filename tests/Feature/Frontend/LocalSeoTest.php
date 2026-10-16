@@ -179,8 +179,9 @@ class LocalSeoTest extends TestCase
         $response = $this->get('/hodowla-kotow-warszawa');
         $response->assertOk();
         $response->assertSee('Kajko Regionalny');
-        // Because the cat is 6 weeks old, pickup window is 12–14 weeks (early reservation badge)
-        $response->assertSee('Wczesna rezerwacja');
+        // Because the cat is 6 weeks old, pickup window is 12–14 weeks (early reservation stage)
+        $response->assertSee('Dostępny do rezerwacji');
+        $response->assertSee('Odbiór: za ok. 6 tyg.');
     }
 
     public function test_footer_contains_internal_links_to_all_local_seo_pages(): void

@@ -250,9 +250,7 @@
                                         $ageInWeeks = $animal->ageInWeeks();
                                         $isStrictlyReadyToLeave = $hasDob && $ageInWeeks >= 12;
                                         $badgeLabel = $animal->pickupBadgeLabel();
-                                        if (! $hasDob) {
-                                            $badgeLabel = 'Dostępny do rezerwacji';
-                                        }
+                                        $timelineLabel = $animal->pickupTimelineLabel();
                                     @endphp
                                     <div class="quiz-cat-item" 
                                          data-breed="{{ $breedCategory }}" 
@@ -270,6 +268,9 @@
                                             <p>{{ $animal->breed }} • {{ $animal->gender->label() }}</p>
                                             <span class="quiz-cat-item__status">
                                                 {{ $isStrictlyReadyToLeave ? '🟢 ' . $badgeLabel : '⏳ ' . $badgeLabel }}
+                                                @if($timelineLabel)
+                                                    <small style="display:block; font-size:0.75rem; opacity:0.85; margin-top:2px;">{{ $timelineLabel }}</small>
+                                                @endif
                                             </span>
                                         </div>
                                         <button type="button" 

@@ -394,6 +394,27 @@
     gap: var(--sp-sm);
 }
 
+.animal-profile__badge-timeline {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-ink-muted-80);
+    background: rgba(200, 157, 92, 0.08);
+    border: 1px solid rgba(200, 157, 92, 0.28);
+    padding: 3px 10px;
+    border-radius: 9999px;
+}
+
+.animal-profile__badge-timeline svg,
+.animal-profile__badge-timeline i {
+    color: var(--color-gold, #c89d5c);
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+}
+
 .animal-profile__name {
     margin-top: var(--sp-xs);
     color: var(--color-ink);

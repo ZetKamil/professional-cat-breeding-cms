@@ -500,13 +500,12 @@ class Animal extends Model
     }
 
     /**
-     * Unified, rule-compliant badge label for public cards, profiles, and admin tables.
+     * Unified, rule-compliant status badge label for public cards, profiles, and admin tables.
      *
      * Rules:
      * - Non-available animals retain their domain status (e.g., Zarezerwowany, Kotka Hodowlana, W nowym domu).
-     * - Available kittens < 12 weeks: "Wczesna rezerwacja • za X tyg."
-     * - Available kittens 12–14 weeks: "Gotowy do odbioru (12–14 tyg.)"
-     * - Available kittens > 14 weeks: "Gotowy do odbioru • Odchowany"
+     * - Available kittens < 12 weeks: "Dostępny do rezerwacji"
+     * - Available kittens >= 12 weeks: "Gotowy do odbioru"
      * - Available without DOB: safe fallback "Dostępny do rezerwacji"
      */
     public function pickupBadgeLabel(?Carbon $targetDate = null): string
@@ -526,16 +525,44 @@ class Animal extends Model
         }
 
         if ($age < 12) {
+            return 'Dostępny do rezerwacji';
+        }
+
+        return 'Gotowy do odbioru';
+    }
+
+    /**
+     * Human-friendly timeline label for pickup readiness.
+     *
+     * Rules:
+     * - Only available animals with a valid date of birth have a timeline countdown.
+     * - < 12 weeks: "Odbiór: za ok. X tyg."
+     * - >= 12 weeks: "Gotowy do odbioru od zaraz"
+     * - Non-available or missing DOB: null
+     */
+    public function pickupTimelineLabel(?Carbon $targetDate = null): ?string
+    {
+        if ($this->status !== AnimalStatus::Available) {
+            return null;
+        }
+
+        if (! $this->date_of_birth) {
+            return null;
+        }
+
+        $age = $this->ageInWeeks($targetDate);
+
+        if ($age === null) {
+            return null;
+        }
+
+        if ($age < 12) {
             $weeksUntil = $this->weeksUntilPickupWindow($targetDate);
 
-            return "Wczesna rezerwacja • za {$weeksUntil} tyg.";
+            return "Odbiór: za ok. {$weeksUntil} tyg.";
         }
 
-        if ($age <= 14) {
-            return 'Gotowy do odbioru (12–14 tyg.)';
-        }
-
-        return 'Gotowy do odbioru • Odchowany';
+        return 'Gotowy do odbioru od zaraz';
     }
 
     /**

@@ -444,7 +444,8 @@ class ReservationAndCroTest extends TestCase
 
         // Verify Early Cat is flagged with data-ready="future" and pickup window label
         $response->assertSee('KotekWczesny');
-        $response->assertSee('Wczesna rezerwacja • za 6 tyg.');
+        $response->assertSee('Dostępny do rezerwacji');
+        $response->assertSee('Odbiór: za ok. 6 tyg.');
 
         // Verify Missing DOB Cat is flagged with data-ready="future" and safe fallback badge
         $response->assertSee('KotekBezDaty');
@@ -553,7 +554,8 @@ class ReservationAndCroTest extends TestCase
         $this->assertFalse($youngKitten->isReadyNow($now));
         $this->assertFalse($youngKitten->isOdchowany($now));
         $this->assertSame(8, $youngKitten->weeksUntilPickupWindow($now));
-        $this->assertSame('Wczesna rezerwacja • za 8 tyg.', $youngKitten->pickupBadgeLabel($now));
+        $this->assertSame('Dostępny do rezerwacji', $youngKitten->pickupBadgeLabel($now));
+        $this->assertSame('Odbiór: za ok. 8 tyg.', $youngKitten->pickupTimelineLabel($now));
         $this->assertSame('warning', $youngKitten->pickupBadgeVariant($now));
 
         $window = $youngKitten->pickupWindow();
@@ -573,7 +575,8 @@ class ReservationAndCroTest extends TestCase
         $this->assertTrue($boundary12->isReadyNow($now));
         $this->assertFalse($boundary12->isOdchowany($now));
         $this->assertSame(0, $boundary12->weeksUntilPickupWindow($now));
-        $this->assertSame('Gotowy do odbioru (12–14 tyg.)', $boundary12->pickupBadgeLabel($now));
+        $this->assertSame('Gotowy do odbioru', $boundary12->pickupBadgeLabel($now));
+        $this->assertSame('Gotowy do odbioru od zaraz', $boundary12->pickupTimelineLabel($now));
         $this->assertSame('gold', $boundary12->pickupBadgeVariant($now));
 
         // 3. Kitten at 13 weeks old (inside 12–14 week window)
@@ -585,7 +588,8 @@ class ReservationAndCroTest extends TestCase
         $this->assertSame(13, $kitten13->ageInWeeks($now));
         $this->assertTrue($kitten13->isInPickupWindow($now));
         $this->assertTrue($kitten13->isReadyNow($now));
-        $this->assertSame('Gotowy do odbioru (12–14 tyg.)', $kitten13->pickupBadgeLabel($now));
+        $this->assertSame('Gotowy do odbioru', $kitten13->pickupBadgeLabel($now));
+        $this->assertSame('Gotowy do odbioru od zaraz', $kitten13->pickupTimelineLabel($now));
 
         // 4. Kitten at boundary: exactly 14 weeks old (upper limit of pickup window)
         $boundary14 = Animal::factory()->create([
@@ -596,7 +600,8 @@ class ReservationAndCroTest extends TestCase
         $this->assertSame(14, $boundary14->ageInWeeks($now));
         $this->assertTrue($boundary14->isInPickupWindow($now));
         $this->assertFalse($boundary14->isOdchowany($now));
-        $this->assertSame('Gotowy do odbioru (12–14 tyg.)', $boundary14->pickupBadgeLabel($now));
+        $this->assertSame('Gotowy do odbioru', $boundary14->pickupBadgeLabel($now));
+        $this->assertSame('Gotowy do odbioru od zaraz', $boundary14->pickupTimelineLabel($now));
 
         // 5. Kitten older than 14 weeks (e.g. 16 weeks old)
         $olderKitten = Animal::factory()->create([
@@ -610,7 +615,8 @@ class ReservationAndCroTest extends TestCase
         $this->assertTrue($olderKitten->isReadyNow($now));
         $this->assertTrue($olderKitten->isOdchowany($now));
         $this->assertSame(0, $olderKitten->weeksUntilPickupWindow($now));
-        $this->assertSame('Gotowy do odbioru • Odchowany', $olderKitten->pickupBadgeLabel($now));
+        $this->assertSame('Gotowy do odbioru', $olderKitten->pickupBadgeLabel($now));
+        $this->assertSame('Gotowy do odbioru od zaraz', $olderKitten->pickupTimelineLabel($now));
         $this->assertSame('gold', $olderKitten->pickupBadgeVariant($now));
 
         // 6. Missing / null birth date
@@ -709,24 +715,24 @@ class ReservationAndCroTest extends TestCase
         // Verify Early Reservation cat profile: show page displays early reservation badge and pickup window
         $earlyProfile = $this->get(route('frontend.animals.show', $earlyKitten));
         $earlyProfile->assertOk();
-        $earlyProfile->assertSee('Wczesna rezerwacja • za 7 tyg.');
-        $earlyProfile->assertSee('Okno odbioru (12–14 tyg.)');
+        $earlyProfile->assertSee('Dostępny do rezerwacji');
+        $earlyProfile->assertSee('Odbiór: za ok. 7 tyg.');
         $earlyProfile->assertSee($earlyKitten->pickupWindowFormatted());
         $earlyProfile->assertSee('Zasada odbioru:');
-        $earlyProfile->assertSee('Kocięta mogą wyjeżdżać do nowych domów w wieku 12–14 tygodni, po potwierdzeniu gotowości konkretnego kociaka.');
 
         // Verify Ready cat profile: show page displays 12-14 weeks ready badge
         $readyProfile = $this->get(route('frontend.animals.show', $readyKitten));
         $readyProfile->assertOk();
-        $readyProfile->assertSee('Gotowy do odbioru (12–14 tyg.)');
-        $readyProfile->assertSee('Okno odbioru (12–14 tyg.)');
+        $readyProfile->assertSee('Gotowy do odbioru');
+        $readyProfile->assertSee('Gotowy do odbioru od zaraz');
         $readyProfile->assertSee($readyKitten->pickupWindowFormatted());
 
         // Verify Homepage cards display matching badges
         $homeResponse = $this->get(route('home'));
         $homeResponse->assertOk();
-        $homeResponse->assertSee('Wczesna rezerwacja • za 7 tyg.');
-        $homeResponse->assertSee('Gotowy do odbioru (12–14 tyg.)');
+        $homeResponse->assertSee('Dostępny do rezerwacji');
+        $homeResponse->assertSee('Odbiór: za ok. 7 tyg.');
+        $homeResponse->assertSee('Gotowy do odbioru');
 
         \Illuminate\Support\Carbon::setTestNow();
     }
@@ -773,9 +779,11 @@ class ReservationAndCroTest extends TestCase
         $catalogue = $this->get(route('frontend.animals.index'));
         $catalogue->assertOk();
         $catalogue->assertSee('AdaBrytyjska');
-        $catalogue->assertSee('Wczesna rezerwacja • za 7 tyg.');
+        $catalogue->assertSee('Dostępny do rezerwacji');
+        $catalogue->assertSee('Odbiór: za ok. 7 tyg.');
         $catalogue->assertSee('CarlosBengalski');
-        $catalogue->assertSee('Gotowy do odbioru (12–14 tyg.)');
+        $catalogue->assertSee('Gotowy do odbioru');
+        $catalogue->assertSee('Gotowy do odbioru od zaraz');
         $catalogue->assertSee('ZafiraZarezerwowana');
         $catalogue->assertSee('Zarezerwowany');
 
@@ -783,16 +791,18 @@ class ReservationAndCroTest extends TestCase
         $adaProfile = $this->get(route('frontend.animals.show', $earlyCat));
         $adaProfile->assertOk();
         $adaProfile->assertSee('AdaBrytyjska');
-        $adaProfile->assertSee('Wczesna rezerwacja • za 7 tyg.');
+        $adaProfile->assertSee('Dostępny do rezerwacji');
+        $adaProfile->assertSee('Odbiór: za ok. 7 tyg.');
         $adaProfile->assertSee($earlyCat->pickupWindowFormatted());
-        $adaProfile->assertSee("window.openReservationModal('AdaBrytyjska', 'Kot Brytyjski', 'Wczesna rezerwacja • za 7 tyg.')", false);
+        $adaProfile->assertSee("window.openReservationModal('AdaBrytyjska', 'Kot Brytyjski', 'Dostępny do rezerwacji')", false);
 
         // Profile checks: Carlos
         $carlosProfile = $this->get(route('frontend.animals.show', $readyCat));
         $carlosProfile->assertOk();
         $carlosProfile->assertSee('CarlosBengalski');
-        $carlosProfile->assertSee('Gotowy do odbioru (12–14 tyg.)');
-        $carlosProfile->assertSee("window.openReservationModal('CarlosBengalski', 'Kot Bengalski', 'Gotowy do odbioru (12–14 tyg.)')", false);
+        $carlosProfile->assertSee('Gotowy do odbioru');
+        $carlosProfile->assertSee('Gotowy do odbioru od zaraz');
+        $carlosProfile->assertSee("window.openReservationModal('CarlosBengalski', 'Kot Bengalski', 'Gotowy do odbioru')", false);
 
         // Profile checks: Zafira (Reserved)
         $zafiraProfile = $this->get(route('frontend.animals.show', $reservedCat));

@@ -76,7 +76,7 @@
                         Zasada hodowli: kocięta wyjeżdżają do nowych domów w wieku 12–14 tygodni, po potwierdzeniu gotowości konkretnego kociaka.
                         @if($animal->date_of_birth)
                             <br><strong>Obliczone okno odbioru (12–14 tyg.):</strong> {{ $animal->pickupWindowFormatted() }}
-                            (Wiek: {{ $animal->ageInWeeks() }} tyg. &bull; Status wizytówki: {{ $animal->pickupBadgeLabel() }})
+                            (Wiek: {{ $animal->ageInWeeks() }} tyg. &bull; Status: {{ $animal->pickupBadgeLabel() }}@if($animal->pickupTimelineLabel()) &bull; {{ $animal->pickupTimelineLabel() }}@endif)
                         @endif
                     </div>
                     @error('date_of_birth') <div class="invalid-feedback">{{ $message }}</div> @enderror
