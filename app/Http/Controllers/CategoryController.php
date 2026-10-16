@@ -16,6 +16,8 @@ class CategoryController extends Controller
      */
     public function index(CategoryIndexRequest $request)
     {
+        $this->authorize('viewAny', Category::class);
+
         $filters = $request->defaults();
 
         $categories = Category::query()
@@ -38,6 +40,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Category::class);
+
         return view('backend.categories.create');
     }
 
@@ -46,6 +50,8 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
+        $this->authorize('create', Category::class);
+
         $data = $request->validated();
 
         try {
@@ -76,6 +82,8 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
+        $this->authorize('view', $category);
+
         //        $category->loadCount('posts');
 
         return view('backend.categories.show', [
@@ -88,6 +96,8 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
+        $this->authorize('update', $category);
+
         return view('backend.categories.edit', [
             'category' => $category,
         ]);
@@ -98,6 +108,8 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request, Category $category)
     {
+        $this->authorize('update', $category);
+
         $data = $request->validated();
 
         try {
@@ -128,6 +140,8 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        $this->authorize('delete', $category);
+
         try {
             $category->delete();
 
@@ -145,6 +159,8 @@ class CategoryController extends Controller
         try {
             $category = Category::withTrashed()->findOrFail($id);
 
+            $this->authorize('restore', $category);
+
             $category->restore();
 
             return redirect()
@@ -160,6 +176,8 @@ class CategoryController extends Controller
     {
         try {
             $category = Category::withTrashed()->findOrFail($id);
+
+            $this->authorize('forceDelete', $category);
 
             if ($category->posts()->exists()) {
                 return back()->with('error', 'Category cannot be permanently deleted because posts are still linked to it.');

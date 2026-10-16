@@ -68,7 +68,6 @@ class ProductionSmokeTest extends TestCase
             '/o-hodowli',
             '/kontakt',
             '/login',
-            '/register',
             '/forgot-password',
             '/polityka-prywatnosci',
             '/regulamin',
@@ -83,6 +82,9 @@ class ProductionSmokeTest extends TestCase
             $response = $this->get($route);
             $response->assertOk();
         }
+
+        // Security check: public registration must be disabled (returns 404)
+        $this->get('/register')->assertNotFound();
     }
 
     // ─── 2. AUTHENTICATED BACKEND ROUTES SMOKE TEST ───────────────────────────

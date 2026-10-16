@@ -53,6 +53,9 @@ class SecurityHardeningTest extends TestCase
             '/dashboard',
             '/check-media',
             '/fix-storage',
+            '/deploy-now',
+            '/deploy-sync',
+            '/sync-blog-articles',
             '/backend/users',
             '/backend/roles',
             '/backend/categories',
@@ -73,12 +76,16 @@ class SecurityHardeningTest extends TestCase
         }
     }
 
-    public function test_non_admin_user_cannot_execute_fix_storage(): void
+    public function test_non_admin_user_cannot_execute_admin_maintenance_routes(): void
     {
         $user = User::factory()->create(); // standard user without admin role
 
-        $response = $this->actingAs($user)->get('/fix-storage');
-        $response->assertForbidden();
+        $this->actingAs($user)->get('/fix-storage')->assertForbidden();
+        $this->actingAs($user)->get('/check-media')->assertForbidden();
+        $this->actingAs($user)->get('/check-mail')->assertForbidden();
+        $this->actingAs($user)->get('/deploy-now')->assertForbidden();
+        $this->actingAs($user)->get('/deploy-sync')->assertForbidden();
+        $this->actingAs($user)->get('/sync-blog-articles')->assertForbidden();
     }
 
     public function test_media_streaming_rejects_directory_traversal_and_disallowed_extensions(): void

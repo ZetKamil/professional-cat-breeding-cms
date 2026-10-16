@@ -10,7 +10,9 @@ class UpdateCategoryRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        $category = $this->route('category');
+
+        return $category ? ($this->user()?->can('update', $category) ?? false) : false;
     }
 
     protected function prepareForValidation(): void

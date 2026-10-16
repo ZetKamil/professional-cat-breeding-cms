@@ -151,8 +151,12 @@ Route::get('/storage/{path}', function ($path) {
     abort(404);
 })->where('path', '.*');
 
-// Diagnostic route to inspect media status on hosting (auth required)
+// Diagnostic route to inspect media status on hosting (auth & admin required)
 Route::match(['get', 'post'], '/check-media', function (\Illuminate\Http\Request $request) {
+    if (auth()->user()?->role?->name !== 'admin') {
+        abort(403, 'Tylko administrator moze uruchomic diagnostyke bazy i zdjec.');
+    }
+
     $migrateOutput = null;
     if ($request->has('run_migrate') || $request->input('run_migrate') === '1') {
         try {
@@ -269,8 +273,12 @@ Route::match(['get', 'post'], '/check-media', function (\Illuminate\Http\Request
     return $output;
 })->middleware(['auth', 'verified', 'active']);
 
-// One-shot sync endpoint for blog articles & media on hosting
+// One-shot sync endpoint for blog articles & media on hosting (admin only)
 Route::get('/sync-blog-articles', function () {
+    if (auth()->user()?->role?->name !== 'admin') {
+        abort(403, 'Tylko administrator moze uruchomic synchronizacje artykulow bloga.');
+    }
+
     try {
         $blogPath = base_path('BLOG');
         if (\Illuminate\Support\Facades\File::isDirectory($blogPath)) {
@@ -306,7 +314,7 @@ Route::get('/sync-blog-articles', function () {
             'message' => $e->getMessage(),
         ], 500);
     }
-});
+})->middleware(['auth', 'verified', 'active']);
 
 // Diagnostic route to test and inspect SMTP / Mail configuration on hosting (admin only)
 Route::match(['get', 'post'], '/check-mail', function (\Illuminate\Http\Request $request) {
@@ -483,8 +491,12 @@ Route::get('/fix-storage', function () {
     }
 })->middleware(['auth', 'verified', 'active']);
 
-// One-click Auto Deploy & Sync Route for hosting (triggers git pull & seo article import)
+// One-click Auto Deploy & Sync Route for hosting (triggers git pull & seo article import - admin only)
 Route::match(['get', 'post'], '/deploy-now', function () {
+    if (auth()->user()?->role?->name !== 'admin') {
+        abort(403, 'Tylko administrator moze uruchomic aktualizacje hostingu.');
+    }
+
     try {
         $gitOutput = shell_exec('git pull origin main 2>&1');
         \Illuminate\Support\Facades\Artisan::call('seo:import-articles');
@@ -509,7 +521,7 @@ Route::match(['get', 'post'], '/deploy-now', function () {
             .'<p>'.e($e->getMessage()).'</p>'
             .'</div>';
     }
-});
+})->middleware(['auth', 'verified', 'active']);
 
 // backend dashboard
 Route::get('/dashboard', [DashboardController::class, 'index'])
@@ -573,8 +585,12 @@ Route::middleware(['auth', 'verified', 'active'])
         Route::resource('media', MediaController::class);
     });
 
-// Deployment sync route: pulls latest code from git, runs migrations & clears cache via browser
+// Deployment sync route: pulls latest code from git, runs migrations & clears cache via browser (admin only)
 Route::get('/deploy-sync', function (\Illuminate\Http\Request $request) {
+    if (auth()->user()?->role?->name !== 'admin') {
+        abort(403, 'Tylko administrator moze uruchomic te operacje.');
+    }
+
     try {
         $gitOut = 'Funkcja exec jest wyłączona na serwerze.';
         if (function_exists('exec')) {
@@ -637,6 +653,6 @@ Route::get('/deploy-sync', function (\Illuminate\Http\Request $request) {
         return response("<div style='font-family:sans-serif; padding:30px; max-width:700px; margin:40px auto; background:#fef2f2; border:1px solid #f87171; border-radius:12px; color:#991b1b;'>"
             .'<h2>❌ Błąd aktualizacji:</h2><pre>'.e($e->getMessage()).'</pre></div>', 500);
     }
-});
+})->middleware(['auth', 'verified', 'active']);
 
 require __DIR__.'/settings.php';
