@@ -213,15 +213,27 @@
                             }
                         @endphp
 
-                        <div class="animal-profile__meta-line" style="display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; font-family: var(--font-sans, inherit); font-size: 0.9rem; color: #4a4a4a; margin-top: 6px;">
-                            <span><strong>Data urodzenia:</strong> {{ $animal->date_of_birth ? $animal->date_of_birth->format('d.m.Y') : 'Wiek adult' }} ({{ $animal->age() ?? 'Dorosły kot' }})</span>
-                            @if($isBreeding)
-                                <span title="Badania dedykowane dla rasy">🩺 {{ $breedHealthText }}</span>
-                            @elseif($animal->isEarlyReservation() || $animal->isInPickupWindow())
-                                <span>🏡 100% Domowe wychowanie bez klatek • Linia po przebadanych rodzicach • Odbiór w wieku 12–14 tyg. ({{ $animal->pickupWindowFormatted() }})</span>
-                            @else
-                                <span>🏡 100% Domowe wychowanie bez klatek • Linia po przebadanych rodzicach • Szczepienia, microchip i rodowód</span>
-                            @endif
+                        <div class="animal-profile__meta-badges" style="display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; margin-top: 14px;">
+                            <div class="animal-meta-pill" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 9999px; background: rgba(200, 157, 92, 0.08); border: 1px solid rgba(200, 157, 92, 0.28); font-size: 0.84rem; color: #3a3a3c; font-weight: 500;">
+                                <span aria-hidden="true">🎂</span>
+                                <span><strong>Urodzony:</strong> {{ $animal->date_of_birth ? $animal->date_of_birth->format('d.m.Y') : 'Wiek adult' }} ({{ $animal->age() ?? 'Dorosły kot' }})</span>
+                            </div>
+
+                            <div class="animal-meta-pill" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 9999px; background: rgba(52, 199, 89, 0.08); border: 1px solid rgba(52, 199, 89, 0.28); font-size: 0.84rem; color: #166534; font-weight: 500;">
+                                <span aria-hidden="true">🏡</span>
+                                <span>100% Wychowanie domowe bez klatek</span>
+                            </div>
+
+                            <div class="animal-meta-pill" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 9999px; background: rgba(200, 157, 92, 0.08); border: 1px solid rgba(200, 157, 92, 0.28); font-size: 0.84rem; color: #3a3a3c; font-weight: 500;">
+                                <span aria-hidden="true">🩺</span>
+                                @if($isBreeding)
+                                    <span title="Badania dedykowane dla rasy">{{ $breedHealthText }}</span>
+                                @elseif($animal->isEarlyReservation() || $animal->isInPickupWindow())
+                                    <span>Linia po przebadanych rodzicach • Odbiór w wieku 12–14 tyg. ({{ $animal->pickupWindowFormatted() }})</span>
+                                @else
+                                    <span>Linia po przebadanych rodzicach • Szczepienia, microchip i rodowód</span>
+                                @endif
+                            </div>
                         </div>
                     </div>
 

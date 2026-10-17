@@ -63,7 +63,7 @@ Displays the 4-pillar health & trust standards for our breeding cattery.
                     najwyższych standardów etycznych</span>
             </div>
         </div>
-        <a href="{{ route('about') }}#certyfikaty" class="trust-guarantee-banner__link">
+        <a href="{{ route('cattery') }}#kodeks" class="trust-guarantee-banner__link">
             Poznaj naszą dokumentację →
         </a>
     </div>

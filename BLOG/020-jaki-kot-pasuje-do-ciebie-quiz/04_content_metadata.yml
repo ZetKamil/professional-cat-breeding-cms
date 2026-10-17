@@ -1,0 +1,49 @@
+id: ARTICLE-020
+title: "Jaki kot pasuje do Twojego stylu życia? Porównanie ras i Quiz Behawioralny w 45 sekund"
+slug: "jaki-kot-pasuje-do-ciebie-quiz"
+publication_date: "2026-10-21"
+publication_time: "10:00"
+primary_keyword: "jaki kot pasuje do mnie"
+secondary_keywords:
+  - "quiz jaka rasa kota"
+  - "kot bengalski czy brytyjski czy syjamski"
+  - "dobór rasy kota do stylu życia"
+  - "jaki kot do mieszkania"
+  - "kot brytyjski krótkowłosy czy długowłosy"
+
+intent: "commercial-investigation"
+cluster: "breed-selection"
+
+target_page: "/dobierz-rase"
+
+primary_cta: "Rozwiąż Quiz w 45 sekund"
+cta_url: "/dobierz-rase"
+
+hero_image:
+  filename: "02_hero.jpg"
+  alt: "Porównanie ras kotów: kot bengalski, brytyjski i syjamski w domowej hodowli"
+  source: "Domowa Hodowla z Mazowieckiej Szwajcarii"
+  status: "published"
+
+meta:
+  title: "Jaki kot pasuje do Twojego stylu życia? Porównanie ras + Quiz"
+  description: "Zastanawiasz się nad wyborem rasy kota? Porównaj charakter kotów brytyjskich (BSH i BLH), bengalskich i syjamskich oraz rozwiąż 45-sekundowy quiz behawioralny."
+
+categories:
+  - "Odmiany i Rasy"
+
+internal_links:
+  - anchor: "Quiz Doboru Rasy Kota"
+    url: "/dobierz-rase"
+  - anchor: "kot brytyjski czy bengalski"
+    url: "/blog/011-kot-bengalski-czy-brytyjski"
+  - anchor: "socjalizacja kociąt w hodowli"
+    url: "/blog/010-socjalizacja-kociat-w-hodowli"
+  - anchor: "o domowej hodowli"
+    url: "/o-hodowli"
+  - anchor: "dostępne kocięta"
+    url: "/koty"
+
+schema: "BlogPosting"
+
+status: "PUBLISHED"

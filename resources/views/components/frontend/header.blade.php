@@ -49,16 +49,17 @@
                 </li>
                 <li>
                     <a href="{{ route('cattery') }}"
-                       class="global-nav__link {{ request()->routeIs('cattery') ? 'is-active' : '' }}"
-                       {{ request()->routeIs('cattery') ? 'aria-current=page' : '' }}>
+                       class="global-nav__link {{ request()->routeIs('cattery') || request()->routeIs('about') ? 'is-active' : '' }}"
+                       {{ request()->routeIs('cattery') || request()->routeIs('about') ? 'aria-current=page' : '' }}>
                         O Domowej Hodowli
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('about') }}"
-                       class="global-nav__link {{ request()->routeIs('about') ? 'is-active' : '' }}"
-                       {{ request()->routeIs('about') ? 'aria-current=page' : '' }}>
-                        O Nas
+                    <a href="{{ route('quiz') }}"
+                       class="global-nav__link global-nav__link--quiz {{ request()->routeIs('quiz') ? 'is-active' : '' }}"
+                       {{ request()->routeIs('quiz') ? 'aria-current=page' : '' }}
+                       style="color: var(--color-gold, #c89d5c); font-weight: 600;">
+                        ✨ Dobierz Rasę
                     </a>
                 </li>
                 <li>
@@ -145,13 +146,14 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('cattery') }}" class="mobile-menu__link {{ request()->routeIs('cattery') ? 'is-active' : '' }}">
+                    <a href="{{ route('cattery') }}" class="mobile-menu__link {{ request()->routeIs('cattery') || request()->routeIs('about') ? 'is-active' : '' }}">
                         O Domowej Hodowli
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('about') }}" class="mobile-menu__link {{ request()->routeIs('about') ? 'is-active' : '' }}">
-                        O Nas
+                    <a href="{{ route('quiz') }}" class="mobile-menu__link {{ request()->routeIs('quiz') ? 'is-active' : '' }}" style="color: var(--color-gold, #c89d5c); font-weight: 600; display: flex; align-items: center; justify-content: space-between;">
+                        <span>✨ Dobierz Rasę (Quiz)</span>
+                        <span style="font-size: 0.72rem; padding: 2px 8px; border-radius: 9999px; background: rgba(200, 157, 92, 0.18); color: var(--color-gold, #c89d5c);">45 sek.</span>
                     </a>
                 </li>
                 <li>

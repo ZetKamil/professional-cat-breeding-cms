@@ -345,6 +345,93 @@
         </div>
     </section>
 
+    {{-- ============================================================
+    2. EDUCATIONAL SEO GUIDE — BREED COMPARISON & FAQ
+    ============================================================ --}}
+    <x-frontend.section tile="parchment" id="przewodnik-po-rasach" class="reveal-up">
+        <x-frontend.section-header
+            eyebrow="Eksperckie Porównanie Ras"
+            headline="Kot Bengalski, Brytyjski czy Syjamski? Jak wybrać idealnego towarzysza?"
+            description="Wybór rasy to decyzja na 15–20 lat. Poznaj kluczowe różnice w temperamencie, potrzebach ruchowych i pielęgnacji kotów z naszej domowej hodowli."
+        />
+
+        <div class="benefits-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--sp-xl); margin-bottom: var(--sp-3xl);" role="list" aria-label="Porównanie ras kotów">
+            {{-- Bengalski --}}
+            <div class="benefit-item" style="background: var(--color-canvas, #fff); border-radius: var(--r-xl); padding: var(--sp-xl); border: 1px solid var(--color-hairline); box-shadow: 0 4px 20px rgba(0,0,0,0.03);" role="listitem">
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                    <span style="font-size: 2rem;">🐆</span>
+                    <div>
+                        <h3 class="text-body-strong" style="font-size: 1.15rem; margin: 0; color: var(--color-ink);">Kot Bengalski</h3>
+                        <span style="font-size: 0.8rem; color: var(--color-gold, #c89d5c); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Dzikie Piękno & Inteligencja</span>
+                    </div>
+                </div>
+                <ul style="list-style: none; padding: 0; margin: 0 0 16px; font-size: 0.92rem; line-height: 1.6; color: var(--color-ink-muted-80);">
+                    <li style="margin-bottom: 8px;"><strong>Temperament:</strong> Niezwykle bystry, żywiołowy, uwielbia aportować i uczyć się sztuczek.</li>
+                    <li style="margin-bottom: 8px;"><strong>Szata:</strong> Krótka, jedwabista z brokatowym połyskiem (glitter), niemal nie gubi sierści.</li>
+                    <li style="margin-bottom: 8px;"><strong>Potrzeby:</strong> Wymaga przestrzeni do wspinaczki (wysoki drapak) i codziennej stymulacji umysłowej.</li>
+                    <li><strong>Dla kogo:</strong> Dla osób aktywnych, rodzin ze starszymi dziećmi lub osób pracujących z domu.</li>
+                </ul>
+            </div>
+
+            {{-- Brytyjski --}}
+            <div class="benefit-item" style="background: var(--color-canvas, #fff); border-radius: var(--r-xl); padding: var(--sp-xl); border: 1px solid var(--color-hairline); box-shadow: 0 4px 20px rgba(0,0,0,0.03);" role="listitem">
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                    <span style="font-size: 2rem;">🛋️</span>
+                    <div>
+                        <h3 class="text-body-strong" style="font-size: 1.15rem; margin: 0; color: var(--color-ink);">Kot Brytyjski (BSH / BLH)</h3>
+                        <span style="font-size: 0.8rem; color: var(--color-gold, #c89d5c); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Arystokratyczny Spokój & Plusz</span>
+                    </div>
+                </div>
+                <ul style="list-style: none; padding: 0; margin: 0 0 16px; font-size: 0.92rem; line-height: 1.6; color: var(--color-ink-muted-80);">
+                    <li style="margin-bottom: 8px;"><strong>Temperament:</strong> Spokojny, zrównoważony, łagodny, nienarzucający się kompan kanapowy.</li>
+                    <li style="margin-bottom: 8px;"><strong>Szata:</strong> Krótkowłosa pluszowa (BSH, jak kotka Nel) lub okazała półdługa (BLH, jak reproduktor Staś colourpoint).</li>
+                    <li style="margin-bottom: 8px;"><strong>Potrzeby:</strong> Rutyna, ciche otoczenie, bez problemu znosi chwile samotności podczas pracy opiekuna.</li>
+                    <li><strong>Dla kogo:</strong> Dla osób ceniących ciszę, rodzin z dziećmi, osób pracujących poza domem.</li>
+                </ul>
+            </div>
+
+            {{-- Syjamski --}}
+            <div class="benefit-item" style="background: var(--color-canvas, #fff); border-radius: var(--r-xl); padding: var(--sp-xl); border: 1px solid var(--color-hairline); box-shadow: 0 4px 20px rgba(0,0,0,0.03);" role="listitem">
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                    <span style="font-size: 2rem;">💎</span>
+                    <div>
+                        <h3 class="text-body-strong" style="font-size: 1.15rem; margin: 0; color: var(--color-ink);">Kot Syjamski / Tajski</h3>
+                        <span style="font-size: 0.8rem; color: var(--color-gold, #c89d5c); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Głęboka Więź & Szafirowe Oczy</span>
+                    </div>
+                </div>
+                <ul style="list-style: none; padding: 0; margin: 0 0 16px; font-size: 0.92rem; line-height: 1.6; color: var(--color-ink-muted-80);">
+                    <li style="margin-bottom: 8px;"><strong>Temperament:</strong> Niezwykle kontaktowy, lojalny, "kocie dziecko" podążające krok w krok za opiekunem.</li>
+                    <li style="margin-bottom: 8px;"><strong>Szata:</strong> Delikatna, przylegająca do ciała, z eleganckim umaszczeniem point i błękitnymi oczami.</li>
+                    <li style="margin-bottom: 8px;"><strong>Potrzeby:</strong> Dużo uwagi i czułości — źle znosi długotrwałą samotność i ignorowanie.</li>
+                    <li><strong>Dla kogo:</strong> Dla osób szukających oddanego przyjaciela, który uwielbia brać udział we wszystkim, co robisz.</li>
+                </ul>
+            </div>
+        </div>
+
+        {{-- FAQ Section --}}
+        <div style="max-width: 800px; margin: 0 auto; background: var(--color-canvas, #fff); border-radius: var(--r-xl); padding: var(--sp-2xl); border: 1px solid var(--color-hairline);">
+            <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--color-ink); margin-bottom: 20px; text-align: center;">Najczęstsze pytania o dobór rasy</h3>
+            
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+                <div>
+                    <h4 style="font-size: 1rem; font-weight: 600; color: var(--color-ink); margin-bottom: 4px;">Czy kot bengalski nadaje się do mieszkania w bloku?</h4>
+                    <p style="font-size: 0.92rem; color: var(--color-ink-muted-80); margin: 0; line-height: 1.5;">Tak! Kot bengalski świetnie czuje się w mieszkaniu pod warunkiem zagospodarowania przestrzeni wertykalnej — wysokich drapaków, półek ściennych oraz codziennej zabawy w polowanie wędką.</p>
+                </div>
+                <div style="border-top: 1px solid var(--color-hairline); padding-top: 16px;">
+                    <h4 style="font-size: 1rem; font-weight: 600; color: var(--color-ink); margin-bottom: 4px;">Czym różni się kot brytyjski krótkowłosy (BSH) od długowłosego (BLH)?</h4>
+                    <p style="font-size: 0.92rem; color: var(--color-ink-muted-80); margin: 0; line-height: 1.5;">Obie rasy dzielą ten sam cudowny, opanowany i przyjacielski charakter. Różnią się długością okrywy: brytyjczyk krótkowłosy ma gęsty, sprężysty plusz, natomiast długowłosy (jak nasz reproduktor Staś) zachwyca jedwabistym półdługim włosem z puszystą kryzą, który wymaga czesania 1–2 razy w tygodniu.</p>
+                </div>
+                <div style="border-top: 1px solid var(--color-hairline); padding-top: 16px;">
+                    <h4 style="font-size: 1rem; font-weight: 600; color: var(--color-ink); margin-bottom: 4px;">Jak socjalizacja w Waszej hodowli ułatwia adaptację kociaka?</h4>
+                    <p style="font-size: 0.92rem; color: var(--color-ink-muted-80); margin: 0; line-height: 1.5;">Nasze kocięta nie znają klatek ani boksów. Od urodzenia mieszkają z nami w pokojach, słyszą odkurzacz, telewizor, rozmawiają z dziećmi i są codziennie brane na ręce. Dzięki temu w nowym domu adaptują się natychmiast i bez stresu.</p>
+                </div>
+            </div>
+        </div>
+    </x-frontend.section>
+
+    {{-- Conversion CTA --}}
+    <x-frontend.conversion-cta source-context="Quiz Dobierz Rasę" />
+
     {{-- Multi-Criteria Vanilla JS Quiz State Machine --}}
     <x-slot:scripts>
     <script>

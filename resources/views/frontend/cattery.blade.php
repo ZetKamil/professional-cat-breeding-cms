@@ -4,7 +4,7 @@
     {{-- ============================================================
     1. HERO — Editorial, photography-first
     ============================================================ --}}
-    <x-frontend.hero eyebrow="Felinologia i Standardy Domowe" title="O Domowej Hodowli.<br>Bezkompromisowa Etyka."
+    <x-frontend.hero eyebrow="Felinologia i Standardy Domowe" title="O Domowej Hodowli.<br>Bezkompromisowa Etyka i Ciepło."
         lead="Poznaj naszą filozofię opieki, Kodeks Zaufania oraz jasny, przejrzysty proces zakupu i dołączenia kocięcia do Twojego domu."
         image-url="{{ asset('image/cattery/hero_bg.jpg') }}"
         image-position="center 68%"
@@ -78,7 +78,52 @@
     </x-frontend.section>
 
     {{-- ============================================================
-    3. ARCHITECTURAL HEALTH MATRIX (4-PILLAR CODE OF TRUST)
+    3. OUR STORY & BREED FOUNDATION (STAŚ BLH & NEL BSH)
+    ============================================================ --}}
+    <x-frontend.section id="nasza-historia" class="reveal-up">
+        <div class="about-story">
+            <div class="about-story__text">
+                <x-frontend.section-header
+                    align="left"
+                    eyebrow="Nasza Historia i Rasy"
+                    headline="Koty Brytyjskie (krótkowłose i długowłose), Bengalskie i Syjamskie"
+                />
+                <div class="about-story__body">
+                    <p class="text-body text-ink-muted-80">
+                        Nasza przygoda z hodowlą zrodziła się z autentycznego zachwytu nad naturą, inteligencją
+                        i szlachetnym pięknem kotów rasowych. Prowadzimy kameralną hodowlę domową, w której
+                        każde kocię traktowane jest indywidualnie – z maksymalną uwagą, czułością i bezpieczną socjalizacją.
+                    </p>
+                    <p class="text-body text-ink-muted-80">
+                        Szczególną dumą naszej hodowli są <strong>Koty Brytyjskie hodowane w obu odmianach szaty</strong>:
+                        majestatyczne <strong>koty brytyjskie długowłose (BLH)</strong>, których uosobieniem jest nasz arystokratyczny
+                        reproduktor <strong>Staś</strong> (colourpoint o magnetycznych błękitnych oczach), oraz klasyczne, aksamitne
+                        <strong>koty brytyjskie krótkowłose (BSH)</strong>, reprezentowane przez opiekuńczą kotkę <strong>Nel</strong>.
+                    </p>
+                    <p class="text-body text-ink-muted-80">
+                        Obok kotów brytyjskich rozwijamy również linie zwinnych, cętkowanych <strong>kotów bengalskich</strong>
+                        oraz niezwykle kontaktowych i lojalnych <strong>kotów syjamskich / tajskich</strong>.
+                        Wszystkie nasze koty dorastają ramię w ramię z nami, bez klatek, w atmosferze miłości i spokoju.
+                    </p>
+                </div>
+            </div>
+            <div class="about-story__image-wrapper">
+                <x-frontend.picture 
+                    src="{{ asset('image/about/story_care.jpg') }}" 
+                    alt="Opieka i czułość w hodowli — hodowca z kociakiem brytyjskim colourpoint"
+                    class="about-story__image"
+                    width="1000"
+                    height="1333"
+                    decoding="async"
+                    loading="lazy"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                />
+            </div>
+        </div>
+    </x-frontend.section>
+
+    {{-- ============================================================
+    4. ARCHITECTURAL HEALTH MATRIX (4-PILLAR CODE OF TRUST)
     ============================================================ --}}
     <x-frontend.section tile="dark" id="kodeks" class="reveal-up" data-nav-theme="dark">
         <x-frontend.section-header eyebrow="Standard Medyczny i Etyka" headline="Kodeks Zaufania"
@@ -118,7 +163,51 @@
     </x-frontend.section>
 
     {{-- ============================================================
-    4. THE ADOPTION JOURNEY — LUXURY CONCIERGE TIMELINE
+    5. WHAT YOU GET — DOCUMENTATION & STANDARD
+    ============================================================ --}}
+    <x-frontend.section tile="parchment" id="co-otrzymujesz" class="reveal-up">
+        <x-frontend.section-header
+            eyebrow="Standard"
+            headline="Dokumentacja i standard"
+            description="Przekazujemy kocię wyłącznie z pełną, przejrzystą dokumentacją i certyfikatami potwierdzającymi pochodzenie oraz profilaktykę."
+        />
+
+        <div class="benefits-grid" role="list" aria-label="Standard i dokumentacja dołączana do kocięcia">
+            <div class="benefit-item" role="listitem">
+                <i data-lucide="file-check" aria-hidden="true" class="benefit-item__icon"></i>
+                <h3 class="benefit-item__title text-body-strong">Książeczka zdrowia</h3>
+                <p class="benefit-item__desc">Kompletna historia szczepień i zabiegów profilaktycznych</p>
+            </div>
+            <div class="benefit-item" role="listitem">
+                <i data-lucide="scroll-text" aria-hidden="true" class="benefit-item__icon"></i>
+                <h3 class="benefit-item__title text-body-strong">Rodowód SHiOZ ZOOLANDIA</h3>
+                <p class="benefit-item__desc">Wielopokoleniowy certyfikat rodowodowy wydany przez SHiOZ ZOOLANDIA (58/CW/2025)</p>
+            </div>
+            <div class="benefit-item" role="listitem">
+                <i data-lucide="dna" aria-hidden="true" class="benefit-item__icon"></i>
+                <h3 class="benefit-item__title text-body-strong">Badania rodziców</h3>
+                <p class="benefit-item__desc">Wyniki testów DNA i badań kardiologicznych rodziców dedykowanych dla danej rasy</p>
+            </div>
+            <div class="benefit-item" role="listitem">
+                <i data-lucide="syringe" aria-hidden="true" class="benefit-item__icon"></i>
+                <h3 class="benefit-item__title text-body-strong">2x Szczepienie i Chip</h3>
+                <p class="benefit-item__desc">2 obowiązkowe szczepienia oraz wszczepiony, zarejestrowany mikrochip</p>
+            </div>
+            <div class="benefit-item" role="listitem">
+                <i data-lucide="bug-off" aria-hidden="true" class="benefit-item__icon"></i>
+                <h3 class="benefit-item__title text-body-strong">2x Odrobaczanie</h3>
+                <p class="benefit-item__desc">2 cykle odrobaczania potwierdzone wpisami w książeczce zdrowia</p>
+            </div>
+            <div class="benefit-item" role="listitem">
+                <i data-lucide="phone" aria-hidden="true" class="benefit-item__icon"></i>
+                <h3 class="benefit-item__title text-body-strong">Wsparcie po zakupie</h3>
+                <p class="benefit-item__desc">Bezpłatna pomoc, stały kontakt i doradztwo przez całe życie kota</p>
+            </div>
+        </div>
+    </x-frontend.section>
+
+    {{-- ============================================================
+    6. THE ADOPTION JOURNEY — LUXURY CONCIERGE TIMELINE
     ============================================================ --}}
     <x-frontend.section id="proces-krok-po-kroku" class="reveal-up">
         <x-frontend.section-header eyebrow="Standardy Hodowli" headline="Jak wygląda proces zakupu kocięcia?"
@@ -163,7 +252,61 @@
     </x-frontend.section>
 
     {{-- ============================================================
-    5. VERIFIED PATRON STORIES — EDITORIAL QUOTE MONOLITHS
+    7. GALLERY — LIFE IN THE CATTERY
+    ============================================================ --}}
+    <x-frontend.section tile="dark" id="galeria" class="reveal-up" data-nav-theme="dark">
+        <x-frontend.section-header
+            eyebrow="Galeria i Reproduktory"
+            headline="Życie w Naszej Hodowli"
+            description="Poznaj nasze koty hodowlane i zobacz ich codzienność w domowym środowisku."
+        />
+
+        <div class="gallery-grid">
+            <div class="gallery-item gallery-item--large">
+                <x-frontend.picture 
+                    src="{{ asset('image/hero/stas_studio.jpg') }}" 
+                    alt="Nasz arystokratyczny reproduktor Staś — kot brytyjski długowłosy colourpoint" 
+                    width="1200" 
+                    height="896" 
+                    decoding="async" 
+                    loading="lazy"
+                    sizes="(max-width: 768px) 100vw, 66vw"
+                />
+            </div>
+            <div class="gallery-item">
+                <x-frontend.picture 
+                    src="{{ asset('image/hero/bars_studio.jpg') }}" 
+                    alt="Nasz reproduktor Bars — kot bengalski o umaszczeniu silver rosetted" 
+                    width="1200" 
+                    height="896" 
+                    decoding="async" 
+                    loading="lazy"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                />
+            </div>
+            <div class="gallery-item">
+                <x-frontend.picture 
+                    src="{{ asset('image/hero/baltazar_studio.jpg') }}" 
+                    alt="Nasz reproduktor Baltazar — dumny kot syjamski / tajski" 
+                    width="1200" 
+                    height="896" 
+                    decoding="async" 
+                    loading="lazy"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                />
+            </div>
+        </div>
+
+        <div class="gallery-cta" style="margin-top: var(--sp-2xl); text-align: center;">
+            <x-frontend.button variant="secondary" href="https://www.facebook.com/profile.php?id=61580668026948"
+                target="_blank" rel="noopener">
+                Obserwuj nas na Facebooku →
+            </x-frontend.button>
+        </div>
+    </x-frontend.section>
+
+    {{-- ============================================================
+    8. VERIFIED PATRON STORIES — EDITORIAL QUOTE MONOLITHS
     ============================================================ --}}
     <x-frontend.section tile="parchment" id="opinie" class="reveal-up">
         <x-frontend.section-header eyebrow="Rekomendacje i Zaufanie" headline="Historie Opiekunów Naszych Kotów"
@@ -224,7 +367,7 @@
     </x-frontend.section>
 
     {{-- ============================================================
-    6. FINAL INVITATION — REUSABLE CONVERSION CTA
+    9. FINAL INVITATION — REUSABLE CONVERSION CTA
     ============================================================ --}}
-    <x-frontend.conversion-cta source-context="O Hodowli" />
+    <x-frontend.conversion-cta source-context="O Domowej Hodowli" />
 </x-frontend.shell>

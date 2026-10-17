@@ -71,11 +71,10 @@ Calm, minimal, trust-building
                     <ul class="footer-links" role="list">
                         <li><a href="{{ route('home') }}" class="footer-link">Strona Główna</a></li>
                         <li><a href="{{ route('frontend.animals.index') }}" class="footer-link">Nasze Koty</a></li>
-                        <li><a href="{{ route('cattery') }}" class="footer-link">O Hodowli</a></li>
-                        <li><a href="{{ route('about') }}" class="footer-link">O Nas</a></li>
+                        <li><a href="{{ route('cattery') }}" class="footer-link">O Domowej Hodowli</a></li>
+                        <li><a href="{{ route('quiz') }}" class="footer-link" style="color: var(--color-gold, #c89d5c); font-weight: 600;">✨ Dobierz Rasę (Quiz)</a></li>
                         <li><a href="{{ route('frontend.blog.index') }}" class="footer-link">Baza Wiedzy</a></li>
                         <li><a href="{{ route('contact') }}" class="footer-link">Kontakt</a></li>
-                        <li><a href="{{ route('quiz') }}" class="footer-link" style="color: var(--color-gold, #c89d5c); font-weight: 600;">✨ Dobierz Rasę (Quiz)</a></li>
                     </ul>
                 </div>
 
@@ -83,8 +82,8 @@ Calm, minimal, trust-building
                 <div class="footer-col">
                     <h3 class="footer-heading">Informacje</h3>
                     <ul class="footer-links" role="list">
-                        <li><a href="{{ route('about') }}#zdrowie" class="footer-link">Zdrowie & Certyfikaty</a></li>
-                        <li><a href="{{ route('about') }}#co-otrzymujesz" class="footer-link">Dokumentacja i
+                        <li><a href="{{ route('cattery') }}#kodeks" class="footer-link">Zdrowie & Certyfikaty</a></li>
+                        <li><a href="{{ route('cattery') }}#co-otrzymujesz" class="footer-link">Dokumentacja i
                                 standard</a>
                         </li>
                         <li><a href="{{ route('contact') }}#faq" class="footer-link">Częste pytania (FAQ)</a></li>

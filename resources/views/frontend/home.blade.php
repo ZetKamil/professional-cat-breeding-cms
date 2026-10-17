@@ -215,7 +215,7 @@
                     <div class="daily-life__image-wrap daily-life__image-wrap--sub1">
                         <x-frontend.picture
                             src="{{ asset('image/hero/stas_studio.jpg') }}"
-                            alt="Staś – kocur brytyjski, domowy spokój i ufność"
+                            alt="Staś – kocur brytyjski długowłosy (BLH), domowy spokój i ufność"
                             width="600"
                             height="600"
                             decoding="async"
