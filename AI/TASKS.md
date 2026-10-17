@@ -1,17 +1,21 @@
-# Sprint Animals Media Expansion — Atos Profile & Media Integration (COMPLETED)
+# Sprint Animals Pickup Scheduling — Earliest Pickup Date Override (COMPLETED)
 
 ## Status
+- **Sprint Pickup Scheduling**: COMPLETED (2026-10-17) — Optional Earliest Pickup Date Override with Automatic 12–14 Weeks Fallback
 - **Sprint Animals Media**: COMPLETED (2026-10-17) — Atos Profile & 1:1 Cropped Media Attachment, Responsive WebP Pipeline
 - **Sprint Cropper**: COMPLETED (2026-10-16) — Reusable Image Cropper, Live Card Preview, Base64 & File Bag Pipeline
 - **Sprint CRO**: COMPLETED (2026-10-15) — Reservation Modal, Mobile Sticky Bar, Attribution & Local SEO
 - **Sprint 7**: COMPLETED — Security, SEO, Forms & Final Production QA (2026-08-11)
 
-## Sprint Animals Media Tasks (2026-10-17)
-- [x] `feat(media): crop atos profile photo` — Smart 1:1 crop from `profilowe.jfif` (1536x1536) preserving full ears, facial features and blue eyes
-- [x] `feat(media): register atos gallery photo` — Attached `9286a117-c510-41a9-aa87-81fc0c49e1aa.jfif` as `parent_atos_2.jpg` (angel companion gallery photo)
-- [x] `feat(media): responsive webp derivatives` — Generated WebP size derivatives (400, 800, 1200px) with `images:optimize`
-- [x] `feat(animals): safe idempotent migration` — Created `2026_10_17_110000_attach_atos_photos.php` to bind media and enforce `sort_order = 33`
-- [x] `test(frontend): atos profile test suite` — Verified via `AtosProfileTest.php` (3 tests, 16 assertions, 100% PASS)
+## Sprint Animals Pickup Scheduling Tasks (2026-10-17)
+- [x] `feat(animals): database migration` — Created `2026_10_17_120000_add_earliest_pickup_date_to_animals_table.php` and populated 2026-11-14 (4 weeks) for British kittens
+- [x] `feat(animals): pickup calculation engine` — Added `earliestPickupDate()` with fallback in `Animal.php`, updated timeline, badge, and pickup window calculations
+- [x] `feat(cms): earliest pickup date in form` — Added date picker input and live calculation info alert in `backend/animals/partials/form.blade.php`
+- [x] `feat(backend): requests & actions` — Added validation in `StoreAnimalRequest` and `UpdateAnimalRequest`, persisted in `CreateAnimalAction` and `UpdateAnimalAction`
+- [x] `feat(frontend): show page pickup label` — Displayed custom pickup date/window in `frontend/animals/show.blade.php`
+- [x] `test(frontend): earliest pickup date test suite` — Verified via `EarliestPickupDateTest.php` (5 tests, 41 assertions, 100% PASS)
+
+# Sprint Animals Media Expansion — Atos Profile & Media Integration (COMPLETED)
 
 # Sprint Media Cropping — Reusable Profile Framing & Cropper Module (COMPLETED)
 

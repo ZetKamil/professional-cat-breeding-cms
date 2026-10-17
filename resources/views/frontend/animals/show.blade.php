@@ -265,22 +265,22 @@
                             </div>
                             <span class="animal-spec-card__value">{{ $animal->pickupBadgeLabel() }}</span>
                         </div>
-                        @if($animal->pickupTimelineLabel())
-                            <div class="animal-spec-card" role="listitem">
-                                <div class="animal-spec-card__top">
-                                    <span class="animal-spec-card__label">Termin odbioru</span>
-                                    <i data-lucide="calendar-check" class="animal-spec-card__icon" aria-hidden="true"></i>
+                            @if($animal->pickupTimelineLabel())
+                                <div class="animal-spec-card" role="listitem">
+                                    <div class="animal-spec-card__top">
+                                        <span class="animal-spec-card__label">Termin odbioru</span>
+                                        <i data-lucide="calendar-check" class="animal-spec-card__icon" aria-hidden="true"></i>
+                                    </div>
+                                    <span class="animal-spec-card__value">
+                                        {{ $animal->pickupTimelineLabel() }}
+                                        @if($animal->pickupWindowFormatted())
+                                            <small style="display:block; font-size:0.75rem; color:var(--color-ink-muted-80); margin-top:2px;">
+                                                ({{ $animal->earliest_pickup_date ? 'Termin odbioru: ' . $animal->pickupWindowFormatted() : 'Okno 12–14 tyg.: ' . $animal->pickupWindowFormatted() }})
+                                            </small>
+                                        @endif
+                                    </span>
                                 </div>
-                                <span class="animal-spec-card__value">
-                                    {{ $animal->pickupTimelineLabel() }}
-                                    @if($animal->pickupWindowFormatted())
-                                        <small style="display:block; font-size:0.75rem; color:var(--color-ink-muted-80); margin-top:2px;">
-                                            (Okno 12–14 tyg.: {{ $animal->pickupWindowFormatted() }})
-                                        </small>
-                                    @endif
-                                </span>
-                            </div>
-                        @endif
+                            @endif
                     </div>
 
                     {{-- Description --}}

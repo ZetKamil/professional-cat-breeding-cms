@@ -64,6 +64,7 @@ class AnimalFactory extends Factory
             'status' => AnimalStatus::Available,
             'type' => AnimalType::Cat,
             'date_of_birth' => fake()->dateTimeBetween('-3 years', '-3 months'),
+            'earliest_pickup_date' => null,
             'description' => fake('pl_PL')->paragraphs(2, true),
             'short_description' => fake('pl_PL')->sentence(10),
             'is_featured' => false,

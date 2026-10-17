@@ -4,6 +4,22 @@
 
 ### Completed
 
+✓ Wdrożenie Opcjonalnej Najwcześniejszej Daty Odbioru z Automatycznym Fallbackiem (`feat(animals)`, `feat(cms)`, `test(frontend)`)
+  - **Mechanizm `earliest_pickup_date` w Modelu `Animal`:**
+    - Dodano kolumnę `earliest_pickup_date` (nullable date) w tabeli `animals` za pomocą bezpiecznej migracji `2026_10_17_120000_add_earliest_pickup_date_to_animals_table.php`.
+    - Skonfigurowano termin odbioru kociąt brytyjskich (`ada`, `alma`, `atena`) na **2026-11-14** (za 4 tygodnie od bieżącej daty `2026-10-17`).
+    - Zaimplementowano metodę `earliestPickupDate()` z transparentnym fallbackiem: jeśli hodowca nie poda daty, system automatycznie wylicza termin ze standardowej matematyki felinologicznej (`date_of_birth + 12 tyg.`).
+    - Zsynchronizowano metody `weeksUntilPickupWindow()`, `pickupWindow()`, `isEarlyReservation()`, `isReadyNow()`, `isInPickupWindow()`, `pickupBadgeLabel()` oraz `pickupTimelineLabel()`.
+  - **Panel CMS Hodowcy (`backend/animals/partials/form.blade.php`):**
+    - Dodano pole edycyjne `Najwcześniejsza data odbioru (opcjonalnie)` obok `Daty urodzenia`.
+    - Dodano pomocniczy boks informacyjny na żywo prezentujący aktualnie obliczone okno, status oraz czy data pochodzi z własnego wpisu czy standardowej matematyki.
+    - Zaktualizowano `StoreAnimalRequest`, `UpdateAnimalRequest`, `CreateAnimalAction` oraz `UpdateAnimalAction`.
+  - **Prezentacja na Wizytówkach i Profilach Kociąt:**
+    - Wizytówki i profile poprawnie prezentują status „Dostępny do rezerwacji” oraz „Odbiór: za ok. 4 tyg.” wraz z oknem odbioru 14.11.2026 – 28.11.2026.
+  - **Testy Automatyczne:**
+    - Utworzono testy funkcjonalne `tests/Feature/Frontend/EarliestPickupDateTest.php` (5 testów, 41 asercji, 100% PASS).
+    - Zweryfikowano brak regresji w całym projekcie: 180 testów, 1464 asercje PASS.
+
 ✓ Wdrożenie Pełnego Profilu i Mediów Kocura Atosa (`feat(animals)`, `feat(media)`, `test(frontend)`)
   - **Zdjęcia i Media Atosa:**
     - Wykadrowano zdjęcie profilowe `image/Brytyjczyki/Kociaki/Atos/profilowe.jfif` do idealnego kwadratu 1:1 (1536x1536, `parent_atos_1.jpg`) z pełnym wyeksponowaniem uszu, pyszczka i szafirowych oczu bez ucinania w kartach i profilu.

@@ -44,7 +44,7 @@ class StoreAnimalRequest extends FormRequest
 
                     $file = new \Illuminate\Http\UploadedFile(
                         $tmpFilePath,
-                        'cropped_' . uniqid() . '.' . $ext,
+                        'cropped_'.uniqid().'.'.$ext,
                         $mimeType,
                         null,
                         true
@@ -75,6 +75,7 @@ class StoreAnimalRequest extends FormRequest
             'status' => ['required', Rule::enum(AnimalStatus::class)],
             'type' => ['required', Rule::enum(AnimalType::class)],
             'date_of_birth' => ['nullable', 'date'],
+            'earliest_pickup_date' => ['nullable', 'date'],
             'description' => ['nullable', 'string'],
             'short_description' => ['nullable', 'string', 'max:500'],
 

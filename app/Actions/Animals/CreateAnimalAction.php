@@ -28,6 +28,7 @@ class CreateAnimalAction
                 'status' => $data['status'],
                 'type' => $data['type'],
                 'date_of_birth' => $data['date_of_birth'] ?? null,
+                'earliest_pickup_date' => $data['earliest_pickup_date'] ?? null,
                 'description' => $data['description'] ?? null,
                 'short_description' => $data['short_description'] ?? null,
                 'mother_id' => $data['mother_id'] ?? null,

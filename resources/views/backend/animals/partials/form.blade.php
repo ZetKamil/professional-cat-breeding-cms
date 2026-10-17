@@ -69,18 +69,49 @@
                     </div>
                 </div>
 
-                <div class="mb-3">
-                    <label for="date_of_birth" class="form-label">Data urodzenia</label>
-                    <input type="date" class="form-control @error('date_of_birth') is-invalid @enderror" id="date_of_birth" name="date_of_birth" value="{{ old('date_of_birth', optional($animal->date_of_birth)->format('Y-m-d')) }}">
-                    <div class="form-text">
-                        Zasada hodowli: kocięta wyjeżdżają do nowych domów w wieku 12–14 tygodni, po potwierdzeniu gotowości konkretnego kociaka.
-                        @if($animal->date_of_birth)
-                            <br><strong>Obliczone okno odbioru (12–14 tyg.):</strong> {{ $animal->pickupWindowFormatted() }}
-                            (Wiek: {{ $animal->ageInWeeks() }} tyg. &bull; Status: {{ $animal->pickupBadgeLabel() }}@if($animal->pickupTimelineLabel()) &bull; {{ $animal->pickupTimelineLabel() }}@endif)
-                        @endif
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="date_of_birth" class="form-label">Data urodzenia</label>
+                        <input type="date" class="form-control @error('date_of_birth') is-invalid @enderror" id="date_of_birth" name="date_of_birth" value="{{ old('date_of_birth', optional($animal->date_of_birth)->format('Y-m-d')) }}">
+                        <div class="form-text">
+                            Data urodzenia kociaka.
+                        </div>
+                        @error('date_of_birth') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
-                    @error('date_of_birth') <div class="invalid-feedback">{{ $message }}</div> @enderror
+
+                    <div class="col-md-6 mb-3">
+                        <label for="earliest_pickup_date" class="form-label">
+                            Najwcześniejsza data odbioru <small class="text-muted">(opcjonalnie)</small>
+                        </label>
+                        <input type="date" class="form-control @error('earliest_pickup_date') is-invalid @enderror" id="earliest_pickup_date" name="earliest_pickup_date" value="{{ old('earliest_pickup_date', optional($animal->earliest_pickup_date)->format('Y-m-d')) }}">
+                        <div class="form-text">
+                            Pozostaw puste, aby używać standardowej matematyki (12–14 tyg. od urodzenia / po szczepieniach).
+                        </div>
+                        @error('earliest_pickup_date') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
                 </div>
+
+                @if($animal->pickupWindowFormatted())
+                    <div class="alert alert-secondary py-2 px-3 mb-3 d-flex align-items-center justify-content-between flex-wrap gap-2" style="font-size: 0.88rem;">
+                        <div>
+                            <strong>Termin odbioru:</strong> {{ $animal->pickupWindowFormatted() }}
+                            @if($animal->earliest_pickup_date)
+                                <span class="badge bg-primary ms-1">Własna data odbioru</span>
+                            @else
+                                <span class="badge bg-secondary ms-1">Automatycznie (12–14 tyg.)</span>
+                            @endif
+                        </div>
+                        <div>
+                            @if($animal->date_of_birth)
+                                <span class="text-muted">Wiek: {{ $animal->ageInWeeks() }} tyg. &bull;</span>
+                            @endif
+                            <span class="text-muted">Status: <strong>{{ $animal->pickupBadgeLabel() }}</strong></span>
+                            @if($animal->pickupTimelineLabel())
+                                <span class="text-muted">&bull; {{ $animal->pickupTimelineLabel() }}</span>
+                            @endif
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
 

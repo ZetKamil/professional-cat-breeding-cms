@@ -2,6 +2,29 @@
 
 ---
 
+## 2026-10-17 — Earliest Pickup Date Override with Automatic Fallback (`feat(animals)`, `feat(cms)`, `test(frontend)`)
+
+### Context
+Breeder requested the ability to specify an explicit earliest pickup date (`earliest_pickup_date`) for cats/kittens in the CMS (e.g. British kittens Ada, Alma, and Atena are scheduled to be ready in exactly 4 weeks from today, 2026-10-17 -> 2026-11-14). If this explicit date is not provided, the system must transparently fall back to the standard felinology mathematics based on kitten age and vaccination schedule (12–14 weeks from `date_of_birth`).
+
+### Technical & Architectural Decisions
+1. **Database Schema (`2026_10_17_120000_add_earliest_pickup_date_to_animals_table.php`)**:
+   - Added nullable `earliest_pickup_date` column right after `date_of_birth` on `animals`.
+   - Populated `2026-11-14` for British kittens (`ada`, `alma`, `atena`) to reflect the breeder's 4-week timeline.
+2. **Model Architecture & Fallback Engine (`Animal.php`)**:
+   - Introduced `earliestPickupDate(): ?Carbon` helper using `Carbon::parse()` for seamless `Carbon` / `CarbonImmutable` / `DateTimeInterface` interoperability.
+   - Refactored `pickupWindow()`, `weeksUntilPickupWindow()`, `isEarlyReservation()`, `isReadyNow()`, `isInPickupWindow()`, `pickupBadgeLabel()`, and `pickupTimelineLabel()` to respect `earliestPickupDate()` with zero regression on automatic `date_of_birth + 12 weeks` fallback.
+3. **Admin CMS Integration**:
+   - Added `earliest_pickup_date` date picker input alongside `date_of_birth` in `backend/animals/partials/form.blade.php`.
+   - Added a live informative preview alert displaying current pickup window, active status badge, countdown timeline, and whether calculation is manual ("Własna data") or automated ("Automatycznie 12–14 tyg.").
+   - Updated `StoreAnimalRequest`, `UpdateAnimalRequest`, `CreateAnimalAction`, and `UpdateAnimalAction` to ensure seamless validation and persistence.
+4. **Automated Testing & QA**:
+   - Created `tests/Feature/Frontend/EarliestPickupDateTest.php` testing override, boundary conditions, ready-now transition, null fallback, public show page rendering, and CMS updating (5 passed, 41 assertions).
+   - Executed full project test suite: 180 passed, 1464 assertions (100% PASS).
+   - Formatted using Laravel Pint.
+
+---
+
 ## 2026-10-17 — Atos Profile Media Integration & 1:1 Framing (`feat(animals)`, `feat(media)`, `test(frontend)`)
 
 ### Context

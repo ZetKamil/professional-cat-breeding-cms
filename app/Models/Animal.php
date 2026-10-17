@@ -52,6 +52,7 @@ class Animal extends Model
         'status',
         'type',
         'date_of_birth',
+        'earliest_pickup_date',
         'description',
         'short_description',
         'mother_id',
@@ -71,6 +72,7 @@ class Animal extends Model
             'status' => AnimalStatus::class,
             'type' => AnimalType::class,
             'date_of_birth' => 'date',
+            'earliest_pickup_date' => 'date',
             'is_featured' => 'boolean',
             'is_published' => 'boolean',
             'published_at' => 'datetime',
@@ -374,36 +376,57 @@ class Animal extends Model
      * Calculate age in complete weeks from date_of_birth.
      * Returns null if date_of_birth is missing.
      */
-    public function ageInWeeks(?Carbon $targetDate = null): ?int
+    public function ageInWeeks(?\Carbon\CarbonInterface $targetDate = null): ?int
     {
         if (! $this->date_of_birth) {
             return null;
         }
 
-        $target = $targetDate ? Carbon::instance($targetDate) : Carbon::now();
+        $target = $targetDate ? Carbon::parse($targetDate) : Carbon::now();
+        $dob = Carbon::parse($this->date_of_birth);
 
-        if ($target->lt($this->date_of_birth)) {
+        if ($target->lt($dob)) {
             return 0;
         }
 
-        return (int) $this->date_of_birth->diffInWeeks($target);
+        return (int) $dob->diffInWeeks($target);
+    }
+
+    /**
+     * Earliest possible date the animal can be picked up by its new family.
+     * Uses explicit earliest_pickup_date override if provided by breeder,
+     * otherwise falls back to standard felinology math (date_of_birth + 12 weeks).
+     */
+    public function earliestPickupDate(): ?Carbon
+    {
+        if ($this->earliest_pickup_date) {
+            return Carbon::parse($this->earliest_pickup_date);
+        }
+
+        if ($this->date_of_birth) {
+            return Carbon::parse($this->date_of_birth)->addWeeks(12);
+        }
+
+        return null;
     }
 
     /**
      * Expected pickup window [start, end] corresponding to kitten reaching
-     * 12 weeks (start) and 14 weeks (end) of age.
+     * pickup readiness (start) and standard 2-week collection window (end).
      *
      * @return array{start: Carbon, end: Carbon}|null
      */
     public function pickupWindow(): ?array
     {
-        if (! $this->date_of_birth) {
+        $start = $this->earliestPickupDate();
+
+        if (! $start) {
             return null;
         }
 
         return [
-            'start' => $this->date_of_birth->copy()->addWeeks(12),
-            'end'   => $this->date_of_birth->copy()->addWeeks(14),
+            'start' => $start,
+            'end' => $start->copy()->addWeeks(2),
         ];
     }
 
@@ -418,21 +441,22 @@ class Animal extends Model
             return null;
         }
 
-        return $window['start']->format($format) . ' – ' . $window['end']->format($format);
+        return $window['start']->format($format).' – '.$window['end']->format($format);
     }
 
     /**
-     * Number of complete weeks remaining until reaching the minimum 12-week pickup age.
-     * Returns 0 if the kitten is already 12 weeks or older.
+     * Number of complete weeks remaining until reaching the minimum pickup date.
+     * Returns 0 if the kitten has already reached or passed the pickup date.
      */
-    public function weeksUntilPickupWindow(?Carbon $targetDate = null): ?int
+    public function weeksUntilPickupWindow(?\Carbon\CarbonInterface $targetDate = null): ?int
     {
-        if (! $this->date_of_birth) {
+        $pickupStart = $this->earliestPickupDate();
+
+        if (! $pickupStart) {
             return null;
         }
 
-        $target = $targetDate ? Carbon::instance($targetDate) : Carbon::now();
-        $pickupStart = $this->date_of_birth->copy()->addWeeks(12);
+        $target = $targetDate ? Carbon::parse($targetDate) : Carbon::now();
 
         if ($target->gte($pickupStart)) {
             return 0;
@@ -444,12 +468,20 @@ class Animal extends Model
     }
 
     /**
-     * Whether this animal is an available kitten younger than 12 weeks (early reservation stage).
+     * Whether this animal is an available kitten in the early reservation stage (before pickup date).
      */
-    public function isEarlyReservation(?Carbon $targetDate = null): bool
+    public function isEarlyReservation(?\Carbon\CarbonInterface $targetDate = null): bool
     {
         if ($this->status !== AnimalStatus::Available) {
             return false;
+        }
+
+        $pickupStart = $this->earliestPickupDate();
+
+        if ($pickupStart !== null) {
+            $target = $targetDate ? Carbon::parse($targetDate) : Carbon::now();
+
+            return $target->lt($pickupStart);
         }
 
         $age = $this->ageInWeeks($targetDate);
@@ -458,26 +490,41 @@ class Animal extends Model
     }
 
     /**
-     * Whether this animal is an available kitten currently within the 12–14-week pickup window.
+     * Whether this animal is an available kitten currently within the pickup window (start to start + 2 weeks).
      */
-    public function isInPickupWindow(?Carbon $targetDate = null): bool
+    public function isInPickupWindow(?\Carbon\CarbonInterface $targetDate = null): bool
     {
         if ($this->status !== AnimalStatus::Available) {
             return false;
         }
 
-        $age = $this->ageInWeeks($targetDate);
+        $window = $this->pickupWindow();
 
-        return $age !== null && $age >= 12 && $age <= 14;
+        if (! $window) {
+            return false;
+        }
+
+        $target = $targetDate ? Carbon::parse($targetDate) : Carbon::now();
+
+        return $target->gte($window['start']->copy()->startOfDay())
+            && $target->lte($window['end']->copy()->endOfDay());
     }
 
     /**
-     * Whether this animal is available and at or above pickup age (>= 12 weeks, or adult without DOB).
+     * Whether this animal is available and at or above pickup age/date (or adult without DOB/pickup date).
      */
-    public function isReadyNow(?Carbon $targetDate = null): bool
+    public function isReadyNow(?\Carbon\CarbonInterface $targetDate = null): bool
     {
         if ($this->status !== AnimalStatus::Available) {
             return false;
+        }
+
+        $pickupStart = $this->earliestPickupDate();
+
+        if ($pickupStart !== null) {
+            $target = $targetDate ? Carbon::parse($targetDate) : Carbon::now();
+
+            return $target->gte($pickupStart->copy()->startOfDay());
         }
 
         $age = $this->ageInWeeks($targetDate);
@@ -486,9 +533,9 @@ class Animal extends Model
     }
 
     /**
-     * Whether this animal is available and older than the initial 14-week pickup window.
+     * Whether this animal is available and older than the initial pickup window.
      */
-    public function isOdchowany(?Carbon $targetDate = null): bool
+    public function isOdchowany(?\Carbon\CarbonInterface $targetDate = null): bool
     {
         if ($this->status !== AnimalStatus::Available) {
             return false;
@@ -496,7 +543,19 @@ class Animal extends Model
 
         $age = $this->ageInWeeks($targetDate);
 
-        return $age !== null && $age > 14;
+        if ($age !== null) {
+            return $age > 14;
+        }
+
+        $window = $this->pickupWindow();
+
+        if ($window !== null) {
+            $target = $targetDate ? Carbon::parse($targetDate) : Carbon::now();
+
+            return $target->gt($window['end']->copy()->endOfDay());
+        }
+
+        return false;
     }
 
     /**
@@ -504,27 +563,23 @@ class Animal extends Model
      *
      * Rules:
      * - Non-available animals retain their domain status (e.g., Zarezerwowany, Kotka Hodowlana, W nowym domu).
-     * - Available kittens < 12 weeks: "Dostępny do rezerwacji"
-     * - Available kittens >= 12 weeks: "Gotowy do odbioru"
-     * - Available without DOB: safe fallback "Dostępny do rezerwacji"
+     * - Available kittens before pickup date: "Dostępny do rezerwacji"
+     * - Available kittens at or past pickup date: "Gotowy do odbioru"
+     * - Available without DOB and without pickup date: safe fallback "Dostępny do rezerwacji"
      */
-    public function pickupBadgeLabel(?Carbon $targetDate = null): string
+    public function pickupBadgeLabel(?\Carbon\CarbonInterface $targetDate = null): string
     {
         if ($this->status !== AnimalStatus::Available) {
             return $this->statusLabel();
         }
 
-        if (! $this->date_of_birth) {
+        $pickupStart = $this->earliestPickupDate();
+
+        if ($pickupStart === null && ! $this->date_of_birth) {
             return 'Dostępny do rezerwacji';
         }
 
-        $age = $this->ageInWeeks($targetDate);
-
-        if ($age === null) {
-            return 'Dostępny do rezerwacji';
-        }
-
-        if ($age < 12) {
+        if ($this->isEarlyReservation($targetDate)) {
             return 'Dostępny do rezerwacji';
         }
 
@@ -535,28 +590,24 @@ class Animal extends Model
      * Human-friendly timeline label for pickup readiness.
      *
      * Rules:
-     * - Only available animals with a valid date of birth have a timeline countdown.
-     * - < 12 weeks: "Odbiór: za ok. X tyg."
-     * - >= 12 weeks: "Gotowy do odbioru od zaraz"
-     * - Non-available or missing DOB: null
+     * - Only available animals with a valid pickup date / birth date have a timeline countdown.
+     * - Before pickup date: "Odbiór: za ok. X tyg."
+     * - At or past pickup date: "Gotowy do odbioru od zaraz"
+     * - Non-available or missing DOB/pickup date: null
      */
-    public function pickupTimelineLabel(?Carbon $targetDate = null): ?string
+    public function pickupTimelineLabel(?\Carbon\CarbonInterface $targetDate = null): ?string
     {
         if ($this->status !== AnimalStatus::Available) {
             return null;
         }
 
-        if (! $this->date_of_birth) {
+        $pickupStart = $this->earliestPickupDate();
+
+        if (! $pickupStart) {
             return null;
         }
 
-        $age = $this->ageInWeeks($targetDate);
-
-        if ($age === null) {
-            return null;
-        }
-
-        if ($age < 12) {
+        if ($this->isEarlyReservation($targetDate)) {
             $weeksUntil = $this->weeksUntilPickupWindow($targetDate);
 
             return "Odbiór: za ok. {$weeksUntil} tyg.";
@@ -568,7 +619,7 @@ class Animal extends Model
     /**
      * Badge visual variant matching <x-frontend.badge variant="...">
      */
-    public function pickupBadgeVariant(?Carbon $targetDate = null): string
+    public function pickupBadgeVariant(?\Carbon\CarbonInterface $targetDate = null): string
     {
         if ($this->isEarlyReservation($targetDate)) {
             return 'warning';
