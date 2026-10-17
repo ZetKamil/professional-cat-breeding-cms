@@ -2,6 +2,33 @@
 
 ---
 
+## 2026-10-17 — Atos Profile Media Integration & 1:1 Framing (`feat(animals)`, `feat(media)`, `test(frontend)`)
+
+### Context
+User provided photos for British Longhair stud cat Atos (`image/Brytyjczyki/Kociaki/Atos/`) and requested adding / completing his profile. Atos was previously registered in the database as a future breeding stud without media (pending standalone photography).
+
+### Technical & Creative Implementation
+1. **Photo Curation & Aspect Ratio Optimization**:
+   - `profilowe.jfif` (1536x2048, vertical portrait): Subject sits gracefully on red velvet with blue eyes looking straight ahead. Using GD image processing, cropped from `(0,0)` to a crisp 1:1 square (`1536x1536`, 92% JPEG quality, saved as `parent_atos_1.jpg`), ensuring 100% preservation of ears, head, paws, and gaze in cards and profile avatars without clipping.
+   - `9286a117-c510-41a9-aa87-81fc0c49e1aa.jfif` (1536x2048): Beautiful artistic shot of Atos with a marble angel figurine on red velvet, registered as `parent_atos_2.jpg` in the gallery (`is_featured = false`, `sort_order = 1`).
+2. **Responsive WebP Generation**:
+   - Ran `images:optimize` producing optimized WebP variants:
+     - `parent_atos_1-400.webp` (9.7 KB), `parent_atos_1-800.webp` (26.5 KB), `parent_atos_1-1200.webp` (46.2 KB)
+     - `parent_atos_2-400.webp` (21.3 KB), `parent_atos_2-800.webp` (60.4 KB), `parent_atos_2-1200.webp` (105.8 KB)
+3. **Safe Idempotent Migration (`2026_10_17_110000_attach_atos_photos.php`)**:
+   - Strictly respects the Zero-Overwrite Policy: attaches media to `atos` (`mediable_type = Animal::class`), populates descriptive metadata, links to mother Nel, and aligns `sort_order = 33` per breeding cattery hierarchy standard (`31–39: British Breeding`).
+   - Copies files safely into both `storage/app/public/media/` and `public/storage/media/`.
+4. **Automated Testing & QA**:
+   - Created `tests/Feature/Frontend/AtosProfileTest.php`:
+     - Verified `/koty/atos` renders HTTP 200 with Atos, Kot Brytyjski, Reproduktor badge, Nel as mother, and both photos.
+     - Verified `/koty` catalogue card renders with `parent_atos_1.jpg`.
+     - Verified authenticated admin can view Atos with the new 1:1 photo in `/backend/animals/atos/edit`.
+     - 100% PASS (3 tests, 16 assertions).
+   - Executed full test suite: 172 passed, 1407 assertions.
+   - Formatted using Laravel Pint.
+
+---
+
 ## 2026-10-16 — Reusable Image Cropper Module & Profile Photo Framing (`feat(cms)`, `feat(ui)`, `test(backend)`)
 
 ### Context

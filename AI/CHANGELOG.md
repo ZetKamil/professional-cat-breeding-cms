@@ -1,5 +1,14 @@
 # AI/CHANGELOG.md
 
+## [2026-10-17] Sprint Animals Media — Atos Profile & Media Integration
+
+### Added
+- **Profil i Media Kocura Atosa (`/koty/atos`)**:
+  - Główne zdjęcie profilowe 1:1 (`parent_atos_1.jpg`) ze zoptymalizowanymi wariantami WebP (400px, 800px, 1200px).
+  - Zdjęcie galeryjne z aniołkiem (`parent_atos_2.jpg`) w formacie 1536×2048.
+  - Bezpieczna migracja `2026_10_17_110000_attach_atos_photos.php` przypisująca media i porządkująca hierarchię sortowania (`sort_order = 33`).
+  - Pokrycie testami funkcjonalnymi w `AtosProfileTest.php`.
+
 ## [2026-08-11] Sprint 7 — Security, SEO, Forms & Final Production QA
 
 ### Added

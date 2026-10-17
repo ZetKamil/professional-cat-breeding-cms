@@ -1,9 +1,19 @@
-# Sprint Media Cropping — Reusable Profile Framing & Cropper Module (COMPLETED)
+# Sprint Animals Media Expansion — Atos Profile & Media Integration (COMPLETED)
 
 ## Status
+- **Sprint Animals Media**: COMPLETED (2026-10-17) — Atos Profile & 1:1 Cropped Media Attachment, Responsive WebP Pipeline
 - **Sprint Cropper**: COMPLETED (2026-10-16) — Reusable Image Cropper, Live Card Preview, Base64 & File Bag Pipeline
 - **Sprint CRO**: COMPLETED (2026-10-15) — Reservation Modal, Mobile Sticky Bar, Attribution & Local SEO
 - **Sprint 7**: COMPLETED — Security, SEO, Forms & Final Production QA (2026-08-11)
+
+## Sprint Animals Media Tasks (2026-10-17)
+- [x] `feat(media): crop atos profile photo` — Smart 1:1 crop from `profilowe.jfif` (1536x1536) preserving full ears, facial features and blue eyes
+- [x] `feat(media): register atos gallery photo` — Attached `9286a117-c510-41a9-aa87-81fc0c49e1aa.jfif` as `parent_atos_2.jpg` (angel companion gallery photo)
+- [x] `feat(media): responsive webp derivatives` — Generated WebP size derivatives (400, 800, 1200px) with `images:optimize`
+- [x] `feat(animals): safe idempotent migration` — Created `2026_10_17_110000_attach_atos_photos.php` to bind media and enforce `sort_order = 33`
+- [x] `test(frontend): atos profile test suite` — Verified via `AtosProfileTest.php` (3 tests, 16 assertions, 100% PASS)
+
+# Sprint Media Cropping — Reusable Profile Framing & Cropper Module (COMPLETED)
 
 ## Sprint Media Cropping Tasks (2026-10-16)
 - [x] `feat(cms): blade image cropper` — Created `<x-backend.image-cropper />` with Cropper.js, 1:1/4:3/16:9/free ratios, live dual card/avatar preview and global JS API
