@@ -165,32 +165,48 @@
             Nie tworzymy fikcyjnych oddziałów ani punktów handlowych w {{ $city['name_locative'] }}. Zapraszamy do poznania naszych kociąt przez wygodną wideo-wizytę na WhatsApp lub Messengerze, a następnie do osobistego odbioru malucha w jego prawdziwym, domowym otoczeniu.
         </div>
 
+        <style>
+            .collection-grid .collection-card {
+                min-height: auto !important;
+                padding: 28px 24px !important;
+                justify-content: flex-start !important;
+            }
+            .collection-grid .collection-card__title {
+                font-size: 1.35rem !important;
+                line-height: 1.25 !important;
+                margin-bottom: 12px !important;
+            }
+            .collection-grid .collection-card__quote {
+                margin-bottom: 0 !important;
+                line-height: 1.6 !important;
+            }
+            @media (max-width: 767px) {
+                .collection-grid .collection-card {
+                    padding: 20px 18px !important;
+                }
+            }
+        </style>
+
         <div class="collection-grid" role="list">
             <div class="collection-card" role="listitem">
-                <div>
-                    <h3 class="collection-card__title">100% Warunki Domowe</h3>
-                    <p class="collection-card__quote">
-                        Nasze koty nie żyją w klatkach ani zamkniętych boksach. Wychowują się z nami w przestronnym domu w otoczeniu Brudzeńskiego Parku Krajobrazowego, mając stały kontakt z człowiekiem, dziećmi i domowymi dźwiękami.
-                    </p>
-                </div>
+                <h3 class="collection-card__title">100% Warunki Domowe</h3>
+                <p class="collection-card__quote">
+                    Nasze koty nie żyją w klatkach ani zamkniętych boksach. Wychowują się z nami w przestronnym domu w otoczeniu Brudzeńskiego Parku Krajobrazowego, mając stały kontakt z człowiekiem, dziećmi i domowymi dźwiękami.
+                </p>
             </div>
 
             <div class="collection-card" role="listitem">
-                <div>
-                    <h3 class="collection-card__title">Pewne Badania Genetyczne</h3>
-                    <p class="collection-card__quote">
-                        Kupując kota z {{ $city['name_genitive'] }}, oczekujesz pewności. Każdy z rodziców naszych miotów przechodzi regularne badania kardiologiczne echo serca (HCM) oraz testy genetyczne (PKD, PRA-b, PK-Def, FIV/FeLV).
-                    </p>
-                </div>
+                <h3 class="collection-card__title">Pewne Badania Genetyczne</h3>
+                <p class="collection-card__quote">
+                    Kupując kota z {{ $city['name_genitive'] }}, oczekujesz pewności. Każdy z rodziców naszych miotów przechodzi regularne badania kardiologiczne echo serca (HCM) oraz testy genetyczne (PKD, PRA-b, PK-Def, FIV/FeLV).
+                </p>
             </div>
 
             <div class="collection-card" role="listitem">
-                <div>
-                    <h3 class="collection-card__title">Dogodny Dojazd ({{ $city['distance_time'] }})</h3>
-                    <p class="collection-card__quote">
-                        Sikórz znajduje się {{ $city['distance_time'] }} od {{ $city['name_genitive'] }} ({{ $city['route_desc'] }}). Po wcześniejszym poznaniu kociaka na wideo-wizycie, przyjazd po odbiór staje się przyjemną, bezstresową wycieczką.
-                    </p>
-                </div>
+                <h3 class="collection-card__title">Dogodny Dojazd ({{ $city['distance_time'] }})</h3>
+                <p class="collection-card__quote">
+                    Sikórz znajduje się {{ $city['distance_time'] }} od {{ $city['name_genitive'] }} ({{ $city['route_desc'] }}). Po wcześniejszym poznaniu kociaka na wideo-wizycie, przyjazd po odbiór staje się przyjemną, bezstresową wycieczką.
+                </p>
             </div>
         </div>
 

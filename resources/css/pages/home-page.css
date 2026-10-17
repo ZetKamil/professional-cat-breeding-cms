@@ -404,26 +404,27 @@
     background-color: var(--color-canvas-parchment);
     border: 1px solid var(--color-hairline);
     border-radius: var(--r-xl);
-    padding: var(--sp-xl) var(--sp-lg);
+    padding: 28px 24px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
     height: 100%;
-    min-height: 380px;
+    min-height: auto;
     transition: all var(--duration-base) var(--ease-out);
     text-decoration: none;
 }
 
 @media (min-width: 768px) {
     .collection-card {
-        padding: 40px 32px;
+        padding: 28px 24px;
     }
 }
 
-/* Reduce min-height on mobile — cards should not tower */
+/* On mobile keep compact natural padding */
 @media (max-width: 767px) {
     .collection-card {
-        min-height: 280px;
+        padding: 20px 18px;
+        min-height: auto;
     }
 }
 
@@ -445,19 +446,19 @@
 }
 
 .collection-card__title {
-    font-size: 1.75rem;
-    line-height: 1.2;
+    font-size: 1.35rem;
+    line-height: 1.25;
     font-weight: 700;
     color: var(--color-ink);
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     text-wrap: balance;
 }
 
 .collection-card__quote {
     font-size: 15px;
     color: var(--color-ink-muted-80);
-    line-height: 1.65;
-    margin-bottom: 24px;
+    line-height: 1.6;
+    margin-bottom: 0;
     text-wrap: pretty;
 }
 
