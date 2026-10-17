@@ -211,12 +211,40 @@
         </div>
 
         @if(!empty($city['travel_tips']))
-            <div style="margin-top: 36px; background: #ffffff; border: 1px solid rgba(0,0,0,0.08); border-radius: 14px; padding: 24px; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
-                <h3 style="font-size: 1.1rem; color: #1a1a1a; margin-bottom: 8px;">🚗 Wskazówki dojazdu i transportu dla opiekunów z {{ $city['name_genitive'] }}:</h3>
-                <p style="font-size: 0.92rem; color: #4a4a4a; line-height: 1.6; margin-bottom: 12px;">{{ $city['travel_tips'] }}</p>
-                @if(!empty($city['local_context']))
-                    <p style="font-size: 0.92rem; color: #4a4a4a; line-height: 1.6; margin: 0;">{{ $city['local_context'] }}</p>
-                @endif
+            <div class="city-travel-guide" style="margin-top: 36px; background: var(--color-canvas-parchment, #fbf9f5); border: 1px solid rgba(200, 157, 92, 0.28); border-left: 4px solid var(--color-gold, #c89d5c); border-radius: 16px; padding: 26px 28px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);">
+                <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid rgba(200, 157, 92, 0.18);">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span style="display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 10px; background: rgba(200, 157, 92, 0.15); font-size: 1.25rem; flex-shrink: 0;">
+                            🚗
+                        </span>
+                        <div>
+                            <span style="display: block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-gold, #c89d5c);">Logistyka & Trasa dojazdu</span>
+                            <h3 style="font-size: 1.15rem; font-weight: 700; color: #1a1a1a; margin: 0;">Wskazówki dojazdu i transportu dla opiekunów z {{ $city['name_genitive'] }}</h3>
+                        </div>
+                    </div>
+                    
+                    <a href="https://www.google.com/maps/dir/?api=1&destination=Sik%C3%B3rz+56A,+09-413+Sik%C3%B3rz" 
+                       target="_blank" 
+                       rel="noopener noreferrer" 
+                       style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.8125rem; padding: 7px 14px; border-radius: 8px; border: 1px solid rgba(200, 157, 92, 0.45); background: #ffffff; color: #8a6428; text-decoration: none; font-weight: 600; box-shadow: 0 2px 6px rgba(0,0,0,0.03); transition: all 0.2s ease;">
+                        <span>📍 Nawiguj do hodowli (Google Maps)</span>
+                        <span aria-hidden="true">↗</span>
+                    </a>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px;">
+                    <div style="background: #ffffff; border: 1px solid rgba(200, 157, 92, 0.16); border-radius: 12px; padding: 18px 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+                        <strong style="display: block; font-size: 0.9rem; color: #1a1a1a; margin-bottom: 6px;">🛣️ Rekomendowana trasa ({{ $city['distance_time'] }})</strong>
+                        <p style="font-size: 0.9rem; color: #3a3a3c; line-height: 1.6; margin: 0;">{{ $city['travel_tips'] }}</p>
+                    </div>
+
+                    @if(!empty($city['local_context']))
+                        <div style="background: #ffffff; border: 1px solid rgba(200, 157, 92, 0.16); border-radius: 12px; padding: 18px 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+                            <strong style="display: block; font-size: 0.9rem; color: #1a1a1a; margin-bottom: 6px;">🏡 Domowe warunki i przygotowanie odbioru</strong>
+                            <p style="font-size: 0.9rem; color: #3a3a3c; line-height: 1.6; margin: 0;">{{ $city['local_context'] }}</p>
+                        </div>
+                    @endif
+                </div>
             </div>
         @endif
     </x-frontend.section>
