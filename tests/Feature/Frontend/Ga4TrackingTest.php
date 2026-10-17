@@ -27,7 +27,7 @@ class Ga4TrackingTest extends TestCase
 {
     use RefreshDatabase;
 
-    // ─── 1. GA4 Script w HTML ──────────────────────────────────────────────────
+    // ─── 1. GA4 & GTM Script w HTML ──────────────────────────────────────────
 
     public function test_frontend_renders_ga4_script(): void
     {
@@ -36,6 +36,16 @@ class Ga4TrackingTest extends TestCase
         $response->assertOk();
         $response->assertSee('googletagmanager.com/gtag/js', false);
         $response->assertSee('gtag(', false);
+    }
+
+    public function test_frontend_renders_gtm_script_and_noscript(): void
+    {
+        $response = $this->get(route('home'));
+
+        $response->assertOk();
+        $response->assertSee('googletagmanager.com/gtm.js?id=', false);
+        $response->assertSee('googletagmanager.com/ns.html?id=', false);
+        $response->assertSee('name="gtm-id"', false);
     }
 
     // ─── 2. Consent Mode v2 default denied ────────────────────────────────────

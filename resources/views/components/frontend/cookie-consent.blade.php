@@ -282,6 +282,12 @@
                 localStorage.setItem(STORAGE_KEY, 'accepted');
             } catch (e) {}
 
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+                'event': 'cookie_consent_accepted',
+                'consent_status': 'granted'
+            });
+
             if (typeof gtag === 'function') {
                 gtag('consent', 'update', {
                     'analytics_storage': 'granted',
@@ -302,6 +308,12 @@
             try {
                 localStorage.setItem(STORAGE_KEY, 'declined');
             } catch (e) {}
+
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+                'event': 'cookie_consent_declined',
+                'consent_status': 'denied'
+            });
 
             if (typeof fbq === 'function') {
                 fbq('consent', 'revoke');

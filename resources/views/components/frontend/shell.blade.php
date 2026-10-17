@@ -60,42 +60,59 @@
 
     <title>{{ $title }}</title>
 
-    {{-- Google Analytics 4 — Consent Mode v2 + gtag.js --}}
+    {{-- Google Analytics 4 & Google Tag Manager — Consent Mode v2 --}}
     @php
         $gaId = config('services.google.analytics_id') ?: env('GOOGLE_ANALYTICS_ID', env('GA_MEASUREMENT_ID', 'G-VB4ZCKR8WB'));
+        $gtmId = config('services.google.tag_manager_id') ?: env('GOOGLE_TAG_MANAGER_ID', env('GTM_ID', 'GT-M6X37ZJ4'));
     @endphp
+
+    {{-- Consent Mode v2: domyślnie odmawiamy analytics i ads do czasu wyrażenia zgody przez użytkownika --}}
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('consent', 'default', {
+            'analytics_storage': 'denied',
+            'ad_storage': 'denied',
+            'ad_user_data': 'denied',
+            'ad_personalization': 'denied',
+            'wait_for_update': 500
+        });
+        // Przywróć zgodę jeśli użytkownik wcześniej ją wyraził
+        (function() {
+            try {
+                var saved = localStorage.getItem('katten_cookie_consent');
+                if (saved === 'accepted') {
+                    gtag('consent', 'update', {
+                        'analytics_storage': 'granted',
+                        'ad_storage': 'granted',
+                        'ad_user_data': 'granted',
+                        'ad_personalization': 'granted'
+                    });
+                }
+            } catch(e) {}
+        })();
+    </script>
+
+    @if($gtmId)
+        <!-- Google Tag Manager -->
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','{{ $gtmId }}');</script>
+        <!-- End Google Tag Manager -->
+        <meta name="gtm-id" content="{{ $gtmId }}">
+    @endif
+
     @if($gaId)
-        {{-- Consent Mode v2: domyślnie odmawiamy analytics do czasu wyrażenia zgody przez użytkownika --}}
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('consent', 'default', {
-                'analytics_storage': 'denied',
-                'ad_storage': 'denied',
-                'ad_user_data': 'denied',
-                'ad_personalization': 'denied',
-                'wait_for_update': 500
-            });
-            // Przywróć zgodę jeśli użytkownik wcześniej ją wyraził
-            (function() {
-                try {
-                    var saved = localStorage.getItem('katten_cookie_consent');
-                    if (saved === 'accepted') {
-                        gtag('consent', 'update', {
-                            'analytics_storage': 'granted',
-                            'ad_storage': 'granted',
-                            'ad_user_data': 'granted',
-                            'ad_personalization': 'granted'
-                        });
-                    }
-                } catch(e) {}
-            })();
-        </script>
         <!-- Google tag (gtag.js) -->
         <script async src="https://www.googletagmanager.com/gtag/js?id={{ $gaId }}"></script>
         <script>
             gtag('js', new Date());
             gtag('config', '{{ $gaId }}', { 'send_page_view': true });
+            @if($gtmId && str_starts_with($gtmId, 'GT-'))
+                gtag('config', '{{ $gtmId }}');
+            @endif
         </script>
         <meta name="ga-measurement-id" content="{{ $gaId }}">
     @endif
@@ -149,6 +166,12 @@
     @stack('schema')
 </head>
 <body class="frontend-shell">
+    @if($gtmId)
+        <!-- Google Tag Manager (noscript) -->
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ $gtmId }}"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        <!-- End Google Tag Manager (noscript) -->
+    @endif
 
     {{-- Skip to content — accessibility --}}
     <a href="#main-content" class="skip-to-content">
