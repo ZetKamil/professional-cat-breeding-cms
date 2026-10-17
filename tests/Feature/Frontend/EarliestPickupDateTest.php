@@ -200,4 +200,44 @@ class EarliestPickupDateTest extends TestCase
         $kitten->refresh();
         $this->assertNull($kitten->earliest_pickup_date);
     }
+
+    public function test_cat_over_14_weeks_shows_ready_with_agreed_date_without_historical_window(): void
+    {
+        // Audit test case: Baron born 2026-05-05, audit date 2026-10-17 (> 5 months / 23 weeks)
+        $auditDate = Carbon::parse('2026-10-17 12:00:00');
+        Carbon::setTestNow($auditDate);
+
+        $baron = Animal::factory()->create([
+            'name' => 'Baron',
+            'slug' => 'baron-brytyjski',
+            'breed' => 'Kot Brytyjski',
+            'status' => AnimalStatus::Available,
+            'is_published' => true,
+            'published_at' => $auditDate->copy()->subMonths(3),
+            'date_of_birth' => Carbon::parse('2026-05-05'),
+            'earliest_pickup_date' => null,
+        ]);
+
+        $this->assertTrue($baron->isOdchowany($auditDate));
+        $this->assertFalse($baron->isInPickupWindow($auditDate));
+        $this->assertFalse($baron->isEarlyReservation($auditDate));
+        $this->assertTrue($baron->isReadyNow($auditDate));
+        $this->assertSame('Gotowy do odbioru', $baron->pickupBadgeLabel($auditDate));
+        $this->assertSame('Gotowy do odbioru — termin do ustalenia', $baron->pickupTimelineLabel($auditDate));
+
+        // Public show page
+        $response = $this->get(route('frontend.animals.show', $baron));
+
+        $response->assertOk();
+        $response->assertSee('Gotowy do odbioru');
+        $response->assertSee('Termin do ustalenia');
+        $response->assertSee('Gotowy do odbioru — termin do ustalenia');
+        // Crucial: Must NOT present the historical 12-14 week window (28.07.2026 – 11.08.2026) as future pickup
+        $response->assertDontSee('28.07.2026 – 11.08.2026');
+        $response->assertDontSee('(okno:');
+        $response->assertDontSee('Gotowy do odbioru od zaraz');
+        $response->assertSee('Kotek jest w pełni odchowany');
+
+        Carbon::setTestNow();
+    }
 }

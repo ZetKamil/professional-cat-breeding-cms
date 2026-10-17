@@ -41,7 +41,7 @@ class ReservationAndCroTest extends TestCase
     public function test_quick_callback_rejects_bot_with_honeypot(): void
     {
         $response = $this->postJson('/api/quick-callback', [
-            'phone'       => '514 153 204',
+            'phone' => '514 153 204',
             '_hp_website' => 'http://spam-bot.com',
         ]);
 
@@ -53,10 +53,10 @@ class ReservationAndCroTest extends TestCase
         Event::fake([ContactMessageSent::class]);
 
         $response = $this->postJson('/api/quick-callback', [
-            'phone'          => '514 153 204',
-            'cat_name'       => 'Baron',
-            'cat_breed'      => 'Kot Bengalski',
-            'page_url'       => 'https://kotyzmazowieckiejszwajcarii.pl/koty/baron',
+            'phone' => '514 153 204',
+            'cat_name' => 'Baron',
+            'cat_breed' => 'Kot Bengalski',
+            'page_url' => 'https://kotyzmazowieckiejszwajcarii.pl/koty/baron',
             'traffic_source' => 'FB_Ads_bengale',
         ]);
 
@@ -149,7 +149,7 @@ class ReservationAndCroTest extends TestCase
         // Send 5 valid requests (rate limit is 5 per minute)
         for ($i = 0; $i < 5; $i++) {
             $response = $this->postJson('/api/quick-callback', [
-                'phone' => '514 153 20' . $i,
+                'phone' => '514 153 20'.$i,
             ]);
             $response->assertOk();
         }
@@ -187,16 +187,16 @@ class ReservationAndCroTest extends TestCase
         \Illuminate\Support\Facades\Notification::fake();
 
         $response = $this->postJson('/api/quick-callback', [
-            'phone'          => '+48 514 153 204',
-            'cat_name'       => 'Baron',
-            'cat_breed'      => 'Kot Bengalski',
+            'phone' => '+48 514 153 204',
+            'cat_name' => 'Baron',
+            'cat_breed' => 'Kot Bengalski',
             'traffic_source' => 'FB_Ads_bengale',
         ]);
 
         $response->assertOk();
 
         \Illuminate\Support\Facades\Notification::assertSentTo(
-            new \Illuminate\Notifications\AnonymousNotifiable(),
+            new \Illuminate\Notifications\AnonymousNotifiable,
             \App\Notifications\ContactMessageNotification::class,
             function ($notification) {
                 return $notification->data['phone'] === '+48 514 153 204'
@@ -616,7 +616,7 @@ class ReservationAndCroTest extends TestCase
         $this->assertTrue($olderKitten->isOdchowany($now));
         $this->assertSame(0, $olderKitten->weeksUntilPickupWindow($now));
         $this->assertSame('Gotowy do odbioru', $olderKitten->pickupBadgeLabel($now));
-        $this->assertSame('Gotowy do odbioru od zaraz', $olderKitten->pickupTimelineLabel($now));
+        $this->assertSame('Gotowy do odbioru — termin do ustalenia', $olderKitten->pickupTimelineLabel($now));
         $this->assertSame('gold', $olderKitten->pickupBadgeVariant($now));
 
         // 6. Missing / null birth date
@@ -744,35 +744,35 @@ class ReservationAndCroTest extends TestCase
 
         // 1. Kitten awaiting pickup window (5 weeks old)
         $earlyCat = Animal::factory()->create([
-            'name'          => 'AdaBrytyjska',
-            'breed'         => 'Kot Brytyjski',
-            'gender'        => \App\Enums\AnimalGender::Female,
-            'status'        => \App\Enums\AnimalStatus::Available,
+            'name' => 'AdaBrytyjska',
+            'breed' => 'Kot Brytyjski',
+            'gender' => \App\Enums\AnimalGender::Female,
+            'status' => \App\Enums\AnimalStatus::Available,
             'date_of_birth' => $now->copy()->subWeeks(5),
-            'is_published'  => true,
-            'is_featured'   => true,
+            'is_published' => true,
+            'is_featured' => true,
         ]);
 
         // 2. Kitten in pickup window (13 weeks old)
         $readyCat = Animal::factory()->create([
-            'name'          => 'CarlosBengalski',
-            'breed'         => 'Kot Bengalski',
-            'gender'        => \App\Enums\AnimalGender::Male,
-            'status'        => \App\Enums\AnimalStatus::Available,
+            'name' => 'CarlosBengalski',
+            'breed' => 'Kot Bengalski',
+            'gender' => \App\Enums\AnimalGender::Male,
+            'status' => \App\Enums\AnimalStatus::Available,
             'date_of_birth' => $now->copy()->subWeeks(13),
-            'is_published'  => true,
-            'is_featured'   => true,
+            'is_published' => true,
+            'is_featured' => true,
         ]);
 
         // 3. Kitten reserved (even if 13 weeks old)
         $reservedCat = Animal::factory()->create([
-            'name'          => 'ZafiraZarezerwowana',
-            'breed'         => 'Kot Syjamski',
-            'gender'        => \App\Enums\AnimalGender::Female,
-            'status'        => \App\Enums\AnimalStatus::Reserved,
+            'name' => 'ZafiraZarezerwowana',
+            'breed' => 'Kot Syjamski',
+            'gender' => \App\Enums\AnimalGender::Female,
+            'status' => \App\Enums\AnimalStatus::Reserved,
             'date_of_birth' => $now->copy()->subWeeks(13),
-            'is_published'  => true,
-            'is_featured'   => true,
+            'is_published' => true,
+            'is_featured' => true,
         ]);
 
         // Catalogue checks
@@ -822,10 +822,10 @@ class ReservationAndCroTest extends TestCase
 
         // 1. Reserved cat (older than 14 weeks)
         $reserved = Animal::factory()->create([
-            'name'          => 'ZarezerwowanyMaluch',
-            'status'        => \App\Enums\AnimalStatus::Reserved,
+            'name' => 'ZarezerwowanyMaluch',
+            'status' => \App\Enums\AnimalStatus::Reserved,
             'date_of_birth' => $now->copy()->subWeeks(15),
-            'is_published'  => true,
+            'is_published' => true,
         ]);
 
         $this->assertFalse($reserved->isReadyNow($now));
@@ -835,10 +835,10 @@ class ReservationAndCroTest extends TestCase
 
         // 2. Sold cat
         $sold = Animal::factory()->create([
-            'name'          => 'SprzedanyMaluch',
-            'status'        => \App\Enums\AnimalStatus::Sold,
+            'name' => 'SprzedanyMaluch',
+            'status' => \App\Enums\AnimalStatus::Sold,
             'date_of_birth' => $now->copy()->subWeeks(16),
-            'is_published'  => true,
+            'is_published' => true,
         ]);
 
         $this->assertFalse($sold->isReadyNow($now));
@@ -858,26 +858,26 @@ class ReservationAndCroTest extends TestCase
     {
         // 1. Featured breeding parent
         $breeding = Animal::factory()->create([
-            'name'         => 'BaltazarReproduktor',
-            'status'       => \App\Enums\AnimalStatus::Breeding,
+            'name' => 'BaltazarReproduktor',
+            'status' => \App\Enums\AnimalStatus::Breeding,
             'is_published' => true,
-            'is_featured'  => true,
+            'is_featured' => true,
         ]);
 
         // 2. Featured sold cat
         $sold = Animal::factory()->create([
-            'name'         => 'BarbieWNowymDomu',
-            'status'       => \App\Enums\AnimalStatus::Sold,
+            'name' => 'BarbieWNowymDomu',
+            'status' => \App\Enums\AnimalStatus::Sold,
             'is_published' => true,
-            'is_featured'  => true,
+            'is_featured' => true,
         ]);
 
         // 3. Featured available kitten
         $available = Animal::factory()->create([
-            'name'         => 'CandyDostepna',
-            'status'       => \App\Enums\AnimalStatus::Available,
+            'name' => 'CandyDostepna',
+            'status' => \App\Enums\AnimalStatus::Available,
             'is_published' => true,
-            'is_featured'  => true,
+            'is_featured' => true,
         ]);
 
         $home = $this->get(route('home'));
@@ -906,10 +906,10 @@ class ReservationAndCroTest extends TestCase
 
         // 2. Animal with missing date_of_birth
         $animalWithoutDob = Animal::factory()->create([
-            'name'          => 'TajemniczyKot',
-            'status'        => \App\Enums\AnimalStatus::Available,
+            'name' => 'TajemniczyKot',
+            'status' => \App\Enums\AnimalStatus::Available,
             'date_of_birth' => null,
-            'is_published'  => true,
+            'is_published' => true,
         ]);
 
         $this->assertSame('Dostępny do rezerwacji', $animalWithoutDob->pickupBadgeLabel());
@@ -922,4 +922,3 @@ class ReservationAndCroTest extends TestCase
         $profile->assertDontSee('undefined');
     }
 }
-

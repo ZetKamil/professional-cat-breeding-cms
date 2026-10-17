@@ -178,6 +178,17 @@
                                         @endif
                                     </td>
                                 </tr>
+                                @if($animal->earliest_pickup_date)
+                                <tr>
+                                    <th>Najwcześniejszy odbiór</th>
+                                    <td>
+                                        {{ $animal->earliest_pickup_date->format('Y-m-d') }}
+                                        @if($animal->pickupTimelineLabel())
+                                            <span class="text-muted ms-1">({{ $animal->pickupTimelineLabel() }})</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                                @endif
                             </tbody>
                         </table>
                     </div>

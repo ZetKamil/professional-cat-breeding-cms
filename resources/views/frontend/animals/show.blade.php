@@ -184,7 +184,7 @@
                             @if($timeline = $animal->pickupTimelineLabel())
                                 <span class="animal-profile__badge-timeline">
                                     <i data-lucide="calendar" class="w-3.5 h-3.5" aria-hidden="true"></i>
-                                    {{ $timeline }}
+                                    {{ $animal->isOdchowany() ? 'Termin do ustalenia' : $timeline }}
                                 </span>
                             @endif
                             <span class="animal-profile__badge-gender text-ink-muted-80">
@@ -272,11 +272,20 @@
                                     <i data-lucide="calendar-check" class="animal-spec-card__icon" aria-hidden="true"></i>
                                 </div>
                                 <span class="animal-spec-card__value">
-                                    @if($animal->earliest_pickup_date)
-                                        Od {{ $animal->earliest_pickup_date->format('d.m.Y') }}
-                                        <small style="display:block; font-size:0.75rem; color:var(--color-ink-muted-80); margin-top:2px;">
-                                            ({{ $animal->pickupTimelineLabel() }})
-                                        </small>
+                                    @if($animal->isOdchowany())
+                                        {{ $animal->pickupTimelineLabel() }}
+                                    @elseif($animal->earliest_pickup_date)
+                                        @if($animal->isInPickupWindow())
+                                            {{ $animal->pickupTimelineLabel() }}
+                                            <small style="display:block; font-size:0.75rem; color:var(--color-ink-muted-80); margin-top:2px;">
+                                                (od {{ $animal->earliest_pickup_date->format('d.m.Y') }})
+                                            </small>
+                                        @else
+                                            Od {{ $animal->earliest_pickup_date->format('d.m.Y') }}
+                                            <small style="display:block; font-size:0.75rem; color:var(--color-ink-muted-80); margin-top:2px;">
+                                                ({{ $animal->pickupTimelineLabel() }})
+                                            </small>
+                                        @endif
                                     @else
                                         {{ $animal->pickupTimelineLabel() }}
                                         @if($animal->pickupWindowFormatted())
@@ -313,6 +322,10 @@
                                 @else
                                     Kotek ukończył już 12. tydzień życia i jest <strong>gotowy do odbioru od zaraz</strong>.
                                 @endif
+                            </div>
+                        @elseif($animal->isOdchowany())
+                            <div style="margin-top: 14px; padding: 12px 16px; background: rgba(200, 157, 92, 0.08); border-left: 3px solid var(--color-gold, #c89d5c); border-radius: 6px; font-size: 0.88rem; line-height: 1.5; color: var(--color-ink-muted-80, #d1cfc7);">
+                                <strong>Zasada odbioru:</strong> Kotek jest w pełni odchowany, po komplecie szczepień i socjalizacji — <strong>gotowy do odbioru</strong>, dokładny termin do bezpośredniego ustalenia z hodowlą.
                             </div>
                         @endif
                     </div>

@@ -541,10 +541,12 @@ class Animal extends Model
             return false;
         }
 
-        $age = $this->ageInWeeks($targetDate);
+        if ($this->isEarlyReservation($targetDate)) {
+            return false;
+        }
 
-        if ($age !== null) {
-            return $age > 14;
+        if ($this->isInPickupWindow($targetDate)) {
+            return false;
         }
 
         $window = $this->pickupWindow();
@@ -555,7 +557,9 @@ class Animal extends Model
             return $target->gt($window['end']->copy()->endOfDay());
         }
 
-        return false;
+        $age = $this->ageInWeeks($targetDate);
+
+        return $age !== null && $age > 14;
     }
 
     /**
@@ -591,8 +595,9 @@ class Animal extends Model
      *
      * Rules:
      * - Only available animals with a valid pickup date / birth date have a timeline countdown.
-     * - Before pickup date: "Odbiór: za ok. X tyg."
-     * - At or past pickup date: "Gotowy do odbioru od zaraz"
+     * - Kitten < 12 weeks (or before earliest pickup date): "Odbiór: za ok. X tyg."
+     * - Cat in 12–14 weeks window (or within initial 2-week pickup window): "Gotowy do odbioru od zaraz"
+     * - Cat older than 14 weeks (confirmed ready): "Gotowy do odbioru — termin do ustalenia"
      * - Non-available or missing DOB/pickup date: null
      */
     public function pickupTimelineLabel(?\Carbon\CarbonInterface $targetDate = null): ?string
@@ -611,6 +616,10 @@ class Animal extends Model
             $weeksUntil = $this->weeksUntilPickupWindow($targetDate);
 
             return "Odbiór: za ok. {$weeksUntil} tyg.";
+        }
+
+        if ($this->isOdchowany($targetDate)) {
+            return 'Gotowy do odbioru — termin do ustalenia';
         }
 
         return 'Gotowy do odbioru od zaraz';
