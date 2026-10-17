@@ -44,8 +44,9 @@
                             <x-frontend.button 
                                 type="button" 
                                 variant="secondary"
-                                onclick="window.openReservationModal('', '', '')">
-                                📹 Wideo-wizyta na żywo
+                                onclick="window.openReservationModal('', '', '')"
+                                icon="video">
+                                Wideo-wizyta na żywo
                             </x-frontend.button>
                         </div>
                         <div style="margin-top: 14px;">
@@ -188,7 +189,7 @@
                         variant="primary"
                         onclick="window.openReservationModal('', '', '')"
                         icon="video">
-                        📹 Zobacz maluchy na żywo
+                        Zobacz maluchy na żywo
                     </x-frontend.button>
                     <a href="https://www.facebook.com/profile.php?id=61580668026948"
                         target="_blank" rel="noopener"
