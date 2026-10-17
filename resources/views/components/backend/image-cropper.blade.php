@@ -75,6 +75,37 @@
         box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
         position: relative;
     }
+    .image-cropper-preview-card-wrap {
+        position: relative;
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    .image-cropper-safezone-guide {
+        position: absolute;
+        top: 6%;
+        left: 6%;
+        right: 6%;
+        bottom: 6%;
+        border: 1.5px dashed rgba(200, 157, 92, 0.85);
+        border-radius: 10px;
+        pointer-events: none;
+        z-index: 10;
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-end;
+        padding: 4px 6px;
+    }
+    .image-cropper-safezone-badge {
+        background: rgba(255, 255, 255, 0.92);
+        color: #8c6828;
+        font-size: 9.5px;
+        font-weight: 700;
+        padding: 2px 6px;
+        border-radius: 4px;
+        border: 1px solid rgba(200, 157, 92, 0.4);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        letter-spacing: 0.02em;
+    }
     .image-cropper-preview-circle {
         width: 80px;
         height: 80px;
@@ -125,7 +156,7 @@
                         {{-- Control Bar --}}
                         <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 bg-light p-2 rounded border">
                             {{-- Aspect Ratio Presets --}}
-                            <div class="btn-group btn-group-sm" role="group" aria-label="Proporcje kadru">
+                            <div class="btn-group btn-group-sm cropper-ratio-btn-group" id="{{ $id }}RatioBtnGroup" role="group" aria-label="Proporcje kadru">
                                 <button type="button" class="btn btn-outline-secondary cropper-ratio-btn active" data-ratio="1" title="Kwadrat 1:1 (Wizytówka kota / Profilowe)">
                                     <i class="fas fa-square me-1"></i>1:1 (Karta)
                                 </button>
@@ -138,6 +169,11 @@
                                 <button type="button" class="btn btn-outline-secondary cropper-ratio-btn" data-ratio="NaN" title="Swobodny kadr bez ograniczeń">
                                     Swobodny
                                 </button>
+                            </div>
+                            <div class="d-none align-items-center" id="{{ $id }}RatioLockBadge">
+                                <span class="badge bg-primary text-white py-1 px-2 fw-semibold" style="font-size: 11px;">
+                                    <i class="fas fa-lock me-1"></i>Format wizytówki: 1:1 (Kwadrat)
+                                </span>
                             </div>
 
                             {{-- Manipulation Tools: Zoom, Rotate, Flip, Reset --}}
@@ -171,9 +207,14 @@
                                 <i class="fas fa-eye me-1"></i> Podgląd na wizytówce
                             </div>
 
-                            {{-- Live Square Card Preview Container --}}
-                            <div class="image-cropper-preview-card mb-2" id="{{ $id }}PreviewCard">
-                                {{-- Cropper will render live preview here --}}
+                            {{-- Live Square Card Preview Container with Safe Zone --}}
+                            <div class="image-cropper-preview-card-wrap">
+                                <div class="image-cropper-preview-card" id="{{ $id }}PreviewCard">
+                                    {{-- Cropper will render live preview here --}}
+                                </div>
+                                <div class="image-cropper-safezone-guide" title="Strefa bezpieczna: upewnij się, że uszy, pyszczek i istotne detale kota mieszczą się w tej ramce.">
+                                    <span class="image-cropper-safezone-badge"><i class="fas fa-shield-alt me-1"></i>Bezpieczny kadr</span>
+                                </div>
                             </div>
 
                             <div class="d-flex align-items-center justify-content-between mb-3 px-1">
@@ -193,9 +234,9 @@
                         {{-- Quality Note / Breeder Tip --}}
                         <div class="alert alert-info py-2 px-3 small mb-0 border-0 bg-opacity-10 bg-info" style="font-size: 11.5px; line-height: 1.45;">
                             <div class="fw-bold mb-1 text-primary">
-                                <i class="fas fa-lightbulb me-1"></i> Wskazówka hodowcy:
+                                <i class="fas fa-lightbulb me-1"></i> Wskazówka hodowcy (Złota zasada kadru):
                             </div>
-                            Zostaw odrobinę przestrzeni nad uszami oraz po bokach pyszczka. Dzięki temu kadr będzie wyglądał naturalnie i elegancko na każdym telefonie.
+                            Wizytówki kotów mają format <strong>1:1 (Kwadrat)</strong>. Trzymaj uszy i pyszczek kota wewnątrz złotej ramki bezpieczeństwa. Spojrzenie kota wprost w obiektyw najbardziej przyciąga kupujących!
                         </div>
                     </div>
                 </div>
@@ -256,6 +297,7 @@ document.addEventListener('DOMContentLoaded', function() {
             imageSrc: '',
             title: 'Dopasuj kadr zdjęcia',
             aspectRatio: 1, // 1:1 default
+            lockRatio: false,
             exportWidth: 1200,
             exportHeight: 1200,
             exportQuality: 0.92,
@@ -266,6 +308,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (titleEl && currentOptions.title) {
             titleEl.textContent = currentOptions.title;
+        }
+
+        const ratioGroup = document.getElementById('{{ $id }}RatioBtnGroup');
+        const ratioLockBadge = document.getElementById('{{ $id }}RatioLockBadge');
+
+        if (currentOptions.lockRatio) {
+            currentOptions.aspectRatio = 1;
+            if (ratioGroup) ratioGroup.classList.add('d-none');
+            if (ratioLockBadge) {
+                ratioLockBadge.classList.remove('d-none');
+                ratioLockBadge.classList.add('d-flex');
+            }
+        } else {
+            if (ratioGroup) ratioGroup.classList.remove('d-none');
+            if (ratioLockBadge) {
+                ratioLockBadge.classList.add('d-none');
+                ratioLockBadge.classList.remove('d-flex');
+            }
         }
 
         // Set active ratio button
@@ -347,7 +407,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Ratio button switches
     ratioBtns.forEach(btn => {
         btn.addEventListener('click', function() {
-            if (!cropperInstance) return;
+            if (!cropperInstance || (currentOptions && currentOptions.lockRatio)) return;
             ratioBtns.forEach(b => b.classList.remove('active'));
             this.classList.add('active');
             const ratio = parseFloat(this.dataset.ratio);

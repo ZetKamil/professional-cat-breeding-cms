@@ -576,6 +576,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         imageSrc: existingUrl,
                         title: 'Kadrowanie obecnego zdjęcia: {{ addslashes($animal->name) }}',
                         aspectRatio: 1,
+                        lockRatio: true,
                         onCrop: applyCroppedResult
                     });
                 }
@@ -600,6 +601,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             imageSrc: currentRawImageSrc,
                             title: 'Dopasuj kadr nowego zdjęcia: ' + file.name,
                             aspectRatio: 1,
+                            lockRatio: true,
                             onCrop: applyCroppedResult
                         });
                     } else {
@@ -620,8 +622,9 @@ document.addEventListener('DOMContentLoaded', function() {
             if (srcToCrop && typeof window.openImageCropper === 'function') {
                 window.openImageCropper({
                     imageSrc: srcToCrop,
-                    title: 'Dostosuj kadr zdjęcia',
+                    title: 'Dostosuj kadr zdjęcia (Wizytówka 1:1)',
                     aspectRatio: 1,
+                    lockRatio: true,
                     onCrop: applyCroppedResult
                 });
             }
