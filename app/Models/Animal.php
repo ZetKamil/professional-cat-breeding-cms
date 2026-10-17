@@ -626,6 +626,39 @@ class Animal extends Model
     }
 
     /**
+     * Compact timeline label specifically optimized for animal cards to eliminate
+     * redundancy with the status badge overlaid on the card photo.
+     *
+     * Example:
+     * - Photo badge: "Gotowy do odbioru"
+     * - Card timeline: "Odbiór: termin do ustalenia" (instead of repeating "Gotowy do odbioru — termin do ustalenia")
+     */
+    public function pickupCardTimelineLabel(?\Carbon\CarbonInterface $targetDate = null): ?string
+    {
+        if ($this->status !== AnimalStatus::Available) {
+            return null;
+        }
+
+        $pickupStart = $this->earliestPickupDate();
+
+        if (! $pickupStart) {
+            return null;
+        }
+
+        if ($this->isEarlyReservation($targetDate)) {
+            $weeksUntil = $this->weeksUntilPickupWindow($targetDate);
+
+            return "Odbiór: za ok. {$weeksUntil} tyg.";
+        }
+
+        if ($this->isOdchowany($targetDate)) {
+            return 'Odbiór: termin do ustalenia';
+        }
+
+        return 'Odbiór: od zaraz';
+    }
+
+    /**
      * Badge visual variant matching <x-frontend.badge variant="...">
      */
     public function pickupBadgeVariant(?\Carbon\CarbonInterface $targetDate = null): string

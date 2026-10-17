@@ -783,7 +783,7 @@ class ReservationAndCroTest extends TestCase
         $catalogue->assertSee('Odbiór: za ok. 7 tyg.');
         $catalogue->assertSee('CarlosBengalski');
         $catalogue->assertSee('Gotowy do odbioru');
-        $catalogue->assertSee('Gotowy do odbioru od zaraz');
+        $catalogue->assertSee('Odbiór: od zaraz');
         $catalogue->assertSee('ZafiraZarezerwowana');
         $catalogue->assertSee('Zarezerwowany');
 
