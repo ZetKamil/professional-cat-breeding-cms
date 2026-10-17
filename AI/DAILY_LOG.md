@@ -4,6 +4,16 @@
 
 ### Completed
 
+✓ Uproszczenie i Pełna Indywidualizacja Dat Odbioru Kociąt (`refactor(animals)`, `refactor(cms)`, `fix(db)`)
+  - **Usunięcie Wymuszonej Daty Zbiorczej:**
+    - Utworzono migrację `2026_10_17_130000_reset_british_kittens_pickup_dates.php` czyszczącą masowo wpisane daty dla brytyjczyków do wartości `NULL`.
+    - Kociaki wracają do 100% czystego stanu – każde ma własne, niezależne pole i liczy się ze standardowej daty urodzenia (12 tyg.), dopóki hodowca sam nie ustali mu indywidualnej daty.
+  - **Uproszczenie Formularza w CMS:**
+    - Usunięto skomplikowany, techniczny boks alertu z informacjami o 2-tygodniowych oknach.
+    - Zostawiono 2 proste, intuicyjne pola: `Data urodzenia` (z podglądem: Wiek i kiedy mija 12 tyg.) oraz `Indywidualna data odbioru (opcjonalnie)`.
+  - **Przejrzysta Prezentacja na Profilu Kota:**
+    - Zastąpiono sztuczny zakres „14.11.2026 – 28.11.2026” czytelną dla człowieka informacją: `Od 14.11.2026 (za ok. 4 tyg.)`.
+
 ✓ Wdrożenie Opcjonalnej Najwcześniejszej Daty Odbioru z Automatycznym Fallbackiem (`feat(animals)`, `feat(cms)`, `test(frontend)`)
   - **Mechanizm `earliest_pickup_date` w Modelu `Animal`:**
     - Dodano kolumnę `earliest_pickup_date` (nullable date) w tabeli `animals` za pomocą bezpiecznej migracji `2026_10_17_120000_add_earliest_pickup_date_to_animals_table.php`.

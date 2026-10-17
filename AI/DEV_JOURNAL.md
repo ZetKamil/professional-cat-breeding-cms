@@ -2,6 +2,21 @@
 
 ---
 
+## 2026-10-17 — Pickup Date Simplification & Full Cat Independence (`refactor(animals)`, `refactor(cms)`, `fix(db)`)
+
+### Context
+Breeder reported confusion after observing that all British kittens had received the same pickup date simultaneously, thinking they were linked by breed in the application logic. The breeder asked why this happened and requested a much simpler, intuitive system where each cat is 100% independent without unnecessary complexity.
+
+### Root Cause & Resolution
+1. **Root Cause**: In migration `2026_10_17_120000`, a bulk SQL update was executed for `ada`, `alma`, and `atena` to prefill `2026-11-14`. This made all three cats share the same initial date, creating the false impression of an implicit coupling.
+2. **Database Reset**: Created `2026_10_17_130000_reset_british_kittens_pickup_dates.php` clearing the bulk dates back to `NULL`. Each cat now starts in a pure state governed solely by its own `date_of_birth + 12 weeks`, unless the breeder enters an explicit date for that individual cat in CMS.
+3. **Form Simplification (`form.blade.php`)**: Removed the verbose alert box and mathematical window labels. Created two clean, side-by-side inputs:
+   - `Data urodzenia` (shows age and exact standard 12-week date: e.g. 02.12.2026).
+   - `Indywidualna data odbioru (opcjonalnie)` (allows setting a custom date for that cat only).
+4. **Clean Presentation**: Simplified profile page spec cards from technical ranges like `14.11.2026 – 28.11.2026` to human-friendly `Od 14.11.2026 (za ok. 4 tyg.)`.
+
+---
+
 ## 2026-10-17 — Earliest Pickup Date Override with Automatic Fallback (`feat(animals)`, `feat(cms)`, `test(frontend)`)
 
 ### Context
