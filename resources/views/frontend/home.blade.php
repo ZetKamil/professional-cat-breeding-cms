@@ -1,4 +1,4 @@
-<x-frontend.shell title="Hodowla Kotów Rasowych z Rodowodem – Bengalskie, Brytyjskie, Syjamskie | Mazowiecka Szwajcaria"
+<x-frontend.shell title="Domowa Hodowla Kotów Rasowych z Rodowodem – Bengalskie, Brytyjskie, Syjamskie | Mazowiecka Szwajcaria"
     meta-description="Domowa hodowla kotów rasowych z rodowodem SHiOZ ZOOLANDIA (Certyfikat 58/CW/2025, Rej. 58/P/2025). Koty bengalskie, brytyjskie i syjamskie w Sikorzu k. Płocka (Mazowsze). Sprawdź dostępne kocięta!"
     og-image="{{ asset('image/hero/bars_studio.jpg') }}">
     {{-- ============================================================
@@ -26,10 +26,11 @@
                 <div class="hero-split-grid">
                     <div class="hero-split__left">
                         <span class="hero-split__eyebrow" style="display: inline-block; color: var(--color-gold, #c89d5c); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 12px;">
-                            Hodowla Kotów Rasowych • SHiOZ ZOOLANDIA • Sikórz k. Płocka
+                            Domowa Hodowla Kotów Rasowych • SHiOZ ZOOLANDIA • Sikórz k. Płocka
                         </span>
                         <h1 class="hero-split__title">
-                            Hodowla Kotów Rasowych z Rodowodem.<br>
+                            Domowa Hodowla Kotów<br>
+                            Rasowych z Rodowodem.<br>
                             Bengalskie, Brytyjskie i Syjamskie.
                         </h1>
                         <p class="hero-split__lead">
@@ -250,13 +251,13 @@
     {
       "@@context": "https://schema.org",
       "@@type": "LocalBusiness",
-      "name": "Hodowla Kotów z Mazowieckiej Szwajcarii",
+      "name": "Domowa Hodowla Kotów z Mazowieckiej Szwajcarii",
       "description": "Domowa hodowla kotów rasowych z Mazowieckiej Szwajcarii (Sikórz k. Płocka). Członek SHiOZ ZOOLANDIA (Certyfikat: 58/CW/2025, Rejestracja: 58/P/2025). Koty bengalskie, brytyjskie i syjamskie z rodowodem, po przebadanych rodzicach.",
       "image": "{{ asset('image/hero/bars_studio.jpg') }}",
       "logo": "{{ asset('logo.png') }}",
       "url": "https://kotyzmazowieckiejszwajcarii.pl/",
       "telephone": "+48514153204",
-      "email": "hodowla.z.mazowieckiej.szwajcarii@gmail.com",
+      "email": "biuro@kotyzmazowieckiejszwajcarii.pl",
       "address": {
         "@@type": "PostalAddress",
         "streetAddress": "Sikórz 56A",

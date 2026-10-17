@@ -1,14 +1,14 @@
-<x-frontend.shell title="O Hodowli — Standardy, Filozofia i Kodeks Zaufania | Hodowla Kotów z Mazowieckiej Szwajcarii"
-    meta-description="Poznaj standardy hodowli kotów z Mazowieckiej Szwajcarii (SHiOZ ZOOLANDIA). Badania kardiologiczne i genetyczne rodziców, etyczna domowa socjalizacja i jasny proces zakupu kocięcia."
+<x-frontend.shell title="O Domowej Hodowli — Standardy, Filozofia i Kodeks Zaufania | Mazowiecka Szwajcaria"
+    meta-description="Poznaj standardy domowej hodowli kotów z Mazowieckiej Szwajcarii (SHiOZ ZOOLANDIA). Badania kardiologiczne i genetyczne rodziców, etyczna domowa socjalizacja i jasny proces zakupu kocięcia."
     og-image="{{ asset('image/cattery/hero_bg.jpg') }}">
     {{-- ============================================================
     1. HERO — Editorial, photography-first
     ============================================================ --}}
-    <x-frontend.hero eyebrow="Felinologia i Standardy" title="O Hodowli.<br>Bezkompromisowa Etyka."
+    <x-frontend.hero eyebrow="Felinologia i Standardy Domowe" title="O Domowej Hodowli.<br>Bezkompromisowa Etyka."
         lead="Poznaj naszą filozofię opieki, Kodeks Zaufania oraz jasny, przejrzysty proces zakupu i dołączenia kocięcia do Twojego domu."
         image-url="{{ asset('image/cattery/hero_bg.jpg') }}"
         image-position="center 68%"
-        image-alt="Arystokratyczny kot brytyjski długowłosy colourpoint w eleganckim wnętrzu hodowli" scroll-target="#filozofia" size="large"
+        image-alt="Arystokratyczny kot brytyjski w eleganckim wnętrzu domowej hodowli" scroll-target="#filozofia" size="large"
         data-nav-theme="dark" />
 
     {{-- ============================================================
@@ -18,7 +18,7 @@
         <div class="manifesto__grid">
             <div class="manifesto__heading">
                 <x-frontend.section-header align="left" eyebrow="Filozofia Naszej Hodowli"
-                    headline="Nie budujemy po prostu hodowli. Tworzymy nowe standardy w felinologii."
+                    headline="Nie budujemy po prostu hodowli. Tworzymy nowe standardy w domowej felinologii."
                     description="Każda decyzja w naszej hodowli jest podyktowana rygorystycznym szacunkiem do genetyki, spokoju socjalizacji oraz bezkompromisowej etyki felinologicznej." />
             </div>
 

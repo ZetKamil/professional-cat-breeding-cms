@@ -1,6 +1,6 @@
 <x-frontend.shell
-    title="Nasze Koty — Koty Bengalskie, Brytyjskie i Syjamskie | Hodowla Kotów z Mazowieckiej Szwajcarii"
-    meta-description="Przeglądaj koty hodowlane i dostępne kocięta w naszej hodowli. Zdrowe linie genetyczne, komplet badań rodziców dedykowanych rasie, rodowód SHiOZ ZOOLANDIA i domowa socjalizacja."
+    title="Nasze Koty — Kocięta z Domowej Hodowli | Koty Bengalskie, Brytyjskie i Syjamskie"
+    meta-description="Przeglądaj koty dorosłe i dostępne kocięta w naszej domowej hodowli. Zdrowe linie genetyczne, komplet badań rodziców dedykowanych rasie, rodowód SHiOZ ZOOLANDIA i pełna domowa socjalizacja."
     og-image="{{ asset('storage/media/parent_bella_1.jpg') }}"
 >
     {{-- ============================================================
@@ -9,14 +9,14 @@
     <section class="animals-catalog-hero" aria-label="Nasze koty">
         <div class="section-inner">
             <span class="text-eyebrow animals-catalog-hero__eyebrow">
-                Hodowla & Oferta
+                Domowa Hodowla & Dostępne Kocięta
             </span>
             <h1 class="text-hero-display animals-catalog-hero__title">
                 Nasze Koty
             </h1>
             <p class="text-lead-airy animals-catalog-hero__lead">
-                Poznaj nasze koty hodowlane i dostępne kocięta. Hodujemy trzy wyjątkowe rasy:
-                Bengalskie, Brytyjskie oraz Syjamskie — z dbałością o najwyższe standardy zdrowotne.
+                Poznaj nasze koty hodowlane i dostępne kocięta wychowywane w sercu naszego domu. Hodujemy trzy wyjątkowe rasy:
+                Bengalskie, Brytyjskie oraz Syjamskie — z dbałością o najwyższe standardy zdrowotne i czułą socjalizację bez klatek.
             </p>
         </div>
     </section>

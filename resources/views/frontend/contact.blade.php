@@ -1,5 +1,5 @@
-<x-frontend.shell title="Kontakt i Rezerwacja Kociąt | Hodowla Kotów z Mazowieckiej Szwajcarii"
-    meta-description="Skontaktuj się z naszą hodowlą w Sikorzu (woj. mazowieckie). Zadzwoń: +48 514 153 204 lub napisz przez formularz kontaktowy. Odpowiadamy w ciągu 24h."
+<x-frontend.shell title="Kontakt i Rezerwacja Kociąt | Domowa Hodowla Kotów z Mazowieckiej Szwajcarii"
+    meta-description="Skontaktuj się z naszą domową hodowlą w Sikorzu (woj. mazowieckie). Zadzwoń: +48 514 153 204 lub napisz przez formularz kontaktowy. Odpowiadamy w ciągu 24h."
     og-image="{{ asset('storage/media/parent_bella_1.jpg') }}">
     {{-- ============================================================
     1. TOP HERO + CONTACT FORM (Primary Action Front & Center)
@@ -77,9 +77,9 @@
                                     <i data-lucide="map-pin" aria-hidden="true"></i>
                                 </div>
                                 <div class="contact-fast-link__body">
-                                    <span class="contact-fast-link__label">Lokalizacja hodowli</span>
+                                    <span class="contact-fast-link__label">Lokalizacja domowej hodowli</span>
                                     <span class="contact-fast-link__val">Sikórz k. Płocka (woj. mazowieckie)</span>
-                                    <span class="contact-fast-link__hint">Wizyty po wcześniejszym umówieniu terminu</span>
+                                    <span class="contact-fast-link__hint">Odwiedziny w domowej hodowli po wcześniejszym umówieniu terminu</span>
                                 </div>
                             </div>
                         </li>
@@ -268,11 +268,11 @@
     {
       "@@context": "https://schema.org",
       "@@type": "ContactPage",
-      "name": "Kontakt — Hodowla Kotów z Mazowieckiej Szwajcarii",
+      "name": "Kontakt — Domowa Hodowla Kotów z Mazowieckiej Szwajcarii",
       "url": "{{ route('contact') }}",
       "mainEntity": {
         "@@type": "LocalBusiness",
-        "name": "Hodowla Kotów z Mazowieckiej Szwajcarii",
+        "name": "Domowa Hodowla Kotów z Mazowieckiej Szwajcarii",
         "image": "{{ asset('storage/media/parent_bella_1.jpg') }}",
         "logo": "{{ asset('logo.png') }}",
         "telephone": "+48514153204",

@@ -1,5 +1,5 @@
-<x-frontend.shell title="Polityka Prywatności i Plików Cookies | Hodowla Kotów z Mazowieckiej Szwajcarii"
-    meta-description="Informacje o zasadach przetwarzania danych osobowych (RODO), prawach użytkowników i plikach cookies w serwisie Hodowli Kotów z Mazowieckiej Szwajcarii.">
+<x-frontend.shell title="Polityka Prywatności i Plików Cookies | Domowa Hodowla Kotów z Mazowieckiej Szwajcarii"
+    meta-description="Informacje o zasadach przetwarzania danych osobowych (RODO), prawach użytkowników i plikach cookies w serwisie Domowej Hodowli Kotów z Mazowieckiej Szwajcarii.">
     <div class="section tile-canvas legal-page">
         <div class="section-inner legal-page__inner">
 
@@ -7,7 +7,7 @@
                 <h1 class="text-hero-display legal-page__title">Polityka Prywatności</h1>
                 <p class="text-body text-ink-muted-48" style="margin-top: 8px; font-weight: 600;">Ostatnia aktualizacja: 27.08.2026</p>
                 <p class="text-lead-airy text-ink-muted-80" style="margin-top: 16px;">
-                    Prywatność osób odwiedzających naszą stronę internetową oraz osób kontaktujących się z nami jest dla nas ważna. Niniejsza Polityka Prywatności określa zasady przetwarzania danych osobowych w związku z korzystaniem ze strony internetowej <strong>Hodowli Kotów z Mazowieckiej Szwajcarii</strong> oraz korzystaniem z dostępnych za jej pośrednictwem form kontaktu.
+                    Prywatność osób odwiedzających naszą stronę internetową oraz osób kontaktujących się z nami jest dla nas ważna. Niniejsza Polityka Prywatności określa zasady przetwarzania danych osobowych w związku z korzystaniem ze strony internetowej <strong>Domowej Hodowli Kotów z Mazowieckiej Szwajcarii</strong> oraz korzystaniem z dostępnych za jej pośrednictwem form kontaktu.
                 </p>
             </header>
 
@@ -18,7 +18,7 @@
                     <h2 class="legal-page__section-title">1. Administrator danych osobowych</h2>
                     <p>Administratorem danych osobowych przetwarzanych w związku z korzystaniem ze strony internetowej oraz kontaktem za jej pośrednictwem jest:</p>
                     <p style="margin-top: 12px;">
-                        <strong>Hodowla Kotów z Mazowieckiej Szwajcarii</strong><br>
+                        <strong>Domowa Hodowla Kotów z Mazowieckiej Szwajcarii</strong><br>
                         REGON: <strong>910936148</strong><br>
                         Sikórz 56A<br>
                         09-413 Sikórz<br>
@@ -129,7 +129,7 @@
                     </ul>
                     <p style="margin-top: 16px;">W celu skorzystania ze swoich praw możesz skontaktować się z Administratorem:</p>
                     <ul class="legal-page__list">
-                        <li><strong>E-mail:</strong> <a href="mailto:hodowla.z.mazowieckiej.szwajcarii@gmail.com">hodowla.z.mazowieckiej.szwajcarii@gmail.com</a></li>
+                        <li><strong>E-mail:</strong> <a href="mailto:biuro@kotyzmazowieckiejszwajcarii.pl">biuro@kotyzmazowieckiejszwajcarii.pl</a></li>
                         <li><strong>Adres korespondencyjny:</strong> Sikórz 56A, 09-413 Sikórz, Polska</li>
                     </ul>
                     <p style="margin-top: 12px;">Administrator rozpatruje żądania zgodnie z terminami i zasadami określonymi w RODO.</p>
@@ -226,7 +226,7 @@
                     <h2 class="legal-page__section-title">9. Inspektor Ochrony Danych</h2>
                     <p>Administrator nie wyznaczył Inspektora Ochrony Danych.</p>
                     <p style="margin-top: 12px;">W sprawach dotyczących ochrony danych osobowych należy kontaktować się bezpośrednio z Administratorem pod adresem:</p>
-                    <p style="margin-top: 8px;"><strong><a href="mailto:hodowla.z.mazowieckiej.szwajcarii@gmail.com">hodowla.z.mazowieckiej.szwajcarii@gmail.com</a></strong></p>
+                    <p style="margin-top: 8px;"><strong><a href="mailto:biuro@kotyzmazowieckiejszwajcarii.pl">biuro@kotyzmazowieckiejszwajcarii.pl</a></strong></p>
                 </section>
 
                 {{-- Sekcja 10 --}}

@@ -1,6 +1,6 @@
 <x-frontend.shell
-    title="O Nas — Pasja, Certyfikaty i Domowa Socjalizacja | Hodowla Kotów z Mazowieckiej Szwajcarii"
-    meta-description="Poznaj naszą hodowlę kotów rasowych w Sikorzu k. Płocka. Członek SHiOZ ZOOLANDIA (Certyfikat 58/CW/2025, Rej. 58/P/2025). Opieka weterynaryjna, badania rodziców i domowa socjalizacja."
+    title="O Nas — Pasja, Certyfikaty i Domowa Socjalizacja | Domowa Hodowla Kotów z Mazowieckiej Szwajcarii"
+    meta-description="Poznaj naszą domową hodowlę kotów rasowych w Sikorzu k. Płocka. Członek SHiOZ ZOOLANDIA (Certyfikat 58/CW/2025, Rej. 58/P/2025). Opieka weterynaryjna, badania rodziców i domowa socjalizacja."
     og-image="{{ asset('image/about/hero_bg.jpg') }}"
 >
     {{-- ============================================================
@@ -8,8 +8,8 @@
          ============================================================ --}}
     <x-frontend.hero
         eyebrow="Nasza Historia"
-        title="Hodowla z pasją<br>i pełną troską."
-        lead="Każdy kot, który opuszcza naszą hodowlę, niesie ze sobą doświadczenie, miłość i bezkompromisową troskę o zdrowie i rozwój."
+        title="Domowa hodowla z pasją<br>i pełną troską."
+        lead="Każdy kot, który opuszcza naszą domową hodowlę, niesie ze sobą doświadczenie, miłość i bezkompromisową troskę o zdrowie i rozwój."
         image-url="{{ asset('image/about/hero_bg.jpg') }}"
         image-position="center 60%"
         image-alt="Ciepła i jasna przestrzeń domowa hodowli kotów rasowych z kotem bengalskim"

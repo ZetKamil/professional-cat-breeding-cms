@@ -1,6 +1,6 @@
 <x-frontend.shell
-    title="{{ $animal->meta_title ?: ($animal->name . ' — ' . $animal->breed . ' | Hodowla Kotów z Mazowieckiej Szwajcarii') }}"
-    meta-description="{{ $animal->meta_description ?: ($animal->short_description ?: ('Poznaj kota ' . $animal->name . ' (' . $animal->breed . ', ' . $animal->color . '). Rodowód SHiOZ ZOOLANDIA, ' . ($animal->status === \App\Enums\AnimalStatus::Breeding ? 'dedykowane badania rasy' : 'po przebadanych rodzicach') . ' i zrównoważony charakter.')) }}"
+    title="{{ $animal->meta_title ?: ($animal->name . ' — ' . $animal->breed . ' | Domowa Hodowla Kotów z Mazowieckiej Szwajcarii') }}"
+    meta-description="{{ $animal->meta_description ?: ($animal->short_description ?: ('Poznaj kota ' . $animal->name . ' (' . $animal->breed . ', ' . $animal->color . '). Domowa hodowla bez klatek, rodowód SHiOZ ZOOLANDIA, ' . ($animal->status === \App\Enums\AnimalStatus::Breeding ? 'dedykowane badania rasy' : 'po przebadanych rodzicach') . ' i zrównoważony charakter.')) }}"
     og-image="{{ $animal->media ? $animal->media->url() : asset('storage/media/parent_bella_1.jpg') }}"
     og-type="profile"
 >
@@ -213,17 +213,14 @@
                             }
                         @endphp
 
-                        <div class="animal-profile__meta-line">
-                            <span>Data urodzenia:
-                                {{ $animal->date_of_birth ? $animal->date_of_birth->format('d.m.Y') : 'Wiek adult' }}
-                                ({{ $animal->age() ?? 'Dorosły kot' }})</span>
-                            <span aria-hidden="true">·</span>
+                        <div class="animal-profile__meta-line" style="display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; font-family: var(--font-sans, inherit); font-size: 0.9rem; color: #4a4a4a; margin-top: 6px;">
+                            <span><strong>Data urodzenia:</strong> {{ $animal->date_of_birth ? $animal->date_of_birth->format('d.m.Y') : 'Wiek adult' }} ({{ $animal->age() ?? 'Dorosły kot' }})</span>
                             @if($isBreeding)
-                                <span title="Badania dedykowane dla rasy">{{ $breedHealthText }}</span>
+                                <span title="Badania dedykowane dla rasy">🩺 {{ $breedHealthText }}</span>
                             @elseif($animal->isEarlyReservation() || $animal->isInPickupWindow())
-                                <span>Linia po przebadanych rodzicach (profil rasy) • 2x szczepienie, 2x odrobaczenie, microchip i rodowód • Odbiór w wieku 12–14 tyg. ({{ $animal->pickupWindowFormatted() }})</span>
+                                <span>🏡 100% Domowe wychowanie bez klatek • Linia po przebadanych rodzicach • Odbiór w wieku 12–14 tyg. ({{ $animal->pickupWindowFormatted() }})</span>
                             @else
-                                <span>Linia po przebadanych rodzicach (profil rasy) • 2x szczepienie, 2x odrobaczenie, microchip i rodowód</span>
+                                <span>🏡 100% Domowe wychowanie bez klatek • Linia po przebadanych rodzicach • Szczepienia, microchip i rodowód</span>
                             @endif
                         </div>
                     </div>
@@ -470,7 +467,7 @@
             'url' => route('frontend.animals.show', $animal),
             'isPartOf' => [
                 '@type' => 'WebSite',
-                'name' => config('app.name', 'Hodowla Kotów z Mazowieckiej Szwajcarii'),
+                'name' => config('app.name', 'Domowa Hodowla Kotów z Mazowieckiej Szwajcarii'),
                 'url' => url('/'),
             ],
             'mainEntity' => array_filter([

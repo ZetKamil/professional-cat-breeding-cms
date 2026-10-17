@@ -7,7 +7,7 @@
         $localSchema = [
             '@context' => 'https://schema.org',
             '@type' => 'LocalBusiness',
-            'name' => 'Hodowla Kotów z Mazowieckiej Szwajcarii — dla mieszkańców: ' . $city['name'],
+            'name' => 'Domowa Hodowla Kotów z Mazowieckiej Szwajcarii — dla mieszkańców: ' . $city['name'],
             'description' => $city['meta_description'],
             'url' => url()->current(),
             'telephone' => '+48 514 153 204',
@@ -68,7 +68,7 @@
     {{-- ============================================================
     1. LOCAL HERO — DEDICATED CITY HEADER
     ============================================================ --}}
-    <section class="hero hero--dark" aria-label="Hodowla kotów dla {{ $city['name_genitive'] }}" data-nav-theme="dark">
+    <section class="hero hero--dark" aria-label="Domowa hodowla kotów dla {{ $city['name_genitive'] }}" data-nav-theme="dark">
         <div class="hero__bg" aria-hidden="true">
             <x-frontend.picture
                 src="{{ asset('image/hero/cinematic_bg.jpg') }}"
@@ -89,10 +89,10 @@
                 <div class="hero-split-grid">
                     <div class="hero-split__left">
                         <span class="hero-split__eyebrow" style="display: inline-block; color: var(--color-gold, #c89d5c); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 12px;">
-                            Dla Opiekunów z {{ $city['name_genitive'] }} • {{ $city['distance_time'] }} dojazdu
+                            Dla Opiekunów z {{ $city['name_genitive'] }} • {{ $city['distance_time'] }} dojazdu • Domowa Hodowla
                         </span>
                         <h1 class="hero-split__title">
-                            Hodowla Kotów Rasowych z Rodowodem dla Mieszkańców {{ $city['name_genitive'] }}.
+                            Domowa Hodowla Kotów Rasowych z Rodowodem dla Mieszkańców {{ $city['name_genitive'] }}.
                         </h1>
                         <p class="hero-split__lead">
                             Mieszkasz w {{ $city['name_locative'] }} lub okolicach i marzysz o kocie bengalskim, brytyjskim lub syjamskim? 
@@ -227,7 +227,7 @@
                        target="_blank" 
                        rel="noopener noreferrer" 
                        style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.8125rem; padding: 7px 14px; border-radius: 8px; border: 1px solid rgba(200, 157, 92, 0.45); background: #ffffff; color: #8a6428; text-decoration: none; font-weight: 600; box-shadow: 0 2px 6px rgba(0,0,0,0.03); transition: all 0.2s ease;">
-                        <span>📍 Nawiguj do hodowli (Google Maps)</span>
+                        <span>📍 Nawiguj do domowej hodowli (Google Maps)</span>
                         <span aria-hidden="true">↗</span>
                     </a>
                 </div>

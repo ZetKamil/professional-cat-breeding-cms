@@ -1,11 +1,11 @@
-<x-frontend.shell title="Regulamin Świadczenia Usług Drogą Elektroniczną | Hodowla Kotów z Mazowieckiej Szwajcarii"
-    meta-description="Regulamin korzystania ze strony internetowej oraz formularza kontaktowego Hodowli Kotów z Mazowieckiej Szwajcarii w Sikorzu.">
+<x-frontend.shell title="Regulamin Świadczenia Usług Drogą Elektroniczną | Domowa Hodowla Kotów z Mazowieckiej Szwajcarii"
+    meta-description="Regulamin korzystania ze strony internetowej oraz formularza kontaktowego Domowej Hodowli Kotów z Mazowieckiej Szwajcarii w Sikorzu.">
     <div class="section tile-canvas legal-page">
         <div class="section-inner legal-page__inner">
 
             <header class="legal-page__header">
                 <h1 class="text-hero-display legal-page__title">Regulamin Świadczenia Usług Drogą Elektroniczną</h1>
-                <p class="text-body text-ink-muted-48" style="margin-top: 8px; font-weight: 600;">Hodowla Kotów z Mazowieckiej Szwajcarii</p>
+                <p class="text-body text-ink-muted-48" style="margin-top: 8px; font-weight: 600;">Domowa Hodowla Kotów z Mazowieckiej Szwajcarii</p>
                 <p class="text-body text-ink-muted-48" style="margin-top: 4px;">Ostatnia aktualizacja: 11.08.2026</p>
             </header>
 
@@ -15,9 +15,9 @@
                 <section class="legal-page__section">
                     <h2 class="legal-page__section-title">1. Postanowienia ogólne</h2>
                     <ol class="legal-page__list legal-page__list--numbered">
-                        <li>Niniejszy Regulamin określa zasady korzystania ze strony internetowej Hodowli Kotów z Mazowieckiej Szwajcarii oraz zasady korzystania z usług świadczonych drogą elektroniczną za jej pośrednictwem.</li>
+                        <li>Niniejszy Regulamin określa zasady korzystania ze strony internetowej Domowej Hodowli Kotów z Mazowieckiej Szwajcarii oraz zasady korzystania z usług świadczonych drogą elektroniczną za jej pośrednictwem.</li>
                         <li>Usługodawcą jest:<br><br>
-                            <strong>Hodowla Kotów z Mazowieckiej Szwajcarii</strong><br>
+                            <strong>Domowa Hodowla Kotów z Mazowieckiej Szwajcarii</strong><br>
                             REGON: 910936148<br>
                             Sikórz 56A<br>
                             09-413 Sikórz<br>
@@ -121,9 +121,9 @@
                     <ol class="legal-page__list legal-page__list--numbered">
                         <li>Użytkownik może zgłosić reklamację dotyczącą działania usług świadczonych drogą elektroniczną, w szczególności problemów z funkcjonowaniem strony lub formularza kontaktowego.</li>
                         <li>Reklamację można przesłać:<br><br>
-                            <strong>E-mail:</strong> <a href="mailto:hodowla.z.mazowieckiej.szwajcarii@gmail.com">hodowla.z.mazowieckiej.szwajcarii@gmail.com</a><br><br>
+                            <strong>E-mail:</strong> <a href="mailto:biuro@kotyzmazowieckiejszwajcarii.pl">biuro@kotyzmazowieckiejszwajcarii.pl</a><br><br>
                             lub pocztą na adres:<br><br>
-                            <strong>Hodowla Kotów z Mazowieckiej Szwajcarii</strong><br>
+                            <strong>Domowa Hodowla Kotów z Mazowieckiej Szwajcarii</strong><br>
                             Sikórz 56A<br>
                             09-413 Sikórz<br>
                             Polska
@@ -163,13 +163,13 @@
                     </ol>
 
                     <div style="margin-top: 32px; padding: 20px; background-color: var(--color-canvas-parchment); border: 1px solid var(--color-hairline); border-radius: var(--r-lg);">
-                        <p><strong>Hodowla Kotów z Mazowieckiej Szwajcarii</strong><br>
+                        <p><strong>Domowa Hodowla Kotów z Mazowieckiej Szwajcarii</strong><br>
                         REGON: 910936148<br>
                         Sikórz 56A<br>
                         09-413 Sikórz<br>
                         Polska</p>
                         <p style="margin-top: 8px;">
-                            <strong>E-mail:</strong> <a href="mailto:hodowla.z.mazowieckiej.szwajcarii@gmail.com">hodowla.z.mazowieckiej.szwajcarii@gmail.com</a><br>
+                            <strong>E-mail:</strong> <a href="mailto:biuro@kotyzmazowieckiejszwajcarii.pl">biuro@kotyzmazowieckiejszwajcarii.pl</a><br>
                             <strong>Telefon:</strong> <a href="tel:+48514153204">+48 514 153 204</a>
                         </p>
                     </div>

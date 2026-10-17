@@ -13,7 +13,7 @@ Calm, minimal, trust-building
                 {{-- Brand & Contact Column --}}
                 <div class="footer-col footer-col--brand">
                     <a href="{{ route('home') }}" class="footer-brand"
-                        aria-label="Hodowla Kotów z Mazowieckiej Szwajcarii">
+                        aria-label="Domowa Hodowla Kotów z Mazowieckiej Szwajcarii">
                         <picture>
                             <source
                                 srcset="{{ asset('logo-36.webp') }} 1x, {{ asset('logo-72.webp') }} 2x"
@@ -28,10 +28,10 @@ Calm, minimal, trust-building
                                 height="40"
                             >
                         </picture>
-                        <span class="footer-brand__name">Hodowla Kotów z Mazowieckiej Szwajcarii</span>
+                        <span class="footer-brand__name">Domowa Hodowla Kotów z Mazowieckiej Szwajcarii</span>
                     </a>
                     <p class="footer-brand__tagline text-body">
-                        Profesjonalna hodowla kotów rasowych z pasją, troską i pełną transparentnością.
+                        Certyfikowana domowa hodowla kotów rasowych bez klatek — prowadzona z miłością, empatią i pełną troską o zdrowie.
                     </p>
 
 
@@ -94,17 +94,17 @@ Calm, minimal, trust-building
 
                 {{-- Location & Visits --}}
                 <div class="footer-col footer-col--newsletter">
-                    <h3 class="footer-heading">Lokalizacja & Wizyty</h3>
+                    <h3 class="footer-heading">Lokalizacja & Odwiedziny w domowej hodowli</h3>
                     <p class="footer-newsletter__desc text-body" style="line-height: 1.6;">
                         <strong>Sikórz k. Płocka</strong><br>
                         woj. mazowieckie<br><br>
-                        Wizyty w hodowli po wcześniejszym uzgodnieniu terminu.<br>
+                        Odwiedziny w domowej hodowli po wcześniejszym uzgodnieniu terminu.<br>
                         <strong>9:00 – 20:00</strong>
                     </p>
                     <div style="margin-top: 12px;">
                         <a href="{{ route('contact') }}" class="footer-link"
                             style="color: var(--color-primary); font-weight: 600;">
-                            Umów spotkanie w hodowli →
+                            Umów spotkanie w domowej hodowli →
                         </a>
                     </div>
                 </div>
@@ -127,7 +127,7 @@ Calm, minimal, trust-building
             {{-- Bottom Bar --}}
             <div class="footer-bottom">
                 <p class="footer-copyright">
-                    &copy; {{ now()->year }} Hodowla Kotów z Mazowieckiej Szwajcarii. Wszelkie prawa zastrzeżone.
+                    &copy; {{ now()->year }} Domowa Hodowla Kotów z Mazowieckiej Szwajcarii. Wszelkie prawa zastrzeżone.
                 </p>
                 <p class="footer-legal">
                     <a href="{{ route('privacy') }}" class="footer-link">Polityka prywatności</a>

@@ -51,7 +51,7 @@
                     <a href="{{ route('cattery') }}"
                        class="global-nav__link {{ request()->routeIs('cattery') ? 'is-active' : '' }}"
                        {{ request()->routeIs('cattery') ? 'aria-current=page' : '' }}>
-                        O Hodowli
+                        O Domowej Hodowli
                     </a>
                 </li>
                 <li>
@@ -146,7 +146,7 @@
                 </li>
                 <li>
                     <a href="{{ route('cattery') }}" class="mobile-menu__link {{ request()->routeIs('cattery') ? 'is-active' : '' }}">
-                        O Hodowli
+                        O Domowej Hodowli
                     </a>
                 </li>
                 <li>

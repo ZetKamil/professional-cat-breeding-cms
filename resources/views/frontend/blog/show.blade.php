@@ -37,7 +37,7 @@
             <div class="article-author-bar">
                 <div class="article-author-bar__info">
                     <span class="article-author-bar__name">{{ config('app.name') }}</span>
-                    <span class="article-author-bar__role">Certyfikowana Hodowla Kotów Rasowych</span>
+                    <span class="article-author-bar__role">Certyfikowana Domowa Hodowla Kotów Rasowych</span>
                 </div>
                 <div class="article-author-bar__meta">
                     <time datetime="{{ $post->published_at?->toIso8601String() }}">

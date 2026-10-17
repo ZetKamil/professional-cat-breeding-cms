@@ -1,5 +1,5 @@
 @props([
-    'title' => 'Hodowla Kotów Rasowych z Rodowodem – Bengalskie, Brytyjskie i Syjamskie | Mazowiecka Szwajcaria',
+    'title' => 'Domowa Hodowla Kotów Rasowych z Rodowodem – Bengalskie, Brytyjskie i Syjamskie | Mazowiecka Szwajcaria',
     'metaDescription' => 'Domowa hodowla kotów rasowych z rodowodem SHiOZ ZOOLANDIA (Certyfikat 58/CW/2025, Rej. 58/P/2025). Koty bengalskie, brytyjskie i syjamskie w Sikorzu k. Płocka (Mazowsze).',
     'ogImage' => null,
     'ogType' => 'website',
@@ -44,7 +44,7 @@
     @endphp
 
     {{-- Open Graph --}}
-    <meta property="og:site_name" content="Hodowla Kotów z Mazowieckiej Szwajcarii">
+    <meta property="og:site_name" content="Domowa Hodowla Kotów z Mazowieckiej Szwajcarii">
     <meta property="og:title" content="{{ $title }}">
     <meta property="og:description" content="{{ $metaDescription }}">
     <meta property="og:type" content="{{ $ogType }}">
