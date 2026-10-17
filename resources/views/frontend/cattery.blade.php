@@ -7,8 +7,9 @@
     <x-frontend.hero eyebrow="Felinologia i Standardy Domowe" title="O Domowej Hodowli.<br>Bezkompromisowa Etyka i Ciepło."
         lead="Poznaj naszą filozofię opieki, Kodeks Zaufania oraz jasny, przejrzysty proces zakupu i dołączenia kocięcia do Twojego domu."
         image-url="{{ asset('image/cattery/hero_bg.jpg') }}"
-        image-position="center 68%"
-        image-alt="Arystokratyczny kot brytyjski w eleganckim wnętrzu domowej hodowli" scroll-target="#filozofia" size="large"
+        image-position="center 90%"
+        image-alt="Arystokratyczny kot brytyjski długowłosy w eleganckim wnętrzu domowej hodowli" scroll-target="#filozofia" size="large"
+        class="hero--cattery"
         data-nav-theme="dark" />
 
     {{-- ============================================================

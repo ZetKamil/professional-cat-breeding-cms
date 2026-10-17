@@ -352,7 +352,7 @@
         <x-frontend.section-header
             eyebrow="Eksperckie Porównanie Ras"
             headline="Kot Bengalski, Brytyjski czy Syjamski? Jak wybrać idealnego towarzysza?"
-            description="Wybór rasy to decyzja na 15–20 lat. Poznaj kluczowe różnice w temperamencie, potrzebach ruchowych i pielęgnacji kotów z naszej domowej hodowli."
+            description="Poznaj kluczowe różnice w temperamencie, potrzebach ruchowych i pielęgnacji kotów z naszej domowej hodowli."
         />
 
         <div class="benefits-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--sp-xl); margin-bottom: var(--sp-3xl);" role="list" aria-label="Porównanie ras kotów">

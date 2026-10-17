@@ -279,6 +279,74 @@ a.contact-fast-link:hover {
     max-width: 640px;
 }
 
+/* --- Contact Method Tabs (Quick Phone vs Email Form) --- */
+.contact-tabs {
+    display: flex;
+    background-color: var(--color-canvas-parchment);
+    padding: 4px;
+    border-radius: var(--r-full);
+    border: 1px solid var(--color-hairline);
+    margin-bottom: var(--sp-lg);
+    gap: 4px;
+}
+
+.contact-tab {
+    flex: 1;
+    padding: 10px 16px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-ink-muted-80);
+    border: none;
+    background: transparent;
+    border-radius: var(--r-full);
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+    text-align: center;
+}
+
+.contact-tab:hover {
+    color: var(--color-ink);
+}
+
+.contact-tab.is-active {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Quick Callback in Contact Card */
+.contact-quick-panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-md);
+}
+
+.contact-quick-pill-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.quick-breed-pill {
+    padding: 6px 14px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    border-radius: var(--r-full);
+    border: 1px solid var(--color-hairline);
+    background: var(--color-canvas-parchment);
+    color: var(--color-ink-muted-80);
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+}
+
+.quick-breed-pill:hover,
+.quick-breed-pill.is-selected {
+    background: var(--color-ink);
+    color: #fff;
+    border-color: var(--color-ink);
+}
+
 /* ==========================================================================
    RESPONSIVE — Contact page
    ========================================================================== */

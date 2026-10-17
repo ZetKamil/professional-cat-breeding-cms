@@ -1,6 +1,6 @@
 # Jaki kot pasuje do Twojego stylu życia? Porównanie kotów brytyjskich, bengalskich i syjamskich + Quiz Behawioralny w 45 sekund
 
-Decyzja o powiększeniu rodziny o kota rasowego to zobowiązanie na 15, a często nawet na ponad 20 lat. W internecie łatwo ulec zachwytowi nad hipnotyzującymi cętkami lamparta u kota bengalskiego, puszystym arystokratyzmem brytyjczyka czy szafirowym spojrzeniem syjama. 
+Wybór kota rasowego to ważny i piękny krok dla całej rodziny. W internecie łatwo ulec zachwytowi nad hipnotyzującymi cętkami lamparta u kota bengalskiego, puszystym arystokratyzmem brytyjczyka czy szafirowym spojrzeniem syjama. 
 
 Jednak w codziennym życiu to nie wygląd decyduje o harmonii pod jednym dachem — decyduje **temperament, poziom energii i wzajemne dopasowanie rytmu dnia**.
 

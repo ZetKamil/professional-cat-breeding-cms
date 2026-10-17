@@ -5,7 +5,7 @@
 /* Hero Section */
 .blog-hero {
     padding-top: var(--sp-3xl);
-    padding-bottom: var(--sp-2xl);
+    padding-bottom: var(--sp-lg);
     text-align: center;
 }
 
@@ -13,7 +13,7 @@
     .blog-hero {
         /* Add navbar height offset so headline is never hidden under the fixed nav */
         padding-top: calc(var(--nav-height, 64px) + var(--sp-xl));
-        padding-bottom: var(--sp-lg);
+        padding-bottom: var(--sp-md);
     }
 }
 
@@ -137,8 +137,8 @@
 
 /* Articles Grid */
 .blog-grid-section {
-    padding-top: var(--sp-xl);
-    padding-bottom: var(--sp-lg);
+    padding-top: var(--sp-md);
+    padding-bottom: var(--sp-3xl);
 }
 
 .blog-grid {
@@ -161,7 +161,7 @@
 
 /* Pagination */
 .blog-pagination {
-    margin-top: var(--space-12);
+    margin-top: var(--sp-2xl);
     display: flex;
     justify-content: center;
 }
