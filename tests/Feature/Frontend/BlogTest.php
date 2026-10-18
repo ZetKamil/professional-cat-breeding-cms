@@ -121,4 +121,32 @@ class BlogTest extends TestCase
 
         $response->assertNotFound();
     }
+
+    public function test_card_excerpt_strips_markdown_images_and_syntax(): void
+    {
+        $user = User::factory()->create();
+        $post = Post::factory()->create([
+            'user_id' => $user->id,
+            'title' => 'Test Markdown Strip',
+            'excerpt' => null,
+            'body' => "![Zdjęcie do sekcji](/storage/blog/013-wyprawka-dla-kociaka-lista/02_hero.jpg)\n\n## Nagłówek H2\n\nTo jest [link](https://example.com) do **kompletnej** wyprawki dla kota.",
+            'is_published' => true,
+            'published_at' => now()->subDay(),
+        ]);
+
+        $excerpt = $post->cardExcerpt(115);
+
+        // Must not contain markdown image, header or brackets
+        expect($excerpt)->not->toContain('![Zdjęcie do sekcji]')
+            ->and($excerpt)->not->toContain('/storage/blog')
+            ->and($excerpt)->not->toContain('##')
+            ->and($excerpt)->not->toContain('**')
+            ->and($excerpt)->toContain('To jest link do kompletnej wyprawki dla kota.');
+
+        // And verify that blog index renders this without markdown image syntax
+        $response = $this->get(route('frontend.blog.index'));
+        $response->assertOk();
+        $response->assertDontSee('![Zdjęcie do sekcji]');
+        $response->assertSee('To jest link do kompletnej wyprawki dla kota.');
+    }
 }

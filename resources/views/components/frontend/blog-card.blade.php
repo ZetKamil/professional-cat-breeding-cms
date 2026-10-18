@@ -47,7 +47,7 @@
         <h3 class="blog-card__title">{{ $post->title }}</h3>
 
         <p class="blog-card__excerpt">
-            {{ Str::limit(strip_tags($post->body ?? ''), 115) }}
+            {{ $post->cardExcerpt(115) }}
         </p>
 
         <div class="blog-card__read-more">

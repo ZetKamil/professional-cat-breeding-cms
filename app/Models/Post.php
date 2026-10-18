@@ -273,6 +273,40 @@ class Post extends Model
     }
 
     /**
+     * Clean plain-text excerpt for cards and listings.
+     * Strips Markdown images, links, headers and HTML, prioritizing the curated excerpt field.
+     */
+    public function cardExcerpt(int $limit = 115): string
+    {
+        $text = trim((string) ($this->excerpt ?? ''));
+
+        if ($text === '') {
+            $text = (string) ($this->body ?? '');
+        }
+
+        // 1. Remove markdown images: ![alt](url)
+        $text = preg_replace('/!\[.*?\]\(.*?\)/su', '', $text);
+
+        // 2. Convert markdown links [text](url) -> text
+        $text = preg_replace('/\[(.*?)\]\(.*?\)/su', '$1', $text);
+
+        // 3. Remove Markdown headings (#, ##, etc.) and blockquotes
+        $text = preg_replace('/^#+\s+/mu', '', $text);
+        $text = preg_replace('/^>\s+/mu', '', $text);
+
+        // 4. Remove Markdown bold, italic, strikethrough, backticks
+        $text = preg_replace('/[\*_~`]/u', '', $text);
+
+        // 5. Remove HTML tags
+        $text = strip_tags($text);
+
+        // 6. Normalize whitespace
+        $text = trim(preg_replace('/\s+/u', ' ', $text));
+
+        return Str::limit($text, $limit);
+    }
+
+    /**
      * Konwertuje ciało Markdown starego artykułu na tablicę sekcji (H2 + tekst + zdjęcia).
      */
     public static function parseBodyToSections(?string $body): array
