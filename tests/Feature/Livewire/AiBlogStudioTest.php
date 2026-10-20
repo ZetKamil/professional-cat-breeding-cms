@@ -78,3 +78,78 @@ test('fetchTopics executes agent and sets topicsLoaded', function () {
         ->assertSet('isFetchingTopics', false);
 });
 
+test('saveDraft creates post with structured sections and tip', function () {
+    \Illuminate\Support\Facades\Storage::fake('public');
+    \Illuminate\Support\Facades\Http::fake();
+
+    $category = \App\Models\Category::firstOrCreate(
+        ['slug' => 'zywienie-holistyczne'],
+        ['name' => 'Żywienie holistyczne']
+    );
+
+    $component = Livewire::test(AiBlogStudio::class);
+    $component->set('customTopic', 'Żywienie i dieta BARF dla kota bengalskiego');
+    $component->set('generatedDraft', [
+        'title'             => 'Jak karmić kota bengalskiego?',
+        'slug'              => 'jak-karmic-kota-bengalskiego',
+        'excerpt'           => 'Kompleksowy poradnik o diecie BARF.',
+        'sections'          => [
+            [
+                'heading'      => '',
+                'body'         => 'Wstęp do diety mięsnej.',
+                'tip'          => 'Zawsze dodawaj taurynę.',
+                'image_url'    => '',
+                'image_prompt' => 'Bengal eating',
+            ],
+            [
+                'heading'      => 'Jakie mięso wybrać?',
+                'body'         => 'Najlepiej drób i wołowinę.',
+                'tip'          => 'Unikaj kości poddanych obróbce termicznej.',
+                'image_url'    => '',
+                'image_prompt' => 'Raw meat for cat',
+            ],
+        ],
+        'hero_image_prompt' => 'Bengal cat eating meat',
+        'meta_title'        => 'Jak karmić kota?',
+        'meta_description'  => 'Poradnik diety BARF.',
+    ]);
+
+    $component->call('saveDraft', false);
+
+    $post = \App\Models\Post::where('slug', 'jak-karmic-kota-bengalskiego')->first();
+    expect($post)->not->toBeNull();
+    expect($post->is_published)->toBeFalse();
+    expect($post->sections)->toBeArray();
+    expect($post->sections[0]['tip'])->toBe('Zawsze dodawaj taurynę.');
+    expect($post->categories->pluck('slug')->all())->toContain('zywienie-holistyczne');
+});
+
+test('saveDraft with publishNow true immediately publishes post', function () {
+    \Illuminate\Support\Facades\Storage::fake('public');
+    \Illuminate\Support\Facades\Http::fake();
+
+    $component = Livewire::test(AiBlogStudio::class);
+    $component->set('customTopic', 'Pielęgnacja sierści kota bengalskiego');
+    $component->set('generatedDraft', [
+        'title'             => 'Pielęgnacja futra kota bengalskiego',
+        'slug'              => 'pielegnacja-futra-kota-bengalskiego',
+        'excerpt'           => 'Czesanie i kąpiele.',
+        'sections'          => [
+            [
+                'heading'      => '',
+                'body'         => 'Wstęp o futrze.',
+                'tip'          => 'Używaj gumowej rękawicy.',
+                'image_url'    => '',
+                'image_prompt' => 'Brushing cat',
+            ],
+        ],
+        'hero_image_prompt' => 'Brushing cat',
+    ]);
+
+    $component->call('saveDraft', true);
+
+    $post = \App\Models\Post::where('slug', 'pielegnacja-futra-kota-bengalskiego')->first();
+    expect($post)->not->toBeNull();
+    expect($post->is_published)->toBeTrue();
+});
+

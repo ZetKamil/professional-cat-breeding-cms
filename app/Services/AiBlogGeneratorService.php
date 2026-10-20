@@ -53,35 +53,91 @@ class AiBlogGeneratorService
 
     /**
      * Generate a decorative hero image for a post cover and attach it via MediaService.
+     * Tries Gemini Imagen first, then falls back to Pollinations AI photo generator.
      *
-     * @param  string            $prompt Image prompt for Imagen
+     * @param  string            $prompt Image prompt for Imagen / AI generator
      * @param  \App\Models\Post  $post   Created Post model
      * @return \App\Models\Media|null
      */
     public function generateHeroImage(string $prompt, \App\Models\Post $post): ?\App\Models\Media
     {
-        $base64 = $this->gemini->generateImage($prompt);
+        $imageData = null;
+        $mime = 'image/png';
+        $ext = 'png';
 
-        if (blank($base64)) {
+        // 1. Try Gemini Imagen
+        try {
+            $base64 = $this->gemini->generateImage($prompt);
+            if (filled($base64)) {
+                $imageData = base64_decode($base64);
+            }
+        } catch (\Throwable $e) {
+            Log::info('AiBlogGeneratorService: Gemini Imagen unavailable, using AI photo engine fallback', [
+                'error' => $e->getMessage(),
+            ]);
+        }
+
+        // 2. Reliable AI fallback engine (Pollinations AI)
+        if (empty($imageData)) {
+            $imageData = $this->fetchAiGeneratedImage($prompt);
+            $mime = 'image/jpeg';
+            $ext = 'jpg';
+        }
+
+        if (empty($imageData)) {
             return null;
         }
 
-        $imageData = base64_decode($base64);
-        if (! $imageData) {
-            return null;
-        }
-
-        $tmpPath = sys_get_temp_dir() . '/gemini_hero_' . uniqid() . '.png';
+        $tmpPath = sys_get_temp_dir() . '/ai_hero_' . uniqid() . '.' . $ext;
         file_put_contents($tmpPath, $imageData);
 
         try {
-            $uploadedFile = new \Illuminate\Http\UploadedFile($tmpPath, 'hero.png', 'image/png', null, true);
-            return app(MediaService::class)->upload($post, $uploadedFile, 'posts');
+            $uploadedFile = new \Illuminate\Http\UploadedFile($tmpPath, 'hero.' . $ext, $mime, null, true);
+            $media = app(MediaService::class)->upload($post, $uploadedFile, 'posts', isFeatured: true);
+
+            // Update title and alt attributes
+            $media->update([
+                'title'       => $post->title,
+                'alt_text'    => $post->title . ' — Hodowla Kotów z Mazowieckiej Szwajcarii',
+                'is_featured' => true,
+            ]);
+
+            return $media;
         } finally {
             if (file_exists($tmpPath)) {
                 @unlink($tmpPath);
             }
         }
+    }
+
+    /**
+     * Download an AI-generated image via public AI image model.
+     */
+    public function fetchAiGeneratedImage(string $prompt, int $width = 1200, int $height = 675): ?string
+    {
+        $cleanPrompt = trim($prompt);
+        if (blank($cleanPrompt)) {
+            $cleanPrompt = 'Magnificent pedigreed cat in a warm luxury interior, natural sunlight, cinematic 8k';
+        }
+
+        $encoded = urlencode($cleanPrompt);
+        $url = "https://image.pollinations.ai/prompt/{$encoded}?width={$width}&height={$height}&nologo=true&enhance=true";
+
+        try {
+            $response = \Illuminate\Support\Facades\Http::timeout(25)
+                ->withoutVerifying()
+                ->get($url);
+
+            if ($response->successful() && strlen($response->body()) > 5000) {
+                return $response->body();
+            }
+        } catch (\Throwable $e) {
+            Log::warning('AiBlogGeneratorService: failed to fetch AI image from Pollinations', [
+                'error' => $e->getMessage(),
+            ]);
+        }
+
+        return null;
     }
 
 
@@ -203,21 +259,24 @@ class AiBlogGeneratorService
             {
               "heading": "",
               "body": "Introductory lead paragraph text (no heading for the first section)",
-              "image_url": ""
+              "tip": "Breeder practical pro-tip (1-2 sentences) or empty string",
+              "image_prompt": "English prompt for photo of cat or theme illustrating this section"
             },
             {
               "heading": "First H2 subtitle",
               "body": "Body paragraphs for this section. Use \\n between paragraphs.",
-              "image_url": ""
+              "tip": "Actionable breeder tip from Hodowla z Mazowieckiej Szwajcarii (1-2 sentences)",
+              "image_prompt": "English prompt for photo illustrating this H2 topic"
             }
           ],
-          "hero_image_prompt": "English prompt for generating a decorative cover image (NOT a photo of a real cat)"
+          "hero_image_prompt": "English prompt for generating a decorative high-resolution cover photo"
         }
         RULES FOR sections:
         - Generate 4-6 sections total.
         - The FIRST section MUST have an empty heading ("") — it is the intro paragraph.
         - All other sections MUST have a non-empty heading (H2 level).
-        - image_url is always empty string "" — images will be added manually by the editor.
+        - tip: A concise, highly professional practical advice from the breeder (1-2 sentences) highlighting responsible care, health, or socialization.
+        - image_prompt: A vivid English prompt describing a photo that fits this specific section (e.g. "British Shorthair kitten playing on a carpet, warm sunlight, photorealistic 8k").
         - body is plain text only. No HTML tags.
         - DO NOT generate a contact/closing cattery offer section (e.g. "Dostępne kocięta", "Kontakt z hodowlą"). The website dynamically appends the live cattery offer and contact card at the bottom of every article. Focus 100% on high-quality educational knowledge and advice for the reader.
         PROMPT;
@@ -350,6 +409,9 @@ class AiBlogGeneratorService
             if (!empty($s['body'])) {
                 $parts[] = $s['body'];
             }
+            if (!empty($s['tip'])) {
+                $parts[] = '> 💡 **Wskazówka hodowcy:** ' . $s['tip'];
+            }
             if (!empty($s['image_url'])) {
                 $alt = !empty($s['heading']) ? $s['heading'] : 'Zdjęcie sekcji';
                 $parts[] = '![' . $alt . '](' . $s['image_url'] . ')';
@@ -361,8 +423,8 @@ class AiBlogGeneratorService
     /**
      * Normalize the parsed Gemini response into a standard sections array:
      * [
-     *   ['heading' => '', 'body' => '...', 'image_url' => ''],
-     *   ['heading' => 'H2...', 'body' => '...', 'image_url' => ''],
+     *   ['heading' => '', 'body' => '...', 'tip' => '...', 'image_url' => '', 'image_prompt' => '...'],
+     *   ['heading' => 'H2...', 'body' => '...', 'tip' => '...', 'image_url' => '', 'image_prompt' => '...'],
      * ]
      *
      * Handles:
@@ -403,6 +465,14 @@ class AiBlogGeneratorService
             $body = strip_tags(str_replace(['<br>', '<br/>', '<br />', '</p>'], ["\n", "\n", "\n", "\n\n"], $body));
             $body = trim(preg_replace("/\n{3,}/", "\n\n", $body));
 
+            $tip = trim((string) (
+                $item['tip'] ?? $item['breeder_tip'] ?? $item['advice'] ?? ''
+            ));
+
+            $imagePrompt = trim((string) (
+                $item['image_prompt'] ?? $item['prompt'] ?? ''
+            ));
+
             $imageUrl = trim((string) ($item['image_url'] ?? $item['image_path'] ?? ''));
 
             if ($body === '' && $heading === '') {
@@ -422,9 +492,11 @@ class AiBlogGeneratorService
             }
 
             $normalized[] = [
-                'heading'   => $heading,
-                'body'      => $body,
-                'image_url' => $imageUrl,
+                'heading'      => $heading,
+                'body'         => $body,
+                'tip'          => $tip,
+                'image_url'    => $imageUrl,
+                'image_prompt' => $imagePrompt,
             ];
         }
 
@@ -432,9 +504,11 @@ class AiBlogGeneratorService
         if (empty($normalized)) {
             $introText = !empty($parsed['excerpt']) ? $parsed['excerpt'] : "Wprowadzenie do artykułu na temat: {$fallbackTopic}.";
             $normalized[] = [
-                'heading'   => '',
-                'body'      => $introText,
-                'image_url' => '',
+                'heading'      => '',
+                'body'         => $introText,
+                'tip'          => '',
+                'image_url'    => '',
+                'image_prompt' => '',
             ];
         }
 

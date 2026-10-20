@@ -245,13 +245,27 @@ class AiBlogStudio extends Component
                 $this->selectedAnimalIds
             );
 
-            // Distribute photos from selected cattery animals to the article sections
+            // 1. Distribute photos from selected cattery animals to the article sections
             if (!empty($draft['sections'])) {
                 $draft['sections'] = $this->distributeAnimalPhotosToSections(
                     $draft['sections'],
                     $this->selectedAnimalIds
                 );
+
+                // 2. Auto-fill any remaining sections without images with thematic AI images
+                $draft['sections'] = $this->assignAiPhotosToEmptySections(
+                    $draft['sections'],
+                    $breedLabel,
+                    $topic
+                );
+
                 $draft['body'] = $blogService->sectionsToBody($draft['sections']);
+            }
+
+            // Set hero image preview URL
+            if (!empty($draft['hero_image_prompt'])) {
+                $encodedHero = urlencode(trim($draft['hero_image_prompt']) . ', photorealistic 8k, warm lighting, luxury interior');
+                $draft['hero_image_preview_url'] = "https://image.pollinations.ai/prompt/{$encodedHero}?width=1200&height=675&nologo=true&enhance=true";
             }
 
             $this->generatedDraft = $draft;
@@ -269,9 +283,9 @@ class AiBlogStudio extends Component
         }
     }
 
-    // ─── Step 3: Save Draft ─────────────────────────────────────────
+    // ─── Step 3: Save Draft / Publish ────────────────────────────────
 
-    public function saveDraft(): void
+    public function saveDraft(bool $publishNow = false): void
     {
         if (! $this->generatedDraft) {
             return;
@@ -287,15 +301,11 @@ class AiBlogStudio extends Component
         try {
             $draft = $this->generatedDraft;
 
-            $draft['is_published'] = false;
+            $draft['is_published'] = $publishNow;
             $draft['published_at'] = now();
             $draft['user_id']      = Auth::id();
 
             $sections = $draft['sections'] ?? [];
-            $body = !empty($sections)
-                ? $blogService->sectionsToBody($sections)
-                : ($draft['body'] ?? '');
-
             $topicForCategory = trim($this->customTopic) ?: trim($this->selectedTopic);
             $assignedCategories = $this->detectCategoryForTopic($topicForCategory);
 
@@ -305,15 +315,27 @@ class AiBlogStudio extends Component
                 'slug'                => $draft['slug'],
                 'excerpt'             => $draft['excerpt'],
                 'sections'            => $sections,
-                'body'                => $body,
+                'body'                => !empty($sections) ? $blogService->sectionsToBody($sections) : ($draft['body'] ?? ''),
                 'featured_animal_ids' => $this->selectedAnimalIds ?? [],
                 'meta_title'          => $draft['meta_title'] ?? null,
                 'meta_description'    => $draft['meta_description'] ?? null,
-                'is_published'        => false,
+                'is_published'        => $publishNow,
                 'published_at'        => $draft['published_at'],
                 'categories'          => $assignedCategories,
             ]);
 
+            // Persist remote section images locally so they are permanently stored in /public/storage/posts/
+            if (!empty($sections)) {
+                $persistedSections = $this->persistRemoteSectionImages($sections, $post->id);
+                if ($persistedSections !== $sections) {
+                    $post->update([
+                        'sections' => $persistedSections,
+                        'body'     => $blogService->sectionsToBody($persistedSections),
+                    ]);
+                }
+            }
+
+            // Cover Image Generation / Attachment
             $heroCreated = false;
             if (! empty($draft['hero_image_prompt'])) {
                 try {
@@ -322,22 +344,22 @@ class AiBlogStudio extends Component
                         $heroCreated = true;
                     }
                 } catch (\Throwable $e) {
-                    Log::warning('AI Blog Studio: failed to generate hero cover image via Imagen', [
+                    Log::warning('AI Blog Studio: failed to generate hero cover image', [
                         'post_id' => $post->id,
                         'error'   => $e->getMessage(),
                     ]);
                 }
             }
 
-            // If Imagen is unavailable or failed (e.g. Free Tier Google API key),
-            // automatically attach the selected cat's photo as the Post's Featured Image!
+            // If AI generation failed, automatically attach the selected cat's photo as the Post's Featured Image
             if (! $heroCreated) {
                 $this->attachFeaturedImageFromAnimal($post, $this->selectedAnimalIds);
             }
 
             $this->savedPostSlug   = $post->slug;
             $this->savedPostTitle  = $post->title;
-            $this->successMessage  = "Szkic \"{$post->title}\" został zapisany w nowym szablonie!";
+            $actionVerb            = $publishNow ? 'opublikowany na blogu' : 'zapisany jako szkic';
+            $this->successMessage  = "Artykuł \"{$post->title}\" został {$actionVerb}!";
             $this->generatedDraft  = null;
             $this->currentStep     = 1;
             $this->reset(['selectedTopic', 'customTopic', 'selectedAnimalIds', 'heroImageDataUri']);
@@ -345,7 +367,7 @@ class AiBlogStudio extends Component
             $this->dispatch('draft-saved', postSlug: $post->slug);
 
         } catch (\Throwable $e) {
-            $this->errorMessage = 'Nie udało się zapisać szkicu: ' . $e->getMessage();
+            $this->errorMessage = 'Nie udało się zapisać wpisu: ' . $e->getMessage();
         } finally {
             $this->isSavingDraft = false;
         }
@@ -606,5 +628,59 @@ class AiBlogStudio extends Component
         $category = \App\Models\Category::where('slug', $matchedSlug)->first();
 
         return $category ? [$category->id] : [];
+    }
+
+    /**
+     * Auto-assign thematic AI photo URLs to any sections that still lack images.
+     */
+    private function assignAiPhotosToEmptySections(array $sections, string $breedLabel, string $topic): array
+    {
+        foreach ($sections as $idx => &$sec) {
+            if (empty($sec['image_url'])) {
+                $prompt = !empty($sec['image_prompt'])
+                    ? $sec['image_prompt']
+                    : (!empty($sec['heading']) ? "{$sec['heading']}, {$breedLabel} cat" : "{$topic}, {$breedLabel} kitten");
+
+                $cleanPrompt = urlencode(trim($prompt) . ', photorealistic 8k, warm natural lighting, luxury aesthetic');
+                $sec['image_url'] = "https://image.pollinations.ai/prompt/{$cleanPrompt}?width=800&height=500&nologo=true";
+            }
+        }
+
+        return $sections;
+    }
+
+    /**
+     * Download remote section images and persist them to local storage to guarantee permanent availability.
+     */
+    private function persistRemoteSectionImages(array $sections, int $postId): array
+    {
+        foreach ($sections as $idx => &$sec) {
+            $url = $sec['image_url'] ?? '';
+            if (str_starts_with($url, 'https://image.pollinations.ai/') || str_starts_with($url, 'https://images.unsplash.com/')) {
+                try {
+                    $response = \Illuminate\Support\Facades\Http::timeout(15)->withoutVerifying()->get($url);
+                    if ($response->successful() && strlen($response->body()) > 4000) {
+                        $dir = 'posts';
+                        $filename = "sec_{$postId}_{$idx}_" . uniqid() . '.jpg';
+                        \Illuminate\Support\Facades\Storage::disk('public')->put("{$dir}/{$filename}", $response->body());
+
+                        // Copy to public/storage if not symlinked
+                        $targetPath = public_path("storage/{$dir}/{$filename}");
+                        if (!\Illuminate\Support\Facades\File::isDirectory(dirname($targetPath))) {
+                            \Illuminate\Support\Facades\File::makeDirectory(dirname($targetPath), 0755, true, true);
+                        }
+                        \Illuminate\Support\Facades\File::put($targetPath, $response->body());
+
+                        $sec['image_url'] = asset("storage/{$dir}/{$filename}");
+                    }
+                } catch (\Throwable $e) {
+                    \Illuminate\Support\Facades\Log::warning('AI Blog Studio: could not persist remote section image locally', [
+                        'error' => $e->getMessage(),
+                    ]);
+                }
+            }
+        }
+
+        return $sections;
     }
 }

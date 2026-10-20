@@ -715,6 +715,18 @@ document.addEventListener('DOMContentLoaded', function () {
                                 placeholder="${isIntro ? 'Wprowadź tekst wstępny artykułu...' : 'Treść tej sekcji...'}"
                             >${escHtml(sec.body || '')}</textarea>
                         </div>
+                        <div class="mt-2">
+                            <label class="form-label small fw-semibold text-warning-emphasis">
+                                <i class="fas fa-lightbulb text-warning me-1"></i> Wskazówka hodowcy (Pro-Tip) <span class="text-muted fw-normal">(opcjonalna)</span>
+                            </label>
+                            <input
+                                type="text"
+                                class="form-control form-control-sm section-tip"
+                                data-idx="${idx}"
+                                value="${escHtml(sec.tip || '')}"
+                                placeholder="Np. Praktyczna rada od hodowcy z Mazowieckiej Szwajcarii..."
+                            >
+                        </div>
                     </div>
                     <div class="col-12 col-md-4">
                         <label class="form-label small fw-semibold">Zdjęcie sekcji <span class="text-muted fw-normal">(opcjonalne)</span></label>
@@ -756,6 +768,12 @@ document.addEventListener('DOMContentLoaded', function () {
         // Body textarea
         card.querySelector('.section-body')?.addEventListener('input', function () {
             regularSections[idx].body = this.value;
+            saveToInput();
+        });
+
+        // Tip input
+        card.querySelector('.section-tip')?.addEventListener('input', function () {
+            regularSections[idx].tip = this.value;
             saveToInput();
         });
 

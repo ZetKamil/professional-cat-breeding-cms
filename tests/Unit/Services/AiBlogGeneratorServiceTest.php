@@ -22,6 +22,8 @@ use Tests\TestCase;
  */
 class AiBlogGeneratorServiceTest extends TestCase
 {
+    use \Illuminate\Foundation\Testing\RefreshDatabase;
+
     public function test_generated_draft_is_always_unpublished(): void
     {
         $this->mock(GeminiService::class, function (MockInterface $mock) {
@@ -142,6 +144,10 @@ class AiBlogGeneratorServiceTest extends TestCase
 
     public function test_generate_hero_image_returns_null_when_base64_empty(): void
     {
+        \Illuminate\Support\Facades\Http::fake([
+            '*' => \Illuminate\Support\Facades\Http::response('', 500),
+        ]);
+
         $this->mock(GeminiService::class, function (MockInterface $mock) {
             $mock->shouldReceive('generateImage')
                 ->once()
@@ -157,6 +163,41 @@ class AiBlogGeneratorServiceTest extends TestCase
         $this->assertNull($media);
     }
 
+    public function test_generate_hero_image_falls_back_to_ai_generator_when_imagen_fails(): void
+    {
+        \Illuminate\Support\Facades\Storage::fake('public');
+
+        \Illuminate\Support\Facades\Http::fake([
+            'image.pollinations.ai/*' => \Illuminate\Support\Facades\Http::response(
+                str_repeat('X', 6000),
+                200,
+                ['Content-Type' => 'image/jpeg']
+            ),
+        ]);
+
+        $this->mock(GeminiService::class, function (MockInterface $mock) {
+            $mock->shouldReceive('generateImage')
+                ->once()
+                ->andThrow(new \Exception('Imagen quota exceeded'));
+        });
+
+        Config::set('services.gemini.api_key', 'test-key-123');
+
+        $user = \App\Models\User::factory()->create();
+        $post = \App\Models\Post::create([
+            'user_id' => $user->id,
+            'title'   => 'Post z okladka AI',
+            'slug'    => 'post-z-okladka-ai',
+            'body'    => 'Tresc',
+        ]);
+
+        $service = app(AiBlogGeneratorService::class);
+        $media   = $service->generateHeroImage('a cute kitten', $post);
+
+        $this->assertNotNull($media);
+        $this->assertTrue((bool) $media->is_featured);
+    }
+
     public function test_normalize_sections_cleans_and_structures_data(): void
     {
         $service = app(AiBlogGeneratorService::class);
@@ -167,10 +208,12 @@ class AiBlogGeneratorServiceTest extends TestCase
                 [
                     'title'   => 'Ignored intro heading',
                     'content' => 'First intro paragraph.',
+                    'tip'     => 'Wskazowka wstepna',
                 ],
                 [
                     'title'     => 'Sekcja druga H2',
                     'paragraph' => '<p>Treść z tagami html.</p>',
+                    'tip'       => 'Praktyczny tip o zdrowiu',
                 ],
                 [
                     'heading' => 'Sekcja trzecia H2',
@@ -191,13 +234,19 @@ class AiBlogGeneratorServiceTest extends TestCase
         // 2. Section 0 must have empty heading for the intro lead
         $this->assertSame('', $normalized[0]['heading']);
         $this->assertSame('First intro paragraph.', $normalized[0]['body']);
+        $this->assertSame('Wskazowka wstepna', $normalized[0]['tip']);
 
         // 3. Section 1 mapped 'title' to 'heading' and stripped HTML from body
         $this->assertSame('Sekcja druga H2', $normalized[1]['heading']);
         $this->assertSame('Treść z tagami html.', $normalized[1]['body']);
+        $this->assertSame('Praktyczny tip o zdrowiu', $normalized[1]['tip']);
 
         // 4. Section 2 kept regular fields
         $this->assertSame('Sekcja trzecia H2', $normalized[2]['heading']);
         $this->assertSame('Normalny tekst sekcji.', $normalized[2]['body']);
+
+        // 5. sectionsToBody converts tips to blockquotes
+        $body = $service->sectionsToBody($normalized);
+        $this->assertStringContainsString('💡 **Wskazówka hodowcy:** Praktyczny tip o zdrowiu', $body);
     }
 }

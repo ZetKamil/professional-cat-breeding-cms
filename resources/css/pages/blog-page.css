@@ -631,6 +631,37 @@
     box-shadow: var(--shadow-md, 0 4px 24px rgba(0,0,0,0.08));
 }
 
+/* Editorial Pro-Tip Callout (.article-tip-box) */
+.article-tip-box {
+    margin: var(--space-6, 24px) 0;
+    padding: var(--space-5, 20px) var(--space-6, 24px);
+    background: #fdfbf7;
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    border-left: 4px solid #c59b27;
+    border-radius: var(--radius-md, 10px);
+    box-shadow: 0 2px 12px rgba(197, 155, 39, 0.05);
+}
+
+.article-tip-box__header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #946c00;
+}
+
+.article-tip-box__text {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--color-ink, #1d1d1f);
+    margin: 0;
+    font-style: italic;
+}
+
 /* ==========================================================================
    Featured Cats Strip (article-featured-cats-section)
    ========================================================================== */

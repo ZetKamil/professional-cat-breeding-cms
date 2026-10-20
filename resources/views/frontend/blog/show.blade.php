@@ -77,6 +77,7 @@
                             $section = $post->sections[$i];
                             $sectionBody = trim($section['body'] ?? '');
                             $sectionHeading = trim($section['heading'] ?? '');
+                            $sectionTip = trim($section['tip'] ?? '');
                             $sectionImage = trim($section['image_url'] ?? '');
                             $isIntro = $i === 0;
                         @endphp
@@ -87,6 +88,15 @@
                                 <div class="article-intro-content">
                                     {!! Str::markdown($sectionBody) !!}
                                 </div>
+                            @endif
+                            @if($sectionTip)
+                                <aside class="article-tip-box" aria-label="Wskazówka hodowcy">
+                                    <div class="article-tip-box__header">
+                                        <span class="article-tip-box__icon">💡</span>
+                                        <span class="article-tip-box__label">Wskazówka Hodowcy</span>
+                                    </div>
+                                    <p class="article-tip-box__text">{{ $sectionTip }}</p>
+                                </aside>
                             @endif
                             @if($sectionImage)
                                 <figure class="article-section-figure article-section-figure--full">
@@ -99,7 +109,7 @@
                                 </figure>
                             @endif
                         @else
-                            {{-- Regular section: optional H2 + body + image --}}
+                            {{-- Regular section: optional H2 + body + tip + image --}}
                             <div class="article-section-block">
                                 @if($sectionHeading)
                                     <h2>{{ $sectionHeading }}</h2>
@@ -108,6 +118,15 @@
                                     <div class="article-section-content">
                                         {!! Str::markdown($sectionBody) !!}
                                     </div>
+                                @endif
+                                @if($sectionTip)
+                                    <aside class="article-tip-box" aria-label="Wskazówka hodowcy">
+                                        <div class="article-tip-box__header">
+                                            <span class="article-tip-box__icon">💡</span>
+                                            <span class="article-tip-box__label">Wskazówka Hodowcy</span>
+                                        </div>
+                                        <p class="article-tip-box__text">{{ $sectionTip }}</p>
+                                    </aside>
                                 @endif
                                 @if($sectionImage)
                                     <figure class="article-section-figure">

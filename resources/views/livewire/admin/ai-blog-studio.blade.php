@@ -303,18 +303,40 @@
                     <p class="text-muted">Generuję nagłówki, treść SEO oraz prompty graficzne.</p>
                 </div>
             @elseif($generatedDraft)
-                <div class="card mb-4 border-primary">
-                    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                {{-- Cover Image & Header Preview --}}
+                @if(!empty($generatedDraft['hero_image_preview_url']))
+                    <div class="card mb-4 border-0 shadow-sm overflow-hidden" style="border-radius: 12px;">
+                        <div class="position-relative" style="max-height: 260px; overflow: hidden; background: #111;">
+                            <img src="{{ $generatedDraft['hero_image_preview_url'] }}"
+                                 alt="Okładka wygenerowana przez AI"
+                                 class="w-100"
+                                 style="object-fit: cover; height: 260px; opacity: 0.85;">
+                            <div class="position-absolute bottom-0 start-0 w-100 p-4 text-white"
+                                 style="background: linear-gradient(0deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 60%, transparent 100%);">
+                                <span class="badge bg-warning text-dark fw-bold mb-2">
+                                    <i class="fas fa-magic me-1"></i> Zdjęcie okładkowe (AI Hero Cover)
+                                </span>
+                                <h3 class="fw-bold mb-1 text-white">{{ $generatedDraft['title'] ?? 'Tytuł wpisu' }}</h3>
+                                <p class="mb-0 text-white-50 small text-truncate" style="max-width: 800px;">
+                                    {{ $generatedDraft['excerpt'] ?? '' }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+                <div class="card mb-4 border-primary shadow-sm" style="border-radius: 12px;">
+                    <div class="card-header bg-light d-flex justify-content-between align-items-center py-3">
                         <div>
                             <span class="badge bg-primary text-white me-2">Nowy Szablon Editorialny</span>
                             <span class="badge bg-warning text-dark">SZKIC (Draft)</span>
                         </div>
-                        <span class="text-muted small">
-                            <i class="fas fa-layer-group me-1"></i>
-                            {{ !empty($generatedDraft['sections']) ? count($generatedDraft['sections']) . ' sekcji' : '' }}
+                        <span class="text-muted small fw-semibold">
+                            <i class="fas fa-layer-group me-1 text-primary"></i>
+                            {{ !empty($generatedDraft['sections']) ? count($generatedDraft['sections']) . ' sekcji z mediami' : '' }}
                         </span>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body p-4">
                         {{-- H1 --}}
                         <h2 class="fw-bold mb-3" style="color: #1e293b;">
                             {{ $generatedDraft['title'] ?? 'Szkic wpisu' }}
@@ -323,7 +345,9 @@
                         {{-- Excerpt / Lead --}}
                         @if(!empty($generatedDraft['excerpt']))
                             <div class="p-3 bg-light rounded border-start border-4 border-primary mb-4">
-                                <span class="fw-bold text-uppercase small text-muted d-block mb-1">Wstęp / Lead artykułu:</span>
+                                <span class="fw-bold text-uppercase small text-muted d-block mb-1">
+                                    <i class="fas fa-feather me-1 text-primary"></i> Wstęp / Lead artykułu:
+                                </span>
                                 <p class="lead mb-0 text-secondary" style="font-size: 1.05rem;">
                                     {{ $generatedDraft['excerpt'] }}
                                 </p>
@@ -340,8 +364,8 @@
                                                 {{ $sIdx === 0 ? 'Sekcja 1 (Wprowadzenie)' : 'Sekcja ' . ($sIdx + 1) }}
                                             </span>
                                             @if(!empty($sec['image_url']))
-                                                <span class="badge bg-info text-dark" style="font-size: 0.7rem;">
-                                                    <i class="fas fa-image me-1"></i> Ze zdjęciem
+                                                <span class="badge bg-success text-white" style="font-size: 0.7rem;">
+                                                    <i class="fas fa-check-circle me-1"></i> Zdjęcie przypisane
                                                 </span>
                                             @endif
                                         </div>
@@ -359,6 +383,16 @@
                                                         <p class="text-muted mb-2" style="line-height: 1.6;">{{ trim($p) }}</p>
                                                     @endif
                                                 @endforeach
+
+                                                {{-- Breeder Pro-Tip Callout --}}
+                                                @if(!empty($sec['tip']))
+                                                    <div class="p-2 px-3 mt-3 rounded bg-warning bg-opacity-10 border border-warning border-opacity-50 small">
+                                                        <strong class="text-warning-emphasis d-block mb-1">
+                                                            <i class="fas fa-lightbulb text-warning me-1"></i> Wskazówka hodowcy:
+                                                        </strong>
+                                                        <span class="fst-italic text-dark">{{ $sec['tip'] }}</span>
+                                                    </div>
+                                                @endif
                                             </div>
                                             @if(!empty($sec['image_url']))
                                                 <div class="col-12 col-md-4 text-center">
@@ -366,7 +400,9 @@
                                                          class="img-fluid rounded border shadow-sm"
                                                          style="max-height: 160px; object-fit: cover; width: 100%;"
                                                          alt="Zdjęcie sekcji">
-                                                    <small class="text-muted d-block mt-1" style="font-size: 0.75rem;">Zdjęcie przypisane do sekcji</small>
+                                                    <small class="text-muted d-block mt-1" style="font-size: 0.75rem;">
+                                                        <i class="fas fa-camera text-secondary me-1"></i>Zdjęcie przypisane do sekcji
+                                                    </small>
                                                 </div>
                                             @endif
                                         </div>
@@ -402,18 +438,28 @@
                     </div>
                 </div>
 
-                <div class="d-flex justify-content-between">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
                     <button type="button" wire:click="backToStep(2)" class="btn btn-outline-secondary btn-lg">
                         ← Wstecz
                     </button>
-                    <button type="button" wire:click="saveDraft" class="btn btn-success btn-lg px-5" wire:loading.attr="disabled">
-                        <span wire:loading.remove wire:target="saveDraft">
-                            <i class="fas fa-save me-2"></i> Zapisz jako Szkic w CMS
-                        </span>
-                        <span wire:loading wire:target="saveDraft" style="display: none;">
-                            <span class="spinner-border spinner-border-sm me-2"></span> Zapisuję...
-                        </span>
-                    </button>
+                    <div class="d-flex gap-2">
+                        <button type="button" wire:click="saveDraft(false)" class="btn btn-primary btn-lg px-4" wire:loading.attr="disabled">
+                            <span wire:loading.remove wire:target="saveDraft(false)">
+                                <i class="fas fa-save me-2"></i> Zapisz jako Szkic
+                            </span>
+                            <span wire:loading wire:target="saveDraft(false)" style="display: none;">
+                                <span class="spinner-border spinner-border-sm me-2"></span> Zapisuję...
+                            </span>
+                        </button>
+                        <button type="button" wire:click="saveDraft(true)" class="btn btn-success btn-lg px-4" wire:loading.attr="disabled">
+                            <span wire:loading.remove wire:target="saveDraft(true)">
+                                <i class="fas fa-globe me-2"></i> Zapisz i Opublikuj
+                            </span>
+                            <span wire:loading wire:target="saveDraft(true)" style="display: none;">
+                                <span class="spinner-border spinner-border-sm me-2"></span> Publikuję...
+                            </span>
+                        </button>
+                    </div>
                 </div>
             @endif
         </div>
