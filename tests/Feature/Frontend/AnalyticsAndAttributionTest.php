@@ -48,9 +48,9 @@ class AnalyticsAndAttributionTest extends TestCase
 
         // 1. Banner element presence
         $response->assertSee('id="cookie-consent-banner"', false);
-        $response->assertSee('Szanujemy Twoją prywatność');
-        $response->assertSee('Odrzuć');
-        $response->assertSee('Akceptuj');
+        $response->assertSee('Dbamy o Twój komfort!');
+        $response->assertSee('Tylko niezbędne');
+        $response->assertSee('Akceptuj wszystkie');
 
         // 2. Strictly single cookie banner on the page
         $matches = substr_count($content, 'id="cookie-consent-banner"');

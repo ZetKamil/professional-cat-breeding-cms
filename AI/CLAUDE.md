@@ -389,76 +389,35 @@ The next Claude session must be able to continue immediately by reading:
 2. TASKS.md
 3. DEV_JOURNAL.md
 
-# Git Workflow
+# Git & Testing Workflow
 
 Git is part of the development process.
 
-Every completed task must follow this workflow.
+### Testing Strategy
+1. **On Session Start**: Run `composer test:smoke` (~5 seconds). Verifies core routes, admin dashboard, contact, and security headers without waiting for the full suite.
+2. **Before Every Commit**: Run `composer test` (Full suite: 183 tests, 1493 assertions + Laravel Pint). This is enforced by `.git/hooks/pre-commit` to guarantee 100% test passing before code enters git history.
 
+### Commit Steps:
 1. Verify that the application is in a working state.
-
 2. Update:
    - TASKS.md
    - DEV_JOURNAL.md
    - DAILY_LOG.md
    - CHANGELOG.md (if user-facing changes were made)
-
-3. Run code quality tools when available:
-   - Laravel Pint
-   - Pest
-   - npm build (if frontend changed)
-
+3. Run code quality & full test suite:
+   - `composer test` (runs Pint + full Pest/PHPUnit suite with xdebug disabled)
+   - `npm run build` (if frontend assets changed)
 4. Fix any errors before continuing.
-
 5. Create a meaningful Git commit using Conventional Commits.
-
-Examples:
-
-feat(homepage): implement premium hero section
-
-feat(animals): add animal detail page
-
-refactor(media): optimize responsive images
-
-fix(blog): correct pagination bug
-
-docs(ai): update roadmap
-
-6. Push commits to the configured remote repository.
-
+   Examples:
+   feat(animals): add earliest pickup date calculator
+   fix(media): lock profile cropper to 1:1
+   refactor(tests): optimize suite execution with fast smoke test
+6. Push commits to `origin main`.
 7. Continue with the next highest priority task from TASKS.md.
 
 Never accumulate many unrelated changes into a single commit.
-
 Prefer many small commits over one huge commit.
-
-# Session Recovery
-
-Assume every session may end unexpectedly.
-
-Never leave the repository in a broken state.
-
-If a task cannot be completed during the current session:
-
-- finish at the nearest safe checkpoint
-- ensure the project builds successfully
-- commit completed work
-- push changes
-- document remaining work
-- update TASKS.md
-- update DAILY_LOG.md
-- update DEV_JOURNAL.md
-
-At the beginning of every new session read, in order:
-
-1. DAILY_LOG.md
-2. TASKS.md
-3. DEV_JOURNAL.md
-4. ROADMAP.md
-
-Continue from the highest priority unfinished task.
-
-Never restart work that has already been completed.
 
 
 # Atomic Development

@@ -63,10 +63,16 @@
         "test:lint": [
             "pint --parallel --test"
         ],
+        "test:smoke": [
+            "@php -d xdebug.mode=off artisan test --filter=ProductionSmokeTest"
+        ],
         "test": [
             "@php artisan config:clear --ansi",
-            "@test:lint",
-            "@php artisan test"
+            "@php -d xdebug.mode=off artisan test"
+        ],
+        "test:full": [
+            "@php artisan config:clear --ansi",
+            "@php -d xdebug.mode=off artisan test"
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",

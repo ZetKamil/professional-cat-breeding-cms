@@ -19,10 +19,11 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
-RULES.md
-CLAUDE.md
-DESIGN_SYSTEM.md
-getdesign.md
-FRONTEND_PLAN.md
+/RULES.md
+/CLAUDE.md
+/DESIGN_SYSTEM.md
+/getdesign.md
+/FRONTEND_PLAN.md
 AI
+/AI
 *.sql
