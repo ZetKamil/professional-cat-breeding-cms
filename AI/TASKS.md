@@ -13,12 +13,13 @@
   - `Sprint Animals Media` (2026-10-17) — Atos profile, 1:1 cropped media attachment.
   - `Sprint Cropper` (2026-10-16) — Reusable Cropper.js with 1:1 safe-zone preview.
   - `Sprint CRO` (2026-10-15) — Reservation modal, mobile sticky bar, WhatsApp UTM attribution, local SEO.
-- **Test Suite Status**: 183 tests passed (1493 assertions), 100% PASS in ~40s without xdebug, smoke test in ~5s.
+- **Test Suite Status**: 183 tests passed (1470 assertions), 100% PASS in ~40s without xdebug, smoke test in ~5s.
 
 ---
 
 ## Active & Recent Maintenance Tasks (2026-10-20)
-- [x] `test(audit): test suite hardening & de-duplication` — Audited all 183 tests; removed dummy boilerplate tests (ExampleTest), added missing core admin modules (/backend/animals, /backend/posts/ai-studio, /backend/blog-cta) to smoke test, removed redundant local SEO duplicate from ReservationAndCroTest, tied quiz scoring test to live DOM options, fixed hardcoded role ID in MediaLibraryTest, and resolved stud vs kitten semantics in BritishCatsFatherAssignmentTest. Result: 180 clean, genuine tests passing 100% (1457 assertions).
+- [x] `feat(ai-studio): image generator & structured breeder pro-tips` — Multi-tier AI image engine (Imagen + Pollinations fallback + cattery library), automatic local image persistence into `storage/app/public/posts/`, section `tip` (breeder callout box in blog template & CMS editor), Step 3 Hero Cover preview, and One-Click publish option. Result: 183 tests passing 100% (1470 assertions).
+- [x] `test(audit): test suite hardening & de-duplication` — Audited test suite; removed dummy boilerplate tests (ExampleTest), added missing core admin modules (/backend/animals, /backend/posts/ai-studio, /backend/blog-cta) to smoke test, removed redundant local SEO duplicate from ReservationAndCroTest, tied quiz scoring test to live DOM options, fixed hardcoded role ID in MediaLibraryTest, and resolved stud vs kitten semantics in BritishCatsFatherAssignmentTest. Result: 180 clean, genuine tests passing 100% (1457 assertions).
 - [x] `feat(legal): cookie consent banner modernization` — Redesigned banner UI/UX to legally maximize opt-in rates (prominent "Akceptuj wszystkie" primary CTA, subtle "Tylko niezbędne" secondary CTA, friendly cat-centric copy, mobile sticky bar collision avoidance, verified on desktop & mobile).
 - [x] `perf(tests): fast test execution engine` — Added `composer test:smoke` (5s), optimized `composer test` with `-d xdebug.mode=off` (~40s vs 150s).
 - [x] `feat(git): pre-commit hook enforcement` — Configured `.git/hooks/pre-commit` to guarantee 100% full test suite execution before every commit.

@@ -21,6 +21,22 @@
   - Usunięto zduplikowany test `test_local_seo_city_pages_render_successfully` (pokryty w 100% przez dedykowany `LocalSeoTest.php`).
   - W teście `test_quiz_scoring_algorithm_determines_unique_winner_across_all_thirty_six_paths` dodano weryfikację obecności wszystkich 10 kluczy opcji w realnym DOM widoku quizu, łącząc test z rzeczywistym szablonem Blade.
 - **Wynik:** Wszystkie 180 testów (1457 asercji) przechodzi w 100% PASS w ~40s (smoke w 5s).
+- **Wdrożenie Git:** Scommitowano (`aad4a551`) z pełnym przejściem hooka pre-commit i pomyślnie wypchnięto do repozytorium GitHub (`origin/main`).
+
+✓ AI Blog Studio: Niezawodny Generator Zdjęć AI i Sekcje ze Wskazówkami Hodowcy (`feat(ai-studio)`, `feat(media)`, `feat(blog)`, `test(ai)`)
+- **Niezawodny Silnik Zdjęć AI (Cover + Sekcje):**
+  - Rozbudowano `AiBlogGeneratorService::generateHeroImage()` o wielowarstwowy silnik pobierania zdjęć (Imagen -> darmowy fotorealistyczny silnik Pollinations AI -> zdjęcie kota z hodowli).
+  - Zdjęcia pobrane z generatora AI są automatycznie optymalizowane i trwale zapisywane na dysku serwera (`storage/app/public/posts/`) oraz w tabeli `media`, co uniezależnia blog od zewnętrznych serwerów.
+  - W przypadku sekcji bez przypisanych kotów z hodowli wprowadzono automatyczne generowanie tematycznych ilustracji (`assignAiPhotosToEmptySections()`) na podstawie nagłówka sekcji i promptu AI, a następnie lokalną persystencję (`persistRemoteSectionImages()`).
+- **Rozbudowa Struktury Sekcji o Wskazówki Hodowcy (Pro-Tips):**
+  - Rozszerzono schemat sekcji artykułu o pole `tip` (wskazówka / rada eksperta z Mazowieckiej Szwajcarii).
+  - Dodano stylowy boks `.article-tip-box` na frontendzie (`resources/css/pages/blog-page.css` oraz `frontend/blog/show.blade.php`) w estetyce luksusowej karty ze złotym akcentem.
+  - Zaktualizowano interaktywny edytor w CMS (`backend/posts/partials/form.blade.php`), umożliwiając edycję i podgląd wskazówek hodowcy w sekcjach.
+- **Usprawnienia UX w AI Blog Studio:**
+  - W Kroku 3 dodano podgląd okładki (Hero Cover Preview) oraz wyróżnione boksy z przypisanymi zdjęciami i wskazówkami.
+  - Wprowadzono opcję One-Click Publish: przycisk `[Zapisz jako Szkic]` oraz `[Zapisz i Opublikuj]`.
+- **Testy:**
+  - Dodano nowe testy jednostkowe i integracyjne w `AiBlogGeneratorServiceTest.php` oraz `AiBlogStudioTest.php`. Wszystkie 183 testy przechodzą w 100% (1470 asercji).
 
 ✓ Modernizacja UI/UX Cookie Consent Banner i Zgodność z Consent Mode v2 (`feat(legal)`, `feat(ui)`, `test(frontend)`)
 - **Optymalizacja UX/CRO pod kątem Opt-in:**
