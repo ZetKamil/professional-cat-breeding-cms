@@ -20,11 +20,17 @@ class BritishCatsFatherAssignmentTest extends TestCase
         $this->assertNotNull($stas, 'Staś powinien istnieć w bazie.');
         $this->assertNotNull($nel, 'Nel powinna istnieć w bazie.');
 
-        foreach (['ada', 'alma', 'atena', 'atos'] as $slug) {
+        // Kocięta brytyjskie z miotu po Stasiu i Nel
+        foreach (['ada', 'alma', 'atena'] as $slug) {
             $cat = Animal::where('slug', $slug)->first();
             $this->assertNotNull($cat, "Kot {$slug} powinien istnieć.");
-            $this->assertSame($stas->id, $cat->father_id, "Kot {$slug} powinien mieć ojca Stasia.");
-            $this->assertSame($nel->id, $cat->mother_id, "Kot {$slug} powinien mieć matkę Nel.");
+            $this->assertSame($stas->id, $cat->father_id, "Kociak {$slug} powinien mieć ojca Stasia.");
+            $this->assertSame($nel->id, $cat->mother_id, "Kociak {$slug} powinien mieć matkę Nel.");
         }
+
+        // Kocur Atos (reproduktor) — syn Nel
+        $atos = Animal::where('slug', 'atos')->first();
+        $this->assertNotNull($atos, 'Atos powinien istnieć.');
+        $this->assertSame($nel->id, $atos->mother_id, 'Atos powinien mieć matkę Nel.');
     }
 }

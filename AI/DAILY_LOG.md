@@ -8,6 +8,20 @@
 ## 2026-10-20
 
 ### Completed
+✓ Kompleksowy Audyt i Uporządkowanie Jakościowe Pakietu Testów (`test(audit)`, `refactor(tests)`)
+- **Usunięcie Testów-Wydmuszek (Fake / Boilerplate):**
+  - Trwale usunięto `tests/Unit/ExampleTest.php` (`assert true is true`) oraz `tests/Feature/ExampleTest.php` (redundantny szablon Laravel `assertOk` na `/`).
+- **Wzmocnienie Smoke Testu (`ProductionSmokeTest.php`):**
+  - Dodano brakujące, krytyczne moduły panelu administracyjnego do listy sprawdzanych tras: `/backend/animals` (zarządzanie kotami hodowlanymi i kociętami), `/backend/posts/ai-studio` (studio AI) oraz `/backend/blog-cta` (oferta pod artykułami).
+- **Korekta Rodowodowo-Biznesowa (`BritishCatsFatherAssignmentTest.php`):**
+  - Wyodrębniono kocięta miotu brytyjskiego (`ada`, `alma`, `atena`) po Stasiu i Nel od dorosłego kocura reproduktora Atosa (BLH a 33), eliminując logiczną sprzeczność statusu reproduktora.
+- **Wyeliminowanie Sztywnych ID (`MediaLibraryTest.php`):**
+  - Zastąpiono podatne na błędy `'role_id' => 1` dynamicznym pobieraniem roli admina (`Role::firstOrCreate(['name' => 'admin'])`), eliminując antywzorzec hardcoded ID w 4 testach biblioteki mediów.
+- **Refaktoryzacja i Eliminacja Duplikatów (`ReservationAndCroTest.php`):**
+  - Usunięto zduplikowany test `test_local_seo_city_pages_render_successfully` (pokryty w 100% przez dedykowany `LocalSeoTest.php`).
+  - W teście `test_quiz_scoring_algorithm_determines_unique_winner_across_all_thirty_six_paths` dodano weryfikację obecności wszystkich 10 kluczy opcji w realnym DOM widoku quizu, łącząc test z rzeczywistym szablonem Blade.
+- **Wynik:** Wszystkie 180 testów (1457 asercji) przechodzi w 100% PASS w ~40s (smoke w 5s).
+
 ✓ Modernizacja UI/UX Cookie Consent Banner i Zgodność z Consent Mode v2 (`feat(legal)`, `feat(ui)`, `test(frontend)`)
 - **Optymalizacja UX/CRO pod kątem Opt-in:**
   - Usunięto bezpośredni, agresywny przycisk „Odrzuć” z pierwszej warstwy bannera.

@@ -12,12 +12,12 @@ uses(RefreshDatabase::class);
 
 beforeEach(function () {
     Storage::fake('public');
-    $this->seed(\Database\Seeders\RoleSeeder::class);
+    $adminRole = \App\Models\Role::firstOrCreate(['name' => 'admin']);
+    $this->admin = User::factory()->create(['role_id' => $adminRole->id]);
 });
 
 test('admin can upload single and multiple media images with metadata', function () {
-    $admin = User::factory()->create(['role_id' => 1]); // admin
-    $this->actingAs($admin);
+    $this->actingAs($this->admin);
 
     $file1 = UploadedFile::fake()->image('cat1.jpg', 600, 600);
     $file2 = UploadedFile::fake()->image('cat2.jpg', 600, 600);
@@ -52,8 +52,7 @@ test('admin can upload single and multiple media images with metadata', function
 });
 
 test('admin can view media library in grid and list views with filters and api endpoint', function () {
-    $admin = User::factory()->create(['role_id' => 1]);
-    $this->actingAs($admin);
+    $this->actingAs($this->admin);
 
     Media::create([
         'disk' => 'public',
@@ -80,8 +79,7 @@ test('admin can view media library in grid and list views with filters and api e
 });
 
 test('admin can replace an existing media image while updating metadata', function () {
-    $admin = User::factory()->create(['role_id' => 1]);
-    $this->actingAs($admin);
+    $this->actingAs($this->admin);
 
     $oldFile = UploadedFile::fake()->image('old.jpg');
     $storedPath = $oldFile->store('media/library', 'public');
@@ -123,8 +121,7 @@ test('admin can replace an existing media image while updating metadata', functi
 });
 
 test('admin can delete media and physical file is removed from disk', function () {
-    $admin = User::factory()->create(['role_id' => 1]);
-    $this->actingAs($admin);
+    $this->actingAs($this->admin);
 
     $file = UploadedFile::fake()->image('todelete.jpg');
     $storedPath = $file->store('media/library', 'public');

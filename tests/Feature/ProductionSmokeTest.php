@@ -95,8 +95,11 @@ class ProductionSmokeTest extends TestCase
 
         $backendRoutes = [
             '/dashboard',
+            '/backend/animals',
             '/backend/categories',
             '/backend/posts',
+            '/backend/posts/ai-studio',
+            '/backend/blog-cta',
             '/backend/media',
             '/backend/users',
             '/backend/roles',

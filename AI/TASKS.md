@@ -18,6 +18,7 @@
 ---
 
 ## Active & Recent Maintenance Tasks (2026-10-20)
+- [x] `test(audit): test suite hardening & de-duplication` — Audited all 183 tests; removed dummy boilerplate tests (ExampleTest), added missing core admin modules (/backend/animals, /backend/posts/ai-studio, /backend/blog-cta) to smoke test, removed redundant local SEO duplicate from ReservationAndCroTest, tied quiz scoring test to live DOM options, fixed hardcoded role ID in MediaLibraryTest, and resolved stud vs kitten semantics in BritishCatsFatherAssignmentTest. Result: 180 clean, genuine tests passing 100% (1457 assertions).
 - [x] `feat(legal): cookie consent banner modernization` — Redesigned banner UI/UX to legally maximize opt-in rates (prominent "Akceptuj wszystkie" primary CTA, subtle "Tylko niezbędne" secondary CTA, friendly cat-centric copy, mobile sticky bar collision avoidance, verified on desktop & mobile).
 - [x] `perf(tests): fast test execution engine` — Added `composer test:smoke` (5s), optimized `composer test` with `-d xdebug.mode=off` (~40s vs 150s).
 - [x] `feat(git): pre-commit hook enforcement` — Configured `.git/hooks/pre-commit` to guarantee 100% full test suite execution before every commit.

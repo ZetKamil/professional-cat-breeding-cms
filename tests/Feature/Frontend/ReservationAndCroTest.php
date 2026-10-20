@@ -323,9 +323,17 @@ class ReservationAndCroTest extends TestCase
 
     public function test_quiz_scoring_algorithm_determines_unique_winner_across_all_thirty_six_paths(): void
     {
+        $response = $this->get(route('quiz'));
+        $response->assertOk();
+
         $step1Options = ['calm_couch', 'active_curious', 'devoted_vocal'];
         $step2Options = ['away_work', 'home_work', 'family_children', 'other_pets'];
         $step3Options = ['short_sleek', 'dense_plush', 'interactive_shadow'];
+
+        // Verify all options exist in the quiz page DOM
+        foreach (array_merge($step1Options, $step2Options, $step3Options) as $optionKey) {
+            $response->assertSee($optionKey);
+        }
 
         $ties = 0;
         $distribution = ['bengal' => 0, 'british' => 0, 'siamese' => 0];
@@ -472,33 +480,6 @@ class ReservationAndCroTest extends TestCase
         $response->assertSee('Wynik Quizu: ${breed}', false);
     }
 
-    public function test_local_seo_city_pages_render_successfully(): void
-    {
-        $cities = [
-            'seo.warszawa' => 'Warszawa',
-            'seo.lodz' => 'Łódź',
-            'seo.torun' => 'Toruń',
-            'seo.wloclawek' => 'Włocławek',
-            'seo.bydgoszcz' => 'Bydgoszcz',
-        ];
-
-        foreach ($cities as $routeName => $cityName) {
-            $response = $this->get(route($routeName));
-            $response->assertOk();
-            $response->assertSee($cityName);
-            $response->assertSee('Sikórz');
-            $response->assertSee('Wideo-wizyta');
-            $response->assertSee('Pytania i Odpowiedzi');
-            $response->assertDontSee('ciasnych hodowli w miejskich blokach');
-            $response->assertDontSee('trzykrotnym odrobaczeniu');
-            $response->assertDontSee('3 odrobaczenia');
-            $response->assertDontSee('trzy odrobaczenia');
-        }
-
-        $responseTorun = $this->get(route('seo.torun'));
-        $responseTorun->assertSee('dwukrotnym odrobaczeniu');
-        $responseTorun->assertDontSee('trzykrotnym odrobaczeniu');
-    }
 
     public function test_public_pages_consistently_state_two_dewormings_and_never_three(): void
     {
