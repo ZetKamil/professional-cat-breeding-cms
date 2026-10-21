@@ -28,7 +28,7 @@
                         height="36"
                     >
                 </picture>
-                <span class="global-nav__logo-text">{{ config('app.name', 'Cattery') }}</span>
+                <span class="global-nav__logo-text">Hodowla Kotów z Mazowieckiej Szwajcarii</span>
             </a>
 
             {{-- Zone 2: Desktop Primary Links --}}
@@ -51,7 +51,7 @@
                     <a href="{{ route('cattery') }}"
                        class="global-nav__link {{ request()->routeIs('cattery') || request()->routeIs('about') ? 'is-active' : '' }}"
                        {{ request()->routeIs('cattery') || request()->routeIs('about') ? 'aria-current=page' : '' }}>
-                        O Domowej Hodowli
+                        O Hodowli
                     </a>
                 </li>
                 <li>
@@ -126,7 +126,7 @@
                         height="34"
                     >
                 </picture>
-                <span>{{ config('app.name', 'Cattery') }}</span>
+                <span>Hodowla Kotów z Mazowieckiej Szwajcarii</span>
             </a>
             <button type="button" class="mobile-menu__close" aria-label="Zamknij menu" id="mobileMenuCloseBtn">
                 <i data-lucide="x" aria-hidden="true"></i>
@@ -147,7 +147,7 @@
                 </li>
                 <li>
                     <a href="{{ route('cattery') }}" class="mobile-menu__link {{ request()->routeIs('cattery') || request()->routeIs('about') ? 'is-active' : '' }}">
-                        O Domowej Hodowli
+                        O Hodowli
                     </a>
                 </li>
                 <li>

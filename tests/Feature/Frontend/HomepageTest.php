@@ -73,9 +73,9 @@ class HomepageTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('SHiOZ ZOOLANDIA • MAZOWIECKA SZWAJCARIA');
-        $response->assertSee('Koty Bengalskie, Brytyjskie');
-        $response->assertSee('i Syjamskie z Rodowodem.');
-        $response->assertSee('Domowa socjalizacja, badania genetyczne rodziców (HCM/PKD) i pełne wsparcie.');
+        $response->assertSee('Domowa hodowla kotów:');
+        $response->assertSee('Bengalskie, Brytyjskie i Syjamskie.');
+        $response->assertSee('Badania genetyczne rodziców (HCM/PKD), pełne wsparcie i chów w sercu rodziny.');
         $response->assertSee('🐾 Zobacz dostępne kocięta');
         $response->assertSee('✨ Quiz: Dobierz rasę (45s)');
         $response->assertSee(route('quiz'));

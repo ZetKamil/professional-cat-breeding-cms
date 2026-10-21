@@ -27,15 +27,15 @@
                     <div class="hero-split__left">
                         <span class="hero-split__eyebrow">
                             <span class="hero-split__eyebrow--mobile">SHiOZ ZOOLANDIA • MAZOWIECKA SZWAJCARIA</span>
-                            <span class="hero-split__eyebrow--desktop">Domowa Hodowla Kotów Rasowych • SHiOZ ZOOLANDIA • Sikórz k. Płocka</span>
+                            <span class="hero-split__eyebrow--desktop">SHiOZ ZOOLANDIA • MAZOWIECKA SZWAJCARIA • SIKÓRZ K. PŁOCKA</span>
                         </span>
                         <h1 class="hero-split__title">
-                            <span class="hero-split__title--mobile">Koty Bengalskie, Brytyjskie<br>i Syjamskie z Rodowodem.</span>
+                            <span class="hero-split__title--mobile">Domowa hodowla kotów:<br>Bengalskie, Brytyjskie i Syjamskie.</span>
                             <span class="hero-split__title--desktop">Domowa Hodowla Kotów<br>Rasowych z Rodowodem.<br>Bengalskie, Brytyjskie i Syjamskie.</span>
                         </h1>
                         <p class="hero-split__lead">
-                            <span class="hero-split__lead--mobile">Domowa socjalizacja, badania genetyczne rodziców (HCM/PKD) i pełne wsparcie.</span>
-                            <span class="hero-split__lead--desktop">Domowa hodowla kotów z Mazowieckiej Szwajcarii, oficjalny członek <strong>SHiOZ ZOOLANDIA</strong> (Certyfikat: 58/CW/2025, Rejestracja: 58/P/2025). Nasze koty rozwijają się w bezpiecznych, pełnych miłości warunkach domowych, z regularną kontrolą kardiologiczną (echo serca) i badaniami genetycznymi rodziców dobranymi do danej rasy.</span>
+                            <span class="hero-split__lead--mobile">Badania genetyczne rodziców (HCM/PKD), pełne wsparcie i chów w sercu rodziny.</span>
+                            <span class="hero-split__lead--desktop">Hodowla kotów z Mazowieckiej Szwajcarii, oficjalny członek <strong>SHiOZ ZOOLANDIA</strong> (Certyfikat: 58/CW/2025, Rejestracja: 58/P/2025). Nasze koty rozwijają się w bezpiecznych, pełnych miłości warunkach, z regularną kontrolą kardiologiczną (echo serca) i badaniami genetycznymi rodziców dobranymi do danej rasy.</span>
                         </p>
                         <div class="hero-split__actions">
                             {{-- Mobile Compact Actions --}}

@@ -31,6 +31,20 @@
   - Standard `clip` zapobiega uciekaniu zawartości w poziomie bez tworzenia odrębnego bloku przewijania, zachowując 100% natywne przewijanie pionowe na poziomie okna (`window` / `html`).
   - Uruchomiono i zabezpieczono ciągłość działania lokalnego serwera `php artisan serve --port=8000`. assety produkcyjne przebudowano pomyślnie. Wszystkie 184 testy przeszły pomyślnie.
 
+✓ Eliminacja Powtórzeń „Domowa” i Optymalizacja Mobile First pod SEO (`fix(seo)`, `refactor(copy)`)
+- **Jedno, Kluczowe Miejsce dla „Domowa” (H1 dla SEO):**
+  - Wyeliminowano 5 zbędnych powtórzeń słowa „domowa” w obrębie pierwszego ekranu (nawigacja, menu, odznaka eyebrow, początek leada, środek leada).
+  - Słowo „Domowa” pozostawiono wyłącznie w jednym, najważniejszym semantycznie miejscu pod algorytm Google – w głównym nagłówku `<h1>` (`Domowa hodowla kotów: Bengalskie, Brytyjskie i Syjamskie.` na mobile oraz `Domowa Hodowla Kotów Rasowych z Rodowodem.` na desktopie).
+- **Czysta i Elegancka Warstwa Wizualna (Mobile First & Desktop):**
+  - Logo w nawigacji: `Hodowla Kotów z Mazowieckiej Szwajcarii` (usunięto „Domowa”, zyskując przestrzeń i eliminując zderzenie z menu).
+  - Link w menu: `O Hodowli` (zamiast `O Domowej Hodowli`).
+  - Odznaka eyebrow: `SHiOZ ZOOLANDIA • MAZOWIECKA SZWAJCARIA` (brak sztucznego słowa „certyfikowana”, zero powtórzeń).
+  - Lead: `Badania genetyczne rodziców (HCM/PKD), pełne wsparcie i chów w sercu rodziny.` (ciepły, perswazyjny przekaz bez mechanicznego powtarzania frazy).
+- **Jakość i Testy:**
+  - Zaktualizowano asercje testowe w `HomepageTest.php`. Wszystkie 184 testy przeszły w 100% na zielono (1479 asercji).
+  - Zweryfikowano poprawność renderowania w przeglądarce (`browser_subagent`) na rozdzielczościach mobilnej (375x667) i desktopowej (1280x800).
+
+
 ---
 
 ## 2026-10-20
