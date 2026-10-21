@@ -23,6 +23,14 @@
   - Dodano dedykowany test `test_homepage_renders_mobile_hero_optimizations` w `HomepageTest.php`. Wszystkie 184 testy (1479 asercji) przechodzą w 100% PASS.
   - Zbudowano produkcyjne assety Vite (`npm run build`). Zweryfikowano poprawność renderowania w przeglądarce (`browser_subagent`) na rozdzielczości 375x667.
 
+✓ Rozwiązanie Problemu Blokowania Przewijania na Widoku Mobilnym (`fix(css)`, `fix(scroll)`)
+- **Diagnoza Blokady Scrolla:**
+  - `body.frontend-shell` posiadało regułę `@media (max-width: 1023px) { body.frontend-shell { overflow-x: hidden; } }`. W silnikach Chromium powodowało to wyliczenie `overflow-y: auto` na elemencie `body` i utworzenie zagnieżdżonego kontenera przewijania, co w połączeniu z emulacją dotyku (`isMobile: true` w panelu deweloperskim) blokowało standardowe przewijanie kółkiem myszy.
+  - Narzędzia automatyzacji przeglądarki (`browser agent`) przy przechwytywaniu widoku tymczasowo nakładały klasę `antigravity-scroll-lock` z `overflow: hidden !important`.
+  - Zastąpiono `overflow-x: hidden` nowoczesnym standardem `overflow-x: clip;` na selektorach `html` oraz `body.frontend-shell` w `resources/css/design-tokens.css`.
+  - Standard `clip` zapobiega uciekaniu zawartości w poziomie bez tworzenia odrębnego bloku przewijania, zachowując 100% natywne przewijanie pionowe na poziomie okna (`window` / `html`).
+  - Uruchomiono i zabezpieczono ciągłość działania lokalnego serwera `php artisan serve --port=8000`. assety produkcyjne przebudowano pomyślnie. Wszystkie 184 testy przeszły pomyślnie.
+
 ---
 
 ## 2026-10-20
