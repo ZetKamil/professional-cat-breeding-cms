@@ -13,11 +13,12 @@
   - `Sprint Animals Media` (2026-10-17) — Atos profile, 1:1 cropped media attachment.
   - `Sprint Cropper` (2026-10-16) — Reusable Cropper.js with 1:1 safe-zone preview.
   - `Sprint CRO` (2026-10-15) — Reservation modal, mobile sticky bar, WhatsApp UTM attribution, local SEO.
-- **Test Suite Status**: 183 tests passed (1470 assertions), 100% PASS in ~40s without xdebug, smoke test in ~5s.
+- **Test Suite Status**: 184 tests passed (1479 assertions), 100% PASS in ~40s without xdebug, smoke test in ~5s.
 
 ---
 
-## Active & Recent Maintenance Tasks (2026-10-20)
+## Active & Recent Maintenance Tasks (2026-10-21)
+- [x] `fix(hero): mobile hero section hotfix & above-the-fold optimization` — Elevated featured cat photo (Bars) to the top on mobile (`~230px` height) with anchored glass/gold SHiOZ ZOOLANDIA seal. Shortened mobile eyebrow to `SHiOZ ZOOLANDIA • MAZOWIECKA SZWAJCARIA`, condensed H1 headline to `Koty Bengalskie, Brytyjskie i Syjamskie z Rodowodem.` (26px, leading-tight, max 3 lines), trimmed subtitle to 2 lines (`Domowa socjalizacja, badania genetyczne rodziców (HCM/PKD) i pełne wsparcie.`), and deployed two compact action buttons (`🐾 Zobacz dostępne kocięta` and `✨ Quiz: Dobierz rasę (45s)`) comfortably above the sticky bottom bar with peek of `Dostępne Kocięta i Mioty`. Added automated feature test. 184 tests passing 100% (1479 assertions).
 - [x] `feat(ai-studio): image generator & structured breeder pro-tips` — Multi-tier AI image engine (Imagen + Pollinations fallback + cattery library), automatic local image persistence into `storage/app/public/posts/`, section `tip` (breeder callout box in blog template & CMS editor), Step 3 Hero Cover preview, and One-Click publish option. Result: 183 tests passing 100% (1470 assertions).
 - [x] `test(audit): test suite hardening & de-duplication` — Audited test suite; removed dummy boilerplate tests (ExampleTest), added missing core admin modules (/backend/animals, /backend/posts/ai-studio, /backend/blog-cta) to smoke test, removed redundant local SEO duplicate from ReservationAndCroTest, tied quiz scoring test to live DOM options, fixed hardcoded role ID in MediaLibraryTest, and resolved stud vs kitten semantics in BritishCatsFatherAssignmentTest. Result: 180 clean, genuine tests passing 100% (1457 assertions).
 - [x] `feat(legal): cookie consent banner modernization` — Redesigned banner UI/UX to legally maximize opt-in rates (prominent "Akceptuj wszystkie" primary CTA, subtle "Tylko niezbędne" secondary CTA, friendly cat-centric copy, mobile sticky bar collision avoidance, verified on desktop & mobile).

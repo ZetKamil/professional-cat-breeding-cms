@@ -419,6 +419,34 @@ Git is part of the development process.
 Never accumulate many unrelated changes into a single commit.
 Prefer many small commits over one huge commit.
 
+# Session Recovery
+
+Assume every session may end unexpectedly.
+
+Never leave the repository in a broken state.
+
+If a task cannot be completed during the current session:
+
+- finish at the nearest safe checkpoint
+- ensure the project builds successfully
+- commit completed work
+- push changes
+- document remaining work
+- update TASKS.md
+- update DAILY_LOG.md
+- update DEV_JOURNAL.md
+
+At the beginning of every new session read, in order:
+
+1. DAILY_LOG.md
+2. TASKS.md
+3. DEV_JOURNAL.md
+4. ROADMAP.md
+
+Continue from the highest priority unfinished task.
+
+Never restart work that has already been completed.
+
 
 # Atomic Development
 

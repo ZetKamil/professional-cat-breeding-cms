@@ -3,6 +3,34 @@
 > Project: Luxury Cattery Website & CMS
 > Engineering Journal & Architectural Record
 
+## 2026-10-21 — Mobile Hero Section Hotfix (Above the Fold Optimization) (`fix(hero)`, `feat(ui)`, `test(frontend)`)
+
+### Context
+On mobile viewports (`< 768px`), the Homepage Hero section was rendering as a massive black wall of text where the `<h1>` spanned 7 lines, repeated the phrase ("Domowa hodowla kotów...") three times across eyebrow, title, and lead, obscured the cat photo below the fold, and pushed all action buttons and available kittens below the viewport.
+
+### Technical & Architectural Resolutions
+1. **Elevating Cat Photography (Bars) to the First Fold**:
+   - In `resources/css/pages/home-page.css`, applied `.hero-split__right { order: -1; width: 100%; margin: 0; }` under `@media (max-width: 767px)`.
+   - Set `.hero-split__frame` to a clean height of 230px with `object-fit: cover; object-position: center 25%;`.
+   - Repositioned `.hero-split__seal` (SHiOZ ZOOLANDIA) as a compact, floating glass badge (`bottom: 10px; left: 10px;`) directly anchored inside the cat photo corner, taking zero additional vertical space.
+2. **Eliminating Redundant Copy & Shrinking Typography on Mobile (`max-md`)**:
+   - Shortened mobile eyebrow to `SHiOZ ZOOLANDIA • MAZOWIECKA SZWAJCARIA` (11px, letter-spacing 0.08em).
+   - Reduced mobile H1 headline to 26px (`leading-tight`, max 3 lines) and condensed copy to: `Koty Bengalskie, Brytyjskie i Syjamskie z Rodowodem.` to eliminate redundancy with the eyebrow.
+   - Constrained mobile subtitle lead to max 2 lines with `-webkit-line-clamp: 2` (`Domowa socjalizacja, badania genetyczne rodziców (HCM/PKD) i pełne wsparcie.`, 14px, `#d6d3d1`).
+   - Desktop markup and styles remain 100% intact via dedicated desktop/mobile conditional spans and BEM classes (`.hero-split__eyebrow--mobile`, `.hero-split__title--mobile`, etc.), completely removing obsolete inline `style=""` attributes.
+3. **Above-the-Fold Compact CTAs & Available Kittens Peek**:
+   - Deployed two compact touch-friendly pill buttons on mobile:
+     - Primary: `🐾 Zobacz dostępne kocięta` (`href="#nasze-koty"`)
+     - Secondary: `✨ Quiz: Dobierz rasę (45s)` (`href="{{ route('quiz') }}"`)
+   - Reduced mobile hero vertical padding (`padding-top: calc(var(--nav-height, 64px) + 8px); padding-bottom: 16px;`) and `.hero-split__left` gap from 24px to 6px.
+   - Reduced `.home-section--nasze-koty` mobile padding-top to 24px, ensuring that both action buttons fit comfortably above the mobile sticky bar and the top edge of `Dostępne Kocięta i Mioty` peeks prominently into the viewport to encourage scrolling.
+4. **Verification**:
+   - Automated testing: added `test_homepage_renders_mobile_hero_optimizations` in `tests/Feature/Frontend/HomepageTest.php`. Full test suite passes 100% (184 tests, 1479 assertions).
+   - Production Vite build: compiled assets (`public/build/assets/app-C43eghny.css`).
+   - Visual QA: verified via `browser_subagent` at 375x667 mobile resolution.
+
+---
+
 ## 2026-10-20 — Comprehensive Test Suite Audit, De-duplication & Quality Hardening (`test(audit)`, `refactor(tests)`)
 
 ### Context

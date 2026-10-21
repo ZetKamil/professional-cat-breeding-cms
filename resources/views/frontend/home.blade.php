@@ -25,31 +25,44 @@
                 {{-- Split-Screen Editorial Opening --}}
                 <div class="hero-split-grid">
                     <div class="hero-split__left">
-                        <span class="hero-split__eyebrow" style="display: inline-block; color: var(--color-gold, #c89d5c); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 12px;">
-                            Domowa Hodowla Kotów Rasowych • SHiOZ ZOOLANDIA • Sikórz k. Płocka
+                        <span class="hero-split__eyebrow">
+                            <span class="hero-split__eyebrow--mobile">SHiOZ ZOOLANDIA • MAZOWIECKA SZWAJCARIA</span>
+                            <span class="hero-split__eyebrow--desktop">Domowa Hodowla Kotów Rasowych • SHiOZ ZOOLANDIA • Sikórz k. Płocka</span>
                         </span>
                         <h1 class="hero-split__title">
-                            Domowa Hodowla Kotów<br>
-                            Rasowych z Rodowodem.<br>
-                            Bengalskie, Brytyjskie i Syjamskie.
+                            <span class="hero-split__title--mobile">Koty Bengalskie, Brytyjskie<br>i Syjamskie z Rodowodem.</span>
+                            <span class="hero-split__title--desktop">Domowa Hodowla Kotów<br>Rasowych z Rodowodem.<br>Bengalskie, Brytyjskie i Syjamskie.</span>
                         </h1>
                         <p class="hero-split__lead">
-                            Domowa hodowla kotów z Mazowieckiej Szwajcarii, oficjalny członek <strong>SHiOZ ZOOLANDIA</strong> (Certyfikat: 58/CW/2025, Rejestracja: 58/P/2025). 
-                            Nasze koty rozwijają się w bezpiecznych, pełnych miłości warunkach domowych, z regularną kontrolą kardiologiczną (echo serca) i badaniami genetycznymi rodziców dobranymi do danej rasy.
+                            <span class="hero-split__lead--mobile">Domowa socjalizacja, badania genetyczne rodziców (HCM/PKD) i pełne wsparcie.</span>
+                            <span class="hero-split__lead--desktop">Domowa hodowla kotów z Mazowieckiej Szwajcarii, oficjalny członek <strong>SHiOZ ZOOLANDIA</strong> (Certyfikat: 58/CW/2025, Rejestracja: 58/P/2025). Nasze koty rozwijają się w bezpiecznych, pełnych miłości warunkach domowych, z regularną kontrolą kardiologiczną (echo serca) i badaniami genetycznymi rodziców dobranymi do danej rasy.</span>
                         </p>
-                        <div class="hero-split__actions" style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
-                            <x-frontend.button href="#nasze-koty" icon="arrow-right">
-                                Zobacz dostępne kocięta
-                            </x-frontend.button>
-                            <x-frontend.button 
-                                type="button" 
-                                variant="secondary"
-                                onclick="window.openReservationModal('', '', '')"
-                                icon="video">
-                                Wideo-wizyta na żywo
-                            </x-frontend.button>
+                        <div class="hero-split__actions">
+                            {{-- Mobile Compact Actions --}}
+                            <div class="hero-split__actions--mobile">
+                                <a href="#nasze-koty" class="hero-btn hero-btn--primary">
+                                    <span>🐾 Zobacz dostępne kocięta</span>
+                                </a>
+                                <a href="{{ route('quiz') }}" class="hero-btn hero-btn--secondary">
+                                    <span>✨ Quiz: Dobierz rasę (45s)</span>
+                                </a>
+                            </div>
+
+                            {{-- Desktop Full Actions --}}
+                            <div class="hero-split__actions--desktop">
+                                <x-frontend.button href="#nasze-koty" icon="arrow-right">
+                                    Zobacz dostępne kocięta
+                                </x-frontend.button>
+                                <x-frontend.button 
+                                    type="button" 
+                                    variant="secondary"
+                                    onclick="window.openReservationModal('', '', '')"
+                                    icon="video">
+                                    Wideo-wizyta na żywo
+                                </x-frontend.button>
+                            </div>
                         </div>
-                        <div style="margin-top: 14px;">
+                        <div class="hero-split__facebook">
                             <a href="https://www.facebook.com/profile.php?id=61580668026948" target="_blank" rel="noopener"
                                 class="hero-split__secondary-link">
                                 Codzienne życie hodowli na Facebooku →

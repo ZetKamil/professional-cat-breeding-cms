@@ -5,6 +5,26 @@
 
 ---
 
+## 2026-10-21
+
+### Completed
+✓ Optymalizacja Sekcji Hero na Urządzeniach Mobilnych (Above the Fold Hotfix) (`fix(hero)`, `feat(ui)`, `test(frontend)`)
+- **Ekspozycja Zdjęcia Kota na Samej Górze (Mobile First):**
+  - Zdjęcie reproduktora Barsa (`bars_studio.jpg`) zostało wyniesione na samą górę sekcji hero na widokach mobilnych (`< 768px`) z estetyczną ramką o wysokości 230px (`order: -1`).
+  - Pieczęć `SHiOZ ZOOLANDIA` została przekształcona w elegancki, szklany chip ze złotym akcentem zakotwiczony w rogu zdjęcia, eliminując zajmowanie zbędnego miejsca pod fotografią.
+- **Odchudzenie Treści i Skrócenie Typografii na Telefonach:**
+  - Skrócono odznakę eyebrow do jednej zwartej linii: `SHiOZ ZOOLANDIA • MAZOWIECKA SZWAJCARIA` (11px, złoty odcień).
+  - Skondensowano nagłówek H1 na telefonach do: `Koty Bengalskie, Brytyjskie i Syjamskie z Rodowodem.` (26px, leading-tight, max 3 linie), eliminując powtarzanie frazy z eyebrowa.
+  - Skrócono podtytuł lead do max 2 zwięzłych linii (`Domowa socjalizacja, badania genetyczne rodziców (HCM/PKD) i pełne wsparcie.`).
+- **Kompaktowe Przyciski Akcji i Widoczność Kociąt Above the Fold:**
+  - Wprowadzono 2 ergonomiczne, dotykowe przyciski pigułkowe: `🐾 Zobacz dostępne kocięta` oraz `✨ Quiz: Dobierz rasę (45s)`, mieszczące się z dużym zapasem powyżej dolnego paska `mobile-sticky-bar`.
+  - Zredukowano paddingi pionowe sekcji hero (`pt` i `pb`) oraz zmniejszono górny padding sekcji `#nasze-koty`, dzięki czemu nagłówek i karty kociąt są wyraźnie widoczne i zachęcają do przewijania (peek effect).
+- **Testy i Jakość:**
+  - Dodano dedykowany test `test_homepage_renders_mobile_hero_optimizations` w `HomepageTest.php`. Wszystkie 184 testy (1479 asercji) przechodzą w 100% PASS.
+  - Zbudowano produkcyjne assety Vite (`npm run build`). Zweryfikowano poprawność renderowania w przeglądarce (`browser_subagent`) na rozdzielczości 375x667.
+
+---
+
 ## 2026-10-20
 
 ### Completed

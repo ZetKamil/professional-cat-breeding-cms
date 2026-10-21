@@ -66,4 +66,19 @@ class HomepageTest extends TestCase
         $response->assertOk();
         $response->assertDontSee('home-section--blog');
     }
+
+    public function test_homepage_renders_mobile_hero_optimizations(): void
+    {
+        $response = $this->get(route('home'));
+
+        $response->assertOk();
+        $response->assertSee('SHiOZ ZOOLANDIA • MAZOWIECKA SZWAJCARIA');
+        $response->assertSee('Koty Bengalskie, Brytyjskie');
+        $response->assertSee('i Syjamskie z Rodowodem.');
+        $response->assertSee('Domowa socjalizacja, badania genetyczne rodziców (HCM/PKD) i pełne wsparcie.');
+        $response->assertSee('🐾 Zobacz dostępne kocięta');
+        $response->assertSee('✨ Quiz: Dobierz rasę (45s)');
+        $response->assertSee(route('quiz'));
+        $response->assertSee('bars_studio.jpg');
+    }
 }
