@@ -44,6 +44,11 @@
   - Zaktualizowano asercje testowe w `HomepageTest.php`. Wszystkie 184 testy przeszły w 100% na zielono (1479 asercji).
   - Zweryfikowano poprawność renderowania w przeglądarce (`browser_subagent`) na rozdzielczościach mobilnej (375x667) i desktopowej (1280x800).
 
+✓ Wdrożenie Przycisku Quizu na Ekranach Desktopowych (`feat(cro)`, `feat(hero)`)
+- Zastąpiono poboczny przycisk „Wideo-wizyta na żywo” w sekcji desktop hero bezpośrednim przyciskiem do interaktywnego quizu ras: `<x-frontend.button href="{{ route('quiz') }}" variant="secondary">✨ Quiz: Dobierz rasę (45s)</x-frontend.button>`.
+- Spójność Mobile i Desktop: oba widoki oferują teraz identyczną, wysokokonwertującą parę CTA (`Zobacz dostępne kocięta` + `Quiz: Dobierz rasę (45s)`).
+- Wideo-wizyta na żywo pozostaje silnie wyeksponowana w dedykowanym pasku zaufania, w dolnym pasku sticky na mobile oraz na każdej karcie kociaka.
+- Testy i weryfikacja: 184 testy przeszły w 100% PASS, zweryfikowano wizualnie w przeglądarce.
 
 ---
 

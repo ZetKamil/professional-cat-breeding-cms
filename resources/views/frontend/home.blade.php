@@ -53,12 +53,8 @@
                                 <x-frontend.button href="#nasze-koty" icon="arrow-right">
                                     Zobacz dostępne kocięta
                                 </x-frontend.button>
-                                <x-frontend.button 
-                                    type="button" 
-                                    variant="secondary"
-                                    onclick="window.openReservationModal('', '', '')"
-                                    icon="video">
-                                    Wideo-wizyta na żywo
+                                <x-frontend.button href="{{ route('quiz') }}" variant="secondary">
+                                    ✨ Quiz: Dobierz rasę (45s)
                                 </x-frontend.button>
                             </div>
                         </div>
