@@ -1237,6 +1237,7 @@
 
 /* Section 3: Dostępne Kocięta -> Historie */
 .home-section--nasze-koty {
+    scroll-margin-top: calc(var(--nav-height, 64px) + 16px);
     padding-top: 56px;
     padding-bottom: 56px;
 }

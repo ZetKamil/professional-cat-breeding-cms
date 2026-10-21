@@ -60,6 +60,11 @@
   - Skorygowano kolejność importów w `resources/css/app.css`, co umożliwiło prawidłowe kompilowanie modułów stron przez Vite/Tailwind v4.
 - **Wynik:** Luksusowy, magazynowy układ (Quiet Luxury jak Apple / Leica / Aesop). Wszystkie 184 testy przeszły w 100% na zielono.
 
+✓ Optymalizacja Płynnego Zjazdu Kotwicy Hero (#nasze-koty) (`feat(ux)`, `style(layout)`)
+- Dodano `scroll-margin-top: calc(var(--nav-height, 64px) + 16px)` do klasy `.home-section--nasze-koty` w `resources/css/pages/home-page.css`.
+- Po kliknięciu w przycisk „Zobacz dostępne kocięta” ekran płynnie zatrzymuje się z zachowaniem 16px marginesu poniżej przyklejonego paska nawigacji, dzięki czemu nagłówek sekcji „Selekcja 2026 / Dostępne Kocięta i Mioty” nie jest przysłaniany przez menu.
+- Przetestowano i zweryfikowano w pakiecie testów (184 testy PASS).
+
 ---
 
 ## 2026-10-20
