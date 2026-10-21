@@ -1,8 +1,5 @@
-/* Self-hosted Inter — must come before @import 'tailwindcss' */
+/* Self-hosted Inter */
 @import './inter.css';
-
-@import 'tailwindcss';
-@import '../../vendor/livewire/flux/dist/flux.css';
 
 @import './design-tokens.css';
 
@@ -29,6 +26,9 @@
 @import './pages/home-page.css';
 @import './pages/legal-page.css';
 @import './pages/quiz.css';
+
+@import '../../vendor/livewire/flux/dist/flux.css';
+@import 'tailwindcss';
 
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';

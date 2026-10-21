@@ -50,6 +50,16 @@
 - Wideo-wizyta na żywo pozostaje silnie wyeksponowana w dedykowanym pasku zaufania, w dolnym pasku sticky na mobile oraz na każdej karcie kociaka.
 - Testy i weryfikacja: 184 testy przeszły w 100% PASS, zweryfikowano wizualnie w przeglądarce.
 
+✓ Redukcja i Harmonizacja Typografii Nagłówka Hero na Wszystkich Ekranach (`style(typography)`, `fix(hero)`)
+- **Problem:** Poprzednia reguła `clamp(2.5rem, 5.5vw, 4.25rem)` forsowała na dużych ekranach rozmiar aż **68px**, co przy 3-liniowym tytule tworzyło gigantyczny, przytłaczający blok tekstu (rozbity na 6 poszarpanych linii i dominujący kadr ze zdjęciem kota).
+- **Rozwiązanie (Editorial Scale & Golden Ratio):**
+  - Desktop (1440px - 1920px+): zmniejszono z 68px do wyważonego **42px - 44px** (`clamp(2rem, 1.25rem + 1.6vw, 2.75rem)` z `line-height: 1.15`).
+  - Laptopy (1024px - 1439px): **38px - 40px** (nagłówek mieści się elegancko w kolumnie bez ucinania słów).
+  - Tablety (768px - 1023px): **32px** (`line-height: 1.18`).
+  - Telefony (< 768px): zachowane optymalne **26px** (dokładnie 3 zwarte linie, kadr z kotem i przyciski above the fold).
+  - Skorygowano kolejność importów w `resources/css/app.css`, co umożliwiło prawidłowe kompilowanie modułów stron przez Vite/Tailwind v4.
+- **Wynik:** Luksusowy, magazynowy układ (Quiet Luxury jak Apple / Leica / Aesop). Wszystkie 184 testy przeszły w 100% na zielono.
+
 ---
 
 ## 2026-10-20
