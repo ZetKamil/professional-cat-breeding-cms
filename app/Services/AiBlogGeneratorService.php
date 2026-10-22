@@ -242,7 +242,7 @@ class AiBlogGeneratorService
         - Cattery name: Hodowla Kotów z Mazowieckiej Szwajcarii
         - Location: Sikórz k. Płocka (woj. mazowieckie)
         - Official Phone / WhatsApp: +48 514 153 204 (If you mention contact, phone or WhatsApp, ONLY use this number: +48 514 153 204)
-        - Contact page: /contact
+        - Contact page: /kontakt
 
         ## BREED CONTEXT
         You are writing about: {$breed}

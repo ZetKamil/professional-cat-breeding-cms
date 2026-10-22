@@ -71,6 +71,6 @@ W hodowli Kotów z Mazowieckiej Szwajcarii posiadamy obecnie **5 cudownych koci�
 - 🏠 **2 starsze kocięta** — w pełni usamodzielnione, po dwóch szczepieniach, **gotowe do zmiany domu od zaraz**!
 - 🗓️ **3 młodsze kocięta** — w trakcie ostatnich dni profilaktyki, **gotowe do odbioru od przyszłego tygodnia**!
 
-👉 **[Skontaktuj się z nami i dowiedz się więcej o naszej profilaktyce →](/contact)**  
+👉 **[Skontaktuj się z nami i dowiedz się więcej o naszej profilaktyce →](/kontakt)**  
 📞 **Telefon / WhatsApp:** +48 514 153 204  
 📍 **Lokalizacja:** Sikórz k. Płocka (woj. mazowieckie — blisko Warszawy i Łodzi)

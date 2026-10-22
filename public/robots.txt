@@ -22,10 +22,12 @@ Allow: /
 Allow: /koty
 Allow: /koty/
 Allow: /o-hodowli
-Allow: /about
+Allow: /o-nas
 Allow: /blog
 Allow: /blog/
-Allow: /contact
+Allow: /kontakt
+Allow: /dobierz-rase
+Allow: /hodowla-kotow-
 Allow: /polityka-prywatnosci
 Allow: /regulamin
 Allow: /storage/media/

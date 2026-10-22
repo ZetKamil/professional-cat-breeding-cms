@@ -17,7 +17,7 @@ cluster: "bengal-care"
 target_page: "/blog"
 
 primary_cta: "Skontaktuj się z hodowlą"
-cta_url: "/contact"
+cta_url: "/kontakt"
 
 hero_image:
   filename: "pierwsze-dni-kociecia-w-nowym-domu.webp"

@@ -217,7 +217,7 @@
                                     id="button_url_input"
                                     class="form-control form-control-sm"
                                     value="{{ old('button_url', $cta['button_url'] ?? '/koty') }}"
-                                    placeholder="Np. /koty lub /contact"
+                                    placeholder="Np. /koty lub /kontakt"
                                 >
                             </div>
                         </div>
