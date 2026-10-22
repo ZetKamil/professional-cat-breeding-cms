@@ -98,6 +98,18 @@
     <meta property="og:image:type" content="{{ $effectiveOgImageType }}">
     <meta property="og:image:alt" content="{{ $effectiveOgTitle }}">
 
+    {{-- Facebook App ID & Page ID (Resolves Facebook Debugger "Missing fb:app_id" warning) --}}
+    @php
+        $fbAppId = config('services.facebook.app_id') ?: env('FACEBOOK_APP_ID', env('FB_APP_ID', ''));
+        $fbPageId = config('services.facebook.page_id') ?: env('FACEBOOK_PAGE_ID', '61580668026948');
+    @endphp
+    @if($fbAppId)
+        <meta property="fb:app_id" content="{{ $fbAppId }}">
+    @endif
+    @if($fbPageId)
+        <meta property="fb:pages" content="{{ $fbPageId }}">
+    @endif
+
     {{-- Twitter Cards --}}
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ $effectiveOgTitle }}">

@@ -40,6 +40,11 @@ return [
         'tag_manager_id' => env('GOOGLE_TAG_MANAGER_ID', env('GTM_ID', 'GT-M6X37ZJ4')),
     ],
 
+    'facebook' => [
+        'app_id' => env('FACEBOOK_APP_ID', env('FB_APP_ID')),
+        'page_id' => env('FACEBOOK_PAGE_ID', '61580668026948'),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Gemini AI API
