@@ -1,6 +1,12 @@
 <x-frontend.shell
     title="Dobierz Idealną Rasę Kota w 45 Sekund — Bengalski, Brytyjski czy Syjamski? | Mazowiecka Szwajcaria"
     meta-description="Nie wiesz, jaki kot pasuje do Twojego stylu życia? Wypełnij nasz 4-etapowy quiz behawioralny i poznaj rasę dopasowaną do Ciebie oraz zobacz dostępne maluchy na żywo."
+    og-title="🐾 Test: Kot Bengalski, Brytyjski czy Syjamski? Sprawdź w 45 sekund!"
+    og-description="Rozwiąż krótki test i sprawdź, która rasa z naszej domowej hodowli SHiOZ ZOOLANDIA pasuje do Twojego domu."
+    og-image="{{ asset('og-quiz.jpg') }}"
+    og-image-width="1200"
+    og-image-height="630"
+    og-image-type="image/jpeg"
     nav-theme="dark"
 >
     <section class="quiz-section hero--dark" data-nav-theme="dark" aria-label="Interaktywny quiz doboru rasy kota">

@@ -1,7 +1,45 @@
+@php
+    $breedTitles = [
+        'Kot Bengalski' => 'Koty Bengalskie — Kocięta z Rodowodem | Domowa Hodowla Kotów z Mazowieckiej Szwajcarii',
+        'bengal' => 'Koty Bengalskie — Kocięta z Rodowodem | Domowa Hodowla Kotów z Mazowieckiej Szwajcarii',
+        'bengalskie' => 'Koty Bengalskie — Kocięta z Rodowodem | Domowa Hodowla Kotów z Mazowieckiej Szwajcarii',
+        'Kot Brytyjski' => 'Koty Brytyjskie — Kocięta z Rodowodem | Domowa Hodowla Kotów z Mazowieckiej Szwajcarii',
+        'british' => 'Koty Brytyjskie — Kocięta z Rodowodem | Domowa Hodowla Kotów z Mazowieckiej Szwajcarii',
+        'brytyjskie' => 'Koty Brytyjskie — Kocięta z Rodowodem | Domowa Hodowla Kotów z Mazowieckiej Szwajcarii',
+        'brytyjczyki' => 'Koty Brytyjskie — Kocięta z Rodowodem | Domowa Hodowla Kotów z Mazowieckiej Szwajcarii',
+        'Kot Syjamski' => 'Koty Syjamskie — Kocięta z Rodowodem | Domowa Hodowla Kotów z Mazowieckiej Szwajcarii',
+        'siamese' => 'Koty Syjamskie — Kocięta z Rodowodem | Domowa Hodowla Kotów z Mazowieckiej Szwajcarii',
+        'syjamskie' => 'Koty Syjamskie — Kocięta z Rodowodem | Domowa Hodowla Kotów z Mazowieckiej Szwajcarii',
+    ];
+    $breedOgImages = [
+        'Kot Bengalski' => asset('og-bengal.jpg'),
+        'bengal' => asset('og-bengal.jpg'),
+        'bengalskie' => asset('og-bengal.jpg'),
+        'Kot Brytyjski' => asset('og-british.jpg'),
+        'british' => asset('og-british.jpg'),
+        'brytyjskie' => asset('og-british.jpg'),
+        'brytyjczyki' => asset('og-british.jpg'),
+        'Kot Syjamski' => asset('og-siamese.jpg'),
+        'siamese' => asset('og-siamese.jpg'),
+        'syjamskie' => asset('og-siamese.jpg'),
+    ];
+    $pageTitle = ($currentBreed && isset($breedTitles[$currentBreed]))
+        ? $breedTitles[$currentBreed]
+        : 'Nasze Koty — Kocięta z Domowej Hodowli | Koty Bengalskie, Brytyjskie i Syjamskie';
+    $pageOgImage = ($currentBreed && isset($breedOgImages[$currentBreed]))
+        ? $breedOgImages[$currentBreed]
+        : asset('og-default.jpg');
+@endphp
+
 <x-frontend.shell
-    title="Nasze Koty — Kocięta z Domowej Hodowli | Koty Bengalskie, Brytyjskie i Syjamskie"
+    :title="$pageTitle"
     meta-description="Przeglądaj koty dorosłe i dostępne kocięta w naszej domowej hodowli. Zdrowe linie genetyczne, komplet badań rodziców dedykowanych rasie, rodowód SHiOZ ZOOLANDIA i pełna domowa socjalizacja."
-    og-image="{{ asset('storage/media/parent_bella_1.jpg') }}"
+    :og-title="$pageTitle"
+    og-description="Przeglądaj koty dorosłe i dostępne kocięta w naszej domowej hodowli. Zdrowe linie genetyczne, komplet badań rodziców dedykowanych rasie, rodowód SHiOZ ZOOLANDIA i pełna domowa socjalizacja."
+    :og-image="$pageOgImage"
+    og-image-width="1200"
+    og-image-height="630"
+    og-image-type="image/jpeg"
 >
     {{-- ============================================================
          1. CATALOG HERO

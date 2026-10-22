@@ -1,6 +1,6 @@
 <x-frontend.shell title="O Domowej Hodowli — Standardy, Filozofia i Kodeks Zaufania | Mazowiecka Szwajcaria"
     meta-description="Poznaj standardy domowej hodowli kotów z Mazowieckiej Szwajcarii (SHiOZ ZOOLANDIA). Badania kardiologiczne i genetyczne rodziców, etyczna domowa socjalizacja i jasny proces zakupu kocięcia."
-    og-image="{{ asset('image/cattery/hero_bg.jpg') }}">
+    og-image="{{ asset('og-cattery.jpg') }}">
     {{-- ============================================================
     1. HERO — Editorial, photography-first
     ============================================================ --}}

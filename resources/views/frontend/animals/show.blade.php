@@ -1,7 +1,19 @@
+@php
+    $catTitle = $animal->meta_title ?: ($animal->name . ' — ' . $animal->breed . ' | Domowa Hodowla Kotów z Mazowieckiej Szwajcarii');
+    $catDesc = $animal->meta_description ?: ($animal->short_description ?: ('Poznaj kota ' . $animal->name . ' (' . $animal->breed . ', ' . $animal->color . '). Domowa hodowla bez klatek, rodowód SHiOZ ZOOLANDIA, ' . ($animal->status === \App\Enums\AnimalStatus::Breeding ? 'dedykowane badania rasy' : 'po przebadanych rodzicach') . ' i zrównoważony charakter.'));
+    $catOgImage = $animal->media ? $animal->media->url() : asset('og-default.jpg');
+    $catMimeType = $animal->media && $animal->media->mime_type ? $animal->media->mime_type : 'image/jpeg';
+@endphp
+
 <x-frontend.shell
-    title="{{ $animal->meta_title ?: ($animal->name . ' — ' . $animal->breed . ' | Domowa Hodowla Kotów z Mazowieckiej Szwajcarii') }}"
-    meta-description="{{ $animal->meta_description ?: ($animal->short_description ?: ('Poznaj kota ' . $animal->name . ' (' . $animal->breed . ', ' . $animal->color . '). Domowa hodowla bez klatek, rodowód SHiOZ ZOOLANDIA, ' . ($animal->status === \App\Enums\AnimalStatus::Breeding ? 'dedykowane badania rasy' : 'po przebadanych rodzicach') . ' i zrównoważony charakter.')) }}"
-    og-image="{{ $animal->media ? $animal->media->url() : asset('storage/media/parent_bella_1.jpg') }}"
+    :title="$catTitle"
+    :meta-description="$catDesc"
+    :og-title="$catTitle"
+    :og-description="$catDesc"
+    :og-image="$catOgImage"
+    :og-image-type="$catMimeType"
+    og-image-width="1200"
+    og-image-height="630"
     og-type="profile"
 >
     {{-- ============================================================

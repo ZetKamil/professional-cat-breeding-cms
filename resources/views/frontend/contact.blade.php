@@ -1,6 +1,6 @@
 <x-frontend.shell title="Kontakt i Rezerwacja Kociąt | Domowa Hodowla Kotów z Mazowieckiej Szwajcarii"
     meta-description="Skontaktuj się z naszą domową hodowlą w Sikorzu (woj. mazowieckie). Zadzwoń: +48 514 153 204 lub napisz przez formularz kontaktowy. Odpowiadamy w ciągu 24h."
-    og-image="{{ asset('storage/media/parent_bella_1.jpg') }}">
+    og-image="{{ asset('og-default.jpg') }}">
     {{-- ============================================================
     1. TOP HERO + CONTACT CONCIERGE (Fast Phone / WhatsApp / Form)
     ============================================================ --}}
@@ -481,7 +481,7 @@
       "mainEntity": {
         "@@type": "LocalBusiness",
         "name": "Domowa Hodowla Kotów z Mazowieckiej Szwajcarii",
-        "image": "{{ asset('storage/media/parent_bella_1.jpg') }}",
+        "image": "{{ asset('og-default.jpg') }}",
         "logo": "{{ asset('logo.png') }}",
         "telephone": "+48514153204",
         "email": "biuro@kotyzmazowieckiejszwajcarii.pl",

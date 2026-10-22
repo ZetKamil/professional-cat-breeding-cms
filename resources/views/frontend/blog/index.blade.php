@@ -1,6 +1,6 @@
 <x-frontend.shell title="Blog i Poradniki o Kotach Rasowych | Hodowla Kotów z Mazowieckiej Szwajcarii"
     meta-description="Eksperckie poradniki felinologiczne: zdrowie, żywienie BARF, wyprawka dla kociaka, badania genetyczne rodziców i socjalizacja kotów bengalskich, brytyjskich i syjamskich."
-    og-image="{{ asset('storage/media/parent_bella_1.jpg') }}">
+    og-image="{{ asset('og-default.jpg') }}">
     {{-- ============================================================
     1. EDITORIAL HERO HEADER + CATEGORY FILTER TOOLBAR
     ============================================================ --}}

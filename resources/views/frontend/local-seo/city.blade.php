@@ -1,6 +1,12 @@
 <x-frontend.shell
     :title="$city['meta_title']"
     :meta-description="$city['meta_description']"
+    :og-title="$city['meta_title']"
+    :og-description="$city['meta_description']"
+    :og-image="asset('og-default.jpg')"
+    og-image-width="1200"
+    og-image-height="630"
+    og-image-type="image/jpeg"
 >
     @push('schema')
     @php

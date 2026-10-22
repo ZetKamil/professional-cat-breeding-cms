@@ -1,7 +1,12 @@
 @props([
     'title' => 'Domowa Hodowla Kotów Rasowych z Rodowodem – Bengalskie, Brytyjskie i Syjamskie | Mazowiecka Szwajcaria',
     'metaDescription' => 'Domowa hodowla kotów rasowych z rodowodem SHiOZ ZOOLANDIA (Certyfikat 58/CW/2025, Rej. 58/P/2025). Koty bengalskie, brytyjskie i syjamskie w Sikorzu k. Płocka (Mazowsze).',
+    'ogTitle' => null,
+    'ogDescription' => null,
     'ogImage' => null,
+    'ogImageWidth' => 1200,
+    'ogImageHeight' => 630,
+    'ogImageType' => null,
     'ogType' => 'website',
     'canonical' => null,
     'robots' => 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
@@ -9,11 +14,51 @@
 ])
 
 @php
+    $effectiveOgTitle = $ogTitle ?: $title;
+    $effectiveOgDescription = $ogDescription ?: $metaDescription;
+
+    $isProd = app()->isProduction()
+        || config('app.url') === 'https://kotyzmazowieckiejszwajcarii.pl'
+        || (isset($_SERVER['HTTP_HOST']) && str_contains($_SERVER['HTTP_HOST'], 'kotyzmazowieckiejszwajcarii.pl'));
+
     $canonicalUrl = $canonical ?? (
-        app()->isProduction() || config('app.url') === 'https://kotyzmazowieckiejszwajcarii.pl'
+        $isProd
             ? 'https://kotyzmazowieckiejszwajcarii.pl' . (request()->getPathInfo() === '/' ? '/' : request()->getPathInfo())
             : url()->current()
     );
+
+    // Guaranteed fallback image in /public/ so og:image never 404s
+    $rawOgImage = $ogImage ?: asset('og-default.jpg');
+
+    if ($isProd) {
+        $parsedHost = parse_url($rawOgImage, PHP_URL_HOST);
+        $isLocalOrOurHost = empty($parsedHost) || in_array($parsedHost, ['localhost', '127.0.0.1', 'kotyzmazowieckiejszwajcarii.pl', 'www.kotyzmazowieckiejszwajcarii.pl']);
+
+        if ($isLocalOrOurHost) {
+            $path = parse_url($rawOgImage, PHP_URL_PATH) ?? '';
+            if (str_starts_with($path, '/katten/')) {
+                $path = substr($path, 7);
+            }
+            $effectiveOgImage = 'https://kotyzmazowieckiejszwajcarii.pl/' . ltrim($path, '/');
+        } else {
+            $effectiveOgImage = str_starts_with($rawOgImage, 'http://')
+                ? 'https://' . substr($rawOgImage, 7)
+                : $rawOgImage;
+        }
+    } else {
+        $effectiveOgImage = str_starts_with($rawOgImage, 'http') ? $rawOgImage : url($rawOgImage);
+    }
+
+    $effectiveOgImageWidth = $ogImageWidth ?? 1200;
+    $effectiveOgImageHeight = $ogImageHeight ?? 630;
+    $parsedPath = parse_url($effectiveOgImage, PHP_URL_PATH) ?? '';
+    $ext = strtolower(pathinfo($parsedPath, PATHINFO_EXTENSION));
+    $effectiveOgImageType = $ogImageType ?? match ($ext) {
+        'png' => 'image/png',
+        'webp' => 'image/webp',
+        'gif' => 'image/gif',
+        default => 'image/jpeg',
+    };
 @endphp
 
 <!DOCTYPE html>
@@ -39,24 +84,26 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}?v=2">
     <link rel="manifest" href="{{ asset('manifest.webmanifest') }}?v=2">
 
-    @php
-        $effectiveOgImage = $ogImage ?? asset('logo.png');
-    @endphp
-
     {{-- Open Graph --}}
     <meta property="og:site_name" content="Domowa Hodowla Kotów z Mazowieckiej Szwajcarii">
-    <meta property="og:title" content="{{ $title }}">
-    <meta property="og:description" content="{{ $metaDescription }}">
+    <meta property="og:title" content="{{ $effectiveOgTitle }}">
+    <meta property="og:description" content="{{ $effectiveOgDescription }}">
     <meta property="og:type" content="{{ $ogType }}">
     <meta property="og:url" content="{{ $canonicalUrl }}">
     <meta property="og:locale" content="pl_PL">
     <meta property="og:image" content="{{ $effectiveOgImage }}">
+    <meta property="og:image:secure_url" content="{{ $effectiveOgImage }}">
+    <meta property="og:image:width" content="{{ $effectiveOgImageWidth }}">
+    <meta property="og:image:height" content="{{ $effectiveOgImageHeight }}">
+    <meta property="og:image:type" content="{{ $effectiveOgImageType }}">
+    <meta property="og:image:alt" content="{{ $effectiveOgTitle }}">
 
     {{-- Twitter Cards --}}
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{{ $title }}">
-    <meta name="twitter:description" content="{{ $metaDescription }}">
+    <meta name="twitter:title" content="{{ $effectiveOgTitle }}">
+    <meta name="twitter:description" content="{{ $effectiveOgDescription }}">
     <meta name="twitter:image" content="{{ $effectiveOgImage }}">
+    <meta name="twitter:image:alt" content="{{ $effectiveOgTitle }}">
 
     <title>{{ $title }}</title>
 
