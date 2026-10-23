@@ -35,6 +35,21 @@ class SecurityHeadersMiddleware
         if (!$response->headers->has('X-XSS-Protection')) {
             $response->headers->set('X-XSS-Protection', '0');
         }
+        if (!$response->headers->has('Content-Security-Policy')) {
+            $csp = implode('; ', [
+                "default-src 'self'",
+                "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://connect.facebook.net https://use.fontawesome.com",
+                "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://use.fontawesome.com",
+                "img-src 'self' data: blob: https:",
+                "font-src 'self' data: https://fonts.gstatic.com https://use.fontawesome.com",
+                "connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://connect.facebook.net https://*.facebook.com",
+                "frame-src 'self' https://www.facebook.com https://www.google.com",
+                "object-src 'none'",
+                "base-uri 'self'",
+                "frame-ancestors 'self'",
+            ]);
+            $response->headers->set('Content-Security-Policy', $csp);
+        }
 
         return $response;
     }

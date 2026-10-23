@@ -33,6 +33,7 @@ class SecurityHardeningTest extends TestCase
             $response->assertHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
             $response->assertHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
             $response->assertHeader('X-XSS-Protection', '0');
+            $response->assertHeader('Content-Security-Policy');
         }
     }
 
@@ -45,6 +46,7 @@ class SecurityHardeningTest extends TestCase
         $response->assertHeader('X-Frame-Options', 'SAMEORIGIN');
         $response->assertHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
         $response->assertHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+        $response->assertHeader('Content-Security-Policy');
     }
 
     public function test_guest_is_blocked_from_all_backend_routes(): void

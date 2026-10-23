@@ -149,4 +149,27 @@ class BlogTest extends TestCase
         $response->assertDontSee('![Zdjęcie do sekcji]');
         $response->assertSee('To jest link do kompletnej wyprawki dla kota.');
     }
+
+    public function test_blog_post_markdown_strips_malicious_html_scripts(): void
+    {
+        $user = User::factory()->create();
+        $post = Post::factory()->create([
+            'user_id' => $user->id,
+            'title' => 'Test XSS Markdown',
+            'is_published' => true,
+            'published_at' => now()->subDay(),
+            'sections' => [
+                [
+                    'heading' => 'Wstęp z XSS',
+                    'body' => "<script>alert('xss')</script>\n\nTekst **bezpieczny**",
+                ],
+            ],
+        ]);
+
+        $response = $this->get(route('frontend.blog.show', $post));
+
+        $response->assertOk();
+        $response->assertDontSee("<script>alert('xss')</script>", false);
+        $response->assertSee('Tekst <strong>bezpieczny</strong>', false);
+    }
 }

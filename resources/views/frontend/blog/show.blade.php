@@ -58,6 +58,13 @@
         <div class="article-layout">
             <article class="article-editorial">
 
+                @php
+                    $markdownOptions = [
+                        'html_input' => 'strip',
+                        'allow_unsafe_links' => false,
+                    ];
+                @endphp
+
                 @if($hasSections)
                     {{-- ─── Structured sections rendering ─────────── --}}
                     @php
@@ -86,7 +93,7 @@
                             {{-- Intro section: no H2, just lead paragraph --}}
                             @if($sectionBody)
                                 <div class="article-intro-content">
-                                    {!! Str::markdown($sectionBody) !!}
+                                    {!! Str::markdown($sectionBody, $markdownOptions) !!}
                                 </div>
                             @endif
                             @if($sectionTip)
@@ -116,7 +123,7 @@
                                 @endif
                                 @if($sectionBody)
                                     <div class="article-section-content">
-                                        {!! Str::markdown($sectionBody) !!}
+                                        {!! Str::markdown($sectionBody, $markdownOptions) !!}
                                     </div>
                                 @endif
                                 @if($sectionTip)
@@ -149,7 +156,7 @@
                             $bodyToRender = preg_replace('/(?:\r?\n)*---\s*(?:\r?\n)*##\s*(?:🐾|Dostępne kocięta|Aktualnie dostępne).*$/su', '', $bodyToRender);
                         }
                     @endphp
-                    {!! Str::markdown($bodyToRender) !!}
+                    {!! Str::markdown($bodyToRender, $markdownOptions) !!}
                 @endif
 
                 {{-- ============================================================
@@ -168,7 +175,7 @@
                         @endif
 
                         <div class="article-closing-cta-card__body">
-                            {!! Str::markdown($globalCta['body']) !!}
+                            {!! Str::markdown($globalCta['body'], $markdownOptions) !!}
                         </div>
 
                         @if(!empty($globalCta['image_url']))
