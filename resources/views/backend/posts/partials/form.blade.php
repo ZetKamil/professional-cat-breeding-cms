@@ -850,7 +850,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         document.getElementById('sections_preview_body').innerHTML = html;
-        new bootstrap.Modal(document.getElementById('sectionsPreviewModal')).show();
+        if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('sectionsPreviewModal')).show();
+        }
     });
 
     // ── Animal selectors ─────────────────────────────────────────────
@@ -877,7 +879,9 @@ document.addEventListener('DOMContentLoaded', function () {
     function openSectionMediaPicker(target) {
         smpTargetIdx = target;
         loadSmpMedia(1);
-        new bootstrap.Modal(smpModal).show();
+        if (typeof bootstrap !== 'undefined' && bootstrap.Modal && smpModal) {
+            bootstrap.Modal.getOrCreateInstance(smpModal).show();
+        }
     }
 
     smpModal?.addEventListener('show.bs.modal', function () {
@@ -939,7 +943,9 @@ document.addEventListener('DOMContentLoaded', function () {
                         regularSections[smpTargetIdx].image_url = item.url;
                         renderRegularSections();
                     }
-                    bootstrap.Modal.getInstance(smpModal)?.hide();
+                    if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                        bootstrap.Modal.getInstance(smpModal)?.hide();
+                    }
                     smpTargetIdx = null;
                 }
             };

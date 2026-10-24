@@ -480,7 +480,9 @@
 
         document.getElementById('open_media_btn').addEventListener('click', function () {
             loadMedia(1);
-            new bootstrap.Modal(mpModal).show();
+            if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                bootstrap.Modal.getOrCreateInstance(mpModal).show();
+            }
         });
 
         removeImageBtn.addEventListener('click', function () {
@@ -534,7 +536,9 @@
                     imagePreviewBox.innerHTML = `<img src="${item.url}" class="rounded border w-100 h-100" style="object-fit:cover;" alt="Wybrane zdjęcie">`;
                     removeImageBtn.classList.remove('d-none');
                     updatePreview();
-                    bootstrap.Modal.getInstance(mpModal)?.hide();
+                    if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                        bootstrap.Modal.getInstance(mpModal)?.hide();
+                    }
                 });
                 mpGrid.appendChild(col);
             });
