@@ -209,39 +209,67 @@
                 </div>
 
                 {{-- RESULT SCREEN --}}
+                {{-- PART 2: New visual hierarchy — CTA is immediately after the title, above the fold --}}
                 <div class="quiz-result" id="quizResult" style="display:none;">
                     <div class="quiz-result__badge">
                         <span>✨ Twoje Behawioralne Dopasowanie:</span>
                     </div>
 
                     <h2 class="quiz-result__title" id="quizResultBreedTitle">Kot Bengalski</h2>
+
+                    {{-- Short punchy 2-3 sentence description (CSS line-clamp prevents scroll fatigue) --}}
                     <p class="quiz-result__desc" id="quizResultBreedDesc"></p>
 
-                    <div class="quiz-result__disclaimer" style="margin: 10px 0 16px; font-size: 0.84rem; color: #b8b2a8; font-style: italic; text-align: left; line-height: 1.5;">
-                        ℹ️ Powyższa rekomendacja opiera się na ogólnych predyspozycjach rasy. Każdy kot posiada indywidualny charakter, a optymalne dopasowanie pomożemy Ci potwierdzić podczas rozmowy wideo i bezpośredniego kontaktu z hodowlą.
-                    </div>
+                    {{-- PART 2 + PART 3: IMMEDIATE CTA BOX — directly under title, BEFORE cat cards --}}
+                    <div class="quiz-result__immediate-cta">
+                        <div class="quiz-cta-group" id="quizTopCtaGroup">
+                            {{-- Primary: Messenger --}}
+                            <a id="quizCtaMessengerTop"
+                               href="https://m.me/61580668026948"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="quiz-cta-btn--messenger"
+                               onclick="window.fireQuizContactEvent('messenger', 'top_cta')">
+                                <svg class="quiz-cta-btn__icon" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path d="M12 2C6.48 2 2 6.03 2 11c0 2.87 1.5 5.43 3.84 7.07L5 22l4.13-1.81C10.05 20.35 11 20.48 12 20.48c5.52 0 10-4.03 10-9s-4.48-9.48-10-9.48z"/>
+                                    <path d="M7.5 13.5l3-3.2 2 2 3-3.2-3 3.2-2-2-3 3.2z" fill="rgba(0,132,255,0.3)"/>
+                                </svg>
+                                💬 Napisz na Messengerze (Zapytaj o cenę i wolne mioty)
+                            </a>
 
-                    {{-- Personalized Behavioral Note --}}
-                    <div id="quizBehavioralNoteBox" style="background: rgba(200, 157, 92, 0.14); border: 1px solid rgba(200, 157, 92, 0.35); border-left: 4px solid var(--color-gold, #c89d5c); padding: 16px 20px; border-radius: 10px; margin: 18px 0 24px; text-align: left; font-size: 0.95rem; line-height: 1.6;">
-                        <strong id="quizBehavioralNoteTitle" style="color: var(--color-gold, #c89d5c); display: block; font-size: 1rem; margin-bottom: 6px;">💡 Dlaczego ten wybór pasuje do Twojego rytmu dnia:</strong>
-                        <p id="quizBehavioralNoteText" style="margin: 0; color: #f5f0e8; font-weight: 400;"></p>
+                            {{-- Secondary: WhatsApp --}}
+                            <a id="quizCtaWhatsappTop"
+                               href="https://wa.me/48514153204"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="quiz-cta-btn--whatsapp"
+                               onclick="window.fireQuizContactEvent('whatsapp', 'top_cta')">
+                                <svg class="quiz-cta-btn__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                                </svg>
+                                🟢 Zapytaj o cenę i filmik z kociakami (WhatsApp)
+                            </a>
+                        </div>
+                        {{-- Micro-reassurance badge --}}
+                        <p class="quiz-cta-reassurance">⚡ Odpowiadamy zazwyczaj w kilka minut • Pytanie o cenę do niczego nie zobowiązuje.</p>
                     </div>
 
                     {{-- Matched kittens from database --}}
                     <div class="quiz-result__cats-box">
                         <h3 class="quiz-result__cats-heading" id="quizMatchedCatsHeading">Aktualnie dostępne maluchy tej rasy w hodowli:</h3>
-                        
-                        {{-- Notice if user chose 'ready_now' but matched breed is in early reservation (like British kittens) --}}
+
+                        {{-- Notice if user chose 'ready_now' but matched breed is in early reservation (e.g. British kittens < 12 weeks) --}}
                         <div id="quizFutureNoticeForNow" style="display:none; background: rgba(200, 157, 92, 0.15); border: 1px solid rgba(200, 157, 92, 0.4); border-radius: 12px; padding: 16px 20px; margin-bottom: 20px; text-align: left; font-size: 0.92rem; line-height: 1.55; color: #f5f0e8;">
                             <div style="display: flex; align-items: flex-start; gap: 12px;">
                                 <span style="font-size: 1.6rem; line-height: 1;">⏳</span>
                                 <div>
                                     <strong style="color: var(--color-gold, #c89d5c); display: block; font-size: 0.98rem; margin-bottom: 4px;">Szukasz kociaka od zaraz? Kocięta mogą wyjeżdżać do nowych domów w wieku 12–14 tygodni, po potwierdzeniu gotowości konkretnego kociaka.</strong>
-                                    Maluszki z tego miotu są obecnie pod troskliwą opieką mamy i przechodzą program domowej socjalizacji. Już teraz możesz połączyć się na żywo na WhatsApp, zobaczyć je podczas zabawy i dokonać wczesnej rezerwacji swojego ulubieńca.
+                                    Maluszki z tego miotu są teraz pod opieką mamy i przechodzą program domowej socjalizacji. Już teraz możesz napisać na Messengerze, zobaczyć je podczas zabawy i dokonać wczesnej rezerwacji swojego ulubieńca.
                                 </div>
                             </div>
                         </div>
 
+                        {{-- PART 4: Cat cards with dual Messenger + WhatsApp buttons --}}
                         <div class="quiz-cats-grid" id="quizMatchingCatsGrid">
                             @foreach($animals as $animal)
                                 @if($animal->status === \App\Enums\AnimalStatus::Available)
@@ -257,12 +285,18 @@
                                         $isStrictlyReadyToLeave = $hasDob && $ageInWeeks >= 12;
                                         $badgeLabel = $animal->pickupBadgeLabel();
                                         $timelineLabel = $animal->pickupTimelineLabel();
+
+                                        // PART 4: Pre-build dynamic contact URLs per kitten
+                                        $catMsgText = 'Dzień dobry! Chciał(a)bym zapytać o cenę i dostępność kociaka: ' . $animal->name . ' (' . $animal->breed . ')';
+                                        $catMsgWa   = 'Dzień dobry! Chciał(a)bym zapytać o cenę kociaka: ' . $animal->name . ' (' . $animal->breed . '). Czy mogę prosić o krótki filmik?';
                                     @endphp
-                                    <div class="quiz-cat-item" 
-                                         data-breed="{{ $breedCategory }}" 
+                                    <div class="quiz-cat-item"
+                                         data-breed="{{ $breedCategory }}"
                                          data-status="available"
-                                         data-ready="{{ $isStrictlyReadyToLeave ? 'now' : 'future' }}">
-                                         <div class="quiz-cat-item__img">
+                                         data-ready="{{ $isStrictlyReadyToLeave ? 'now' : 'future' }}"
+                                         data-cat-name="{{ addslashes($animal->name) }}"
+                                         data-cat-breed="{{ addslashes($animal->breed) }}">
+                                        <div class="quiz-cat-item__img">
                                             @if($animal->media)
                                                 <img src="{{ $animal->media->url() }}" alt="{{ $animal->name }}" loading="lazy">
                                             @else
@@ -279,11 +313,23 @@
                                                 @endif
                                             </span>
                                         </div>
-                                        <button type="button" 
-                                                class="quiz-cat-item__btn" 
-                                                onclick="window.openReservationModal('{{ addslashes($animal->name) }}', '{{ addslashes($animal->breed) }}', 'Quiz: {{ addslashes($badgeLabel) }}')">
-                                            📹 Zobacz na żywo
-                                        </button>
+                                        {{-- PART 4: Dual Messenger + WhatsApp buttons on each kitten card --}}
+                                        <div class="quiz-cat-item__btns">
+                                            <a href="https://m.me/61580668026948?text={{ urlencode($catMsgText) }}"
+                                               target="_blank"
+                                               rel="noopener noreferrer"
+                                               class="quiz-cat-item__btn--messenger"
+                                               onclick="window.fireQuizCatEvent('messenger', '{{ addslashes($animal->name) }}', '{{ addslashes($animal->breed) }}')">
+                                                💬 Zapytaj o cenę (Messenger)
+                                            </a>
+                                            <a href="https://wa.me/48514153204?text={{ urlencode($catMsgWa) }}"
+                                               target="_blank"
+                                               rel="noopener noreferrer"
+                                               class="quiz-cat-item__btn--whatsapp"
+                                               onclick="window.fireQuizCatEvent('whatsapp', '{{ addslashes($animal->name) }}', '{{ addslashes($animal->breed) }}')">
+                                                🟢 Filmik (WhatsApp)
+                                            </a>
+                                        </div>
                                     </div>
                                 @endif
                             @endforeach
@@ -294,49 +340,101 @@
                             <span style="font-size: 2rem; display: block; margin-bottom: 8px;">🗓️</span>
                             <h4 id="quizNoCatsNoticeTitle" style="font-size: 1.05rem; font-weight: 700; color: var(--color-gold, #c89d5c); margin-bottom: 6px;">Planujemy kolejny miot tej rasy</h4>
                             <p id="quizNoCatsNoticeText" style="font-size: 0.92rem; color: #e8e3d8; line-height: 1.6; margin-bottom: 16px;">
-                                Aktualnie wszystkie maluchy tej rasy z obecnych miotów znalazły już swoje domy lub są w trakcie rezerwacji. Skontaktuj się z nami, aby porozmawiać o planowanym miocie i zapisać się na Listę Pierwszeństwa na WhatsApp!
+                                Aktualnie wszystkie maluchy tej rasy z obecnych miotów znalazły już swoje domy lub są w trakcie rezerwacji. Skontaktuj się z nami, aby porozmawiać o planowanym miocie i zapisać się na Listę Pierwszeństwa!
                             </p>
-                            <button type="button" class="btn btn-primary" onclick="window.contactBreederFromQuiz()">
-                                📹 Zapytaj o planowany miot na WhatsApp
-                            </button>
+                            <a id="quizNoCatsCtaMessenger"
+                               href="https://m.me/61580668026948"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="quiz-cta-btn--messenger"
+                               style="display:inline-flex; max-width: 360px;"
+                               onclick="window.fireQuizContactEvent('messenger', 'no_cats_notice')">
+                                💬 Zapytaj na Messengerze o planowany miot
+                            </a>
                         </div>
 
-                        {{-- Alternative recommendations if user wanted ready_now and matched breed isn't ready today, OR if 0 kittens matched --}}
+                        {{-- Alternative recommendations if user wanted ready_now and matched breed not ready, or 0 matched --}}
                         <div id="quizAlternativesBox" style="display:none; margin-top: 28px; padding-top: 22px; border-top: 1px solid rgba(255, 255, 255, 0.12);">
                             <div style="background: rgba(37, 211, 102, 0.1); border: 1px solid rgba(37, 211, 102, 0.3); border-radius: 12px; padding: 14px 18px; margin-bottom: 16px; text-align: left;">
                                 <strong id="quizAltBoxTitle" style="color: #25d366; font-size: 0.96rem; display: flex; align-items: center; gap: 8px;">
                                     <span>⚡</span> Zależy Ci na odbiorze kociaka już w ten weekend?
                                 </strong>
                                 <p id="quizAltBoxDesc" style="margin: 4px 0 0; font-size: 0.88rem; color: #e6f7ec; line-height: 1.5;">
-                                    Poznaj nasze w pełni odchowane maluchy innych ras, które są po komplecie szczepień, zaczipowane i nauczone czystości, gotowe do odbioru od ręki:
+                                    Poznaj nasze w pełni odchowane maluchy innych ras, które są po komplecie szczepień, zaczipowane i gotowe do odbioru od ręki:
                                 </p>
                             </div>
                             <div class="quiz-cats-grid" id="quizAlternativeCatsGrid"></div>
                         </div>
 
-                        {{-- Fallback when catalogue has 0 cats at all --}}
+                        {{-- Fallback when catalogue has 0 available cats at all --}}
                         <div id="quizEmptyCatalogueNotice" style="display:none; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 12px; padding: 20px; text-align: center; margin-top: 16px; color: #f5f0e8;">
                             <p style="margin: 0 0 14px; font-size: 0.93rem; color: #ded9d0; line-height: 1.6;">
                                 Aktualnie przygotowujemy nowe mioty do publikacji w katalogu online.<br>
                                 Skontaktuj się bezpośrednio z hodowlą – z przyjemnością poinformujemy Cię o aktualnym stanie miotów i planowanych narodzinach.
                             </p>
-                            <button type="button" class="btn btn-primary" onclick="window.contactBreederFromQuiz()">
-                                📹 Skontaktuj się z hodowcą (WhatsApp)
-                            </button>
+                            <a href="https://m.me/61580668026948"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="quiz-cta-btn--messenger"
+                               style="display:inline-flex; max-width: 320px;"
+                               onclick="window.fireQuizContactEvent('messenger', 'empty_catalogue')">
+                                💬 Napisz do hodowcy (Messenger)
+                            </a>
                         </div>
                     </div>
 
-                    {{-- Primary actions after quiz completion --}}
-                    <div class="quiz-result__actions" style="margin-top: 28px;">
-                        <button type="button" id="quizPrimaryCta" class="quiz-cta-btn quiz-cta-btn--primary" onclick="window.contactBreederFromQuiz()">
-                            📹 Porozmawiaj z hodowcą o dopasowaniu (WhatsApp)
-                        </button>
-                        <button type="button" class="quiz-cta-btn quiz-cta-btn--secondary" onclick="window.openCallbackFromQuiz()">
-                            📞 Poproś o szybkie oddzwonienie
-                        </button>
+                    {{-- Personalized Behavioral Note (moved below cats to keep CTAs above fold) --}}
+                    <div id="quizBehavioralNoteBox" style="background: rgba(200, 157, 92, 0.14); border: 1px solid rgba(200, 157, 92, 0.35); border-left: 4px solid var(--color-gold, #c89d5c); padding: 16px 20px; border-radius: 10px; margin: 0 0 22px; text-align: left; font-size: 0.92rem; line-height: 1.6;">
+                        <strong id="quizBehavioralNoteTitle" style="color: var(--color-gold, #c89d5c); display: block; font-size: 0.95rem; margin-bottom: 5px;">💡 Dlaczego ten wybór pasuje do Twojego rytmu dnia:</strong>
+                        <p id="quizBehavioralNoteText" style="margin: 0; color: #f5f0e8; font-weight: 400;"></p>
                     </div>
 
-                    <div style="text-align: center; margin-top: 24px; display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap;">
+                    {{-- PART 2 (Bottom): Repeat CTA + Callback as secondary at the bottom --}}
+                    <div class="quiz-result__actions">
+                        <div class="quiz-cta-group">
+                            <a id="quizCtaMessengerBottom"
+                               href="https://m.me/61580668026948"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="quiz-cta-btn--messenger"
+                               onclick="window.fireQuizContactEvent('messenger', 'bottom_cta')">
+                                💬 Napisz na Messengerze (Zapytaj o cenę i wolne mioty)
+                            </a>
+                            <a id="quizCtaWhatsappBottom"
+                               href="https://wa.me/48514153204"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="quiz-cta-btn--whatsapp"
+                               onclick="window.fireQuizContactEvent('whatsapp', 'bottom_cta')">
+                                🟢 Zapytaj o cenę i filmik z kociakami (WhatsApp)
+                            </a>
+                            <button type="button"
+                                    class="quiz-cta-btn--callback"
+                                    onclick="window.openCallbackFromQuiz()">
+                                📞 Poproś o szybkie oddzwonienie
+                            </button>
+                        </div>
+                        <p class="quiz-cta-reassurance">⚡ Odpowiadamy zazwyczaj w kilka minut • Pytanie o cenę do niczego nie zobowiązuje.</p>
+
+                        {{-- PART 5: Facebook Follower Magnet Card --}}
+                        <div class="quiz-follower-card">
+                            <span class="quiz-follower-card__icon">📸</span>
+                            <h3 class="quiz-follower-card__heading">Nie planujesz zakupu od razu? Zobacz, jak nasze kociaki rosną!</h3>
+                            <p class="quiz-follower-card__sub">Wrzucamy codzienne relacje, wideo z maluchami i zapowiedzi nowych miotów. Zaobserwuj nas, żebyśmy nie zgubili kontaktu:</p>
+                            <a href="https://www.facebook.com/profile.php?id=61580668026948"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="quiz-follower-card__btn"
+                               onclick="window.fireQuizFollowEvent()">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                                </svg>
+                                👍 Obserwuj hodowlę na Facebooku
+                            </a>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 20px; display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap;">
                         <button type="button" class="quiz-modify-btn" onclick="window.prevQuizStep(4)">
                             ✏️ Zmień odpowiedzi (krok 4)
                         </button>
@@ -774,11 +872,17 @@
                             if (shouldInclude) {
                                 const clone = item.cloneNode(true);
                                 clone.style.display = 'flex';
-                                const btn = clone.querySelector('.quiz-cat-item__btn');
-                                const origBtn = item.querySelector('.quiz-cat-item__btn');
-                                if (btn && origBtn && origBtn.getAttribute('onclick')) {
-                                    btn.setAttribute('onclick', origBtn.getAttribute('onclick'));
-                                }
+                                // Preserve href attributes on the new dual-button anchor elements
+                                const origBtns = item.querySelectorAll('[href]');
+                                const cloneBtns = clone.querySelectorAll('[href]');
+                                origBtns.forEach((origA, i) => {
+                                    if (cloneBtns[i]) {
+                                        cloneBtns[i].href = origA.href;
+                                        if (origA.getAttribute('onclick')) {
+                                            cloneBtns[i].setAttribute('onclick', origA.getAttribute('onclick'));
+                                        }
+                                    }
+                                });
                                 altGrid.appendChild(clone);
                                 altCount++;
                             }
@@ -819,7 +923,13 @@
                 }
             }
 
-            window.contactBreederFromQuiz = function() {
+            /**
+             * PART 3 + 6: Fire contact event for Messenger or WhatsApp CTA buttons.
+             * Builds dynamic URL with breed context and fires Meta Pixel + GA4 events.
+             * @param {string} channel  'messenger' | 'whatsapp'
+             * @param {string} location  CTA location label for analytics
+             */
+            window.fireQuizContactEvent = function(channel, location) {
                 const breed = window.__quizMatchedBreedName || 'Kot Rasowy';
                 const hasAvailable = (window.__quizMatchedCount || 0) > 0;
                 const timeframeLabels = {
@@ -836,31 +946,96 @@
                     }
                 } catch(e) {}
 
-                let msg = '';
-                if (hasAvailable) {
-                    msg = `Dzień dobry! Rozwiązałem/am quiz doboru rasy na kotyzmazowieckiejszwajcarii.pl.\n`
-                        + `Mój wynik dopasowania: ${breed}.\n`
-                        + `Preferowany czas odbioru: ${timeframe}.\n`
-                        + `Chciał(a)bym porozmawiać z hodowcą o dostępnych maluchach i umówić wideo-wizytę na żywo. [Źródło: ${attributionCode}]`;
-                } else {
-                    msg = `Dzień dobry! Rozwiązałem/am quiz doboru rasy na kotyzmazowieckiejszwajcarii.pl.\n`
-                        + `Mój wynik dopasowania: ${breed}.\n`
-                        + `Preferowany czas odbioru: ${timeframe}.\n`
-                        + `Wiem, że maluchy z obecnego miotu są już zarezerwowane — chciał(a)bym porozmawiać o planowanym kolejnym miocie i zapisać się na Listę Pierwszeństwa. [Źródło: ${attributionCode}]`;
-                }
-                
-                // Track contact click
+                // PART 6: Meta Pixel Contact event
+                try {
+                    if (typeof fbq === 'function') {
+                        fbq('track', 'Contact', { content_name: breed, method: channel === 'messenger' ? 'Messenger' : 'WhatsApp' });
+                    }
+                } catch(e) {}
+
+                // PART 6: GA4 generate_lead push
+                try {
+                    if (typeof window.dataLayer !== 'undefined') {
+                        window.dataLayer.push({ event: 'generate_lead', contact_method: channel, breed: breed, quiz_location: location });
+                    }
+                } catch(e) {}
+
+                // Legacy funnel tracker (GA4 + fbq wrapper)
                 if (typeof window.trackFunnelStep === 'function') {
                     window.trackFunnelStep('contact_cta_click', {
-                        channel: 'whatsapp',
-                        origin: 'quiz_result',
+                        channel: channel,
+                        origin: 'quiz_result_' + location,
                         matched_breed: breed,
                         has_available: hasAvailable,
                         timeframe: quizState.step4 || 'flexible'
                     });
                 }
 
-                window.open(`https://wa.me/48514153204?text=${encodeURIComponent(msg)}`, '_blank');
+                // Backward-compatibility alias for legacy scripts and test suites
+                window.contactBreederFromQuiz = function() {
+                    return window.fireQuizContactEvent('whatsapp', 'legacy');
+                };
+
+                // Update href dynamically with breed context before navigation
+                if (channel === 'messenger') {
+                    const msgText = hasAvailable
+                        ? `Dzień dobry! W teście wyszedł mi ${breed}. W jakiej cenie są aktualnie kocięta i które maluchy są wolne? [Źródło: ${attributionCode}]`
+                        : `Dzień dobry! W teście wyszedł mi ${breed}. W jakiej cenie są kocięta i kiedy planujecie nowy miot? [Źródło: ${attributionCode}]`;
+                    const url = `https://m.me/61580668026948?text=${encodeURIComponent(msgText)}`;
+                    window.open(url, '_blank');
+                } else {
+                    // WhatsApp
+                    const waMsg = hasAvailable
+                        ? `Dzień dobry! Rozwiązałem(am) test na stronie – mój wynik to ${breed}. W jakiej cenie są aktualnie kocięta i czy mogę prosić o krótki filmik z wolnymi maluchami? [Źródło: ${attributionCode}]`
+                        : `Dzień dobry! Rozwiązałem(am) test na stronie – mój wynik to ${breed}. W jakiej cenie są kocięta i kiedy planujecie nowy miot? [Źródło: ${attributionCode}]`;
+                    const url = `https://wa.me/48514153204?text=${encodeURIComponent(waMsg)}`;
+                    window.open(url, '_blank');
+                }
+            };
+
+            /**
+             * PART 4 + 6: Fire contact event from an individual kitten card.
+             * @param {string} channel  'messenger' | 'whatsapp'
+             * @param {string} catName  Kitten's name
+             * @param {string} catBreed Kitten's breed
+             */
+            window.fireQuizCatEvent = function(channel, catName, catBreed) {
+                // PART 6: Meta Pixel
+                try {
+                    if (typeof fbq === 'function') {
+                        fbq('track', 'Contact', { content_name: catName + ' (' + catBreed + ')', method: channel === 'messenger' ? 'Messenger' : 'WhatsApp' });
+                    }
+                } catch(e) {}
+
+                // PART 6: GA4
+                try {
+                    if (typeof window.dataLayer !== 'undefined') {
+                        window.dataLayer.push({ event: 'generate_lead', contact_method: channel, breed: catBreed, cat_name: catName });
+                    }
+                } catch(e) {}
+
+                if (typeof window.trackFunnelStep === 'function') {
+                    window.trackFunnelStep('contact_cta_click', { channel: channel, origin: 'quiz_cat_card', cat_name: catName });
+                }
+                // href is pre-rendered server-side; navigation is handled by the <a> tag itself
+            };
+
+            /**
+             * PART 5 + 6: Fire tracking event when user clicks Facebook follow button.
+             */
+            window.fireQuizFollowEvent = function() {
+                // PART 6: Meta Pixel custom event
+                try {
+                    if (typeof fbq === 'function') {
+                        fbq('trackCustom', 'FacebookFollowClick', { location: 'quiz_result' });
+                    }
+                } catch(e) {}
+
+                try {
+                    if (typeof window.dataLayer !== 'undefined') {
+                        window.dataLayer.push({ event: 'facebook_follow_click', location: 'quiz_result' });
+                    }
+                } catch(e) {}
             };
 
             window.openCallbackFromQuiz = function() {

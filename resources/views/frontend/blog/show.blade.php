@@ -1,6 +1,6 @@
 <x-frontend.shell
-    title="{{ $post->title }} | Blog — Hodowla Kotów z Mazowieckiej Szwajcarii"
-    meta-description="{{ Str::limit($post->excerpt ?: strip_tags($post->body ?? ''), 160) }}"
+    title="{{ $post->meta_title ?: ($post->title . ' | Blog — Hodowla Kotów z Mazowieckiej Szwajcarii') }}"
+    meta-description="{{ $post->meta_description ?: Str::limit($post->excerpt ?: strip_tags($post->body ?? ''), 160) }}"
     og-image="{{ $post->coverImageUrl() }}"
     og-type="article"
 >
@@ -157,6 +157,45 @@
                         }
                     @endphp
                     {!! Str::markdown($bodyToRender, $markdownOptions) !!}
+                @endif
+
+                {{-- ============================================================
+                     PART 3: CONVERSION CTA BOX AT THE BOTTOM OF THE ARTICLE
+                     Directly below the article text, prominent & mobile-friendly
+                     ============================================================ --}}
+                @if($post->slug === 'kot-bengalski-w-domu-mity-zalety-odchowanych-kociat' || str_contains($post->slug, 'odchowanych-kociat'))
+                    <aside class="article-conversion-cta-box" aria-label="Kontakt w sprawie odchowanych kociąt bengalskich">
+                        <div class="article-conversion-cta-box__badge">
+                            <span class="article-conversion-cta-box__badge-icon">💬</span>
+                            <span class="article-conversion-cta-box__badge-text">Dostępne maluchy od zaraz</span>
+                        </div>
+                        <h3 class="article-conversion-cta-box__heading">
+                            💬 Chcesz zobaczyć naszą trójkę odchowanych bengali na żywo lub zapytać o cenę?
+                        </h3>
+                        <p class="article-conversion-cta-box__subtext">
+                            Napisz do nas – chętnie prześlemy dzisiejsze filmiki z kociakami na czacie!
+                        </p>
+                        <div class="article-conversion-cta-box__buttons">
+                            <a href="https://m.me/61580668026948?text={{ urlencode('Dzień dobry! Czytam artykuł o odchowanych bengalach. W jakiej cenie są aktualnie dostępne kocięta?') }}"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="article-conversion-cta-btn article-conversion-cta-btn--messenger"
+                               onclick="try{if(typeof fbq==='function'){fbq('track','Contact',{method:'Messenger',content_name:'Odchowane kocięta bengalskie'});}}catch(e){}">
+                                💬 Zapytaj o cenę i kociaki (Messenger)
+                            </a>
+                            <a href="https://wa.me/48514153204?text={{ urlencode('Dzień dobry! Czytam artykuł o odchowanych bengalach. W jakiej cenie są aktualnie dostępne kocięta?') }}"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="article-conversion-cta-btn article-conversion-cta-btn--whatsapp"
+                               onclick="try{if(typeof fbq==='function'){fbq('track','Contact',{method:'WhatsApp',content_name:'Odchowane kocięta bengalskie'});}}catch(e){}">
+                                🟢 Otrzymaj filmik z kociakami (WhatsApp)
+                            </a>
+                            <a href="{{ route('quiz') }}"
+                               class="article-conversion-cta-btn article-conversion-cta-btn--quiz">
+                                🐾 Rozwiąż 45s Quiz: Która rasa pasuje do Ciebie?
+                            </a>
+                        </div>
+                    </aside>
                 @endif
 
                 {{-- ============================================================

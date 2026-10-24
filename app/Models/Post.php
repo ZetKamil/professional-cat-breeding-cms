@@ -63,6 +63,25 @@ class Post extends Model
     }
 
     /**
+     * Resolve route binding supporting both canonical slug and 3-digit numbered prefix slugs.
+     */
+    public function resolveRouteBinding($value, $field = null)
+    {
+        $field = $field ?? $this->getRouteKeyName();
+
+        $post = $this->where($field, $value)->first();
+        if ($post) {
+            return $post;
+        }
+
+        if ($field === 'slug' && is_string($value) && preg_match('/^\d{3}-(.*)$/', $value, $matches)) {
+            return $this->where('slug', $matches[1])->first();
+        }
+
+        return null;
+    }
+
+    /**
      * Relatie: één post hoort bij één auteur.
      */
     public function user()

@@ -159,6 +159,8 @@ class ImportSeoArticles extends Command
                     'excerpt' => $excerpt,
                     'body' => $processedBody,
                     'sections' => Post::parseBodyToSections($processedBody),
+                    'meta_title' => $metaData['meta_title'] ?? ($metaData['meta']['title'] ?? null),
+                    'meta_description' => $metaData['meta_description'] ?? ($metaData['meta']['description'] ?? $excerpt),
                     'is_published' => true,
                     'published_at' => $publishedAt,
                 ]

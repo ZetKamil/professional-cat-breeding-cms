@@ -874,3 +874,123 @@
         justify-content: center;
     }
 }
+
+/* ==========================================================================
+   Article Conversion CTA Box (Messenger / WhatsApp / Quiz)
+   ========================================================================== */
+.article-conversion-cta-box {
+    margin-top: var(--space-10, 40px);
+    margin-bottom: var(--space-8, 32px);
+    padding: var(--space-8, 32px) var(--space-6, 24px);
+    background: linear-gradient(135deg, rgba(20, 28, 48, 0.98) 0%, rgba(10, 16, 30, 0.98) 100%);
+    border: 1px solid rgba(0, 132, 255, 0.35);
+    border-radius: var(--radius-xl, 18px);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+    text-align: center;
+}
+
+.article-conversion-cta-box__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0, 132, 255, 0.15);
+    border: 1px solid rgba(0, 132, 255, 0.35);
+    border-radius: 999px;
+    padding: 5px 14px;
+    margin-bottom: 14px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #60a5fa;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.article-conversion-cta-box__heading {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #ffffff !important;
+    margin: 0 0 10px 0;
+    line-height: 1.35;
+}
+
+.article-conversion-cta-box__subtext {
+    font-size: 0.95rem;
+    color: #cbd5e1 !important;
+    margin: 0 0 24px 0;
+    line-height: 1.5;
+}
+
+.article-conversion-cta-box__buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.article-conversion-cta-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 22px;
+    border-radius: 14px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-decoration: none !important;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.article-conversion-cta-btn--messenger {
+    background: #0084FF;
+    color: #ffffff !important;
+    box-shadow: 0 6px 18px rgba(0, 132, 255, 0.35);
+}
+
+.article-conversion-cta-btn--messenger:hover {
+    background: #0073e6;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 22px rgba(0, 132, 255, 0.5);
+    color: #ffffff !important;
+}
+
+.article-conversion-cta-btn--whatsapp {
+    background: rgba(37, 211, 102, 0.15);
+    border: 1px solid rgba(37, 211, 102, 0.5);
+    color: #25D366 !important;
+}
+
+.article-conversion-cta-btn--whatsapp:hover {
+    background: #25D366;
+    color: #ffffff !important;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 22px rgba(37, 211, 102, 0.4);
+}
+
+.article-conversion-cta-btn--quiz {
+    background: rgba(200, 157, 92, 0.1);
+    border: 1px solid rgba(200, 157, 92, 0.4);
+    color: #f7e6cc !important;
+}
+
+.article-conversion-cta-btn--quiz:hover {
+    background: rgba(200, 157, 92, 0.22);
+    color: #ffffff !important;
+    transform: translateY(-1px);
+}
+
+@media (max-width: 640px) {
+    .article-conversion-cta-box {
+        padding: 24px 16px;
+        margin-top: 28px;
+    }
+    .article-conversion-cta-box__heading {
+        font-size: 1.15rem;
+    }
+    .article-conversion-cta-btn {
+        padding: 13px 16px;
+        font-size: 0.88rem;
+    }
+}

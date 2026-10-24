@@ -314,9 +314,10 @@ class ReservationAndCroTest extends TestCase
         $response->assertSee('quiz-nav-back', false);
         $response->assertSee('window.prevQuizStep', false);
         $response->assertSee('quiz-modify-btn', false);
-        $response->assertSee('quiz-result__disclaimer', false);
-        $response->assertSee('indywidualny charakter');
-        $response->assertSee('window.contactBreederFromQuiz', false);
+        // CRO overhaul v2: disclaimer removed to reduce scroll fatigue; behavioral note now lives below cat cards
+        $response->assertSee('quizBehavioralNoteBox', false);
+        // CRO overhaul v2: primary CTA is now Messenger-first via fireQuizContactEvent
+        $response->assertSee('window.fireQuizContactEvent', false);
         $response->assertSee('window.openCallbackFromQuiz', false);
         $response->assertSee('quizEmptyCatalogueNotice', false);
     }
@@ -469,15 +470,17 @@ class ReservationAndCroTest extends TestCase
         $response = $this->get(route('quiz'));
         $response->assertOk();
 
-        // Checks WhatsApp pre-filled template construction
-        $response->assertSee('Mój wynik dopasowania: ${breed}', false);
-        $response->assertSee('Preferowany czas odbioru: ${timeframe}', false);
+        // CRO overhaul v2: Messenger is now primary channel; dynamic URL built at click time
+        // New shorter message template: "W jakiej cenie są aktualnie kocięta i które maluchy są wolne?"
+        $response->assertSee('m.me/61580668026948', false);
+        $response->assertSee('W jakiej cenie s', false); // present in both Messenger and WhatsApp templates
         $response->assertSee('Quiz_Dopasowania');
         $response->assertSee('wa.me/48514153204');
 
-        // Checks Reservation modal integration
+        // Checks Reservation modal integration (callback tertiary CTA still present)
         $response->assertSee('window.openReservationModal', false);
         $response->assertSee('Wynik Quizu: ${breed}', false);
+        $response->assertSee('fireQuizContactEvent', false);
     }
 
 
