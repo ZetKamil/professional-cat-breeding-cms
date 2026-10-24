@@ -624,31 +624,28 @@ Route::get('/deploy-sync', function (\Illuminate\Http\Request $request) {
         \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
         $migrateOut = \Illuminate\Support\Facades\Artisan::output();
 
-        // Sync blog assets & articles ONLY when explicitly requested (?import_blog=1)
-        // to prevent overwriting user edits made in CMS dashboard or DB
-        $blogSyncOut = 'Pominięto (chroniąc edycje z CMS/bazy). Aby wymusić import z plików: dodaj ?import_blog=1';
-        if ($request->boolean('import_blog')) {
-            $blogPath = base_path('BLOG');
-            if (\Illuminate\Support\Facades\File::isDirectory($blogPath)) {
-                $directories = \Illuminate\Support\Facades\File::directories($blogPath);
-                foreach ($directories as $dirPath) {
-                    $folderName = basename($dirPath);
-                    $storagePublicDir = public_path("storage/blog/{$folderName}");
-                    \Illuminate\Support\Facades\File::ensureDirectoryExists($storagePublicDir);
+        // Sync blog assets & new articles into DB (safe: ImportSeoArticles skips already existing posts)
+        $blogPath = base_path('BLOG');
+        $blogSyncOut = 'Katalog BLOG nie istnieje.';
+        if (\Illuminate\Support\Facades\File::isDirectory($blogPath)) {
+            $directories = \Illuminate\Support\Facades\File::directories($blogPath);
+            foreach ($directories as $dirPath) {
+                $folderName = basename($dirPath);
+                $storagePublicDir = public_path("storage/blog/{$folderName}");
+                \Illuminate\Support\Facades\File::ensureDirectoryExists($storagePublicDir);
 
-                    $sourceFiles = \Illuminate\Support\Facades\File::files($dirPath);
-                    foreach ($sourceFiles as $file) {
-                        $ext = strtolower($file->getExtension());
-                        if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'jfif'], true)) {
-                            $targetPath = $storagePublicDir.'/'.$file->getFilename();
-                            @\Illuminate\Support\Facades\File::copy($file->getPathname(), $targetPath);
-                            @chmod($targetPath, 0644);
-                        }
+                $sourceFiles = \Illuminate\Support\Facades\File::files($dirPath);
+                foreach ($sourceFiles as $file) {
+                    $ext = strtolower($file->getExtension());
+                    if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'jfif'], true)) {
+                        $targetPath = $storagePublicDir.'/'.$file->getFilename();
+                        @\Illuminate\Support\Facades\File::copy($file->getPathname(), $targetPath);
+                        @chmod($targetPath, 0644);
                     }
                 }
-                \Illuminate\Support\Facades\Artisan::call('seo:import-articles');
-                $blogSyncOut = trim(\Illuminate\Support\Facades\Artisan::output());
             }
+            \Illuminate\Support\Facades\Artisan::call('seo:import-articles');
+            $blogSyncOut = trim(\Illuminate\Support\Facades\Artisan::output());
         }
 
         \Illuminate\Support\Facades\Artisan::call('optimize:clear');

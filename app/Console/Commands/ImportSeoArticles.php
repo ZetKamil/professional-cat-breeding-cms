@@ -95,6 +95,14 @@ class ImportSeoArticles extends Command
                 $metaData = $this->parseSimpleYaml(File::get($metadataYml));
             }
 
+            // Use explicit publication date from metadata if defined, otherwise calculate Sunday schedule
+            if (! empty($metaData['publication_date'])) {
+                $time = $metaData['publication_time'] ?? '10:00';
+                $scheduledDate = Carbon::parse("{$metaData['publication_date']} {$time}:00");
+            } elseif (! empty($metaData['publish_date'])) {
+                $scheduledDate = Carbon::parse($metaData['publish_date']);
+            }
+
             // Copy images to public storage
             $storagePublicDir = public_path("storage/blog/{$folderName}");
             File::ensureDirectoryExists($storagePublicDir);
