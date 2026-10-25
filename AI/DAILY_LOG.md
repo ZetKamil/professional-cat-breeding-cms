@@ -24,6 +24,7 @@
   - Katalog `/koty` został podzielony na dwie niezależne sekcje przedzielone diamentowym separatorem ✦:
     - Sekcja 1: „Dostępne Kocięta i Mioty” (kocięta na sprzedaż z cenami).
     - Sekcja 2: „Nasi Rodzice i Koty Hodowlane” (reproduktory i kotki bez cen, z naciskiem na badania genetyczne HCM/PKD).
+  - Usunięto omyłkowo wstawiony górny blok paginacji pomiędzy filtrem ras a nagłówkiem sekcji kociąt. Paginacja znajduje się wyłącznie na samym dole, pod wszystkimi sekcjami kotów.
 - **Profil Kota (`/koty/[slug]`) — Balans i Quiet Luxury:**
   - Siatka atrybutów przekształcona w kompaktowy układ 3 kolumny × 2 wiersze (Rasa, Płeć, Umaszczenie, Wiek, Odbiór, Rodowód) o wysokości 72px.
   - Luksusowy baner cenowy umieszczony bezpośrednio nad opisem i przyciskami CTA (`2 700 zł — opcja „na kolanka” z rodowodem i wyprawką`).

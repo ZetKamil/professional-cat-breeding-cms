@@ -16,10 +16,11 @@
 - **Redesign Kart Kotów i Proporcje Zdjęć 4:3 (`aspect-ratio: 4 / 3`)**:
   - Przekształcenie kontenerów zdjęć kotów z nadmiernie wysokich (pionowe smartfonowe 9:16/3:4) na prestiżowy format `aspect-ratio: 4 / 3` z `object-fit: cover; object-position: center 25%`.
   - Nowa estetyczna stopka karty: subtelna linia graniczna, cena kociaka w pogrubionym szeryfie/złocie po lewej stronie oraz pigułkowy przycisk `Zobacz profil →` po prawej.
-- **Podział Katalogu `/koty` na Dwie Wyraźne Sekcje Wizualne**:
+- **Podział Katalogu `/koty` na Dwie Wyraźne Sekcje Wizualne & Korekta Paginacji**:
   - **Sekcja 1 (Góra):** „Dostępne Kocięta i Mioty” – wyłącznie kocięta do rezerwacji i odbioru z widocznymi cenami.
   - **Luksusowy Separator:** Dyskretna linia z diamentowym motywem `✦` w odcieniu Champagne Gold.
   - **Sekcja 2 (Dół):** „Nasi Rodzice i Koty Hodowlane” – dorośli rodzice miotów i koty hodowlane (Atos, Luki, Koko) prezentowani bez cen, z akcentem na linie championów i badania genetyczne.
+  - **Korekta Położenia Paginacji:** Usunięcie niechcianego górnego paska paginacji umieszczonego między filtrami a nagłówkiem sekcji. Paginacja renderuje się wyłącznie na dole strony pod wszystkimi sekcjami kotów z eleganckim marginesem `clamp(36px, 4vw, 56px)` i wyśrodkowaniem.
 - **Profil Kota (`/koty/[slug]`) Layout & Balance Fix**:
   - **Kompaktowa siatka 3×2 dla atrybutów:** Rasa, Płeć, Umaszczenie, Wiek, Odbiór, Rodowód (wysokość 72px z wyważonymi paddingami).
   - **Luksusowy Baner Cenowy:** Wyniesiony bezpośrednio nad opis kota i przyciski akcji (`2 700 zł — opcja „na kolanka” z rodowodem i wyprawką`).

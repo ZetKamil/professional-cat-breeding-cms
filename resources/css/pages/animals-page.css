@@ -55,7 +55,10 @@
 }
 
 .animals-catalog__pagination {
-    margin-top: var(--sp-lg);
+    margin-top: clamp(36px, 4vw, 56px);
+    margin-bottom: var(--sp-md);
+    display: flex;
+    justify-content: center;
 }
 
 .animals-filter-bar {
