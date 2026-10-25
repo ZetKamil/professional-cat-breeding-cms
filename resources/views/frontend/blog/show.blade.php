@@ -63,20 +63,35 @@
                         'html_input' => 'strip',
                         'allow_unsafe_links' => false,
                     ];
+
+                    $renderArticleMarkdown = function ($markdownText) use ($markdownOptions) {
+                        $html = Str::markdown($markdownText ?? '', $markdownOptions);
+                        // Transform "Odpowiedź w pigułce:" paragraph into Quiet Luxury editorial callout box
+                        $pattern = '/<p>(?:\s*<strong>)?\s*Odpowiedź w pigułce:\s*(.*?)(?:<\/strong>)?\s*<\/p>/siu';
+                        return preg_replace_callback($pattern, function ($matches) {
+                            $content = trim($matches[1]);
+                            if (str_starts_with($content, '<strong>') && str_ends_with($content, '</strong>')) {
+                                $content = substr($content, 8, -9);
+                            }
+                            return '<aside class="article-takeaway-box" aria-label="Odpowiedź w pigułce">'
+                                . '<div class="article-takeaway-box__header">'
+                                . '<span class="article-takeaway-box__icon">💡</span>'
+                                . '<span class="article-takeaway-box__label">Odpowiedź w pigułce</span>'
+                                . '</div>'
+                                . '<div class="article-takeaway-box__content">' . $content . '</div>'
+                                . '</aside>';
+                        }, $html);
+                    };
                 @endphp
 
                 @if($hasSections)
                     {{-- ─── Structured sections rendering ─────────── --}}
                     @php
                         $sectionsCount = count($post->sections);
-                        // If the last section is a legacy static CTA (starts with 🐾 or mentions kittens), omit it from the body loop
+                        // Only omit legacy AI boilerplate sections starting with 🐾
                         $lastSection = $sectionsCount > 1 ? $post->sections[$sectionsCount - 1] : null;
-                        $lastIsCta = $lastSection && (
-                            str_starts_with(trim($lastSection['heading'] ?? ''), '🐾') ||
-                            str_contains(mb_strtolower($lastSection['heading'] ?? ''), 'dostępne') ||
-                            str_contains(mb_strtolower($lastSection['heading'] ?? ''), 'kocięta')
-                        );
-                        $renderCount = ($lastIsCta && ($globalCta['is_enabled'] ?? true)) ? $sectionsCount - 1 : $sectionsCount;
+                        $lastIsLegacyBoilerplate = $lastSection && str_starts_with(trim($lastSection['heading'] ?? ''), '🐾');
+                        $renderCount = ($lastIsLegacyBoilerplate && ($globalCta['is_enabled'] ?? true)) ? $sectionsCount - 1 : $sectionsCount;
                     @endphp
 
                     @for($i = 0; $i < $renderCount; $i++)
@@ -93,7 +108,7 @@
                             {{-- Intro section: no H2, just lead paragraph --}}
                             @if($sectionBody)
                                 <div class="article-intro-content">
-                                    {!! Str::markdown($sectionBody, $markdownOptions) !!}
+                                    {!! $renderArticleMarkdown($sectionBody) !!}
                                 </div>
                             @endif
                             @if($sectionTip)
@@ -123,7 +138,7 @@
                                 @endif
                                 @if($sectionBody)
                                     <div class="article-section-content">
-                                        {!! Str::markdown($sectionBody, $markdownOptions) !!}
+                                        {!! $renderArticleMarkdown($sectionBody) !!}
                                     </div>
                                 @endif
                                 @if($sectionTip)
@@ -156,111 +171,83 @@
                             $bodyToRender = preg_replace('/(?:\r?\n)*---\s*(?:\r?\n)*##\s*(?:🐾|Dostępne kocięta|Aktualnie dostępne).*$/su', '', $bodyToRender);
                         }
                     @endphp
-                    {!! Str::markdown($bodyToRender, $markdownOptions) !!}
+                    {!! $renderArticleMarkdown($bodyToRender) !!}
                 @endif
 
                 {{-- ============================================================
-                     PART 3: CONVERSION CTA BOX AT THE BOTTOM OF THE ARTICLE
-                     Directly below the article text, prominent & mobile-friendly
+                     UNIFIED QUIET LUXURY CTA CARD AT THE BOTTOM OF THE ARTICLE
+                     Strictly Black (#141414) / Champagne Gold (#C5A059) Quiet Luxury
                      ============================================================ --}}
-                @if($post->slug === 'kot-bengalski-w-domu-mity-zalety-odchowanych-kociat' || str_contains($post->slug, 'odchowanych-kociat'))
-                    <aside class="article-conversion-cta-box" aria-label="Kontakt w sprawie odchowanych kociąt bengalskich">
-                        <div class="article-conversion-cta-box__badge">
-                            <span class="article-conversion-cta-box__badge-icon">💬</span>
-                            <span class="article-conversion-cta-box__badge-text">Dostępne maluchy od zaraz</span>
-                        </div>
-                        <h3 class="article-conversion-cta-box__heading">
-                            💬 Chcesz zobaczyć naszą trójkę odchowanych bengali na żywo lub zapytać o cenę?
+                <aside class="article-luxury-cta-card" aria-label="Kontakt z hodowlą">
+                    <div class="article-luxury-cta-card__badge">
+                        <span>🐾 DOMOWA HODOWLA MAZOWIECKA SZWAJCARIA</span>
+                    </div>
+
+                    @if($post->slug === 'kot-bengalski-w-domu-mity-zalety-odchowanych-kociat' || str_contains($post->slug, 'odchowanych-kociat') || str_contains($post->slug, 'bengal'))
+                        <h3 class="article-luxury-cta-card__heading">
+                            Chcesz zobaczyć naszą trójkę odchowanych bengali na żywo lub zapytać o szczegóły?
                         </h3>
-                        <p class="article-conversion-cta-box__subtext">
-                            Napisz do nas – chętnie prześlemy dzisiejsze filmiki z kociakami na czacie!
+                        <p class="article-luxury-cta-card__subtext">
+                            Napisz do nas na Messengerze – chętnie prześlemy dzisiejsze filmiki z Baronem, Cyprianem i Carlosem lub połączymy się na krótką wideo-wizytę.
                         </p>
-                        <div class="article-conversion-cta-box__buttons">
-                            <a href="https://m.me/61580668026948?text={{ urlencode('Dzień dobry! Czytam artykuł o odchowanych bengalach. W jakiej cenie są aktualnie dostępne kocięta?') }}"
+
+                        <div class="article-luxury-cta-card__buttons">
+                            <a href="https://m.me/61580668026948?text={{ urlencode('Dzień dobry! Czytam artykuł o odchowanych bengalach. Chciałbym zapytać o Barona, Cypriana i Carlosa oraz zobaczyć dzisiejsze filmiki.') }}"
                                target="_blank"
                                rel="noopener noreferrer"
-                               class="article-conversion-cta-btn article-conversion-cta-btn--messenger"
+                               class="article-luxury-cta-btn article-luxury-cta-btn--primary"
                                onclick="try{if(typeof fbq==='function'){fbq('track','Contact',{method:'Messenger',content_name:'Odchowane kocięta bengalskie'});}}catch(e){}">
-                                💬 Zapytaj o cenę i kociaki (Messenger)
+                                💬 Napisz na Messengerze (Zapytaj o kociaki i filmik)
                             </a>
-                            <a href="https://wa.me/48514153204?text={{ urlencode('Dzień dobry! Czytam artykuł o odchowanych bengalach. W jakiej cenie są aktualnie dostępne kocięta?') }}"
+
+                            <a href="https://wa.me/48514153204?text={{ urlencode('Dzień dobry! Czytam artykuł o odchowanych bengalach. Chciałbym zapytać o Barona, Cypriana i Carlosa.') }}"
                                target="_blank"
                                rel="noopener noreferrer"
-                               class="article-conversion-cta-btn article-conversion-cta-btn--whatsapp"
+                               class="article-luxury-cta-btn article-luxury-cta-btn--secondary"
                                onclick="try{if(typeof fbq==='function'){fbq('track','Contact',{method:'WhatsApp',content_name:'Odchowane kocięta bengalskie'});}}catch(e){}">
-                                🟢 Otrzymaj filmik z kociakami (WhatsApp)
-                            </a>
-                            <a href="{{ route('quiz') }}"
-                               class="article-conversion-cta-btn article-conversion-cta-btn--quiz">
-                                🐾 Rozwiąż 45s Quiz: Która rasa pasuje do Ciebie?
+                                WhatsApp (+48 514 153 204)
                             </a>
                         </div>
-                    </aside>
-                @endif
 
-                {{-- ============================================================
-                     DYNAMIC GLOBAL CATTERY OFFER & KITTENS CTA CARD
-                     Always displays the latest kittens availability across ALL articles!
-                     ============================================================ --}}
-                @if(!empty($globalCta) && ($globalCta['is_enabled'] ?? true) && !empty($globalCta['body']))
-                    <aside class="article-closing-cta-card" aria-label="Aktualna oferta hodowli i kontakt">
-                        <div class="article-closing-cta-card__badge">
-                            <span class="article-closing-cta-card__icon">🐾</span>
-                            <span class="article-closing-cta-card__label">{{ $globalCta['badge'] ?? 'Hodowla Kotów z Mazowieckiej Szwajcarii' }}</span>
+                        <div class="article-luxury-cta-card__quiz">
+                            <a href="{{ route('quiz') }}" class="article-luxury-cta-card__quiz-link">
+                                ✨ Nie wiesz, czy Bengal pasuje do Twojego domu? Rozwiąż 45-sekundowy Quiz →
+                            </a>
+                        </div>
+                    @else
+                        {{-- Generic / Breed-Adaptive Luxury Card for all other articles --}}
+                        <h3 class="article-luxury-cta-card__heading">
+                            {{ $globalCta['heading'] ?? 'Szukasz wymarzonego, rodowodowego kociaka?' }}
+                        </h3>
+                        <p class="article-luxury-cta-card__subtext">
+                            Napisz do nas na Messengerze – z przyjemnością opowiemy o naszych miotach, warunkach domowego wychowania i prześlemy aktualne materiały wideo.
+                        </p>
+
+                        <div class="article-luxury-cta-card__buttons">
+                            <a href="https://m.me/61580668026948?text={{ urlencode('Dzień dobry! Czytam artykuł: ' . $post->title . '. Chciałbym zapytać o dostępne kocięta.') }}"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="article-luxury-cta-btn article-luxury-cta-btn--primary"
+                               onclick="try{if(typeof fbq==='function'){fbq('track','Contact',{method:'Messenger',content_name:'{{ addslashes($post->title) }}'});}}catch(e){}">
+                                💬 Napisz na Messengerze (Zapytaj o kocięta)
+                            </a>
+
+                            <a href="https://wa.me/48514153204?text={{ urlencode('Dzień dobry! Czytam artykuł: ' . $post->title . '. Chciałbym zapytać o dostępne kocięta.') }}"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="article-luxury-cta-btn article-luxury-cta-btn--secondary"
+                               onclick="try{if(typeof fbq==='function'){fbq('track','Contact',{method:'WhatsApp',content_name:'{{ addslashes($post->title) }}'});}}catch(e){}">
+                                WhatsApp (+48 514 153 204)
+                            </a>
                         </div>
 
-                        @if(!empty($globalCta['heading']))
-                            <h2 class="article-closing-cta-card__title">{{ $globalCta['heading'] }}</h2>
-                        @endif
-
-                        <div class="article-closing-cta-card__body">
-                            {!! Str::markdown($globalCta['body'], $markdownOptions) !!}
+                        <div class="article-luxury-cta-card__quiz">
+                            <a href="{{ route('quiz') }}" class="article-luxury-cta-card__quiz-link">
+                                ✨ Nie wiesz, która rasa najlepiej pasuje do Ciebie? Rozwiąż 45-sekundowy Quiz →
+                            </a>
                         </div>
-
-                        @if(!empty($globalCta['image_url']))
-                            <figure class="article-closing-cta-card__figure">
-                                <img
-                                    src="{{ $globalCta['image_url'] }}"
-                                    alt="{{ $globalCta['heading'] ?? 'Kocięta w hodowli' }}"
-                                    class="article-closing-cta-card__img"
-                                    loading="lazy"
-                                >
-                            </figure>
-                        @endif
-
-                        @if(!empty($globalCta['facebook_url']))
-                            <div class="article-closing-cta-card__facebook">
-                                <div class="article-closing-cta-card__facebook-content">
-                                    <span class="article-closing-cta-card__facebook-icon" aria-hidden="true">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                                        </svg>
-                                    </span>
-                                    <div class="article-closing-cta-card__facebook-text">
-                                        {{ $globalCta['facebook_info'] ?? 'Zapraszamy na nasz profil na Facebooku! Codziennie publikujemy relacje, zdjęcia i filmy z życia naszych kociąt.' }}
-                                    </div>
-                                </div>
-                                <a
-                                    href="{{ $globalCta['facebook_url'] }}"
-                                    target="_blank"
-                                    rel="noopener"
-                                    class="article-closing-cta-card__facebook-btn"
-                                    id="blog-closing-cta-facebook-btn"
-                                >
-                                    {{ $globalCta['facebook_text'] ?? 'Odwiedź nas na Facebooku' }} →
-                                </a>
-                            </div>
-                        @endif
-
-                        <div class="article-closing-cta-card__actions" style="margin-top: 1.5rem; display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
-                            @if(!empty($globalCta['button_text']) && !empty($globalCta['button_url']))
-                                <a href="{{ $globalCta['button_url'] }}" class="btn btn-warning text-dark fw-bold" style="background:#c59b27; border-color:#c59b27; color:#181816; font-weight:700; padding:10px 24px; border-radius:9999px; text-decoration:none; display:inline-block; box-shadow: 0 4px 14px rgba(197, 155, 39, 0.25);">
-                                    {{ $globalCta['button_text'] }} →
-                                </a>
-                            @endif
-                        </div>
-                    </aside>
-                @endif
+                    @endif
+                </aside>
 
             </article>
         </div>
@@ -268,9 +255,13 @@
 
     {{-- ============================================================
          4. FEATURED CATS STRIP (before related articles)
-         Shows animals pinned to this post by the editor
+         Shows animals pinned to this post in a spacious 3-column grid
          ============================================================ --}}
-    @if($post->animals->isNotEmpty())
+    @php
+        $catsToDisplay = $articleAnimals ?? $post->animals;
+    @endphp
+
+    @if($catsToDisplay->isNotEmpty())
         <x-frontend.section class="article-featured-cats-section">
             <x-frontend.section-header
                 eyebrow="Poznaj nasze koty"
@@ -278,9 +269,9 @@
                 description="Chcesz dowiedzieć się więcej? Zajrzyj bezpośrednio do profili kotów wspomnianych w tym artykule."
             />
 
-            <div class="animals-grid animals-grid--compact">
-                @foreach($post->animals as $animal)
-                    <x-frontend.animal-card :animal="$animal" :show-age="false" />
+            <div class="animals-grid">
+                @foreach($catsToDisplay as $animal)
+                    <x-frontend.animal-card :animal="$animal" :show-age="true" />
                 @endforeach
             </div>
         </x-frontend.section>

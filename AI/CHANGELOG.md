@@ -3,6 +3,12 @@
 ## [2026-10-25] Quiet Luxury Unification & Senior UI/UX Design System Overhaul
 
 ### Added & Refined
+- **Refaktoryzacja UI/UX i Konwersji Artykułu Bloga (`/blog/[slug]`)**:
+  - **Pojedyncza Karta Quiet Luxury CTA zamiast duplikatów:** Usunięto podwójne boksy pod artykułem (ciemnoniebieski z neonami `#0084FF` i `#25D366` oraz kremowy z niebieskim przyciskiem FB). Wdrożono jedną prestiżową kartę `.article-luxury-cta-card` w głębokim węglu `#141414` ze złotą ramką `rgba(197, 160, 89, 0.3)`, złotym badge'em `🐾 DOMOWA HODOWLA MAZOWIECKA SZWAJCARIA`, białym szeryfowym nagłówkiem, ciepłym szarym podtytułem, solidnym przyciskiem Messenger w złocie Champagne Gold (`#C5A059`), konturowym WhatsApp i linkiem do Quizu.
+  - **Naturalny H2 w prozie artykułu:** Przywrócono sekcję *„Poznaj nasze odchowane kocięta bengalskie – gotowe do zmiany domu!”* jako pełnoprawny nagłówek H2 z treścią bezpośrednio w toku narracji artykułu.
+  - **Przestronna 3-kolumnowa siatka „Koty z tego artykułu”:** Wycofano ściśnięty 6-elementowy układ miniatur. Artykuł o bengalach prezentuje w siatce `.animals-grid` (wzorowanej na Homepage) wyłącznie 3 dostępne odchowane maluchy: Baron (2 700 zł), Cyprian (3 000 zł) oraz Carlos (3 000 zł).
+  - **Automatyczny Box „Odpowiedź w pigułce” (`.article-takeaway-box`):** Akapity kluczowej tezy artykułu stylizowane są na edytorski callout: ciepły krem `#FAF8F5`, lewa złota belka `4px solid #C5A059`, rogi `0 16px 16px 0` oraz złota etykieta 💡.
+  - **Zrównoważone proporcje zdjęć:** Format krajobrazowy `16:9` (`max-height: 420px; object-fit: cover; border-radius: 16px;`) ze zintegrowanymi, subtelnymi podpisami w kursywie.
 - **Rozdzielenie Informacji Zdrowotnych od Dat Odbioru na Profilu Kota (`/koty/[slug]`)**:
   - **Czysta pigułka stetoskopu `🩺`:** Usunięto z górnego badge'a medycznego automatycznie doklejane widełki czasowe `(14.11.2026 – 28.11.2026)`, które kłóciły się z danymi ustalanymi ręcznie przez hodowcę w panelu lub opisie. Pigułka skupia się wyłącznie na aspektach weterynaryjnych i rodowodowych (`Linia po przebadanych rodzicach • Szczepienia, microchip i rodowód`).
   - **Precyzyjny termin odbioru z panelu hodowcy:** W kafelku specyfikacji `Odbiór` oraz w boksie informacyjnym pod opisem (`Zasada odbioru`) system bezpośrednio respektuje pole `earliest_pickup_date` z CMS (`Od 14.11.2026` / `odbiór możliwy od 14.11.2026`), eliminując sztuczne i mylące dwutygodniowe widełki w nawiasach.

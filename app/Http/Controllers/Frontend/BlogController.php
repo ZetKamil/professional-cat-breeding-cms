@@ -91,9 +91,34 @@ class BlogController extends Controller
                 ->get();
         }
 
+        // Filter or resolve animals for this article:
+        // Prioritize available kittens of the breed mentioned in the article (max 3).
+        $articleAnimals = $post->animals->where('status', \App\Enums\AnimalStatus::Available);
+
+        $postText = mb_strtolower($post->slug . ' ' . $post->title);
+        if (str_contains($postText, 'bengal')) {
+            $bengalAnimals = \App\Models\Animal::query()
+                ->where('breed', 'Kot Bengalski')
+                ->where('status', \App\Enums\AnimalStatus::Available)
+                ->where('is_published', true)
+                ->with('media')
+                ->orderByRaw("CASE WHEN name IN ('Baron', 'Cyprian', 'Carlos') THEN 0 ELSE 1 END")
+                ->take(3)
+                ->get();
+
+            if ($bengalAnimals->isNotEmpty()) {
+                $articleAnimals = $bengalAnimals;
+            }
+        } elseif ($articleAnimals->isEmpty()) {
+            $articleAnimals = $post->animals->take(3);
+        } else {
+            $articleAnimals = $articleAnimals->take(3);
+        }
+
         return view('frontend.blog.show', [
             'post' => $post,
             'relatedPosts' => $relatedPosts,
+            'articleAnimals' => $articleAnimals,
         ]);
     }
 }

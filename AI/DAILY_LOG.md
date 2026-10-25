@@ -8,6 +8,14 @@
 ## 2026-10-25
 
 ### Completed
+- **Refaktoryzacja UI/UX i Konwersji Artykułu Bloga (`/blog/[slug]`):**
+  - **Usunięcie zdublowanych i neonowych boksów CTA:** Zastąpiono dwa konkurujące boksy (ciemnoniebieski z neonami `#0084FF`/`#25D366` oraz kremowy z niebieskim przyciskiem FB) **jedną, spójną kartą Quiet Luxury** (`.article-luxury-cta-card`) w barwach `#141414` z subtelną ramką `1px solid rgba(197, 160, 89, 0.3)` i zaokrągleniem 20px.
+  - **Złote CTA w palecie Quiet Luxury:** Solidny przycisk Messenger w złocie Champagne Gold (`#C5A059`, ciemny tekst, link do czatu z trackerem Facebook Pixel), konturowy przezroczysty przycisk WhatsApp oraz link do 45-sekundowego Quizu.
+  - **Sekcja z kociętami w tekście jako normalny H2:** Wyeliminowano agresywne wycinanie ostatniej sekcji przez filtr `kocięta` – nagłówek *„Poznaj nasze odchowane kocięta bengalskie – gotowe do zmiany domu!”* renderuje się jako naturalna, czytelna sekcja H2 w treści artykułu.
+  - **Koty z tego artykułu (wyłącznie 3 Bengale w 3-kolumnowej siatce):** Zastąpiono ściśnięty 6-elementowy rząd (`animals-grid--compact`) przestronną 3-kolumnową siatką `.animals-grid` (wzorowaną na stronie głównej), filtrując listę wyłącznie do 3 dostępnych odchowanych kociąt bengalskich: Baron (2 700 zł), Cyprian (3 000 zł) i Carlos (3 000 zł).
+  - **Stylizacja boksu „Odpowiedź w pigułce” (`.article-takeaway-box`):** Każdy akapit zaczynający się od *„Odpowiedź w pigułce:”* jest automatycznie transformowany w edytorski callout: ciepłe kremowe tło `#FAF8F5`, lewa złota belka `4px solid #C5A059`, padding `20px 24px`, zaokrąglone rogi `0 16px 16px 0` oraz złota etykieta 💡.
+  - **Proporcje zdjęć w treści artykułu:** Ograniczono zdjęcia w ciele artykułu do formatu krajobrazowego `16:9` (`max-height: 420px; object-fit: cover; border-radius: 16px;`) z wyśrodkowanym, subtelnym podpisem kursywą, co zapobiega dominacji zdjęć nad typografią.
+  - **Testy:** Dodano pakiet testów `BlogPostLuxuryLayoutTest`; wszystkie 199 testów w projekcie zaliczone (100% green).
 - **Rozdzielenie Informacji Zdrowotnych od Dat Odbioru na Profilu Kota (`show.blade.php`):**
   - Wyeliminowano konflikt dat: usunięto automatyczne wyliczanie sztucznych widełek odbioru `(14.11.2026 – 28.11.2026)` z górnej pigułki z ikoną stetoskopu `🩺`.
   - Pigułka `🩺` dotyczy od teraz **wyłącznie zdrowia i rodowodu** (`Linia po przebadanych rodzicach • Szczepienia, microchip i rodowód` dla kociąt, lub badania genetyczne HCM/PKD/PRA/FIV dla kotów hodowlanych).

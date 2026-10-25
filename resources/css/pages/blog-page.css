@@ -610,25 +610,85 @@
     margin-top: 0;
 }
 
-/* Section images — standardised ratio 16:9, max 720px */
-.article-section-figure {
-    margin: var(--space-6, 24px) 0 var(--space-8, 32px);
-}
-
-.article-section-figure--full {
-    margin: var(--space-8, 32px) 0;
-}
-
+/* ==========================================================================
+   In-Article Images Refinement (16:9 / 16:10 ratio, max 420px, subtle caption)
+   ========================================================================== */
+.article-editorial img,
 .article-section-img {
     width: 100%;
-    max-width: 720px;
-    height: auto;
-    max-height: 560px;
+    max-width: 100%;
+    max-height: 420px;
+    aspect-ratio: 16 / 9;
     object-fit: cover;
-    border-radius: var(--radius-lg, 12px);
+    border-radius: 16px;
     display: block;
-    margin: 0 auto;
-    box-shadow: var(--shadow-md, 0 4px 24px rgba(0,0,0,0.08));
+    margin: var(--space-6, 24px) auto var(--space-3, 12px);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+}
+
+.article-section-figure,
+.article-editorial figure {
+    margin: var(--space-6, 24px) 0 var(--space-8, 32px);
+    text-align: center;
+}
+
+.article-section-figure figcaption,
+.article-editorial figcaption,
+.article-editorial p:has(> img) + p > em:only-child,
+.article-editorial p:has(> img) + em {
+    display: block;
+    font-size: 0.85rem;
+    color: #71717a;
+    font-style: italic;
+    text-align: center;
+    margin-top: 8px;
+    margin-bottom: var(--space-6, 24px);
+    line-height: 1.5;
+}
+
+/* ==========================================================================
+   Editorial Key Takeaway Callout Box (.article-takeaway-box)
+   Warm cream (#FAF8F5), left gold accent border (4px solid #C5A059), rounded-r-xl
+   ========================================================================== */
+.article-takeaway-box {
+    margin: var(--space-6, 24px) 0 var(--space-8, 32px);
+    padding: 20px 24px;
+    background: #FAF8F5;
+    border: 1px solid rgba(197, 160, 89, 0.28);
+    border-left: 4px solid #C5A059;
+    border-radius: 0 16px 16px 0;
+    box-shadow: 0 4px 20px rgba(197, 160, 89, 0.06);
+}
+
+.article-takeaway-box__header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.article-takeaway-box__icon {
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.article-takeaway-box__label {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #946c00;
+}
+
+.article-takeaway-box__content {
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: #2c2c2e;
+    font-weight: 500;
+}
+
+.article-takeaway-box__content p {
+    margin: 0;
 }
 
 /* Editorial Pro-Tip Callout (.article-tip-box) */
@@ -876,121 +936,148 @@
 }
 
 /* ==========================================================================
-   Article Conversion CTA Box (Messenger / WhatsApp / Quiz)
+   Unified Quiet Luxury Article CTA Card (.article-luxury-cta-card)
+   Black (#141414) / Champagne Gold (#C5A059) / Warm Cream Aesthetics
    ========================================================================== */
-.article-conversion-cta-box {
-    margin-top: var(--space-10, 40px);
+.article-luxury-cta-card {
+    margin-top: var(--space-12, 48px);
     margin-bottom: var(--space-8, 32px);
-    padding: var(--space-8, 32px) var(--space-6, 24px);
-    background: linear-gradient(135deg, rgba(20, 28, 48, 0.98) 0%, rgba(10, 16, 30, 0.98) 100%);
-    border: 1px solid rgba(0, 132, 255, 0.35);
-    border-radius: var(--radius-xl, 18px);
-    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+    padding: clamp(28px, 4vw, 44px) clamp(20px, 3.5vw, 36px);
+    background: #141414;
+    border: 1px solid rgba(197, 160, 89, 0.3);
+    border-radius: var(--radius-xl, 20px);
+    box-shadow: 0 20px 48px -8px rgba(0, 0, 0, 0.45);
     text-align: center;
+    position: relative;
+    overflow: hidden;
 }
 
-.article-conversion-cta-box__badge {
+.article-luxury-cta-card::before {
+    content: '';
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 280px;
+    height: 140px;
+    background: radial-gradient(ellipse at top, rgba(197, 160, 89, 0.16) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.article-luxury-cta-card__badge {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    background: rgba(0, 132, 255, 0.15);
-    border: 1px solid rgba(0, 132, 255, 0.35);
-    border-radius: 999px;
-    padding: 5px 14px;
-    margin-bottom: 14px;
-    font-size: 0.8rem;
+    gap: 8px;
+    padding: 6px 16px;
+    background: rgba(197, 160, 89, 0.1);
+    border: 1px solid rgba(197, 160, 89, 0.28);
+    border-radius: 9999px;
+    font-size: 0.78rem;
     font-weight: 700;
-    color: #60a5fa;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    color: #C5A059;
+    margin-bottom: 20px;
 }
 
-.article-conversion-cta-box__heading {
-    font-size: 1.35rem;
+.article-luxury-cta-card__heading {
+    font-family: var(--font-serif, "Playfair Display", Georgia, serif);
+    font-size: clamp(1.35rem, 2.5vw, 1.85rem);
     font-weight: 700;
-    color: #ffffff !important;
-    margin: 0 0 10px 0;
+    color: #FAF8F5 !important;
+    margin: 0 auto 14px auto;
     line-height: 1.35;
+    max-width: 680px;
+    letter-spacing: -0.01em;
 }
 
-.article-conversion-cta-box__subtext {
-    font-size: 0.95rem;
-    color: #cbd5e1 !important;
-    margin: 0 0 24px 0;
-    line-height: 1.5;
+.article-luxury-cta-card__subtext {
+    font-family: var(--font-sans, system-ui, sans-serif);
+    font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+    line-height: 1.65;
+    color: #a1a1aa !important;
+    margin: 0 auto 28px auto;
+    max-width: 620px;
 }
 
-.article-conversion-cta-box__buttons {
+.article-luxury-cta-card__buttons {
     display: flex;
-    flex-direction: column;
-    gap: 12px;
-    max-width: 480px;
+    flex-wrap: wrap;
+    gap: 14px;
+    justify-content: center;
+    align-items: center;
+    max-width: 640px;
     margin: 0 auto;
 }
 
-.article-conversion-cta-btn {
-    display: flex;
+.article-luxury-cta-btn {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    padding: 14px 22px;
-    border-radius: 14px;
+    padding: 14px 26px;
+    border-radius: 12px;
     font-size: 0.95rem;
     font-weight: 700;
     text-decoration: none !important;
-    transition: all 0.2s ease;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     box-sizing: border-box;
-    width: 100%;
+    line-height: 1.3;
 }
 
-.article-conversion-cta-btn--messenger {
-    background: #0084FF;
+.article-luxury-cta-btn--primary {
+    background: #C5A059;
+    color: #111111 !important;
+    box-shadow: 0 4px 16px rgba(197, 160, 89, 0.3);
+}
+
+.article-luxury-cta-btn--primary:hover {
+    background: #B38E46;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(197, 160, 89, 0.45);
+    color: #111111 !important;
+}
+
+.article-luxury-cta-btn--secondary {
+    background: rgba(197, 160, 89, 0.06);
+    border: 1px solid rgba(197, 160, 89, 0.45);
+    color: #FAF8F5 !important;
+}
+
+.article-luxury-cta-btn--secondary:hover {
+    background: rgba(197, 160, 89, 0.16);
+    border-color: #C5A059;
     color: #ffffff !important;
-    box-shadow: 0 6px 18px rgba(0, 132, 255, 0.35);
+    transform: translateY(-2px);
 }
 
-.article-conversion-cta-btn--messenger:hover {
-    background: #0073e6;
-    transform: translateY(-1px);
-    box-shadow: 0 8px 22px rgba(0, 132, 255, 0.5);
-    color: #ffffff !important;
+.article-luxury-cta-card__quiz {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.article-conversion-cta-btn--whatsapp {
-    background: rgba(37, 211, 102, 0.15);
-    border: 1px solid rgba(37, 211, 102, 0.5);
-    color: #25D366 !important;
+.article-luxury-cta-card__quiz-link {
+    font-size: 0.9375rem;
+    color: #C5A059 !important;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.15s ease, opacity 0.15s ease;
 }
 
-.article-conversion-cta-btn--whatsapp:hover {
-    background: #25D366;
-    color: #ffffff !important;
-    transform: translateY(-1px);
-    box-shadow: 0 8px 22px rgba(37, 211, 102, 0.4);
-}
-
-.article-conversion-cta-btn--quiz {
-    background: rgba(200, 157, 92, 0.1);
-    border: 1px solid rgba(200, 157, 92, 0.4);
-    color: #f7e6cc !important;
-}
-
-.article-conversion-cta-btn--quiz:hover {
-    background: rgba(200, 157, 92, 0.22);
-    color: #ffffff !important;
-    transform: translateY(-1px);
+.article-luxury-cta-card__quiz-link:hover {
+    color: #e5c583 !important;
+    text-decoration: underline;
 }
 
 @media (max-width: 640px) {
-    .article-conversion-cta-box {
-        padding: 24px 16px;
-        margin-top: 28px;
+    .article-luxury-cta-card {
+        padding: 28px 18px;
+        border-radius: 16px;
     }
-    .article-conversion-cta-box__heading {
-        font-size: 1.15rem;
-    }
-    .article-conversion-cta-btn {
-        padding: 13px 16px;
-        font-size: 0.88rem;
+    .article-luxury-cta-btn {
+        width: 100%;
+        padding: 13px 18px;
+        font-size: 0.9rem;
     }
 }
