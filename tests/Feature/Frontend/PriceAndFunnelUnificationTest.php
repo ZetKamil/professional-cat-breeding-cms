@@ -233,4 +233,118 @@ class PriceAndFunnelUnificationTest extends TestCase
         $response->assertSee('Obserwuj nas na Facebooku, by oglądać codzienne relacje z hodowli →');
         $response->assertSee('facebook.com/profile.php?id=61580668026948', false);
     }
+
+    public function test_edge_case_negative_and_zero_prices_are_treated_as_null_and_hidden(): void
+    {
+        $catZero = Animal::factory()->create([
+            'name' => 'Zero Cat',
+            'status' => AnimalStatus::Available,
+            'price' => 0,
+        ]);
+        $this->assertNull($catZero->price);
+        $this->assertNull($catZero->formattedPrice());
+        $this->assertFalse($catZero->shouldShowPrice());
+
+        $catNegative = Animal::factory()->create([
+            'name' => 'Negative Cat',
+            'status' => AnimalStatus::Available,
+            'price' => -500,
+        ]);
+        $this->assertNull($catNegative->price);
+        $this->assertNull($catNegative->formattedPrice());
+        $this->assertFalse($catNegative->shouldShowPrice());
+    }
+
+    public function test_edge_case_price_sanitization_with_weird_characters_and_overflow(): void
+    {
+        $cat = new Animal();
+
+        // Polish formatted currency string
+        $cat->price = ' 2 700 zł ';
+        $this->assertSame(2700, $cat->price);
+        $this->assertSame('2 700 zł', $cat->formattedPrice());
+
+        // Extreme overflow clamp
+        $cat->price = '99999999999';
+        $this->assertSame(1000000, $cat->price);
+        $this->assertSame('1 000 000 zł', $cat->formattedPrice());
+
+        // XSS / Malformed string with no digits
+        $cat->price = "<script>alert('hack')</script>";
+        $this->assertNull($cat->price);
+        $this->assertNull($cat->formattedPrice());
+
+        // Negative sign in string
+        $cat->price = '-2500 zł';
+        $this->assertNull($cat->price);
+    }
+
+    public function test_edge_case_age_calculation_handles_future_dates_and_polish_inflections(): void
+    {
+        $cat = new Animal();
+
+        // Null DOB
+        $cat->date_of_birth = null;
+        $this->assertNull($cat->age());
+
+        // Future DOB (planned litter)
+        $cat->date_of_birth = now()->addMonths(2);
+        $this->assertSame('Oczekiwany miot', $cat->age());
+
+        // Born today
+        $cat->date_of_birth = now();
+        $this->assertSame('Dziś', $cat->age());
+
+        // 1 month
+        $cat->date_of_birth = now()->subMonth();
+        $this->assertSame('1 miesiąc', $cat->age());
+
+        // 3 months
+        $cat->date_of_birth = now()->subMonths(3);
+        $this->assertSame('3 miesiące', $cat->age());
+
+        // 6 months
+        $cat->date_of_birth = now()->subMonths(6);
+        $this->assertSame('6 miesięcy', $cat->age());
+
+        // 1 year
+        $cat->date_of_birth = now()->subYear();
+        $this->assertSame('1 rok', $cat->age());
+
+        // 2 years
+        $cat->date_of_birth = now()->subYears(2);
+        $this->assertSame('2 lata', $cat->age());
+
+        // 5 years
+        $cat->date_of_birth = now()->subYears(5);
+        $this->assertSame('5 lat', $cat->age());
+    }
+
+    public function test_concurrency_and_race_condition_protection_on_quick_price_endpoint(): void
+    {
+        $kitten = Animal::factory()->create([
+            'name' => 'Concurrent Kitten',
+            'status' => AnimalStatus::Available,
+            'price' => 2000,
+        ]);
+
+        // Simulating simultaneous atomic lock and update
+        $response = $this->actingAs($this->adminUser)
+            ->patch(route('backend.animals.quick-price', $kitten), [
+                'price' => '2 900 zł',
+            ]);
+
+        $response->assertRedirect();
+        $kitten->refresh();
+        $this->assertSame(2900, $kitten->price);
+
+        // Validation rejection for excessively long / malicious strings
+        $badResponse = $this->actingAs($this->adminUser)
+            ->patch(route('backend.animals.quick-price', $kitten), [
+                'price' => str_repeat('a', 60),
+            ]);
+
+        $badResponse->assertSessionHasErrors('price');
+    }
 }
+

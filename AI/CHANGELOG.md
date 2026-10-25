@@ -25,9 +25,15 @@
 - **SEO & Analityka**:
   - Schema.org `Product` / `Offer` (`price`, `PLN`, `InStock`) na podstronach kociąt z ustaloną ceną.
   - Zachowanie zdarzenia Meta Pixel `fbq('track', 'Contact')` na wszystkich przyciskach Messenger i WhatsApp.
+- **Harden Edge Cases & Concurrency / Race Conditions**:
+  - Mutator `Animal::setPriceAttribute` odporny na: ujemne wartości, zera, dziwne znaki, znaczniki XSS oraz overflow (limit max 1 000 000 zł).
+  - Akcesory `formattedPrice()` i `shouldShowPrice()` wykluczają zerowe i ujemne ceny (kocięta rodowodowe nigdy nie mają etykiety 0 zł).
+  - `AnimalController::updateQuickPrice` zabezpieczony transakcją bazodanową z blokadą pesymistyczną (`DB::transaction` + `lockForUpdate()`), co całkowicie zapobiega race conditions przy jednoczesnych edycjach lub podwójnych kliknięciach.
+  - Walidacja wejścia cenowego (`max:50` / `max:1000000`) w kontrolerze i FormRequestach (`StoreAnimalRequest`, `UpdateAnimalRequest`).
+  - Metoda `Animal::age()` zabezpieczona przed datami w przyszłości (`Oczekiwany miot`), zerem dni (`Dziś`) oraz uzupełniona o poprawną polską odmianę liczebników (1 miesiąc, 2-4 miesiące, 5 miesięcy, 1 rok, 2-4 lata, 5 lat).
 - **Testy Automatyczne**:
-  - Nowy zestaw testów `tests/Feature/Frontend/PriceAndFunnelUnificationTest.php` (8 testów, 64 asercje).
-  - Całkowity wynik testów aplikacji: 193 testy przeszły pomyślnie (1555 asercji).
+  - Nowy zestaw testów `tests/Feature/Frontend/PriceAndFunnelUnificationTest.php` rozszerzony o testy warunków brzegowych i współbieżności (12 testów, 90 asercji).
+  - Całkowity wynik testów aplikacji: 197 testów przeszło pomyślnie (1581 asercji), 100% PASS.
 
 ## [2026-10-17] Sprint Animals Media — Atos Profile & Media Integration
 

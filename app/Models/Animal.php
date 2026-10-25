@@ -83,6 +83,7 @@ class Animal extends Model
 
     /**
      * Mutator to sanitize price input (e.g. '2 700 zł' -> 2700).
+     * Hardened against negative numbers, zero, extreme values, and weird characters.
      */
     public function setPriceAttribute($value): void
     {
@@ -92,8 +93,41 @@ class Animal extends Model
             return;
         }
 
-        $clean = preg_replace('/[^\d]/', '', (string) $value);
-        $this->attributes['price'] = $clean !== '' ? (int) $clean : null;
+        if (is_numeric($value)) {
+            $num = (float) $value;
+            if ($num <= 0) {
+                $this->attributes['price'] = null;
+
+                return;
+            }
+
+            $this->attributes['price'] = min((int) round($num), 1000000);
+
+            return;
+        }
+
+        if (is_string($value)) {
+            // Reject negative sign
+            if (str_contains($value, '-')) {
+                $this->attributes['price'] = null;
+
+                return;
+            }
+
+            $clean = preg_replace('/[^\d]/', '', $value);
+            if ($clean === '') {
+                $this->attributes['price'] = null;
+
+                return;
+            }
+
+            $price = (int) $clean;
+            $this->attributes['price'] = $price > 0 ? min($price, 1000000) : null;
+
+            return;
+        }
+
+        $this->attributes['price'] = null;
     }
 
     /**
@@ -101,7 +135,7 @@ class Animal extends Model
      */
     public function formattedPrice(): ?string
     {
-        if ($this->price === null) {
+        if ($this->price === null || $this->price <= 0) {
             return null;
         }
 
@@ -110,11 +144,13 @@ class Animal extends Model
 
     /**
      * Determine if price badge should be displayed.
-     * Only displayed for available/reservable kittens, hidden for adult breeding cats/reproduktors.
+     * Only displayed for available/reservable kittens with a positive price,
+     * hidden for adult breeding cats/reproduktors, sold, or retired cats.
      */
     public function shouldShowPrice(): bool
     {
         return $this->price !== null
+            && $this->price > 0
             && $this->status !== AnimalStatus::Breeding
             && in_array($this->status, [AnimalStatus::Available, AnimalStatus::Reserved], true);
     }
@@ -392,6 +428,7 @@ class Animal extends Model
     /**
      * Calculate age from date_of_birth.
      * Returns null if date_of_birth is not set.
+     * Handles future dates, zero days, and Polish pluralization rules.
      */
     public function age(): ?string
     {
@@ -399,14 +436,38 @@ class Animal extends Model
             return null;
         }
 
+        if ($this->date_of_birth->isFuture()) {
+            return 'Oczekiwany miot';
+        }
+
         $diff = $this->date_of_birth->diff(now());
 
         if ($diff->y >= 1) {
-            return $diff->y === 1 ? '1 rok' : $diff->y.' lata';
+            if ($diff->y === 1) {
+                return '1 rok';
+            }
+            $mod10 = $diff->y % 10;
+            $mod100 = $diff->y % 100;
+            if ($mod10 >= 2 && $mod10 <= 4 && ($mod100 < 10 || $mod100 >= 20)) {
+                return $diff->y.' lata';
+            }
+
+            return $diff->y.' lat';
         }
 
         if ($diff->m >= 1) {
-            return $diff->m === 1 ? '1 miesiąc' : $diff->m.' miesięcy';
+            if ($diff->m === 1) {
+                return '1 miesiąc';
+            }
+            if ($diff->m >= 2 && $diff->m <= 4) {
+                return $diff->m.' miesiące';
+            }
+
+            return $diff->m.' miesięcy';
+        }
+
+        if ($diff->d === 0) {
+            return 'Dziś';
         }
 
         return $diff->d === 1 ? '1 dzień' : $diff->d.' dni';

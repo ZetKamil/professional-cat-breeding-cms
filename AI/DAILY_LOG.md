@@ -36,10 +36,15 @@
   - Wdrożono structured data Schema.org `Product` z ofertą `Offer` (`price`, `priceCurrency: PLN`, `availability: InStock`) generowaną wyłącznie dla dostępnych kociąt z ustaloną ceną.
   - Zachowano standardowy typ `ItemPage` / `Animal` dla kotów hodowlanych.
   - Zabezpieczono zdarzenie Meta Pixel `fbq('track', 'Contact')` na wszystkich przyciskach Messenger i WhatsApp.
+- **Harden Edge Cases & Concurrency / Race Conditions:**
+  - Wdrożono mutator `Animal::setPriceAttribute` filtrujący ujemne kwoty, zero, ciągi XSS oraz z zabezpieczeniem overflow do 1 000 000 zł.
+  - Wyeliminowano wyświetlanie błędnego badge'a `0 zł` dla kociąt rodowodowych w `formattedPrice()` i `shouldShowPrice()`.
+  - Zabezpieczono endpoint szybkiej edycji ceny transakcją z blokadą pesymistyczną (`DB::transaction` + `lockForUpdate()`) oraz walidacją długości stringa.
+  - Uodporniono metodę `Animal::age()` na przyszłe daty miotów (`Oczekiwany miot`), dzisiejszy dzień (`Dziś`) oraz zaimplementowano pełną polską odmianę liczebników dla miesięcy i lat.
 - **Jakość, Testy i Kompilacja:**
-  - Opracowano 8 nowych testów funkcjonalnych w `tests/Feature/Frontend/PriceAndFunnelUnificationTest.php`.
+  - Rozszerzono `tests/Feature/Frontend/PriceAndFunnelUnificationTest.php` do 12 testów (90 asercji).
   - Przebudowano assety Vite (`npm run build`).
-  - Cały zestaw testów (193 testy, 1555 asercji) przechodzi w 100% PASS bez błędów.
+  - Cały zestaw testów (197 testów, 1581 asercji) przechodzi w 100% PASS bez błędów.
 
 ---
 

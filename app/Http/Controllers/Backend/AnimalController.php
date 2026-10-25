@@ -123,11 +123,17 @@ class AnimalController extends Controller
         $this->authorize('update', $animal);
 
         $validated = $request->validate([
-            'price' => ['nullable'],
+            'price' => ['nullable', 'string', 'max:50'],
         ]);
 
-        $animal->price = $validated['price'] ?? null;
-        $animal->save();
+        \Illuminate\Support\Facades\DB::transaction(function () use ($animal, $validated) {
+            /** @var Animal $locked */
+            $locked = Animal::whereKey($animal->getKey())->lockForUpdate()->firstOrFail();
+            $locked->price = $validated['price'] ?? null;
+            $locked->save();
+        });
+
+        $animal->refresh();
 
         if ($request->wantsJson()) {
             return response()->json([
