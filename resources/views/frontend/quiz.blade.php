@@ -249,7 +249,7 @@
                                         $ageInWeeks = $animal->ageInWeeks();
                                         $isStrictlyReadyToLeave = $hasDob && $ageInWeeks >= 12;
                                         $badgeLabel = $animal->pickupBadgeLabel();
-                                        $timelineLabel = $animal->pickupTimelineLabel();
+                                        $timelineLabel = $animal->pickupCardTimelineLabel();
                                     @endphp
                                     <div class="quiz-cat-item"
                                          data-breed="{{ $breedCategory }}"
@@ -274,9 +274,10 @@
                                             <p>{{ $animal->breed }} • {{ $animal->color }}</p>
                                             <span class="quiz-cat-item__status">
                                                 <span class="quiz-cat-item__status-dot {{ $isStrictlyReadyToLeave ? '' : 'quiz-cat-item__status-dot--future' }}"></span>
-                                                <span>{{ $isStrictlyReadyToLeave ? 'Gotowy do odbioru' : $badgeLabel }}</span>
+                                                <span class="quiz-cat-item__status-text">{{ $isStrictlyReadyToLeave ? 'Gotowy do odbioru' : $badgeLabel }}</span>
                                                 @if($timelineLabel)
-                                                    <small style="display:block; font-size:0.75rem; opacity:0.85; margin-top:2px;">{{ $timelineLabel }}</small>
+                                                    <span class="quiz-cat-item__timeline-sep">•</span>
+                                                    <span class="quiz-cat-item__timeline">{{ $timelineLabel }}</span>
                                                 @endif
                                             </span>
                                         </div>
@@ -754,7 +755,7 @@
                     totalAvailableInGrid++;
 
                     if (breed === matchedBreed) {
-                        item.style.display = 'flex';
+                        item.style.display = '';
                         matchedCount++;
                         if (ready === 'now') {
                             hasReadyNowInMatched = true;
@@ -841,8 +842,8 @@
 
                             if (shouldInclude) {
                                 const clone = item.cloneNode(true);
-                                clone.style.display = 'flex';
-                                // Preserve href attributes on the new dual-button anchor elements
+                                clone.style.display = '';
+                                // Preserve href attributes on anchor elements
                                 const origBtns = item.querySelectorAll('[href]');
                                 const cloneBtns = clone.querySelectorAll('[href]');
                                 origBtns.forEach((origA, i) => {

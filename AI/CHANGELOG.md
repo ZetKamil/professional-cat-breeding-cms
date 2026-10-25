@@ -8,11 +8,16 @@
   - Podstawowy przycisk Messenger w solidnym Champagne Gold (`#C5A059` z hover `#B38E46`), wtórny WhatsApp z subtelną ramką i tłem transparentnym.
   - Karta obserwacji profilu na Facebooku na dole quizu w estetyce ciemno-złotej z obramowaniem i konturowym przyciskiem.
   - Boxy powiadomień o wczesnej rezerwacji i propozycjach alternatywnych ras zyskały aksamitne, złote wykończenie.
-- **Redesign Kart Dopasowanych Kociąt w Wynikach Quizu**:
-  - Nowoczesna siatka mini-kart (`grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))`).
-  - Powiększone zdjęcia 80×80px z subtelnym obramowaniem w złocie.
-  - Szeryfowa typografia dla imion kociąt, wskaźnik statusu odbioru, etykieta ceny w Champagne Gold.
-  - Pojedynczy, czysty przycisk `Zobacz profil →` prowadzący do profilu kota.
+- **Architektura & Redesign Kart Dopasowanych Kociąt w Wynikach Quizu (`/dobierz-rase`)**:
+  - **Rozwiązanie problemu wąskich kolumn (text squashing):** Poprzedni `minmax(280px, 1fr)` wewnątrz 2-kolumnowej siatki kompresował środkową kolumnę z tekstem kociaka do zaledwie 6–9px, powodując łamanie tekstu sylaba po sylabie w pionowy słup liter.
+  - **Pełnowymiarowe rzędy VIP (Desktop):** Zastąpienie siatki 2-kolumnowej jednorzędowym, przestronnym layoutem `.quiz-cats-grid` (układ kolumnowy `display: flex; flex-direction: column; gap: 14px;`).
+  - **3-kolumnowa siatka karty `.quiz-cat-item`:** `grid-template-columns: 84px 1fr auto;` na desktopie:
+    - Kolumna 1: Zdjęcie 84×84px z zaokrąglonymi rogami i złotą ramką.
+    - Kolumna 2: Imię (Playfair serif 1.25rem), złoty badge ceny (`formattedPrice()`), rasa i umaszczenie, oraz status z kropką dostępności i terminem odbioru.
+    - Kolumna 3: Złoty przycisk `Zobacz profil →` z płynnym hoverem.
+  - **Responsywność Mobile (<640px):** Dwupoziomowy układ siatki (`grid-template-columns: 76px 1fr;` w pierwszym rzędzie dla zdjęcia i danych, oraz `grid-column: 1 / -1;` w drugim rzędzie dla pełnoszerokościowego, wygodnego w dotyku przycisku `Zobacz profil →`).
+  - **Likwidacja nadpisań JS:** Usunięcie wymuszania `style.display = 'flex'` w kodzie filtrującym JavaScript (zarówno w siatce głównej, jak i przy klonowaniu alternatyw w `#quizAlternativeCatsGrid`), co pozwalało regułom CSS Grid działać w 100% czysto na każdym widoku.
+  - **Eliminacja powtórzeń statusu:** Przełączenie z `$animal->pickupTimelineLabel()` na `$animal->pickupCardTimelineLabel()` usuwające powielające się frazy „Gotowy do odbioru Gotowy do odbioru”.
 - **Redesign Kart Kotów i Proporcje Zdjęć 4:3 (`aspect-ratio: 4 / 3`)**:
   - Przekształcenie kontenerów zdjęć kotów z nadmiernie wysokich (pionowe smartfonowe 9:16/3:4) na prestiżowy format `aspect-ratio: 4 / 3` z `object-fit: cover; object-position: center 25%`.
   - Nowa estetyczna stopka karty: subtelna linia graniczna, cena kociaka w pogrubionym szeryfie/złocie po lewej stronie oraz pigułkowy przycisk `Zobacz profil →` po prawej.

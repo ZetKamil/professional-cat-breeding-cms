@@ -14,10 +14,12 @@
   - Główny przycisk Messenger zyskał pełne złoto szampańskie `#C5A059` z ciemnym tekstem `#111111`.
   - Wtórny przycisk WhatsApp otrzymał delikatną złotą ramkę `rgba(197, 160, 89, 0.35)` na ciemnym tle.
   - Karta zaproszenia na profil Facebooka zyskała luksusowe tło `rgba(197, 160, 89, 0.06)` z eleganckim przyciskiem konturowym.
-- **Nowy Układ Mini-Kart Kociąt w Wynikach Quizu:**
-  - Przebudowano wąskie wiersze w przestronną siatkę mini-kart (`repeat(auto-fit, minmax(280px, 1fr))`).
-  - Zdjęcia powiększone do 80×80px w zaokrąglonym kontenerze ze złotą ramką.
-  - Szeryfowy nagłówek imienia, status dostępności z kropką, cena w kolorze Champagne Gold i pojedynczy elegancki przycisk `Zobacz profil →`.
+- **Architektura & Naprawa Kart Kociąt w Wynikach Quizu (`/dobierz-rase`):**
+  - Naprawiono błąd wąskich kolumn (text squashing): usunięto problematyczny `repeat(auto-fit, minmax(280px, 1fr))`, który wewnątrz kontenera wyników kompresował środkową kolumnę tekstową do 6-9px szerokości, powodując łamanie tekstu pionowo po jednej literze.
+  - Zastosowano pełnoszerokościowy layout rzędów (`display: flex; flex-direction: column; gap: 14px;`) z 3-kolumnową siatką wewnętrzną (`84px 1fr auto`) na desktopie.
+  - Na urządzeniach mobilnych (<640px) wprowadzono stabilny dwupoziomowy układ (`76px 1fr` w wierszu 1, oraz pełnoszerokościowy przycisk `grid-column: 1 / -1;` w wierszu 2).
+  - Usunięto wymuszenia `style.display = 'flex'` w JS (w tym przy klonowaniu propozycji alternatywnych miotów).
+  - Zastąpiono `$animal->pickupTimelineLabel()` zoptymalizowaną metodą `$animal->pickupCardTimelineLabel()`, eliminując powielanie frazy „Gotowy do odbioru”.
 - **Nowe Proporcje Kart Kotów (4:3) i Separacja Katalogu `/koty`:**
   - Zdjęcia kotów w kartach zyskały proporcję `aspect-ratio: 4 / 3` (zamiast wysokich pionowych 3:4/9:16) z kadrowaniem `center 25%`.
   - Dolny pasek karty wzbogacony o lewą stronę z ceną kociaka (lub etykietą hodowlaną) oraz prawą stronę z przyciskiem `Zobacz profil →`.
