@@ -3,6 +3,10 @@
 ## [2026-10-25] Quiet Luxury Unification & Senior UI/UX Design System Overhaul
 
 ### Added & Refined
+- **Rozdzielenie Informacji Zdrowotnych od Dat Odbioru na Profilu Kota (`/koty/[slug]`)**:
+  - **Czysta pigułka stetoskopu `🩺`:** Usunięto z górnego badge'a medycznego automatycznie doklejane widełki czasowe `(14.11.2026 – 28.11.2026)`, które kłóciły się z danymi ustalanymi ręcznie przez hodowcę w panelu lub opisie. Pigułka skupia się wyłącznie na aspektach weterynaryjnych i rodowodowych (`Linia po przebadanych rodzicach • Szczepienia, microchip i rodowód`).
+  - **Precyzyjny termin odbioru z panelu hodowcy:** W kafelku specyfikacji `Odbiór` oraz w boksie informacyjnym pod opisem (`Zasada odbioru`) system bezpośrednio respektuje pole `earliest_pickup_date` z CMS (`Od 14.11.2026` / `odbiór możliwy od 14.11.2026`), eliminując sztuczne i mylące dwutygodniowe widełki w nawiasach.
+  - **Zgodność testów:** Zaktualizowano `ReservationAndCroTest` i `EarliestPickupDateTest`; 197/197 testów zalicza się w 100%.
 - **Wydzielenie Komponentu Ceny (`<x-frontend.animal-price-box>`) & Usunięcie Wyprawki**:
   - **Reużywalny komponent cenowy:** Cała prezentacja luksusowego banera cenowego kociaka została wyekstrahowana do dedykowanego, reużywalnego komponentu Blade `components/frontend/animal-price-box.blade.php`. Zmiana zawartości pakietu cenowego odbywa się teraz w jednym miejscu.
   - **Usunięcie wzmianek o wyprawce z kotów:** Zgodnie z wytycznymi hodowli (hodowla nie dodaje wyprawki fizycznej) wyczyszczono wszelkie deklaracje o „bogatych/kompletnych wyprawkach”:

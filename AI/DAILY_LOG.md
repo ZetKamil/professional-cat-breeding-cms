@@ -8,6 +8,11 @@
 ## 2026-10-25
 
 ### Completed
+- **Rozdzielenie Informacji Zdrowotnych od Dat Odbioru na Profilu Kota (`show.blade.php`):**
+  - Wyeliminowano konflikt dat: usunięto automatyczne wyliczanie sztucznych widełek odbioru `(14.11.2026 – 28.11.2026)` z górnej pigułki z ikoną stetoskopu `🩺`.
+  - Pigułka `🩺` dotyczy od teraz **wyłącznie zdrowia i rodowodu** (`Linia po przebadanych rodzicach • Szczepienia, microchip i rodowód` dla kociąt, lub badania genetyczne HCM/PKD/PRA/FIV dla kotów hodowlanych).
+  - W siatce atrybutów (`Odbiór`) oraz w boksie informacyjnym pod opisem (`Zasada odbioru`) wprowadzono bezpośrednie respektowanie daty wpisanej przez hodowcę w panelu (`earliest_pickup_date` -> np. `Od 14.11.2026` / `odbiór możliwy od 14.11.2026`), eliminując sztuczne dwutygodniowe widełki, które gryzły się z ręcznymi ustaleniami hodowli.
+  - Zaktualizowano testy `ReservationAndCroTest` oraz `EarliestPickupDateTest`; wszystkie 197 testów zalicza się w 100%.
 - **Wydzielenie Komponentu Ceny (`<x-frontend.animal-price-box>`) & Usunięcie Wyprawki:**
   - Utworzono dedykowany reużywalny komponent Blade `resources/views/components/frontend/animal-price-box.blade.php`. Zmiana treści pakietu w cenie odbywa się w jednym pliku.
   - Usunięto deklaracje o wyprawce z profilu kota (`show.blade.php`), nagłówka katalogu (`index.blade.php`), globalnego CTA (`conversion-cta.blade.php`), stron miast (`city.blade.php`), testu quizu (`quiz.blade.php`) oraz bazy danych (Carmen).

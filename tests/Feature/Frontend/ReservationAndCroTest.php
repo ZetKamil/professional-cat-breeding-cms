@@ -696,12 +696,13 @@ class ReservationAndCroTest extends TestCase
         $quizResponse->assertSee('Kocięta mogą wyjeżdżać do nowych domów w wieku 12–14 tygodni, po potwierdzeniu gotowości konkretnego kociaka');
         $quizResponse->assertDontSee('będą gotowe do odbioru za ok. 3–4 tygodnie');
 
-        // Verify Early Reservation cat profile: show page displays early reservation badge and pickup window
+        // Verify Early Reservation cat profile: show page displays early reservation badge and clean health meta pill
         $earlyProfile = $this->get(route('frontend.animals.show', $earlyKitten));
         $earlyProfile->assertOk();
         $earlyProfile->assertSee('Dostępny do rezerwacji');
         $earlyProfile->assertSee('Odbiór: za ok. 7 tyg.');
-        $earlyProfile->assertSee($earlyKitten->pickupWindowFormatted());
+        $earlyProfile->assertSee('Linia po przebadanych rodzicach • Szczepienia, microchip i rodowód');
+        $earlyProfile->assertDontSee($earlyKitten->pickupWindowFormatted());
         $earlyProfile->assertSee('Zasada odbioru:');
 
         // Verify Ready cat profile: show page displays 12-14 weeks ready badge
@@ -709,7 +710,8 @@ class ReservationAndCroTest extends TestCase
         $readyProfile->assertOk();
         $readyProfile->assertSee('Gotowy do odbioru');
         $readyProfile->assertSee('Gotowy do odbioru od zaraz');
-        $readyProfile->assertSee($readyKitten->pickupWindowFormatted());
+        $readyProfile->assertSee('Linia po przebadanych rodzicach • Szczepienia, microchip i rodowód');
+        $readyProfile->assertDontSee($readyKitten->pickupWindowFormatted());
 
         // Verify Homepage cards display matching badges
         $homeResponse = $this->get(route('home'));
@@ -777,7 +779,8 @@ class ReservationAndCroTest extends TestCase
         $adaProfile->assertSee('AdaBrytyjska');
         $adaProfile->assertSee('Dostępny do rezerwacji');
         $adaProfile->assertSee('Odbiór: za ok. 7 tyg.');
-        $adaProfile->assertSee($earlyCat->pickupWindowFormatted());
+        $adaProfile->assertSee('Linia po przebadanych rodzicach • Szczepienia, microchip i rodowód');
+        $adaProfile->assertDontSee($earlyCat->pickupWindowFormatted());
         $adaProfile->assertSee("window.openReservationModal('AdaBrytyjska', 'Kot Brytyjski', 'Dostępny do rezerwacji')", false);
 
         // Profile checks: Carlos

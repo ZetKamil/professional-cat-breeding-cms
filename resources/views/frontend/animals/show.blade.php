@@ -240,8 +240,6 @@
                                 <span aria-hidden="true">🩺</span>
                                 @if($isBreeding)
                                     <span title="Badania dedykowane dla rasy">{{ $breedHealthText }}</span>
-                                @elseif($animal->isEarlyReservation() || $animal->isInPickupWindow())
-                                    <span>Linia po przebadanych rodzicach • Odbiór w wieku 12–14 tyg. ({{ $animal->pickupWindowFormatted() }})</span>
                                 @else
                                     <span>Linia po przebadanych rodzicach • Szczepienia, microchip i rodowód</span>
                                 @endif
@@ -285,7 +283,9 @@
                                 <i data-lucide="calendar-check" class="animal-spec-card__icon" aria-hidden="true"></i>
                             </div>
                             <span class="animal-spec-card__value">
-                                @if($animal->pickupTimelineLabel())
+                                @if($animal->earliest_pickup_date && $animal->isEarlyReservation())
+                                    Od {{ $animal->earliest_pickup_date->format('d.m.Y') }}
+                                @elseif($animal->pickupTimelineLabel())
                                     {{ $animal->pickupTimelineLabel() }}
                                 @else
                                     {{ $animal->pickupBadgeLabel() }}
@@ -320,9 +320,11 @@
                             <div style="margin-top: 14px; padding: 12px 16px; background: rgba(200, 157, 92, 0.08); border-left: 3px solid var(--color-gold, #c89d5c); border-radius: 6px; font-size: 0.88rem; line-height: 1.5; color: var(--color-ink-muted-80, #d1cfc7);">
                                 <strong>Zasada odbioru:</strong> Zgodnie ze standardami felinologii kocięta mogą wyjeżdżać do nowych domów w wieku 12–14 tygodni, po pełnej domowej socjalizacji i komplecie szczepień.
                                 @if($animal->isEarlyReservation())
-                                    Kotek jest obecnie dostępny do rezerwacji — <strong>{{ mb_strtolower($animal->pickupTimelineLabel()) }}</strong>
-                                    @if($animal->pickupWindowFormatted())
-                                        (przewidywane okno odbioru: <strong>{{ $animal->pickupWindowFormatted() }}</strong>).
+                                    Kotek jest obecnie dostępny do rezerwacji — 
+                                    @if($animal->earliest_pickup_date)
+                                        odbiór możliwy <strong>od {{ $animal->earliest_pickup_date->format('d.m.Y') }}</strong> (dokładny termin do ustalenia).
+                                    @else
+                                        <strong>{{ mb_strtolower($animal->pickupTimelineLabel()) }}</strong>.
                                     @endif
                                 @else
                                     Kotek ukończył już 12. tydzień życia i jest <strong>gotowy do odbioru od zaraz</strong>.

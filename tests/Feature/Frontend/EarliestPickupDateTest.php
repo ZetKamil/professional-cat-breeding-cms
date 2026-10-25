@@ -141,8 +141,10 @@ class EarliestPickupDateTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('Dostępny do rezerwacji');
-        $response->assertSee('Odbiór: za ok. 4 tyg.');
-        $response->assertSee('14.11.2026 – 28.11.2026');
+        $response->assertSee('Od 14.11.2026');
+        $response->assertSee('odbiór możliwy <strong>od 14.11.2026</strong>', false);
+        $response->assertSee('Linia po przebadanych rodzicach • Szczepienia, microchip i rodowód');
+        $response->assertDontSee('14.11.2026 – 28.11.2026');
 
         Carbon::setTestNow();
     }
