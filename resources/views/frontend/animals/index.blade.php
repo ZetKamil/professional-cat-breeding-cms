@@ -98,29 +98,92 @@
             @endif
 
             {{-- ============================================================
-                 3. ANIMALS GRID
+                 3. ANIMALS CATALOG SECTIONS (KITTENS & BREEDING PARENTS)
                  ============================================================ --}}
-            <div class="animals-grid">
-                @forelse($animals as $animal)
-                    <x-frontend.animal-card :animal="$animal" />
-                @empty
-                    <div class="empty-state animals-grid__empty">
-                        <i data-lucide="cat" aria-hidden="true" class="empty-state__icon"></i>
-                        <h3 class="empty-state__title text-tagline">
-                            Brak kotów spełniających kryteria
-                        </h3>
-                        <p class="empty-state__desc text-body">
-                            Obecnie nie mamy kotów o wybranej rasie lub statusie.
-                            Spróbuj zmienić filtry lub skontaktuj się z nami, aby zapytać o planowane mioty.
-                        </p>
-                        <div class="empty-state__action">
-                            <x-frontend.button href="{{ route('frontend.animals.index') }}" variant="secondary" icon="refresh-cw">
-                                Pokaż wszystkie koty
-                            </x-frontend.button>
+            @php
+                $kittens = $animals->filter(fn($a) => in_array($a->status, [\App\Enums\AnimalStatus::Available, \App\Enums\AnimalStatus::Reserved]));
+                $breedingParents = $animals->filter(fn($a) => $a->status === \App\Enums\AnimalStatus::Breeding);
+                $otherCats = $animals->filter(fn($a) => !in_array($a->status, [\App\Enums\AnimalStatus::Available, \App\Enums\AnimalStatus::Reserved, \App\Enums\AnimalStatus::Breeding]));
+            @endphp
+
+            @if($animals->isEmpty())
+                <div class="empty-state animals-grid__empty">
+                    <i data-lucide="cat" aria-hidden="true" class="empty-state__icon"></i>
+                    <h3 class="empty-state__title text-tagline">
+                        Brak kotów spełniających kryteria
+                    </h3>
+                    <p class="empty-state__desc text-body">
+                        Obecnie nie mamy kotów o wybranej rasie lub statusie.
+                        Spróbuj zmienić filtry lub skontaktuj się z nami, aby zapytać o planowane mioty.
+                    </p>
+                    <div class="empty-state__action">
+                        <x-frontend.button href="{{ route('frontend.animals.index') }}" variant="secondary" icon="refresh-cw">
+                            Pokaż wszystkie koty
+                        </x-frontend.button>
+                    </div>
+                </div>
+            @else
+                {{-- Section 1: Dostępne Kocięta i Mioty --}}
+                @if($kittens->isNotEmpty())
+                    <div class="animals-catalog-group">
+                        <div class="animals-section-header">
+                            <span class="text-eyebrow">Wychowanie Domowe & Wczesna Rezerwacja</span>
+                            <h2 class="animals-section-title">Dostępne Kocięta i Mioty</h2>
+                            <p class="animals-section-lead">
+                                Kocięta z naszej domowej hodowli gotowe do odbioru lub wczesnej rezerwacji. Wszystkie maluchy posiadają wielopokoleniowy rodowód, komplet szczepień, microchip oraz bogatą wyprawkę.
+                            </p>
+                        </div>
+                        <div class="animals-grid">
+                            @foreach($kittens as $animal)
+                                <x-frontend.animal-card :animal="$animal" />
+                            @endforeach
                         </div>
                     </div>
-                @endforelse
-            </div>
+                @endif
+
+                {{-- Luxury Divider if both sections are present --}}
+                @if($kittens->isNotEmpty() && $breedingParents->isNotEmpty())
+                    <div class="animals-section-divider" aria-hidden="true">
+                        <span class="animals-divider-line"></span>
+                        <span class="animals-divider-diamond">✦</span>
+                        <span class="animals-divider-line"></span>
+                    </div>
+                @endif
+
+                {{-- Section 2: Nasi Rodzice i Koty Hodowlane --}}
+                @if($breedingParents->isNotEmpty())
+                    <div class="animals-catalog-group">
+                        <div class="animals-section-header">
+                            <span class="text-eyebrow">Championy & Linie Genetyczne</span>
+                            <h2 class="animals-section-title">Nasi Rodzice i Koty Hodowlane</h2>
+                            <p class="animals-section-lead">
+                                Koty hodowlane tworzące fundament genetyczny naszej hodowli. Wszystkie koty posiadają profile DNA, regularne badania kardiologiczne (Echo serca HCM normal) oraz ujemne testy PKD i FIV/FeLV.
+                            </p>
+                        </div>
+                        <div class="animals-grid">
+                            @foreach($breedingParents as $animal)
+                                <x-frontend.animal-card :animal="$animal" />
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+
+                {{-- Section 3: Inne / W nowych domach (jeśli wyfiltrowano) --}}
+                @if($otherCats->isNotEmpty())
+                    <div class="animals-catalog-group" style="margin-top: var(--sp-2xl);">
+                        <div class="animals-section-header">
+                            <span class="text-eyebrow">Kocięta w Nowych Domach</span>
+                            <h2 class="animals-section-title">Znalazły Już Swój Dom</h2>
+                            <p class="animals-section-lead">Koty z wcześniejszych miotów, które cieszą już swoich nowych opiekunów.</p>
+                        </div>
+                        <div class="animals-grid">
+                            @foreach($otherCats as $animal)
+                                <x-frontend.animal-card :animal="$animal" />
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+            @endif
 
             {{-- Pagination --}}
             @if($animals->hasPages())

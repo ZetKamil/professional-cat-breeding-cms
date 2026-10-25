@@ -224,7 +224,7 @@
                         <h3 class="quiz-result__cats-heading" id="quizMatchedCatsHeading">Dostępne kocięta tej rasy w naszej hodowli:</h3>
 
                         {{-- Notice if user chose 'ready_now' but matched breed is in early reservation (e.g. British kittens < 12 weeks) --}}
-                        <div id="quizFutureNoticeForNow" style="display:none; background: rgba(200, 157, 92, 0.15); border: 1px solid rgba(200, 157, 92, 0.4); border-radius: 12px; padding: 16px 20px; margin-bottom: 20px; text-align: left; font-size: 0.92rem; line-height: 1.55; color: #f5f0e8;">
+                        <div id="quizFutureNoticeForNow" style="display:none; background: rgba(197, 160, 89, 0.08); border: 1px solid rgba(197, 160, 89, 0.28); border-radius: 12px; padding: 16px 20px; margin-bottom: 20px; text-align: left; font-size: 0.92rem; line-height: 1.55; color: #FAF8F5;">
                             <div style="display: flex; align-items: flex-start; gap: 12px;">
                                 <span style="font-size: 1.6rem; line-height: 1;">⏳</span>
                                 <div>
@@ -234,7 +234,7 @@
                             </div>
                         </div>
 
-                        {{-- Matched Kittens: Single Luxury Profile Button + Price --}}
+                        {{-- Matched Kittens: Clean Luxury Mini-Cards --}}
                         <div class="quiz-cats-grid" id="quizMatchingCatsGrid">
                             @foreach($animals as $animal)
                                 @if($animal->status === \App\Enums\AnimalStatus::Available)
@@ -271,9 +271,10 @@
                                                     <span class="quiz-cat-item__price">{{ $animal->formattedPrice() }}</span>
                                                 @endif
                                             </div>
-                                            <p>{{ $animal->breed }} • {{ $animal->gender->label() }}</p>
+                                            <p>{{ $animal->breed }} • {{ $animal->color }}</p>
                                             <span class="quiz-cat-item__status">
-                                                {{ $isStrictlyReadyToLeave ? '🟢 ' . $badgeLabel : '⏳ ' . $badgeLabel }}
+                                                <span class="quiz-cat-item__status-dot {{ $isStrictlyReadyToLeave ? '' : 'quiz-cat-item__status-dot--future' }}"></span>
+                                                <span>{{ $isStrictlyReadyToLeave ? 'Gotowy do odbioru' : $badgeLabel }}</span>
                                                 @if($timelineLabel)
                                                     <small style="display:block; font-size:0.75rem; opacity:0.85; margin-top:2px;">{{ $timelineLabel }}</small>
                                                 @endif
@@ -282,7 +283,7 @@
                                         <div class="quiz-cat-item__actions">
                                             <a href="{{ route('frontend.animals.show', $animal) }}"
                                                class="quiz-cat-item__btn-profile">
-                                                🎬 Zobacz profil, zdjęcia i filmiki →
+                                                Zobacz profil →
                                             </a>
                                         </div>
                                     </div>
@@ -291,7 +292,7 @@
                         </div>
 
                         {{-- Alert when 0 kittens of this breed exist in database or all are booked --}}
-                        <div id="quizNoMatchingCatsNotice" style="display:none; background: rgba(200, 157, 92, 0.12); border: 1px solid rgba(200, 157, 92, 0.35); border-radius: 12px; padding: 22px; text-align: center; margin-top: 16px; color: #f5f0e8;">
+                        <div id="quizNoMatchingCatsNotice" style="display:none; background: rgba(197, 160, 89, 0.08); border: 1px solid rgba(197, 160, 89, 0.28); border-radius: 12px; padding: 22px; text-align: center; margin-top: 16px; color: #FAF8F5;">
                             <span style="font-size: 2rem; display: block; margin-bottom: 8px;">🗓️</span>
                             <h4 id="quizNoCatsNoticeTitle" style="font-size: 1.05rem; font-weight: 700; color: var(--color-gold, #c89d5c); margin-bottom: 6px;">Planujemy kolejny miot tej rasy</h4>
                             <p id="quizNoCatsNoticeText" style="font-size: 0.92rem; color: #e8e3d8; line-height: 1.6; margin-bottom: 16px;">
@@ -310,11 +311,11 @@
 
                         {{-- Alternative recommendations if user wanted ready_now and matched breed not ready, or 0 matched --}}
                         <div id="quizAlternativesBox" style="display:none; margin-top: 28px; padding-top: 22px; border-top: 1px solid rgba(255, 255, 255, 0.12);">
-                            <div style="background: rgba(37, 211, 102, 0.1); border: 1px solid rgba(37, 211, 102, 0.3); border-radius: 12px; padding: 14px 18px; margin-bottom: 16px; text-align: left;">
-                                <strong id="quizAltBoxTitle" style="color: #25d366; font-size: 0.96rem; display: flex; align-items: center; gap: 8px;">
+                            <div style="background: rgba(197, 160, 89, 0.08); border: 1px solid rgba(197, 160, 89, 0.28); border-radius: 12px; padding: 14px 18px; margin-bottom: 16px; text-align: left;">
+                                <strong id="quizAltBoxTitle" style="color: #C5A059; font-size: 0.96rem; display: flex; align-items: center; gap: 8px;">
                                     <span>⚡</span> Zależy Ci na odbiorze kociaka już w ten weekend?
                                 </strong>
-                                <p id="quizAltBoxDesc" style="margin: 4px 0 0; font-size: 0.88rem; color: #e6f7ec; line-height: 1.5;">
+                                <p id="quizAltBoxDesc" style="margin: 4px 0 0; font-size: 0.88rem; color: #FAF8F5; line-height: 1.5;">
                                     Poznaj nasze w pełni odchowane maluchy innych ras, które są po komplecie szczepień, zaczipowane i gotowe do odbioru od ręki:
                                 </p>
                             </div>

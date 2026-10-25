@@ -1,5 +1,32 @@
 # AI/CHANGELOG.md
 
+## [2026-10-25] Quiet Luxury Unification & Senior UI/UX Design System Overhaul
+
+### Added & Refined
+- **Eliminacja Kolorów Neonowych i Ujednolicenie Quizu (`/dobierz-rase`)**:
+  - Usunięcie wszelkich jaskrawych odcieni zieleni (`#25D366`), błękitu Messenger (`#0084FF`), brązów i granatu na rzecz palety Quiet Luxury: `#111111` Charcoal, `#FAF8F5` Warm Cream, `#C5A059` Champagne Gold.
+  - Podstawowy przycisk Messenger w solidnym Champagne Gold (`#C5A059` z hover `#B38E46`), wtórny WhatsApp z subtelną ramką i tłem transparentnym.
+  - Karta obserwacji profilu na Facebooku na dole quizu w estetyce ciemno-złotej z obramowaniem i konturowym przyciskiem.
+  - Boxy powiadomień o wczesnej rezerwacji i propozycjach alternatywnych ras zyskały aksamitne, złote wykończenie.
+- **Redesign Kart Dopasowanych Kociąt w Wynikach Quizu**:
+  - Nowoczesna siatka mini-kart (`grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))`).
+  - Powiększone zdjęcia 80×80px z subtelnym obramowaniem w złocie.
+  - Szeryfowa typografia dla imion kociąt, wskaźnik statusu odbioru, etykieta ceny w Champagne Gold.
+  - Pojedynczy, czysty przycisk `Zobacz profil →` prowadzący do profilu kota.
+- **Redesign Kart Kotów i Proporcje Zdjęć 4:3 (`aspect-ratio: 4 / 3`)**:
+  - Przekształcenie kontenerów zdjęć kotów z nadmiernie wysokich (pionowe smartfonowe 9:16/3:4) na prestiżowy format `aspect-ratio: 4 / 3` z `object-fit: cover; object-position: center 25%`.
+  - Nowa estetyczna stopka karty: subtelna linia graniczna, cena kociaka w pogrubionym szeryfie/złocie po lewej stronie oraz pigułkowy przycisk `Zobacz profil →` po prawej.
+- **Podział Katalogu `/koty` na Dwie Wyraźne Sekcje Wizualne**:
+  - **Sekcja 1 (Góra):** „Dostępne Kocięta i Mioty” – wyłącznie kocięta do rezerwacji i odbioru z widocznymi cenami.
+  - **Luksusowy Separator:** Dyskretna linia z diamentowym motywem `✦` w odcieniu Champagne Gold.
+  - **Sekcja 2 (Dół):** „Nasi Rodzice i Koty Hodowlane” – dorośli rodzice miotów i koty hodowlane (Atos, Luki, Koko) prezentowani bez cen, z akcentem na linie championów i badania genetyczne.
+- **Profil Kota (`/koty/[slug]`) Layout & Balance Fix**:
+  - **Kompaktowa siatka 3×2 dla atrybutów:** Rasa, Płeć, Umaszczenie, Wiek, Odbiór, Rodowód (wysokość 72px z wyważonymi paddingami).
+  - **Luksusowy Baner Cenowy:** Wyniesiony bezpośrednio nad opis kota i przyciski akcji (`2 700 zł — opcja „na kolanka” z rodowodem i wyprawką`).
+  - **Sticky Gallery na Desktopie:** Lewa kolumna galerii ze zdjęciem głównym i miniaturami zakotwiczona na `position: sticky; top: 100px;` (brak pustych przestrzeni podczas czytania prawej kolumny).
+  - **Jednorzędowy pasek miniatur:** Siatka 6 kolumn (`grid-template-columns: repeat(6, 1fr)`) idealnie dopasowana pod zdjęciem głównym.
+  - **Portrety Rodziców 88×88px w Rodowodzie:** Powiększenie awatarów rodziców (Ojciec / Matka) z małych 48px kółek do formatu 88×88px rounded-xl z obramowaniem w złocie (`.pedigree-card__portrait`).
+
 ## [2026-10-25] Master UI/UX Unification, Admin Price Dashboard & Premium Funnel Refactor
 
 ### Added

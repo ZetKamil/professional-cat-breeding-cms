@@ -8,6 +8,28 @@
 ## 2026-10-25
 
 ### Completed
+✓ Senior UI/UX Design System & Layout Overhaul (Quiet Luxury Unification) (`feat(design)`, `feat(ui)`, `feat(quiz)`, `feat(catalog)`)
+- **Eliminacja Kolorów Neonowych w Quizie (`/dobierz-rase`):**
+  - Wycięto wszelkie neonowe odcienie błękitu Messenger (`#0084FF`), zieleni WhatsApp (`#25D366`) oraz brązy. Zastąpiono je paletą Quiet Luxury (`#111111`, `#FAF8F5`, `#C5A059`).
+  - Główny przycisk Messenger zyskał pełne złoto szampańskie `#C5A059` z ciemnym tekstem `#111111`.
+  - Wtórny przycisk WhatsApp otrzymał delikatną złotą ramkę `rgba(197, 160, 89, 0.35)` na ciemnym tle.
+  - Karta zaproszenia na profil Facebooka zyskała luksusowe tło `rgba(197, 160, 89, 0.06)` z eleganckim przyciskiem konturowym.
+- **Nowy Układ Mini-Kart Kociąt w Wynikach Quizu:**
+  - Przebudowano wąskie wiersze w przestronną siatkę mini-kart (`repeat(auto-fit, minmax(280px, 1fr))`).
+  - Zdjęcia powiększone do 80×80px w zaokrąglonym kontenerze ze złotą ramką.
+  - Szeryfowy nagłówek imienia, status dostępności z kropką, cena w kolorze Champagne Gold i pojedynczy elegancki przycisk `Zobacz profil →`.
+- **Nowe Proporcje Kart Kotów (4:3) i Separacja Katalogu `/koty`:**
+  - Zdjęcia kotów w kartach zyskały proporcję `aspect-ratio: 4 / 3` (zamiast wysokich pionowych 3:4/9:16) z kadrowaniem `center 25%`.
+  - Dolny pasek karty wzbogacony o lewą stronę z ceną kociaka (lub etykietą hodowlaną) oraz prawą stronę z przyciskiem `Zobacz profil →`.
+  - Katalog `/koty` został podzielony na dwie niezależne sekcje przedzielone diamentowym separatorem ✦:
+    - Sekcja 1: „Dostępne Kocięta i Mioty” (kocięta na sprzedaż z cenami).
+    - Sekcja 2: „Nasi Rodzice i Koty Hodowlane” (reproduktory i kotki bez cen, z naciskiem na badania genetyczne HCM/PKD).
+- **Profil Kota (`/koty/[slug]`) — Balans i Quiet Luxury:**
+  - Siatka atrybutów przekształcona w kompaktowy układ 3 kolumny × 2 wiersze (Rasa, Płeć, Umaszczenie, Wiek, Odbiór, Rodowód) o wysokości 72px.
+  - Luksusowy baner cenowy umieszczony bezpośrednio nad opisem i przyciskami CTA (`2 700 zł — opcja „na kolanka” z rodowodem i wyprawką`).
+  - Pływająca galeria (`position: sticky; top: 100px;`) na desktopie, likwidująca puste przestrzenie po lewej stronie, z jednorzędowym paskiem 6 miniatur.
+  - Portrety rodziców w sekcji genealogii powiększone z 48px kółek do prestiżowych portretów 88×88px rounded-xl ze złotą obwódką (`.pedigree-card__portrait`).
+
 ✓ Master UI/UX Unification, Admin Price Dashboard & Premium Funnel Refactor (`feat(pricing)`, `feat(admin)`, `feat(cro)`, `feat(seo)`)
 - **Admin Dashboard – Zarządzanie Cenami Kociąt (Szybka Edycja w 2 Sekundy):**
   - Rozszerzono schemat tabeli `animals` o opcjonalne pole `price` (unsigned integer PLN) za pomocą migracji `2026_10_25_120000_add_price_to_animals_and_set_initial_prices.php`.

@@ -65,25 +65,20 @@
         @endif
 
         <div class="animal-card__footer">
-            @if($animal->shouldShowPrice())
-                <span class="animal-card__price-badge" title="Cena kociaka (opcja „na kolanka”)">
-                    {{ $animal->formattedPrice() }}
-                </span>
-            @else
-                <span class="animal-card__quick-reserve"
-                      role="button"
-                      tabindex="0"
-                      title="Umów wideo-wizytę na żywo"
-                      onclick="event.preventDefault(); event.stopPropagation(); window.openReservationModal('{{ addslashes($animal->name) }}', '{{ addslashes($animal->breed) }}', '{{ addslashes($cardStatusLabel) }}');"
-                      onkeydown="if(event.key === 'Enter' || event.key === ' '){ event.preventDefault(); event.stopPropagation(); window.openReservationModal('{{ addslashes($animal->name) }}', '{{ addslashes($animal->breed) }}', '{{ addslashes($cardStatusLabel) }}'); }">
-                    <span class="animal-card__quick-reserve-dot"></span>
-                    <span>Wideo-wizyta</span>
-                </span>
-            @endif
+            <div class="animal-card__price-wrapper">
+                @if($animal->shouldShowPrice())
+                    <span class="animal-card__price-badge" title="Cena kociaka (opcja „na kolanka”)">
+                        {{ $animal->formattedPrice() }}
+                    </span>
+                @else
+                    <span class="animal-card__status-label" title="{{ $cardStatusLabel }}">
+                        {{ $animal->statusLabel() }}
+                    </span>
+                @endif
+            </div>
 
             <span class="animal-card__cta">
-                Profil
-                <i data-lucide="arrow-up-right" class="w-3.5 h-3.5 text-primary" aria-hidden="true"></i>
+                Zobacz profil →
             </span>
         </div>
     </div>

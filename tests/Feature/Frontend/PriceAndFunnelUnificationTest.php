@@ -191,7 +191,7 @@ class PriceAndFunnelUnificationTest extends TestCase
         // 2. Verify matched kitten row displays price and single profile button
         $response->assertSee('2 700 zł');
         $response->assertSee('quiz-cat-item__btn-profile', false);
-        $response->assertSee('Zobacz profil, zdjęcia i filmiki →');
+        $response->assertSee('Zobacz profil →');
         $response->assertSee(route('frontend.animals.show', $bengal));
 
         // 3. Verify single contact block has luxury gold Messenger button

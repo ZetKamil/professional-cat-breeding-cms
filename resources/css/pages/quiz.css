@@ -420,7 +420,7 @@
     flex-shrink: 0;
 }
 
-/* Secondary CTA: Dark Subtle Outline */
+/* Secondary CTA: Dark Subtle Outline with Gold Accent */
 .quiz-cta-btn--outline {
     display: flex;
     align-items: center;
@@ -431,20 +431,20 @@
     font-size: 0.93rem;
     font-weight: 600;
     text-decoration: none;
-    border: 1px solid rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(197, 160, 89, 0.35);
     cursor: pointer;
     transition: all 0.22s ease;
     box-sizing: border-box;
     width: 100%;
-    background: transparent;
-    color: #f5f5f7 !important;
+    background: rgba(255, 255, 255, 0.04);
+    color: #FAF8F5 !important;
 }
 
 .quiz-cta-btn--outline:hover,
 .quiz-cta-btn--outline:focus-visible {
-    border-color: #25D366;
-    background: rgba(37, 211, 102, 0.08);
-    color: #25D366 !important;
+    border-color: #C5A059;
+    background: rgba(197, 160, 89, 0.12);
+    color: #ecd09b !important;
     transform: translateY(-1px);
     outline: none;
 }
@@ -458,7 +458,7 @@
     line-height: 1.5;
 }
 
-/* Tertiary CTA: Callback */
+/* Tertiary CTA: Callback (Quiet Luxury Dark Gold) */
 .quiz-cta-btn--callback {
     display: flex;
     align-items: center;
@@ -468,77 +468,83 @@
     font-size: 0.88rem;
     font-weight: 600;
     text-decoration: none;
-    border: 1px solid rgba(200, 157, 92, 0.35);
+    border: 1px solid rgba(197, 160, 89, 0.25);
     cursor: pointer;
     transition: all 0.2s ease;
     box-sizing: border-box;
     width: 100%;
-    background: rgba(200, 157, 92, 0.06);
-    color: #f7e6cc;
+    background: rgba(197, 160, 89, 0.05);
+    color: #ded9d0;
 }
 
 .quiz-cta-btn--callback:hover,
 .quiz-cta-btn--callback:focus-visible {
-    background: rgba(200, 157, 92, 0.16);
+    background: rgba(197, 160, 89, 0.14);
+    border-color: #C5A059;
     color: #ffffff;
     outline: none;
 }
 
 /* ----------------------------------------------------------------
-   8. KITTENS GRID IN RESULTS
+   8. KITTENS GRID IN RESULTS — Luxury Mini-Card Grid Layout
 ---------------------------------------------------------------- */
 
 .quiz-result__cats-box {
     background: rgba(0, 0, 0, 0.25);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(197, 160, 89, 0.18);
     border-radius: 16px;
-    padding: 18px;
+    padding: 20px;
     margin-bottom: 22px;
 }
 
 .quiz-result__cats-heading {
-    font-size: 0.95rem;
+    font-size: 0.98rem;
     font-weight: 600;
     color: #ffffff;
-    margin: 0 0 14px;
+    margin: 0 0 16px;
 }
 
 .quiz-cats-grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 14px;
 }
 
-/* Matched Cat Row (Quiet Luxury, Single Profile Link, Price Tag) */
+/* Matched Cat Row (Quiet Luxury, Serif Name, Gold Price Tag, Clean Profile Link) */
 .quiz-cat-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
     background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 12px;
-    padding: 12px 14px;
-    gap: 14px;
-    transition: border-color 0.2s ease, background 0.2s ease;
+    border: 1px solid rgba(197, 160, 89, 0.2);
+    border-radius: 14px;
+    padding: 14px 16px;
+    gap: 16px;
+    transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s ease;
 }
 
 .quiz-cat-item:hover {
-    border-color: rgba(200, 157, 92, 0.35);
-    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(197, 160, 89, 0.45);
+    background: rgba(197, 160, 89, 0.05);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
 }
 
 .quiz-cat-item__img {
-    width: 64px;
-    height: 64px;
-    border-radius: 10px;
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
     overflow: hidden;
     flex-shrink: 0;
+    border: 1px solid rgba(197, 160, 89, 0.25);
+    background: var(--color-canvas-parchment, #fbf9f5);
 }
 
 .quiz-cat-item__img img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center 25%;
 }
 
 .quiz-cat-item__info {
@@ -548,43 +554,59 @@
 
 .quiz-cat-item__name-row {
     display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 2px;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 3px;
 }
 
 .quiz-cat-item__info h4 {
     margin: 0;
-    font-size: 1rem;
+    font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
+    font-size: 1.15rem;
     font-weight: 600;
-    color: #ffffff;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    color: #FAF8F5;
+    letter-spacing: -0.01em;
 }
 
 .quiz-cat-item__price {
     display: inline-block;
-    font-size: 0.82rem;
+    font-size: 0.85rem;
     font-weight: 700;
-    color: #c89d5c;
-    background: rgba(200, 157, 92, 0.12);
-    border: 1px solid rgba(200, 157, 92, 0.3);
+    color: #C5A059;
+    background: rgba(197, 160, 89, 0.12);
+    border: 1px solid rgba(197, 160, 89, 0.35);
     border-radius: 999px;
-    padding: 1px 8px;
+    padding: 2px 9px;
     letter-spacing: 0.02em;
 }
 
 .quiz-cat-item__info p {
-    margin: 0 0 3px;
-    font-size: 0.78rem;
-    color: #8e8e93;
+    margin: 0 0 4px;
+    font-size: 0.8rem;
+    color: #a1a1a6;
 }
 
 .quiz-cat-item__status {
-    font-size: 0.72rem;
-    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.75rem;
+    font-weight: 500;
     color: #d8b273;
+}
+
+.quiz-cat-item__status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #34C759;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.quiz-cat-item__status-dot--future {
+    background: #C5A059;
 }
 
 .quiz-cat-item__actions {
@@ -595,12 +617,12 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 9px 16px;
-    background: rgba(200, 157, 92, 0.12);
-    border: 1px solid rgba(200, 157, 92, 0.4);
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px solid rgba(197, 160, 89, 0.45);
     border-radius: 8px;
     color: #ecd09b !important;
-    font-size: 0.82rem;
+    font-size: 0.84rem;
     font-weight: 600;
     text-decoration: none;
     white-space: nowrap;
@@ -609,16 +631,20 @@
 
 .quiz-cat-item__btn-profile:hover {
     background: #C5A059;
-    color: #121214 !important;
+    color: #111111 !important;
     border-color: #C5A059;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(197, 160, 89, 0.3);
+    box-shadow: 0 4px 14px rgba(197, 160, 89, 0.35);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 640px) {
+    .quiz-cats-grid {
+        grid-template-columns: 1fr;
+    }
+
     .quiz-cat-item {
         flex-wrap: wrap;
-        padding: 12px;
+        padding: 14px;
     }
 
     .quiz-cat-item__actions {
@@ -633,16 +659,16 @@
 }
 
 /* ----------------------------------------------------------------
-   9. FACEBOOK FOLLOWER MAGNET CARD (Luxury Dark Gold Aesthetic)
+   9. FACEBOOK FOLLOWER MAGNET CARD (Refined Dark Luxury Card)
 ---------------------------------------------------------------- */
 
 .quiz-follower-card {
-    background: rgba(200, 157, 92, 0.03);
-    border: 1px solid rgba(200, 157, 92, 0.32);
+    background: rgba(197, 160, 89, 0.06);
+    border: 1px solid rgba(197, 160, 89, 0.25);
     border-radius: 16px;
     padding: 22px 20px;
     text-align: center;
-    margin-top: 10px;
+    margin-top: 14px;
 }
 
 .quiz-follower-card__icon {
@@ -652,16 +678,16 @@
 }
 
 .quiz-follower-card__heading {
-    font-size: 1rem;
+    font-size: 1.05rem;
     font-weight: 700;
-    color: #ffffff;
+    color: #FAF8F5;
     margin: 0 0 6px;
     line-height: 1.35;
 }
 
 .quiz-follower-card__sub {
     font-size: 0.84rem;
-    color: #8e8e93;
+    color: #a1a1a6;
     line-height: 1.5;
     margin: 0 0 16px;
 }
@@ -678,14 +704,14 @@
     text-decoration: none;
     background: transparent;
     color: #ecd09b !important;
-    border: 1px solid rgba(200, 157, 92, 0.5);
+    border: 1px solid rgba(197, 160, 89, 0.45);
     cursor: pointer;
     transition: all 0.22s ease;
 }
 
 .quiz-follower-card__btn:hover,
 .quiz-follower-card__btn:focus-visible {
-    background: rgba(200, 157, 92, 0.15);
+    background: rgba(197, 160, 89, 0.15);
     border-color: #C5A059;
     color: #ffffff !important;
     transform: translateY(-1px);

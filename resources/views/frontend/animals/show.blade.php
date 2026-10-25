@@ -249,7 +249,7 @@
                         </div>
                     </div>
 
-                    {{-- Editorial Spec Cards Grid --}}
+                    {{-- Editorial Spec Cards Grid: Compact 3x2 Architecture --}}
                     <div class="animal-profile__specs-grid" role="list" aria-label="Specyfikacja kota">
                         <div class="animal-spec-card" role="listitem">
                             <div class="animal-spec-card__top">
@@ -267,13 +267,6 @@
                         </div>
                         <div class="animal-spec-card" role="listitem">
                             <div class="animal-spec-card__top">
-                                <span class="animal-spec-card__label">Wiek</span>
-                                <i data-lucide="calendar" class="animal-spec-card__icon" aria-hidden="true"></i>
-                            </div>
-                            <span class="animal-spec-card__value">{{ $animal->age() ?? 'Dorosły kot' }}</span>
-                        </div>
-                        <div class="animal-spec-card animal-spec-card--wide" role="listitem">
-                            <div class="animal-spec-card__top">
                                 <span class="animal-spec-card__label">Umaszczenie</span>
                                 <i data-lucide="palette" class="animal-spec-card__icon" aria-hidden="true"></i>
                             </div>
@@ -281,44 +274,48 @@
                         </div>
                         <div class="animal-spec-card" role="listitem">
                             <div class="animal-spec-card__top">
-                                <span class="animal-spec-card__label">Status</span>
-                                <i data-lucide="shield-check" class="animal-spec-card__icon" aria-hidden="true"></i>
+                                <span class="animal-spec-card__label">Wiek</span>
+                                <i data-lucide="calendar" class="animal-spec-card__icon" aria-hidden="true"></i>
                             </div>
-                            <span class="animal-spec-card__value">{{ $animal->pickupBadgeLabel() }}</span>
+                            <span class="animal-spec-card__value">{{ $animal->age() ?? 'Dorosły kot' }}</span>
                         </div>
-                        @if($animal->pickupTimelineLabel())
-                            <div class="animal-spec-card" role="listitem">
-                                <div class="animal-spec-card__top">
-                                    <span class="animal-spec-card__label">Termin odbioru</span>
-                                    <i data-lucide="calendar-check" class="animal-spec-card__icon" aria-hidden="true"></i>
-                                </div>
-                                <span class="animal-spec-card__value">
-                                    @if($animal->isOdchowany())
-                                        {{ $animal->pickupTimelineLabel() }}
-                                    @elseif($animal->earliest_pickup_date)
-                                        @if($animal->isInPickupWindow())
-                                            {{ $animal->pickupTimelineLabel() }}
-                                            <small style="display:block; font-size:0.75rem; color:var(--color-ink-muted-80); margin-top:2px;">
-                                                (od {{ $animal->earliest_pickup_date->format('d.m.Y') }})
-                                            </small>
-                                        @else
-                                            Od {{ $animal->earliest_pickup_date->format('d.m.Y') }}
-                                            <small style="display:block; font-size:0.75rem; color:var(--color-ink-muted-80); margin-top:2px;">
-                                                ({{ $animal->pickupTimelineLabel() }})
-                                            </small>
-                                        @endif
-                                    @else
-                                        {{ $animal->pickupTimelineLabel() }}
-                                        @if($animal->pickupWindowFormatted())
-                                            <small style="display:block; font-size:0.75rem; color:var(--color-ink-muted-80); margin-top:2px;">
-                                                (okno: {{ $animal->pickupWindowFormatted() }})
-                                            </small>
-                                        @endif
-                                    @endif
-                                </span>
+                        <div class="animal-spec-card" role="listitem">
+                            <div class="animal-spec-card__top">
+                                <span class="animal-spec-card__label">Odbiór</span>
+                                <i data-lucide="calendar-check" class="animal-spec-card__icon" aria-hidden="true"></i>
                             </div>
-                        @endif
+                            <span class="animal-spec-card__value">
+                                @if($animal->pickupTimelineLabel())
+                                    {{ $animal->pickupTimelineLabel() }}
+                                @else
+                                    {{ $animal->pickupBadgeLabel() }}
+                                @endif
+                            </span>
+                        </div>
+                        <div class="animal-spec-card" role="listitem">
+                            <div class="animal-spec-card__top">
+                                <span class="animal-spec-card__label">Rodowód</span>
+                                <i data-lucide="award" class="animal-spec-card__icon" aria-hidden="true"></i>
+                            </div>
+                            <span class="animal-spec-card__value">SHiOZ ZOOLANDIA</span>
+                        </div>
                     </div>
+
+                    {{-- Luxury Price Banner (Only for available/reservable kittens with price) placed right above description --}}
+                    @if($animal->shouldShowPrice())
+                        <div class="animal-profile__price-box">
+                            <div class="animal-profile__price-banner-content">
+                                <span class="animal-profile__price-label">CENA KOCIAKA (OPCJA „NA KOLANKA”)</span>
+                                <div class="animal-profile__price-row">
+                                    <span class="animal-profile__price-val">{{ $animal->formattedPrice() }}</span>
+                                    <span class="animal-profile__price-tagline">— opcja „na kolanka” z rodowodem i wyprawką</span>
+                                </div>
+                                <p class="animal-profile__price-subtext">
+                                    W cenie: wielopokoleniowy rodowód SHiOZ, książeczka zdrowia (komplet szczepień i odrobaczeń), umowa kupna oraz wyprawka na start.
+                                </p>
+                            </div>
+                        </div>
+                    @endif
 
                     {{-- Description --}}
                     <div class="animal-profile__description">
@@ -350,17 +347,6 @@
                             </div>
                         @endif
                     </div>
-
-                    {{-- Luxury Price Box (Only for available/reservable kittens with price) --}}
-                    @if($animal->shouldShowPrice())
-                        <div class="animal-profile__price-box">
-                            <span class="animal-profile__price-label">CENA KOCIAKA (OPCJA „NA KOLANKA”)</span>
-                            <div class="animal-profile__price-val">{{ $animal->formattedPrice() }}</div>
-                            <p class="animal-profile__price-subtext">
-                                W cenie: wielopokoleniowy rodowód SHiOZ, książeczka zdrowia (komplet szczepień i odrobaczeń), umowa kupna oraz wyprawka na start.
-                            </p>
-                        </div>
-                    @endif
 
                     @php
                         $priceText = $animal->formattedPrice() ? ' (' . $animal->formattedPrice() . ')' : '';

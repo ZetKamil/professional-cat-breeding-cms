@@ -36,9 +36,9 @@
                         class="pedigree-card"
                         aria-label="Profil matki: {{ $mother->name }}"
                     >
-                        <div class="pedigree-card__icon" aria-hidden="true">
+                        <div class="pedigree-card__portrait" aria-hidden="true">
                             @if($mother->media)
-                                <img src="{{ $mother->media->url() }}" alt="{{ $mother->name }}" style="width: 100%; height: 100%; object-fit: cover; object-position: center 20%; border-radius: 9999px;">
+                                <img src="{{ $mother->media->url() }}" alt="{{ $mother->name }}" loading="lazy">
                             @else
                                 <i data-lucide="heart" aria-hidden="true"></i>
                             @endif
@@ -51,7 +51,7 @@
                     </a>
                 @else
                     <div class="pedigree-card pedigree-card--placeholder" aria-hidden="true">
-                        <div class="pedigree-card__icon" aria-hidden="true">
+                        <div class="pedigree-card__portrait pedigree-card__portrait--placeholder" aria-hidden="true">
                             <i data-lucide="award" aria-hidden="true"></i>
                         </div>
                         <div class="pedigree-card__info">
@@ -68,9 +68,9 @@
                         class="pedigree-card"
                         aria-label="Profil ojca: {{ $father->name }}"
                     >
-                        <div class="pedigree-card__icon" aria-hidden="true">
+                        <div class="pedigree-card__portrait" aria-hidden="true">
                             @if($father->media)
-                                <img src="{{ $father->media->url() }}" alt="{{ $father->name }}" style="width: 100%; height: 100%; object-fit: cover; object-position: center 20%; border-radius: 9999px;">
+                                <img src="{{ $father->media->url() }}" alt="{{ $father->name }}" loading="lazy">
                             @else
                                 <i data-lucide="shield" aria-hidden="true"></i>
                             @endif
@@ -83,7 +83,7 @@
                     </a>
                 @else
                     <div class="pedigree-card pedigree-card--placeholder" aria-hidden="true">
-                        <div class="pedigree-card__icon" aria-hidden="true">
+                        <div class="pedigree-card__portrait pedigree-card__portrait--placeholder" aria-hidden="true">
                             <i data-lucide="award" aria-hidden="true"></i>
                         </div>
                         <div class="pedigree-card__info">
