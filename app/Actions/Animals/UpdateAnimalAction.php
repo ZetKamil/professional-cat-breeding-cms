@@ -19,7 +19,10 @@ class UpdateAnimalAction
     public function handle(Animal $animal, array $data): Animal
     {
         return DB::transaction(function () use ($animal, $data) {
-            $animal->update([
+            /** @var Animal $locked */
+            $locked = Animal::whereKey($animal->getKey())->lockForUpdate()->firstOrFail();
+
+            $locked->update([
                 'name' => $data['name'],
                 'slug' => $data['slug'],
                 'breed' => $data['breed'],
@@ -36,11 +39,11 @@ class UpdateAnimalAction
                 'is_featured' => $data['is_featured'],
                 'is_published' => $data['is_published'],
                 'published_at' => $data['published_at'] ?? null,
-                'sort_order' => (function () use ($animal, $data) {
+                'sort_order' => (function () use ($locked, $data) {
                     $newStatus = $data['status'] instanceof \App\Enums\AnimalStatus ? $data['status'] : \App\Enums\AnimalStatus::from($data['status']);
                     $sort = (isset($data['sort_order']) && (int) $data['sort_order'] > 0)
                         ? (int) $data['sort_order']
-                        : ($animal->sort_order ?: Animal::nextSortOrderFor($data['status'], $data['breed'] ?? $animal->breed));
+                        : ($locked->sort_order ?: Animal::nextSortOrderFor($data['status'], $data['breed'] ?? $locked->breed));
 
                     if ($newStatus === \App\Enums\AnimalStatus::Sold && $sort < 20) {
                         return Animal::nextSortOrderFor(\App\Enums\AnimalStatus::Sold);
@@ -55,7 +58,7 @@ class UpdateAnimalAction
 
             if (isset($data['image']) && $data['image'] instanceof UploadedFile) {
                 $this->mediaService->replace(
-                    $animal,
+                    $locked,
                     $data['image'],
                     'animals'
                 );
@@ -64,12 +67,12 @@ class UpdateAnimalAction
             if (! empty($data['gallery']) && is_array($data['gallery'])) {
                 foreach ($data['gallery'] as $galleryFile) {
                     if ($galleryFile instanceof UploadedFile) {
-                        $this->mediaService->upload($animal, $galleryFile, 'animals');
+                        $this->mediaService->upload($locked, $galleryFile, 'animals');
                     }
                 }
             }
 
-            return $animal;
+            return $locked;
         });
     }
 }

@@ -255,8 +255,8 @@
                                          data-breed="{{ $breedCategory }}"
                                          data-status="available"
                                          data-ready="{{ $isStrictlyReadyToLeave ? 'now' : 'future' }}"
-                                         data-cat-name="{{ addslashes($animal->name) }}"
-                                         data-cat-breed="{{ addslashes($animal->breed) }}">
+                                         data-cat-name="{{ $animal->name }}"
+                                         data-cat-breed="{{ $animal->breed }}">
                                         <div class="quiz-cat-item__img">
                                             @if($animal->media)
                                                 <img src="{{ $animal->media->url() }}" alt="{{ $animal->name }}" loading="lazy">

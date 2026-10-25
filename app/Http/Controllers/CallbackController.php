@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Events\ContactMessageSent;
 use App\Http\Requests\QuickCallbackRequest;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class CallbackController extends Controller
@@ -40,6 +41,16 @@ class CallbackController extends Controller
             . "Źródło ruchu: {$source}\n"
             . "Data zgłoszenia: {$submissionTime}";
 
+        // Concurrency & Race Condition Protection:
+        // Prevent duplicate callback notifications within 10 seconds for the same phone & animal inquiry (e.g. rapid double-clicks).
+        $dedupKey = 'quick_callback_lock:' . md5($rawPhone . '|' . ($catName ?? 'general'));
+        if (! Cache::add($dedupKey, true, 10)) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Dziękujemy! Twoje zgłoszenie zostało już przyjęte. Skontaktujemy się telefonicznie lub przez WhatsApp tak szybko, jak to możliwe.',
+            ]);
+        }
+
         try {
             // Dispatch via existing application contact notification event
             ContactMessageSent::dispatch([
@@ -55,6 +66,9 @@ class CallbackController extends Controller
                 'message' => 'Dziękujemy! Otrzymaliśmy Twój numer. Skontaktujemy się telefonicznie lub przez WhatsApp tak szybko, jak to możliwe.',
             ]);
         } catch (\Throwable $e) {
+            // Release deduplication lock on error so user can immediately retry
+            Cache::forget($dedupKey);
+
             // Mask phone for GDPR/privacy compliance in log files (e.g. +48 514 *** *04)
             $maskedPhone = preg_replace('/(\+?\d{2,3}\s*\d{3})\d{3}(\d{2})/', '$1 *** *$2', $phone) ?: '***';
 

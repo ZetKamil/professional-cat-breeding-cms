@@ -350,7 +350,7 @@
                            target="_blank"
                            rel="noopener noreferrer"
                            class="animal-profile__btn--messenger"
-                           onclick="if(typeof fbq === 'function'){ fbq('track', 'Contact', { content_name: '{{ addslashes($animal->name) }}', method: 'Messenger' }); }">
+                           onclick="if(typeof fbq === 'function'){ fbq('track', 'Contact', { content_name: @js($animal->name), method: 'Messenger' }); }">
                             💬 Zapytaj o kociaka lub umów wideo-wizytę (Messenger)
                         </a>
 
@@ -358,7 +358,7 @@
                            target="_blank"
                            rel="noopener noreferrer"
                            class="animal-profile__btn--whatsapp"
-                           onclick="if(typeof fbq === 'function'){ fbq('track', 'Contact', { content_name: '{{ addslashes($animal->name) }}', method: 'WhatsApp' }); }">
+                           onclick="if(typeof fbq === 'function'){ fbq('track', 'Contact', { content_name: @js($animal->name), method: 'WhatsApp' }); }">
                             WhatsApp (+48 514 153 204)
                         </a>
 
@@ -387,7 +387,7 @@
                         <button type="button" 
                             class="btn btn-secondary" 
                             style="font-size: 0.82rem; padding: 8px 14px; white-space: nowrap;"
-                            onclick="window.openReservationModal('{{ addslashes($animal->name) }}', '{{ addslashes($animal->breed) }}', '{{ addslashes($animal->pickupBadgeLabel()) }}')">
+                            onclick="window.openReservationModal('{{ htmlspecialchars(addslashes($animal->name), ENT_QUOTES) }}', '{{ htmlspecialchars(addslashes($animal->breed), ENT_QUOTES) }}', '{{ htmlspecialchars(addslashes($animal->pickupBadgeLabel()), ENT_QUOTES) }}')">
                             Połącz się teraz →
                         </button>
                     </div>
@@ -465,7 +465,7 @@
                         type="button"
                         variant="primary"
                         icon="arrow-right"
-                        onclick="window.openReservationModal('{{ addslashes($animal->name) }}', '{{ addslashes($animal->breed) }}', '{{ addslashes($animal->pickupBadgeLabel()) }}')">
+                        onclick="window.openReservationModal('{{ htmlspecialchars(addslashes($animal->name), ENT_QUOTES) }}', '{{ htmlspecialchars(addslashes($animal->breed), ENT_QUOTES) }}', '{{ htmlspecialchars(addslashes($animal->pickupBadgeLabel()), ENT_QUOTES) }}')">
                         📹 Umów wideo-wizytę / Zarezerwuj
                     </x-frontend.button>
                     <x-frontend.button
@@ -518,7 +518,7 @@
         ];
     @endphp
     <script type="application/ld+json">
-    {!! json_encode($animalSchema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}
+    {!! json_encode($animalSchema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_PRETTY_PRINT) !!}
     </script>
     @endpush
 

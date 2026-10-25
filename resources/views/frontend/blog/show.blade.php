@@ -228,7 +228,7 @@
                                target="_blank"
                                rel="noopener noreferrer"
                                class="article-luxury-cta-btn article-luxury-cta-btn--primary"
-                               onclick="try{if(typeof fbq==='function'){fbq('track','Contact',{method:'Messenger',content_name:'{{ addslashes($post->title) }}'});}}catch(e){}">
+                               onclick="try{if(typeof fbq==='function'){fbq('track','Contact',{method:'Messenger',content_name: @js($post->title) });}}catch(e){}">
                                 💬 Napisz na Messengerze (Zapytaj o kocięta)
                             </a>
 
@@ -236,7 +236,7 @@
                                target="_blank"
                                rel="noopener noreferrer"
                                class="article-luxury-cta-btn article-luxury-cta-btn--secondary"
-                               onclick="try{if(typeof fbq==='function'){fbq('track','Contact',{method:'WhatsApp',content_name:'{{ addslashes($post->title) }}'});}}catch(e){}">
+                               onclick="try{if(typeof fbq==='function'){fbq('track','Contact',{method:'WhatsApp',content_name: @js($post->title) });}}catch(e){}">
                                 WhatsApp (+48 514 153 204)
                             </a>
                         </div>
@@ -299,35 +299,38 @@
     {{-- ============================================================
          6. CTA SECTION
          ============================================================ --}}
-    <x-frontend.conversion-cta source-context="Artykuł bloga: {{ addslashes($post->title) }}" />
+    <x-frontend.conversion-cta source-context="Artykuł bloga: {{ $post->title }}" />
 
     @push('schema')
+    @php
+        $blogPostingSchema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'BlogPosting',
+            'mainEntityOfPage' => [
+                '@type' => 'WebPage',
+                '@id' => route('frontend.blog.show', $post),
+            ],
+            'headline' => $post->title,
+            'description' => \Illuminate\Support\Str::limit($post->excerpt ?: strip_tags($post->body ?? ''), 160),
+            'image' => $post->coverImageUrl(),
+            'author' => [
+                '@type' => 'Organization',
+                'name' => 'Hodowla Kotów z Mazowieckiej Szwajcarii',
+            ],
+            'publisher' => [
+                '@type' => 'Organization',
+                'name' => 'Hodowla Kotów z Mazowieckiej Szwajcarii',
+                'logo' => [
+                    '@type' => 'ImageObject',
+                    'url' => asset('logo.png'),
+                ],
+            ],
+            'datePublished' => $post->published_at ? $post->published_at->toIso8601String() : $post->created_at->toIso8601String(),
+            'dateModified' => $post->updated_at->toIso8601String(),
+        ];
+    @endphp
     <script type="application/ld+json">
-    {
-      "@@context": "https://schema.org",
-      "@@type": "BlogPosting",
-      "mainEntityOfPage": {
-        "@@type": "WebPage",
-        "@@id": "{{ route('frontend.blog.show', $post) }}"
-      },
-      "headline": "{{ $post->title }}",
-      "description": "{{ Str::limit($post->excerpt ?: strip_tags($post->body ?? ''), 160) }}",
-      "image": "{{ $post->coverImageUrl() }}",
-      "author": {
-        "@@type": "Organization",
-        "name": "Hodowla Kotów z Mazowieckiej Szwajcarii"
-      },
-      "publisher": {
-        "@@type": "Organization",
-        "name": "Hodowla Kotów z Mazowieckiej Szwajcarii",
-        "logo": {
-          "@@type": "ImageObject",
-          "url": "{{ asset('logo.png') }}"
-        }
-      },
-      "datePublished": "{{ $post->published_at ? $post->published_at->toIso8601String() : $post->created_at->toIso8601String() }}",
-      "dateModified": "{{ $post->updated_at->toIso8601String() }}"
-    }
+    {!! json_encode($blogPostingSchema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_PRETTY_PRINT) !!}
     </script>
     @endpush
 </x-frontend.shell>

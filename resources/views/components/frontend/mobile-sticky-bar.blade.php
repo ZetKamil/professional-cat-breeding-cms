@@ -16,7 +16,7 @@
         <button 
             type="button" 
             class="mobile-sticky-bar__btn mobile-sticky-bar__btn--video"
-            onclick="window.openReservationModal('{{ $currentAnimal ? addslashes($currentAnimal->name) : '' }}', '{{ $currentAnimal ? addslashes($currentAnimal->breed) : '' }}', '{{ $currentAnimal ? addslashes($currentAnimal->pickupBadgeLabel()) : '' }}')"
+            onclick="window.openReservationModal(@js($currentAnimal?->name ?? ''), @js($currentAnimal?->breed ?? ''), @js($currentAnimal?->pickupBadgeLabel() ?? ''))"
         >
             <span class="mobile-sticky-bar__icon" aria-hidden="true">📹</span>
             <span class="mobile-sticky-bar__label">

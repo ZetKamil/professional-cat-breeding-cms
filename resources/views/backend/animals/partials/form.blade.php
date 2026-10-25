@@ -597,7 +597,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (typeof window.openImageCropper === 'function') {
                     window.openImageCropper({
                         imageSrc: existingUrl,
-                        title: 'Kadrowanie obecnego zdjęcia: {{ addslashes($animal->name) }}',
+                        title: 'Kadrowanie obecnego zdjęcia: ' + @js($animal->name),
                         aspectRatio: 1,
                         lockRatio: true,
                         onCrop: applyCroppedResult

@@ -33,14 +33,14 @@
                        target="_blank"
                        rel="noopener noreferrer"
                        class="cta-block__btn--messenger"
-                       onclick="if(typeof fbq === 'function'){ fbq('track', 'Contact', { content_name: '{{ addslashes($sourceContext) }}', method: 'Messenger' }); } if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'messenger', origin: 'pre_footer_cta', context: '{{ addslashes($sourceContext) }}' }); }">
+                       onclick="if(typeof fbq === 'function'){ fbq('track', 'Contact', { content_name: @js($sourceContext), method: 'Messenger' }); } if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'messenger', origin: 'pre_footer_cta', context: @js($sourceContext) }); }">
                         💬 Napisz lub umów wideo-wizytę (Messenger)
                     </a>
                     <a href="https://wa.me/48514153204?text={{ urlencode('Dzień dobry! Piszę ze strony hodowli Mazowiecka Szwajcaria. Chciałbym zapytać o kocięta i wideo-wizytę na żywo.') }}"
                        target="_blank"
                        rel="noopener noreferrer"
                        class="cta-block__btn--whatsapp"
-                       onclick="if(typeof fbq === 'function'){ fbq('track', 'Contact', { content_name: '{{ addslashes($sourceContext) }}', method: 'WhatsApp' }); } if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'whatsapp', origin: 'pre_footer_cta', context: '{{ addslashes($sourceContext) }}' }); } var src = (typeof window.getTrafficSourceLabel === 'function') ? ' [Źródło: ' + window.getTrafficSourceLabel() + ']' : ''; this.href = 'https://wa.me/48514153204?text=' + encodeURIComponent('Dzień dobry! Piszę ze strony hodowli Mazowiecka Szwajcaria. Chciałbym zapytać o kocięta i wideo-wizytę na żywo.' + src);">
+                       onclick="if(typeof fbq === 'function'){ fbq('track', 'Contact', { content_name: @js($sourceContext), method: 'WhatsApp' }); } if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'whatsapp', origin: 'pre_footer_cta', context: @js($sourceContext) }); } var src = (typeof window.getTrafficSourceLabel === 'function') ? ' [Źródło: ' + window.getTrafficSourceLabel() + ']' : ''; this.href = 'https://wa.me/48514153204?text=' + encodeURIComponent('Dzień dobry! Piszę ze strony hodowli Mazowiecka Szwajcaria. Chciałbym zapytać o kocięta i wideo-wizytę na żywo.' + src);">
                         Kontakt przez WhatsApp
                     </a>
                 </div>

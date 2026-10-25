@@ -790,7 +790,7 @@ class Animal extends Model
                 ->where('sort_order', '<', 30)
                 ->max('sort_order');
 
-            return $max !== null ? (int) $max + 1 : 20;
+            return $max !== null ? min((int) $max + 1, 29) : 20;
         }
 
         // 2. Dorosłe koty hodowlane (Breeding): pule rasowe 31–39, 41–49, 51–59
@@ -812,7 +812,7 @@ class Animal extends Model
                 ->whereBetween('sort_order', [$rangeStart, $rangeEnd])
                 ->max('sort_order');
 
-            return $max !== null ? (int) $max + 1 : $rangeStart;
+            return $max !== null ? min((int) $max + 1, $rangeEnd) : $rangeStart;
         }
 
         // 3. Kocięta (Available / Reserved): pula 1 - 19
@@ -820,6 +820,6 @@ class Animal extends Model
             ->whereBetween('sort_order', [1, 19])
             ->max('sort_order');
 
-        return $max !== null ? (int) $max + 1 : 1;
+        return $max !== null ? min((int) $max + 1, 19) : 1;
     }
 }

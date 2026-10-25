@@ -17,6 +17,16 @@ class QuickCallbackRequest extends FormRequest
     }
 
     /**
+     * Prepare inputs for validation (cast numbers to string, trim).
+     */
+    protected function prepareForValidation(): void
+    {
+        if ($this->has('phone') && ! is_string($this->phone)) {
+            $this->merge(['phone' => (string) $this->phone]);
+        }
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
