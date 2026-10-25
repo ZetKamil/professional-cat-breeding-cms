@@ -351,15 +351,41 @@
                         @endif
                     </div>
 
-                    {{-- Actions --}}
+                    {{-- Luxury Price Box (Only for available/reservable kittens with price) --}}
+                    @if($animal->shouldShowPrice())
+                        <div class="animal-profile__price-box">
+                            <span class="animal-profile__price-label">CENA KOCIAKA (OPCJA „NA KOLANKA”)</span>
+                            <div class="animal-profile__price-val">{{ $animal->formattedPrice() }}</div>
+                            <p class="animal-profile__price-subtext">
+                                W cenie: wielopokoleniowy rodowód SHiOZ, książeczka zdrowia (komplet szczepień i odrobaczeń), umowa kupna oraz wyprawka na start.
+                            </p>
+                        </div>
+                    @endif
+
+                    @php
+                        $priceText = $animal->formattedPrice() ? ' (' . $animal->formattedPrice() . ')' : '';
+                        $inquiryMsg = "Dzień dobry! Piszę w sprawie kociaka: {$animal->name}{$priceText}. Czy jest aktualnie wolny?";
+                        $messengerInquiryUrl = 'https://m.me/61580668026948?text=' . urlencode($inquiryMsg);
+                        $whatsappInquiryUrl = 'https://wa.me/48514153204?text=' . urlencode($inquiryMsg);
+                    @endphp
+
+                    {{-- Actions: Messenger-First, WhatsApp Secondary --}}
                     <div class="animal-profile__actions">
-                        <x-frontend.button
-                            type="button"
-                            variant="primary"
-                            icon="arrow-right"
-                            onclick="window.openReservationModal('{{ addslashes($animal->name) }}', '{{ addslashes($animal->breed) }}', '{{ addslashes($animal->pickupBadgeLabel()) }}')">
-                            📹 Wideo-wizyta & Rezerwacja
-                        </x-frontend.button>
+                        <a href="{{ $messengerInquiryUrl }}"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           class="animal-profile__btn--messenger"
+                           onclick="if(typeof fbq === 'function'){ fbq('track', 'Contact', { content_name: '{{ addslashes($animal->name) }}', method: 'Messenger' }); }">
+                            💬 Zapytaj o kociaka lub umów wideo-wizytę (Messenger)
+                        </a>
+
+                        <a href="{{ $whatsappInquiryUrl }}"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           class="animal-profile__btn--whatsapp"
+                           onclick="if(typeof fbq === 'function'){ fbq('track', 'Contact', { content_name: '{{ addslashes($animal->name) }}', method: 'WhatsApp' }); }">
+                            WhatsApp (+48 514 153 204)
+                        </a>
 
                         @if(isset($children) && $children->isNotEmpty())
                             <x-frontend.button href="#potomstwo" variant="secondary" icon="users">
@@ -375,12 +401,12 @@
                     </div>
 
                     {{-- 5-min Live Video-Visit Callout Box --}}
-                    <div class="animal-profile__video-callout" style="margin-top: 18px; padding: 14px 18px; background: rgba(200, 157, 92, 0.08); border: 1px solid rgba(200, 157, 92, 0.28); border-radius: 12px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
+                    <div class="animal-profile__video-callout">
                         <div style="display: flex; align-items: center; gap: 12px;">
                             <span style="font-size: 1.5rem; line-height: 1;">📹</span>
                             <div>
-                                <strong style="display: block; font-size: 0.95rem; color: var(--color-ink, #ffffff);">Umów 5-minutową Wideo-wizytę na żywo</strong>
-                                <span style="font-size: 0.82rem; color: var(--color-ink-muted-80, #a1a1a6);">Zobacz malucha przez WhatsApp lub Messenger prosto z domowego otoczenia</span>
+                                <strong style="display: block; font-size: 0.95rem; color: var(--color-ink, #ffffff);">Zobacz kota na żywo (Wideo-wizyta)</strong>
+                                <span style="font-size: 0.82rem; color: var(--color-ink-muted-80, #a1a1a6);">Połącz się bezpośrednio przez Messenger lub WhatsApp i poznaj kociaka w domowym otoczeniu</span>
                             </div>
                         </div>
                         <button type="button" 
@@ -484,6 +510,25 @@
 
     @push('schema')
     @php
+        $mainEntity = array_filter([
+            '@type' => $animal->shouldShowPrice() ? 'Product' : 'Animal',
+            'name' => $animal->name,
+            'breed' => $animal->breed ?: null,
+            'description' => $animal->short_description ?: ($animal->description ?: null),
+            'image' => $animal->media ? $animal->media->url() : null,
+            'url' => route('frontend.animals.show', $animal),
+        ]);
+
+        if ($animal->shouldShowPrice()) {
+            $mainEntity['offers'] = [
+                '@type' => 'Offer',
+                'price' => number_format((float) $animal->price, 2, '.', ''),
+                'priceCurrency' => 'PLN',
+                'availability' => $animal->status === \App\Enums\AnimalStatus::Available ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder',
+                'url' => route('frontend.animals.show', $animal),
+            ];
+        }
+
         $animalSchema = [
             '@context' => 'https://schema.org',
             '@type' => 'ItemPage',
@@ -494,14 +539,7 @@
                 'name' => config('app.name', 'Domowa Hodowla Kotów z Mazowieckiej Szwajcarii'),
                 'url' => url('/'),
             ],
-            'mainEntity' => array_filter([
-                '@type' => 'Animal',
-                'name' => $animal->name,
-                'breed' => $animal->breed ?: null,
-                'description' => $animal->short_description ?: ($animal->description ?: null),
-                'image' => $animal->media ? $animal->media->url() : null,
-                'url' => route('frontend.animals.show', $animal),
-            ]),
+            'mainEntity' => $mainEntity,
         ];
     @endphp
     <script type="application/ld+json">

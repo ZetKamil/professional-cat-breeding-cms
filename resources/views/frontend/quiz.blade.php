@@ -209,7 +209,6 @@
                 </div>
 
                 {{-- RESULT SCREEN --}}
-                {{-- PART 2: New visual hierarchy — CTA is immediately after the title, above the fold --}}
                 <div class="quiz-result" id="quizResult" style="display:none;">
                     <div class="quiz-result__badge">
                         <span>✨ Twoje Behawioralne Dopasowanie:</span>
@@ -217,46 +216,12 @@
 
                     <h2 class="quiz-result__title" id="quizResultBreedTitle">Kot Bengalski</h2>
 
-                    {{-- Short punchy 2-3 sentence description (CSS line-clamp prevents scroll fatigue) --}}
+                    {{-- Short punchy 2-3 sentence description --}}
                     <p class="quiz-result__desc" id="quizResultBreedDesc"></p>
-
-                    {{-- PART 2 + PART 3: IMMEDIATE CTA BOX — directly under title, BEFORE cat cards --}}
-                    <div class="quiz-result__immediate-cta">
-                        <div class="quiz-cta-group" id="quizTopCtaGroup">
-                            {{-- Primary: Messenger --}}
-                            <a id="quizCtaMessengerTop"
-                               href="https://m.me/61580668026948"
-                               target="_blank"
-                               rel="noopener noreferrer"
-                               class="quiz-cta-btn--messenger"
-                               onclick="window.fireQuizContactEvent('messenger', 'top_cta')">
-                                <svg class="quiz-cta-btn__icon" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                    <path d="M12 2C6.48 2 2 6.03 2 11c0 2.87 1.5 5.43 3.84 7.07L5 22l4.13-1.81C10.05 20.35 11 20.48 12 20.48c5.52 0 10-4.03 10-9s-4.48-9.48-10-9.48z"/>
-                                    <path d="M7.5 13.5l3-3.2 2 2 3-3.2-3 3.2-2-2-3 3.2z" fill="rgba(0,132,255,0.3)"/>
-                                </svg>
-                                💬 Napisz na Messengerze (Zapytaj o cenę i wolne mioty)
-                            </a>
-
-                            {{-- Secondary: WhatsApp --}}
-                            <a id="quizCtaWhatsappTop"
-                               href="https://wa.me/48514153204"
-                               target="_blank"
-                               rel="noopener noreferrer"
-                               class="quiz-cta-btn--whatsapp"
-                               onclick="window.fireQuizContactEvent('whatsapp', 'top_cta')">
-                                <svg class="quiz-cta-btn__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
-                                </svg>
-                                🟢 Zapytaj o cenę i filmik z kociakami (WhatsApp)
-                            </a>
-                        </div>
-                        {{-- Micro-reassurance badge --}}
-                        <p class="quiz-cta-reassurance">⚡ Odpowiadamy zazwyczaj w kilka minut • Pytanie o cenę do niczego nie zobowiązuje.</p>
-                    </div>
 
                     {{-- Matched kittens from database --}}
                     <div class="quiz-result__cats-box">
-                        <h3 class="quiz-result__cats-heading" id="quizMatchedCatsHeading">Aktualnie dostępne maluchy tej rasy w hodowli:</h3>
+                        <h3 class="quiz-result__cats-heading" id="quizMatchedCatsHeading">Dostępne kocięta tej rasy w naszej hodowli:</h3>
 
                         {{-- Notice if user chose 'ready_now' but matched breed is in early reservation (e.g. British kittens < 12 weeks) --}}
                         <div id="quizFutureNoticeForNow" style="display:none; background: rgba(200, 157, 92, 0.15); border: 1px solid rgba(200, 157, 92, 0.4); border-radius: 12px; padding: 16px 20px; margin-bottom: 20px; text-align: left; font-size: 0.92rem; line-height: 1.55; color: #f5f0e8;">
@@ -269,7 +234,7 @@
                             </div>
                         </div>
 
-                        {{-- PART 4: Cat cards with dual Messenger + WhatsApp buttons --}}
+                        {{-- Matched Kittens: Single Luxury Profile Button + Price --}}
                         <div class="quiz-cats-grid" id="quizMatchingCatsGrid">
                             @foreach($animals as $animal)
                                 @if($animal->status === \App\Enums\AnimalStatus::Available)
@@ -285,10 +250,6 @@
                                         $isStrictlyReadyToLeave = $hasDob && $ageInWeeks >= 12;
                                         $badgeLabel = $animal->pickupBadgeLabel();
                                         $timelineLabel = $animal->pickupTimelineLabel();
-
-                                        // PART 4: Pre-build dynamic contact URLs per kitten
-                                        $catMsgText = 'Dzień dobry! Chciał(a)bym zapytać o cenę i dostępność kociaka: ' . $animal->name . ' (' . $animal->breed . ')';
-                                        $catMsgWa   = 'Dzień dobry! Chciał(a)bym zapytać o cenę kociaka: ' . $animal->name . ' (' . $animal->breed . '). Czy mogę prosić o krótki filmik?';
                                     @endphp
                                     <div class="quiz-cat-item"
                                          data-breed="{{ $breedCategory }}"
@@ -304,7 +265,12 @@
                                             @endif
                                         </div>
                                         <div class="quiz-cat-item__info">
-                                            <h4>{{ $animal->name }}</h4>
+                                            <div class="quiz-cat-item__name-row">
+                                                <h4>{{ $animal->name }}</h4>
+                                                @if($animal->shouldShowPrice())
+                                                    <span class="quiz-cat-item__price">{{ $animal->formattedPrice() }}</span>
+                                                @endif
+                                            </div>
                                             <p>{{ $animal->breed }} • {{ $animal->gender->label() }}</p>
                                             <span class="quiz-cat-item__status">
                                                 {{ $isStrictlyReadyToLeave ? '🟢 ' . $badgeLabel : '⏳ ' . $badgeLabel }}
@@ -313,21 +279,10 @@
                                                 @endif
                                             </span>
                                         </div>
-                                        {{-- PART 4: Dual Messenger + WhatsApp buttons on each kitten card --}}
-                                        <div class="quiz-cat-item__btns">
-                                            <a href="https://m.me/61580668026948?text={{ urlencode($catMsgText) }}"
-                                               target="_blank"
-                                               rel="noopener noreferrer"
-                                               class="quiz-cat-item__btn--messenger"
-                                               onclick="window.fireQuizCatEvent('messenger', '{{ addslashes($animal->name) }}', '{{ addslashes($animal->breed) }}')">
-                                                💬 Zapytaj o cenę (Messenger)
-                                            </a>
-                                            <a href="https://wa.me/48514153204?text={{ urlencode($catMsgWa) }}"
-                                               target="_blank"
-                                               rel="noopener noreferrer"
-                                               class="quiz-cat-item__btn--whatsapp"
-                                               onclick="window.fireQuizCatEvent('whatsapp', '{{ addslashes($animal->name) }}', '{{ addslashes($animal->breed) }}')">
-                                                🟢 Filmik (WhatsApp)
+                                        <div class="quiz-cat-item__actions">
+                                            <a href="{{ route('frontend.animals.show', $animal) }}"
+                                               class="quiz-cat-item__btn-profile">
+                                                🎬 Zobacz profil, zdjęcia i filmiki →
                                             </a>
                                         </div>
                                     </div>
@@ -346,7 +301,7 @@
                                href="https://m.me/61580668026948"
                                target="_blank"
                                rel="noopener noreferrer"
-                               class="quiz-cta-btn--messenger"
+                               class="quiz-cta-btn--gold"
                                style="display:inline-flex; max-width: 360px;"
                                onclick="window.fireQuizContactEvent('messenger', 'no_cats_notice')">
                                 💬 Zapytaj na Messengerze o planowany miot
@@ -375,7 +330,7 @@
                             <a href="https://m.me/61580668026948"
                                target="_blank"
                                rel="noopener noreferrer"
-                               class="quiz-cta-btn--messenger"
+                               class="quiz-cta-btn--gold"
                                style="display:inline-flex; max-width: 320px;"
                                onclick="window.fireQuizContactEvent('messenger', 'empty_catalogue')">
                                 💬 Napisz do hodowcy (Messenger)
@@ -383,53 +338,67 @@
                         </div>
                     </div>
 
-                    {{-- Personalized Behavioral Note (moved below cats to keep CTAs above fold) --}}
+                    {{-- Compact Golden Behavioral Note --}}
                     <div id="quizBehavioralNoteBox" style="background: rgba(200, 157, 92, 0.14); border: 1px solid rgba(200, 157, 92, 0.35); border-left: 4px solid var(--color-gold, #c89d5c); padding: 16px 20px; border-radius: 10px; margin: 0 0 22px; text-align: left; font-size: 0.92rem; line-height: 1.6;">
                         <strong id="quizBehavioralNoteTitle" style="color: var(--color-gold, #c89d5c); display: block; font-size: 0.95rem; margin-bottom: 5px;">💡 Dlaczego ten wybór pasuje do Twojego rytmu dnia:</strong>
                         <p id="quizBehavioralNoteText" style="margin: 0; color: #f5f0e8; font-weight: 400;"></p>
                     </div>
 
-                    {{-- PART 2 (Bottom): Repeat CTA + Callback as secondary at the bottom --}}
+                    {{-- Single Primary Contact Block (Messenger First, WhatsApp Secondary, Quiet Luxury) --}}
                     <div class="quiz-result__actions">
                         <div class="quiz-cta-group">
+                            {{-- Primary Button: Solid Luxury Gold #C5A059 --}}
                             <a id="quizCtaMessengerBottom"
                                href="https://m.me/61580668026948"
                                target="_blank"
                                rel="noopener noreferrer"
-                               class="quiz-cta-btn--messenger"
+                               class="quiz-cta-btn--gold"
                                onclick="window.fireQuizContactEvent('messenger', 'bottom_cta')">
-                                💬 Napisz na Messengerze (Zapytaj o cenę i wolne mioty)
+                                <svg class="quiz-cta-btn__icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path d="M12 2C6.48 2 2 6.03 2 11c0 2.87 1.5 5.43 3.84 7.07L5 22l4.13-1.81C10.05 20.35 11 20.48 12 20.48c5.52 0 10-4.03 10-9s-4.48-9.48-10-9.48z"/>
+                                    <path d="M7.5 13.5l3-3.2 2 2 3-3.2-3 3.2-2-2-3 3.2z" fill="rgba(18,18,20,0.4)"/>
+                                </svg>
+                                💬 Napisz na Messengerze (Zapytaj o kociaki lub wideo-wizytę)
                             </a>
+
+                            {{-- Secondary Button: Dark Subtle Outline with WhatsApp icon --}}
                             <a id="quizCtaWhatsappBottom"
                                href="https://wa.me/48514153204"
                                target="_blank"
                                rel="noopener noreferrer"
-                               class="quiz-cta-btn--whatsapp"
+                               class="quiz-cta-btn--outline"
                                onclick="window.fireQuizContactEvent('whatsapp', 'bottom_cta')">
-                                🟢 Zapytaj o cenę i filmik z kociakami (WhatsApp)
+                                <svg class="quiz-cta-btn__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                                </svg>
+                                Napisz na WhatsApp (+48 514 153 204)
                             </a>
+
+                            {{-- Tertiary Callback Button --}}
                             <button type="button"
                                     class="quiz-cta-btn--callback"
                                     onclick="window.openCallbackFromQuiz()">
                                 📞 Poproś o szybkie oddzwonienie
                             </button>
                         </div>
-                        <p class="quiz-cta-reassurance">⚡ Odpowiadamy zazwyczaj w kilka minut • Pytanie o cenę do niczego nie zobowiązuje.</p>
 
-                        {{-- PART 5: Facebook Follower Magnet Card --}}
+                        {{-- Reassurance Micro-copy --}}
+                        <p class="quiz-cta-reassurance">⚡ Odpowiadamy w kilka minut • Wideo-wizytę z kociakami możemy połączyć również bezpośrednio na Messengerze.</p>
+
+                        {{-- Refined Facebook Follow Box (Luxury Dark Gold Border) --}}
                         <div class="quiz-follower-card">
                             <span class="quiz-follower-card__icon">📸</span>
-                            <h3 class="quiz-follower-card__heading">Nie planujesz zakupu od razu? Zobacz, jak nasze kociaki rosną!</h3>
-                            <p class="quiz-follower-card__sub">Wrzucamy codzienne relacje, wideo z maluchami i zapowiedzi nowych miotów. Zaobserwuj nas, żebyśmy nie zgubili kontaktu:</p>
+                            <h3 class="quiz-follower-card__heading">Nie planujesz zakupu od razu? Zobacz codzienne filmiki z kociakami!</h3>
+                            <p class="quiz-follower-card__sub">Wrzucamy codzienne relacje, wideo z maluchami i zapowiedzi nowych miotów. Zaobserwuj naszą hodowlę na Facebooku:</p>
                             <a href="https://www.facebook.com/profile.php?id=61580668026948"
                                target="_blank"
                                rel="noopener noreferrer"
                                class="quiz-follower-card__btn"
                                onclick="window.fireQuizFollowEvent()">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                     <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                                 </svg>
-                                👍 Obserwuj hodowlę na Facebooku
+                                👍 Zaobserwuj naszą Hodowlę na Facebooku
                             </a>
                         </div>
                     </div>

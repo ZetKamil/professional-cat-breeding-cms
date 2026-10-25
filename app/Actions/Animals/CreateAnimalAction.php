@@ -39,6 +39,7 @@ class CreateAnimalAction
                 'sort_order' => (! empty($data['sort_order']) && (int) $data['sort_order'] > 0)
                     ? (int) $data['sort_order']
                     : Animal::nextSortOrderFor($data['status'], $data['breed'] ?? null),
+                'price' => $data['price'] ?? null,
                 'meta_title' => $data['meta_title'] ?? null,
                 'meta_description' => $data['meta_description'] ?? null,
             ]);

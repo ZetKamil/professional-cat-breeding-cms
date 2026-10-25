@@ -590,6 +590,8 @@ Route::middleware(['auth', 'verified', 'active'])
         Route::delete('posts/{id}/force-delete', [PostController::class, 'forceDelete'])
             ->name('posts.forceDelete');
 
+        Route::patch('animals/{animal}/quick-price', [\App\Http\Controllers\Backend\AnimalController::class, 'updateQuickPrice'])
+            ->name('animals.quick-price');
         Route::resource('animals', \App\Http\Controllers\Backend\AnimalController::class);
         Route::patch('animals/{id}/restore', [\App\Http\Controllers\Backend\AnimalController::class, 'restore'])
             ->name('animals.restore');

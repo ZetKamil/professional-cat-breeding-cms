@@ -94,6 +94,29 @@
                         @error('earliest_pickup_date') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="price" class="form-label">
+                            Cena kociaka (zł) <small class="text-muted">(opcja „na kolanka”)</small>
+                        </label>
+                        <div class="input-group">
+                            <input type="number" 
+                                   class="form-control @error('price') is-invalid @enderror" 
+                                   id="price" 
+                                   name="price" 
+                                   value="{{ old('price', $animal->price) }}" 
+                                   placeholder="np. 2700" 
+                                   min="0" 
+                                   step="50">
+                            <span class="input-group-text">zł</span>
+                        </div>
+                        <div class="form-text">
+                            Wyświetla się elegancko na karcie kota i profilu. Widoczna tylko dla dostępnych kociąt (ukryta dla kotów hodowlanych).
+                        </div>
+                        @error('price') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
+                </div>
             </div>
         </div>
 

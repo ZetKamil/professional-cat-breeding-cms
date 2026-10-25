@@ -3,6 +3,44 @@
 > Project: Luxury Cattery Website & CMS
 > Engineering Journal & Architectural Record
 
+## 2026-10-25 — Master UI/UX Unification, Admin Price Dashboard & Premium Funnel Refactor (`feat(pricing)`, `feat(admin)`, `feat(cro)`, `feat(seo)`)
+
+### Context & Problem Statement
+A full-page UX/UI audit of our live site (`Homepage`, `/koty`, `/koty/[slug]`, `/o-hodowli`, and `/dobierz-rase`) revealed that recent Quiz Result screen changes introduced severe visual clutter ("Christmas tree effect" with 12+ bright neon blue and green buttons, duplicated CTA blocks, and pulse animations) that broke our cohesive Black/Gold/Cream Quiet Luxury brand aesthetic. Additionally, the owner needed transparent kitten pricing manageable in 2 seconds directly from the Admin Dashboard, Facebook Messenger needed to become our #1 primary contact channel across the site (pushing WhatsApp into a secondary outline role), and Schema.org Product/Offer data needed to be generated for organic Google SERP snippet enhancement.
+
+### Technical & Architectural Resolutions
+1. **Database Schema & Zero-Overwrite Migration (`Animal::$price`)**:
+   - Created safe migration `2026_10_25_120000_add_price_to_animals_and_set_initial_prices.php` adding an unsigned integer `price` column to `animals`.
+   - Seeded/verified kitten record for Baron (`01m14119dq8fj61zfrt2gtt99c`, `kitten_baron_1.jpg`) idempotently without overwriting production records.
+   - Set initial kitten prices: Baron `2 700 zł`, Cyprian `3 000 zł`, Carlos `3 000 zł`, 3 British kittens `2 500 zł` each, available Siamese kitten `2 100 zł` each. Breeding adults explicitly remain unpriced.
+   - Updated `Animal` model with `price` fillable, integer casting, `formattedPrice()` accessor (`2 700 zł`), mutator stripping whitespace/currency symbols, and business logic `shouldShowPrice()` restricting pricing strictly to available/reservable non-breeding cats.
+2. **Admin Dashboard Quick-Edit UI & Controller**:
+   - Added `updateQuickPrice` endpoint `PATCH /backend/animals/{animal}/quick-price` to `AnimalController`.
+   - Added inline quick-edit price forms with instant save buttons to both the Cats Management table (`backend/animals/index.blade.php`) and the main dashboard overview (`backend/dashboard.blade.php`).
+   - Integrated full price field into `backend/animals/partials/form.blade.php`, `StoreAnimalRequest`, `UpdateAnimalRequest`, and actions `CreateAnimalAction` and `UpdateAnimalAction`.
+3. **Cat Cards & Individual Cat Profile Refactor (`/koty/[slug]`)**:
+   - Added gold pill price tag badge (`.animal-card__price-badge`) to cat cards on Homepage and `/koty`.
+   - Replaced legacy buttons on cat profile with:
+     - Prominent luxury Price Box (`.animal-profile__price-box`): `CENA KOCIAKA (OPCJA „NA KOLANKA”)`, large serif/gold value, and starter-pack guarantee subtext.
+     - Primary Button (Solid Gold `#C5A059`): `💬 Zapytaj o kociaka lub umów wideo-wizytę (Messenger)` with pre-filled message URL (`https://m.me/61580668026948?text=...`).
+     - Secondary Button: `WhatsApp (+48 514 153 204)` in subtle outline style.
+     - Live video-visit callout box copy highlighting Messenger and WhatsApp video visits.
+4. **Quiz Result Screen Refactor (`/dobierz-rase`)**:
+   - Removed duplicated top CTA block (`.quiz-result__immediate-cta`).
+   - In each matched cat card row, eliminated dual neon blue/green buttons and replaced with: photo + name + price pill + status + ONE luxury button: `🎬 Zobacz profil, zdjęcia i filmiki →` linking directly to `/koty/[slug]`.
+   - Single primary contact block at bottom: Solid Gold Messenger `#C5A059`, Dark Subtle Outline WhatsApp, reassurance micro-copy, and retained callback button for lead modal pathway.
+   - Redesigned Facebook follow magnet card (`.quiz-follower-card`) with dark gold border and outline styling.
+5. **Global Pre-Footer Conversion CTA (`conversion-cta.blade.php`)**:
+   - Unified across Homepage, `/koty`, `/o-hodowli`, and `/dobierz-rase`: Primary Gold Messenger button, Secondary Outline WhatsApp button with dynamic attribution, direct phone line, and subtle link to Facebook cattery stories.
+6. **SEO Structured Data & Pixel Tracking**:
+   - Added Schema.org `Product` with `offers` (`price`, `PLN`, `InStock`) on `/koty/[slug]` for priced kittens; preserved pure `Animal` schema without commerce tags on breeding adults.
+   - Preserved `fbq('track', 'Contact')` on all Messenger & WhatsApp CTA buttons.
+7. **Testing & Verification**:
+   - Created `PriceAndFunnelUnificationTest.php` with 8 comprehensive feature tests.
+   - Full test suite: 193 tests passed (1555 assertions), 100% PASS with 0 failures. Production assets compiled cleanly with Vite.
+
+---
+
 ## 2026-10-21 — Mobile Hero Section Hotfix (Above the Fold Optimization) (`fix(hero)`, `feat(ui)`, `test(frontend)`)
 
 ### Context

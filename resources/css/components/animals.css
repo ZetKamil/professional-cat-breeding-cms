@@ -158,6 +158,20 @@
     border-top: 1px solid var(--color-divider-soft);
 }
 
+.animal-card__price-badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #c89d5c;
+    letter-spacing: -0.01em;
+    background: rgba(200, 157, 92, 0.12);
+    border: 1px solid rgba(200, 157, 92, 0.32);
+    border-radius: var(--r-full);
+    padding: 3px 10px;
+    line-height: 1.25;
+}
+
 .animal-card__age {
     font-size: var(--text-nav-size);
     color: var(--color-ink-muted-48);

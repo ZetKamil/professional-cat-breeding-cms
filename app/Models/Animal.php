@@ -61,6 +61,7 @@ class Animal extends Model
         'is_published',
         'published_at',
         'sort_order',
+        'price',
         'meta_title',
         'meta_description',
     ];
@@ -73,10 +74,49 @@ class Animal extends Model
             'type' => AnimalType::class,
             'date_of_birth' => 'date',
             'earliest_pickup_date' => 'date',
+            'price' => 'integer',
             'is_featured' => 'boolean',
             'is_published' => 'boolean',
             'published_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Mutator to sanitize price input (e.g. '2 700 zł' -> 2700).
+     */
+    public function setPriceAttribute($value): void
+    {
+        if ($value === null || $value === '') {
+            $this->attributes['price'] = null;
+
+            return;
+        }
+
+        $clean = preg_replace('/[^\d]/', '', (string) $value);
+        $this->attributes['price'] = $clean !== '' ? (int) $clean : null;
+    }
+
+    /**
+     * Formatted price for luxury frontend and admin display (e.g. '2 700 zł').
+     */
+    public function formattedPrice(): ?string
+    {
+        if ($this->price === null) {
+            return null;
+        }
+
+        return number_format((float) $this->price, 0, ',', ' ').' zł';
+    }
+
+    /**
+     * Determine if price badge should be displayed.
+     * Only displayed for available/reservable kittens, hidden for adult breeding cats/reproduktors.
+     */
+    public function shouldShowPrice(): bool
+    {
+        return $this->price !== null
+            && $this->status !== AnimalStatus::Breeding
+            && in_array($this->status, [AnimalStatus::Available, AnimalStatus::Reserved], true);
     }
 
     // ─── Route Model Binding ────────────────────────────────────────

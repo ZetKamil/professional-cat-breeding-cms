@@ -97,6 +97,67 @@
     box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
 }
 
+.cta-block__btn--messenger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 26px;
+    background: #C5A059;
+    color: #121214 !important;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border-radius: var(--r-md, 8px);
+    text-decoration: none;
+    box-shadow: 0 4px 14px rgba(197, 160, 89, 0.3);
+    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cta-block__btn--messenger:hover {
+    background: #b58f48;
+    color: #000000 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(197, 160, 89, 0.45);
+}
+
+.cta-block__btn--whatsapp {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 24px;
+    background: transparent;
+    color: var(--color-ink, #1d1d1f) !important;
+    border: 1px solid var(--color-hairline, rgba(0, 0, 0, 0.18));
+    font-weight: 500;
+    font-size: 0.92rem;
+    border-radius: var(--r-md, 8px);
+    text-decoration: none;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.cta-block__btn--whatsapp:hover {
+    border-color: #25D366;
+    background: rgba(37, 211, 102, 0.08);
+    color: #166534 !important;
+    transform: translateY(-1px);
+}
+
+.cta-block__fb-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: var(--color-ink-muted-80, #515154);
+    text-decoration: none;
+    margin-top: 6px;
+    transition: color 0.2s ease;
+}
+
+.cta-block__fb-link:hover {
+    color: var(--color-primary, #c8a04a);
+}
+
 .cta-block__note {
     display: inline-flex;
     align-items: center;

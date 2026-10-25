@@ -127,6 +127,7 @@
                         <th><a class="text-decoration-none" href="{{ $sortUrl('breed') }}">Rasa{!! $sortIcon('breed') !!}</a></th>
                         <th><a class="text-decoration-none" href="{{ $sortUrl('gender') }}">Płeć{!! $sortIcon('gender') !!}</a></th>
                         <th><a class="text-decoration-none" href="{{ $sortUrl('status') }}">Status{!! $sortIcon('status') !!}</a></th>
+                        <th>Cena (zł)</th>
                         <th>Wyróżniony / Opublikowany</th>
                         <th><a class="text-decoration-none" href="{{ $sortUrl('sort_order') }}">Kolejność{!! $sortIcon('sort_order') !!}</a></th>
                         <th class="text-end">Akcje</th>
@@ -165,6 +166,29 @@
                                 @endif
                                 @if($animal->pickupWindowFormatted() && ($animal->isEarlyReservation() || $animal->isInPickupWindow()))
                                     <br><small class="text-muted">Okno: {{ $animal->pickupWindowFormatted() }}</small>
+                                @endif
+                            </td>
+
+                            <td>
+                                @if($animal->status !== \App\Enums\AnimalStatus::Breeding)
+                                    <form action="{{ route('backend.animals.quick-price', $animal) }}" method="POST" class="d-flex align-items-center gap-1" style="max-width: 140px;">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="text"
+                                               name="price"
+                                               value="{{ $animal->price }}"
+                                               class="form-control form-control-sm text-end"
+                                               placeholder="—"
+                                               title="Wpisz cenę i kliknij zapisz">
+                                        <button type="submit" class="btn btn-sm btn-outline-success p-1 px-2" title="Zapisz cenę">
+                                            <i class="fas fa-save"></i>
+                                        </button>
+                                    </form>
+                                    @if($animal->price)
+                                        <small class="text-success fw-bold d-block mt-1">{{ $animal->formattedPrice() }}</small>
+                                    @endif
+                                @else
+                                    <span class="badge bg-light text-muted border">Hodowlany</span>
                                 @endif
                             </td>
 

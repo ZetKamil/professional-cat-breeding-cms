@@ -118,6 +118,30 @@ class AnimalController extends Controller
             ->with('success', "Animal '{$animal->name}' updated successfully.");
     }
 
+    public function updateQuickPrice(\Illuminate\Http\Request $request, Animal $animal)
+    {
+        $this->authorize('update', $animal);
+
+        $validated = $request->validate([
+            'price' => ['nullable'],
+        ]);
+
+        $animal->price = $validated['price'] ?? null;
+        $animal->save();
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'price' => $animal->price,
+                'formatted' => $animal->formattedPrice(),
+            ]);
+        }
+
+        $formatted = $animal->formattedPrice() ?: 'usunięta (brak ceny)';
+
+        return back()->with('success', "Cena kota '{$animal->name}' została zaktualizowana: {$formatted}.");
+    }
+
     public function destroy(Animal $animal)
     {
         $this->authorize('delete', $animal);

@@ -5,6 +5,44 @@
 
 ---
 
+## 2026-10-25
+
+### Completed
+✓ Master UI/UX Unification, Admin Price Dashboard & Premium Funnel Refactor (`feat(pricing)`, `feat(admin)`, `feat(cro)`, `feat(seo)`)
+- **Admin Dashboard – Zarządzanie Cenami Kociąt (Szybka Edycja w 2 Sekundy):**
+  - Rozszerzono schemat tabeli `animals` o opcjonalne pole `price` (unsigned integer PLN) za pomocą migracji `2026_10_25_120000_add_price_to_animals_and_set_initial_prices.php`.
+  - Zaktualizowano model `Animal` (`$fillable`, cast `integer`, akcesor `formattedPrice()` zwracający np. `2 700 zł`, mutator oczyszczający spacje i znaki waluty, oraz regułę biznesową `shouldShowPrice()`, która ukrywa cenę dla dorosłych kotów hodowlanych/reproduktorów).
+  - Wprowadzono inline formularz szybkiej edycji ceny w tabeli kotów (`/backend/animals`) oraz na pulpicie głównym (`/backend/dashboard`) powiązany z dedykowanym endpointem `PATCH /backend/animals/{animal}/quick-price`.
+  - Wzbogacono pełny formularz edycji i tworzenia kota (`backend.animals.partials.form`) o pole `Cena kociaka (zł)` z czytelnym opisem.
+  - Wprowadzono i zabezpieczono bazowe ceny kociąt w bazie: Baron (`2 700 zł`), Cyprian (`3 000 zł`), Carlos (`3 000 zł`), 3 dostępne kocięta brytyjskie (`2 500 zł` każde), dostępne kocięta syjamskie (`2 100 zł` każde). Koty hodowlane (np. reproduktor Atos) nie posiadają badge'a cenowego.
+- **Elegancka Prezentacja Cen na Kartach i Profilu Kota (`Quiet Luxury`):**
+  - Na kartach kotów (`animal-card.blade.php`) na stronie głównej oraz w katalogu `/koty` wprowadzono subtelny, arystokratyczny badge ze złotym akcentem (np. `2 700 zł`).
+  - Na stronie profilu kota (`/koty/[slug]`) wprowadzono dedykowany Price Box: etykieta `CENA KOCIAKA (OPCJA „NA KOLANKA”)`, elegancka wartość w złotej typografii szeryfowej, oraz podtytuł gwarancyjny z wyprawką i rodowodem SHiOZ.
+  - Główny przycisk kontaktu (Primary Gold `#C5A059`) przełączono na **Facebook Messenger** z automatycznie predefiniowaną wiadomością zapytania o kociaka i cenę (`https://m.me/61580668026948?text=...`).
+  - Przycisk WhatsApp przekształcono w estetyczny, subtelny wariant konturowy jako opcję wtórną.
+  - Zaktualizowano box wideo-wizyty na profilu kota, wskazując łatwość połączenia przez Messenger lub WhatsApp.
+- **Ujednolicenie i Odchudzenie Ekranu Wyników Quizu (`/dobierz-rase`):**
+  - Wyeliminowano efekt „choinki” wizualnej i zdublowane bloki CTA.
+  - Usunięto górny zdublowany pasek CTA bezpośrednio pod tytułem wyniku.
+  - W siatce dopasowanych kociąt usunięto po 2 jaskrawe, neonowe przyciski na wiersz i zastąpiono je **jednym, arystokratycznym przyciskiem**: `🎬 Zobacz profil, zdjęcia i filmiki →` kierującym bezpośrednio do podstrony kota, wraz z ceną malucha.
+  - Zbudowano pojedynczy, spójny blok kontaktowy: solidny złoty Messenger (`#C5A059`), subtelny konturowy WhatsApp oraz mikro-kopia zaufania o braku zobowiązań i szybkiej odpowiedzi.
+  - Karta zaproszenia na Facebooka zyskała luksusowe ciemno-złote obramowanie zamiast agresywnego niebieskiego gradientu.
+- **Ujednolicenie Globalnej Sekcji Pre-Footer CTA (`conversion-cta.blade.php`):**
+  - Przebudowano sekcję przedstopkową na Homepage, `/koty`, `/o-hodowli` i `/dobierz-rase`:
+  - Przycisk 1 (Primary Gold): `💬 Napisz lub umów wideo-wizytę (Messenger)` (`https://m.me/61580668026948`).
+  - Przycisk 2 (Secondary Outline): `Kontakt przez WhatsApp` z dynamiczną atrybucją źródła ruchu.
+  - Zachowano bezpośredni numer infolinii oraz dodano elegancki odnośnik do codziennych relacji na profilu hodowli na Facebooku.
+- **SEO & Analityka Meta Pixel:**
+  - Wdrożono structured data Schema.org `Product` z ofertą `Offer` (`price`, `priceCurrency: PLN`, `availability: InStock`) generowaną wyłącznie dla dostępnych kociąt z ustaloną ceną.
+  - Zachowano standardowy typ `ItemPage` / `Animal` dla kotów hodowlanych.
+  - Zabezpieczono zdarzenie Meta Pixel `fbq('track', 'Contact')` na wszystkich przyciskach Messenger i WhatsApp.
+- **Jakość, Testy i Kompilacja:**
+  - Opracowano 8 nowych testów funkcjonalnych w `tests/Feature/Frontend/PriceAndFunnelUnificationTest.php`.
+  - Przebudowano assety Vite (`npm run build`).
+  - Cały zestaw testów (193 testy, 1555 asercji) przechodzi w 100% PASS bez błędów.
+
+---
+
 ## 2026-10-21
 
 ### Completed

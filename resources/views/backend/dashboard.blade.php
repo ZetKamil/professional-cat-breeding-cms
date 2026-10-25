@@ -154,6 +154,7 @@
                                         <th>Imię</th>
                                         <th>Rasa</th>
                                         <th>Status</th>
+                                        <th>Cena (zł)</th>
                                         <th class="text-end pe-3">Akcje</th>
                                     </tr>
                                 </thead>
@@ -184,6 +185,20 @@
                                                 <span class="badge {{ $badgeClass }} px-2 py-1 small fw-semibold">
                                                     {{ $animal->status?->label() ?? 'Brak' }}
                                                 </span>
+                                            </td>
+                                            <td>
+                                                @if($animal->status !== \App\Enums\AnimalStatus::Breeding)
+                                                    <form action="{{ route('backend.animals.quick-price', $animal) }}" method="POST" class="d-flex align-items-center gap-1" style="max-width: 140px;">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <input type="text" name="price" value="{{ $animal->price }}" class="form-control form-control-sm text-end" style="width: 80px;" placeholder="—" title="Wpisz cenę i zapisz">
+                                                        <button type="submit" class="btn btn-sm btn-outline-success p-1 px-2" title="Zapisz cenę">
+                                                            <i class="fas fa-save"></i>
+                                                        </button>
+                                                    </form>
+                                                @else
+                                                    <span class="text-muted small">—</span>
+                                                @endif
                                             </td>
                                             <td class="text-end pe-3">
                                                 <a href="{{ route('backend.animals.edit', $animal) }}" class="btn btn-sm btn-light border" title="Edytuj">

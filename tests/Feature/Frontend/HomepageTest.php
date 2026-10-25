@@ -22,7 +22,7 @@ class HomepageTest extends TestCase
         $response->assertSee('Dostępne Kocięta i Mioty');
         $response->assertSee('Domowa Socjalizacja');
         $response->assertSee('Zero klatek, 100% życia z nami');
-        $response->assertSee('Umów wideo-rozmowę na żywo');
+        $response->assertSee('Napisz lub umów wideo-wizytę');
     }
 
     public function test_cattery_page_renders_successfully_with_philosophy_code_and_process_journey(): void
@@ -38,7 +38,7 @@ class HomepageTest extends TestCase
         $response->assertSee('Wizyta w Hodowli');
         $response->assertSee('Umowa i Odbiór');
         $response->assertSee('Historie Opiekunów Naszych Kotów');
-        $response->assertSee('Umów wideo-rozmowę na żywo');
+        $response->assertSee('Napisz lub umów wideo-wizytę');
     }
 
     public function test_homepage_renders_featured_animals_when_available(): void

@@ -48,6 +48,7 @@ class UpdateAnimalAction
 
                     return $sort;
                 })(),
+                'price' => $data['price'] ?? null,
                 'meta_title' => $data['meta_title'] ?? null,
                 'meta_description' => $data['meta_description'] ?? null,
             ]);

@@ -1,5 +1,34 @@
 # AI/CHANGELOG.md
 
+## [2026-10-25] Master UI/UX Unification, Admin Price Dashboard & Premium Funnel Refactor
+
+### Added
+- **Zarządzanie Cenami w Panelu Admina (`/backend/animals`, `/backend/dashboard`)**:
+  - Kolumna szybkiej edycji `Cena (zł)` z inline formularzem i natychmiastowym zapisem (`PATCH /backend/animals/{animal}/quick-price`).
+  - Pole `price` (unsigned integer PLN) w schemacie `animals`, mutator i akcesor `formattedPrice()` (`2 700 zł`) w modelu `Animal`.
+  - Migracja `2026_10_25_120000_add_price_to_animals_and_set_initial_prices.php` z bezpiecznym seedowaniem cen początkowych: Baron `2 700 zł`, Cyprian `3 000 zł`, Carlos `3 000 zł`, Brytyjskie kocięta `2 500 zł`, Syjamskie kocięta `2 100 zł`.
+- **Prezentacja Cen na Kartach i Profilu Kota (`/koty`, `/koty/[slug]`)**:
+  - Pigułkowy badge cenowy w złotym odcieniu `.animal-card__price-badge` na kartach kotów.
+  - Luksusowy Price Box `.animal-profile__price-box` na profilu kota z etykietą `CENA KOCIAKA (OPCJA „NA KOLANKA”)`, szeryfową typografią i opisem wyprawki z rodowodem.
+  - Złoty przycisk Primary Messenger `#C5A059` z predefiniowaną wiadomością zapytań o kota i cenę (`https://m.me/61580668026948?text=...`).
+  - Wtórny przycisk konturowy WhatsApp (+48 514 153 204).
+  - Wzbogacenie boxu wideo-wizyty o wzmiankę o Messengerze.
+- **Refaktoryzacja Ekranu Wyników Quizu (`/dobierz-rase`)**:
+  - Usunięcie powtórzonego górnego bloku CTA (eliminacja visual clutter).
+  - Zastąpienie neonowych przycisków w wierszach kociąt jednym spójnym przyciskiem: `🎬 Zobacz profil, zdjęcia i filmiki →` oraz odznaką ceny.
+  - Pojedynczy dolny blok kontaktu w stylu Quiet Luxury: złoty Messenger, konturowy WhatsApp, mikro-kopia gwarancyjna.
+  - Karta zaproszenia na Facebooka zyskała ciemno-złote obramowanie i elegancki przycisk konturowy.
+- **Ujednolicenie Globalnego CTA Przedstopkowego (`conversion-cta.blade.php`)**:
+  - Przycisk 1 (Primary Gold): `💬 Napisz lub umów wideo-wizytę (Messenger)`.
+  - Przycisk 2 (Secondary Outline): `Kontakt przez WhatsApp`.
+  - Subtelny odnośnik do codziennych relacji na Facebooku hodowli.
+- **SEO & Analityka**:
+  - Schema.org `Product` / `Offer` (`price`, `PLN`, `InStock`) na podstronach kociąt z ustaloną ceną.
+  - Zachowanie zdarzenia Meta Pixel `fbq('track', 'Contact')` na wszystkich przyciskach Messenger i WhatsApp.
+- **Testy Automatyczne**:
+  - Nowy zestaw testów `tests/Feature/Frontend/PriceAndFunnelUnificationTest.php` (8 testów, 64 asercje).
+  - Całkowity wynik testów aplikacji: 193 testy przeszły pomyślnie (1555 asercji).
+
 ## [2026-10-17] Sprint Animals Media — Atos Profile & Media Integration
 
 ### Added
