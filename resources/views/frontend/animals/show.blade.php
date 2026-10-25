@@ -302,20 +302,7 @@
                     </div>
 
                     {{-- Luxury Price Banner (Only for available/reservable kittens with price) placed right above description --}}
-                    @if($animal->shouldShowPrice())
-                        <div class="animal-profile__price-box">
-                            <div class="animal-profile__price-banner-content">
-                                <span class="animal-profile__price-label">CENA KOCIAKA (OPCJA „NA KOLANKA”)</span>
-                                <div class="animal-profile__price-row">
-                                    <span class="animal-profile__price-val">{{ $animal->formattedPrice() }}</span>
-                                    <span class="animal-profile__price-tagline">— opcja „na kolanka” z rodowodem i wyprawką</span>
-                                </div>
-                                <p class="animal-profile__price-subtext">
-                                    W cenie: wielopokoleniowy rodowód SHiOZ, książeczka zdrowia (komplet szczepień i odrobaczeń), umowa kupna oraz wyprawka na start.
-                                </p>
-                            </div>
-                        </div>
-                    @endif
+                    <x-frontend.animal-price-box :animal="$animal" />
 
                     {{-- Description --}}
                     <div class="animal-profile__description">

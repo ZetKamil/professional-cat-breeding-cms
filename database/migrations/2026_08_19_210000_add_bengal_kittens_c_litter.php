@@ -109,7 +109,7 @@ return new class extends Migration
                 'type' => AnimalType::Cat,
                 'date_of_birth' => Carbon::create(2026, 6, 21),
                 'short_description' => 'Zjawiskowa kotka bengalska o szlachetnych liniach, głębokim kontraście i figlarnym spojrzeniu. Córka Luny i Lukiego. Dostępna do rezerwacji.',
-                'description' => 'Carmen to pełna gracji kotka bengalska o intensywnym, kontrastowym rysunku rozet (BEN n 24/32) i wspaniałej ekspresji. Odznacza się bystrym umysłem, wesołym usposobieniem i zamiłowaniem do pieszczot. Doskonale zsocjalizowana z ludźmi w warunkach domowych. Córka Luny i Lukiego, urodzona 21 czerwca 2026 r. Wraz z wyprawką otrzyma rodowód SHiOZ ZOOLANDIA, mikrochip oraz udokumentowane zabiegi profilaktyczne. Dostępna do rezerwacji.',
+                'description' => 'Carmen to pełna gracji kotka bengalska o intensywnym, kontrastowym rysunku rozet (BEN n 24/32) i wspaniałej ekspresji. Odznacza się bystrym umysłem, wesołym usposobieniem i zamiłowaniem do pieszczot. Doskonale zsocjalizowana z ludźmi w warunkach domowych. Córka Luny i Lukiego, urodzona 21 czerwca 2026 r. Otrzyma rodowód SHiOZ ZOOLANDIA, mikrochip oraz udokumentowane zabiegi profilaktyczne. Dostępna do rezerwacji.',
                 'mother_id' => $luna?->id,
                 'father_id' => $luki?->id,
                 'sort_order' => 3,

@@ -124,7 +124,7 @@
                             <span class="text-eyebrow">Wychowanie Domowe & Wczesna Rezerwacja</span>
                             <h2 class="animals-section-title">Dostępne Kocięta i Mioty</h2>
                             <p class="animals-section-lead">
-                                Kocięta z naszej domowej hodowli gotowe do odbioru lub wczesnej rezerwacji. Wszystkie maluchy posiadają wielopokoleniowy rodowód, komplet szczepień, microchip oraz bogatą wyprawkę.
+                                Kocięta z naszej domowej hodowli gotowe do odbioru lub wczesnej rezerwacji. Wszystkie maluchy posiadają wielopokoleniowy rodowód, komplet szczepień i odrobaczeń oraz microchip.
                             </p>
                         </div>
                         <div class="animals-grid">

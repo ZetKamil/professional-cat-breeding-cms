@@ -192,7 +192,7 @@
                             <span class="quiz-option__icon">⏳</span>
                             <div class="quiz-option__content">
                                 <strong>Za 3–6 tygodni (wczesna rezerwacja z nowego miotu)</strong>
-                                <small>Chcę spokojnie skompletować wyprawkę i obserwować dorastanie maluszka w kontakcie z hodowcą.</small>
+                                <small>Chcę spokojnie przygotować dom na powitanie kociaka i obserwować dorastanie maluszka w kontakcie z hodowcą.</small>
                             </div>
                             <span class="quiz-option__arrow">→</span>
                         </button>

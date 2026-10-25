@@ -8,7 +8,10 @@
 ## 2026-10-25
 
 ### Completed
-✓ Senior UI/UX Design System & Layout Overhaul (Quiet Luxury Unification) (`feat(design)`, `feat(ui)`, `feat(quiz)`, `feat(catalog)`)
+- **Wydzielenie Komponentu Ceny (`<x-frontend.animal-price-box>`) & Usunięcie Wyprawki:**
+  - Utworzono dedykowany reużywalny komponent Blade `resources/views/components/frontend/animal-price-box.blade.php`. Zmiana treści pakietu w cenie odbywa się w jednym pliku.
+  - Usunięto deklaracje o wyprawce z profilu kota (`show.blade.php`), nagłówka katalogu (`index.blade.php`), globalnego CTA (`conversion-cta.blade.php`), stron miast (`city.blade.php`), testu quizu (`quiz.blade.php`) oraz bazy danych (Carmen).
+  - Wdrożono migrację `2026_10_25_124000_remove_wyprawka_from_animals_table.php`.
 - **Eliminacja Kolorów Neonowych w Quizie (`/dobierz-rase`):**
   - Wycięto wszelkie neonowe odcienie błękitu Messenger (`#0084FF`), zieleni WhatsApp (`#25D366`) oraz brązy. Zastąpiono je paletą Quiet Luxury (`#111111`, `#FAF8F5`, `#C5A059`).
   - Główny przycisk Messenger zyskał pełne złoto szampańskie `#C5A059` z ciemnym tekstem `#111111`.

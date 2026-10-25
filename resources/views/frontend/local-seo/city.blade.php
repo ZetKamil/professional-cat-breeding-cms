@@ -281,7 +281,7 @@
                 <span style="font-size: 2rem; display: block; margin-bottom: 12px;">🚗</span>
                 <strong style="display: block; font-size: 1.15rem; color: #1a1a1a; margin-bottom: 8px;">Krok 2: Spokojny odbiór w Sikorzu</strong>
                 <p style="font-size: 0.9rem; line-height: 1.6; color: #4a4a4a; margin: 0 0 16px;">
-                    Gdy maluch osiągnie gotowość do odbioru (w wieku 12–14 tygodni) i wybierzesz swojego wymarzonego przyjaciela, przyjeżdżasz do naszej hodowli w Sikorzu ({{ $city['distance_time'] }} z {{ $city['name_genitive'] }}). Otrzymujesz rodowód SHiOZ ZOOLANDIA, książeczkę zdrowia (po dwukrotnym zaszczepieniu i dwukrotnym odrobaczeniu), microchip oraz kompletną wyprawkę.
+                    Gdy maluch osiągnie gotowość do odbioru (w wieku 12–14 tygodni) i wybierzesz swojego wymarzonego przyjaciela, przyjeżdżasz do naszej hodowli w Sikorzu ({{ $city['distance_time'] }} z {{ $city['name_genitive'] }}). Otrzymujesz rodowód SHiOZ ZOOLANDIA, książeczkę zdrowia (po dwukrotnym zaszczepieniu i dwukrotnym odrobaczeniu), microchip oraz umowę kupna-sprzedaży.
                 </p>
                 <a href="tel:+48514153204" class="btn btn-secondary" style="font-size: 0.85rem;">
                     📞 Zadzwoń: +48 514 153 204

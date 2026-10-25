@@ -3,6 +3,15 @@
 ## [2026-10-25] Quiet Luxury Unification & Senior UI/UX Design System Overhaul
 
 ### Added & Refined
+- **Wydzielenie Komponentu Ceny (`<x-frontend.animal-price-box>`) & Usunięcie Wyprawki**:
+  - **Reużywalny komponent cenowy:** Cała prezentacja luksusowego banera cenowego kociaka została wyekstrahowana do dedykowanego, reużywalnego komponentu Blade `components/frontend/animal-price-box.blade.php`. Zmiana zawartości pakietu cenowego odbywa się teraz w jednym miejscu.
+  - **Usunięcie wzmianek o wyprawce z kotów:** Zgodnie z wytycznymi hodowli (hodowla nie dodaje wyprawki fizycznej) wyczyszczono wszelkie deklaracje o „bogatych/kompletnych wyprawkach”:
+    - Na profilu kota (`/koty/[slug]`): *„— opcja „na kolanka” z rodowodem”*, *„W cenie: wielopokoleniowy rodowód SHiOZ, książeczka zdrowia (komplet szczepień i odrobaczeń) oraz umowa kupna-sprzedaży”*.
+    - W nagłówku katalogu (`/koty`): usunięto *„oraz bogatą wyprawkę”*.
+    - W globalnym komponencie CTA (`conversion-cta.blade.php`): zastąpiono wyprawkę microchipem.
+    - W opisach lokalnych miast (`city.blade.php`): zastąpiono wyprawkę umową kupna-sprzedaży.
+    - W teście quizu (`quiz.blade.php`): przeformułowano odpowiedź kroku 4 na spokojne przygotowanie domu.
+    - W bazie danych (migracja `2026_10_25_124000_remove_wyprawka_from_animals_table`): zaktualizowano opis kotki Carmen.
 - **Eliminacja Kolorów Neonowych i Ujednolicenie Quizu (`/dobierz-rase`)**:
   - Usunięcie wszelkich jaskrawych odcieni zieleni (`#25D366`), błękitu Messenger (`#0084FF`), brązów i granatu na rzecz palety Quiet Luxury: `#111111` Charcoal, `#FAF8F5` Warm Cream, `#C5A059` Champagne Gold.
   - Podstawowy przycisk Messenger w solidnym Champagne Gold (`#C5A059` z hover `#B38E46`), wtórny WhatsApp z subtelną ramką i tłem transparentnym.

@@ -3,7 +3,7 @@
     'headline' => 'Zaplanuj Rozmowę lub Wideo-Wizytę',
     'description' => 'Chcesz poznać nasze kocięta na żywo? Wideo-wizyty i bezpośrednie zapytania realizujemy wygodnie przez Messenger lub WhatsApp — bez pośpiechu i bez zobowiązań.',
     'tile' => 'parchment',
-    'note' => 'Bezpieczna rezerwacja z rodowodem SHiOZ ZOOLANDIA · Pełna dokumentacja medyczna i wyprawka',
+    'note' => 'Bezpieczna rezerwacja z rodowodem SHiOZ ZOOLANDIA · Pełna dokumentacja medyczna i microchip',
     'sourceContext' => 'Strona hodowli',
 ])
 
