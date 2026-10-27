@@ -3,6 +3,13 @@
 ## [2026-10-27] Felinological Pricing ("Na kolanka"), Mobile Quiz Unclamping, Cage-Free Phrasing & Blog Excerpt Fix
 
 ### Added & Refined
+- **Pakiet testów Adversarial, Warunki Brzegowe & Race Conditions (`tests/Feature/AdversarialEdgeCasesAndRaceConditionsTest.php`)**:
+  - Przetestowano 12 skrajnych scenariuszy: ułamkowe ceny z groszami i przecinkiem, 50-cyfrowe przepełnienia typów w PHP, ochrona cen dorosłych kotów hodowlanych, natychmiastowe ukrywanie cen po zmianie statusu na `Sold`, wycinanie składni Markdown z zajawek, strefy czasowe publikacji UTC oraz pusty katalog w quizie.
+  - Naprawiono dwa ukryte błędy w mutatorze ceny `Animal::setPriceAttribute`:
+    1. Usuwanie ułamków groszy (`2 700,50 zł`) zapobiegające sklejaniu cyfr w 270 tysięcy.
+    2. Blokada przed rzutowaniem do int skrajnych liczb zmiennoprzecinkowych powyżej `PHP_INT_MAX` (gdzie PHP rzutowało `(int) 1e51` na `0`).
+  - Zweryfikowano blokadę atomową `Cache::lock` chroniącą przed wyścigami w szybkim formularzu kontaktowym (Quick Callback) oraz spójność transakcyjną przy równoczesnej edycji cen.
+  - Całość testów: 233 zdane testy (1797 asercji), 100% PASS.
 - **Arystokratyczna prezentacja kosztu kociaka („Kociak w opcji na kolanka”)**:
   - Zastąpiono komercyjne etykiety „Cena kociaka” profesjonalną terminologią felinologiczną:
     - Profil kota (`/koty/[slug]`): nagłówek `KOCIAK W OPCJI „NA KOLANKA”`, wartość `2 700 zł — pupil domowy z rodowodem` oraz formuła gwarancyjna: *„W pakiecie z maluchem: wielopokoleniowy rodowód SHiOZ, książeczka zdrowia (komplet szczepień i 2 odrobaczenia) oraz umowa kupna-sprzedaży”*.

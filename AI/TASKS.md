@@ -18,6 +18,17 @@
 ---
 
 ## Active & Recent Maintenance Tasks (2026-10-27)
+- [x] `test(audit): adversarial edge cases and race conditions test suite & price mutator overflow hardening` (2026-10-27) — Comprehensive adversarial testing suite (12 dedicated tests in `AdversarialEdgeCasesAndRaceConditionsTest.php`) forcing boundary conditions, race conditions, and hostile inputs:
+  1. **Edge Case 1 — Ułamkowe grosze i separatory (comma/dot):** Naprawiono `Animal::setPriceAttribute`, usuwając część dziesiętną przed sanitizacją cyfr (`2 700,50 zł` -> `2700 zł`, eliminując błąd sklejenia do `270 050 zł`).
+  2. **Edge Case 2 — Przepełnienie typu całkowitego (PHP float/int 64-bit overflow):** Przetestowano skrajny ciąg 50 cyfr (`999...999`). Odkryto błąd, w którym `(int) (1e51)` w PHP dawał `0` zamiast `1 000 000`. Wdrożono ograniczenie `$num >= 1000000` przed rzutowaniem do int.
+  3. **Edge Case 3 — Wyciek ceny kota hodowlanego:** Przypadkowa cena wpisana kotu dorosłemu w bazie danych nigdy nie jest renderowana publicznie w katalogu ani na profilu (`shouldShowPrice()`).
+  4. **Edge Case 4 — Natychmiastowa reakcja na zmianę statusu:** Zmiana ze statusu `Available` na `Sold` natychmiast ukrywa badge cenowy, boks ceny na profilu i oferty Schema.org.
+  5. **Edge Case 5 — Odporność parsera zajawek artykułów:** Treść zawierająca wyłącznie nagłówki Markdown (`# `), bloki kodu (` ``` `) lub tabele Markdown (`|`) jest bezpiecznie czyszczona bez wycieku składni i bez łamania układu.
+  6. **Edge Case 6 — Odporność stref czasowych:** Artykuły z datą w przyszłości w UTC są ukryte do dokładnej sekundy publikacji.
+  7. **Race Condition 1 — Jednoczesne zgłoszenia szybkiego kontaktu (Quick Callback):** Sprawdzono blokadę atomową (`Cache::lock('quick_callback_lock_...')`), zapobiegającą wysłaniu zdublowanych powiadomień SMS/email przy równoczesnym podwójnym kliknięciu w tej samej milisekundzie.
+  8. **Race Condition 2 — Równoczesna aktualizacja ceny (Concurrent Price Updates):** Zweryfikowano integralność transakcyjną bazy danych i poprawność odświeżenia danych.
+  9. **Pusty katalog i brakujące dane w Quizie:** Przetestowano zachowanie algorytmu rekomendacji w sytuacji, gdy wszystkie koty w bazie mają status `Sold` lub `Breeding` — quiz renderuje elegancki fallback z zaproszeniem do kontaktu i wideo-rozmowy.
+  10. **Stan testów:** 233 testy zdane (1797 asercji), 100% PASS w ~53s.
 - [x] `feat(pricing): quiet luxury 'kociak na kolanka' presentation, mobile quiz clamp removal, cage-free phrasing cleanup & blog lead fix` — Four-part UX and content refinement:
   1. **Ceny kotów („Kociak w opcji na kolanka”):** Zastąpiono etykiety „Cena kociaka” profesjonalną terminologią felinologiczną: `KOCIAK W OPCJI „NA KOLANKA”` + `2 700 zł — pupil domowy z rodowodem` w boksie profilowym, `Na kolanka: {kwota}` na kartach kotów i w wynikach quizu, oraz `Kwota w opcji „na kolanka” (zł)` w formularzu CMS.
   2. **Quiz Mobile Unclamping:** Usunięto regułę `-webkit-line-clamp: 3` z `.quiz-result__desc` w `quiz.css`, umożliwiając pełne, nieobcięte wyświetlanie opisu dopasowania behawioralnego rasy.

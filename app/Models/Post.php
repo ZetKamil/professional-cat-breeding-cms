@@ -311,14 +311,18 @@ class Post extends Model
         // 1. Remove markdown images: ![alt](url)
         $text = preg_replace('/!\[.*?\]\(.*?\)/su', '', $text);
 
-        // 2. Convert markdown links [text](url) -> text
+        // 2. Remove fenced code blocks: ```code```
+        $text = preg_replace('/```.*?```/su', '', $text);
+
+        // 3. Convert markdown links [text](url) -> text
         $text = preg_replace('/\[(.*?)\]\(.*?\)/su', '$1', $text);
 
-        // 3. Remove Markdown headings (#, ##, etc.) and blockquotes entirely
+        // 4. Remove Markdown headings (#, ##, etc.) and blockquotes entirely
         $text = preg_replace('/^#+.*$/mu', '', $text);
         $text = preg_replace('/^>\s+/mu', '', $text);
+        $text = preg_replace('/^\|.*?\|$/mu', '', $text);
 
-        // 4. Remove Markdown bold, italic, strikethrough, backticks
+        // 5. Remove Markdown bold, italic, strikethrough, backticks
         $text = preg_replace('/[\*_~`]/u', '', $text);
 
         // 5. Remove HTML tags

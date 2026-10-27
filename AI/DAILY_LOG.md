@@ -7,7 +7,17 @@
 
 ## 2026-10-27
 
-### Completed
+- **Pakiet Testów Adversarial, Warunki Brzegowe & Race Conditions (`test(audit)`, `fix(models)`):**
+  - **Ułamkowe kwoty z przecinkiem/kropką (`2 700,50 zł`):** Zabezpieczono mutator ceny `Animal::setPriceAttribute` przed sklejaniem groszy z kwotą główną — obcinana jest część dziesiętna przed filtracją cyfr.
+  - **Przepełnienie typu całkowitego w PHP (64-bit float/int overflow):** Wykryto i naprawiono błąd, w którym `(int) (1e51)` rzutował na `0` i powodował zapis pustej ceny; dodano twardy limit `$num >= 1000000` przed rzutowaniem do int.
+  - **Wyciek cen kotów dorosłych/hodowlanych:** Zweryfikowano, że dorosły kot hodowlany z omyłkową ceną w bazie nie wyświetla ceny publicznie na kartach ani na profilu (`shouldShowPrice()`).
+  - **Natychmiastowe ukrywanie cen i badge'y po zmianie statusu:** Kociak oznaczony jako `Sold` natychmiast przestaje renderować boks ceny i ofertę Schema.org.
+  - **Odporność zajawek artykułów bloga:** Potwierdzono poprawne usuwanie nagłówków Markdown (`# `), bloków kodu (` ``` `) oraz tabel (`|`) ze generowanych zajawek bez ucinania w połowie tagów.
+  - **Strefy czasowe:** Artykuły zaplanowane w czasie przyszłym (UTC) pozostają ukryte na liście i w szczegółach do właściwej sekundy.
+  - **Race Condition (Quick Callback):** Sprawdzono mechanizm blokady atomowej `Cache::lock`, uniemożliwiający wielokrotne powiadomienie hodowcy przy jednoczesnych zapytaniach w tej samej milisekundzie.
+  - **Race Condition (Aktualizacja Cen):** Zweryfikowano transakcyjną spójność jednoczesnych edycji cen.
+  - **Brak klatek w całym serwisie:** Zweryfikowano pełny brak słów o klatkach w publicznym katalogu i treściach.
+  - **Wynik całego suite:** 233 testy zdane (1797 asercji), 100% PASS.
 - **Eliminacja Formuły „Cena Kociaka” & Arystokratyczna Prezentacja („Na Kolanka”) (`feat(pricing)`, `refactor(copy)`):**
   - Przekształcono boks na profilu kota (`animal-price-box.blade.php`) na prestiżowy nagłówek `KOCIAK W OPCJI „NA KOLANKA”` z dopiskiem `— pupil domowy z rodowodem` oraz formułą gwarancyjną `W pakiecie z maluchem: wielopokoleniowy rodowód SHiOZ, książeczka zdrowia (komplet szczepień i 2 odrobaczenia) oraz umowa kupna-sprzedaży`.
   - Na kartach kotów (`animal-card.blade.php`) wprowadzono dopracowaną plakietkę `Na kolanka: {kwota}` z dedykowaną klasą `.animal-card__price-prefix`.

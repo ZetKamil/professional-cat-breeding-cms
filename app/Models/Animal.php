@@ -101,7 +101,13 @@ class Animal extends Model
                 return;
             }
 
-            $this->attributes['price'] = min((int) round($num), 1000000);
+            if ($num >= 1000000) {
+                $this->attributes['price'] = 1000000;
+
+                return;
+            }
+
+            $this->attributes['price'] = (int) round($num);
 
             return;
         }
@@ -114,6 +120,10 @@ class Animal extends Model
                 return;
             }
 
+            $value = trim($value);
+            // If decimal fraction exists like ,00 or .00 or ,50, strip fractional part
+            $value = preg_replace('/[,.]\d{1,2}\s*(?:zł|pln)?$/iu', '', $value);
+
             $clean = preg_replace('/[^\d]/', '', $value);
             if ($clean === '') {
                 $this->attributes['price'] = null;
@@ -121,8 +131,15 @@ class Animal extends Model
                 return;
             }
 
+            // Guard against massive integer overflow in PHP before int cast
+            if (strlen($clean) > 7 || (float) $clean > 1000000) {
+                $this->attributes['price'] = 1000000;
+
+                return;
+            }
+
             $price = (int) $clean;
-            $this->attributes['price'] = $price > 0 ? min($price, 1000000) : null;
+            $this->attributes['price'] = $price > 0 ? $price : null;
 
             return;
         }
