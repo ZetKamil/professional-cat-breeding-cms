@@ -297,10 +297,15 @@ class Post extends Model
      */
     public function cardExcerpt(int $limit = 115): string
     {
+        // 1. If clean meta_description exists without markdown headings, prefer it
+        if (!empty($this->meta_description) && !str_starts_with(trim($this->meta_description), '#')) {
+            return Str::limit(trim(strip_tags($this->meta_description)), $limit);
+        }
+
         $text = trim((string) ($this->excerpt ?? ''));
 
-        if ($text === '') {
-            $text = (string) ($this->body ?? '');
+        if ($text === '' || str_starts_with($text, '#')) {
+            $text = (string) ($this->body ?? $text);
         }
 
         // 1. Remove markdown images: ![alt](url)
@@ -309,8 +314,8 @@ class Post extends Model
         // 2. Convert markdown links [text](url) -> text
         $text = preg_replace('/\[(.*?)\]\(.*?\)/su', '$1', $text);
 
-        // 3. Remove Markdown headings (#, ##, etc.) and blockquotes
-        $text = preg_replace('/^#+\s+/mu', '', $text);
+        // 3. Remove Markdown headings (#, ##, etc.) and blockquotes entirely
+        $text = preg_replace('/^#+.*$/mu', '', $text);
         $text = preg_replace('/^>\s+/mu', '', $text);
 
         // 4. Remove Markdown bold, italic, strikethrough, backticks

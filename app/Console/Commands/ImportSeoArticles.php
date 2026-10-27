@@ -138,7 +138,16 @@ class ImportSeoArticles extends Command
             }, $rawBody);
 
             $slug = $metaData['slug'] ?? Str::slug($title);
-            $excerpt = $metaData['meta']['description'] ?? $metaData['excerpt'] ?? Str::limit(strip_tags($processedBody), 160);
+            $excerpt = $metaData['meta_description']
+                ?? ($metaData['meta']['description'] ?? ($metaData['excerpt'] ?? null));
+
+            if (! $excerpt) {
+                // Clean markdown headings, images and formatting before taking excerpt
+                $cleanText = preg_replace('/^#+\s+.*$/m', '', $processedBody);
+                $cleanText = preg_replace('/!\[.*?\]\(.*?\)/s', '', $cleanText);
+                $cleanText = preg_replace('/\[(.*?)\]\(.*?\)/s', '$1', $cleanText);
+                $excerpt = Str::limit(trim(preg_replace('/\s+/', ' ', strip_tags($cleanText))), 160);
+            }
 
             $publishedAt = $forceNow ? now() : $scheduledDate;
 

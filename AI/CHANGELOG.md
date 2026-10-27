@@ -1,5 +1,23 @@
 # AI/CHANGELOG.md
 
+## [2026-10-27] Felinological Pricing ("Na kolanka"), Mobile Quiz Unclamping, Cage-Free Phrasing & Blog Excerpt Fix
+
+### Added & Refined
+- **Arystokratyczna prezentacja kosztu kociaka („Kociak w opcji na kolanka”)**:
+  - Zastąpiono komercyjne etykiety „Cena kociaka” profesjonalną terminologią felinologiczną:
+    - Profil kota (`/koty/[slug]`): nagłówek `KOCIAK W OPCJI „NA KOLANKA”`, wartość `2 700 zł — pupil domowy z rodowodem` oraz formuła gwarancyjna: *„W pakiecie z maluchem: wielopokoleniowy rodowód SHiOZ, książeczka zdrowia (komplet szczepień i 2 odrobaczenia) oraz umowa kupna-sprzedaży”*.
+    - Karty kotów na stronie głównej i w katalogu (`/koty`): `Na kolanka: {kwota}`.
+    - Wyniki quizu (`/dobierz-rase`): `Na kolanka: {kwota}`.
+    - CMS: `Kwota w opcji „na kolanka” (zł) (pupil domowy)`.
+- **Pełny, nieobcięty opis dopasowania rasy w Quizie na telefonach (`/dobierz-rase`)**:
+  - Usunięto regułę `-webkit-line-clamp: 3` w `quiz.css`, dzięki czemu cały opis temperamentu rasy wyświetla się naturalnie bez ucinania w pół zdania przed listą kociąt.
+- **Usunięcie słów o klatkach („bez klatek” / „klatek”) w całym serwisie**:
+  - Oczyszczono 7 widoków Blade ze wzmianek o klatkach, zastępując je ciepłą, naturalną socjalizacją domową (*„Czułość i domowe ciepło od pierwszego dnia”*, *„Chów w sercu rodziny, 100% życia z nami”*, *„żadnej izolacji – każdy kot ma pełen dostęp do przestrzeni domowej”*).
+- **Usunięcie uciętego teasera pod tytułem artykułu na blogu (`/blog/[slug]`)**:
+  - Usunięto powielony lead `$post->excerpt` z nagłówka hero w widoku artykułu.
+  - Wyczyszczono nagłówki Markdown `# ` w bazie danych migracją `2026_10_27_163000_clean_post_excerpts.php`.
+  - Usprawniono metodę `Post::cardExcerpt()` oraz komendę `ImportSeoArticles.php`.
+
 ## [2026-10-25] Quiet Luxury Unification & Senior UI/UX Design System Overhaul
 
 ### Added & Refined

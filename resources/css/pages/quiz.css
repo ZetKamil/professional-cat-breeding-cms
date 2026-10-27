@@ -342,22 +342,12 @@
     }
 }
 
-/* Shortened punchy description -- clamp so CTAs are always above the fold */
+/* Full behavioral description -- clean editorial flow without clipping */
 .quiz-result__desc {
-    font-size: 0.92rem;
-    line-height: 1.55;
-    color: #b0b0b8;
-    margin: 0;
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-@media (max-width: 767px) {
-    .quiz-result__desc {
-        -webkit-line-clamp: 3;
-    }
+    font-size: 0.94rem;
+    line-height: 1.6;
+    color: #d1cfc7;
+    margin: 0 0 16px;
 }
 
 /* PART 2: Immediate CTA Box -- directly under short summary, before cat cards */
@@ -585,6 +575,13 @@
     padding: 2px 10px;
     letter-spacing: 0.02em;
     white-space: nowrap;
+}
+
+.quiz-cat-item__price-prefix {
+    font-size: 0.72rem;
+    font-weight: 500;
+    opacity: 0.85;
+    margin-right: 4px;
 }
 
 .quiz-cat-item__info p {

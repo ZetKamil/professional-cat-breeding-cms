@@ -54,7 +54,7 @@
             </h1>
             <p class="text-lead-airy animals-catalog-hero__lead">
                 Poznaj nasze koty hodowlane i dostępne kocięta wychowywane w sercu naszego domu. Hodujemy trzy wyjątkowe rasy:
-                Bengalskie, Brytyjskie (krótkowłose BSH i długowłose BLH) oraz Syjamskie — z dbałością o najwyższe standardy zdrowotne i czułą socjalizację bez klatek.
+                Bengalskie, Brytyjskie (krótkowłose BSH i długowłose BLH) oraz Syjamskie — z dbałością o najwyższe standardy zdrowotne i troskliwą domową socjalizację.
             </p>
         </div>
     </section>

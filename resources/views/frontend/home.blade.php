@@ -157,9 +157,9 @@
                 <span class="daily-life__eyebrow" style="display: inline-block; margin-bottom: 12px;">
                     Domowa Socjalizacja • Sikórz k. Płocka
                 </span>
-                <h2 class="daily-life__headline">Czułość i życie bez klatek od pierwszego dnia.</h2>
+                <h2 class="daily-life__headline">Czułość i domowe ciepło od pierwszego dnia.</h2>
                 <p class="daily-life__desc">
-                    Wierzymy, że stabilny i ufny charakter kota kształtuje się w pierwszych 12 tygodniach życia. Nasze koty nie mieszkają w odizolowanych boksach ani klatkach — dorastają w samym sercu naszego domu, otoczone miłością, dźwiękami codzienności i stałą opieką weterynaryjną.
+                    Wierzymy, że stabilny i ufny charakter kota kształtuje się w pierwszych 12 tygodniach życia. Nasze koty nie są izolowane — dorastają w samym sercu naszego domu, otoczone miłością, dźwiękami codzienności i stałą opieką weterynaryjną.
                 </p>
 
                 <div class="daily-life__pillars" role="list" aria-label="Filary domowej socjalizacji">
@@ -168,7 +168,7 @@
                             <i data-lucide="home"></i>
                         </div>
                         <div>
-                            <h3 class="daily-life__pillar-title">Zero klatek, 100% życia z nami</h3>
+                            <h3 class="daily-life__pillar-title">Chów w sercu rodziny, 100% życia z nami</h3>
                             <p class="daily-life__pillar-text">Salon i sypialnia to ich naturalna przestrzeń. Naturalnie oswajają się z odkurzaczem, telewizorem i gośćmi.</p>
                         </div>
                     </div>

@@ -31,7 +31,7 @@
                             <h3 class="manifesto-tenet__title">Dobrostan Ponad Wszystko</h3>
                             <p class="manifesto-tenet__desc">
                                 Nasze koty żyją razem z nami, jako pełnoprawni członkowie rodziny. Nie uznajemy
-                                klatkowania ani izolacji – każdy kot ma pełen dostęp do przestrzeni domowej.
+                                żadnej izolacji – każdy kot ma pełen dostęp do przestrzeni domowej.
                             </p>
                         </div>
                     </div>
@@ -104,7 +104,7 @@
                     <p class="text-body text-ink-muted-80">
                         Obok kotów brytyjskich rozwijamy również linie zwinnych, cętkowanych <strong>kotów bengalskich</strong>
                         oraz niezwykle kontaktowych i lojalnych <strong>kotów syjamskich / tajskich</strong>.
-                        Wszystkie nasze koty dorastają ramię w ramię z nami, bez klatek, w atmosferze miłości i spokoju.
+                        Wszystkie nasze koty dorastają ramię w ramię z nami, w atmosferze miłości, bezpieczeństwa i spokoju.
                     </p>
                 </div>
             </div>

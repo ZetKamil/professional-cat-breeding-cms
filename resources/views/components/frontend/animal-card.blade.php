@@ -67,8 +67,8 @@
         <div class="animal-card__footer">
             <div class="animal-card__price-wrapper">
                 @if($animal->shouldShowPrice())
-                    <span class="animal-card__price-badge" title="Cena kociaka (opcja „na kolanka”)">
-                        {{ $animal->formattedPrice() }}
+                    <span class="animal-card__price-badge" title="Kociak w opcji „na kolanka”">
+                        <span class="animal-card__price-prefix">Na kolanka:</span> {{ $animal->formattedPrice() }}
                     </span>
                 @else
                     <span class="animal-card__status-label" title="{{ $cardStatusLabel }}">

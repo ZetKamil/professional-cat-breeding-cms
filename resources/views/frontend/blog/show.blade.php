@@ -28,12 +28,6 @@
                 {{ $post->title }}
             </h1>
 
-            @if($post->excerpt)
-                <p class="article-cover-hero__lead">
-                    {{ $post->excerpt }}
-                </p>
-            @endif
-
             <div class="article-author-bar">
                 <div class="article-author-bar__info">
                     <span class="article-author-bar__name">{{ config('app.name') }}</span>

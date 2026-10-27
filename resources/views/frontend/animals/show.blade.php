@@ -1,6 +1,6 @@
 @php
     $catTitle = $animal->meta_title ?: ($animal->name . ' — ' . $animal->breed . ' | Domowa Hodowla Kotów z Mazowieckiej Szwajcarii');
-    $catDesc = $animal->meta_description ?: ($animal->short_description ?: ('Poznaj kota ' . $animal->name . ' (' . $animal->breed . ', ' . $animal->color . '). Domowa hodowla bez klatek, rodowód SHiOZ ZOOLANDIA, ' . ($animal->status === \App\Enums\AnimalStatus::Breeding ? 'dedykowane badania rasy' : 'po przebadanych rodzicach') . ' i zrównoważony charakter.'));
+    $catDesc = $animal->meta_description ?: ($animal->short_description ?: ('Poznaj kota ' . $animal->name . ' (' . $animal->breed . ', ' . $animal->color . '). Certyfikowana domowa hodowla, rodowód SHiOZ ZOOLANDIA, ' . ($animal->status === \App\Enums\AnimalStatus::Breeding ? 'dedykowane badania rasy' : 'po przebadanych rodzicach') . ' i zrównoważony charakter.'));
     $catOgImage = $animal->media ? $animal->media->url() : asset('og-default.jpg');
     $catMimeType = $animal->media && $animal->media->mime_type ? $animal->media->mime_type : 'image/jpeg';
 @endphp
@@ -233,7 +233,7 @@
 
                             <div class="animal-meta-pill" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 9999px; background: rgba(52, 199, 89, 0.08); border: 1px solid rgba(52, 199, 89, 0.28); font-size: 0.84rem; color: #166534; font-weight: 500;">
                                 <span aria-hidden="true">🏡</span>
-                                <span>100% Wychowanie domowe bez klatek</span>
+                                <span>100% Wychowanie domowe w sercu rodziny</span>
                             </div>
 
                             <div class="animal-meta-pill" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 9999px; background: rgba(200, 157, 92, 0.08); border: 1px solid rgba(200, 157, 92, 0.28); font-size: 0.84rem; color: #3a3a3c; font-weight: 500;">

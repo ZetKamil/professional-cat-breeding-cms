@@ -197,7 +197,7 @@
             <div class="collection-card" role="listitem">
                 <h3 class="collection-card__title">100% Warunki Domowe</h3>
                 <p class="collection-card__quote">
-                    Nasze koty nie żyją w klatkach ani zamkniętych boksach. Wychowują się z nami w przestronnym domu w otoczeniu Brudzeńskiego Parku Krajobrazowego, mając stały kontakt z człowiekiem, dziećmi i domowymi dźwiękami.
+                    Nasze koty dorastają w samym sercu domu. Wychowują się z nami w przestronnych wnętrzach w otoczeniu Brudzeńskiego Parku Krajobrazowego, mając stały kontakt z człowiekiem, dziećmi i domowymi dźwiękami.
                 </p>
             </div>
 

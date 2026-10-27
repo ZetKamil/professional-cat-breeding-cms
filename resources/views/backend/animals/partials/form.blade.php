@@ -98,7 +98,7 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="price" class="form-label">
-                            Cena kociaka (zł) <small class="text-muted">(opcja „na kolanka”)</small>
+                            Kwota w opcji „na kolanka” (zł) <small class="text-muted">(pupil domowy)</small>
                         </label>
                         <div class="input-group">
                             <input type="number" 

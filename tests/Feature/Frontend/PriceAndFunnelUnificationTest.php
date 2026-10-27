@@ -105,7 +105,7 @@ class PriceAndFunnelUnificationTest extends TestCase
         $profileResponse = $this->get(route('frontend.animals.show', $adultCat));
         $profileResponse->assertOk();
         $profileResponse->assertDontSee('3 500 zł');
-        $profileResponse->assertDontSee('CENA KOCIAKA (OPCJA „NA KOLANKA”)');
+        $profileResponse->assertDontSee('KOCIAK W OPCJI „NA KOLANKA”');
     }
 
     public function test_cat_profile_page_displays_luxury_price_box_and_messenger_primary_cta(): void
@@ -125,9 +125,9 @@ class PriceAndFunnelUnificationTest extends TestCase
 
         // 1. Price Box and Subtext
         $response->assertSee('animal-profile__price-box', false);
-        $response->assertSee('CENA KOCIAKA (OPCJA „NA KOLANKA”)');
+        $response->assertSee('KOCIAK W OPCJI „NA KOLANKA”');
         $response->assertSee('2 700 zł');
-        $response->assertSee('W cenie: wielopokoleniowy rodowód SHiOZ, książeczka zdrowia');
+        $response->assertSee('W pakiecie z maluchem: wielopokoleniowy rodowód SHiOZ, książeczka zdrowia');
 
         // 2. Messenger-First Primary CTA with pre-filled inquiry
         $response->assertSee('animal-profile__btn--messenger', false);

@@ -3,6 +3,33 @@
 > Project: Luxury Cattery Website & CMS
 > Engineering Journal & Architectural Record
 
+## 2026-10-27 — Quiet Luxury 'Kociak Na Kolanka' Presentation, Mobile Quiz Unclamping, Cage-Free Phrasing Cleanup & Blog Excerpt Fix (`feat(pricing)`, `fix(quiz)`, `refactor(copy)`, `fix(blog)`)
+
+### Context & Problem Statement
+The cattery owner reported 4 critical UX and copy issues requiring immediate resolution:
+1. Cat pricing should not use commercial supermarket wording ("Cena kociaka to..."), but rather professional cattery terminology ("Kociak na kolanka" with the exact amount).
+2. On mobile, the quiz result screen cut off the behavioral breed recommendation in mid-sentence with an ellipsis (`...`), right above the list of available kittens.
+3. The site referenced raising cats "bez klatek" / "klatek"; these phrases needed to be removed while maintaining natural, grammatical, and appealing phrasing.
+4. On individual blog post pages (`/blog/[slug]`), under the main H1 title, a truncated sentence starting with a markdown heading `# Title...` and ending with an abrupt cutoff `fu...` was displayed, repeating the intro paragraph that appears fully below.
+
+### Technical Resolutions
+1. **Felinological Pricing Refinement**:
+   - Replaced `CENA KOCIAKA (OPCJA „NA KOLANKA”)` in `<x-frontend.animal-price-box>` with `KOCIAK W OPCJI „NA KOLANKA”`, value `2 700 zł — pupil domowy z rodowodem`, and warranty subtext `W pakiecie z maluchem: wielopokoleniowy rodowód SHiOZ, książeczka zdrowia (komplet szczepień i 2 odrobaczenia) oraz umowa kupna-sprzedaży.`.
+   - Updated `animal-card.blade.php` to render `<span class="animal-card__price-prefix">Na kolanka:</span> {{ $animal->formattedPrice() }}` with dedicated micro-styling in `animals.css`.
+   - Updated quiz results in `quiz.blade.php` to badge kittens with `Na kolanka: {kwota}`.
+   - Updated admin form label in `form.blade.php` to `Kwota w opcji „na kolanka” (zł) (pupil domowy)`.
+2. **Mobile Quiz Result Unclamping**:
+   - Identified `-webkit-line-clamp: 3` in `resources/css/pages/quiz.css` on `.quiz-result__desc`.
+   - Removed the clamp rules so the behavioral match description renders in its entirety without clipping.
+3. **Cage-Free Phrasing Cleanup**:
+   - Replaced all negative cage mentions across 7 Blade templates (`home`, `cattery`, `animals/show`, `animals/index`, `footer`, `quiz`, `city`) with positive, warm domestic socialization terms: *„Czułość i domowe ciepło od pierwszego dnia”*, *„Chów w sercu rodziny, 100% życia z nami”*, *„żadnej izolacji – każdy kot ma pełen dostęp do przestrzeni domowej”*, *„Wychowanie domowe w sercu rodziny”*.
+   - Updated test assertions in `HomepageTest.php`.
+4. **Blog Excerpt & Hero Truncation Fix**:
+   - Removed `@if($post->excerpt) <p class="article-cover-hero__lead">` from `blog/show.blade.php` to eliminate the redundant, truncated snippet under H1.
+   - Fixed `ImportSeoArticles.php` to prioritize `meta_description` and strip markdown headings before excerpt creation.
+   - Created migration `2026_10_27_163000_clean_post_excerpts.php` to scrub raw `# ` markdown headings from database records.
+   - Updated `Post::cardExcerpt()` to clean markdown headings before returning card listings.
+
 ## 2026-10-25 — Master UI/UX Unification, Admin Price Dashboard & Premium Funnel Refactor (`feat(pricing)`, `feat(admin)`, `feat(cro)`, `feat(seo)`)
 
 ### Context & Problem Statement

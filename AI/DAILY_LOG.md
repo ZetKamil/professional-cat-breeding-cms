@@ -5,6 +5,27 @@
 
 ---
 
+## 2026-10-27
+
+### Completed
+- **Eliminacja Formuły „Cena Kociaka” & Arystokratyczna Prezentacja („Na Kolanka”) (`feat(pricing)`, `refactor(copy)`):**
+  - Przekształcono boks na profilu kota (`animal-price-box.blade.php`) na prestiżowy nagłówek `KOCIAK W OPCJI „NA KOLANKA”` z dopiskiem `— pupil domowy z rodowodem` oraz formułą gwarancyjną `W pakiecie z maluchem: wielopokoleniowy rodowód SHiOZ, książeczka zdrowia (komplet szczepień i 2 odrobaczenia) oraz umowa kupna-sprzedaży`.
+  - Na kartach kotów (`animal-card.blade.php`) wprowadzono dopracowaną plakietkę `Na kolanka: {kwota}` z dedykowaną klasą `.animal-card__price-prefix`.
+  - W wynikach quizu (`quiz.blade.php`) zaktualizowano plakietkę na `Na kolanka: {kwota}`.
+  - W panelu CMS zaktualizowano etykietę formularza na `Kwota w opcji „na kolanka” (zł) (pupil domowy)`.
+  - Zaktualizowano testy w `PriceAndFunnelUnificationTest.php` (12/12 PASS).
+- **Naprawa Obcinania Tekstu Quizu na Mobile (`fix(quiz)`, `fix(css)`):**
+  - Zdiagnozowano i usunięto regułę `-webkit-line-clamp: 3` w `resources/css/pages/quiz.css` na klasie `.quiz-result__desc`.
+  - Tekst dopasowania behawioralnego rasy wyświetla się teraz w całości bez ucinania w pół zdania, zapewniając pełną wartość merytoryczną przed listą kociąt.
+- **Usunięcie Słów „Klatek” / „Bez Klatek” w Całym Serwisie (`refactor(copy)`):**
+  - Wyeliminowano wszystkie wystąpienia fraz o klatkach z zachowaniem naturalnego, pozytywnego sensu zdań w 7 widokach Blade: `home.blade.php` (*„Czułość i domowe ciepło od pierwszego dnia”*, *„Chów w sercu rodziny, 100% życia z nami”*), `cattery.blade.php`, `animals/show.blade.php`, `animals/index.blade.php`, `footer.blade.php`, `quiz.blade.php`, `city.blade.php` oraz teście `HomepageTest.php`.
+- **Usunięcie Uciętego Teasera pod Tytułem Artykułu Bloga (`fix(blog)`, `fix(db)`):**
+  - Usunięto powielony lead `$post->excerpt` z nagłówka hero w `resources/views/frontend/blog/show.blade.php`.
+  - Utworzono i uruchomiono bezpieczną migrację `2026_10_27_163000_clean_post_excerpts.php`, która oczyściła nagłówki Markdown `# ` z kolumny `excerpt` w tabeli `posts`.
+  - Usprawniono metodę `Post::cardExcerpt()` oraz komendę `ImportSeoArticles.php` pod kątem czystości generowanych zajawek.
+
+---
+
 ## 2026-10-25
 
 ### Completed

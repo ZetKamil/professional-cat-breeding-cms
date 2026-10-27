@@ -179,6 +179,15 @@
     line-height: 1.25;
 }
 
+.animal-card__price-prefix {
+    font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'Inter', sans-serif);
+    font-size: 0.72rem;
+    font-weight: 500;
+    opacity: 0.85;
+    margin-right: 4px;
+    letter-spacing: 0.01em;
+}
+
 .animal-card__status-label {
     display: inline-flex;
     align-items: center;

@@ -268,7 +268,7 @@
                                             <div class="quiz-cat-item__name-row">
                                                 <h4>{{ $animal->name }}</h4>
                                                 @if($animal->shouldShowPrice())
-                                                    <span class="quiz-cat-item__price">{{ $animal->formattedPrice() }}</span>
+                                                    <span class="quiz-cat-item__price" title="Opcja „na kolanka”"><span class="quiz-cat-item__price-prefix">Na kolanka:</span>{{ $animal->formattedPrice() }}</span>
                                                 @endif
                                             </div>
                                             <p>{{ $animal->breed }} • {{ $animal->color }}</p>
@@ -498,7 +498,7 @@
                 </div>
                 <div style="border-top: 1px solid var(--color-hairline); padding-top: 16px;">
                     <h4 style="font-size: 1rem; font-weight: 600; color: var(--color-ink); margin-bottom: 4px;">Jak socjalizacja w Waszej hodowli ułatwia adaptację kociaka?</h4>
-                    <p style="font-size: 0.92rem; color: var(--color-ink-muted-80); margin: 0; line-height: 1.5;">Nasze kocięta nie znają klatek ani boksów. Od urodzenia mieszkają z nami w pokojach, słyszą odkurzacz, telewizor, rozmawiają z dziećmi i są codziennie brane na ręce. Dzięki temu w nowym domu adaptują się natychmiast i bez stresu.</p>
+                    <p style="font-size: 0.92rem; color: var(--color-ink-muted-80); margin: 0; line-height: 1.5;">Nasze kocięta nie znają izolacji. Od urodzenia mieszkają z nami w pokojach, słyszą odkurzacz, telewizor, rozmawiają z dziećmi i są codziennie brane na ręce. Dzięki temu w nowym domu adaptują się natychmiast i bez stresu.</p>
                 </div>
             </div>
         </div>

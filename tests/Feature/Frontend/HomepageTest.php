@@ -21,7 +21,7 @@ class HomepageTest extends TestCase
         $response->assertSee('Badania Genetyczne Rodziców');
         $response->assertSee('Dostępne Kocięta i Mioty');
         $response->assertSee('Domowa Socjalizacja');
-        $response->assertSee('Zero klatek, 100% życia z nami');
+        $response->assertSee('Chów w sercu rodziny, 100% życia z nami');
         $response->assertSee('Napisz lub umów wideo-wizytę');
     }
 

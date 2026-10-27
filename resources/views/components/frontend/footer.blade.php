@@ -31,7 +31,7 @@ Calm, minimal, trust-building
                         <span class="footer-brand__name">Domowa Hodowla Kotów z Mazowieckiej Szwajcarii</span>
                     </a>
                     <p class="footer-brand__tagline text-body">
-                        Certyfikowana domowa hodowla kotów rasowych bez klatek — prowadzona z miłością, empatią i pełną troską o zdrowie.
+                        Certyfikowana domowa hodowla kotów rasowych — prowadzona z miłością, empatią i pełną troską o zdrowie.
                     </p>
 
 
