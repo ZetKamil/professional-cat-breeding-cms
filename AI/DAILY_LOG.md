@@ -7,6 +7,12 @@
 
 ## 2026-10-28
 
+- **Wdrożenie Nowego Logo Marki „Mazowiecka Szwajcaria” — Wariant 1 Medalion (`feat(brand)`):**
+  - **Wybór koncepcji:** Wybór użytkownika padł na Wariant 1 (Frontalny medalion z kotem, szczytami górskimi, złotymi łapkami i podwójnym pierścieniem rodowym).
+  - **Pliki dla Social Media (Facebook/Instagram/Druk):** Przygotowano pliki Master High-DPI 1200×1200px w `image/logo/` oraz `public/images/brand/` (`logo-facebook-profile.jpg`, `logo-facebook-profile.png`).
+  - **Web & Favicon Assets:** Przeliczono i wygenerowano pełną siatkę ikon serwisu: `public/logo.png` (512px), `public/icon-512x512.png`, `public/icon-192x192.png`, `public/apple-touch-icon.png` (180px), `public/logo-72.png/.webp`, `public/logo-36.png/.webp` oraz favicomy 48/32/16px.
+  - **Karuzela Quizu:** Zsynchronizowano pełną serię 4 slajdów karuzeli (`1.png`, `2.png`, `3.png`, `4.png`) w `public/images/quiz/`.
+
 - **Luksusowa Miniatura Open Graph 1:1 dla Quizu (`feat(quiz)`, `fix(seo)`):**
   - **Diagnoza brzydkiej miniatury na Facebooku:** Rozwiązano problem, w którym przypięty post/reklama quizu na Facebooku wyświetlał spłaszczone, ucięte logo z różowym tłem.
   - **Integracja okładki 1:1:** Zaimportowano nową grafikę quizu z `image/quiz/1.png` do `public/images/quiz/` oraz wygenerowano wersję High-DPI 1200×1200px (`og-quiz-1200.jpg`). Zaktualizowano wszystkie historyczne aliasy (`og-quiz.jpg`, `quiz.jpg`).
