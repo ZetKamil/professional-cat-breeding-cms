@@ -109,7 +109,7 @@
       <!-- Attribution Pill -->
       <rect x="16" y="122" width="276" height="36" rx="6" fill="#042F2E" stroke="#14B8A6" stroke-width="1"/>
       <text x="26" y="137" fill="#5EEAD4" font-size="9.5" font-family="monospace">utm_source=fb_ads_bengale</text>
-      <text x="26" y="150" fill="#99F6E4" font-size="9.5" font-weight="600">&rarr; Injected as [Kod: FB_bengale] into WhatsApp</text>
+      <text x="26" y="150" fill="#99F6E4" font-size="9.5" font-weight="600">→ Injected as [Kod: FB_bengale] into WhatsApp</text>
     </g>
 
     <!-- Result Box -->
@@ -143,7 +143,7 @@
       <text x="24" y="122" fill="#FBCFE8" font-size="9.5" font-family="monospace">Zero Medical Hallucinations Guarantee</text>
 
       <rect x="16" y="138" width="276" height="24" rx="4" fill="#2E1065"/>
-      <text x="154" y="154" fill="#E9D5FF" font-size="9.5" font-weight="700" text-anchor="middle">Production time: 4h &rarr; 3 minutes</text>
+      <text x="154" y="154" fill="#E9D5FF" font-size="9.5" font-weight="700" text-anchor="middle">Production time: 4h → 3 minutes</text>
     </g>
 
     <!-- One-Click Publish Box -->
