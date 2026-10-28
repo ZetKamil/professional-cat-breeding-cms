@@ -3,12 +3,15 @@
     meta-description="Nie wiesz, jaki kot pasuje do Twojego stylu życia? Wypełnij nasz 4-etapowy quiz behawioralny i poznaj rasę dopasowaną do Ciebie oraz zobacz dostępne maluchy na żywo."
     og-title="🐾 Test: Kot Bengalski, Brytyjski czy Syjamski? Sprawdź w 45 sekund!"
     og-description="Rozwiąż krótki test i sprawdź, która rasa z naszej domowej hodowli SHiOZ ZOOLANDIA pasuje do Twojego domu."
-    og-image="{{ asset('og-quiz.jpg') }}"
+    og-image="{{ asset('images/quiz/og-quiz-1200.jpg') }}?v=20261028"
     og-image-width="1200"
-    og-image-height="630"
+    og-image-height="1200"
     og-image-type="image/jpeg"
     nav-theme="dark"
 >
+    {{-- Semantic crawler image for search engines & social bots --}}
+    <img src="{{ asset('images/quiz/og-quiz-1200.jpg') }}" alt="Która rasa kota pasuje do Ciebie? Rozwiąż test — Hodowla Kotów z Mazowieckiej Szwajcarii" class="sr-only" width="1200" height="1200">
+
     <section class="quiz-section hero--dark" data-nav-theme="dark" aria-label="Interaktywny quiz doboru rasy kota">
         <div class="section-inner">
             

@@ -39,7 +39,8 @@
             if (str_starts_with($path, '/katten/')) {
                 $path = substr($path, 7);
             }
-            $effectiveOgImage = 'https://kotyzmazowieckiejszwajcarii.pl/' . ltrim($path, '/');
+            $query = parse_url($rawOgImage, PHP_URL_QUERY);
+            $effectiveOgImage = 'https://kotyzmazowieckiejszwajcarii.pl/' . ltrim($path, '/') . ($query ? '?' . $query : '');
         } else {
             $effectiveOgImage = str_starts_with($rawOgImage, 'http://')
                 ? 'https://' . substr($rawOgImage, 7)
@@ -93,6 +94,7 @@
     <meta property="og:locale" content="pl_PL">
     <meta property="og:image" content="{{ $effectiveOgImage }}">
     <meta property="og:image:secure_url" content="{{ $effectiveOgImage }}">
+    <link rel="image_src" href="{{ $effectiveOgImage }}">
     <meta property="og:image:width" content="{{ $effectiveOgImageWidth }}">
     <meta property="og:image:height" content="{{ $effectiveOgImageHeight }}">
     <meta property="og:image:type" content="{{ $effectiveOgImageType }}">

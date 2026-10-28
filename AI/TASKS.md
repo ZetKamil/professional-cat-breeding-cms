@@ -17,7 +17,8 @@
 
 ---
 
-## Active & Recent Maintenance Tasks (2026-10-27)
+## Active & Recent Maintenance Tasks (2026-10-28)
+- [x] `feat(quiz): luxury 1:1 square Open Graph cover & crawler image unification` (2026-10-28) — Resolved Facebook link preview distortion where pinned ads showed a cropped pink circle logo instead of the quiz cover. Integrated `image/quiz/1.png` into `public/images/quiz/`, generated High-DPI 1200×1200px square asset (`og-quiz-1200.jpg`), updated all fallback aliases, enforced `og-image-width="1200"` / `og-image-height="1200"` in `quiz.blade.php`, fixed query string preservation for cache-busting and added `<link rel="image_src">` in `shell.blade.php`, and added automated feature test `QuizOpenGraphTest.php` (9 assertions, 100% PASS).
 - [x] `test(audit): adversarial edge cases and race conditions test suite & price mutator overflow hardening` (2026-10-27) — Comprehensive adversarial testing suite (12 dedicated tests in `AdversarialEdgeCasesAndRaceConditionsTest.php`) forcing boundary conditions, race conditions, and hostile inputs:
   1. **Edge Case 1 — Ułamkowe grosze i separatory (comma/dot):** Naprawiono `Animal::setPriceAttribute`, usuwając część dziesiętną przed sanitizacją cyfr (`2 700,50 zł` -> `2700 zł`, eliminując błąd sklejenia do `270 050 zł`).
   2. **Edge Case 2 — Przepełnienie typu całkowitego (PHP float/int 64-bit overflow):** Przetestowano skrajny ciąg 50 cyfr (`999...999`). Odkryto błąd, w którym `(int) (1e51)` w PHP dawał `0` zamiast `1 000 000`. Wdrożono ograniczenie `$num >= 1000000` przed rzutowaniem do int.

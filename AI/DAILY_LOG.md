@@ -5,6 +5,15 @@
 
 ---
 
+## 2026-10-28
+
+- **Luksusowa Miniatura Open Graph 1:1 dla Quizu (`feat(quiz)`, `fix(seo)`):**
+  - **Diagnoza brzydkiej miniatury na Facebooku:** Rozwiązano problem, w którym przypięty post/reklama quizu na Facebooku wyświetlał spłaszczone, ucięte logo z różowym tłem.
+  - **Integracja okładki 1:1:** Zaimportowano nową grafikę quizu z `image/quiz/1.png` do `public/images/quiz/` oraz wygenerowano wersję High-DPI 1200×1200px (`og-quiz-1200.jpg`). Zaktualizowano wszystkie historyczne aliasy (`og-quiz.jpg`, `quiz.jpg`).
+  - **Kwadratowe tagi Open Graph:** W `quiz.blade.php` zadeklarowano `og-image-width="1200"` i `og-image-height="1200"` oraz dodano semantyczny tag `img` dla crawlerów społecznościowych.
+  - **Cache-Busting w szablonie:** W `shell.blade.php` naprawiono zachowywanie query string (`?v=20261028`) oraz dodano uniwersalny znacznik `<link rel="image_src">`.
+  - **Testy automatyczne:** Utworzono `QuizOpenGraphTest.php` (9 asercji, 100% PASS).
+
 ## 2026-10-27
 
 - **Pakiet Testów Adversarial, Warunki Brzegowe & Race Conditions (`test(audit)`, `fix(models)`):**
