@@ -13,6 +13,10 @@
 
 ---
 
+![Platform Overview Banner](docs/images/platform-overview-banner.svg)
+
+---
+
 ## 🧭 For Technical Reviewers & Hiring Managers
 
 Are you evaluating this repository for a Senior / Mid Laravel & Full-Stack engineering role? Here is what sets this project apart from generic CRUD templates:
@@ -129,7 +133,7 @@ A custom **AI Content Studio** built on Livewire 4 and Google Gemini 2.0:
 * **Aspect Ratio 1:1 Cropper.js:** Embedded cropper with visual safe-zone guides to ensure ears, paws, and facial features are never clipped on high-density displays.
 * **Frictionless Lead Capture:**
   * Primary: **Messenger** (Gold `#C5A059` button with pre-filled cat reservation prompt).
-  * Secondary: **WhatsApp Live Video-Visit** (`+48 514 153 204`) with dynamic UTM tagging.
+  * Secondary: **WhatsApp Live Video-Visit** (`+48 5XX XXX XXX`) with dynamic UTM tagging.
   * Behavioral: **45-second Interactive Breed Selection Quiz** (`/dobierz-rase`).
 * **Dynamic UTM Attribution Engine:** Captures `utm_source`, `utm_medium`, `utm_campaign`, and `fbclid` on app load into `sessionStorage`, dynamically appending source codes (e.g. `[Kod: FB_Ads_bengale]`) to WhatsApp links.
 
