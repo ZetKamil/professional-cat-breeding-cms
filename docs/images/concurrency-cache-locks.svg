@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" width="100%" height="100%" style="background:#0c0e14;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+  <defs>
+    <linearGradient id="bgGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#151922"/>
+      <stop offset="100%" stop-color="#0a0c10"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <rect width="960" height="480" fill="url(#bgGlow)" rx="16"/>
+  <rect width="958" height="478" x="1" y="1" fill="none" stroke="#232936" stroke-width="1.5" rx="15"/>
+
+  <!-- Header -->
+  <g transform="translate(48, 44)">
+    <rect x="0" y="0" width="160" height="26" rx="13" fill="#EF4444" fill-opacity="0.12" stroke="#EF4444" stroke-opacity="0.3" stroke-width="1"/>
+    <text x="80" y="17" fill="#F87171" font-size="11" font-weight="700" text-anchor="middle" letter-spacing="1">CONCURRENCY &amp; AUDIT</text>
+    
+    <text x="0" y="58" fill="#FFFFFF" font-size="24" font-weight="700" letter-spacing="-0.5">Atomic Cache Locks &amp; Race Condition Defense</text>
+    <text x="0" y="82" fill="#94A3B8" font-size="14">Proven zero duplicate notifications and rock-solid edge-case sanitization under high concurrency.</text>
+  </g>
+
+  <!-- Left: The Problem (Without Lock) -->
+  <g transform="translate(48, 150)" filter="url(#cardShadow)">
+    <rect width="410" height="270" rx="12" fill="#151922" stroke="#EF4444" stroke-opacity="0.4" stroke-width="1.5"/>
+    <rect width="410" height="36" rx="12" fill="#2A1519"/>
+    <path d="M0,24 L0,36 L410,36 L410,24 Z" fill="#2A1519"/>
+    <text x="18" y="23" fill="#F87171" font-size="13" font-weight="700">❌ VULNERABILITY: UNGUARDED RAPID CLICKS</text>
+    
+    <g transform="translate(20, 56)">
+      <rect x="0" y="0" width="160" height="34" rx="6" fill="#1E232F" stroke="#374151" stroke-width="1"/>
+      <text x="12" y="21" fill="#E2E8F0" font-size="11" font-family="monospace">Click A (t = 0.000s)</text>
+      
+      <rect x="0" y="46" width="160" height="34" rx="6" fill="#1E232F" stroke="#374151" stroke-width="1"/>
+      <text x="12" y="67" fill="#E2E8F0" font-size="11" font-family="monospace">Click B (t = 0.001s)</text>
+      
+      <!-- Arrows -->
+      <path d="M165,17 L210,38 M165,63 L210,42" stroke="#EF4444" stroke-width="1.5"/>
+
+      <!-- Simultaneous Processing Box -->
+      <rect x="215" y="10" width="155" height="60" rx="8" fill="#3B1219" stroke="#EF4444" stroke-width="1"/>
+      <text x="225" y="32" fill="#FCA5A5" font-size="11" font-weight="700">Concurrent Workers</text>
+      <text x="225" y="52" fill="#F87171" font-size="10">Both evaluate DB &amp; pass</text>
+
+      <rect x="0" y="100" width="370" height="85" rx="8" fill="#181316" stroke="#451A20" stroke-width="1"/>
+      <text x="14" y="122" fill="#F87171" font-size="12" font-weight="700">Critical Failure Modes:</text>
+      <text x="14" y="142" fill="#94A3B8" font-size="11">• 2x SMS dispatched to breeder phone</text>
+      <text x="14" y="160" fill="#94A3B8" font-size="11">• 2x Email leads inserted into database</text>
+      <text x="14" y="178" fill="#94A3B8" font-size="11">• Distorted conversion attribution in Meta Pixel</text>
+    </g>
+  </g>
+
+  <!-- Right: The Solution (Atomic Cache Lock) -->
+  <g transform="translate(502, 150)" filter="url(#cardShadow)">
+    <rect width="410" height="270" rx="12" fill="#151922" stroke="#10B981" stroke-width="1.5"/>
+    <rect width="410" height="36" rx="12" fill="#0E2F24"/>
+    <path d="M0,24 L0,36 L410,36 L410,24 Z" fill="#0E2F24"/>
+    <text x="18" y="23" fill="#34D399" font-size="13" font-weight="700">✓ SOLUTION: Cache::lock('callback_...')</text>
+    
+    <g transform="translate(20, 52)">
+      <!-- Code preview box -->
+      <rect x="0" y="0" width="370" height="80" rx="6" fill="#0A1118" stroke="#1E3A34" stroke-width="1"/>
+      <text x="14" y="22" fill="#38BDF8" font-size="11" font-family="monospace">$lock = Cache::lock("call_{$phone}", 10);</text>
+      <text x="14" y="42" fill="#A7F3D0" font-size="11" font-family="monospace">if (! $lock-&gt;get()) {</text>
+      <text x="14" y="62" fill="#F87171" font-size="11" font-family="monospace">    return response()-&gt;json(['status' =&gt; 'duplicate'], 429);</text>
+      <text x="14" y="75" fill="#A7F3D0" font-size="11" font-family="monospace">}</text>
+
+      <g transform="translate(0, 95)">
+        <rect x="0" y="0" width="180" height="52" rx="6" fill="#064E3B" stroke="#10B981" stroke-width="1"/>
+        <text x="12" y="20" fill="#A7F3D0" font-size="11" font-weight="700">Request 1: ACQUIRED</text>
+        <text x="12" y="38" fill="#D1FAE5" font-size="10">Processes &amp; notifies once</text>
+
+        <rect x="190" y="0" width="180" height="52" rx="6" fill="#1F2937" stroke="#4B5563" stroke-width="1"/>
+        <text x="202" y="20" fill="#9CA3AF" font-size="11" font-weight="700">Request 2: REJECTED</text>
+        <text x="202" y="38" fill="#6B7280" font-size="10">Graceful 429 Throttle</text>
+      </g>
+
+      <rect x="0" y="160" width="370" height="34" rx="6" fill="#0E2F24" stroke="#10B981" stroke-width="1"/>
+      <text x="185" y="182" fill="#6EE7B7" font-size="11" font-weight="700" text-anchor="middle">100% Protected | Verified by Concurrency Tests</text>
+    </g>
+  </g>
+
+</svg>
