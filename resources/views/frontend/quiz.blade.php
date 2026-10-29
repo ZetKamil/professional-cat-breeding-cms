@@ -540,6 +540,11 @@
             };
 
             window.selectQuizOption = function(step, value) {
+                // Implicit consent on interaction: grant full tracking and auto-dismiss cookie banner
+                if (typeof window.grantImplicitConsent === 'function') {
+                    window.grantImplicitConsent();
+                }
+
                 quizState['step' + step] = value;
 
                 // Track quiz start once when first option is clicked
@@ -895,6 +900,11 @@
                         matched_count: matchedCount,
                     });
                 }
+
+                // Notify mobile sticky bar that quiz results are visible
+                try {
+                    window.dispatchEvent(new CustomEvent('quiz:results-shown'));
+                } catch(e) {}
             }
 
             /**

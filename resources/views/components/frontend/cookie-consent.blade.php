@@ -304,7 +304,49 @@
                     window.declineCookieConsent();
                 });
             }
+
+            // Treat any user interaction outside the banner as implicit consent to auto-dismiss and enable full tracking
+            function onUserInteraction(e) {
+                const bannerEl = document.getElementById('cookie-consent-banner');
+                if (bannerEl && bannerEl.contains(e.target)) {
+                    return;
+                }
+                window.grantImplicitConsent();
+                cleanupListeners();
+            }
+
+            function onUserScroll() {
+                if (window.scrollY > 40) {
+                    window.grantImplicitConsent();
+                    cleanupListeners();
+                }
+            }
+
+            function cleanupListeners() {
+                document.removeEventListener('click', onUserInteraction, true);
+                document.removeEventListener('touchstart', onUserInteraction, true);
+                window.removeEventListener('scroll', onUserScroll, { passive: true });
+            }
+
+            document.addEventListener('click', onUserInteraction, true);
+            document.addEventListener('touchstart', onUserInteraction, true);
+            window.addEventListener('scroll', onUserScroll, { passive: true });
         }
+
+        window.grantImplicitConsent = function () {
+            let consent = null;
+            try {
+                consent = localStorage.getItem(STORAGE_KEY);
+            } catch (e) {}
+
+            if (consent === 'declined') return;
+            if (consent === 'accepted') {
+                hideCookieBanner();
+                return;
+            }
+
+            window.acceptCookieConsent();
+        };
 
         window.acceptCookieConsent = function () {
             try {

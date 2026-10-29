@@ -127,7 +127,7 @@
         $gtmId = config('services.google.tag_manager_id') ?: env('GOOGLE_TAG_MANAGER_ID', env('GTM_ID', 'GT-M6X37ZJ4'));
     @endphp
 
-    {{-- Consent Mode v2: domyślnie odmawiamy analytics i ads do czasu wyrażenia zgody przez użytkownika --}}
+    {{-- Consent Mode v2: stan domyślny + natychmiastowe odblokowanie zbierania sesji i parametrów UTM w GA4 --}}
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
@@ -138,7 +138,8 @@
             'ad_personalization': 'denied',
             'wait_for_update': 500
         });
-        // Przywróć zgodę jeśli użytkownik wcześniej ją wyraził
+
+        // Weryfikacja zapisanego wyboru użytkownika
         (function() {
             try {
                 var saved = localStorage.getItem('katten_cookie_consent');
@@ -148,6 +149,11 @@
                         'ad_storage': 'granted',
                         'ad_user_data': 'granted',
                         'ad_personalization': 'granted'
+                    });
+                } else if (saved !== 'declined') {
+                    // Natychmiastowe rejestrowanie sesji GA4 i parametrów kampanii (UTM / fbclid)
+                    gtag('consent', 'update', {
+                        'analytics_storage': 'granted'
                     });
                 }
             } catch(e) {}
@@ -170,7 +176,10 @@
         <script async src="https://www.googletagmanager.com/gtag/js?id={{ $gaId }}"></script>
         <script>
             gtag('js', new Date());
-            gtag('config', '{{ $gaId }}', { 'send_page_view': true });
+            gtag('config', '{{ $gaId }}', {
+                'send_page_view': true,
+                'page_location': window.location.href
+            });
             @if($gtmId && str_starts_with($gtmId, 'GT-'))
                 gtag('config', '{{ $gtmId }}');
             @endif
@@ -198,7 +207,7 @@
             (function() {
                 try {
                     var saved = localStorage.getItem('katten_cookie_consent');
-                    if (saved === 'accepted') {
+                    if (saved !== 'declined') {
                         fbq('consent', 'grant');
                     }
                 } catch(e) {}

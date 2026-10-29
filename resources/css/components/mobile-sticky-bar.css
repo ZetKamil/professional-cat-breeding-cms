@@ -1,117 +1,115 @@
 /**
  * mobile-sticky-bar.css
  * Hodowla Kotów z Mazowieckiej Szwajcarii
- * Mobile Sticky Action Bar in Thumb Zone
+ * Luxury Sticky Mobile Bottom Bar (Messenger CTA)
  */
 
 .mobile-sticky-bar {
-    display: block;
+    display: none;
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
     z-index: 9990;
-    background: rgba(14, 14, 15, 0.92);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-top: 1px solid rgba(200, 157, 92, 0.3);
-    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.5);
-    padding: 10px 14px;
-    padding-bottom: max(10px, env(safe-area-inset-bottom));
+    background: rgba(17, 17, 17, 0.95);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-top: 1px solid rgba(197, 160, 89, 0.4);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.45);
+    padding: 10px 16px;
+    padding-bottom: max(10px, env(safe-area-inset-bottom, 10px));
     box-sizing: border-box;
+    transform: translateY(105%);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
 }
 
-/* Hide on desktop and larger tablets */
+/* Mobile viewports (< 768px) */
+@media (max-width: 767.98px) {
+    .mobile-sticky-bar {
+        display: block;
+    }
+
+    .mobile-sticky-bar.mobile-sticky-bar--visible {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+    }
+}
+
+/* Hide on desktop and tablets (>= 768px) */
 @media (min-width: 768px) {
     .mobile-sticky-bar {
         display: none !important;
     }
 }
 
-/* Hide sticky bar when reservation modal is active to prevent obscuring inputs */
+/* Hide when reservation modal or other dialog is active */
 body.is-modal-open .mobile-sticky-bar,
 body.modal-open .mobile-sticky-bar {
     display: none !important;
 }
 
+/* Container */
 .mobile-sticky-bar__inner {
-    max-width: 500px;
+    max-width: 520px;
     margin: 0 auto;
     display: flex;
-    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
 }
 
-.mobile-sticky-bar__btn {
-    display: flex;
+/* Left text (Cream / White) */
+.mobile-sticky-bar__text {
+    color: #FAF8F5;
+    font-size: 0.88rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* Right button (Solid Champagne Gold #C5A059, dark bold text) */
+.mobile-sticky-bar__messenger-btn {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    padding: 10px 14px;
-    border-radius: 12px;
+    gap: 6px;
+    background: #C5A059;
+    color: #111111 !important;
+    font-weight: 700;
+    font-size: 0.88rem;
+    line-height: 1;
+    padding: 10px 18px;
+    border-radius: 9999px;
     text-decoration: none;
-    font-family: inherit;
+    white-space: nowrap;
     border: none;
     cursor: pointer;
-    box-sizing: border-box;
-    transition: transform 0.15s ease, filter 0.15s ease;
+    box-shadow: 0 2px 10px rgba(197, 160, 89, 0.35);
+    transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
-}
-
-.mobile-sticky-bar__btn:active {
-    transform: scale(0.97);
-}
-
-.mobile-sticky-bar__icon {
-    font-size: 1.25rem;
-    line-height: 1;
     flex-shrink: 0;
 }
 
-.mobile-sticky-bar__label {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-    line-height: 1.15;
+.mobile-sticky-bar__messenger-btn:hover,
+.mobile-sticky-bar__messenger-btn:focus {
+    background: #D4B068;
+    color: #111111 !important;
+    box-shadow: 0 4px 14px rgba(197, 160, 89, 0.45);
 }
 
-.mobile-sticky-bar__label strong {
-    font-size: 0.88rem;
-    font-weight: 700;
-    letter-spacing: -0.01em;
+.mobile-sticky-bar__messenger-btn:active {
+    transform: scale(0.97);
 }
 
-.mobile-sticky-bar__label small {
-    font-size: 0.68rem;
-    opacity: 0.85;
-    margin-top: 1px;
-}
-
-/* Live Video-Visit Button (Primary - WhatsApp) */
-.mobile-sticky-bar__btn--video {
-    flex: 1.25;
-    background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
-    color: #ffffff;
-    box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
-}
-
-/* Phone Call Button (Gold / Dark) */
-.mobile-sticky-bar__btn--phone {
-    flex: 1;
-    background: rgba(200, 157, 92, 0.16);
-    border: 1px solid rgba(200, 157, 92, 0.45);
-    color: #f7e6cc;
-}
-
-.mobile-sticky-bar__btn--phone:hover,
-.mobile-sticky-bar__btn--phone:active {
-    background: rgba(200, 157, 92, 0.25);
-    color: #ffffff;
-}
-
-/* Extra bottom offset to prevent sticky bar from obstructing footer content */
-@media (max-width: 767px) {
+/* Extra bottom padding to prevent sticky bar from obstructing footer */
+@media (max-width: 767.98px) {
     .site-footer {
-        padding-bottom: calc(74px + env(safe-area-inset-bottom, 12px)) !important;
+        padding-bottom: calc(70px + env(safe-area-inset-bottom, 12px)) !important;
     }
 }
