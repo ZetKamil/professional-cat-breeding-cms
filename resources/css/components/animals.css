@@ -231,60 +231,69 @@
    -------------------------------------------------------------------------- */
 
 .animals-catalog-group {
-    margin-bottom: var(--sp-4xl);
+    margin-bottom: 0;
 }
 
 .animals-section-header {
-    text-align: left;
-    margin-bottom: var(--sp-xl);
+    text-align: center;
+    margin: 0 auto clamp(28px, 3.5vw, 44px);
+    max-width: 720px;
 }
 
 .animals-section-header .text-eyebrow {
     color: var(--color-primary, #C5A059);
     font-size: 0.8125rem;
     font-weight: 600;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    display: block;
-    margin-bottom: 4px;
+    display: inline-block;
+    margin-bottom: 8px;
+    text-align: center;
 }
 
 .animals-section-header .animals-section-title {
     font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
-    font-size: clamp(1.6rem, 3vw, 2.1rem);
+    font-size: clamp(1.85rem, 3.2vw, 2.45rem);
     font-weight: 600;
     color: var(--color-ink);
-    margin: 0 0 6px;
+    margin: 0 0 10px;
     letter-spacing: -0.02em;
+    line-height: 1.25;
+    text-align: center;
+    text-wrap: balance;
 }
 
 .animals-section-header .animals-section-lead {
-    font-size: 0.95rem;
+    font-size: 0.98rem;
     color: var(--color-ink-muted-80);
-    margin: 0;
-    max-width: 64ch;
-    line-height: 1.55;
+    margin: 0 auto;
+    max-width: 60ch;
+    line-height: 1.6;
+    text-align: center;
+    text-wrap: balance;
 }
 
 .animals-section-divider {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 20px;
-    margin: var(--sp-3xl) 0 var(--sp-2xl);
+    gap: 24px;
+    max-width: 600px;
+    margin: clamp(52px, 6.5vw, 80px) auto;
 }
 
 .animals-divider-line {
     flex-grow: 1;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(197, 160, 89, 0.35), transparent);
+    background: linear-gradient(90deg, transparent, rgba(197, 160, 89, 0.45), transparent);
 }
 
 .animals-divider-diamond {
     color: var(--color-gold, #C5A059);
-    font-size: 1rem;
+    font-size: 1.1rem;
     line-height: 1;
-    opacity: 0.8;
+    opacity: 0.85;
+    text-shadow: 0 0 10px rgba(197, 160, 89, 0.35);
 }
 
 .section-action {

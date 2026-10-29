@@ -165,7 +165,15 @@
 
                 {{-- Section 3: Inne / W nowych domach (jeśli wyfiltrowano) --}}
                 @if($otherCats->isNotEmpty())
-                    <div class="animals-catalog-group animals-catalog-group--spaced">
+                    {{-- Luxury Divider if preceding sections exist --}}
+                    @if($kittens->isNotEmpty() || $breedingParents->isNotEmpty())
+                        <div class="animals-section-divider" aria-hidden="true">
+                            <span class="animals-divider-line"></span>
+                            <span class="animals-divider-diamond">✦</span>
+                            <span class="animals-divider-line"></span>
+                        </div>
+                    @endif
+                    <div class="animals-catalog-group">
                         <div class="animals-section-header">
                             <span class="text-eyebrow">Kocięta w Nowych Domach</span>
                             <h2 class="animals-section-title">Znalazły Już Swój Dom</h2>
