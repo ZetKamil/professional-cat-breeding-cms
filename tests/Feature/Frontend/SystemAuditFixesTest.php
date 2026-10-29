@@ -173,4 +173,17 @@ class SystemAuditFixesTest extends TestCase
         $viewContent = file_get_contents(resource_path('views/frontend/animals/index.blade.php'));
         $this->assertStringContainsString('animals-catalog__pagination--top', $viewContent);
     }
+
+    public function test_shell_renders_meta_pixel_with_fallback_identifiers(): void
+    {
+        config([
+            'services.meta.pixel_id' => null,
+            'services.facebook.pixel_id' => '99887766554433',
+        ]);
+
+        $response = $this->get(route('home'));
+        $response->assertOk();
+        $response->assertSee("fbq('init', '99887766554433')", false);
+        $response->assertSee('connect.facebook.net/en_US/fbevents.js', false);
+    }
 }

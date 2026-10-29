@@ -43,11 +43,11 @@ return [
     'facebook' => [
         'app_id' => env('FACEBOOK_APP_ID', env('FB_APP_ID')),
         'page_id' => env('FACEBOOK_PAGE_ID', '61580668026948'),
-        'pixel_id' => env('META_PIXEL_ID', env('VITE_META_PIXEL_ID', '')),
+        'pixel_id' => env('META_PIXEL_ID', env('FB_PIXEL_ID', env('FACEBOOK_PIXEL_ID', env('PIXEL_ID', env('VITE_META_PIXEL_ID', env('VITE_FB_PIXEL_ID', '')))))),
     ],
 
     'meta' => [
-        'pixel_id' => env('META_PIXEL_ID', env('VITE_META_PIXEL_ID', '')),
+        'pixel_id' => env('META_PIXEL_ID', env('FB_PIXEL_ID', env('FACEBOOK_PIXEL_ID', env('PIXEL_ID', env('VITE_META_PIXEL_ID', env('VITE_FB_PIXEL_ID', '')))))),
     ],
 
     /*

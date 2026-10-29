@@ -189,7 +189,32 @@
 
     {{-- Meta Pixel — Consent Mode Integration --}}
     @php
-        $metaPixelId = config('services.meta.pixel_id') ?: config('services.facebook.pixel_id');
+        $metaPixelId = config('services.meta.pixel_id')
+            ?: config('services.facebook.pixel_id')
+            ?: env('META_PIXEL_ID')
+            ?: env('FB_PIXEL_ID')
+            ?: env('FACEBOOK_PIXEL_ID')
+            ?: env('PIXEL_ID')
+            ?: env('VITE_META_PIXEL_ID')
+            ?: env('VITE_FB_PIXEL_ID');
+
+        // Robust fallback: if bootstrap/cache/config.php on hosting is stale or cached without the key, read directly from .env
+        if (! $metaPixelId && @file_exists(base_path('.env'))) {
+            $envLines = @file(base_path('.env'), FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: [];
+            foreach ($envLines as $line) {
+                $line = trim($line);
+                if (str_starts_with($line, '#')) {
+                    continue;
+                }
+                if (preg_match('/^(?:META_PIXEL_ID|FB_PIXEL_ID|FACEBOOK_PIXEL_ID|PIXEL_ID|VITE_META_PIXEL_ID|VITE_FB_PIXEL_ID)\s*=\s*(.*)$/i', $line, $m)) {
+                    $val = trim($m[1], " \t\n\r\0\x0B\"'");
+                    if (! empty($val)) {
+                        $metaPixelId = $val;
+                        break;
+                    }
+                }
+            }
+        }
     @endphp
     @if($metaPixelId)
         <script>
