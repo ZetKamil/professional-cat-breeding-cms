@@ -228,7 +228,7 @@
                         <div class="animal-profile__meta-badges" style="display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; margin-top: 14px;">
                             <div class="animal-meta-pill" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 9999px; background: rgba(200, 157, 92, 0.08); border: 1px solid rgba(200, 157, 92, 0.28); font-size: 0.84rem; color: #3a3a3c; font-weight: 500;">
                                 <span aria-hidden="true">🎂</span>
-                                <span><strong>Urodzony:</strong> {{ $animal->date_of_birth ? $animal->date_of_birth->format('d.m.Y') : 'Wiek adult' }} ({{ $animal->age() ?? 'Dorosły kot' }})</span>
+                                <span><strong>{{ $animal->gender === \App\Enums\AnimalGender::Female ? 'Urodzona:' : 'Urodzony:' }}</strong> {{ $animal->date_of_birth ? $animal->date_of_birth->format('d.m.Y') : 'Wiek adult' }} ({{ $animal->age() ?? 'Dorosły kot' }})</span>
                             </div>
 
                             <div class="animal-meta-pill" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 9999px; background: rgba(52, 199, 89, 0.08); border: 1px solid rgba(52, 199, 89, 0.28); font-size: 0.84rem; color: #166534; font-weight: 500;">
@@ -279,11 +279,21 @@
                         </div>
                         <div class="animal-spec-card" role="listitem">
                             <div class="animal-spec-card__top">
-                                <span class="animal-spec-card__label">Odbiór</span>
-                                <i data-lucide="calendar-check" class="animal-spec-card__icon" aria-hidden="true"></i>
+                                @if($isBreeding)
+                                    <span class="animal-spec-card__label">Rola w hodowli</span>
+                                    <i data-lucide="award" class="animal-spec-card__icon" aria-hidden="true"></i>
+                                @elseif($animal->status === \App\Enums\AnimalStatus::Sold || $animal->status === \App\Enums\AnimalStatus::Retired || $animal->status === \App\Enums\AnimalStatus::Reserved)
+                                    <span class="animal-spec-card__label">Status</span>
+                                    <i data-lucide="check-circle" class="animal-spec-card__icon" aria-hidden="true"></i>
+                                @else
+                                    <span class="animal-spec-card__label">Odbiór</span>
+                                    <i data-lucide="calendar-check" class="animal-spec-card__icon" aria-hidden="true"></i>
+                                @endif
                             </div>
                             <span class="animal-spec-card__value">
-                                @if($animal->earliest_pickup_date && $animal->isEarlyReservation())
+                                @if($isBreeding || $animal->status === \App\Enums\AnimalStatus::Sold || $animal->status === \App\Enums\AnimalStatus::Retired || $animal->status === \App\Enums\AnimalStatus::Reserved)
+                                    {{ $animal->statusLabel() }}
+                                @elseif($animal->earliest_pickup_date && $animal->isEarlyReservation())
                                     Od {{ $animal->earliest_pickup_date->format('d.m.Y') }}
                                 @elseif($animal->pickupTimelineLabel())
                                     {{ $animal->pickupTimelineLabel() }}
@@ -338,7 +348,23 @@
                     </div>
 
                     @php
-                        $inquiryMsg = "Dzień dobry! Piszę w sprawie kociaka: {$animal->name}. Czy jest aktualnie wolny?";
+                        if ($isBreeding) {
+                            $inquiryMsg = "Dzień dobry! Piszę w sprawie kota hodowlanego: {$animal->name}. Kiedy planujecie najbliższe mioty po tym rodzicu?";
+                            $messengerBtnText = "💬 Zapytaj o planowane mioty (Messenger)";
+                            $whatsappBtnText = "WhatsApp (+48 514 153 204)";
+                        } elseif ($animal->status === \App\Enums\AnimalStatus::Reserved) {
+                            $inquiryMsg = "Dzień dobry! Widzę, że kociak {$animal->name} jest zarezerwowany. Czy macie podobne wolne kocięta lub kiedy planujecie kolejny miot?";
+                            $messengerBtnText = "💬 Zapytaj o podobne kocięta (Messenger)";
+                            $whatsappBtnText = "WhatsApp (+48 514 153 204)";
+                        } elseif ($animal->status === \App\Enums\AnimalStatus::Sold || $animal->status === \App\Enums\AnimalStatus::Retired) {
+                            $inquiryMsg = "Dzień dobry! Widzę profil kotka {$animal->name}. Chciał(a)bym zapytać o aktualnie wolne kocięta w hodowli.";
+                            $messengerBtnText = "💬 Zapytaj o wolne kocięta (Messenger)";
+                            $whatsappBtnText = "WhatsApp (+48 514 153 204)";
+                        } else {
+                            $inquiryMsg = "Dzień dobry! Piszę w sprawie kociaka: {$animal->name}. Czy jest aktualnie wolny?";
+                            $messengerBtnText = "💬 Zapytaj o kociaka lub umów wideo-wizytę (Messenger)";
+                            $whatsappBtnText = "WhatsApp (+48 514 153 204)";
+                        }
                         $messengerInquiryUrl = 'https://m.me/61580668026948?text=' . urlencode($inquiryMsg);
                         $whatsappInquiryUrl = 'https://wa.me/48514153204?text=' . urlencode($inquiryMsg);
                     @endphp
@@ -350,7 +376,7 @@
                            rel="noopener noreferrer"
                            class="animal-profile__btn--messenger"
                            onclick="if(typeof fbq === 'function'){ fbq('track', 'Contact', { content_name: @js($animal->name), method: 'Messenger' }); } if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'messenger', origin: 'animal_profile', cat_name: @js($animal->name) }); }">
-                            💬 Zapytaj o kociaka lub umów wideo-wizytę (Messenger)
+                            {{ $messengerBtnText }}
                         </a>
 
                         <a href="{{ $whatsappInquiryUrl }}"
@@ -358,7 +384,7 @@
                            rel="noopener noreferrer"
                            class="animal-profile__btn--whatsapp"
                            onclick="if(typeof fbq === 'function'){ fbq('track', 'Contact', { content_name: @js($animal->name), method: 'WhatsApp' }); } if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'whatsapp', origin: 'animal_profile', cat_name: @js($animal->name) }); }">
-                            WhatsApp (+48 514 153 204)
+                            {{ $whatsappBtnText }}
                         </a>
 
                         @if(isset($children) && $children->isNotEmpty())
@@ -374,22 +400,52 @@
                         @endif
                     </div>
 
-                    {{-- 5-min Live Video-Visit Callout Box --}}
-                    <div class="animal-profile__video-callout">
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <span style="font-size: 1.5rem; line-height: 1;">📹</span>
-                            <div>
-                                <strong style="display: block; font-size: 0.95rem; color: var(--color-ink, #ffffff);">Zobacz kota na żywo (Wideo-wizyta)</strong>
-                                <span style="font-size: 0.82rem; color: var(--color-ink-muted-80, #a1a1a6);">Połącz się bezpośrednio przez Messenger lub WhatsApp i poznaj kociaka w domowym otoczeniu</span>
+                    @if($animal->status === \App\Enums\AnimalStatus::Available)
+                        {{-- 5-min Live Video-Visit Callout Box for available kittens --}}
+                        <div class="animal-profile__video-callout">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <span style="font-size: 1.5rem; line-height: 1;">📹</span>
+                                <div>
+                                    <strong style="display: block; font-size: 0.95rem; color: var(--color-ink, #ffffff);">Zobacz kota na żywo (Wideo-wizyta)</strong>
+                                    <span style="font-size: 0.82rem; color: var(--color-ink-muted-80, #a1a1a6);">Połącz się bezpośrednio przez Messenger lub WhatsApp i poznaj kociaka w domowym otoczeniu</span>
+                                </div>
                             </div>
+                            <button type="button" 
+                                class="btn btn-secondary" 
+                                style="font-size: 0.82rem; padding: 8px 14px; white-space: nowrap;"
+                                onclick="window.openReservationModal('{{ htmlspecialchars(addslashes($animal->name), ENT_QUOTES) }}', '{{ htmlspecialchars(addslashes($animal->breed), ENT_QUOTES) }}', '{{ htmlspecialchars(addslashes($animal->pickupBadgeLabel()), ENT_QUOTES) }}')">
+                                Połącz się teraz →
+                            </button>
                         </div>
-                        <button type="button" 
-                            class="btn btn-secondary" 
-                            style="font-size: 0.82rem; padding: 8px 14px; white-space: nowrap;"
-                            onclick="window.openReservationModal('{{ htmlspecialchars(addslashes($animal->name), ENT_QUOTES) }}', '{{ htmlspecialchars(addslashes($animal->breed), ENT_QUOTES) }}', '{{ htmlspecialchars(addslashes($animal->pickupBadgeLabel()), ENT_QUOTES) }}')">
-                            Połącz się teraz →
-                        </button>
-                    </div>
+                    @elseif($animal->status === \App\Enums\AnimalStatus::Reserved)
+                        {{-- Reserved note callout --}}
+                        <div class="animal-profile__video-callout" style="border-left-color: rgba(197, 160, 89, 0.4);">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <span style="font-size: 1.5rem; line-height: 1;">📝</span>
+                                <div>
+                                    <strong style="display: block; font-size: 0.95rem; color: var(--color-ink, #ffffff);">Ten maluch ma już rezerwację</strong>
+                                    <span style="font-size: 0.82rem; color: var(--color-ink-muted-80, #a1a1a6);">Kotek czeka na odbiór przez nową rodzinę. Skontaktuj się, aby zapytać o podobne kocięta lub kolejny miot</span>
+                                </div>
+                            </div>
+                            <a href="{{ $messengerInquiryUrl }}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="font-size: 0.82rem; padding: 8px 14px; white-space: nowrap;">
+                                Zapytaj o miot →
+                            </a>
+                        </div>
+                    @elseif($isBreeding)
+                        {{-- Breeding parent info callout --}}
+                        <div class="animal-profile__video-callout" style="border-left-color: var(--color-gold, #c89d5c);">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <span style="font-size: 1.5rem; line-height: 1;">🏆</span>
+                                <div>
+                                    <strong style="display: block; font-size: 0.95rem; color: var(--color-ink, #ffffff);">Kot Hodowlany — fundament genetyczny</strong>
+                                    <span style="font-size: 0.82rem; color: var(--color-ink-muted-80, #a1a1a6);">Przebadany pod kątem chorób genetycznych i kardiologicznych. Zapytaj o planowane mioty</span>
+                                </div>
+                            </div>
+                            <a href="{{ $messengerInquiryUrl }}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="font-size: 0.82rem; padding: 8px 14px; white-space: nowrap;">
+                                Zapytaj o mioty →
+                            </a>
+                        </div>
+                    @endif
 
                     {{-- Contextual Facebook Daily Life Discovery --}}
                     <div class="animal-profile__social-note">
@@ -450,30 +506,98 @@
     <div class="reveal-up">
         <x-frontend.section tile="parchment" padding="default" class="cta-section">
             <div class="cta-block">
-                <div class="cta-block__eyebrow">
-                    <span>Wideo-Wizyta na żywo & Rezerwacja</span>
-                </div>
-                <h2 class="cta-block__headline">
-                    Zainteresowany kotem {{ $animal->name }}?
-                </h2>
-                <p class="cta-block__description">
-                    Połącz się z nami na 5-minutową wideo-wizytę na żywo (WhatsApp lub Messenger) albo porozmawiajmy telefonicznie. Chętnie pokażemy malucha w domowym otoczeniu, przedstawimy certyfikaty zdrowia rodziców i odpowiemy na wszystkie Twoje pytania.
-                </p>
-                <div class="cta-block__action" style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-                    <x-frontend.button
-                        type="button"
-                        variant="primary"
-                        icon="arrow-right"
-                        onclick="window.openReservationModal('{{ htmlspecialchars(addslashes($animal->name), ENT_QUOTES) }}', '{{ htmlspecialchars(addslashes($animal->breed), ENT_QUOTES) }}', '{{ htmlspecialchars(addslashes($animal->pickupBadgeLabel()), ENT_QUOTES) }}')">
-                        📹 Umów wideo-wizytę / Zarezerwuj
-                    </x-frontend.button>
-                    <x-frontend.button
-                        href="tel:+48514153204"
-                        variant="secondary"
-                        icon="phone">
-                        Zadzwoń: +48 514 153 204
-                    </x-frontend.button>
-                </div>
+                @if($isBreeding)
+                    <div class="cta-block__eyebrow">
+                        <span>Linie Hodowlane & Planowane Mioty</span>
+                    </div>
+                    <h2 class="cta-block__headline">
+                        Planujesz kociaka po kocie {{ $animal->name }}?
+                    </h2>
+                    <p class="cta-block__description">
+                        Skontaktuj się z nami bezpośrednio. Chętnie przedstawimy rodowód, wyniki badań genetycznych rodzica oraz opowiemy o planowanych miotach i zapisach na listę pierwszeństwa.
+                    </p>
+                    <div class="cta-block__action" style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                        <a href="{{ $messengerInquiryUrl }}"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           class="btn btn-primary"
+                           onclick="if(typeof fbq === 'function'){ fbq('track', 'Contact', { content_name: @js($animal->name), method: 'Messenger' }); } if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'messenger', origin: 'animal_profile_bottom_cta', cat_name: @js($animal->name) }); }">
+                            💬 Zapytaj o planowane mioty (Messenger)
+                        </a>
+                        <x-frontend.button href="tel:+48514153204" variant="secondary" icon="phone">
+                            Zadzwoń: +48 514 153 204
+                        </x-frontend.button>
+                    </div>
+                @elseif($animal->status === \App\Enums\AnimalStatus::Reserved)
+                    <div class="cta-block__eyebrow">
+                        <span>Status Rezerwacji & Kolejne Mioty</span>
+                    </div>
+                    <h2 class="cta-block__headline">
+                        Kotek {{ $animal->name }} ma już swoją rodzinę
+                    </h2>
+                    <p class="cta-block__description">
+                        Ten maluch został już zarezerwowany. Chętnie powiemy Ci o wolnych kociętach z tej samej linii lub wpiszemy Cię na listę pierwszeństwa na kolejny zaplanowany miot.
+                    </p>
+                    <div class="cta-block__action" style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                        <a href="{{ $messengerInquiryUrl }}"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           class="btn btn-primary"
+                           onclick="if(typeof fbq === 'function'){ fbq('track', 'Contact', { content_name: @js($animal->name), method: 'Messenger' }); } if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'messenger', origin: 'animal_profile_bottom_cta', cat_name: @js($animal->name) }); }">
+                            💬 Zapytaj o podobne kociaki (Messenger)
+                        </a>
+                        <x-frontend.button href="tel:+48514153204" variant="secondary" icon="phone">
+                            Zadzwoń: +48 514 153 204
+                        </x-frontend.button>
+                    </div>
+                @elseif($animal->status === \App\Enums\AnimalStatus::Sold || $animal->status === \App\Enums\AnimalStatus::Retired)
+                    <div class="cta-block__eyebrow">
+                        <span>Kocięta w Nowych Domach</span>
+                    </div>
+                    <h2 class="cta-block__headline">
+                        Kotek {{ $animal->name }} zamieszkał już u nowej rodziny
+                    </h2>
+                    <p class="cta-block__description">
+                        Marzysz o maluchu z naszej domowej hodowli? Skontaktuj się z nami, aby poznać aktualnie dostępne kocięta lub dowiedzieć się o nadchodzących miotach.
+                    </p>
+                    <div class="cta-block__action" style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                        <a href="{{ route('frontend.animals.index') }}" class="btn btn-primary">
+                            🐾 Zobacz dostępne kocięta
+                        </a>
+                        <a href="{{ $messengerInquiryUrl }}"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           class="btn btn-secondary"
+                           onclick="if(typeof fbq === 'function'){ fbq('track', 'Contact', { content_name: @js($animal->name), method: 'Messenger' }); } if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'messenger', origin: 'animal_profile_bottom_cta', cat_name: @js($animal->name) }); }">
+                            💬 Napisz do hodowcy (Messenger)
+                        </a>
+                    </div>
+                @else
+                    <div class="cta-block__eyebrow">
+                        <span>Wideo-Wizyta na żywo & Rezerwacja</span>
+                    </div>
+                    <h2 class="cta-block__headline">
+                        Zainteresowany kotem {{ $animal->name }}?
+                    </h2>
+                    <p class="cta-block__description">
+                        Połącz się z nami na 5-minutową wideo-wizytę na żywo (WhatsApp lub Messenger) albo porozmawiajmy telefonicznie. Chętnie pokażemy malucha w domowym otoczeniu, przedstawimy certyfikaty zdrowia rodziców i odpowiemy na wszystkie Twoje pytania.
+                    </p>
+                    <div class="cta-block__action" style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                        <x-frontend.button
+                            type="button"
+                            variant="primary"
+                            icon="arrow-right"
+                            onclick="window.openReservationModal('{{ htmlspecialchars(addslashes($animal->name), ENT_QUOTES) }}', '{{ htmlspecialchars(addslashes($animal->breed), ENT_QUOTES) }}', '{{ htmlspecialchars(addslashes($animal->pickupBadgeLabel()), ENT_QUOTES) }}')">
+                            📹 Umów wideo-wizytę / Zarezerwuj
+                        </x-frontend.button>
+                        <x-frontend.button
+                            href="tel:+48514153204"
+                            variant="secondary"
+                            icon="phone">
+                            Zadzwoń: +48 514 153 204
+                        </x-frontend.button>
+                    </div>
+                @endif
                 <p class="cta-block__note" role="note" style="margin-top: 16px;">
                     <i data-lucide="shield-check" aria-hidden="true" class="cta-block__note-icon"></i>
                     <span>Certyfikat SHiOZ ZOOLANDIA (58/CW/2025) · Czysta linia hodowlana z rodowodem</span>

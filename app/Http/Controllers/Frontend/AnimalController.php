@@ -99,7 +99,7 @@ class AnimalController extends Controller
         ]);
 
         $children = ($animal->gender === AnimalGender::Female ? $animal->childrenAsMother : $animal->childrenAsFather)
-            ->filter(fn ($child) => $child->is_published && $child->published_at)
+            ->filter(fn ($child) => $child->is_published && (! $child->published_at || $child->published_at->isPast()))
             ->sortBy(fn ($child) => [
                 $child->status === AnimalStatus::Available ? 1 : ($child->status === AnimalStatus::Reserved ? 2 : ($child->status === AnimalStatus::Sold ? 3 : 4)),
                 $child->sort_order,

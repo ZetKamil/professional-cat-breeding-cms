@@ -794,7 +794,9 @@ class ReservationAndCroTest extends TestCase
         $zafiraProfile->assertOk();
         $zafiraProfile->assertSee('ZafiraZarezerwowana');
         $zafiraProfile->assertSee('Zarezerwowany');
-        $zafiraProfile->assertSee("window.openReservationModal('ZafiraZarezerwowana', 'Kot Syjamski', 'Zarezerwowany')", false);
+        $zafiraProfile->assertDontSee("window.openReservationModal('ZafiraZarezerwowana'", false);
+        $zafiraProfile->assertSee('Ten maluch został już zarezerwowany');
+        $zafiraProfile->assertSee('Zapytaj o podobne kocięta');
         $this->assertSame('Zarezerwowany', $reservedCat->pickupBadgeLabel());
 
         \Illuminate\Support\Carbon::setTestNow();

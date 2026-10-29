@@ -51,6 +51,10 @@ class UpdateAnimalAction
                         return Animal::nextSortOrderFor(\App\Enums\AnimalStatus::Sold);
                     }
 
+                    if (in_array($newStatus, [\App\Enums\AnimalStatus::Available, \App\Enums\AnimalStatus::Reserved], true) && $sort >= 20) {
+                        return Animal::nextSortOrderFor($newStatus, $data['breed'] ?? $locked->breed);
+                    }
+
                     return $sort;
                 })(),
                 'price' => $data['price'] ?? null,

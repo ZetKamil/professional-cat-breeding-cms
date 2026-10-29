@@ -76,15 +76,14 @@ window.openReservationModal = function (catName, catBreed, statusLabel) {
 
     // Dynamic WhatsApp deep link
     if (whatsappBtn) {
-        const attributionCode = getTrafficAttributionCode();
         let messageText = '';
 
         if (catName) {
-            messageText = `Dzień dobry! Piszę ze strony kotyzmazowieckiejszwajcarii.pl. Interesuje mnie kotek ${catName}` +
+            messageText = `Dzień dobry! Chciał(a)bym porozmawiać o kotku ${catName}` +
                 (catBreed ? ` (${catBreed})` : '') +
-                `. Chciał(a)bym porozmawiać z hodowcą i zobaczyć malucha na żywo przez kamerę w telefonie. [Kod: ${attributionCode}]`;
+                ` i umówić wideo-wizytę na żywo.`;
         } else {
-            messageText = `Dzień dobry! Piszę ze strony kotyzmazowieckiejszwajcarii.pl. Chciał(a)bym zapytać o dostępne kocięta i umówić wideo-wizytę na żywo. [Kod: ${attributionCode}]`;
+            messageText = 'Dzień dobry! Chciał(a)bym zapytać o dostępne kocięta i umówić wideo-wizytę na żywo.';
         }
 
         whatsappBtn.href = `https://wa.me/48514153204?text=${encodeURIComponent(messageText)}`;
