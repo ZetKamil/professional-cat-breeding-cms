@@ -161,15 +161,14 @@ class Animal extends Model
 
     /**
      * Determine if price badge should be displayed.
-     * Only displayed for available/reservable kittens with a positive price,
-     * hidden for adult breeding cats/reproduktors, sold, or retired cats.
+     * Only displayed for currently available kittens with a positive price.
+     * Strictly hidden for reserved, sold, adult breeding cats, or retired cats.
      */
     public function shouldShowPrice(): bool
     {
         return $this->price !== null
             && $this->price > 0
-            && $this->status !== AnimalStatus::Breeding
-            && in_array($this->status, [AnimalStatus::Available, AnimalStatus::Reserved], true);
+            && $this->status === AnimalStatus::Available;
     }
 
     // ─── Route Model Binding ────────────────────────────────────────

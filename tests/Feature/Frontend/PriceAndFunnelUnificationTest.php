@@ -108,6 +108,33 @@ class PriceAndFunnelUnificationTest extends TestCase
         $profileResponse->assertDontSee('KOCIAK W OPCJI „NA KOLANKA”');
     }
 
+    public function test_reserved_cats_do_not_display_price_badge_even_if_price_is_set(): void
+    {
+        $reservedCat = Animal::factory()->create([
+            'name' => 'Kicia Zarezerwowana Unikalna',
+            'breed' => 'Kot Brytyjski',
+            'status' => AnimalStatus::Reserved,
+            'is_published' => true,
+            'price' => 7777,
+            'slug' => 'kicia-zarezerwowana-unikalna',
+        ]);
+
+        $this->assertFalse($reservedCat->shouldShowPrice());
+
+        $indexResponse = $this->get(route('frontend.animals.index'));
+        $indexResponse->assertOk();
+        $indexResponse->assertDontSee('Na kolanka: 7 777 zł');
+        $indexResponse->assertDontSee('7 777 zł');
+        $indexResponse->assertSee('Kicia Zarezerwowana Unikalna');
+        $indexResponse->assertSee('Zarezerwowany');
+
+        $profileResponse = $this->get(route('frontend.animals.show', $reservedCat));
+        $profileResponse->assertOk();
+        $profileResponse->assertDontSee('7 777 zł');
+        $profileResponse->assertDontSee('KOCIAK W OPCJI „NA KOLANKA”');
+        $profileResponse->assertDontSee('animal-profile__price-box', false);
+    }
+
     public function test_cat_profile_page_displays_luxury_price_box_and_messenger_primary_cta(): void
     {
         $kitten = Animal::factory()->create([

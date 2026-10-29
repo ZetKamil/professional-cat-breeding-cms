@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
-use App\Enums\AnimalGender;
 use App\Enums\AnimalStatus;
-use App\Enums\AnimalType;
 use App\Events\ContactMessageSent;
 use App\Models\Animal;
 use App\Models\Post;
@@ -102,6 +100,38 @@ class AdversarialEdgeCasesAndRaceConditionsTest extends TestCase
         $catalogResponse = $this->get(route('frontend.animals.index'));
         $catalogResponse->assertOk();
         $catalogResponse->assertDontSee('Na kolanka: 2 700 zł');
+    }
+
+    public function test_status_transition_from_available_to_reserved_immediately_hides_pricing_and_badges(): void
+    {
+        $kitten = Animal::factory()->create([
+            'name' => 'Koteczek Zarezerwowany Transyt',
+            'breed' => 'Kot Syjamski',
+            'status' => AnimalStatus::Available,
+            'is_published' => true,
+            'price' => 9350,
+            'slug' => 'koteczek-zarezerwowany-transyt',
+        ]);
+
+        $this->assertTrue($kitten->shouldShowPrice());
+
+        // 1. Transition to Reserved
+        $kitten->update(['status' => AnimalStatus::Reserved]);
+        $kitten->refresh();
+
+        $this->assertFalse($kitten->shouldShowPrice());
+
+        // 2. Public views must strictly strip pricing immediately
+        $response = $this->get(route('frontend.animals.show', $kitten));
+        $response->assertOk();
+        $response->assertDontSee('KOCIAK W OPCJI „NA KOLANKA”');
+        $response->assertDontSee('9 350 zł');
+        $response->assertDontSee('animal-profile__price-box', false);
+
+        $catalogResponse = $this->get(route('frontend.animals.index'));
+        $catalogResponse->assertOk();
+        $catalogResponse->assertDontSee('Na kolanka: 9 350 zł');
+        $catalogResponse->assertDontSee('9 350 zł');
     }
 
     public function test_breeding_cat_with_accidental_price_in_database_never_exposes_price_publicly(): void
