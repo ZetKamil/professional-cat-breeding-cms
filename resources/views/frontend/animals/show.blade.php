@@ -331,7 +331,7 @@
                                 @endif
                             </div>
                         @elseif($animal->isOdchowany())
-                            <div style="margin-top: 14px; padding: 12px 16px; background: rgba(200, 157, 92, 0.08); border-left: 3px solid var(--color-gold, #c89d5c); border-radius: 6px; font-size: 0.88rem; line-height: 1.5; color: var(--color-ink-muted-80, #d1cfc7);">
+                            <div class="animal-profile__pickup-rule">
                                 <strong>Zasada odbioru:</strong> Kotek jest w pełni odchowany, po komplecie szczepień i socjalizacji — <strong>gotowy do odbioru</strong>, dokładny termin do bezpośredniego ustalenia z hodowlą.
                             </div>
                         @endif
@@ -350,7 +350,7 @@
                            target="_blank"
                            rel="noopener noreferrer"
                            class="animal-profile__btn--messenger"
-                           onclick="if(typeof fbq === 'function'){ fbq('track', 'Contact', { content_name: @js($animal->name), method: 'Messenger' }); }">
+                           onclick="if(typeof fbq === 'function'){ fbq('track', 'Contact', { content_name: @js($animal->name), method: 'Messenger' }); } if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'messenger', origin: 'animal_profile', cat_name: @js($animal->name) }); }">
                             💬 Zapytaj o kociaka lub umów wideo-wizytę (Messenger)
                         </a>
 
@@ -358,7 +358,7 @@
                            target="_blank"
                            rel="noopener noreferrer"
                            class="animal-profile__btn--whatsapp"
-                           onclick="if(typeof fbq === 'function'){ fbq('track', 'Contact', { content_name: @js($animal->name), method: 'WhatsApp' }); }">
+                           onclick="if(typeof fbq === 'function'){ fbq('track', 'Contact', { content_name: @js($animal->name), method: 'WhatsApp' }); } if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'whatsapp', origin: 'animal_profile', cat_name: @js($animal->name) }); } var src = (typeof window.getTrafficSourceLabel === 'function') ? ' [Źródło: ' + window.getTrafficSourceLabel() + ']' : ''; this.href = 'https://wa.me/48514153204?text=' + encodeURIComponent(@js($inquiryMsg) + src);">
                             WhatsApp (+48 514 153 204)
                         </a>
 

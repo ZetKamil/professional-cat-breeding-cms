@@ -81,7 +81,7 @@ class AnimalController extends Controller
     public function show(Animal $animal): View
     {
         // Ensure only published animals are accessible to the public
-        if (! $animal->is_published || ! $animal->published_at) {
+        if (! $animal->is_published || ($animal->published_at && $animal->published_at->isFuture())) {
             abort(404);
         }
 
@@ -110,7 +110,7 @@ class AnimalController extends Controller
             ->where('id', '!=', $animal->id)
             ->where(function ($q) use ($animal) {
                 $q->where('breed', '=', $animal->breed)
-                  ->orWhere('status', '=', AnimalStatus::Available);
+                    ->orWhere('status', '=', AnimalStatus::Available);
             })
             ->with('media')
             ->orderedByStatus()

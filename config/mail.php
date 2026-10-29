@@ -116,4 +116,6 @@ return [
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
+    'contact_recipient' => env('MAIL_CONTACT_RECIPIENT', env('MAIL_FROM_ADDRESS', 'biuro@kotyzmazowieckiejszwajcarii.pl')),
+
 ];

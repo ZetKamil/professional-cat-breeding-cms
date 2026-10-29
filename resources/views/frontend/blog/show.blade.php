@@ -190,7 +190,7 @@
                                target="_blank"
                                rel="noopener noreferrer"
                                class="article-luxury-cta-btn article-luxury-cta-btn--primary"
-                               onclick="try{if(typeof fbq==='function'){fbq('track','Contact',{method:'Messenger',content_name:'Odchowane kocięta bengalskie'});}}catch(e){}">
+                               onclick="try{if(typeof fbq==='function'){fbq('track','Contact',{method:'Messenger',content_name:'Odchowane kocięta bengalskie'});}}catch(e){} if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'messenger', origin: 'blog_post_bengal', post_title: @js($post->title) }); }">
                                 💬 Napisz na Messengerze (Zapytaj o kociaki i filmik)
                             </a>
 
@@ -198,7 +198,7 @@
                                target="_blank"
                                rel="noopener noreferrer"
                                class="article-luxury-cta-btn article-luxury-cta-btn--secondary"
-                               onclick="try{if(typeof fbq==='function'){fbq('track','Contact',{method:'WhatsApp',content_name:'Odchowane kocięta bengalskie'});}}catch(e){}">
+                               onclick="try{if(typeof fbq==='function'){fbq('track','Contact',{method:'WhatsApp',content_name:'Odchowane kocięta bengalskie'});}}catch(e){} if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'whatsapp', origin: 'blog_post_bengal', post_title: @js($post->title) }); } var src = (typeof window.getTrafficSourceLabel === 'function') ? ' [Źródło: ' + window.getTrafficSourceLabel() + ']' : ''; this.href = 'https://wa.me/48514153204?text=' + encodeURIComponent('Dzień dobry! Czytam artykuł o odchowanych bengalach. Chciałbym zapytać o Barona, Cypriana i Carlosa.' + src);">
                                 WhatsApp (+48 514 153 204)
                             </a>
                         </div>
@@ -222,7 +222,7 @@
                                target="_blank"
                                rel="noopener noreferrer"
                                class="article-luxury-cta-btn article-luxury-cta-btn--primary"
-                               onclick="try{if(typeof fbq==='function'){fbq('track','Contact',{method:'Messenger',content_name: @js($post->title) });}}catch(e){}">
+                               onclick="try{if(typeof fbq==='function'){fbq('track','Contact',{method:'Messenger',content_name: @js($post->title) });}}catch(e){} if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'messenger', origin: 'blog_post', post_title: @js($post->title) }); }">
                                 💬 Napisz na Messengerze (Zapytaj o kocięta)
                             </a>
 
@@ -230,7 +230,7 @@
                                target="_blank"
                                rel="noopener noreferrer"
                                class="article-luxury-cta-btn article-luxury-cta-btn--secondary"
-                               onclick="try{if(typeof fbq==='function'){fbq('track','Contact',{method:'WhatsApp',content_name: @js($post->title) });}}catch(e){}">
+                               onclick="try{if(typeof fbq==='function'){fbq('track','Contact',{method:'WhatsApp',content_name: @js($post->title) });}}catch(e){} if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'whatsapp', origin: 'blog_post', post_title: @js($post->title) }); } var src = (typeof window.getTrafficSourceLabel === 'function') ? ' [Źródło: ' + window.getTrafficSourceLabel() + ']' : ''; this.href = 'https://wa.me/48514153204?text=' + encodeURIComponent('Dzień dobry! Czytam artykuł: ' + @js($post->title) + '. Chciałbym zapytać o dostępne kocięta.' + src);">
                                 WhatsApp (+48 514 153 204)
                             </a>
                         </div>

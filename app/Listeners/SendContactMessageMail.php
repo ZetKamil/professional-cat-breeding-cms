@@ -10,7 +10,7 @@ class SendContactMessageMail
 {
     public function handle(ContactMessageSent $event): void
     {
-        $recipient = env('MAIL_CONTACT_RECIPIENT', config('mail.from.address', 'biuro@kotyzmazowieckiejszwajcarii.pl'));
+        $recipient = config('mail.contact_recipient', config('mail.from.address', 'biuro@kotyzmazowieckiejszwajcarii.pl'));
 
         Notification::route('mail', $recipient)
             ->notify(new ContactMessageNotification($event->data));

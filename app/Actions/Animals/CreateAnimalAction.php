@@ -35,7 +35,9 @@ class CreateAnimalAction
                 'father_id' => $data['father_id'] ?? null,
                 'is_featured' => $data['is_featured'],
                 'is_published' => $data['is_published'],
-                'published_at' => $data['published_at'] ?? null,
+                'published_at' => (! empty($data['is_published']) && empty($data['published_at']))
+                    ? now()
+                    : ($data['published_at'] ?? null),
                 'sort_order' => (! empty($data['sort_order']) && (int) $data['sort_order'] > 0)
                     ? (int) $data['sort_order']
                     : Animal::nextSortOrderFor($data['status'], $data['breed'] ?? null),

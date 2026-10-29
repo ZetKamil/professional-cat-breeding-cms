@@ -227,11 +227,11 @@
                         <h3 class="quiz-result__cats-heading" id="quizMatchedCatsHeading">Dostępne kocięta tej rasy w naszej hodowli:</h3>
 
                         {{-- Notice if user chose 'ready_now' but matched breed is in early reservation (e.g. British kittens < 12 weeks) --}}
-                        <div id="quizFutureNoticeForNow" style="display:none; background: rgba(197, 160, 89, 0.08); border: 1px solid rgba(197, 160, 89, 0.28); border-radius: 12px; padding: 16px 20px; margin-bottom: 20px; text-align: left; font-size: 0.92rem; line-height: 1.55; color: #FAF8F5;">
-                            <div style="display: flex; align-items: flex-start; gap: 12px;">
-                                <span style="font-size: 1.6rem; line-height: 1;">⏳</span>
+                        <div id="quizFutureNoticeForNow" class="quiz-notice-box" style="display:none;">
+                            <div class="quiz-notice-box__row">
+                                <span class="quiz-notice-box__icon">⏳</span>
                                 <div>
-                                    <strong style="color: var(--color-gold, #c89d5c); display: block; font-size: 0.98rem; margin-bottom: 4px;">Szukasz kociaka od zaraz? Kocięta mogą wyjeżdżać do nowych domów w wieku 12–14 tygodni, po potwierdzeniu gotowości konkretnego kociaka.</strong>
+                                    <strong class="quiz-notice-box__title">Szukasz kociaka od zaraz? Kocięta mogą wyjeżdżać do nowych domów w wieku 12–14 tygodni, po potwierdzeniu gotowości konkretnego kociaka.</strong>
                                     Maluszki z tego miotu są teraz pod opieką mamy i przechodzą program domowej socjalizacji. Już teraz możesz napisać na Messengerze, zobaczyć je podczas zabawy i dokonać wczesnej rezerwacji swojego ulubieńca.
                                 </div>
                             </div>
@@ -296,10 +296,10 @@
                         </div>
 
                         {{-- Alert when 0 kittens of this breed exist in database or all are booked --}}
-                        <div id="quizNoMatchingCatsNotice" style="display:none; background: rgba(197, 160, 89, 0.08); border: 1px solid rgba(197, 160, 89, 0.28); border-radius: 12px; padding: 22px; text-align: center; margin-top: 16px; color: #FAF8F5;">
-                            <span style="font-size: 2rem; display: block; margin-bottom: 8px;">🗓️</span>
-                            <h4 id="quizNoCatsNoticeTitle" style="font-size: 1.05rem; font-weight: 700; color: var(--color-gold, #c89d5c); margin-bottom: 6px;">Planujemy kolejny miot tej rasy</h4>
-                            <p id="quizNoCatsNoticeText" style="font-size: 0.92rem; color: #e8e3d8; line-height: 1.6; margin-bottom: 16px;">
+                        <div id="quizNoMatchingCatsNotice" class="quiz-notice-box quiz-notice-box--center" style="display:none;">
+                            <span class="quiz-notice-box__icon">🗓️</span>
+                            <h4 id="quizNoCatsNoticeTitle" class="quiz-notice-box__title quiz-notice-box__title--large">Planujemy kolejny miot tej rasy</h4>
+                            <p id="quizNoCatsNoticeText" class="quiz-notice-box__lead">
                                 Aktualnie wszystkie maluchy tej rasy z obecnych miotów znalazły już swoje domy lub są w trakcie rezerwacji. Skontaktuj się z nami, aby porozmawiać o planowanym miocie i zapisać się na Listę Pierwszeństwa!
                             </p>
                             <a id="quizNoCatsCtaMessenger"
@@ -307,19 +307,18 @@
                                target="_blank"
                                rel="noopener noreferrer"
                                class="quiz-cta-btn--gold"
-                               style="display:inline-flex; max-width: 360px;"
                                onclick="window.fireQuizContactEvent('messenger', 'no_cats_notice')">
                                 💬 Zapytaj na Messengerze o planowany miot
                             </a>
                         </div>
 
                         {{-- Alternative recommendations if user wanted ready_now and matched breed not ready, or 0 matched --}}
-                        <div id="quizAlternativesBox" style="display:none; margin-top: 28px; padding-top: 22px; border-top: 1px solid rgba(255, 255, 255, 0.12);">
-                            <div style="background: rgba(197, 160, 89, 0.08); border: 1px solid rgba(197, 160, 89, 0.28); border-radius: 12px; padding: 14px 18px; margin-bottom: 16px; text-align: left;">
-                                <strong id="quizAltBoxTitle" style="color: #C5A059; font-size: 0.96rem; display: flex; align-items: center; gap: 8px;">
+                        <div id="quizAlternativesBox" class="quiz-alternatives-box" style="display:none;">
+                            <div class="quiz-alternatives-box__header">
+                                <strong id="quizAltBoxTitle" class="quiz-alternatives-box__title">
                                     <span>⚡</span> Zależy Ci na odbiorze kociaka już w ten weekend?
                                 </strong>
-                                <p id="quizAltBoxDesc" style="margin: 4px 0 0; font-size: 0.88rem; color: #FAF8F5; line-height: 1.5;">
+                                <p id="quizAltBoxDesc" class="quiz-alternatives-box__desc">
                                     Poznaj nasze w pełni odchowane maluchy innych ras, które są po komplecie szczepień, zaczipowane i gotowe do odbioru od ręki:
                                 </p>
                             </div>
@@ -327,8 +326,8 @@
                         </div>
 
                         {{-- Fallback when catalogue has 0 available cats at all --}}
-                        <div id="quizEmptyCatalogueNotice" style="display:none; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 12px; padding: 20px; text-align: center; margin-top: 16px; color: #f5f0e8;">
-                            <p style="margin: 0 0 14px; font-size: 0.93rem; color: #ded9d0; line-height: 1.6;">
+                        <div id="quizEmptyCatalogueNotice" class="quiz-empty-box" style="display:none;">
+                            <p class="quiz-empty-box__text">
                                 Aktualnie przygotowujemy nowe mioty do publikacji w katalogu online.<br>
                                 Skontaktuj się bezpośrednio z hodowlą – z przyjemnością poinformujemy Cię o aktualnym stanie miotów i planowanych narodzinach.
                             </p>
@@ -336,7 +335,6 @@
                                target="_blank"
                                rel="noopener noreferrer"
                                class="quiz-cta-btn--gold"
-                               style="display:inline-flex; max-width: 320px;"
                                onclick="window.fireQuizContactEvent('messenger', 'empty_catalogue')">
                                 💬 Napisz do hodowcy (Messenger)
                             </a>
@@ -344,9 +342,9 @@
                     </div>
 
                     {{-- Compact Golden Behavioral Note --}}
-                    <div id="quizBehavioralNoteBox" style="background: rgba(200, 157, 92, 0.14); border: 1px solid rgba(200, 157, 92, 0.35); border-left: 4px solid var(--color-gold, #c89d5c); padding: 16px 20px; border-radius: 10px; margin: 0 0 22px; text-align: left; font-size: 0.92rem; line-height: 1.6;">
-                        <strong id="quizBehavioralNoteTitle" style="color: var(--color-gold, #c89d5c); display: block; font-size: 0.95rem; margin-bottom: 5px;">💡 Dlaczego ten wybór pasuje do Twojego rytmu dnia:</strong>
-                        <p id="quizBehavioralNoteText" style="margin: 0; color: #f5f0e8; font-weight: 400;"></p>
+                    <div id="quizBehavioralNoteBox" class="quiz-behavioral-box">
+                        <strong id="quizBehavioralNoteTitle" class="quiz-behavioral-box__title">💡 Dlaczego ten wybór pasuje do Twojego rytmu dnia:</strong>
+                        <p id="quizBehavioralNoteText" class="quiz-behavioral-box__text"></p>
                     </div>
 
                     {{-- Single Primary Contact Block (Messenger First, WhatsApp Secondary, Quiet Luxury) --}}
@@ -408,7 +406,7 @@
                         </div>
                     </div>
 
-                    <div style="text-align: center; margin-top: 20px; display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap;">
+                    <div class="quiz-result__actions">
                         <button type="button" class="quiz-modify-btn" onclick="window.prevQuizStep(4)">
                             ✏️ Zmień odpowiedzi (krok 4)
                         </button>
@@ -433,75 +431,75 @@
             description="Poznaj kluczowe różnice w temperamencie, potrzebach ruchowych i pielęgnacji kotów z naszej domowej hodowli."
         />
 
-        <div class="benefits-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--sp-xl); margin-bottom: var(--sp-3xl);" role="list" aria-label="Porównanie ras kotów">
+        <div class="quiz-comparison-grid" role="list" aria-label="Porównanie ras kotów">
             {{-- Bengalski --}}
-            <div class="benefit-item" style="background: var(--color-canvas, #fff); border-radius: var(--r-xl); padding: var(--sp-xl); border: 1px solid var(--color-hairline); box-shadow: 0 4px 20px rgba(0,0,0,0.03);" role="listitem">
-                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
-                    <span style="font-size: 2rem;">🐆</span>
+            <div class="quiz-breed-card" role="listitem">
+                <div class="quiz-breed-card__header">
+                    <span class="quiz-breed-card__emoji">🐆</span>
                     <div>
-                        <h3 class="text-body-strong" style="font-size: 1.15rem; margin: 0; color: var(--color-ink);">Kot Bengalski</h3>
-                        <span style="font-size: 0.8rem; color: var(--color-gold, #c89d5c); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Dzikie Piękno & Inteligencja</span>
+                        <h3 class="quiz-breed-card__title text-body-strong">Kot Bengalski</h3>
+                        <span class="quiz-breed-card__tagline">Dzikie Piękno & Inteligencja</span>
                     </div>
                 </div>
-                <ul style="list-style: none; padding: 0; margin: 0 0 16px; font-size: 0.92rem; line-height: 1.6; color: var(--color-ink-muted-80);">
-                    <li style="margin-bottom: 8px;"><strong>Temperament:</strong> Niezwykle bystry, żywiołowy, uwielbia aportować i uczyć się sztuczek.</li>
-                    <li style="margin-bottom: 8px;"><strong>Szata:</strong> Krótka, jedwabista z brokatowym połyskiem (glitter), niemal nie gubi sierści.</li>
-                    <li style="margin-bottom: 8px;"><strong>Potrzeby:</strong> Wymaga przestrzeni do wspinaczki (wysoki drapak) i codziennej stymulacji umysłowej.</li>
-                    <li><strong>Dla kogo:</strong> Dla osób aktywnych, rodzin ze starszymi dziećmi lub osób pracujących z domu.</li>
+                <ul class="quiz-breed-card__traits">
+                    <li class="quiz-breed-card__trait"><strong>Temperament:</strong> Niezwykle bystry, żywiołowy, uwielbia aportować i uczyć się sztuczek.</li>
+                    <li class="quiz-breed-card__trait"><strong>Szata:</strong> Krótka, jedwabista z brokatowym połyskiem (glitter), niemal nie gubi sierści.</li>
+                    <li class="quiz-breed-card__trait"><strong>Potrzeby:</strong> Wymaga przestrzeni do wspinaczki (wysoki drapak) i codziennej stymulacji umysłowej.</li>
+                    <li class="quiz-breed-card__trait"><strong>Dla kogo:</strong> Dla osób aktywnych, rodzin ze starszymi dziećmi lub osób pracujących z domu.</li>
                 </ul>
             </div>
 
             {{-- Brytyjski --}}
-            <div class="benefit-item" style="background: var(--color-canvas, #fff); border-radius: var(--r-xl); padding: var(--sp-xl); border: 1px solid var(--color-hairline); box-shadow: 0 4px 20px rgba(0,0,0,0.03);" role="listitem">
-                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
-                    <span style="font-size: 2rem;">🛋️</span>
+            <div class="quiz-breed-card" role="listitem">
+                <div class="quiz-breed-card__header">
+                    <span class="quiz-breed-card__emoji">🛋️</span>
                     <div>
-                        <h3 class="text-body-strong" style="font-size: 1.15rem; margin: 0; color: var(--color-ink);">Kot Brytyjski (BSH / BLH)</h3>
-                        <span style="font-size: 0.8rem; color: var(--color-gold, #c89d5c); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Arystokratyczny Spokój & Plusz</span>
+                        <h3 class="quiz-breed-card__title text-body-strong">Kot Brytyjski (BSH / BLH)</h3>
+                        <span class="quiz-breed-card__tagline">Arystokratyczny Spokój & Plusz</span>
                     </div>
                 </div>
-                <ul style="list-style: none; padding: 0; margin: 0 0 16px; font-size: 0.92rem; line-height: 1.6; color: var(--color-ink-muted-80);">
-                    <li style="margin-bottom: 8px;"><strong>Temperament:</strong> Spokojny, zrównoważony, łagodny, nienarzucający się kompan kanapowy.</li>
-                    <li style="margin-bottom: 8px;"><strong>Szata:</strong> Krótkowłosa pluszowa (BSH, jak kotka Nel) lub okazała półdługa (BLH, jak reproduktor Staś colourpoint).</li>
-                    <li style="margin-bottom: 8px;"><strong>Potrzeby:</strong> Rutyna, ciche otoczenie, bez problemu znosi chwile samotności podczas pracy opiekuna.</li>
-                    <li><strong>Dla kogo:</strong> Dla osób ceniących ciszę, rodzin z dziećmi, osób pracujących poza domem.</li>
+                <ul class="quiz-breed-card__traits">
+                    <li class="quiz-breed-card__trait"><strong>Temperament:</strong> Spokojny, zrównoważony, łagodny, nienarzucający się kompan kanapowy.</li>
+                    <li class="quiz-breed-card__trait"><strong>Szata:</strong> Krótkowłosa pluszowa (BSH, jak kotka Nel) lub okazała półdługa (BLH, jak reproduktor Staś colourpoint).</li>
+                    <li class="quiz-breed-card__trait"><strong>Potrzeby:</strong> Rutyna, ciche otoczenie, bez problemu znosi chwile samotności podczas pracy opiekuna.</li>
+                    <li class="quiz-breed-card__trait"><strong>Dla kogo:</strong> Dla osób ceniących ciszę, rodzin z dziećmi, osób pracujących poza domem.</li>
                 </ul>
             </div>
 
             {{-- Syjamski --}}
-            <div class="benefit-item" style="background: var(--color-canvas, #fff); border-radius: var(--r-xl); padding: var(--sp-xl); border: 1px solid var(--color-hairline); box-shadow: 0 4px 20px rgba(0,0,0,0.03);" role="listitem">
-                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
-                    <span style="font-size: 2rem;">💎</span>
+            <div class="quiz-breed-card" role="listitem">
+                <div class="quiz-breed-card__header">
+                    <span class="quiz-breed-card__emoji">💎</span>
                     <div>
-                        <h3 class="text-body-strong" style="font-size: 1.15rem; margin: 0; color: var(--color-ink);">Kot Syjamski / Tajski</h3>
-                        <span style="font-size: 0.8rem; color: var(--color-gold, #c89d5c); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Głęboka Więź & Szafirowe Oczy</span>
+                        <h3 class="quiz-breed-card__title text-body-strong">Kot Syjamski / Tajski</h3>
+                        <span class="quiz-breed-card__tagline">Głęboka Więź & Szafirowe Oczy</span>
                     </div>
                 </div>
-                <ul style="list-style: none; padding: 0; margin: 0 0 16px; font-size: 0.92rem; line-height: 1.6; color: var(--color-ink-muted-80);">
-                    <li style="margin-bottom: 8px;"><strong>Temperament:</strong> Niezwykle kontaktowy, lojalny, "kocie dziecko" podążające krok w krok za opiekunem.</li>
-                    <li style="margin-bottom: 8px;"><strong>Szata:</strong> Delikatna, przylegająca do ciała, z eleganckim umaszczeniem point i błękitnymi oczami.</li>
-                    <li style="margin-bottom: 8px;"><strong>Potrzeby:</strong> Dużo uwagi i czułości — źle znosi długotrwałą samotność i ignorowanie.</li>
-                    <li><strong>Dla kogo:</strong> Dla osób szukających oddanego przyjaciela, który uwielbia brać udział we wszystkim, co robisz.</li>
+                <ul class="quiz-breed-card__traits">
+                    <li class="quiz-breed-card__trait"><strong>Temperament:</strong> Niezwykle kontaktowy, lojalny, "kocie dziecko" podążające krok w krok za opiekunem.</li>
+                    <li class="quiz-breed-card__trait"><strong>Szata:</strong> Delikatna, przylegająca do ciała, z eleganckim umaszczeniem point i błękitnymi oczami.</li>
+                    <li class="quiz-breed-card__trait"><strong>Potrzeby:</strong> Dużo uwagi i czułości — źle znosi długotrwałą samotność i ignorowanie.</li>
+                    <li class="quiz-breed-card__trait"><strong>Dla kogo:</strong> Dla osób szukających oddanego przyjaciela, który uwielbia brać udział we wszystkim, co robisz.</li>
                 </ul>
             </div>
         </div>
 
         {{-- FAQ Section --}}
-        <div style="max-width: 800px; margin: 0 auto; background: var(--color-canvas, #fff); border-radius: var(--r-xl); padding: var(--sp-2xl); border: 1px solid var(--color-hairline);">
-            <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--color-ink); margin-bottom: 20px; text-align: center;">Najczęstsze pytania o dobór rasy</h3>
+        <div class="quiz-faq-card">
+            <h3 class="quiz-faq-card__title">Najczęstsze pytania o dobór rasy</h3>
             
-            <div style="display: flex; flex-direction: column; gap: 16px;">
-                <div>
-                    <h4 style="font-size: 1rem; font-weight: 600; color: var(--color-ink); margin-bottom: 4px;">Czy kot bengalski nadaje się do mieszkania w bloku?</h4>
-                    <p style="font-size: 0.92rem; color: var(--color-ink-muted-80); margin: 0; line-height: 1.5;">Tak! Kot bengalski świetnie czuje się w mieszkaniu pod warunkiem zagospodarowania przestrzeni wertykalnej — wysokich drapaków, półek ściennych oraz codziennej zabawy w polowanie wędką.</p>
+            <div class="quiz-faq-card__list">
+                <div class="quiz-faq-card__item">
+                    <h4 class="quiz-faq-card__question">Czy kot bengalski nadaje się do mieszkania w bloku?</h4>
+                    <p class="quiz-faq-card__answer">Tak! Kot bengalski świetnie czuje się w mieszkaniu pod warunkiem zagospodarowania przestrzeni wertykalnej — wysokich drapaków, półek ściennych oraz codziennej zabawy w polowanie wędką.</p>
                 </div>
-                <div style="border-top: 1px solid var(--color-hairline); padding-top: 16px;">
-                    <h4 style="font-size: 1rem; font-weight: 600; color: var(--color-ink); margin-bottom: 4px;">Czym różni się kot brytyjski krótkowłosy (BSH) od długowłosego (BLH)?</h4>
-                    <p style="font-size: 0.92rem; color: var(--color-ink-muted-80); margin: 0; line-height: 1.5;">Obie rasy dzielą ten sam cudowny, opanowany i przyjacielski charakter. Różnią się długością okrywy: brytyjczyk krótkowłosy ma gęsty, sprężysty plusz, natomiast długowłosy (jak nasz reproduktor Staś) zachwyca jedwabistym półdługim włosem z puszystą kryzą, który wymaga czesania 1–2 razy w tygodniu.</p>
+                <div class="quiz-faq-card__item">
+                    <h4 class="quiz-faq-card__question">Czym różni się kot brytyjski krótkowłosy (BSH) od długowłosego (BLH)?</h4>
+                    <p class="quiz-faq-card__answer">Obie rasy dzielą ten sam cudowny, opanowany i przyjacielski charakter. Różnią się długością okrywy: brytyjczyk krótkowłosy ma gęsty, sprężysty plusz, natomiast długowłosy (jak nasz reproduktor Staś) zachwyca jedwabistym półdługim włosem z puszystą kryzą, który wymaga czesania 1–2 razy w tygodniu.</p>
                 </div>
-                <div style="border-top: 1px solid var(--color-hairline); padding-top: 16px;">
-                    <h4 style="font-size: 1rem; font-weight: 600; color: var(--color-ink); margin-bottom: 4px;">Jak socjalizacja w Waszej hodowli ułatwia adaptację kociaka?</h4>
-                    <p style="font-size: 0.92rem; color: var(--color-ink-muted-80); margin: 0; line-height: 1.5;">Nasze kocięta nie znają izolacji. Od urodzenia mieszkają z nami w pokojach, słyszą odkurzacz, telewizor, rozmawiają z dziećmi i są codziennie brane na ręce. Dzięki temu w nowym domu adaptują się natychmiast i bez stresu.</p>
+                <div class="quiz-faq-card__item">
+                    <h4 class="quiz-faq-card__question">Jak socjalizacja w Waszej hodowli ułatwia adaptację kociaka?</h4>
+                    <p class="quiz-faq-card__answer">Nasze kocięta nie znają izolacji. Od urodzenia mieszkają z nami w pokojach, słyszą odkurzacz, telewizor, rozmawiają z dziećmi i są codziennie brane na ręce. Dzięki temu w nowym domu adaptują się natychmiast i bez stresu.</p>
                 </div>
             </div>
         </div>

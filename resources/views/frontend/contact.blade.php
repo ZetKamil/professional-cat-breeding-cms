@@ -33,7 +33,11 @@
                         </li>
 
                         <li>
-                            <a href="https://wa.me/48514153204?text={{ rawurlencode('Dzień dobry! Piszę ze strony kotyzmazowieckiejszwajcarii.pl. Chciał(a)bym porozmawiać o kociętach i umówić wideo-wizytę na żywo.') }}" target="_blank" rel="noopener noreferrer" class="contact-fast-link">
+                            <a href="https://wa.me/48514153204?text={{ rawurlencode('Dzień dobry! Piszę ze strony kotyzmazowieckiejszwajcarii.pl. Chciał(a)bym porozmawiać o kociętach i umówić wideo-wizytę na żywo.') }}"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="contact-fast-link"
+                               onclick="if(typeof fbq === 'function'){ fbq('track', 'Contact', { content_name: 'Strona kontaktu', method: 'WhatsApp' }); } if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'whatsapp', origin: 'contact_page' }); } var src = (typeof window.getTrafficSourceLabel === 'function') ? ' [Źródło: ' + window.getTrafficSourceLabel() + ']' : ''; this.href = 'https://wa.me/48514153204?text=' + encodeURIComponent('Dzień dobry! Piszę ze strony kotyzmazowieckiejszwajcarii.pl. Chciał(a)bym porozmawiać o kociętach i umówić wideo-wizytę na żywo.' + src);">
                                 <div class="contact-fast-link__icon" style="background: rgba(37, 211, 102, 0.14); color: #25d366;">
                                     <i data-lucide="message-circle" aria-hidden="true"></i>
                                 </div>
@@ -46,7 +50,11 @@
                         </li>
 
                         <li>
-                            <a href="https://m.me/61580668026948" target="_blank" rel="noopener noreferrer" class="contact-fast-link">
+                            <a href="https://m.me/61580668026948"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="contact-fast-link"
+                               onclick="if(typeof fbq === 'function'){ fbq('track', 'Contact', { content_name: 'Strona kontaktu', method: 'Messenger' }); } if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'messenger', origin: 'contact_page' }); }">
                                 <div class="contact-fast-link__icon" style="background: rgba(0, 132, 255, 0.12); color: #0084ff;">
                                     <i data-lucide="messages-square" aria-hidden="true"></i>
                                 </div>

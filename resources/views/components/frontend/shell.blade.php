@@ -102,8 +102,8 @@
 
     {{-- Facebook App ID & Page ID (Resolves Facebook Debugger "Missing fb:app_id" warning) --}}
     @php
-        $fbAppId = config('services.facebook.app_id') ?: env('FACEBOOK_APP_ID', env('FB_APP_ID', ''));
-        $fbPageId = config('services.facebook.page_id') ?: env('FACEBOOK_PAGE_ID', '61580668026948');
+        $fbAppId = config('services.facebook.app_id');
+        $fbPageId = config('services.facebook.page_id', '61580668026948');
     @endphp
     @if($fbAppId)
         <meta property="fb:app_id" content="{{ $fbAppId }}">
@@ -123,8 +123,8 @@
 
     {{-- Google Analytics 4 & Google Tag Manager — Consent Mode v2 --}}
     @php
-        $gaId = config('services.google.analytics_id') ?: env('GOOGLE_ANALYTICS_ID', env('GA_MEASUREMENT_ID', 'G-VB4ZCKR8WB'));
-        $gtmId = config('services.google.tag_manager_id') ?: env('GOOGLE_TAG_MANAGER_ID', env('GTM_ID', 'GT-M6X37ZJ4'));
+        $gaId = config('services.google.analytics_id', 'G-VB4ZCKR8WB');
+        $gtmId = config('services.google.tag_manager_id', 'GT-M6X37ZJ4');
     @endphp
 
     {{-- Consent Mode v2: stan domyślny + natychmiastowe odblokowanie zbierania sesji i parametrów UTM w GA4 --}}
@@ -189,7 +189,7 @@
 
     {{-- Meta Pixel — Consent Mode Integration --}}
     @php
-        $metaPixelId = config('services.meta.pixel_id') ?: env('META_PIXEL_ID', env('VITE_META_PIXEL_ID', ''));
+        $metaPixelId = config('services.meta.pixel_id') ?: config('services.facebook.pixel_id');
     @endphp
     @if($metaPixelId)
         <script>

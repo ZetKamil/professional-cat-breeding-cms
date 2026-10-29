@@ -270,12 +270,16 @@ class Animal extends Model
     {
         return $query
             ->where('is_published', true)
-            ->whereNotNull('published_at')
+            ->where(function (Builder $q) {
+                $q->whereNull('published_at')
+                    ->orWhere('published_at', '<=', now());
+            })
             ->whereIn('status', [
                 AnimalStatus::Available,
                 AnimalStatus::Reserved,
                 AnimalStatus::Breeding,
                 AnimalStatus::Sold,
+                AnimalStatus::Retired,
             ]);
     }
 

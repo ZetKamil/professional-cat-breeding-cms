@@ -38,7 +38,9 @@ class UpdateAnimalAction
                 'father_id' => $data['father_id'] ?? null,
                 'is_featured' => $data['is_featured'],
                 'is_published' => $data['is_published'],
-                'published_at' => $data['published_at'] ?? null,
+                'published_at' => (! empty($data['is_published']) && empty($data['published_at']))
+                    ? ($locked->published_at ?? now())
+                    : ($data['published_at'] ?? null),
                 'sort_order' => (function () use ($locked, $data) {
                     $newStatus = $data['status'] instanceof \App\Enums\AnimalStatus ? $data['status'] : \App\Enums\AnimalStatus::from($data['status']);
                     $sort = (isset($data['sort_order']) && (int) $data['sort_order'] > 0)

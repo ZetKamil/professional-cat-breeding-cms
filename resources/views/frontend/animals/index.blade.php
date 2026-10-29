@@ -91,6 +91,13 @@
 
             </div>
 
+            {{-- Top Pagination (Rule 6.1 Dual Pagination) --}}
+            @if($animals->hasPages())
+                <div class="animals-catalog__pagination animals-catalog__pagination--top">
+                    {{ $animals->links('components.frontend.pagination') }}
+                </div>
+            @endif
+
             {{-- ============================================================
                  3. ANIMALS CATALOG SECTIONS (KITTENS & BREEDING PARENTS)
                  ============================================================ --}}
@@ -164,7 +171,7 @@
 
                 {{-- Section 3: Inne / W nowych domach (jeśli wyfiltrowano) --}}
                 @if($otherCats->isNotEmpty())
-                    <div class="animals-catalog-group" style="margin-top: var(--sp-2xl);">
+                    <div class="animals-catalog-group animals-catalog-group--spaced">
                         <div class="animals-section-header">
                             <span class="text-eyebrow">Kocięta w Nowych Domach</span>
                             <h2 class="animals-section-title">Znalazły Już Swój Dom</h2>
