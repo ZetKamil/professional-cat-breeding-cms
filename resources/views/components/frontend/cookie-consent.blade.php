@@ -209,7 +209,7 @@
 
     @media (max-width: 680px) {
         #cookie-consent-banner {
-            bottom: 12px;
+            bottom: max(12px, env(safe-area-inset-bottom, 12px));
             width: calc(100vw - 20px);
         }
 
@@ -304,33 +304,6 @@
                     window.declineCookieConsent();
                 });
             }
-
-            // Treat any user interaction outside the banner as implicit consent to auto-dismiss and enable full tracking
-            function onUserInteraction(e) {
-                const bannerEl = document.getElementById('cookie-consent-banner');
-                if (bannerEl && bannerEl.contains(e.target)) {
-                    return;
-                }
-                window.grantImplicitConsent();
-                cleanupListeners();
-            }
-
-            function onUserScroll() {
-                if (window.scrollY > 40) {
-                    window.grantImplicitConsent();
-                    cleanupListeners();
-                }
-            }
-
-            function cleanupListeners() {
-                document.removeEventListener('click', onUserInteraction, true);
-                document.removeEventListener('touchstart', onUserInteraction, true);
-                window.removeEventListener('scroll', onUserScroll, { passive: true });
-            }
-
-            document.addEventListener('click', onUserInteraction, true);
-            document.addEventListener('touchstart', onUserInteraction, true);
-            window.addEventListener('scroll', onUserScroll, { passive: true });
         }
 
         window.grantImplicitConsent = function () {
