@@ -132,7 +132,7 @@ class SystemAuditFixesTest extends TestCase
         // Messenger & WhatsApp tracking
         $response->assertSee("trackFunnelStep('contact_cta_click', { channel: 'messenger', origin: 'animal_profile', cat_name: 'Baron Test' }", false);
         $response->assertSee("trackFunnelStep('contact_cta_click', { channel: 'whatsapp', origin: 'animal_profile', cat_name: 'Baron Test' }", false);
-        $response->assertSee('getTrafficSourceLabel', false);
+        $response->assertDontSee('[Źródło:', false);
     }
 
     public function test_blog_post_includes_dynamic_utm_attribution_and_ga4_tracking(): void
@@ -155,7 +155,7 @@ class SystemAuditFixesTest extends TestCase
 
         $response->assertSee("trackFunnelStep('contact_cta_click', { channel: 'messenger', origin: 'blog_post'", false);
         $response->assertSee("trackFunnelStep('contact_cta_click', { channel: 'whatsapp', origin: 'blog_post'", false);
-        $response->assertSee('getTrafficSourceLabel', false);
+        $response->assertDontSee('[Źródło:', false);
     }
 
     public function test_contact_page_includes_dynamic_utm_attribution_and_ga4_tracking(): void
@@ -165,7 +165,7 @@ class SystemAuditFixesTest extends TestCase
 
         $response->assertSee("trackFunnelStep('contact_cta_click', { channel: 'whatsapp', origin: 'contact_page' }", false);
         $response->assertSee("trackFunnelStep('contact_cta_click', { channel: 'messenger', origin: 'contact_page' }", false);
-        $response->assertSee('getTrafficSourceLabel', false);
+        $response->assertDontSee('[Źródło:', false);
     }
 
     public function test_dual_pagination_markup_exists_in_animals_catalog_view(): void

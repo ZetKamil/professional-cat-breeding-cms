@@ -133,7 +133,7 @@ class PriceAndFunnelUnificationTest extends TestCase
         $response->assertSee('animal-profile__btn--messenger', false);
         $response->assertSee('Zapytaj o kociaka lub umów wideo-wizytę (Messenger)');
         $response->assertSee('m.me/61580668026948', false);
-        $response->assertSee(urlencode('Dzień dobry! Piszę w sprawie kociaka: Baron (2 700 zł). Czy jest aktualnie wolny?'));
+        $response->assertSee(urlencode('Dzień dobry! Piszę w sprawie kociaka: Baron. Czy jest aktualnie wolny?'));
 
         // 3. Secondary WhatsApp Button
         $response->assertSee('animal-profile__btn--whatsapp', false);
@@ -257,7 +257,7 @@ class PriceAndFunnelUnificationTest extends TestCase
 
     public function test_edge_case_price_sanitization_with_weird_characters_and_overflow(): void
     {
-        $cat = new Animal();
+        $cat = new Animal;
 
         // Polish formatted currency string
         $cat->price = ' 2 700 zł ';
@@ -281,7 +281,7 @@ class PriceAndFunnelUnificationTest extends TestCase
 
     public function test_edge_case_age_calculation_handles_future_dates_and_polish_inflections(): void
     {
-        $cat = new Animal();
+        $cat = new Animal;
 
         // Null DOB
         $cat->date_of_birth = null;
@@ -347,4 +347,3 @@ class PriceAndFunnelUnificationTest extends TestCase
         $badResponse->assertSessionHasErrors('price');
     }
 }
-

@@ -338,8 +338,7 @@
                     </div>
 
                     @php
-                        $priceText = $animal->formattedPrice() ? ' (' . $animal->formattedPrice() . ')' : '';
-                        $inquiryMsg = "Dzień dobry! Piszę w sprawie kociaka: {$animal->name}{$priceText}. Czy jest aktualnie wolny?";
+                        $inquiryMsg = "Dzień dobry! Piszę w sprawie kociaka: {$animal->name}. Czy jest aktualnie wolny?";
                         $messengerInquiryUrl = 'https://m.me/61580668026948?text=' . urlencode($inquiryMsg);
                         $whatsappInquiryUrl = 'https://wa.me/48514153204?text=' . urlencode($inquiryMsg);
                     @endphp
@@ -358,7 +357,7 @@
                            target="_blank"
                            rel="noopener noreferrer"
                            class="animal-profile__btn--whatsapp"
-                           onclick="if(typeof fbq === 'function'){ fbq('track', 'Contact', { content_name: @js($animal->name), method: 'WhatsApp' }); } if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'whatsapp', origin: 'animal_profile', cat_name: @js($animal->name) }); } var src = (typeof window.getTrafficSourceLabel === 'function') ? ' [Źródło: ' + window.getTrafficSourceLabel() + ']' : ''; this.href = 'https://wa.me/48514153204?text=' + encodeURIComponent(@js($inquiryMsg) + src);">
+                           onclick="if(typeof fbq === 'function'){ fbq('track', 'Contact', { content_name: @js($animal->name), method: 'WhatsApp' }); } if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'whatsapp', origin: 'animal_profile', cat_name: @js($animal->name) }); }">
                             WhatsApp (+48 514 153 204)
                         </a>
 

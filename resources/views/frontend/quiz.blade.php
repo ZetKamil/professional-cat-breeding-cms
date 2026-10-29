@@ -961,15 +961,15 @@
                 // Update href dynamically with breed context before navigation
                 if (channel === 'messenger') {
                     const msgText = hasAvailable
-                        ? `Dzień dobry! W teście wyszedł mi ${breed}. W jakiej cenie są aktualnie kocięta i które maluchy są wolne? [Źródło: ${attributionCode}]`
-                        : `Dzień dobry! W teście wyszedł mi ${breed}. W jakiej cenie są kocięta i kiedy planujecie nowy miot? [Źródło: ${attributionCode}]`;
+                        ? `Dzień dobry! W teście na stronie wyszedł mi ${breed}. Chciał(a)bym zapytać o wolne kocięta i aktualne filmiki.`
+                        : `Dzień dobry! W teście na stronie wyszedł mi ${breed}. Kiedy planujecie kolejny miot?`;
                     const url = `https://m.me/61580668026948?text=${encodeURIComponent(msgText)}`;
                     window.open(url, '_blank');
                 } else {
                     // WhatsApp
                     const waMsg = hasAvailable
-                        ? `Dzień dobry! Rozwiązałem(am) test na stronie – mój wynik to ${breed}. W jakiej cenie są aktualnie kocięta i czy mogę prosić o krótki filmik z wolnymi maluchami? [Źródło: ${attributionCode}]`
-                        : `Dzień dobry! Rozwiązałem(am) test na stronie – mój wynik to ${breed}. W jakiej cenie są kocięta i kiedy planujecie nowy miot? [Źródło: ${attributionCode}]`;
+                        ? `Dzień dobry! W teście na stronie wyszedł mi ${breed}. Chciał(a)bym zapytać o wolne kocięta i aktualne filmiki.`
+                        : `Dzień dobry! W teście na stronie wyszedł mi ${breed}. Kiedy planujecie kolejny miot?`;
                     const url = `https://wa.me/48514153204?text=${encodeURIComponent(waMsg)}`;
                     window.open(url, '_blank');
                 }

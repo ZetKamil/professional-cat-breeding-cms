@@ -470,11 +470,10 @@ class ReservationAndCroTest extends TestCase
         $response = $this->get(route('quiz'));
         $response->assertOk();
 
-        // CRO overhaul v2: Messenger is now primary channel; dynamic URL built at click time
-        // New shorter message template: "W jakiej cenie są aktualnie kocięta i które maluchy są wolne?"
+        // CRO overhaul: Clean Messenger and WhatsApp links with no robotic attribution tags
         $response->assertSee('m.me/61580668026948', false);
-        $response->assertSee('W jakiej cenie s', false); // present in both Messenger and WhatsApp templates
-        $response->assertSee('Quiz_Dopasowania');
+        $response->assertSee('Chciał(a)bym zapytać o wolne kocięta i aktualne filmiki.', false);
+        $response->assertDontSee('[Źródło:', false);
         $response->assertSee('wa.me/48514153204');
 
         // Checks Reservation modal integration (callback tertiary CTA still present)
@@ -482,7 +481,6 @@ class ReservationAndCroTest extends TestCase
         $response->assertSee('Wynik Quizu: ${breed}', false);
         $response->assertSee('fireQuizContactEvent', false);
     }
-
 
     public function test_public_pages_consistently_state_two_dewormings_and_never_three(): void
     {

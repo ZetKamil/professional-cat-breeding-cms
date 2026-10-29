@@ -186,7 +186,7 @@
                         </p>
 
                         <div class="article-luxury-cta-card__buttons">
-                            <a href="https://m.me/61580668026948?text={{ urlencode('Dzień dobry! Czytam artykuł o odchowanych bengalach. Chciałbym zapytać o Barona, Cypriana i Carlosa oraz zobaczyć dzisiejsze filmiki.') }}"
+                            <a href="https://m.me/61580668026948?text={{ urlencode('Dzień dobry! Chciał(a)bym zapytać o kociaki bengalskie i filmiki.') }}"
                                target="_blank"
                                rel="noopener noreferrer"
                                class="article-luxury-cta-btn article-luxury-cta-btn--primary"
@@ -194,11 +194,11 @@
                                 💬 Napisz na Messengerze (Zapytaj o kociaki i filmik)
                             </a>
 
-                            <a href="https://wa.me/48514153204?text={{ urlencode('Dzień dobry! Czytam artykuł o odchowanych bengalach. Chciałbym zapytać o Barona, Cypriana i Carlosa.') }}"
+                            <a href="https://wa.me/48514153204?text={{ urlencode('Dzień dobry! Chciał(a)bym zapytać o kociaki bengalskie i filmiki.') }}"
                                target="_blank"
                                rel="noopener noreferrer"
                                class="article-luxury-cta-btn article-luxury-cta-btn--secondary"
-                               onclick="try{if(typeof fbq==='function'){fbq('track','Contact',{method:'WhatsApp',content_name:'Odchowane kocięta bengalskie'});}}catch(e){} if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'whatsapp', origin: 'blog_post_bengal', post_title: @js($post->title) }); } var src = (typeof window.getTrafficSourceLabel === 'function') ? ' [Źródło: ' + window.getTrafficSourceLabel() + ']' : ''; this.href = 'https://wa.me/48514153204?text=' + encodeURIComponent('Dzień dobry! Czytam artykuł o odchowanych bengalach. Chciałbym zapytać o Barona, Cypriana i Carlosa.' + src);">
+                               onclick="try{if(typeof fbq==='function'){fbq('track','Contact',{method:'WhatsApp',content_name:'Odchowane kocięta bengalskie'});}}catch(e){} if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'whatsapp', origin: 'blog_post_bengal', post_title: @js($post->title) }); }">
                                 WhatsApp (+48 514 153 204)
                             </a>
                         </div>
@@ -218,7 +218,7 @@
                         </p>
 
                         <div class="article-luxury-cta-card__buttons">
-                            <a href="https://m.me/61580668026948?text={{ urlencode('Dzień dobry! Czytam artykuł: ' . $post->title . '. Chciałbym zapytać o dostępne kocięta.') }}"
+                            <a href="https://m.me/61580668026948?text={{ urlencode('Dzień dobry! Chciał(a)bym zapytać o dostępne kocięta.') }}"
                                target="_blank"
                                rel="noopener noreferrer"
                                class="article-luxury-cta-btn article-luxury-cta-btn--primary"
@@ -226,11 +226,11 @@
                                 💬 Napisz na Messengerze (Zapytaj o kocięta)
                             </a>
 
-                            <a href="https://wa.me/48514153204?text={{ urlencode('Dzień dobry! Czytam artykuł: ' . $post->title . '. Chciałbym zapytać o dostępne kocięta.') }}"
+                            <a href="https://wa.me/48514153204?text={{ urlencode('Dzień dobry! Chciał(a)bym zapytać o dostępne kocięta.') }}"
                                target="_blank"
                                rel="noopener noreferrer"
                                class="article-luxury-cta-btn article-luxury-cta-btn--secondary"
-                               onclick="try{if(typeof fbq==='function'){fbq('track','Contact',{method:'WhatsApp',content_name: @js($post->title) });}}catch(e){} if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'whatsapp', origin: 'blog_post', post_title: @js($post->title) }); } var src = (typeof window.getTrafficSourceLabel === 'function') ? ' [Źródło: ' + window.getTrafficSourceLabel() + ']' : ''; this.href = 'https://wa.me/48514153204?text=' + encodeURIComponent('Dzień dobry! Czytam artykuł: ' + @js($post->title) + '. Chciałbym zapytać o dostępne kocięta.' + src);">
+                               onclick="try{if(typeof fbq==='function'){fbq('track','Contact',{method:'WhatsApp',content_name: @js($post->title) });}}catch(e){} if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'whatsapp', origin: 'blog_post', post_title: @js($post->title) }); }">
                                 WhatsApp (+48 514 153 204)
                             </a>
                         </div>

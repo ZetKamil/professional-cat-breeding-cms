@@ -70,19 +70,9 @@
             } catch(err) {}
         }
 
-        // 3. Dynamic UTM attribution
-        let attributionCode = 'Sticky_Messenger';
-        try {
-            if (typeof window.getTrafficSourceLabel === 'function') {
-                attributionCode = window.getTrafficSourceLabel();
-            }
-        } catch(err) {}
-
         const btn = document.getElementById('mobileStickyMessengerBtn');
         if (btn) {
-            const base = 'https://m.me/61580668026948';
-            const msg = `Dzień dobry! Piszę ze strony hodowli z pytaniem o kociaka lub filmik. [Źródło: ${attributionCode}]`;
-            btn.href = `${base}?text=${encodeURIComponent(msg)}`;
+            btn.href = 'https://m.me/61580668026948?text=' + encodeURIComponent('Dzień dobry! Chciał(a)bym zapytać o kociaki lub aktualne filmiki.');
         }
     };
 

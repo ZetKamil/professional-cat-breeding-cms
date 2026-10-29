@@ -154,14 +154,14 @@ class AnalyticsAndAttributionTest extends TestCase
         $response->assertSee('data-ga-animal-slug="koteczek-testowy-analytics"', false);
     }
 
-    public function test_conversion_cta_appends_traffic_attribution_to_whatsapp_url(): void
+    public function test_conversion_cta_renders_clean_whatsapp_cta_with_contact_funnel_tracking(): void
     {
         $response = $this->get(route('home'));
 
         $response->assertOk();
-        // Check conversion CTA includes getTrafficSourceLabel in WhatsApp message
-        $response->assertSee('getTrafficSourceLabel', false);
         $response->assertSee('contact_cta_click', false);
+        $response->assertSee('https://wa.me/48514153204', false);
+        $response->assertDontSee('[Źródło:', false);
     }
 
     public function test_quick_callback_dispatches_callback_submitted_only_after_server_acceptance(): void
