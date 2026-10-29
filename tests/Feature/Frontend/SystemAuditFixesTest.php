@@ -168,10 +168,11 @@ class SystemAuditFixesTest extends TestCase
         $response->assertDontSee('[Źródło:', false);
     }
 
-    public function test_dual_pagination_markup_exists_in_animals_catalog_view(): void
+    public function test_pagination_is_located_at_bottom_only_in_animals_catalog(): void
     {
         $viewContent = file_get_contents(resource_path('views/frontend/animals/index.blade.php'));
-        $this->assertStringContainsString('animals-catalog__pagination--top', $viewContent);
+        $this->assertStringNotContainsString('animals-catalog__pagination--top', $viewContent);
+        $this->assertStringContainsString('animals-catalog__pagination', $viewContent);
     }
 
     public function test_shell_renders_meta_pixel_with_fallback_identifiers(): void

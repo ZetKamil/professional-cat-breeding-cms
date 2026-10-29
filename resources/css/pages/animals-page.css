@@ -50,9 +50,6 @@
     margin-top: var(--sp-2xl);
 }
 
-.animals-catalog__pagination--top {
-    margin-bottom: var(--sp-xl);
-}
 
 .empty-state__action {
     margin-top: var(--sp-lg);

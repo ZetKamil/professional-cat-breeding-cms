@@ -91,12 +91,6 @@
 
             </div>
 
-            {{-- Top Pagination (Rule 6.1 Dual Pagination) --}}
-            @if($animals->hasPages())
-                <div class="animals-catalog__pagination animals-catalog__pagination--top">
-                    {{ $animals->links('components.frontend.pagination') }}
-                </div>
-            @endif
 
             {{-- ============================================================
                  3. ANIMALS CATALOG SECTIONS (KITTENS & BREEDING PARENTS)
