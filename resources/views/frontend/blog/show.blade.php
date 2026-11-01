@@ -60,8 +60,8 @@
 
                     $renderArticleMarkdown = function ($markdownText) use ($markdownOptions) {
                         $html = Str::markdown($markdownText ?? '', $markdownOptions);
-                        // Transform "Odpowiedź w pigułce:" paragraph into Quiet Luxury editorial callout box
-                        $pattern = '/<p>(?:\s*<strong>)?\s*Odpowiedź w pigułce:\s*(.*?)(?:<\/strong>)?\s*<\/p>/siu';
+                        // Transform "Odpowiedź w pigułce:" or legacy GEO summary paragraphs into Quiet Luxury editorial callout box
+                        $pattern = '/(?:<blockquote>\s*)?<p>(?:\s*<strong>)?\s*(?:Odpowiedź w pigułce|Szybkie podsumowanie dla wyszukiwarek i sztucznej inteligencji \(GEO Summary\)|W skrócie):\s*(.*?)(?:<\/strong>)?\s*<\/p>(?:\s*<\/blockquote>)?/siu';
                         return preg_replace_callback($pattern, function ($matches) {
                             $content = trim($matches[1]);
                             if (str_starts_with($content, '<strong>') && str_ends_with($content, '</strong>')) {
@@ -174,7 +174,7 @@
                      ============================================================ --}}
                 <aside class="article-luxury-cta-card" aria-label="Kontakt z hodowlą">
                     <div class="article-luxury-cta-card__badge">
-                        <span>🐾 DOMOWA HODOWLA MAZOWIECKA SZWAJCARIA</span>
+                        <span>🐾 DOMOWA HODOWLA KOTÓW Z MAZOWIECKIEJ SZWAJCARII</span>
                     </div>
 
                     @if($post->slug === 'kot-bengalski-w-domu-mity-zalety-odchowanych-kociat' || str_contains($post->slug, 'odchowanych-kociat') || str_contains($post->slug, 'bengal'))

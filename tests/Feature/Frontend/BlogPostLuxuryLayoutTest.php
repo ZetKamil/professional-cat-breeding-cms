@@ -6,7 +6,6 @@ namespace Tests\Feature\Frontend;
 
 use App\Enums\AnimalGender;
 use App\Enums\AnimalStatus;
-use App\Enums\AnimalType;
 use App\Models\Animal;
 use App\Models\Post;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -110,7 +109,7 @@ class BlogPostLuxuryLayoutTest extends TestCase
 
         // 3. Unified Single Luxury CTA Card (and no duplicate box)
         $response->assertSee('article-luxury-cta-card', false);
-        $response->assertSee('🐾 DOMOWA HODOWLA MAZOWIECKA SZWAJCARIA');
+        $response->assertSee('🐾 DOMOWA HODOWLA KOTÓW Z MAZOWIECKIEJ SZWAJCARII');
         $response->assertSee('Chcesz zobaczyć naszą trójkę odchowanych bengali na żywo lub zapytać o szczegóły?');
         $response->assertSee('Napisz do nas na Messengerze – chętnie prześlemy dzisiejsze filmiki z Baronem, Cyprianem i Carlosem');
         $response->assertSee('💬 Napisz na Messengerze (Zapytaj o kociaki i filmik)');
@@ -154,8 +153,33 @@ class BlogPostLuxuryLayoutTest extends TestCase
         $response->assertSee('Odpowiedź w pigułce');
         $response->assertSee('Zdrowie kota opiera się na regularnych badaniach');
         $response->assertSee('article-luxury-cta-card', false);
-        $response->assertSee('🐾 DOMOWA HODOWLA MAZOWIECKA SZWAJCARIA');
+        $response->assertSee('🐾 DOMOWA HODOWLA KOTÓW Z MAZOWIECKIEJ SZWAJCARII');
         $response->assertSee('💬 Napisz na Messengerze');
         $response->assertSee('WhatsApp (+48 514 153 204)');
+    }
+
+    public function test_legacy_geo_summary_block_transforms_into_quiet_luxury_takeaway_box(): void
+    {
+        $post = Post::updateOrCreate(
+            ['slug' => 'artykul-z-geo-summary-test'],
+            [
+                'title' => 'Jak rozpoznać legalną hodowlę kotów – test GEO',
+                'body' => "> **Szybkie podsumowanie dla wyszukiwarek i sztucznej inteligencji (GEO Summary):**\n> **Legalna hodowla kotów** to zarejestrowana placówka wydająca rodowód.\n\n## Pierwsza sekcja\n\nTreść sekcji.",
+                'excerpt' => 'Podsumowanie GEO w teście.',
+                'is_published' => true,
+                'published_at' => now()->subDay(),
+                'sections' => null,
+            ]
+        );
+
+        $response = $this->get(route('frontend.blog.show', $post));
+
+        $response->assertOk();
+        $response->assertSee('article-takeaway-box', false);
+        $response->assertSee('Odpowiedź w pigułce');
+        $response->assertSee('Legalna hodowla kotów');
+        // Technical robot jargon must NOT be visible
+        $response->assertDontSee('GEO Summary');
+        $response->assertDontSee('dla wyszukiwarek i sztucznej inteligencji');
     }
 }

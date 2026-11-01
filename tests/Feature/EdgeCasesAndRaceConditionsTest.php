@@ -8,7 +8,6 @@ use App\Enums\AnimalStatus;
 use App\Enums\AnimalType;
 use App\Events\ContactMessageSent;
 use App\Models\Animal;
-use App\Models\Category;
 use App\Models\Post;
 use App\Models\Role;
 use App\Models\User;
@@ -23,6 +22,7 @@ class EdgeCasesAndRaceConditionsTest extends TestCase
     use RefreshDatabase;
 
     protected User $adminUser;
+
     protected User $authorUser;
 
     protected function setUp(): void
@@ -65,7 +65,7 @@ class EdgeCasesAndRaceConditionsTest extends TestCase
         $response->assertDontSee('Koty z tego artykułu');
         // CTA and main heading should still render
         $response->assertSee('Opieka nad kotem rasowym jesienią');
-        $response->assertSee('DOMOWA HODOWLA MAZOWIECKA SZWAJCARIA');
+        $response->assertSee('DOMOWA HODOWLA KOTÓW Z MAZOWIECKIEJ SZWAJCARII');
     }
 
     public function test_blog_post_with_null_sections_and_empty_body_renders_gracefully(): void
@@ -190,6 +190,7 @@ class EdgeCasesAndRaceConditionsTest extends TestCase
 
         Event::assertDispatched(ContactMessageSent::class, function ($event) {
             $data = $event->data;
+
             return $data['phone'] === '+48 514 153 204'
                 && str_contains($data['subject'], 'Prośba o szybki kontakt')
                 && str_contains($data['message'], 'Ogólne zapytanie o kocięta');
@@ -221,7 +222,7 @@ class EdgeCasesAndRaceConditionsTest extends TestCase
         $response->assertSee('&lt;script&gt;alert(1)&lt;/script&gt;', false);
 
         // Verification that openReservationModal call uses @js escaping without broken HTML attribute
-        $this->assertStringNotContainsString('openReservationModal(\'' . addslashes($weirdName) . '\'', $response->getContent());
+        $this->assertStringNotContainsString('openReservationModal(\''.addslashes($weirdName).'\'', $response->getContent());
     }
 
     public function test_blog_post_with_quotes_and_unicode_produces_valid_json_ld(): void
@@ -423,7 +424,7 @@ class EdgeCasesAndRaceConditionsTest extends TestCase
 
     public function test_price_mutator_sanitizes_extreme_and_invalid_values(): void
     {
-        $cat = new Animal();
+        $cat = new Animal;
 
         // 1. Extreme integer overflow protection (> 1,000,000 capped to 1,000,000)
         $cat->price = 999999999999;
