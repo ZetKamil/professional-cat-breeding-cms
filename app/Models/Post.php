@@ -47,7 +47,7 @@ class Post extends Model
         return [
             'is_published' => 'boolean',
             'published_at' => 'datetime',
-            'sections'     => 'array',
+            'sections' => 'array',
         ];
     }
 
@@ -293,42 +293,47 @@ class Post extends Model
 
     /**
      * Clean plain-text excerpt for cards and listings.
-     * Strips Markdown images, links, headers and HTML, prioritizing the curated excerpt field.
+     * Strips Markdown images, links, headers, technical prompt strings and HTML, prioritizing the curated excerpt field.
      */
     public function cardExcerpt(int $limit = 115): string
     {
-        // 1. If clean meta_description exists without markdown headings, prefer it
-        if (!empty($this->meta_description) && !str_starts_with(trim($this->meta_description), '#')) {
-            return Str::limit(trim(strip_tags($this->meta_description)), $limit);
+        // 1. If clean meta_description exists without markdown headings/quotes or technical GEO prompt, prefer it
+        $candidateMeta = trim((string) ($this->meta_description ?? ''));
+        if (! empty($candidateMeta) && ! str_starts_with($candidateMeta, '#') && ! str_starts_with($candidateMeta, '>') && ! str_contains($candidateMeta, 'GEO Summary') && ! str_contains($candidateMeta, 'Szybkie podsumowanie dla wyszukiwarek')) {
+            return Str::limit(trim(strip_tags($candidateMeta)), $limit);
         }
 
         $text = trim((string) ($this->excerpt ?? ''));
 
-        if ($text === '' || str_starts_with($text, '#')) {
+        if ($text === '' || str_starts_with($text, '#') || str_contains($text, 'GEO Summary') || str_contains($text, 'Szybkie podsumowanie dla wyszukiwarek')) {
             $text = (string) ($this->body ?? $text);
         }
 
-        // 1. Remove markdown images: ![alt](url)
+        // 1. Remove raw prompt directives and summary callout headers (GEO Summary / Odpowiedź w pigułce)
+        $text = preg_replace('/(?:>\s*)?(?:\*\*)?(?:Szybkie podsumowanie dla wyszukiwarek i sztucznej inteligencji \(GEO Summary\)|GEO Summary|Odpowiedź w pigułce):?(?:\*\*)?:?\s*(?:>\s*)?/siu', '', $text);
+
+        // 2. Remove markdown images: ![alt](url)
         $text = preg_replace('/!\[.*?\]\(.*?\)/su', '', $text);
 
-        // 2. Remove fenced code blocks: ```code```
+        // 3. Remove fenced code blocks: ```code```
         $text = preg_replace('/```.*?```/su', '', $text);
 
-        // 3. Convert markdown links [text](url) -> text
+        // 4. Convert markdown links [text](url) -> text
         $text = preg_replace('/\[(.*?)\]\(.*?\)/su', '$1', $text);
 
-        // 4. Remove Markdown headings (#, ##, etc.) and blockquotes entirely
+        // 5. Remove Markdown headings (#, ##, etc.) and blockquotes entirely
         $text = preg_replace('/^#+.*$/mu', '', $text);
-        $text = preg_replace('/^>\s+/mu', '', $text);
+        $text = preg_replace('/^>\s*/mu', '', $text);
+        $text = preg_replace('/(?<=\s)>\s*/u', '', $text);
         $text = preg_replace('/^\|.*?\|$/mu', '', $text);
 
-        // 5. Remove Markdown bold, italic, strikethrough, backticks
+        // 6. Remove Markdown bold, italic, strikethrough, backticks
         $text = preg_replace('/[\*_~`]/u', '', $text);
 
-        // 5. Remove HTML tags
+        // 7. Remove HTML tags
         $text = strip_tags($text);
 
-        // 6. Normalize whitespace
+        // 8. Normalize whitespace
         $text = trim(preg_replace('/\s+/u', ' ', $text));
 
         return Str::limit($text, $limit);
@@ -347,7 +352,7 @@ class Post extends Model
 
         if (empty($parts)) {
             return [
-                ['heading' => '', 'body' => trim($body), 'image_url' => '']
+                ['heading' => '', 'body' => trim($body), 'image_url' => ''],
             ];
         }
 
@@ -366,8 +371,8 @@ class Post extends Model
 
         if ($introText || $introImage) {
             $sections[] = [
-                'heading'   => '',
-                'body'      => $introText,
+                'heading' => '',
+                'body' => $introText,
                 'image_url' => $introImage,
             ];
         }
@@ -387,8 +392,8 @@ class Post extends Model
             $content = trim($content);
 
             $sections[] = [
-                'heading'   => $heading,
-                'body'      => $content,
+                'heading' => $heading,
+                'body' => $content,
                 'image_url' => $imageUrl,
             ];
         }
@@ -402,14 +407,14 @@ class Post extends Model
      */
     public function getSectionsAttribute($value)
     {
-        if (!empty($value)) {
+        if (! empty($value)) {
             $decoded = is_string($value) ? json_decode($value, true) : $value;
-            if (is_array($decoded) && !empty($decoded)) {
+            if (is_array($decoded) && ! empty($decoded)) {
                 return $decoded;
             }
         }
 
-        if (!empty($this->attributes['body'] ?? null)) {
+        if (! empty($this->attributes['body'] ?? null)) {
             return static::parseBodyToSections($this->attributes['body']);
         }
 

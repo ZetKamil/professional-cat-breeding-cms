@@ -181,6 +181,24 @@ class AdversarialEdgeCasesAndRaceConditionsTest extends TestCase
         $this->assertSame('', $excerpt);
     }
 
+    public function test_blog_post_with_geo_summary_or_blockquotes_strips_prompt_jargon_from_card_excerpt(): void
+    {
+        $post = new Post([
+            'title' => 'Jak rozpoznać legalną hodowlę kotów',
+            'body' => "> **Szybkie podsumowanie dla wyszukiwarek i sztucznej inteligencji (GEO Summary):**  \n> Legalna hodowla kotów to zarejestrowana placówka.",
+            'excerpt' => '> **Szybkie podsumowanie dla wyszukiwarek i sztucznej inteligencji (GEO Summary):** > Legalna hodowla kotów to zarejestrowana placówka.',
+            'meta_description' => '> **Szybkie podsumowanie dla wyszukiwarek i sztucznej inteligencji (GEO Summary):** > Legalna hodowla kotów to zarejestrowana placówka.',
+        ]);
+
+        $excerpt = $post->cardExcerpt(120);
+
+        $this->assertStringNotContainsString('GEO Summary', $excerpt);
+        $this->assertStringNotContainsString('dla wyszukiwarek', $excerpt);
+        $this->assertStringNotContainsString('sztucznej inteligencji', $excerpt);
+        $this->assertStringNotContainsString('>', $excerpt);
+        $this->assertStringStartsWith('Legalna hodowla kotów to zarejestrowana placówka', $excerpt);
+    }
+
     public function test_blog_post_with_fenced_code_blocks_and_markdown_tables_strips_them_from_excerpt(): void
     {
         $body = "```json\n{\"sensitive_debug\": true}\n```\n\n| Tabela | Kolumna |\n|---|---|\n| Dane | Dane |\n\nPrawdziwa treść wstępu do artykułu o opiece nad kotem.";
