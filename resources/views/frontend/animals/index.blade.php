@@ -31,19 +31,14 @@
         : asset('og-default.jpg');
 @endphp
 
-<x-frontend.shell
-    :title="$pageTitle"
+<x-frontend.shell :title="$pageTitle"
     meta-description="Przeglądaj koty dorosłe i dostępne kocięta w naszej domowej hodowli. Zdrowe linie genetyczne, komplet badań rodziców dedykowanych rasie, rodowód SHiOZ ZOOLANDIA i pełna domowa socjalizacja."
     :og-title="$pageTitle"
     og-description="Przeglądaj koty dorosłe i dostępne kocięta w naszej domowej hodowli. Zdrowe linie genetyczne, komplet badań rodziców dedykowanych rasie, rodowód SHiOZ ZOOLANDIA i pełna domowa socjalizacja."
-    :og-image="$pageOgImage"
-    og-image-width="1200"
-    og-image-height="630"
-    og-image-type="image/jpeg"
->
+    :og-image="$pageOgImage" og-image-width="1200" og-image-height="630" og-image-type="image/jpeg">
     {{-- ============================================================
-         1. CATALOG HERO
-         ============================================================ --}}
+    1. CATALOG HERO
+    ============================================================ --}}
     <section class="animals-catalog-hero" aria-label="Nasze koty">
         <div class="section-inner">
             <span class="text-eyebrow animals-catalog-hero__eyebrow">
@@ -54,35 +49,31 @@
             </h1>
             <p class="text-lead-airy animals-catalog-hero__lead">
                 Poznaj nasze koty hodowlane i dostępne kocięta wychowywane w sercu naszego domu. Hodujemy trzy wyjątkowe rasy:
-                Bengalskie, Brytyjskie (krótkowłose BSH i długowłose BLH) oraz Syjamskie — z dbałością o najwyższe standardy zdrowotne i troskliwą domową socjalizację.
+                Bengalskie, Brytyjskie oraz Syjamskie — z dbałością o najwyższe standardy zdrowotne i troskliwą domową
+                socjalizację.
             </p>
         </div>
     </section>
 
     {{-- ============================================================
-         2. FILTER BAR (Breeds + Statuses)
-         ============================================================ --}}
+    2. FILTER BAR (Breeds + Statuses)
+    ============================================================ --}}
     <section class="section section--no-pt animals-catalog-section" aria-label="Filtrowanie kotów"
         data-ga-page="animal_list"
-        data-ga-breed-filter="{{ $currentBreed && strlen((string)$currentBreed) ? (string)$currentBreed : 'all' }}"
-    >
+        data-ga-breed-filter="{{ $currentBreed && strlen((string) $currentBreed) ? (string) $currentBreed : 'all' }}">
 
 
         <div class="section-inner">
             <div class="animals-filter-bar">
                 {{-- Breed Filter --}}
                 <div class="animals-filter-breeds" role="navigation" aria-label="Wybierz rasę">
-                    <a
-                        href="{{ route('frontend.animals.index', request()->except('breed', 'page')) }}"
-                        class="breed-pill {{ empty($currentBreed) ? 'breed-pill--active' : '' }}"
-                    >
+                    <a href="{{ route('frontend.animals.index', request()->except('breed', 'page')) }}"
+                        class="breed-pill {{ empty($currentBreed) ? 'breed-pill--active' : '' }}">
                         Wszystkie rasy
                     </a>
                     @foreach($breeds as $breed)
-                        <a
-                            href="{{ route('frontend.animals.index', array_merge(request()->except('page'), ['breed' => $breed])) }}"
-                            class="breed-pill {{ $currentBreed === $breed ? 'breed-pill--active' : '' }}"
-                        >
+                        <a href="{{ route('frontend.animals.index', array_merge(request()->except('page'), ['breed' => $breed])) }}"
+                            class="breed-pill {{ $currentBreed === $breed ? 'breed-pill--active' : '' }}">
                             {{ $breed }}
                         </a>
                     @endforeach
@@ -93,8 +84,8 @@
 
 
             {{-- ============================================================
-                 3. ANIMALS CATALOG SECTIONS (KITTENS & BREEDING PARENTS)
-                 ============================================================ --}}
+            3. ANIMALS CATALOG SECTIONS (KITTENS & BREEDING PARENTS)
+            ============================================================ --}}
             @php
                 $kittens = $animals->filter(fn($a) => in_array($a->status, [\App\Enums\AnimalStatus::Available, \App\Enums\AnimalStatus::Reserved]));
                 $breedingParents = $animals->filter(fn($a) => $a->status === \App\Enums\AnimalStatus::Breeding);
@@ -112,7 +103,8 @@
                         Spróbuj zmienić filtry lub skontaktuj się z nami, aby zapytać o planowane mioty.
                     </p>
                     <div class="empty-state__action">
-                        <x-frontend.button href="{{ route('frontend.animals.index') }}" variant="secondary" icon="refresh-cw">
+                        <x-frontend.button href="{{ route('frontend.animals.index') }}" variant="secondary"
+                            icon="refresh-cw">
                             Pokaż wszystkie koty
                         </x-frontend.button>
                     </div>
@@ -125,13 +117,32 @@
                             <span class="text-eyebrow">Wychowanie Domowe & Wczesna Rezerwacja</span>
                             <h2 class="animals-section-title">Dostępne Kocięta i Mioty</h2>
                             <p class="animals-section-lead">
-                                Kocięta z naszej domowej hodowli gotowe do odbioru lub wczesnej rezerwacji. Wszystkie maluchy posiadają wielopokoleniowy rodowód, komplet szczepień i odrobaczeń oraz microchip.
+                                Kocięta z naszej domowej hodowli gotowe do odbioru lub wczesnej rezerwacji. Wszystkie maluchy
+                                posiadają wielopokoleniowy rodowód, komplet szczepień i odrobaczeń oraz microchip.
                             </p>
                         </div>
                         <div class="animals-grid">
                             @foreach($kittens as $animal)
                                 <x-frontend.animal-card :animal="$animal" />
                             @endforeach
+                        </div>
+
+                        {{-- Luxury Conversion Strip for Bengal Campaign & Kittens --}}
+                        <div class="bengal-conversion-strip" role="region" aria-label="Szybki kontakt w sprawie kociąt">
+                            <div class="bengal-conversion-strip__content">
+                                <div class="bengal-conversion-strip__icon" aria-hidden="true">🐾</div>
+                                <div class="bengal-conversion-strip__text">
+                                    Podoba Ci się Baron, Cyprian lub Carlos? Chętnie wyślemy Ci dzisiejsze filmiki z wybranym
+                                    kociakiem na czacie lub połączymy się na krótką wideo-wizytę!
+                                </div>
+                            </div>
+                            <div class="bengal-conversion-strip__action">
+                                <a href="https://m.me/61580668026948?text={{ urlencode('Dzień dobry! Piszę ze strony hodowli w sprawie kocurków bengalskich (Baron, Cyprian, Carlos). Chętnie zobaczę dzisiejsze filmiki i zadam pytanie o kociaka!') }}"
+                                    target="_blank" rel="noopener noreferrer" class="bengal-conversion-strip__btn"
+                                    onclick="if(typeof fbq === 'function'){ fbq('track', 'Contact', { content_name: 'Bengal_Campaign_Strip', method: 'Messenger' }); } if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'messenger', origin: 'bengal_campaign_catalog_strip' }); }">
+                                    💬 Zapytaj o kociaka na Messengerze
+                                </a>
+                            </div>
                         </div>
                     </div>
                 @endif
@@ -152,7 +163,8 @@
                             <span class="text-eyebrow">Championy & Linie Genetyczne</span>
                             <h2 class="animals-section-title">Nasi Rodzice i Koty Hodowlane</h2>
                             <p class="animals-section-lead">
-                                Koty hodowlane tworzące fundament genetyczny naszej hodowli. Wszystkie koty posiadają profile DNA, regularne badania kardiologiczne (Echo serca HCM normal) oraz ujemne testy PKD i FIV/FeLV.
+                                Koty hodowlane tworzące fundament genetyczny naszej hodowli. Wszystkie koty posiadają profile
+                                DNA, regularne badania kardiologiczne (Echo serca HCM normal) oraz ujemne testy PKD i FIV/FeLV.
                             </p>
                         </div>
                         <div class="animals-grid">
@@ -177,7 +189,8 @@
                         <div class="animals-section-header">
                             <span class="text-eyebrow">Kocięta w Nowych Domach</span>
                             <h2 class="animals-section-title">Znalazły Już Swój Dom</h2>
-                            <p class="animals-section-lead">Koty z wcześniejszych miotów, które cieszą już swoich nowych opiekunów.</p>
+                            <p class="animals-section-lead">Koty z wcześniejszych miotów, które cieszą już swoich nowych
+                                opiekunów.</p>
                         </div>
                         <div class="animals-grid">
                             @foreach($otherCats as $animal)
@@ -198,7 +211,7 @@
     </section>
 
     {{-- ============================================================
-         4. CONTACT CTA
-         ============================================================ --}}
+    4. CONTACT CTA
+    ============================================================ --}}
     <x-frontend.conversion-cta source-context="Katalog kotów" />
 </x-frontend.shell>

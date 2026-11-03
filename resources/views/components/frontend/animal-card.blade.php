@@ -58,9 +58,14 @@
         <h3 class="animal-card__name">{{ $animal->name }}</h3>
 
         @if($timelineLabel)
-            <div class="animal-card__timeline">
-                <i data-lucide="calendar" class="animal-card__timeline-icon" aria-hidden="true"></i>
-                <span class="animal-card__timeline-text">{{ $timelineLabel }}</span>
+            <div class="animal-card__timeline {{ $animal->isOdchowany() ? 'animal-card__timeline--benefit' : '' }}">
+                @if($animal->isOdchowany())
+                    <i data-lucide="shield-check" class="animal-card__timeline-icon animal-card__timeline-icon--benefit" aria-hidden="true"></i>
+                    <span class="animal-card__timeline-text animal-card__timeline-text--benefit">{{ $timelineLabel }}</span>
+                @else
+                    <i data-lucide="calendar" class="animal-card__timeline-icon" aria-hidden="true"></i>
+                    <span class="animal-card__timeline-text">{{ $timelineLabel }}</span>
+                @endif
             </div>
         @endif
 
@@ -78,7 +83,7 @@
             </div>
 
             <span class="animal-card__cta">
-                Zobacz profil →
+                Pełny profil i zdjęcia →
             </span>
         </div>
     </div>

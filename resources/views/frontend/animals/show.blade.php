@@ -314,39 +314,6 @@
                     {{-- Luxury Price Banner (Only for available/reservable kittens with price) placed right above description --}}
                     <x-frontend.animal-price-box :animal="$animal" />
 
-                    {{-- Description --}}
-                    <div class="animal-profile__description">
-                        @if($animal->description)
-                            <div class="text-body text-ink-muted-80">
-                                {!! nl2br(e($animal->description)) !!}
-                            </div>
-                        @elseif($animal->short_description)
-                            <p class="text-body text-ink-muted-80">
-                                {{ $animal->short_description }}
-                            </p>
-                        @endif
-
-                        @if($animal->isEarlyReservation() || $animal->isInPickupWindow())
-                            <div style="margin-top: 14px; padding: 12px 16px; background: rgba(200, 157, 92, 0.08); border-left: 3px solid var(--color-gold, #c89d5c); border-radius: 6px; font-size: 0.88rem; line-height: 1.5; color: var(--color-ink-muted-80, #d1cfc7);">
-                                <strong>Zasada odbioru:</strong> Zgodnie ze standardami felinologii kocięta mogą wyjeżdżać do nowych domów w wieku 12–14 tygodni, po pełnej domowej socjalizacji i komplecie szczepień.
-                                @if($animal->isEarlyReservation())
-                                    Kotek jest obecnie dostępny do rezerwacji — 
-                                    @if($animal->earliest_pickup_date)
-                                        odbiór możliwy <strong>od {{ $animal->earliest_pickup_date->format('d.m.Y') }}</strong> (dokładny termin do ustalenia).
-                                    @else
-                                        <strong>{{ mb_strtolower($animal->pickupTimelineLabel()) }}</strong>.
-                                    @endif
-                                @else
-                                    Kotek ukończył już 12. tydzień życia i jest <strong>gotowy do odbioru od zaraz</strong>.
-                                @endif
-                            </div>
-                        @elseif($animal->isOdchowany())
-                            <div class="animal-profile__pickup-rule">
-                                <strong>Zasada odbioru:</strong> Kotek jest w pełni odchowany, po komplecie szczepień i socjalizacji — <strong>gotowy do odbioru</strong>, dokładny termin do bezpośredniego ustalenia z hodowlą.
-                            </div>
-                        @endif
-                    </div>
-
                     @php
                         if ($isBreeding) {
                             $inquiryMsg = "Dzień dobry! Piszę w sprawie kota hodowlanego: {$animal->name}. Kiedy planujecie najbliższe mioty po tym rodzicu?";
@@ -369,7 +336,7 @@
                         $whatsappInquiryUrl = 'https://wa.me/48514153204?text=' . urlencode($inquiryMsg);
                     @endphp
 
-                    {{-- Actions: Messenger-First, WhatsApp Secondary --}}
+                    {{-- Actions: Messenger-First, WhatsApp Secondary (Above the fold for high conversion) --}}
                     <div class="animal-profile__actions">
                         <a href="{{ $messengerInquiryUrl }}"
                            target="_blank"
@@ -446,6 +413,39 @@
                             </a>
                         </div>
                     @endif
+
+                    {{-- Description --}}
+                    <div class="animal-profile__description">
+                        @if($animal->description)
+                            <div class="text-body text-ink-muted-80">
+                                {!! nl2br(e($animal->description)) !!}
+                            </div>
+                        @elseif($animal->short_description)
+                            <p class="text-body text-ink-muted-80">
+                                {{ $animal->short_description }}
+                            </p>
+                        @endif
+
+                        @if($animal->isEarlyReservation() || $animal->isInPickupWindow())
+                            <div style="margin-top: 14px; padding: 12px 16px; background: rgba(200, 157, 92, 0.08); border-left: 3px solid var(--color-gold, #c89d5c); border-radius: 6px; font-size: 0.88rem; line-height: 1.5; color: var(--color-ink-muted-80, #d1cfc7);">
+                                <strong>Zasada odbioru:</strong> Zgodnie ze standardami felinologii kocięta mogą wyjeżdżać do nowych domów w wieku 12–14 tygodni, po pełnej domowej socjalizacji i komplecie szczepień.
+                                @if($animal->isEarlyReservation())
+                                    Kotek jest obecnie dostępny do rezerwacji — 
+                                    @if($animal->earliest_pickup_date)
+                                        odbiór możliwy <strong>od {{ $animal->earliest_pickup_date->format('d.m.Y') }}</strong> (dokładny termin do ustalenia).
+                                    @else
+                                        <strong>{{ mb_strtolower($animal->pickupTimelineLabel()) }}</strong>.
+                                    @endif
+                                @else
+                                    Kotek ukończył już 12. tydzień życia i jest <strong>gotowy do odbioru od zaraz</strong>.
+                                @endif
+                            </div>
+                        @elseif($animal->isOdchowany())
+                            <div class="animal-profile__pickup-rule">
+                                <strong>Zasada odbioru:</strong> Kotek jest w pełni odchowany, po komplecie szczepień i socjalizacji — <strong>gotowy do odbioru</strong>, dokładny termin do bezpośredniego ustalenia z hodowlą.
+                            </div>
+                        @endif
+                    </div>
 
                     {{-- Contextual Facebook Daily Life Discovery --}}
                     <div class="animal-profile__social-note">

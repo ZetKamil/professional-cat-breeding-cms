@@ -226,7 +226,7 @@ class EarliestPickupDateTest extends TestCase
         $this->assertTrue($baron->isReadyNow($auditDate));
         $this->assertSame('Gotowy do odbioru', $baron->pickupBadgeLabel($auditDate));
         $this->assertSame('Gotowy do odbioru — termin do ustalenia', $baron->pickupTimelineLabel($auditDate));
-        $this->assertSame('Odbiór: termin do ustalenia', $baron->pickupCardTimelineLabel($auditDate));
+        $this->assertSame('Odchowany • Komplet szczepień i rodowód', $baron->pickupCardTimelineLabel($auditDate));
 
         // Public show page
         $response = $this->get(route('frontend.animals.show', $baron));
@@ -241,10 +241,10 @@ class EarliestPickupDateTest extends TestCase
         $response->assertDontSee('Gotowy do odbioru od zaraz');
         $response->assertSee('Kotek jest w pełni odchowany');
 
-        // Catalogue card check (no duplicate "Gotowy do odbioru" inside timeline line)
+        // Catalogue card check (renders high-converting benefit line for odchowany kittens)
         $catalogue = $this->get(route('frontend.animals.index'));
         $catalogue->assertOk();
-        $catalogue->assertSee('Odbiór: termin do ustalenia');
+        $catalogue->assertSee('Odchowany • Komplet szczepień i rodowód');
 
         Carbon::setTestNow();
     }

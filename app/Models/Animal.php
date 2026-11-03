@@ -773,7 +773,7 @@ class Animal extends Model
         }
 
         if ($this->isOdchowany($targetDate)) {
-            return 'Odbiór: termin do ustalenia';
+            return 'Odchowany • Komplet szczepień i rodowód';
         }
 
         return 'Odbiór: od zaraz';

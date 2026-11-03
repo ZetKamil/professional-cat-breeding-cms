@@ -170,22 +170,38 @@
     font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
     font-size: 1.05rem;
     font-weight: 700;
-    color: #C5A059;
+    color: #111111;
     letter-spacing: -0.01em;
-    background: rgba(197, 160, 89, 0.1);
-    border: 1px solid rgba(197, 160, 89, 0.3);
+    background: #FDFBF7;
+    border: 1px solid #C5A059;
     border-radius: var(--r-full);
     padding: 3px 12px;
     line-height: 1.25;
+    box-shadow: 0 1px 2px rgba(138, 102, 33, 0.08);
 }
 
 .animal-card__price-prefix {
     font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'Inter', sans-serif);
     font-size: 0.72rem;
-    font-weight: 500;
-    opacity: 0.85;
-    margin-right: 4px;
-    letter-spacing: 0.01em;
+    font-weight: 600;
+    color: #8A6621;
+    opacity: 0.95;
+    margin-right: 5px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+.animal-card__timeline-icon--benefit {
+    width: 14px;
+    height: 14px;
+    color: #C5A059;
+    flex-shrink: 0;
+}
+
+.animal-card__timeline-text--benefit {
+    font-weight: 600;
+    color: #745318;
+    letter-spacing: -0.01em;
 }
 
 .animal-card__status-label {
@@ -446,5 +462,90 @@
 .animal-card__quick-reserve:hover .animal-card__quick-reserve-dot {
     background-color: #ffffff;
     box-shadow: 0 0 6px #ffffff;
+}
+
+/* ==========================================================================
+   Luxury Conversion Strip (Bengal Meta Ads Campaign)
+   ========================================================================== */
+.bengal-conversion-strip {
+    margin-top: var(--sp-2xl, 32px);
+    background: #141414;
+    border: 1px solid #C5A059;
+    border-radius: var(--r-xl, 16px);
+    padding: var(--sp-xl, 24px) var(--sp-2xl, 32px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-xl, 24px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), 0 0 16px rgba(197, 160, 89, 0.15);
+}
+
+.bengal-conversion-strip__content {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-lg, 16px);
+    flex: 1;
+}
+
+.bengal-conversion-strip__icon {
+    font-size: 2rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.bengal-conversion-strip__text {
+    font-size: 1.02rem;
+    line-height: 1.5;
+    color: #FAF8F5;
+    font-weight: 500;
+}
+
+.bengal-conversion-strip__action {
+    flex-shrink: 0;
+}
+
+.bengal-conversion-strip__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: #C5A059;
+    color: #111111;
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 14px 24px;
+    border-radius: var(--r-full, 999px);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 14px rgba(197, 160, 89, 0.4);
+    white-space: nowrap;
+}
+
+.bengal-conversion-strip__btn:hover {
+    background: #d4b26f;
+    color: #000000;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(197, 160, 89, 0.55);
+}
+
+@media (max-width: 768px) {
+    .bengal-conversion-strip {
+        flex-direction: column;
+        align-items: stretch;
+        padding: var(--sp-lg, 20px);
+        gap: var(--sp-lg, 16px);
+        text-align: center;
+    }
+
+    .bengal-conversion-strip__content {
+        flex-direction: column;
+        gap: var(--sp-sm, 8px);
+    }
+
+    .bengal-conversion-strip__btn {
+        width: 100%;
+        padding: 14px 16px;
+        font-size: 0.92rem;
+    }
 }
 
