@@ -630,9 +630,9 @@ Route::get('/deploy-sync', function (\Illuminate\Http\Request $request) {
         \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
         $migrateOut = \Illuminate\Support\Facades\Artisan::output();
 
-        // Sync blog assets & new articles into DB (safe: ImportSeoArticles skips already existing posts)
+        // Optional local sync for blog assets if folder BLOG exists
+        $blogSyncSection = '';
         $blogPath = base_path('BLOG');
-        $blogSyncOut = 'Katalog BLOG nie istnieje.';
         if (\Illuminate\Support\Facades\File::isDirectory($blogPath)) {
             $directories = \Illuminate\Support\Facades\File::directories($blogPath);
             foreach ($directories as $dirPath) {
@@ -652,6 +652,7 @@ Route::get('/deploy-sync', function (\Illuminate\Http\Request $request) {
             }
             \Illuminate\Support\Facades\Artisan::call('seo:import-articles');
             $blogSyncOut = trim(\Illuminate\Support\Facades\Artisan::output());
+            $blogSyncSection = "<h4>Synchronizacja Bloga z Dysku:</h4><pre style='background:#fff; padding:10px; border-radius:6px;'>".e($blogSyncOut ?: 'Zsynchronizowano.').'</pre>';
         }
 
         \Illuminate\Support\Facades\Artisan::call('optimize:clear');
@@ -659,13 +660,16 @@ Route::get('/deploy-sync', function (\Illuminate\Http\Request $request) {
 
         return response("<div style='font-family:sans-serif; padding:30px; max-width:700px; margin:40px auto; background:#f0fdf4; border:1px solid #10b981; border-radius:12px;'>"
             ."<h2 style='color:#065f46; margin-top:0;'>✅ System Zsynchronizowany na Hostingu!</h2>"
-            .'<p>Kod z Git, baza danych, artykuły bloga i pamięć podręczna zostały zaktualizowane.</p>'
+            .'<p>Kod z Git, baza danych i pamięć podręczna zostały pomyślnie zaktualizowane.</p>'
             ."<h4>Aktualny commit:</h4><pre style='background:#fff; padding:10px; border-radius:6px;'>".e($gitLog).'</pre>'
             ."<h4>Git Pull:</h4><pre style='background:#fff; padding:10px; border-radius:6px;'>".e($gitOut).'</pre>'
             ."<h4>Migracje:</h4><pre style='background:#fff; padding:10px; border-radius:6px;'>".e($migrateOut ?: 'Brak nowych migracji.').'</pre>'
-            ."<h4>Synchronizacja Bloga:</h4><pre style='background:#fff; padding:10px; border-radius:6px;'>".e($blogSyncOut ?: 'Zsynchronizowano.').'</pre>'
+            .$blogSyncSection
             ."<h4>Kesz (optimize:clear):</h4><pre style='background:#fff; padding:10px; border-radius:6px;'>".e($clearOut).'</pre>'
-            ."<a href='".route('backend.posts.ai-studio')."' style='display:inline-block; margin-top:15px; background:#059669; color:#fff; padding:10px 20px; border-radius:8px; text-decoration:none; font-weight:bold;'>Przejdź do AI Blog Studio →</a>"
+            ."<div style='display:flex; gap:10px; margin-top:20px; flex-wrap:wrap;'>"
+            ."<a href='".route('backend.animals.index')."' style='display:inline-block; background:#059669; color:#fff; padding:10px 18px; border-radius:8px; text-decoration:none; font-weight:bold;'>Przejdź do Panelu Kotów →</a>"
+            ."<a href='".route('backend.posts.index')."' style='display:inline-block; background:#0284c7; color:#fff; padding:10px 18px; border-radius:8px; text-decoration:none; font-weight:bold;'>Zarządzaj Blogiem →</a>"
+            .'</div>'
             .'</div>');
     } catch (\Throwable $e) {
         return response("<div style='font-family:sans-serif; padding:30px; max-width:700px; margin:40px auto; background:#fef2f2; border:1px solid #f87171; border-radius:12px; color:#991b1b;'>"
