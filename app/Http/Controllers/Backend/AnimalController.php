@@ -12,6 +12,9 @@ use App\Http\Requests\AnimalIndexRequest;
 use App\Http\Requests\StoreAnimalRequest;
 use App\Http\Requests\UpdateAnimalRequest;
 use App\Models\Animal;
+use App\Models\Media;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Throwable;
 
 class AnimalController extends Controller
@@ -146,6 +149,26 @@ class AnimalController extends Controller
         $formatted = $animal->formattedPrice() ?: 'usunięta (brak ceny)';
 
         return back()->with('success', "Cena kota '{$animal->name}' została zaktualizowana: {$formatted}.");
+    }
+
+    public function setFeaturedMedia(Animal $animal, Media $media): RedirectResponse
+    {
+        $this->authorize('update', $animal);
+
+        if ($media->mediable_type !== Animal::class || (string) $media->mediable_id !== (string) $animal->id) {
+            abort(404, 'To zdjęcie nie należy do tego kota.');
+        }
+
+        DB::transaction(function () use ($animal, $media) {
+            Media::query()
+                ->where('mediable_type', Animal::class)
+                ->where('mediable_id', (string) $animal->id)
+                ->update(['is_featured' => false]);
+
+            $media->update(['is_featured' => true]);
+        });
+
+        return back()->with('success', "Zdjęcie zostało ustawione jako zdjęcie główne kota '{$animal->name}'.");
     }
 
     public function destroy(Animal $animal)

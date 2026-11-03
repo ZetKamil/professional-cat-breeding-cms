@@ -45,14 +45,15 @@ class UpdatePostRequest extends FormRequest
         }
 
         $this->merge([
-            'title'               => $title,
-            'slug'                => $slug !== '' ? Str::slug($slug) : Str::slug($title),
-            'is_published'        => $isPublished,
-            'categories'          => $this->input('categories', []),
-            'published_at'        => $publishedAt ?: ($isPublished ? now() : null),
-            'sections'            => $sections,
-            'body'                => $body,
+            'title' => $title,
+            'slug' => $slug !== '' ? Str::slug($slug) : Str::slug($title),
+            'is_published' => $isPublished,
+            'categories' => $this->input('categories', []),
+            'published_at' => $publishedAt ?: ($isPublished ? now() : null),
+            'sections' => $sections,
+            'body' => $body,
             'featured_animal_ids' => $this->input('featured_animal_ids', []),
+            'featured_media_id' => $this->input('featured_media_id') ?: null,
         ]);
     }
 
@@ -61,25 +62,29 @@ class UpdatePostRequest extends FormRequest
         $postId = $this->route('post')?->id;
 
         return [
-            'user_id'               => ['nullable', 'integer', Rule::exists('users', 'id')],
-            'title'                 => ['required', 'string', 'min:3', 'max:255'],
-            'slug'                  => [
-                'required', 'string', 'min:3', 'max:255',
+            'user_id' => ['nullable', 'integer', Rule::exists('users', 'id')],
+            'title' => ['required', 'string', 'min:3', 'max:255'],
+            'slug' => [
+                'required',
+                'string',
+                'min:3',
+                'max:255',
                 Rule::unique('posts', 'slug')->ignore($postId),
             ],
-            'excerpt'               => ['nullable', 'string', 'max:1000'],
-            'body'                  => ['nullable', 'string'],
-            'sections'              => ['nullable', 'array'],
-            'sections.*.heading'    => ['nullable', 'string'],
-            'sections.*.body'       => ['nullable', 'string'],
-            'sections.*.image_url'  => ['nullable', 'string'],
-            'sections_json'         => ['nullable', 'string'],
-            'is_published'          => ['required', 'boolean'],
-            'published_at'          => ['nullable', 'date'],
-            'categories'            => ['nullable', 'array'],
-            'categories.*'          => ['integer', Rule::exists('categories', 'id')],
-            'image'                 => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
-            'featured_animal_ids'   => ['nullable', 'array'],
+            'excerpt' => ['nullable', 'string', 'max:1000'],
+            'body' => ['nullable', 'string'],
+            'sections' => ['nullable', 'array'],
+            'sections.*.heading' => ['nullable', 'string'],
+            'sections.*.body' => ['nullable', 'string'],
+            'sections.*.image_url' => ['nullable', 'string'],
+            'sections_json' => ['nullable', 'string'],
+            'is_published' => ['required', 'boolean'],
+            'published_at' => ['nullable', 'date'],
+            'categories' => ['nullable', 'array'],
+            'categories.*' => ['integer', Rule::exists('categories', 'id')],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+            'featured_media_id' => ['nullable', 'integer', Rule::exists('media', 'id')],
+            'featured_animal_ids' => ['nullable', 'array'],
             'featured_animal_ids.*' => ['string', Rule::exists('animals', 'id')],
         ];
     }
@@ -91,16 +96,17 @@ class UpdatePostRequest extends FormRequest
     {
         return collect($sections)->map(function (array $s) {
             $parts = [];
-            if (!empty($s['heading'])) {
-                $parts[] = '## ' . $s['heading'];
+            if (! empty($s['heading'])) {
+                $parts[] = '## '.$s['heading'];
             }
-            if (!empty($s['body'])) {
+            if (! empty($s['body'])) {
                 $parts[] = $s['body'];
             }
-            if (!empty($s['image_url'])) {
-                $alt = !empty($s['heading']) ? $s['heading'] : 'Zdjęcie do sekcji';
-                $parts[] = '![' . $alt . '](' . $s['image_url'] . ')';
+            if (! empty($s['image_url'])) {
+                $alt = ! empty($s['heading']) ? $s['heading'] : 'Zdjęcie do sekcji';
+                $parts[] = '!['.$alt.']('.$s['image_url'].')';
             }
+
             return implode("\n\n", $parts);
         })->implode("\n\n");
     }

@@ -291,15 +291,20 @@
             <div class="card-body">
                 @if($animal->gallery && $animal->gallery->isNotEmpty())
                     <div class="mb-3">
-                        <label class="form-label small text-muted fw-bold">Zapisane zdjęcia w galerii (kliknij Usuń aby usunąć z serwera):</label>
+                        <label class="form-label small text-muted fw-bold">Zapisane zdjęcia w galerii (kliknij „Główne” aby ustawić jako wizytówkę lub „Usuń” aby usunąć):</label>
                         <div class="row g-2">
                             @foreach($animal->gallery as $img)
                                 <div class="col-4 text-center">
                                     <div class="position-relative border rounded p-1 bg-light shadow-sm h-100 d-flex flex-column justify-content-between">
                                         <img src="{{ $img->url() }}" alt="Galeria" class="img-thumbnail w-100 mb-1" style="height: 75px; object-fit: cover;">
-                                        <button type="submit" form="delete-media-{{ $img->id }}" class="btn btn-outline-danger btn-sm w-100 py-0" style="font-size: 11px;">
-                                            <i class="fas fa-trash me-1"></i>Usuń
-                                        </button>
+                                        <div class="d-flex flex-column gap-1">
+                                            <button type="submit" form="set-featured-media-{{ $img->id }}" class="btn btn-outline-warning text-dark btn-sm w-100 py-0" style="font-size: 11px;" title="Ustaw to zdjęcie jako zdjęcie główne (profilowe)">
+                                                <i class="fas fa-star text-warning me-1"></i>Główne
+                                            </button>
+                                            <button type="submit" form="delete-media-{{ $img->id }}" class="btn btn-outline-danger btn-sm w-100 py-0" style="font-size: 11px;">
+                                                <i class="fas fa-trash me-1"></i>Usuń
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             @endforeach

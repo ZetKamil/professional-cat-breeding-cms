@@ -164,29 +164,79 @@
 
     {{-- ========================= FEATURED IMAGE ========================= --}}
     <div class="col-12">
-        <label class="form-label">Zdjęcie okładkowe (Featured Image)</label>
-        <input
-            type="file"
-            name="image"
-            class="form-control @error('image') is-invalid @enderror"
-            accept=".jpg,.jpeg,.png,.webp"
-        >
-        @error('image')
-        <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
-        <div class="form-text">Dozwolone formaty: jpg, jpeg, png, webp (max 4MB)</div>
+        <label class="form-label fw-bold">Zdjęcie okładkowe (Featured Image)</label>
+        
+        <input type="hidden" name="featured_media_id" id="postFeaturedMediaId" value="{{ old('featured_media_id', $post?->media?->id) }}">
 
-        @if($post?->media)
-            <div class="mt-3">
-                <div class="small text-muted mb-2">Aktualne zdjęcie okładkowe</div>
-                <img
-                    src="{{ $post->media->url() }}"
-                    class="img-thumbnail"
-                    style="max-width:200px;"
-                    alt="Okładka artykułu"
-                >
+        <div class="card bg-light border p-3">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+                <div>
+                    <span class="small text-muted d-block">Wybierz okładkę artykułu: możesz wybrać zdjęcie z biblioteki mediów lub wgrać nowy plik z dysku.</span>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-outline-primary btn-sm" id="postPickMediaBtn">
+                        <i class="fas fa-images me-1"></i> Wybierz z biblioteki mediów
+                    </button>
+                </div>
             </div>
-        @endif
+
+            <div class="mb-2">
+                <label class="form-label small fw-semibold text-secondary mb-1">Lub wgraj nowy plik z komputera:</label>
+                <input
+                    type="file"
+                    name="image"
+                    id="postFeaturedFileInput"
+                    class="form-control @error('image') is-invalid @enderror"
+                    accept=".jpg,.jpeg,.png,.webp"
+                >
+                @error('image')
+                <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+                @error('featured_media_id')
+                <div class="text-danger small mt-1">{{ $message }}</div>
+                @enderror
+                <div class="form-text small">Dozwolone formaty: jpg, jpeg, png, webp (max 4MB)</div>
+            </div>
+
+            {{-- Dynamic Preview for Selected Library Media --}}
+            <div id="postFeaturedPreviewWrapper" class="d-none mt-2 p-2 bg-white border rounded">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center gap-3">
+                        <img id="postFeaturedPreviewImg" src="" class="img-thumbnail" style="width: 100px; height: 75px; object-fit: cover;" alt="Podgląd">
+                        <div>
+                            <span class="badge bg-success mb-1"><i class="fas fa-check me-1"></i>Wybrano z biblioteki mediów</span>
+                            <div class="small fw-bold text-truncate" id="postFeaturedPreviewTitle" style="max-width: 250px;"></div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-outline-danger btn-sm" id="postRemoveFeaturedBtn">
+                        <i class="fas fa-times me-1"></i> Usuń wybór
+                    </button>
+                </div>
+            </div>
+
+            {{-- Current Existing Cover --}}
+            @if($post?->media)
+                <div id="postCurrentCoverWrapper" class="mt-2 p-2 bg-white border rounded">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center gap-3">
+                            <img
+                                src="{{ $post->media->url() }}"
+                                class="img-thumbnail"
+                                style="width: 100px; height: 75px; object-fit: cover;"
+                                alt="Okładka artykułu"
+                            >
+                            <div>
+                                <span class="badge bg-secondary mb-1">Bieżąca okładka artykułu</span>
+                                <div class="small text-muted">{{ $post->media->filename }}</div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-outline-secondary btn-sm" id="postClearCurrentCoverBtn" title="Zmień lub odłącz okładkę">
+                            <i class="fas fa-times me-1"></i> Odłącz
+                        </button>
+                    </div>
+                </div>
+            @endif
+        </div>
     </div>
 
     {{-- ===============================================================
@@ -935,7 +985,21 @@ document.addEventListener('DOMContentLoaded', function () {
             const card = col.querySelector('.card');
             const pick = () => {
                 if (smpTargetIdx !== null) {
-                    if (smpTargetIdx === 'closing') {
+                    if (smpTargetIdx === 'post_featured') {
+                        const mediaIdInput = document.getElementById('postFeaturedMediaId');
+                        const previewWrapper = document.getElementById('postFeaturedPreviewWrapper');
+                        const previewImg = document.getElementById('postFeaturedPreviewImg');
+                        const previewTitle = document.getElementById('postFeaturedPreviewTitle');
+                        const fileInput = document.getElementById('postFeaturedFileInput');
+                        const currentCover = document.getElementById('postCurrentCoverWrapper');
+
+                        if (mediaIdInput) mediaIdInput.value = item.id;
+                        if (previewImg) previewImg.src = item.url;
+                        if (previewTitle) previewTitle.textContent = item.title || item.filename;
+                        if (previewWrapper) previewWrapper.classList.remove('d-none');
+                        if (fileInput) fileInput.value = '';
+                        if (currentCover) currentCover.classList.add('d-none');
+                    } else if (smpTargetIdx === 'closing') {
                         closingSection.image_url = item.url;
                         renderClosingImage();
                         saveToInput();
@@ -982,6 +1046,38 @@ document.addEventListener('DOMContentLoaded', function () {
             saveToInput();
         });
     }
+
+    // ── Post Featured Cover Media Picker Listeners ────────────────────
+    document.getElementById('postPickMediaBtn')?.addEventListener('click', function () {
+        openSectionMediaPicker('post_featured');
+    });
+
+    document.getElementById('postRemoveFeaturedBtn')?.addEventListener('click', function () {
+        const mediaIdInput = document.getElementById('postFeaturedMediaId');
+        const previewWrapper = document.getElementById('postFeaturedPreviewWrapper');
+        const currentCover = document.getElementById('postCurrentCoverWrapper');
+        if (mediaIdInput) mediaIdInput.value = '';
+        if (previewWrapper) previewWrapper.classList.add('d-none');
+        if (currentCover) currentCover.classList.remove('d-none');
+    });
+
+    document.getElementById('postClearCurrentCoverBtn')?.addEventListener('click', function () {
+        const mediaIdInput = document.getElementById('postFeaturedMediaId');
+        const currentCover = document.getElementById('postCurrentCoverWrapper');
+        if (mediaIdInput) mediaIdInput.value = '';
+        if (currentCover) currentCover.classList.add('d-none');
+    });
+
+    document.getElementById('postFeaturedFileInput')?.addEventListener('change', function () {
+        if (this.files && this.files.length > 0) {
+            const mediaIdInput = document.getElementById('postFeaturedMediaId');
+            const previewWrapper = document.getElementById('postFeaturedPreviewWrapper');
+            const currentCover = document.getElementById('postCurrentCoverWrapper');
+            if (mediaIdInput) mediaIdInput.value = '';
+            if (previewWrapper) previewWrapper.classList.add('d-none');
+            if (currentCover) currentCover.classList.add('d-none');
+        }
+    });
 
     // ── Init ─────────────────────────────────────────────────────────
     updateClosingUI();

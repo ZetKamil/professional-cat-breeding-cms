@@ -99,7 +99,9 @@ class Post extends Model
 
     public function media(): MorphOne
     {
-        return $this->morphOne(Media::class, 'mediable');
+        return $this->morphOne(Media::class, 'mediable')
+            ->orderByDesc('is_featured')
+            ->orderBy('sort_order', 'asc');
     }
 
     /**

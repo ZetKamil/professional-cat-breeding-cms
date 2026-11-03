@@ -36,9 +36,13 @@
                     </form>
                 @endif
 
-                {{-- Hidden Delete Forms for Gallery Images --}}
+                {{-- Hidden Forms for Gallery Images (Delete and Set Featured) --}}
                 @if($animal->gallery)
                     @foreach($animal->gallery as $img)
+                        <form id="set-featured-media-{{ $img->id }}" action="{{ route('backend.animals.media.set-featured', [$animal, $img]) }}" method="POST" class="d-none">
+                            @csrf
+                            @method('PATCH')
+                        </form>
                         <form id="delete-media-{{ $img->id }}" action="{{ route('backend.media.destroy', $img) }}" method="POST" class="d-none" onsubmit="return confirm('Usuń to zdjęcie z galerii?');">
                             @csrf
                             @method('DELETE')

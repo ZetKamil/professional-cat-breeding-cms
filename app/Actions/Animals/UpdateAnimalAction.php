@@ -63,10 +63,16 @@ class UpdateAnimalAction
             ]);
 
             if (isset($data['image']) && $data['image'] instanceof UploadedFile) {
-                $this->mediaService->replace(
+                // Demote previous featured image to gallery so it is never permanently deleted or lost
+                if ($locked->media) {
+                    $locked->media->update(['is_featured' => false]);
+                }
+
+                $this->mediaService->upload(
                     $locked,
                     $data['image'],
-                    'animals'
+                    'animals',
+                    true
                 );
             }
 

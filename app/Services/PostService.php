@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Events\PostCreated;
 use App\Events\PostUpdated;
+use App\Models\Media;
 use App\Models\Post;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
@@ -22,16 +23,16 @@ class PostService
         return DB::transaction(function () use ($data) {
 
             $post = Post::create([
-                'user_id'          => $data['user_id'] ?? null,
-                'title'            => $data['title'],
-                'slug'             => $data['slug'],
-                'excerpt'          => $data['excerpt'] ?? null,
-                'body'             => $data['body'] ?? '',
-                'sections'         => $data['sections'] ?? null,
-                'meta_title'       => $data['meta_title'] ?? null,
+                'user_id' => $data['user_id'] ?? null,
+                'title' => $data['title'],
+                'slug' => $data['slug'],
+                'excerpt' => $data['excerpt'] ?? null,
+                'body' => $data['body'] ?? '',
+                'sections' => $data['sections'] ?? null,
+                'meta_title' => $data['meta_title'] ?? null,
                 'meta_description' => $data['meta_description'] ?? null,
-                'is_published'     => $data['is_published'],
-                'published_at'     => $data['published_at'] ?? null,
+                'is_published' => $data['is_published'],
+                'published_at' => $data['published_at'] ?? null,
             ]);
 
             $post->categories()->sync($data['categories'] ?? []);
@@ -44,8 +45,11 @@ class PostService
                 $this->mediaService->upload(
                     $post,
                     $data['image'],
-                    'posts'
+                    'posts',
+                    true
                 );
+            } elseif (! empty($data['featured_media_id'])) {
+                $this->attachFeaturedMediaFromLibrary($post, (int) $data['featured_media_id']);
             }
 
             PostCreated::dispatch($post);
@@ -59,16 +63,16 @@ class PostService
         return DB::transaction(function () use ($post, $data) {
 
             $post->update([
-                'user_id'          => $data['user_id'] ?? null,
-                'title'            => $data['title'],
-                'slug'             => $data['slug'],
-                'excerpt'          => $data['excerpt'] ?? null,
-                'body'             => $data['body'] ?? '',
-                'sections'         => array_key_exists('sections', $data) ? $data['sections'] : $post->sections,
-                'meta_title'       => $data['meta_title'] ?? null,
+                'user_id' => $data['user_id'] ?? null,
+                'title' => $data['title'],
+                'slug' => $data['slug'],
+                'excerpt' => $data['excerpt'] ?? null,
+                'body' => $data['body'] ?? '',
+                'sections' => array_key_exists('sections', $data) ? $data['sections'] : $post->sections,
+                'meta_title' => $data['meta_title'] ?? null,
                 'meta_description' => $data['meta_description'] ?? null,
-                'is_published'     => $data['is_published'],
-                'published_at'     => $data['published_at'] ?? null,
+                'is_published' => $data['is_published'],
+                'published_at' => $data['published_at'] ?? null,
             ]);
 
             $post->categories()->sync($data['categories'] ?? []);
@@ -83,12 +87,53 @@ class PostService
                     $data['image'],
                     'posts'
                 );
+            } elseif (! empty($data['featured_media_id'])) {
+                $this->attachFeaturedMediaFromLibrary($post, (int) $data['featured_media_id']);
             }
 
             PostUpdated::dispatch($post);
 
             return $post;
         });
+    }
+
+    /**
+     * Attach an existing media file from the library as the featured cover image.
+     */
+    protected function attachFeaturedMediaFromLibrary(Post $post, int $mediaId): void
+    {
+        $media = Media::find($mediaId);
+        if (! $media) {
+            return;
+        }
+
+        // Un-feature any existing media for this post
+        Media::where('mediable_type', Post::class)
+            ->where('mediable_id', (string) $post->id)
+            ->update(['is_featured' => false]);
+
+        if ($media->mediable_type === Post::class && (string) $media->mediable_id === (string) $post->id) {
+            $media->update(['is_featured' => true]);
+
+            return;
+        }
+
+        if ($media->mediable_type === null) {
+            $media->update([
+                'mediable_type' => Post::class,
+                'mediable_id' => (string) $post->id,
+                'is_featured' => true,
+            ]);
+
+            return;
+        }
+
+        // If media belongs to another entity (e.g. Animal), replicate record so the original is preserved
+        $cloned = $media->replicate();
+        $cloned->mediable_type = Post::class;
+        $cloned->mediable_id = (string) $post->id;
+        $cloned->is_featured = true;
+        $cloned->save();
     }
 
     /**
