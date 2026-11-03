@@ -13,7 +13,9 @@ use App\Http\Requests\StoreAnimalRequest;
 use App\Http\Requests\UpdateAnimalRequest;
 use App\Models\Animal;
 use App\Models\Media;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
@@ -169,6 +171,31 @@ class AnimalController extends Controller
         });
 
         return back()->with('success', "Zdjęcie zostało ustawione jako zdjęcie główne kota '{$animal->name}'.");
+    }
+
+    public function reorderGalleryMedia(Request $request, Animal $animal): JsonResponse
+    {
+        $this->authorize('update', $animal);
+
+        $validated = $request->validate([
+            'media_ids' => ['required', 'array', 'min:1'],
+            'media_ids.*' => ['required', 'integer', 'exists:media,id'],
+        ]);
+
+        DB::transaction(function () use ($animal, $validated) {
+            foreach ($validated['media_ids'] as $index => $mediaId) {
+                Media::query()
+                    ->where('id', $mediaId)
+                    ->where('mediable_type', Animal::class)
+                    ->where('mediable_id', (string) $animal->id)
+                    ->update(['sort_order' => $index + 1]);
+            }
+        });
+
+        return response()->json([
+            'success' => true,
+            'message' => "Kolejność zdjęć w galerii kota '{$animal->name}' została pomyślnie zaktualizowana.",
+        ]);
     }
 
     public function destroy(Animal $animal)

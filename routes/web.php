@@ -594,6 +594,8 @@ Route::middleware(['auth', 'verified', 'active'])
             ->name('animals.quick-price');
         Route::patch('animals/{animal}/media/{media}/set-featured', [\App\Http\Controllers\Backend\AnimalController::class, 'setFeaturedMedia'])
             ->name('animals.media.set-featured');
+        Route::patch('animals/{animal}/media/reorder', [\App\Http\Controllers\Backend\AnimalController::class, 'reorderGalleryMedia'])
+            ->name('animals.media.reorder');
         Route::resource('animals', \App\Http\Controllers\Backend\AnimalController::class);
         Route::patch('animals/{id}/restore', [\App\Http\Controllers\Backend\AnimalController::class, 'restore'])
             ->name('animals.restore');

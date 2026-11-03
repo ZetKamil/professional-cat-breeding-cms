@@ -291,16 +291,40 @@
             <div class="card-body">
                 @if($animal->gallery && $animal->gallery->isNotEmpty())
                     <div class="mb-3">
-                        <label class="form-label small text-muted fw-bold">Zapisane zdjęcia w galerii (kliknij „Główne” aby ustawić jako wizytówkę lub „Usuń” aby usunąć):</label>
-                        <div class="row g-2">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <label class="form-label small text-muted fw-bold mb-0">
+                                <i class="fas fa-arrows-alt me-1 text-primary"></i>
+                                Zapisane zdjęcia w galerii (chwyć i przeciągnij myszką, aby zmienić kolejność):
+                            </label>
+                            <span id="gallery-reorder-status" class="badge bg-success-subtle text-success border border-success-subtle d-none">
+                                <i class="fas fa-check me-1"></i> Zapisano nową kolejność!
+                            </span>
+                        </div>
+                        <div id="animal-gallery-sortable" class="row g-2" data-reorder-url="{{ route('backend.animals.media.reorder', $animal) }}">
                             @foreach($animal->gallery as $img)
-                                <div class="col-4 text-center">
-                                    <div class="position-relative border rounded p-1 bg-light shadow-sm h-100 d-flex flex-column justify-content-between">
-                                        <img src="{{ $img->url() }}" alt="Galeria" class="img-thumbnail w-100 mb-1" style="height: 75px; object-fit: cover;">
+                                <div class="col-4 text-center gallery-sortable-item" data-media-id="{{ $img->id }}" draggable="true" style="cursor: grab; user-select: none;">
+                                    <div class="position-relative border rounded p-1 bg-light shadow-sm h-100 d-flex flex-column justify-content-between gallery-card-inner">
+                                        <div class="d-flex justify-content-between align-items-center px-1 mb-1" style="font-size: 11px;">
+                                            <span class="badge bg-dark-subtle text-dark border order-badge" style="font-size: 10px;">#{{ $loop->iteration }}</span>
+                                            <div class="d-flex align-items-center gap-1">
+                                                <button type="button" class="btn btn-link p-0 text-muted btn-move-left" title="Przesuń w lewo" style="font-size: 11px; text-decoration: none;">◀</button>
+                                                <button type="button" class="btn btn-link p-0 text-muted btn-move-right" title="Przesuń w prawo" style="font-size: 11px; text-decoration: none;">▶</button>
+                                                <span class="drag-handle text-muted ms-1" title="Chwyć i przeciągnij" style="cursor: grab;">
+                                                    <i class="fas fa-grip-vertical"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <img src="{{ $img->url() }}" alt="Galeria" class="img-thumbnail w-100 mb-1" style="height: 75px; object-fit: cover; pointer-events: none;">
                                         <div class="d-flex flex-column gap-1">
-                                            <button type="submit" form="set-featured-media-{{ $img->id }}" class="btn btn-outline-warning text-dark btn-sm w-100 py-0" style="font-size: 11px;" title="Ustaw to zdjęcie jako zdjęcie główne (profilowe)">
-                                                <i class="fas fa-star text-warning me-1"></i>Główne
-                                            </button>
+                                            @if($img->is_featured)
+                                                <span class="badge bg-warning text-dark py-1" style="font-size: 11px;" title="To zdjęcie jest wizytówką profilową kota">
+                                                    <i class="fas fa-star me-1"></i>Główne
+                                                </span>
+                                            @else
+                                                <button type="submit" form="set-featured-media-{{ $img->id }}" class="btn btn-outline-warning text-dark btn-sm w-100 py-0" style="font-size: 11px;" title="Ustaw to zdjęcie jako zdjęcie główne (profilowe)">
+                                                    <i class="fas fa-star text-warning me-1"></i>Główne
+                                                </button>
+                                            @endif
                                             <button type="submit" form="delete-media-{{ $img->id }}" class="btn btn-outline-danger btn-sm w-100 py-0" style="font-size: 11px;">
                                                 <i class="fas fa-trash me-1"></i>Usuń
                                             </button>
@@ -668,6 +692,135 @@ document.addEventListener('DOMContentLoaded', function() {
             if (mainPreviewContainer) mainPreviewContainer.classList.add('d-none');
             if (currentContainer) currentContainer.classList.remove('opacity-50');
         });
+    }
+
+    // ─── Existing Gallery Images Drag & Drop Reordering ────────────────
+    const sortableContainer = document.getElementById('animal-gallery-sortable');
+    const reorderStatus = document.getElementById('gallery-reorder-status');
+
+    if (sortableContainer) {
+        let draggedItem = null;
+
+        function updateOrderBadges() {
+            const items = sortableContainer.querySelectorAll('.gallery-sortable-item');
+            items.forEach((item, idx) => {
+                const badge = item.querySelector('.order-badge');
+                if (badge) badge.textContent = '#' + (idx + 1);
+            });
+        }
+
+        function saveNewGalleryOrder() {
+            const reorderUrl = sortableContainer.dataset.reorderUrl;
+            if (!reorderUrl) return;
+
+            const items = sortableContainer.querySelectorAll('.gallery-sortable-item');
+            const mediaIds = Array.from(items).map(item => item.dataset.mediaId);
+
+            if (reorderStatus) {
+                reorderStatus.className = 'badge bg-primary-subtle text-primary border border-primary-subtle d-inline-block';
+                reorderStatus.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Zapisywanie...';
+            }
+
+            fetch(reorderUrl, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || document.querySelector('input[name="_token"]')?.value || '',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ media_ids: mediaIds })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    if (reorderStatus) {
+                        reorderStatus.className = 'badge bg-success-subtle text-success border border-success-subtle d-inline-block';
+                        reorderStatus.innerHTML = '<i class="fas fa-check me-1"></i> Zapisano nową kolejność!';
+                        setTimeout(() => {
+                            if (reorderStatus) reorderStatus.classList.add('d-none');
+                        }, 3000);
+                    }
+                } else {
+                    throw new Error(data.message || 'Błąd zapisu kolejności');
+                }
+            })
+            .catch(err => {
+                console.error('Gallery reorder error:', err);
+                if (reorderStatus) {
+                    reorderStatus.className = 'badge bg-danger-subtle text-danger border border-danger-subtle d-inline-block';
+                    reorderStatus.innerHTML = '<i class="fas fa-exclamation-triangle me-1"></i> Błąd zapisu kolejności';
+                }
+            });
+        }
+
+        function initGalleryItemEvents(item) {
+            item.addEventListener('dragstart', (e) => {
+                if (e.target.closest('button') || e.target.closest('form')) {
+                    e.preventDefault();
+                    return;
+                }
+                draggedItem = item;
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('text/plain', item.dataset.mediaId);
+                setTimeout(() => item.classList.add('opacity-50'), 0);
+            });
+
+            item.addEventListener('dragend', () => {
+                if (draggedItem) {
+                    draggedItem.classList.remove('opacity-50');
+                    draggedItem = null;
+                }
+                sortableContainer.querySelectorAll('.gallery-sortable-item').forEach(el => {
+                    el.classList.remove('border-primary');
+                });
+            });
+
+            item.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+                if (!draggedItem || draggedItem === item) return;
+
+                const rect = item.getBoundingClientRect();
+                const next = (e.clientX - rect.left) / (rect.right - rect.left) > 0.5;
+                sortableContainer.insertBefore(draggedItem, next && item.nextSibling ? item.nextSibling : item);
+                updateOrderBadges();
+            });
+
+            item.addEventListener('drop', (e) => {
+                e.preventDefault();
+                updateOrderBadges();
+                saveNewGalleryOrder();
+            });
+
+            const btnLeft = item.querySelector('.btn-move-left');
+            const btnRight = item.querySelector('.btn-move-right');
+
+            if (btnLeft) {
+                btnLeft.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const prev = item.previousElementSibling;
+                    if (prev) {
+                        sortableContainer.insertBefore(item, prev);
+                        updateOrderBadges();
+                        saveNewGalleryOrder();
+                    }
+                });
+            }
+
+            if (btnRight) {
+                btnRight.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const next = item.nextElementSibling;
+                    if (next) {
+                        sortableContainer.insertBefore(next, item);
+                        updateOrderBadges();
+                        saveNewGalleryOrder();
+                    }
+                });
+            }
+        }
+
+        sortableContainer.querySelectorAll('.gallery-sortable-item').forEach(initGalleryItemEvents);
     }
 });
 </script>
