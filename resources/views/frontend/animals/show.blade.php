@@ -28,18 +28,6 @@
     >
 
         <div class="section-inner">
-            {{-- Editorial Breadcrumbs --}}
-            <nav class="animal-profile__breadcrumbs" aria-label="Nawigacja okruszkowa">
-                <a href="{{ route('home') }}" class="animal-profile__breadcrumb-link">Strona Główna</a>
-                <span class="animal-profile__breadcrumb-sep" aria-hidden="true">/</span>
-                <a href="{{ route('frontend.animals.index') }}" class="animal-profile__breadcrumb-link">Nasze Koty</a>
-                <span class="animal-profile__breadcrumb-sep" aria-hidden="true">/</span>
-                <a href="{{ route('frontend.animals.index', ['breed' => $animal->breed]) }}"
-                    class="animal-profile__breadcrumb-link">{{ $animal->breed }}</a>
-                <span class="animal-profile__breadcrumb-sep" aria-hidden="true">/</span>
-                <span class="text-ink">{{ $animal->name }}</span>
-            </nav>
-
             {{-- Back Navigation --}}
             <div class="animal-profile__back">
                 <a href="{{ route('frontend.animals.index') }}" class="text-nav animal-profile__back-link">
