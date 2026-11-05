@@ -161,14 +161,14 @@
    -------------------------------------------------------------------------- */
 
 .animal-profile {
-    padding-top: clamp(100px, 12vh, 128px);
+    padding-top: calc(var(--nav-height, 64px) + 16px);
     padding-bottom: var(--sp-4xl);
 }
 
 /* Reduce top offset on mobile — keep content in view */
 @media (max-width: 640px) {
     .animal-profile {
-        padding-top: calc(var(--nav-height, 64px) + 16px);
+        padding-top: calc(var(--nav-height, 64px) + 12px);
         padding-bottom: var(--sp-2xl);
     }
 }
@@ -181,12 +181,12 @@
 
 /* Back Link */
 .animal-profile__back {
-    margin-bottom: var(--sp-lg, 24px);
+    margin-bottom: var(--sp-sm, 12px);
 }
 
 @media (max-width: 768px) {
     .animal-profile__back {
-        margin-bottom: var(--sp-sm, 12px);
+        margin-bottom: 8px;
     }
 }
 
@@ -243,7 +243,7 @@
     .animal-profile__gallery {
         position: -webkit-sticky;
         position: sticky;
-        top: 100px;
+        top: calc(var(--nav-height, 64px) + 16px);
         align-self: start;
         z-index: 10;
     }
