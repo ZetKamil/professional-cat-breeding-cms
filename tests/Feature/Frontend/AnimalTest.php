@@ -133,4 +133,38 @@ class AnimalTest extends TestCase
         $response->assertSee('Barbie');
         $response->assertSee('W nowym domu');
     }
+
+    public function test_animal_card_renders_unbroken_price_badge(): void
+    {
+        Animal::factory()->create([
+            'name' => 'Baron Unique',
+            'slug' => 'baron-unique',
+            'breed' => 'Kot Bengalski',
+            'price' => 2700,
+            'is_published' => true,
+            'published_at' => now(),
+            'status' => \App\Enums\AnimalStatus::Available,
+        ]);
+
+        $response = $this->get('/koty');
+
+        $response->assertOk();
+        $response->assertSee('Baron Unique');
+        $response->assertSee('animal-card__price-badge', false);
+        $response->assertSee('animal-card__price-amount', false);
+        $response->assertSee('2 700 zł');
+    }
+
+    public function test_cattery_page_renders_stud_gallery_links_and_cta(): void
+    {
+        $response = $this->get('/o-hodowli');
+
+        $response->assertOk();
+        $response->assertSee('galeria');
+        $response->assertSee('gallery-grid', false);
+        $response->assertSee('/koty/stas');
+        $response->assertSee('/koty/bars');
+        $response->assertSee('/koty/baltazar');
+        $response->assertSee('Poznaj nasze koty hodowlane i dostępne kocięta');
+    }
 }

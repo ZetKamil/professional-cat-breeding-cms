@@ -263,7 +263,7 @@
         />
 
         <div class="gallery-grid">
-            <div class="gallery-item gallery-item--large">
+            <a href="{{ route('frontend.animals.show', 'stas') }}" class="gallery-item gallery-item--large" aria-label="Poznaj profil reproduktora Staś — Kot Brytyjski Długowłosy (BLH)">
                 <x-frontend.picture 
                     src="{{ asset('image/hero/stas_studio.jpg') }}" 
                     alt="Nasz arystokratyczny reproduktor Staś — kot brytyjski długowłosy colourpoint" 
@@ -273,8 +273,12 @@
                     loading="lazy"
                     sizes="(max-width: 768px) 100vw, 66vw"
                 />
-            </div>
-            <div class="gallery-item">
+                <div class="gallery-item__caption">
+                    <span class="gallery-item__name">Staś</span>
+                    <span class="gallery-item__breed">Kot Brytyjski Długowłosy (BLH) &bull; Zobacz profil →</span>
+                </div>
+            </a>
+            <a href="{{ route('frontend.animals.show', 'bars') }}" class="gallery-item" aria-label="Poznaj profil reproduktora Bars — Kot Bengalski">
                 <x-frontend.picture 
                     src="{{ asset('image/hero/bars_studio.jpg') }}" 
                     alt="Nasz reproduktor Bars — kot bengalski o umaszczeniu silver rosetted" 
@@ -284,8 +288,12 @@
                     loading="lazy"
                     sizes="(max-width: 768px) 100vw, 33vw"
                 />
-            </div>
-            <div class="gallery-item">
+                <div class="gallery-item__caption">
+                    <span class="gallery-item__name">Bars</span>
+                    <span class="gallery-item__breed">Kot Bengalski &bull; Zobacz profil →</span>
+                </div>
+            </a>
+            <a href="{{ route('frontend.animals.show', 'baltazar') }}" class="gallery-item" aria-label="Poznaj profil reproduktora Baltazar — Kot Syjamski">
                 <x-frontend.picture 
                     src="{{ asset('image/hero/baltazar_studio.jpg') }}" 
                     alt="Nasz reproduktor Baltazar — dumny kot syjamski / tajski" 
@@ -295,13 +303,20 @@
                     loading="lazy"
                     sizes="(max-width: 768px) 100vw, 33vw"
                 />
-            </div>
+                <div class="gallery-item__caption">
+                    <span class="gallery-item__name">Baltazar</span>
+                    <span class="gallery-item__breed">Kot Syjamski &bull; Zobacz profil →</span>
+                </div>
+            </a>
         </div>
 
-        <div class="gallery-cta" style="margin-top: var(--sp-2xl); text-align: center;">
+        <div class="gallery-cta" style="margin-top: var(--sp-2xl); display: flex; flex-wrap: wrap; justify-content: center; gap: 12px;">
+            <x-frontend.button variant="primary" href="{{ route('frontend.animals.index') }}">
+                Poznaj nasze koty hodowlane i dostępne kocięta →
+            </x-frontend.button>
             <x-frontend.button variant="secondary" href="https://www.facebook.com/profile.php?id=61580668026948"
                 target="_blank" rel="noopener">
-                Obserwuj nas na Facebooku →
+                Obserwuj nas na Facebooku
             </x-frontend.button>
         </div>
     </x-frontend.section>

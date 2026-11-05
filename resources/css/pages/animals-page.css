@@ -168,7 +168,7 @@
 /* Reduce top offset on mobile — keep content in view */
 @media (max-width: 640px) {
     .animal-profile {
-        padding-top: clamp(90px, 14vh, 120px);
+        padding-top: calc(var(--nav-height, 64px) + 16px);
         padding-bottom: var(--sp-2xl);
     }
 }
@@ -186,10 +186,20 @@
     align-items: center;
     gap: var(--sp-sm);
     font-size: var(--text-caption-size);
-    font-family: var(--font-mono);
+    font-family: var(--font-sans);
     color: var(--color-ink-muted-48);
     margin-bottom: var(--sp-xl);
-    letter-spacing: 0.03em;
+    letter-spacing: 0.01em;
+}
+
+@media (max-width: 768px) {
+    .animal-profile__breadcrumbs {
+        display: none;
+    }
+
+    .animal-profile__back {
+        margin-bottom: var(--sp-sm, 12px);
+    }
 }
 
 .animal-profile__breadcrumb-link {
@@ -371,10 +381,24 @@
     outline-offset: 2px;
 }
 
-/* Smaller thumbs gap on mobile */
+/* On mobile, turn multi-row thumbnails into a clean single-row horizontal swipe strip */
 @media (max-width: 640px) {
     .animal-profile__thumbs {
-        gap: 6px;
+        display: flex;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        gap: 8px;
+        padding-bottom: 6px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scroll-snap-type: x mandatory;
+    }
+
+    .animal-profile__thumb {
+        flex: 0 0 64px;
+        width: 64px;
+        height: 64px;
+        scroll-snap-align: start;
     }
 }
 
