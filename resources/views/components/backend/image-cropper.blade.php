@@ -23,19 +23,36 @@
     'defaultRatio' => 1,
 ])
 
-{{-- Load Cropper.js CSS & JS via CDN (matching backend CDN stack) --}}
+{{-- Load Cropper.js: local vendor asset first with CDN fallback --}}
 @once
     @push('styles')
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css" integrity="sha512-08KHElDuWJyqygu96nqMgCNUCQ59QIDAQToVIQUmflgkPkhcI1O03unxF3GVMPW+LCTXBU4S9Qn5KNNAfVvBug==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="{{ asset('vendor/cropperjs/cropper.min.css') }}">
     @endpush
     @push('scripts')
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js" integrity="sha512-JyCZjCOZoyeQZSd5+WY48kv582lA09iObTfiMqslVSEKKETGtMEsNT5tYo61tQHn+xSTVU+uCLKWFUSWUxQB5g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="{{ asset('vendor/cropperjs/cropper.min.js') }}"></script>
+        <script>
+            if (typeof Cropper === 'undefined') {
+                document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"><\/script>');
+            }
+        </script>
     @endpush
 @endonce
 
-{{-- Standalone CSS fallback in case page doesn't push to stack --}}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css" id="cropperjs-css-fallback">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js" id="cropperjs-script-fallback"></script>
+{{-- Standalone CSS & JS fallback in case page layout doesn't use @stack --}}
+<link rel="stylesheet" href="{{ asset('vendor/cropperjs/cropper.min.css') }}" id="cropperjs-css-fallback">
+<script src="{{ asset('vendor/cropperjs/cropper.min.js') }}" id="cropperjs-script-fallback"></script>
+<script>
+    if (typeof Cropper === 'undefined') {
+        const fallbackCss = document.createElement('link');
+        fallbackCss.rel = 'stylesheet';
+        fallbackCss.href = 'https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css';
+        document.head.appendChild(fallbackCss);
+
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js';
+        document.head.appendChild(fallbackScript);
+    }
+</script>
 
 <style>
     .image-cropper-modal .modal-dialog {
@@ -258,6 +275,13 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const modalEl = document.getElementById('{{ $id }}');
+    if (!modalEl) return;
+
+    // Move modal to body to prevent stacking context & backdrop bugs when nested inside <form>
+    if (modalEl.parentElement !== document.body) {
+        document.body.appendChild(modalEl);
+    }
+
     const imageEl = document.getElementById('{{ $id }}Image');
     const titleEl = document.getElementById('{{ $id }}Label');
     const confirmBtn = document.getElementById('{{ $id }}BtnConfirm');
@@ -275,6 +299,64 @@ document.addEventListener('DOMContentLoaded', function() {
     let cropperInstance = null;
     let currentOptions = null;
     let isFlippedH = false;
+
+    // Helper to resolve safe same-origin URL for local storage images (avoids CORS tainted canvas)
+    function resolveSafeImageSrc(url) {
+        if (!url || typeof url !== 'string') return url;
+        if (url.startsWith('data:') || url.startsWith('blob:')) return url;
+
+        try {
+            const parsed = new URL(url, window.location.href);
+            // If the URL points to our storage directory, use the current page's origin
+            if (parsed.pathname.includes('/storage/')) {
+                return window.location.origin + parsed.pathname + parsed.search;
+            }
+            if (parsed.host === window.location.host) {
+                return parsed.href;
+            }
+        } catch (e) {
+            return url;
+        }
+        return url;
+    }
+
+    // Dynamic loader for Cropper.js if not yet ready on execution
+    function ensureCropperReady(callback) {
+        if (typeof Cropper !== 'undefined') {
+            callback();
+            return;
+        }
+
+        const localScript = document.createElement('script');
+        localScript.src = "{{ asset('vendor/cropperjs/cropper.min.js') }}";
+        localScript.onload = function() {
+            if (typeof Cropper !== 'undefined') {
+                callback();
+            } else {
+                loadCdnFallback(callback);
+            }
+        };
+        localScript.onerror = function() {
+            loadCdnFallback(callback);
+        };
+        document.head.appendChild(localScript);
+    }
+
+    function loadCdnFallback(callback) {
+        const cdnScript = document.createElement('script');
+        cdnScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js';
+        cdnScript.onload = function() {
+            if (typeof Cropper !== 'undefined') {
+                callback();
+            } else {
+                alert('Nie udało się załadować biblioteki kadrowania (Cropper.js). Upewnij się, że masz połączenie z siecią.');
+            }
+        };
+        cdnScript.onerror = function() {
+            alert('Narzędzie do kadrowania jest chwilowo niedostępne. Sprawdź połączenie z internetem lub odśwież stronę.');
+        };
+        document.head.appendChild(cdnScript);
+    }
 
     // Initialize Bootstrap Modal instance safely
     function getBsModal() {
@@ -346,8 +428,8 @@ document.addEventListener('DOMContentLoaded', function() {
             cropperInstance = null;
         }
 
-        // Set image src and open modal
-        imageEl.src = currentOptions.imageSrc;
+        // Set safe image src and open modal
+        imageEl.src = resolveSafeImageSrc(currentOptions.imageSrc);
         isFlippedH = false;
 
         const bsModal = getBsModal();
@@ -361,37 +443,35 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // When modal finishes showing, initialize Cropper
     modalEl.addEventListener('shown.bs.modal', function () {
-        if (typeof Cropper === 'undefined') {
-            alert('Biblioteka kadrowania (Cropper.js) ładuje się... Spróbuj ponownie za sekundę.');
-            return;
-        }
-
-        if (cropperInstance) {
-            cropperInstance.destroy();
-        }
-
-        cropperInstance = new Cropper(imageEl, {
-            aspectRatio: currentOptions ? currentOptions.aspectRatio : 1,
-            viewMode: 1, // Restrict crop box within canvas
-            dragMode: 'move',
-            autoCropArea: 0.9,
-            restore: false,
-            guides: true,
-            center: true,
-            highlight: false,
-            cropBoxMovable: true,
-            cropBoxResizable: true,
-            toggleDragModeOnDblclick: false,
-            preview: [
-                document.getElementById('{{ $id }}PreviewCard'),
-                document.getElementById('{{ $id }}PreviewCircle')
-            ],
-            crop: function(e) {
-                const data = e.detail;
-                if (dimBadge) {
-                    dimBadge.textContent = `${Math.round(data.width)} × ${Math.round(data.height)} px`;
-                }
+        ensureCropperReady(function() {
+            if (cropperInstance) {
+                cropperInstance.destroy();
             }
+
+            cropperInstance = new Cropper(imageEl, {
+                aspectRatio: currentOptions ? currentOptions.aspectRatio : 1,
+                viewMode: 1, // Restrict crop box within canvas
+                dragMode: 'move',
+                autoCropArea: 0.9,
+                restore: false,
+                guides: true,
+                center: true,
+                highlight: false,
+                cropBoxMovable: true,
+                cropBoxResizable: true,
+                checkCrossOrigin: false,
+                toggleDragModeOnDblclick: false,
+                preview: [
+                    document.getElementById('{{ $id }}PreviewCard'),
+                    document.getElementById('{{ $id }}PreviewCircle')
+                ],
+                crop: function(e) {
+                    const data = e.detail;
+                    if (dimBadge) {
+                        dimBadge.textContent = `${Math.round(data.width)} × ${Math.round(data.height)} px`;
+                    }
+                }
+            });
         });
     });
 
@@ -457,28 +537,54 @@ document.addEventListener('DOMContentLoaded', function() {
                 imageSmoothingQuality: 'high'
             };
 
-            // If ratio is fixed 1:1, export clean square max 1600x1600
-            const canvas = cropperInstance.getCroppedCanvas(canvasOptions);
+            let canvas = null;
+            try {
+                canvas = cropperInstance.getCroppedCanvas(canvasOptions);
+            } catch (canvasErr) {
+                console.error('Canvas export failed:', canvasErr);
+                alert('Nie udało się wykadrować obrazu ze względów bezpieczeństwa przeglądarki (CORS). Spróbuj wgrać plik z dysku.');
+                return;
+            }
+
             if (!canvas) {
                 alert('Nie udało się wykadrować obrazu. Spróbuj zmienić zaznaczenie.');
                 return;
             }
 
-            const dataUrl = canvas.toDataURL(format, quality);
+            try {
+                const dataUrl = canvas.toDataURL(format, quality);
 
-            canvas.toBlob(function(blob) {
-                if (currentOptions && typeof currentOptions.onCrop === 'function') {
-                    currentOptions.onCrop(blob, dataUrl);
-                }
+                canvas.toBlob(function(blob) {
+                    if (!blob) {
+                        try {
+                            const byteString = atob(dataUrl.split(',')[1]);
+                            const ab = new ArrayBuffer(byteString.length);
+                            const ia = new Uint8Array(ab);
+                            for (let i = 0; i < byteString.length; i++) {
+                                ia[i] = byteString.charCodeAt(i);
+                            }
+                            blob = new Blob([ab], { type: format });
+                        } catch (blobErr) {
+                            console.error('Blob generation failed:', blobErr);
+                        }
+                    }
 
-                const bsModal = getBsModal();
-                if (bsModal) {
-                    bsModal.hide();
-                } else {
-                    modalEl.classList.remove('show');
-                    modalEl.style.display = 'none';
-                }
-            }, format, quality);
+                    if (currentOptions && typeof currentOptions.onCrop === 'function') {
+                        currentOptions.onCrop(blob, dataUrl);
+                    }
+
+                    const bsModal = getBsModal();
+                    if (bsModal) {
+                        bsModal.hide();
+                    } else {
+                        modalEl.classList.remove('show');
+                        modalEl.style.display = 'none';
+                    }
+                }, format, quality);
+            } catch (err) {
+                console.error('Cropper export toDataURL failed:', err);
+                alert('Wystąpił błąd podczas generowania kadru. Upewnij się, że zdjęcie jest dostępne.');
+            }
         });
     }
 });

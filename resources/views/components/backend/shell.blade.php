@@ -16,6 +16,7 @@
 
     {{-- Named slot: extra <head> tags per pagina (optioneel) --}}
     {{ $head ?? '' }}
+    @stack('styles')
 </head>
 
 <body class="sb-nav-fixed">
@@ -64,6 +65,7 @@
 
 {{-- Named slot: extra scripts per pagina (optioneel) --}}
 {{ $scripts ?? '' }}
+@stack('scripts')
 
 </body>
 </html>

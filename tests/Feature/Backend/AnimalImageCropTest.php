@@ -89,4 +89,46 @@ class AnimalImageCropTest extends TestCase
         expect($created)->not->toBeNull();
         expect($created->media)->not->toBeNull();
     }
+
+    public function test_admin_edit_page_renders_cropper_assets_and_crop_buttons(): void
+    {
+        Storage::fake('public');
+
+        $adminRole = Role::firstOrCreate(['name' => 'admin']);
+        $admin = User::factory()->create([
+            'role_id' => $adminRole->id,
+        ]);
+
+        $animal = Animal::factory()->create([
+            'name' => 'Kotek Testowy',
+            'slug' => 'kotek-testowy',
+        ]);
+
+        // Attach a featured photo and a gallery photo
+        $animal->media()->create([
+            'disk' => 'public',
+            'directory' => 'animals',
+            'filename' => 'main_test.jpg',
+            'is_featured' => true,
+            'sort_order' => 1,
+        ]);
+
+        $animal->gallery()->create([
+            'disk' => 'public',
+            'directory' => 'animals',
+            'filename' => 'gallery_test.jpg',
+            'is_featured' => false,
+            'sort_order' => 2,
+        ]);
+
+        $response = $this->actingAs($admin)
+            ->get(route('backend.animals.edit', $animal));
+
+        $response->assertOk();
+        $response->assertSee('vendor/cropperjs/cropper.min.css');
+        $response->assertSee('vendor/cropperjs/cropper.min.js');
+        $response->assertSee('btn-crop-existing-main');
+        $response->assertSee('btn-crop-gallery-item');
+        $response->assertSee('animalImageCropper');
+    }
 }

@@ -325,6 +325,9 @@
                                                     <i class="fas fa-star text-warning me-1"></i>Główne
                                                 </button>
                                             @endif
+                                            <button type="button" class="btn btn-outline-primary btn-sm w-100 py-0 btn-crop-gallery-item" data-image-url="{{ $img->url() }}" data-filename="{{ basename($img->filename) }}" style="font-size: 11px;" title="Wykadruj to zdjęcie 1:1 i ustaw jako nowe zdjęcie główne">
+                                                <i class="fas fa-crop-alt me-1"></i>Kadruj (1:1)
+                                            </button>
                                             <button type="submit" form="delete-media-{{ $img->id }}" class="btn btn-outline-danger btn-sm w-100 py-0" style="font-size: 11px;">
                                                 <i class="fas fa-trash me-1"></i>Usuń
                                             </button>
@@ -615,6 +618,22 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Safe helper to trigger the cropping modal even if script definitions are finishing DOM attachment
+    function triggerCropper(options) {
+        if (typeof window.openImageCropper === 'function') {
+            window.openImageCropper(options);
+            return;
+        }
+
+        setTimeout(function() {
+            if (typeof window.openImageCropper === 'function') {
+                window.openImageCropper(options);
+            } else {
+                alert('Narzędzie do kadrowania wciąż się ładuje. Spróbuj ponownie za moment.');
+            }
+        }, 150);
+    }
+
     // 1. When user clicks "Dopasuj kadr obecnego zdjęcia"
     if (btnCropExisting) {
         btnCropExisting.addEventListener('click', function() {
@@ -623,18 +642,42 @@ document.addEventListener('DOMContentLoaded', function() {
                 currentRawImageSrc = existingUrl;
                 currentRawFileName = '{{ basename($animal->media->filename) }}';
 
-                if (typeof window.openImageCropper === 'function') {
-                    window.openImageCropper({
-                        imageSrc: existingUrl,
-                        title: 'Kadrowanie obecnego zdjęcia: ' + @js($animal->name),
-                        aspectRatio: 1,
-                        lockRatio: true,
-                        onCrop: applyCroppedResult
-                    });
-                }
+                triggerCropper({
+                    imageSrc: existingUrl,
+                    title: 'Kadrowanie obecnego zdjęcia: ' + @js($animal->name),
+                    aspectRatio: 1,
+                    lockRatio: true,
+                    onCrop: applyCroppedResult
+                });
             @endif
         });
     }
+
+    // 1b. When user clicks "Kadruj (1:1)" on any photo in the gallery
+    document.querySelectorAll('.btn-crop-gallery-item').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const imgUrl = this.dataset.imageUrl;
+            const fileName = this.dataset.filename || 'gallery_photo.jpg';
+
+            if (!imgUrl) return;
+
+            currentRawImageSrc = imgUrl;
+            currentRawFileName = fileName;
+
+            triggerCropper({
+                imageSrc: imgUrl,
+                title: 'Wykadruj do formatu wizytówki 1:1 (z galerii): ' + fileName,
+                aspectRatio: 1,
+                lockRatio: true,
+                onCrop: function(blob, dataUrl) {
+                    applyCroppedResult(blob, dataUrl);
+                    if (mainPreviewContainer) {
+                        mainPreviewContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }
+            });
+        });
+    });
 
     // 2. When user selects a new file from disk
     if (mainInput) {
@@ -648,19 +691,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     currentRawImageSrc = e.target.result;
 
                     // Automatically open cropper on file select
-                    if (typeof window.openImageCropper === 'function') {
-                        window.openImageCropper({
-                            imageSrc: currentRawImageSrc,
-                            title: 'Dopasuj kadr nowego zdjęcia: ' + file.name,
-                            aspectRatio: 1,
-                            lockRatio: true,
-                            onCrop: applyCroppedResult
-                        });
-                    } else {
-                        // Fallback simple preview if cropper is not ready
-                        mainPreviewImg.src = currentRawImageSrc;
-                        mainPreviewContainer.classList.remove('d-none');
-                    }
+                    triggerCropper({
+                        imageSrc: currentRawImageSrc,
+                        title: 'Dopasuj kadr nowego zdjęcia: ' + file.name,
+                        aspectRatio: 1,
+                        lockRatio: true,
+                        onCrop: applyCroppedResult
+                    });
                 };
                 reader.readAsDataURL(file);
             }
@@ -671,8 +708,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (btnRecrop) {
         btnRecrop.addEventListener('click', function() {
             const srcToCrop = currentRawImageSrc || (mainPreviewImg ? mainPreviewImg.src : null);
-            if (srcToCrop && typeof window.openImageCropper === 'function') {
-                window.openImageCropper({
+            if (srcToCrop) {
+                triggerCropper({
                     imageSrc: srcToCrop,
                     title: 'Dostosuj kadr zdjęcia (Wizytówka 1:1)',
                     aspectRatio: 1,
