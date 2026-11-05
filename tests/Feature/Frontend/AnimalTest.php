@@ -167,4 +167,25 @@ class AnimalTest extends TestCase
         $response->assertSee('/koty/baltazar');
         $response->assertSee('Poznaj nasze koty hodowlane i dostępne kocięta');
     }
+
+    public function test_animal_profile_renders_carousel_lightbox_with_arrows_and_counter(): void
+    {
+        $animal = Animal::factory()->create([
+            'name' => 'Baron Lightbox',
+            'slug' => 'baron-lightbox',
+            'breed' => 'Kot Bengalski',
+            'is_published' => true,
+            'published_at' => now(),
+        ]);
+
+        $response = $this->get('/koty/baron-lightbox');
+
+        $response->assertOk();
+        $response->assertSee('animal-gallery-main', false);
+        $response->assertSee('openAnimalLightbox()', false);
+        $response->assertSee('animal-lightbox-prev', false);
+        $response->assertSee('animal-lightbox-next', false);
+        $response->assertSee('animal-lightbox-counter', false);
+        $response->assertSee('navigateAnimalLightbox', false);
+    }
 }

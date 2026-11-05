@@ -377,6 +377,199 @@
     display: block;
 }
 
+/* ==========================================================================
+   ANIMAL LIGHTBOX MODAL & CONTROLS (Quiet Luxury)
+   ========================================================================== */
+
+.animal-lightbox {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(10, 10, 12, 0.95);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    z-index: 99999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    box-sizing: border-box;
+    opacity: 0;
+    transition: opacity 0.2s ease-out;
+}
+
+.animal-lightbox--open {
+    display: flex;
+    opacity: 1;
+}
+
+.animal-lightbox__top-bar {
+    position: fixed;
+    top: 20px;
+    left: 24px;
+    right: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 100001;
+    pointer-events: none;
+}
+
+.animal-lightbox__counter {
+    background: rgba(24, 24, 27, 0.85);
+    color: var(--color-primary-light, #f0dfb8);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    padding: 6px 16px;
+    border-radius: 9999px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    pointer-events: auto;
+    user-select: none;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.animal-lightbox__close {
+    background: rgba(24, 24, 27, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: all var(--duration-fast, 0.2s) var(--ease-out);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.animal-lightbox__close:hover,
+.animal-lightbox__close:focus-visible {
+    background: rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    transform: scale(1.08);
+    outline: none;
+}
+
+.animal-lightbox__content {
+    position: relative;
+    max-width: 90vw;
+    max-height: 84vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100000;
+}
+
+.animal-lightbox__img {
+    max-width: 86vw;
+    max-height: 76vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: var(--r-lg, 12px);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+    user-select: none;
+    -webkit-user-select: none;
+    transition: opacity 0.15s ease-out;
+}
+
+.animal-lightbox__caption {
+    margin-top: 14px;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 14px;
+    text-align: center;
+    max-width: 80vw;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    user-select: none;
+}
+
+.animal-lightbox__nav-btn {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba(24, 24, 27, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--duration-fast, 0.2s) var(--ease-out);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+    z-index: 100001;
+}
+
+.animal-lightbox__nav-btn--prev {
+    left: 24px;
+}
+
+.animal-lightbox__nav-btn--next {
+    right: 24px;
+}
+
+.animal-lightbox__nav-btn:hover,
+.animal-lightbox__nav-btn:focus-visible {
+    background: var(--color-primary, #d1ab58);
+    color: #1a1a1a;
+    border-color: var(--color-primary, #d1ab58);
+    transform: translateY(-50%) scale(1.08);
+    outline: none;
+}
+
+@media (max-width: 768px) {
+    .animal-lightbox {
+        padding: 12px;
+    }
+
+    .animal-lightbox__top-bar {
+        top: 14px;
+        left: 14px;
+        right: 14px;
+    }
+
+    .animal-lightbox__counter {
+        padding: 4px 12px;
+        font-size: 12px;
+    }
+
+    .animal-lightbox__close {
+        width: 40px;
+        height: 40px;
+    }
+
+    .animal-lightbox__nav-btn {
+        width: 44px;
+        height: 44px;
+    }
+
+    .animal-lightbox__nav-btn--prev {
+        left: 10px;
+    }
+
+    .animal-lightbox__nav-btn--next {
+        right: 10px;
+    }
+
+    .animal-lightbox__img {
+        max-width: 92vw;
+        max-height: 72vh;
+    }
+
+    .animal-lightbox__caption {
+        font-size: 13px;
+        margin-top: 10px;
+    }
+}
+
 /* Details column */
 .animal-profile__info {
     display: flex;

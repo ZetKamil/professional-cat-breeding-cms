@@ -3,6 +3,31 @@
     $catDesc = $animal->meta_description ?: ($animal->short_description ?: ('Poznaj kota ' . $animal->name . ' (' . $animal->breed . ', ' . $animal->color . '). Certyfikowana domowa hodowla, rodowód SHiOZ ZOOLANDIA, ' . ($animal->status === \App\Enums\AnimalStatus::Breeding ? 'dedykowane badania rasy' : 'po przebadanych rodzicach') . ' i zrównoważony charakter.'));
     $catOgImage = $animal->media ? $animal->media->url() : asset('og-default.jpg');
     $catMimeType = $animal->media && $animal->media->mime_type ? $animal->media->mime_type : 'image/jpeg';
+
+    $galleryList = [];
+    if ($animal->media) {
+        $galleryList[] = [
+            'src' => $animal->media->url(),
+            'alt' => $animal->name . ' — ' . $animal->breed,
+        ];
+    }
+    if ($animal->gallery && $animal->gallery->isNotEmpty()) {
+        foreach ($animal->gallery as $index => $img) {
+            if ($animal->media && $img->id === $animal->media->id) {
+                continue;
+            }
+            $galleryList[] = [
+                'src' => $img->url(),
+                'alt' => $animal->name . ' — ' . $animal->breed . ' (zdjęcie ' . (count($galleryList) + 1) . ')',
+            ];
+        }
+    }
+    if (empty($galleryList)) {
+        $galleryList[] = [
+            'src' => asset('image/hero/bars_studio.jpg'),
+            'alt' => $animal->name . ' (Zdjęcie poglądowe)',
+        ];
+    }
 @endphp
 
 <x-frontend.shell
@@ -79,99 +104,207 @@
                         </div>
                     </div>
 
-                    @if($animal->gallery && $animal->gallery->isNotEmpty())
+                    @if(count($galleryList) > 1)
                         <div class="animal-profile__thumbs" role="list" aria-label="Galeria zdjęć kota {{ $animal->name }}">
-                            @if($animal->media)
-                                <div class="animal-profile__thumb animal-profile__thumb--active" role="button" tabindex="0"
-                                    aria-label="Wyświetl zdjęcie główne" data-image-src="{{ $animal->media->url() }}"
-                                    data-image-alt="{{ $animal->name }} — {{ $animal->breed }}"
+                            @foreach($galleryList as $index => $item)
+                                <div class="animal-profile__thumb {{ $index === 0 ? 'animal-profile__thumb--active' : '' }}" role="button" tabindex="0"
+                                    aria-label="Wyświetl zdjęcie {{ $index + 1 }} z galerii"
+                                    data-index="{{ $index }}"
+                                    data-image-src="{{ $item['src'] }}"
+                                    data-image-alt="{{ $item['alt'] }}"
                                     onclick="switchMainAnimalPhoto(this)"
                                     onkeydown="if(event.key === 'Enter' || event.key === ' '){ switchMainAnimalPhoto(this); event.preventDefault(); }">
-                                    <img src="{{ $animal->media->url() }}" alt="{{ $animal->name }}" width="100" height="100"
-                                        decoding="async" loading="lazy">
-                                </div>
-                            @endif
-
-                            @foreach($animal->gallery as $index => $img)
-                                @if($animal->media && $img->id === $animal->media->id)
-                                    @continue
-                                @endif
-                                <div class="animal-profile__thumb" role="button" tabindex="0"
-                                    aria-label="Wyświetl zdjęcie {{ $index + 1 }} z galerii" data-image-src="{{ $img->url() }}"
-                                    data-image-alt="{{ $animal->name }} — {{ $animal->breed }} (zdjęcie {{ $index + 1 }})"
-                                    onclick="switchMainAnimalPhoto(this)"
-                                    onkeydown="if(event.key === 'Enter' || event.key === ' '){ switchMainAnimalPhoto(this); event.preventDefault(); }">
-                                    <img src="{{ $img->url() }}" alt="{{ $animal->name }}" width="100" height="100"
+                                    <img src="{{ $item['src'] }}" alt="{{ $item['alt'] }}" width="100" height="100"
                                         decoding="async" loading="lazy">
                                 </div>
                             @endforeach
                         </div>
+                    @endif
 
-                        <script>
-                            function switchMainAnimalPhoto(el) {
+                    <script>
+                        (function() {
+                            const animalPhotos = @json($galleryList);
+                            let activePhotoIndex = 0;
+                            let touchStartX = 0;
+                            let touchStartY = 0;
+
+                            window.switchMainAnimalPhoto = function(el) {
+                                const idx = parseInt(el.getAttribute('data-index') || '0', 10);
+                                setPhotoActive(idx);
+                            };
+
+                            function setPhotoActive(idx) {
+                                if (!animalPhotos.length) return;
+                                activePhotoIndex = (idx + animalPhotos.length) % animalPhotos.length;
+                                const photo = animalPhotos[activePhotoIndex];
+
                                 const mainImg = document.getElementById('animal-main-photo');
-                                if (!mainImg) return;
-                                const src = el.getAttribute('data-image-src');
-                                const alt = el.getAttribute('data-image-alt');
-                                if (src) {
+                                if (mainImg && photo) {
                                     const picture = mainImg.closest('picture');
                                     if (picture) {
                                         picture.querySelectorAll('source').forEach(s => s.remove());
                                     }
-                                    mainImg.src = src;
-                                    if (alt) mainImg.alt = alt;
+                                    mainImg.src = photo.src;
+                                    if (photo.alt) mainImg.alt = photo.alt;
                                 }
-                                document.querySelectorAll('.animal-profile__thumb').forEach(t => t.classList.remove('animal-profile__thumb--active'));
-                                el.classList.add('animal-profile__thumb--active');
+
+                                const thumbs = document.querySelectorAll('.animal-profile__thumb');
+                                thumbs.forEach((t, i) => {
+                                    if (i === activePhotoIndex) {
+                                        t.classList.add('animal-profile__thumb--active');
+                                        if (typeof t.scrollIntoView === 'function') {
+                                            t.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                                        }
+                                    } else {
+                                        t.classList.remove('animal-profile__thumb--active');
+                                    }
+                                });
+
+                                syncLightboxContent();
                             }
 
-                            function openAnimalLightbox() {
-                                const mainImg = document.getElementById('animal-main-photo');
-                                if (!mainImg || !mainImg.src) return;
-                                
+                            window.openAnimalLightbox = function() {
+                                if (!animalPhotos.length) return;
                                 let modal = document.getElementById('animal-lightbox-modal');
                                 if (!modal) {
-                                    modal = document.createElement('div');
-                                    modal.id = 'animal-lightbox-modal';
-                                    modal.setAttribute('role', 'dialog');
-                                    modal.setAttribute('aria-modal', 'true');
-                                    modal.setAttribute('aria-label', 'Powiększone zdjęcie kota');
-                                    modal.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.92);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
-                                    modal.innerHTML = `
-                                        <div style="position:relative;max-width:95vw;max-height:95vh;">
-                                            <img id="animal-lightbox-img" src="" alt="Powiększone zdjęcie" style="max-width:95vw;max-height:92vh;object-fit:contain;border-radius:8px;box-shadow:0 20px 40px rgba(0,0,0,0.8);">
-                                            <button id="animal-lightbox-close" type="button" aria-label="Zamknij powiększenie zdjęcia" style="position:absolute;top:-15px;right:-15px;background:#fff;border:none;border-radius:50%;width:40px;height:40px;font-size:22px;font-weight:bold;cursor:pointer;box-shadow:0 4px 10px rgba(0,0,0,0.3);">&times;</button>
-                                        </div>
-                                    `;
-                                    modal.onclick = function(e) {
-                                        if (e.target === modal || e.target.id === 'animal-lightbox-close') {
-                                            closeAnimalLightbox();
-                                        }
-                                    };
-                                    document.body.appendChild(modal);
-
-                                    document.addEventListener('keydown', function(e) {
-                                        if (e.key === 'Escape' && modal.style.display === 'flex') {
-                                            closeAnimalLightbox();
-                                        }
-                                    });
+                                    buildLightboxModal();
+                                    modal = document.getElementById('animal-lightbox-modal');
                                 }
-                                document.getElementById('animal-lightbox-img').src = mainImg.src;
+                                syncLightboxContent();
                                 modal.style.display = 'flex';
-                                const closeBtn = document.getElementById('animal-lightbox-close');
-                                if (closeBtn) closeBtn.focus();
-                            }
+                                requestAnimationFrame(() => modal.classList.add('animal-lightbox--open'));
+                                document.body.style.overflow = 'hidden';
+                            };
 
-                            function closeAnimalLightbox() {
+                            window.closeAnimalLightbox = function() {
                                 const modal = document.getElementById('animal-lightbox-modal');
                                 if (modal) {
-                                    modal.style.display = 'none';
-                                    const trigger = document.getElementById('animal-gallery-main');
-                                    if (trigger) trigger.focus();
+                                    modal.classList.remove('animal-lightbox--open');
+                                    setTimeout(() => {
+                                        modal.style.display = 'none';
+                                    }, 200);
+                                }
+                                document.body.style.overflow = '';
+                                const trigger = document.getElementById('animal-gallery-main');
+                                if (trigger) trigger.focus();
+                            };
+
+                            window.navigateAnimalLightbox = function(dir) {
+                                setPhotoActive(activePhotoIndex + dir);
+                            };
+
+                            function syncLightboxContent() {
+                                const modal = document.getElementById('animal-lightbox-modal');
+                                if (!modal) return;
+                                const photo = animalPhotos[activePhotoIndex];
+                                if (!photo) return;
+
+                                const img = document.getElementById('animal-lightbox-img');
+                                const counter = document.getElementById('animal-lightbox-counter');
+                                const caption = document.getElementById('animal-lightbox-caption');
+                                const prevBtn = document.getElementById('animal-lightbox-prev');
+                                const nextBtn = document.getElementById('animal-lightbox-next');
+
+                                if (img) {
+                                    img.style.opacity = '0.35';
+                                    img.src = photo.src;
+                                    img.alt = photo.alt;
+                                    img.onload = () => { img.style.opacity = '1'; };
+                                }
+                                if (counter) {
+                                    counter.textContent = `${activePhotoIndex + 1} / ${animalPhotos.length}`;
+                                    counter.style.display = animalPhotos.length > 1 ? 'inline-block' : 'none';
+                                }
+                                if (caption) {
+                                    caption.textContent = photo.alt;
+                                }
+                                if (prevBtn && nextBtn) {
+                                    const showNav = animalPhotos.length > 1 ? 'flex' : 'none';
+                                    prevBtn.style.display = showNav;
+                                    nextBtn.style.display = showNav;
                                 }
                             }
-                        </script>
-                    @endif
+
+                            function buildLightboxModal() {
+                                const modal = document.createElement('div');
+                                modal.id = 'animal-lightbox-modal';
+                                modal.className = 'animal-lightbox';
+                                modal.setAttribute('role', 'dialog');
+                                modal.setAttribute('aria-modal', 'true');
+                                modal.setAttribute('aria-label', 'Galeria powiększonych zdjęć kota');
+
+                                modal.innerHTML = `
+                                    <div class="animal-lightbox__top-bar">
+                                        <span id="animal-lightbox-counter" class="animal-lightbox__counter"></span>
+                                        <button id="animal-lightbox-close" class="animal-lightbox__close" type="button" aria-label="Zamknij (Escape)" onclick="closeAnimalLightbox()">
+                                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                                            </svg>
+                                        </button>
+                                    </div>
+
+                                    <button id="animal-lightbox-prev" class="animal-lightbox__nav-btn animal-lightbox__nav-btn--prev" type="button" aria-label="Poprzednie zdjęcie (Strzałka w lewo)" onclick="navigateAnimalLightbox(-1)">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="15 18 9 12 15 6"></polyline>
+                                        </svg>
+                                    </button>
+
+                                    <div class="animal-lightbox__content">
+                                        <img id="animal-lightbox-img" class="animal-lightbox__img" src="" alt="">
+                                        <div id="animal-lightbox-caption" class="animal-lightbox__caption"></div>
+                                    </div>
+
+                                    <button id="animal-lightbox-next" class="animal-lightbox__nav-btn animal-lightbox__nav-btn--next" type="button" aria-label="Następne zdjęcie (Strzałka w prawo)" onclick="navigateAnimalLightbox(1)">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="9 18 15 12 9 6"></polyline>
+                                        </svg>
+                                    </button>
+                                `;
+
+                                modal.addEventListener('click', function(e) {
+                                    if (e.target === modal || e.target.classList.contains('animal-lightbox__content')) {
+                                        closeAnimalLightbox();
+                                    }
+                                });
+
+                                modal.addEventListener('touchstart', function(e) {
+                                    if (e.changedTouches && e.changedTouches[0]) {
+                                        touchStartX = e.changedTouches[0].screenX;
+                                        touchStartY = e.changedTouches[0].screenY;
+                                    }
+                                }, { passive: true });
+
+                                modal.addEventListener('touchend', function(e) {
+                                    if (!e.changedTouches || !e.changedTouches[0]) return;
+                                    const diffX = e.changedTouches[0].screenX - touchStartX;
+                                    const diffY = e.changedTouches[0].screenY - touchStartY;
+                                    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 40) {
+                                        if (diffX < 0) {
+                                            navigateAnimalLightbox(1);
+                                        } else {
+                                            navigateAnimalLightbox(-1);
+                                        }
+                                    }
+                                }, { passive: true });
+
+                                document.body.appendChild(modal);
+                            }
+
+                            document.addEventListener('keydown', function(e) {
+                                const modal = document.getElementById('animal-lightbox-modal');
+                                if (!modal || modal.style.display === 'none') return;
+
+                                if (e.key === 'Escape') {
+                                    closeAnimalLightbox();
+                                } else if (e.key === 'ArrowLeft') {
+                                    navigateAnimalLightbox(-1);
+                                } else if (e.key === 'ArrowRight') {
+                                    navigateAnimalLightbox(1);
+                                }
+                            });
+                        })();
+                    </script>
                 </div>
 
                 {{-- RIGHT COLUMN: Details & Specs --}}
