@@ -134,7 +134,7 @@ class AnimalTest extends TestCase
         $response->assertSee('W nowym domu');
     }
 
-    public function test_animal_card_renders_unbroken_price_badge(): void
+    public function test_animal_card_hides_price_and_displays_luxury_value_badge(): void
     {
         Animal::factory()->create([
             'name' => 'Baron Unique',
@@ -150,9 +150,17 @@ class AnimalTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('Baron Unique');
-        $response->assertSee('animal-card__price-badge', false);
-        $response->assertSee('animal-card__price-amount', false);
-        $response->assertSee('2 700 zł');
+        $response->assertDontSee('animal-card__price-badge', false);
+        $response->assertDontSee('2 700 zł');
+        $response->assertSee('animal-card__value-badge', false);
+        $response->assertSee('✨ Rodowód • Komplet szczepień');
+        $response->assertSee('Poznaj bliżej i sprawdź →');
+
+        // Profile must show the price
+        $profileResponse = $this->get('/koty/baron-unique');
+        $profileResponse->assertOk();
+        $profileResponse->assertSee('2 700 zł');
+        $profileResponse->assertSee('Cena kociaka „na kolanka”:');
     }
 
     public function test_cattery_page_renders_stud_gallery_links_and_cta(): void

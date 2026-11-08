@@ -72,9 +72,8 @@
         <div class="animal-card__footer">
             <div class="animal-card__price-wrapper">
                 @if($animal->shouldShowPrice())
-                    <span class="animal-card__price-badge" title="Kociak w opcji „na kolanka”">
-                        <span class="animal-card__price-prefix">Na kolanka:</span>
-                        <span class="animal-card__price-amount">{{ $animal->formattedPrice() }}</span>
+                    <span class="animal-card__value-badge" title="Kociak z wielopokoleniowym rodowodem i kompletem szczepień">
+                        ✨ Rodowód • Komplet szczepień
                     </span>
                 @else
                     <span class="animal-card__status-label" title="{{ $cardStatusLabel }}">
@@ -84,7 +83,11 @@
             </div>
 
             <span class="animal-card__cta">
-                Pełny profil i zdjęcia →
+                @if($animal->shouldShowPrice())
+                    Poznaj bliżej i sprawdź →
+                @else
+                    Profil i szczegóły →
+                @endif
             </span>
         </div>
     </div>

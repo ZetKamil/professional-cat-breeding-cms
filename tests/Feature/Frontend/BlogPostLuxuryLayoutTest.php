@@ -125,7 +125,7 @@ class BlogPostLuxuryLayoutTest extends TestCase
         // 4. Featured cats: ONLY the 3 Bengals in a 3-column animals-grid
         $response->assertSee('Koty z tego artykułu');
         $response->assertSee('Baron');
-        $response->assertSee('2 700 zł');
+        $response->assertSee('✨ Rodowód • Komplet szczepień');
         $response->assertSee('Cyprian');
         $response->assertSee('Carlos');
         $response->assertDontSee('AdaBrytyjka');

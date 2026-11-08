@@ -39,4 +39,5 @@ test_*.jpg
 *.sql
 /public/preview-logos.html
 /public/images/preview-logos/
+/public/images/logo_backup_*/
 /image/propozycje-logo/

@@ -450,7 +450,7 @@
                             $whatsappBtnText = "WhatsApp (+48 514 153 204)";
                         } else {
                             $inquiryMsg = "Dzień dobry! Piszę w sprawie kociaka: {$animal->name}. Czy jest aktualnie wolny?";
-                            $messengerBtnText = "💬 Zapytaj o kociaka lub umów wideo-wizytę (Messenger)";
+                            $messengerBtnText = "💬 Zapytaj o tego kociaka na Messengerze";
                             $whatsappBtnText = "WhatsApp (+48 514 153 204)";
                         }
                         $messengerInquiryUrl = 'https://m.me/61580668026948?text=' . urlencode($inquiryMsg);

@@ -68,7 +68,7 @@ class PriceAndFunnelUnificationTest extends TestCase
         $this->assertNull($kitten->formattedPrice());
     }
 
-    public function test_cat_cards_display_luxury_price_badge_for_kittens_with_price(): void
+    public function test_cat_cards_hide_price_and_display_luxury_value_badge_and_curiosity_cta(): void
     {
         $kitten = Animal::factory()->create([
             'name' => 'Cyprian',
@@ -81,8 +81,11 @@ class PriceAndFunnelUnificationTest extends TestCase
 
         $response = $this->get(route('frontend.animals.index'));
         $response->assertOk();
-        $response->assertSee('3 000 zł');
-        $response->assertSee('animal-card__price-badge', false);
+        $response->assertDontSee('3 000 zł');
+        $response->assertDontSee('animal-card__price-badge', false);
+        $response->assertSee('animal-card__value-badge', false);
+        $response->assertSee('✨ Rodowód • Komplet szczepień');
+        $response->assertSee('Poznaj bliżej i sprawdź →');
     }
 
     public function test_breeding_cats_do_not_display_price_badge_even_if_price_is_set(): void
@@ -153,12 +156,13 @@ class PriceAndFunnelUnificationTest extends TestCase
         // 1. Price Box and Subtext
         $response->assertSee('animal-profile__price-box', false);
         $response->assertSee('KOCIAK W OPCJI „NA KOLANKA”');
+        $response->assertSee('Cena kociaka „na kolanka”:');
         $response->assertSee('2 700 zł');
-        $response->assertSee('W pakiecie z maluchem: wielopokoleniowy rodowód SHiOZ, książeczka zdrowia');
+        $response->assertSee('W cenie: wielopokoleniowy rodowód SHiOZ ZOOLANDIA, książeczka zdrowia z kompletem szczepień, mikroczip oraz wyprawka na pierwsze dni.');
 
         // 2. Messenger-First Primary CTA with pre-filled inquiry
         $response->assertSee('animal-profile__btn--messenger', false);
-        $response->assertSee('Zapytaj o kociaka lub umów wideo-wizytę (Messenger)');
+        $response->assertSee('💬 Zapytaj o tego kociaka na Messengerze');
         $response->assertSee('m.me/61580668026948', false);
         $response->assertSee(urlencode('Dzień dobry! Piszę w sprawie kociaka: Baron. Czy jest aktualnie wolny?'));
 
