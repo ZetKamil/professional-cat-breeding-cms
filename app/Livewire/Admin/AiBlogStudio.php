@@ -41,9 +41,10 @@ class AiBlogStudio extends Component
     public array $selectedAnimalIds = [];
 
     // ─── Step 3: Generated content ───────────────────────────────────
-    public ?array $generatedDraft    = null;
-    public string $heroImageDataUri  = '';
-    public bool   $isGenerating      = false;
+    public ?array $generatedDraft       = null;
+    public string $heroImageDataUri     = '';
+    public string $selectedHeroAnimalId = '';
+    public bool   $isGenerating         = false;
     public bool   $isSavingDraft     = false;
     public string $errorMessage      = '';
     public string $successMessage    = '';
@@ -84,10 +85,11 @@ class AiBlogStudio extends Component
 
     public function selectBreed(string $breed): void
     {
-        $this->selectedBreed     = $breed;
-        $this->selectedTopic     = '';
-        $this->selectedAnimalIds = [];
-        $this->topics            = [];
+        $this->selectedBreed        = $breed;
+        $this->selectedTopic        = '';
+        $this->selectedAnimalIds    = [];
+        $this->selectedHeroAnimalId = '';
+        $this->topics               = [];
         $this->topicsLoaded      = false;
         $this->topicError        = '';
         $this->topicSource       = 'none';
@@ -231,11 +233,12 @@ class AiBlogStudio extends Component
     public function goToStep3(): void
     {
         $blogService           = app(AiBlogGeneratorService::class);
-        $this->errorMessage   = '';
-        $this->generatedDraft = null;
-        $this->heroImageDataUri = '';
-        $this->isGenerating   = true;
-        $this->currentStep    = 3;
+        $this->errorMessage         = '';
+        $this->generatedDraft       = null;
+        $this->heroImageDataUri     = '';
+        $this->selectedHeroAnimalId = '';
+        $this->isGenerating         = true;
+        $this->currentStep          = 3;
 
         $topic = trim($this->customTopic) ?: trim($this->selectedTopic);
         $breedLabel = $this->breeds[$this->selectedBreed] ?? $this->selectedBreed;
@@ -264,10 +267,9 @@ class AiBlogStudio extends Component
                 $draft['body'] = $blogService->sectionsToBody($draft['sections']);
             }
 
-            // Set hero image preview URL
+            // Set wide-framed hero image preview URL
             if (!empty($draft['hero_image_prompt'])) {
-                $encodedHero = urlencode(trim($draft['hero_image_prompt']) . ', photorealistic 8k, warm lighting, luxury interior');
-                $draft['hero_image_preview_url'] = "https://image.pollinations.ai/prompt/{$encodedHero}?width=1200&height=675&nologo=true&enhance=true";
+                $draft['hero_image_preview_url'] = AiBlogGeneratorService::buildPollinationsUrl((string) $draft['hero_image_prompt']);
             }
 
             $this->generatedDraft = $draft;
@@ -283,6 +285,37 @@ class AiBlogStudio extends Component
         } finally {
             $this->isGenerating = false;
         }
+    }
+
+    public function regenerateAiHero(): void
+    {
+        if (! $this->generatedDraft) {
+            return;
+        }
+
+        $this->selectedHeroAnimalId = '';
+        $prompt = (string) ($this->generatedDraft['hero_image_prompt'] ?? ($this->generatedDraft['title'] ?? ''));
+        $this->generatedDraft['hero_image_preview_url'] = AiBlogGeneratorService::buildPollinationsUrl($prompt, seed: random_int(1, 999999));
+    }
+
+    public function selectHeroFromAnimal(string $animalId): void
+    {
+        if (! $this->generatedDraft) {
+            return;
+        }
+
+        $animal = Animal::whereKey($animalId)->with(['media', 'gallery'])->first();
+        if (! $animal) {
+            return;
+        }
+
+        $photoUrl = $animal->media?->url() ?? $animal->gallery->first()?->url() ?? '';
+        if ($photoUrl === '') {
+            return;
+        }
+
+        $this->selectedHeroAnimalId = (string) $animal->id;
+        $this->generatedDraft['hero_image_preview_url'] = $photoUrl;
     }
 
     // ─── Step 3: Save Draft / Publish ────────────────────────────────
@@ -349,9 +382,27 @@ class AiBlogStudio extends Component
                 }
             }
 
-            // Cover Image Generation / Attachment
+            // Cover Image Generation / Attachment (WYSIWYG: honor explicit animal choice or exact previewed cover)
             $heroCreated = false;
-            if (! empty($draft['hero_image_prompt'])) {
+            if ($this->selectedHeroAnimalId !== '') {
+                $heroCreated = $this->attachFeaturedImageFromAnimal($post, [$this->selectedHeroAnimalId]);
+            } elseif (! empty($draft['hero_image_preview_url'])) {
+                try {
+                    $media = $blogService->generateHeroImageFromPreview(
+                        (string) $draft['hero_image_preview_url'],
+                        (string) ($draft['hero_image_prompt'] ?? ''),
+                        $post
+                    );
+                    if ($media) {
+                        $heroCreated = true;
+                    }
+                } catch (\Throwable $e) {
+                    Log::warning('AI Blog Studio: failed to persist preview hero cover image', [
+                        'post_id' => $post->id,
+                        'error'   => $e->getMessage(),
+                    ]);
+                }
+            } elseif (! empty($draft['hero_image_prompt'])) {
                 try {
                     $media = $blogService->generateHeroImage($draft['hero_image_prompt'], $post);
                     if ($media) {
@@ -376,7 +427,7 @@ class AiBlogStudio extends Component
             $this->successMessage  = "Artykuł \"{$post->title}\" został {$actionVerb}!";
             $this->generatedDraft  = null;
             $this->currentStep     = 1;
-            $this->reset(['selectedTopic', 'customTopic', 'selectedAnimalIds', 'heroImageDataUri']);
+            $this->reset(['selectedTopic', 'customTopic', 'selectedAnimalIds', 'heroImageDataUri', 'selectedHeroAnimalId']);
 
             $this->dispatch('draft-saved', postSlug: $post->slug);
 
@@ -397,8 +448,9 @@ class AiBlogStudio extends Component
             $this->successMessage = '';
 
             if ($step < 3) {
-                $this->generatedDraft   = null;
-                $this->heroImageDataUri = '';
+                $this->generatedDraft       = null;
+                $this->heroImageDataUri     = '';
+                $this->selectedHeroAnimalId = '';
             }
         }
     }
@@ -432,7 +484,7 @@ class AiBlogStudio extends Component
      * Attach a high-resolution photo from the selected cattery animal as the Post's Featured Image.
      * Ensures the post ALWAYS has a featured cover image, even when AI image generation (Imagen) is unavailable.
      */
-    private function attachFeaturedImageFromAnimal(\App\Models\Post $post, array $animalIds): void
+    private function attachFeaturedImageFromAnimal(\App\Models\Post $post, array $animalIds): bool
     {
         $animals = \App\Models\Animal::whereIn('id', $animalIds)
             ->with(['media', 'gallery'])
@@ -463,7 +515,7 @@ class AiBlogStudio extends Component
         }
 
         if (! $sourceMedia) {
-            return;
+            return false;
         }
 
         try {
@@ -497,6 +549,8 @@ class AiBlogStudio extends Component
                     'animal_id' => $sourceAnimal?->id,
                     'filename'  => $newFilename,
                 ]);
+
+                return true;
             }
         } catch (\Throwable $e) {
             \Illuminate\Support\Facades\Log::warning('AI Blog Studio: failed to attach animal photo as post featured image', [
@@ -504,14 +558,16 @@ class AiBlogStudio extends Component
                 'error'   => $e->getMessage(),
             ]);
         }
+
+        return false;
     }
 
     /**
-     * Przypisuje zdjęcia wybranych kotów z hodowli bezpośrednio do sekcji artykułu.
+     * Przypisuje zdjęcia wybranych kotów z hodowli bezpośrednio do sekcji artykułu (round-robin między wybranymi kotami).
      */
     private function distributeAnimalPhotosToSections(array $sections, array $animalIds): array
     {
-        $urls = [];
+        $perAnimalUrls = [];
 
         if (!empty($animalIds)) {
             $animals = \App\Models\Animal::whereIn('id', $animalIds)
@@ -519,18 +575,34 @@ class AiBlogStudio extends Component
                 ->get();
 
             foreach ($animals as $animal) {
+                $catUrls = [];
                 if ($animal->media) {
-                    $urls[] = $animal->media->url();
+                    $catUrls[] = $animal->media->url();
                 }
                 if ($animal->gallery->isNotEmpty()) {
                     foreach ($animal->gallery as $photo) {
-                        $urls[] = $photo->url();
+                        $catUrls[] = $photo->url();
                     }
+                }
+                $catUrls = array_values(array_unique(array_filter($catUrls)));
+                if (! empty($catUrls)) {
+                    $perAnimalUrls[] = $catUrls;
                 }
             }
         }
 
-        // Jeśli brakuje zdjęć, pobierz zdjęcia innych kotów danej rasy z hodowli
+        // Round-robin: first 1 photo from each selected cat, then 2nd photo from each, etc.
+        $urls = [];
+        $maxGalleryDepth = ! empty($perAnimalUrls) ? max(array_map('count', $perAnimalUrls)) : 0;
+        for ($round = 0; $round < $maxGalleryDepth; $round++) {
+            foreach ($perAnimalUrls as $catUrls) {
+                if (isset($catUrls[$round])) {
+                    $urls[] = $catUrls[$round];
+                }
+            }
+        }
+
+        // Jeśli nadal brakuje zdjęć, dopełnij zdjęciami innych kotów danej rasy z hodowli
         if (count($urls) < count($sections)) {
             $breedLabel = $this->breeds[$this->selectedBreed] ?? null;
             if ($breedLabel) {
@@ -613,8 +685,7 @@ class AiBlogStudio extends Component
                     ? $sec['image_prompt']
                     : (!empty($sec['heading']) ? "{$sec['heading']}, {$breedLabel} cat" : "{$topic}, {$breedLabel} kitten");
 
-                $cleanPrompt = urlencode(trim($prompt) . ', photorealistic 8k, warm natural lighting, luxury aesthetic');
-                $sec['image_url'] = "https://image.pollinations.ai/prompt/{$cleanPrompt}?width=800&height=500&nologo=true";
+                $sec['image_url'] = AiBlogGeneratorService::buildPollinationsUrl($prompt, 800, 500);
             }
         }
 

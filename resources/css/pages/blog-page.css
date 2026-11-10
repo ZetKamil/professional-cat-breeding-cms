@@ -177,7 +177,7 @@
     padding-top: var(--sp-4xl, 96px);
     padding-bottom: var(--sp-3xl, 64px);
     background-size: cover;
-    background-position: center;
+    background-position: center 25%;
     background-repeat: no-repeat;
     color: #ffffff;
     overflow: hidden;

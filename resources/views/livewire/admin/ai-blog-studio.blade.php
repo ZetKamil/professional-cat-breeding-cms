@@ -306,21 +306,46 @@
                 {{-- Cover Image & Header Preview --}}
                 @if(!empty($generatedDraft['hero_image_preview_url']))
                     <div class="card mb-4 border-0 shadow-sm overflow-hidden" style="border-radius: 12px;">
-                        <div class="position-relative" style="max-height: 260px; overflow: hidden; background: #111;">
+                        <div class="position-relative" style="aspect-ratio: 16 / 9; min-height: 300px; max-height: 440px; overflow: hidden; background: #141414;">
                             <img src="{{ $generatedDraft['hero_image_preview_url'] }}"
-                                 alt="Okładka wygenerowana przez AI"
-                                 class="w-100"
-                                 style="object-fit: cover; height: 260px; opacity: 0.85;">
+                                 wire:key="hero-preview-{{ md5($generatedDraft['hero_image_preview_url']) }}"
+                                 alt="Okładka artykułu"
+                                 class="w-100 h-100"
+                                 style="object-fit: cover; object-position: center 25%; opacity: 0.9;">
                             <div class="position-absolute bottom-0 start-0 w-100 p-4 text-white"
-                                 style="background: linear-gradient(0deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 60%, transparent 100%);">
+                                 style="background: linear-gradient(0deg, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.45) 60%, transparent 100%);">
                                 <span class="badge bg-warning text-dark fw-bold mb-2">
-                                    <i class="fas fa-magic me-1"></i> Zdjęcie okładkowe (AI Hero Cover)
+                                    <i class="fas {{ $selectedHeroAnimalId !== '' ? 'fa-paw' : 'fa-magic' }} me-1"></i>
+                                    {{ $selectedHeroAnimalId !== '' ? 'Zdjęcie okładkowe (Wybrany kot z hodowli)' : 'Zdjęcie okładkowe (AI Hero Cover)' }}
                                 </span>
                                 <h3 class="fw-bold mb-1 text-white">{{ $generatedDraft['title'] ?? 'Tytuł wpisu' }}</h3>
                                 <p class="mb-0 text-white-50 small text-truncate" style="max-width: 800px;">
                                     {{ $generatedDraft['excerpt'] ?? '' }}
                                 </p>
                             </div>
+                        </div>
+
+                        @php
+                            $heroAnimals = collect($animals)
+                                ->filter(fn ($a) => !empty($a['photo_url']))
+                                ->sortByDesc(fn ($a) => in_array($a['id'], $selectedAnimalIds, true))
+                                ->take(5);
+                        @endphp
+                        <div class="card-footer bg-white border-top py-2 px-3 d-flex flex-wrap align-items-center gap-2">
+                            <span class="small fw-semibold text-muted me-1">Zmień zdjęcie w tle:</span>
+                            <button type="button"
+                                    wire:click="regenerateAiHero"
+                                    class="btn btn-sm {{ $selectedHeroAnimalId === '' ? 'btn-primary' : 'btn-outline-secondary' }}">
+                                <i class="fas fa-sync-alt me-1"></i> Nowe tło AI
+                            </button>
+                            @foreach($heroAnimals as $hAnimal)
+                                <button type="button"
+                                        wire:key="hero-animal-btn-{{ $hAnimal['id'] }}"
+                                        wire:click="selectHeroFromAnimal('{{ $hAnimal['id'] }}')"
+                                        class="btn btn-sm {{ $selectedHeroAnimalId === $hAnimal['id'] ? 'btn-warning text-dark fw-semibold' : 'btn-outline-dark' }}">
+                                    🐾 {{ $hAnimal['name'] }}
+                                </button>
+                            @endforeach
                         </div>
                     </div>
                 @endif

@@ -53,6 +53,37 @@ class AiBlogGeneratorService
     }
 
     /**
+     * Build a wide-composition Pollinations URL with headroom framing so cat ears/heads stay inside hero crops.
+     */
+    public static function buildPollinationsUrl(string $prompt, int $width = 1200, int $height = 675, ?int $seed = null): string
+    {
+        $cleanPrompt = trim($prompt);
+        if (blank($cleanPrompt)) {
+            $cleanPrompt = 'Magnificent pedigreed cat in a warm luxury interior, natural sunlight, editorial photography';
+        }
+
+        $framedPrompt = $cleanPrompt
+            . ', wide horizontal editorial photography, full cat head and ears completely in frame with generous headroom above, natural eyes, warm luxury interior background, crisp focus';
+        $encoded = urlencode($framedPrompt);
+        $resolvedSeed = $seed ?? random_int(1, 999999);
+
+        return "https://image.pollinations.ai/prompt/{$encoded}?width={$width}&height={$height}&model=flux&nologo=true&seed={$resolvedSeed}";
+    }
+
+    /**
+     * Download the previewed cover URL first, falling back to Imagen / Pollinations if download fails.
+     */
+    public function generateHeroImageFromPreview(string $previewUrl, string $prompt, \App\Models\Post $post): ?\App\Models\Media
+    {
+        $bytes = $this->downloadRemoteImage($previewUrl);
+        if (! empty($bytes)) {
+            return $this->storeHeroImageBytes($bytes, 'image/jpeg', 'jpg', $post);
+        }
+
+        return $this->generateHeroImage($prompt, $post);
+    }
+
+    /**
      * Generate a decorative hero image for a post cover and attach it via MediaService.
      * Tries Gemini Imagen first, then falls back to Pollinations AI photo generator.
      *
@@ -89,6 +120,11 @@ class AiBlogGeneratorService
             return null;
         }
 
+        return $this->storeHeroImageBytes($imageData, $mime, $ext, $post);
+    }
+
+    private function storeHeroImageBytes(string $imageData, string $mime, string $ext, \App\Models\Post $post): ?\App\Models\Media
+    {
         $tmpPath = sys_get_temp_dir() . '/ai_hero_' . uniqid() . '.' . $ext;
         file_put_contents($tmpPath, $imageData);
 
@@ -116,14 +152,13 @@ class AiBlogGeneratorService
      */
     public function fetchAiGeneratedImage(string $prompt, int $width = 1200, int $height = 675): ?string
     {
-        $cleanPrompt = trim($prompt);
-        if (blank($cleanPrompt)) {
-            $cleanPrompt = 'Magnificent pedigreed cat in a warm luxury interior, natural sunlight, cinematic 8k';
-        }
+        $url = self::buildPollinationsUrl($prompt, $width, $height);
 
-        $encoded = urlencode($cleanPrompt);
-        $url = "https://image.pollinations.ai/prompt/{$encoded}?width={$width}&height={$height}&nologo=true&enhance=true";
+        return $this->downloadRemoteImage($url);
+    }
 
+    private function downloadRemoteImage(string $url): ?string
+    {
         try {
             $response = \Illuminate\Support\Facades\Http::connectTimeout(4)
                 ->timeout(10)
@@ -133,7 +168,7 @@ class AiBlogGeneratorService
                 return $response->body();
             }
         } catch (\Throwable $e) {
-            Log::warning('AiBlogGeneratorService: failed to fetch AI image from Pollinations', [
+            Log::warning('AiBlogGeneratorService: failed to fetch AI image', [
                 'error' => $e->getMessage(),
             ]);
         }

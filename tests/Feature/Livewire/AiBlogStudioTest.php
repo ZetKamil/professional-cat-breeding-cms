@@ -213,3 +213,89 @@ test('goToStep3 generates article draft and recovers cleanly on gemini timeout',
         ->assertSet('generatedDraft.title', 'Szybko wygenerowany artykuł');
 });
 
+test('step 3 lets admin switch hero cover to a selected cat or regenerate seeded ai cover and distributes multiple cats round-robin', function () {
+    \Illuminate\Support\Facades\Storage::fake('public');
+    \Illuminate\Support\Facades\Config::set('services.gemini.api_key', 'test-key-123');
+
+    $cat1 = \App\Models\Animal::factory()->create(['name' => 'Baron', 'breed' => 'Kot Bengalski', 'is_published' => true]);
+    $cat2 = \App\Models\Animal::factory()->create(['name' => 'Cyprian', 'breed' => 'Kot Bengalski', 'is_published' => true]);
+    $cat3 = \App\Models\Animal::factory()->create(['name' => 'Carlos', 'breed' => 'Kot Bengalski', 'is_published' => true]);
+
+    foreach ([$cat1, $cat2, $cat3] as $idx => $cat) {
+        $f = \Illuminate\Http\UploadedFile::fake()->image("cat{$idx}.jpg", 600, 600);
+        $path = $f->store('media/animals', 'public');
+        \App\Models\Media::create([
+            'disk' => 'public',
+            'directory' => 'media/animals',
+            'filename' => basename($path),
+            'mime_type' => 'image/jpeg',
+            'size' => 1024,
+            'mediable_type' => \App\Models\Animal::class,
+            'mediable_id' => $cat->id,
+            'is_featured' => true,
+        ]);
+        if ($idx === 0) {
+            // Add extra gallery images to Cat 1 — should NOT starve Cat 2 & Cat 3 in sections
+            $extra = \Illuminate\Http\UploadedFile::fake()->image('cat0_extra.jpg', 600, 600)->store('media/animals', 'public');
+            \App\Models\Media::create([
+                'disk' => 'public',
+                'directory' => 'media/animals',
+                'filename' => basename($extra),
+                'mime_type' => 'image/jpeg',
+                'size' => 1024,
+                'mediable_type' => \App\Models\Animal::class,
+                'mediable_id' => $cat->id,
+                'is_featured' => false,
+                'sort_order' => 2,
+            ]);
+        }
+    }
+
+    \Illuminate\Support\Facades\Http::fake([
+        'generativelanguage.googleapis.com/*' => \Illuminate\Support\Facades\Http::response([
+            'candidates' => [[
+                'content' => ['parts' => [[
+                    'text' => json_encode([
+                        'h1' => 'Jak zająć kota bengalskiego?',
+                        'meta_title' => 'Tytuł SEO',
+                        'meta_description' => 'Opis SEO',
+                        'excerpt' => 'Wstęp.',
+                        'sections' => [
+                            ['heading' => '', 'body' => 'S1'],
+                            ['heading' => 'H2 A', 'body' => 'S2'],
+                            ['heading' => 'H2 B', 'body' => 'S3'],
+                        ],
+                        'hero_image_prompt' => 'Bengal cat playing',
+                    ]),
+                ]]],
+            ]],
+        ], 200),
+    ]);
+
+    $component = Livewire::test(AiBlogStudio::class)
+        ->set('selectedAnimalIds', [$cat1->id, $cat2->id, $cat3->id])
+        ->set('customTopic', 'Jak zająć kota bengalskiego?')
+        ->call('goToStep3');
+
+    $draft = $component->get('generatedDraft');
+    expect($draft['hero_image_preview_url'])->toContain('model=flux')
+        ->and($draft['hero_image_preview_url'])->toContain('seed=')
+        ->and($draft['sections'][0]['image_url'])->toContain($cat1->media->filename)
+        ->and($draft['sections'][1]['image_url'])->toContain($cat2->media->filename)
+        ->and($draft['sections'][2]['image_url'])->toContain($cat3->media->filename);
+
+    // Regenerating AI cover produces a new preview URL
+    $firstAiUrl = $draft['hero_image_preview_url'];
+    $component->call('regenerateAiHero');
+    expect($component->get('generatedDraft.hero_image_preview_url'))->toContain('seed=');
+
+    // Switching hero cover to real cat Carlos persists Carlos's photo on saveDraft()
+    $component->call('selectHeroFromAnimal', $cat3->id)
+        ->assertSet('selectedHeroAnimalId', $cat3->id)
+        ->call('saveDraft', false);
+
+    $saved = \App\Models\Post::where('slug', 'jak-zajac-kota-bengalskiego')->first();
+    expect($saved->media)->not->toBeNull()
+        ->and($saved->media->caption)->toContain('Carlos');
+});
+
