@@ -126,7 +126,6 @@ class AiBlogGeneratorService
 
         try {
             $response = \Illuminate\Support\Facades\Http::timeout(25)
-                ->withoutVerifying()
                 ->get($url);
 
             if ($response->successful() && strlen($response->body()) > 5000) {

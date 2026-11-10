@@ -51,16 +51,16 @@ class BlogCtaTest extends TestCase
         $admin = User::factory()->create(['role_id' => $adminRole->id]);
 
         $payload = [
-            'is_enabled'    => '1',
-            'badge'         => 'Hodowla Kotów Mazowiecka Szwajcaria',
-            'heading'       => 'Rezerwacja kociąt z miotu 2026',
-            'body'          => 'Zapraszamy do rezerwacji kociąt brytyjskich oraz bengalskich.',
-            'image_url'     => 'https://example.com/cat.jpg',
-            'button_text'   => 'Zobacz Koty',
-            'button_url'    => '/koty',
+            'is_enabled' => '1',
+            'badge' => 'Hodowla Kotów Mazowiecka Szwajcaria',
+            'heading' => 'Rezerwacja kociąt z miotu 2026',
+            'body' => 'Zapraszamy do rezerwacji kociąt brytyjskich oraz bengalskich.',
+            'image_url' => 'https://example.com/cat.jpg',
+            'button_text' => 'Zobacz Koty',
+            'button_url' => '/koty',
             'facebook_info' => 'Zapraszamy również na nasz profil na Facebooku!',
             'facebook_text' => 'Zobacz na Facebooku',
-            'facebook_url'  => 'https://www.facebook.com/profile.php?id=61580668026948',
+            'facebook_url' => 'https://www.facebook.com/profile.php?id=61580668026948',
         ];
 
         $response = $this->actingAs($admin)
@@ -74,5 +74,20 @@ class BlogCtaTest extends TestCase
         $this->assertSame('Hodowla Kotów Mazowiecka Szwajcaria', $cta['badge']);
         $this->assertSame('Rezerwacja kociąt z miotu 2026', $cta['heading']);
         $this->assertSame('https://www.facebook.com/profile.php?id=61580668026948', $cta['facebook_url']);
+    }
+
+    public function test_blog_cta_rejects_javascript_scheme_urls(): void
+    {
+        $adminRole = Role::firstOrCreate(['name' => 'admin']);
+        $admin = User::factory()->create(['role_id' => $adminRole->id]);
+
+        $response = $this->actingAs($admin)->post(route('backend.blog-cta.update'), [
+            'heading' => 'Bezpieczny nagłówek',
+            'body' => 'Bezpieczna treść oferty.',
+            'button_url' => 'javascript:alert(1)',
+            'image_url' => 'data:text/html,<script>alert(1)</script>',
+        ]);
+
+        $response->assertSessionHasErrors(['button_url', 'image_url']);
     }
 }

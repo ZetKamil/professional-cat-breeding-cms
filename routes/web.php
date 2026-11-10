@@ -113,19 +113,13 @@ Route::get('/storage/{path}', function ($path) {
     $possiblePaths = [
         public_path('storage/'.$cleanPath),
         storage_path('app/public/'.$cleanPath),
-        storage_path('app/private/'.$cleanPath),
-        storage_path('app/'.$cleanPath),
         public_path('storage/media/'.basename($cleanPath)),
         storage_path('app/public/media/'.basename($cleanPath)),
-        storage_path('app/private/media/'.basename($cleanPath)),
         public_path('storage/media/animals/'.basename($cleanPath)),
         storage_path('app/public/media/animals/'.basename($cleanPath)),
-        storage_path('app/private/media/animals/'.basename($cleanPath)),
         public_path('storage/animals/'.basename($cleanPath)),
         storage_path('app/public/animals/'.basename($cleanPath)),
-        storage_path('app/private/animals/'.basename($cleanPath)),
         storage_path('app/public/'.basename($cleanPath)),
-        storage_path('app/private/'.basename($cleanPath)),
         base_path('image/'.$cleanPath),
         base_path('BLOG/'.$cleanPath),
         base_path('BLOG/'.str_replace('blog/', '', $cleanPath)),
@@ -139,13 +133,11 @@ Route::get('/storage/{path}', function ($path) {
         }
     }
 
-    // Global recursive fallback search in storage_path('app'), public_path('storage'), and base_path('image')
+    // Global recursive fallback search across public storage directories only (never storage/app/private)
     $filename = basename($cleanPath);
     $filenameLower = strtolower($filename);
     $searchDirs = [
         storage_path('app/public'),
-        storage_path('app/private'),
-        storage_path('app'),
         public_path('storage'),
         base_path('image'),
     ];
@@ -193,7 +185,6 @@ Route::match(['get', 'post'], '/check-media', function (\Illuminate\Http\Request
 
     $sourceDirs = [
         storage_path('app/public'),
-        storage_path('app/private'),
     ];
 
     $syncedCount = 0;

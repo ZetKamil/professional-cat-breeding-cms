@@ -34,7 +34,7 @@ class MediaPolicy
 
     public function delete(User $user, Media $media): bool
     {
-        return in_array($user->role?->name, ['admin', 'editor'], true);
+        return $user->role?->name === 'admin';
     }
 
     public function restore(User $user, Media $media): bool

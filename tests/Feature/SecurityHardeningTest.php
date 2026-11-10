@@ -2,9 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Models\Media;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\File;
 use Tests\TestCase;
 
 class SecurityHardeningTest extends TestCase
@@ -162,5 +165,69 @@ class SecurityHardeningTest extends TestCase
         $this->assertFileExists($storageHtaccess);
         $storageContent = file_get_contents($storageHtaccess);
         $this->assertStringContainsString('Require all denied', $storageContent);
+    }
+
+    public function test_storage_fallback_route_never_exposes_private_directory_files(): void
+    {
+        $privateDir = storage_path('app/private/livewire-tmp');
+        File::ensureDirectoryExists($privateDir);
+        $secretFile = $privateDir.'/secret-audit-probe.jpg';
+        File::put($secretFile, 'private-content');
+
+        try {
+            $this->get('/storage/secret-audit-probe.jpg')->assertNotFound();
+            $this->get('/storage/livewire-tmp/secret-audit-probe.jpg')->assertNotFound();
+        } finally {
+            @File::delete($secretFile);
+        }
+    }
+
+    public function test_inactive_user_cannot_access_settings_routes_and_non_admin_settings_redirect_works(): void
+    {
+        $userRole = Role::firstOrCreate(['name' => 'user']);
+        $inactive = User::factory()->create([
+            'role_id' => $userRole->id,
+            'is_active' => false,
+        ]);
+
+        $this->actingAs($inactive)->get('/settings')->assertForbidden();
+        $this->actingAs($inactive)->get('/settings/profile')->assertForbidden();
+        $this->actingAs($inactive)->get('/settings/password')->assertForbidden();
+
+        $activeUser = User::factory()->create([
+            'role_id' => $userRole->id,
+            'is_active' => true,
+        ]);
+
+        $this->actingAs($activeUser)->get('/settings')->assertRedirect(route('profile.edit'));
+        $this->actingAs($activeUser)->get('/settings/profile')->assertOk();
+    }
+
+    public function test_svg_upload_is_rejected_and_editor_cannot_delete_media(): void
+    {
+        $adminRole = Role::firstOrCreate(['name' => 'admin']);
+        $editorRole = Role::firstOrCreate(['name' => 'editor']);
+        $admin = User::factory()->create(['role_id' => $adminRole->id]);
+        $editor = User::factory()->create(['role_id' => $editorRole->id]);
+
+        $svgFile = UploadedFile::fake()->create('xss.svg', 10, 'image/svg+xml');
+        $this->actingAs($admin)
+            ->post(route('backend.media.store'), ['upload' => $svgFile])
+            ->assertSessionHasErrors('upload');
+
+        $media = Media::create([
+            'disk' => 'public',
+            'directory' => 'media/library',
+            'filename' => 'protected-avatar.jpg',
+        ]);
+
+        $this->actingAs($editor)
+            ->delete(route('backend.media.destroy', $media))
+            ->assertForbidden();
+
+        // Confirm outbound AI calls keep TLS verification intact
+        $this->assertStringNotContainsString('withoutVerifying', file_get_contents(app_path('Services/GeminiService.php')));
+        $this->assertStringNotContainsString('withoutVerifying', file_get_contents(app_path('Services/AiBlogGeneratorService.php')));
+        $this->assertStringNotContainsString('withoutVerifying', file_get_contents(app_path('Livewire/Admin/AiBlogStudio.php')));
     }
 }

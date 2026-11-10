@@ -387,6 +387,15 @@
         const previewStatusBadge = document.getElementById('preview_status_badge');
         const livePreviewCard = document.getElementById('live_preview_card');
 
+        function escHtml(str) {
+            return String(str ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
         // Simple Markdown parser for live preview
         function parseMd(md) {
             if (!md) return '';
@@ -394,7 +403,11 @@
                 .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
                 .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                 .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" style="color:#b38600;font-weight:600;">$1</a>');
+                .replace(/\[(.*?)\]\((.*?)\)/g, function (_m, text, url) {
+                    const cleanUrl = (url || '').trim();
+                    const safeHref = /^(https?:\/\/|\/)/i.test(cleanUrl) ? cleanUrl : '#';
+                    return `<a href="${escHtml(safeHref)}" target="_blank" rel="noopener noreferrer" style="color:#b38600;font-weight:600;">${text}</a>`;
+                });
 
             const lines = html.split('\n');
             let res = '';
@@ -523,17 +536,19 @@
             items.filter(i => i.is_image).forEach(item => {
                 const col = document.createElement('div');
                 col.className = 'col';
+                const safeTitle = escHtml(item.title || '');
+                const safeUrl = escHtml(item.url || '');
                 col.innerHTML = `
                     <div class="card h-100 border p-1 text-center shadow-sm" style="cursor:pointer;">
-                        <img src="${item.url}" alt="${item.title || ''}" class="card-img-top rounded" style="height:90px;object-fit:cover;">
+                        <img src="${safeUrl}" alt="${safeTitle}" class="card-img-top rounded" style="height:90px;object-fit:cover;">
                         <div class="card-body p-1">
-                            <div class="small fw-semibold text-truncate">${item.title || ''}</div>
+                            <div class="small fw-semibold text-truncate">${safeTitle}</div>
                         </div>
                     </div>
                 `;
                 col.querySelector('.card').addEventListener('click', function () {
                     imageUrlInput.value = item.url;
-                    imagePreviewBox.innerHTML = `<img src="${item.url}" class="rounded border w-100 h-100" style="object-fit:cover;" alt="Wybrane zdjęcie">`;
+                    imagePreviewBox.innerHTML = `<img src="${safeUrl}" class="rounded border w-100 h-100" style="object-fit:cover;" alt="Wybrane zdjęcie">`;
                     removeImageBtn.classList.remove('d-none');
                     updatePreview();
                     if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {

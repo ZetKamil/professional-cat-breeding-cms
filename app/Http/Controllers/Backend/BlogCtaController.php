@@ -32,17 +32,28 @@ class BlogCtaController extends Controller
     {
         $this->authorize('create', Post::class);
 
+        $safeUrlRule = function (string $attribute, mixed $value, \Closure $fail): void {
+            if (! is_string($value) || trim($value) === '') {
+                return;
+            }
+
+            $trimmed = trim($value);
+            if (! str_starts_with($trimmed, '/') && ! preg_match('/^https?:\/\//i', $trimmed)) {
+                $fail("Pole {$attribute} musi zaczynać się od http://, https:// lub /.");
+            }
+        };
+
         $validated = $request->validate([
-            'is_enabled'    => ['nullable', 'boolean'],
-            'badge'         => ['nullable', 'string', 'max:100'],
-            'heading'       => ['required', 'string', 'max:255'],
-            'body'          => ['required', 'string'],
-            'image_url'     => ['nullable', 'string', 'max:500'],
-            'button_text'   => ['nullable', 'string', 'max:100'],
-            'button_url'    => ['nullable', 'string', 'max:255'],
+            'is_enabled' => ['nullable', 'boolean'],
+            'badge' => ['nullable', 'string', 'max:100'],
+            'heading' => ['required', 'string', 'max:255'],
+            'body' => ['required', 'string'],
+            'image_url' => ['nullable', 'string', 'max:500', $safeUrlRule],
+            'button_text' => ['nullable', 'string', 'max:100'],
+            'button_url' => ['nullable', 'string', 'max:255', $safeUrlRule],
             'facebook_info' => ['nullable', 'string', 'max:500'],
             'facebook_text' => ['nullable', 'string', 'max:100'],
-            'facebook_url'  => ['nullable', 'string', 'max:255'],
+            'facebook_url' => ['nullable', 'string', 'max:255', $safeUrlRule],
         ]);
 
         $validated['is_enabled'] = $request->boolean('is_enabled');

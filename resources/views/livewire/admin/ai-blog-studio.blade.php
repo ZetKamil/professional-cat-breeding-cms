@@ -39,7 +39,7 @@
         <div class="alert alert-success d-flex align-items-center mb-4 shadow-sm" role="alert">
             <i class="fas fa-check-circle me-2 fa-lg"></i>
             <div class="d-flex align-items-center flex-wrap gap-2">
-                <span>{!! $successMessage !!}</span>
+                <span>{{ $successMessage }}</span>
                 @if($savedPostSlug)
                     <a href="{{ route('backend.posts.edit', $savedPostSlug) }}" class="btn btn-sm btn-success fw-bold">
                         <i class="fas fa-edit me-1"></i> Otwórz edycję w nowym szablonie →
@@ -411,7 +411,7 @@
                             </div>
                         @else
                             <div class="article-body">
-                                {!! $generatedDraft['body'] ?? '' !!}
+                                {!! \Illuminate\Support\Str::markdown($generatedDraft['body'] ?? '', ['html_input' => 'strip', 'allow_unsafe_links' => false]) !!}
                             </div>
                         @endif
 

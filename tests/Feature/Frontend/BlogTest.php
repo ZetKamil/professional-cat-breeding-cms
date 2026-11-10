@@ -6,6 +6,7 @@ namespace Tests\Feature\Frontend;
 
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -171,5 +172,26 @@ class BlogTest extends TestCase
         $response->assertOk();
         $response->assertDontSee("<script>alert('xss')</script>", false);
         $response->assertSee('Tekst <strong>bezpieczny</strong>', false);
+    }
+
+    public function test_unpublished_post_is_hidden_from_regular_or_inactive_users_but_visible_to_active_staff(): void
+    {
+        $userRole = Role::firstOrCreate(['name' => 'user']);
+        $editorRole = Role::firstOrCreate(['name' => 'editor']);
+
+        $regularUser = User::factory()->create(['role_id' => $userRole->id, 'is_active' => true]);
+        $inactiveEditor = User::factory()->create(['role_id' => $editorRole->id, 'is_active' => false]);
+        $activeEditor = User::factory()->create(['role_id' => $editorRole->id, 'is_active' => true]);
+
+        $draftPost = Post::factory()->create([
+            'user_id' => $activeEditor->id,
+            'title' => 'Tajny Szkic Redakcyjny',
+            'is_published' => false,
+            'published_at' => null,
+        ]);
+
+        $this->actingAs($regularUser)->get(route('frontend.blog.show', $draftPost))->assertNotFound();
+        $this->actingAs($inactiveEditor)->get(route('frontend.blog.show', $draftPost))->assertNotFound();
+        $this->actingAs($activeEditor)->get(route('frontend.blog.show', $draftPost))->assertOk()->assertSee('Tajny Szkic Redakcyjny');
     }
 }

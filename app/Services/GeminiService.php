@@ -125,13 +125,6 @@ class GeminiService
 
                 return $response;
             } catch (ConnectionException $e) {
-                if (str_contains($e->getMessage(), 'SSL') || str_contains($e->getMessage(), 'cURL error 60')) {
-                    return Http::withoutVerifying()
-                        ->timeout($effectiveTimeout)
-                        ->withHeaders($headers)
-                        ->post($url, $payload);
-                }
-
                 if ($attempt < $maxAttempts) {
                     Log::warning("GeminiService: Connection error on attempt {$attempt}/{$maxAttempts}. Retrying...");
                     usleep(500000);

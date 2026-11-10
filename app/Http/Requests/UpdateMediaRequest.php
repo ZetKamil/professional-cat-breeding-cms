@@ -46,7 +46,7 @@ class UpdateMediaRequest extends FormRequest
             'mediable_type' => ['nullable', 'string'],
             'mediable_id' => ['nullable', 'string', 'max:36'],
 
-            'upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,gif,svg', 'max:10240'],
+            'upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,gif,jfif', 'max:10240'],
 
             'title' => ['nullable', 'string', 'max:255'],
             'alt_text' => ['nullable', 'string', 'max:255'],
@@ -77,4 +77,3 @@ class UpdateMediaRequest extends FormRequest
         });
     }
 }
-

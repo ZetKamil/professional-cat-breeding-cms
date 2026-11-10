@@ -54,4 +54,31 @@ class UserManagementTest extends TestCase
         expect($createdUser->name)->toBe('Zaktualizowany Redaktor')
             ->and($createdUser->email_verified_at)->toBeNull();
     }
+
+    public function test_admin_cannot_delete_or_deactivate_own_account(): void
+    {
+        $adminRole = Role::firstOrCreate(['name' => 'admin']);
+        $admin = User::factory()->create(['role_id' => $adminRole->id, 'is_active' => true]);
+
+        $this->actingAs($admin)
+            ->from(route('backend.users.index'))
+            ->delete(route('backend.users.destroy', $admin))
+            ->assertRedirect(route('backend.users.index'))
+            ->assertSessionHas('error');
+
+        expect($admin->fresh()->trashed())->toBeFalse();
+
+        $this->actingAs($admin)
+            ->from(route('backend.users.edit', $admin))
+            ->patch(route('backend.users.update', $admin), [
+                'name' => $admin->name,
+                'email' => $admin->email,
+                'role_id' => $adminRole->id,
+                'is_active' => 0,
+            ])
+            ->assertRedirect(route('backend.users.edit', $admin))
+            ->assertSessionHas('error');
+
+        expect($admin->fresh()->is_active)->toBeTrue();
+    }
 }

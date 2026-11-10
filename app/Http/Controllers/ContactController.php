@@ -21,8 +21,8 @@ class ContactController extends Controller
         try {
             ContactMessageSent::dispatch($data);
         } catch (\Throwable $e) {
-            \Illuminate\Support\Facades\Log::error('Błąd wysyłki formularza kontaktowego: ' . $e->getMessage(), [
-                'exception' => $e,
+            \Illuminate\Support\Facades\Log::error('Błąd wysyłki formularza kontaktowego: '.$e->getMessage(), [
+                'exception_class' => get_class($e),
             ]);
 
             return redirect()

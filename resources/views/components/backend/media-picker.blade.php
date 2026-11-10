@@ -229,6 +229,15 @@
                 });
         }
 
+        function escHtml(str) {
+            return String(str ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
         function renderGrid(items) {
             if (!items.length) {
                 gridEl.innerHTML = `
@@ -243,20 +252,25 @@
             items.forEach(item => {
                 const col = document.createElement('div');
                 col.className = 'col';
+                const safeTitle = escHtml(item.title || '');
+                const safeAlt = escHtml(item.alt_text || item.title || '');
+                const safeUrl = escHtml(item.url || '');
+                const safeId = escHtml(item.id);
+                const safeSizeKb = escHtml(item.size_kb);
                 col.innerHTML = `
                     <div
                         class="card h-100 border p-1 text-center shadow-sm media-picker-item"
                         style="cursor: pointer; transition: transform 0.15s ease;"
                         tabindex="0"
                         role="button"
-                        aria-label="Select media ${item.title}"
-                        data-media-id="${item.id}"
-                        data-media-url="${item.url}"
+                        aria-label="Select media ${safeTitle}"
+                        data-media-id="${safeId}"
+                        data-media-url="${safeUrl}"
                     >
-                        <img src="${item.url}" alt="${item.alt_text || item.title}" class="card-img-top rounded" style="height: 96px; object-fit: cover;">
+                        <img src="${safeUrl}" alt="${safeAlt}" class="card-img-top rounded" style="height: 96px; object-fit: cover;">
                         <div class="card-body p-1 d-flex flex-column justify-content-between">
-                            <div class="small fw-semibold text-truncate" title="${item.title}">${item.title}</div>
-                            <div class="text-muted" style="font-size: 0.65rem;">${item.size_kb} KB</div>
+                            <div class="small fw-semibold text-truncate" title="${safeTitle}">${safeTitle}</div>
+                            <div class="text-muted" style="font-size: 0.65rem;">${safeSizeKb} KB</div>
                         </div>
                     </div>
                 `;

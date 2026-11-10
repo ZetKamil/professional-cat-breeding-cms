@@ -155,6 +155,12 @@ class UserController extends Controller
 
         $data = $request->validated();
 
+        if ((int) auth()->id() === (int) $user->id && empty($data['is_active'])) {
+            return back()
+                ->withInput()
+                ->with('error', 'Nie możesz dezaktywować własnego konta administratora.');
+        }
+
         try {
             DB::beginTransaction();
 
@@ -203,6 +209,11 @@ class UserController extends Controller
     {
         $this->authorize('delete', $user);
 
+        if ((int) auth()->id() === (int) $user->id) {
+            return back()
+                ->with('error', 'Nie możesz usunąć własnego konta.');
+        }
+
         try {
             $user->delete();
 
@@ -239,6 +250,11 @@ class UserController extends Controller
             $user = User::withTrashed()->findOrFail($id);
 
             $this->authorize('forceDelete', $user);
+
+            if ((int) auth()->id() === (int) $user->id) {
+                return back()
+                    ->with('error', 'Nie możesz trwale usunąć własnego konta.');
+            }
 
             $name = $user->name;
 

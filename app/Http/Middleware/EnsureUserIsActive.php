@@ -15,7 +15,7 @@ class EnsureUserIsActive
         }
 
         if (! $request->user()->is_active) {
-            abort(403, 'Je account is niet actief.');
+            abort(403, 'Twoje konto jest nieaktywne.');
         }
 
         return $next($request);

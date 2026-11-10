@@ -82,7 +82,7 @@ class User extends Authenticatable
     // Relaties
     public function role(): BelongsTo
     {
-        return $this->belongsTo(Role::class);
+        return $this->belongsTo(Role::class)->withTrashed();
     }
 
     /**

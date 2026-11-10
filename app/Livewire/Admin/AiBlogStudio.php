@@ -513,7 +513,7 @@ class AiBlogStudio extends Component
                     'mime_type'     => $sourceMedia->mime_type ?: 'image/jpeg',
                     'size'          => $sourceMedia->size ?: 0,
                     'title'         => $post->title,
-                    'alt_text'      => e(($sourceAnimal?->name ?? 'Kot') . ' — ' . $post->title),
+                    'alt_text'      => ($sourceAnimal?->name ?? 'Kot') . ' — ' . $post->title,
                     'caption'       => $sourceAnimal ? "{$sourceAnimal->name} ({$sourceAnimal->breed})" : null,
                     'is_featured'   => true,
                     'mediable_type' => \App\Models\Post::class,
@@ -658,7 +658,7 @@ class AiBlogStudio extends Component
             $url = $sec['image_url'] ?? '';
             if (str_starts_with($url, 'https://image.pollinations.ai/') || str_starts_with($url, 'https://images.unsplash.com/')) {
                 try {
-                    $response = \Illuminate\Support\Facades\Http::timeout(15)->withoutVerifying()->get($url);
+                    $response = \Illuminate\Support\Facades\Http::timeout(15)->get($url);
                     if ($response->successful() && strlen($response->body()) > 4000) {
                         $dir = 'posts';
                         $filename = "sec_{$postId}_{$idx}_" . uniqid() . '.jpg';
