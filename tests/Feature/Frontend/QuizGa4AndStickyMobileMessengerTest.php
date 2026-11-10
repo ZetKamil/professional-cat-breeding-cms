@@ -64,7 +64,13 @@ class QuizGa4AndStickyMobileMessengerTest extends TestCase
         $quizResponse->assertSee('Pytanie o kociaka lub filmik?');
         $quizResponse->assertSee('💬 Messenger →');
         $quizResponse->assertSee('https://m.me/61580668026948');
+        $quizResponse->assertSee('📱 WhatsApp');
+        $quizResponse->assertSee('https://wa.me/48514153204');
         $quizResponse->assertSee('handleStickyMessengerClick', false);
+        $quizResponse->assertSee('handleStickyWhatsappClick', false);
+        $quizResponse->assertSee("method: 'messenger'", false);
+        $quizResponse->assertSee("method: 'whatsapp'", false);
+        $this->assertDoesNotMatchRegularExpression('/<a[^>]*id="mobileStickyMessengerBtn"[^>]*target="_blank"/s', $quizResponse->getContent());
 
         // 2. Render on /koty (catalog)
         $catalogResponse = $this->get(route('frontend.animals.index'));
@@ -72,7 +78,7 @@ class QuizGa4AndStickyMobileMessengerTest extends TestCase
         $catalogResponse->assertSee('id="mobileStickyMessengerBar"', false);
         $catalogResponse->assertSee('data-scroll-eligible="1"', false);
 
-        // 3. Render on /koty/{animal} (profile)
+        // 3. Render on /koty/{animal} (profile) with personalized WhatsApp message & Contact modal CTAs
         $animal = Animal::factory()->create([
             'name' => 'Bars',
             'slug' => 'bars-bengalski',
@@ -82,6 +88,10 @@ class QuizGa4AndStickyMobileMessengerTest extends TestCase
         $animalResponse->assertOk();
         $animalResponse->assertSee('id="mobileStickyMessengerBar"', false);
         $animalResponse->assertSee('data-scroll-eligible="1"', false);
+        $animalResponse->assertSee(rawurlencode('Dzień dobry! Piszę w sprawie kociaka Bars z hodowli Mazowiecka Szwajcaria. Czy mogę prosić o więcej informacji i filmik?'), false);
+        $animalResponse->assertSee('💬 Napisz na Messengerze');
+        $animalResponse->assertSee('📱 Napisz na WhatsApp (Szybki kontakt / Filmik)');
+        $animalResponse->assertSee('tel:+48514153204', false);
 
         // 4. Render on /blog/{post} (single post)
         $post = Post::updateOrCreate(

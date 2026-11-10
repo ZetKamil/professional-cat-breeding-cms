@@ -160,16 +160,17 @@ class PriceAndFunnelUnificationTest extends TestCase
         $response->assertSee('2 700 zł');
         $response->assertSee('W cenie: wielopokoleniowy rodowód SHiOZ ZOOLANDIA, książeczka zdrowia z kompletem szczepień, mikroczip oraz wyprawka na pierwsze dni.');
 
-        // 2. Messenger-First Primary CTA with pre-filled inquiry
+        // 2. Messenger CTA with pre-filled inquiry & iOS-ready markup
         $response->assertSee('animal-profile__btn--messenger', false);
-        $response->assertSee('💬 Zapytaj o tego kociaka na Messengerze');
+        $response->assertSee('💬 Napisz na Messengerze');
         $response->assertSee('m.me/61580668026948', false);
         $response->assertSee(urlencode('Dzień dobry! Piszę w sprawie kociaka: Baron. Czy jest aktualnie wolny?'));
 
-        // 3. Secondary WhatsApp Button
+        // 3. Secondary WhatsApp Button with pre-filled kitten filmik inquiry
         $response->assertSee('animal-profile__btn--whatsapp', false);
-        $response->assertSee('WhatsApp (+48 514 153 204)');
+        $response->assertSee('📱 Napisz na WhatsApp (Szybki kontakt / Filmik)');
         $response->assertSee('wa.me/48514153204', false);
+        $response->assertSee(rawurlencode('Dzień dobry! Piszę w sprawie kociaka Baron z hodowli Mazowiecka Szwajcaria. Czy mogę prosić o więcej informacji i filmik?'));
 
         // 4. Video-visit box copy
         $response->assertSee('Zobacz kota na żywo (Wideo-wizyta)');

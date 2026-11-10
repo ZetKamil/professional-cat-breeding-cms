@@ -307,7 +307,7 @@
                                target="_blank"
                                rel="noopener noreferrer"
                                class="quiz-cta-btn--gold"
-                               onclick="window.fireQuizContactEvent('messenger', 'no_cats_notice')">
+                               onclick="return window.fireQuizContactEvent('messenger', 'no_cats_notice', event)">
                                 💬 Zapytaj na Messengerze o planowany miot
                             </a>
                         </div>
@@ -335,7 +335,7 @@
                                target="_blank"
                                rel="noopener noreferrer"
                                class="quiz-cta-btn--gold"
-                               onclick="window.fireQuizContactEvent('messenger', 'empty_catalogue')">
+                               onclick="return window.fireQuizContactEvent('messenger', 'empty_catalogue', event)">
                                 💬 Napisz do hodowcy (Messenger)
                             </a>
                         </div>
@@ -356,7 +356,7 @@
                                target="_blank"
                                rel="noopener noreferrer"
                                class="quiz-cta-btn--gold"
-                               onclick="window.fireQuizContactEvent('messenger', 'bottom_cta')">
+                               onclick="return window.fireQuizContactEvent('messenger', 'bottom_cta', event)">
                                 <svg class="quiz-cta-btn__icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                     <path d="M12 2C6.48 2 2 6.03 2 11c0 2.87 1.5 5.43 3.84 7.07L5 22l4.13-1.81C10.05 20.35 11 20.48 12 20.48c5.52 0 10-4.03 10-9s-4.48-9.48-10-9.48z"/>
                                     <path d="M7.5 13.5l3-3.2 2 2 3-3.2-3 3.2-2-2-3 3.2z" fill="rgba(18,18,20,0.4)"/>
@@ -370,7 +370,7 @@
                                target="_blank"
                                rel="noopener noreferrer"
                                class="quiz-cta-btn--outline"
-                               onclick="window.fireQuizContactEvent('whatsapp', 'bottom_cta')">
+                               onclick="return window.fireQuizContactEvent('whatsapp', 'bottom_cta', event)">
                                 <svg class="quiz-cta-btn__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                     <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
                                 </svg>
@@ -911,7 +911,7 @@
              * @param {string} channel  'messenger' | 'whatsapp'
              * @param {string} location  CTA location label for analytics
              */
-            window.fireQuizContactEvent = function(channel, location) {
+            window.fireQuizContactEvent = function(channel, location, domEvent) {
                 const breed = window.__quizMatchedBreedName || 'Kot Rasowy';
                 const hasAvailable = (window.__quizMatchedCount || 0) > 0;
                 const timeframeLabels = {
@@ -946,6 +946,7 @@
                 if (typeof window.trackFunnelStep === 'function') {
                     window.trackFunnelStep('contact_cta_click', {
                         channel: channel,
+                        method: channel,
                         origin: 'quiz_result_' + location,
                         matched_breed: breed,
                         has_available: hasAvailable,
@@ -958,20 +959,33 @@
                     return window.fireQuizContactEvent('whatsapp', 'legacy');
                 };
 
+                const evt = domEvent || (typeof window.event !== 'undefined' ? window.event : null);
+                if (evt && typeof evt.preventDefault === 'function') {
+                    evt.preventDefault();
+                }
+
                 // Update href dynamically with breed context before navigation
                 if (channel === 'messenger') {
                     const msgText = hasAvailable
                         ? `Dzień dobry! W teście na stronie wyszedł mi ${breed}. Chciał(a)bym zapytać o wolne kocięta i aktualne filmiki.`
                         : `Dzień dobry! W teście na stronie wyszedł mi ${breed}. Kiedy planujecie kolejny miot?`;
                     const url = `https://m.me/61580668026948?text=${encodeURIComponent(msgText)}`;
-                    window.open(url, '_blank');
+                    if (typeof window.openMessengerLink === 'function') {
+                        window.openMessengerLink(url);
+                    } else if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent || '')) {
+                        window.location.assign(url);
+                    } else {
+                        window.open(url, '_blank', 'noopener,noreferrer');
+                    }
+                    return false;
                 } else {
                     // WhatsApp
                     const waMsg = hasAvailable
                         ? `Dzień dobry! W teście na stronie wyszedł mi ${breed}. Chciał(a)bym zapytać o wolne kocięta i aktualne filmiki.`
                         : `Dzień dobry! W teście na stronie wyszedł mi ${breed}. Kiedy planujecie kolejny miot?`;
                     const url = `https://wa.me/48514153204?text=${encodeURIComponent(waMsg)}`;
-                    window.open(url, '_blank');
+                    window.open(url, '_blank', 'noopener,noreferrer');
+                    return false;
                 }
             };
 
@@ -997,7 +1011,7 @@
                 } catch(e) {}
 
                 if (typeof window.trackFunnelStep === 'function') {
-                    window.trackFunnelStep('contact_cta_click', { channel: channel, origin: 'quiz_cat_card', cat_name: catName });
+                    window.trackFunnelStep('contact_cta_click', { channel: channel, method: channel, origin: 'quiz_cat_card', cat_name: catName });
                 }
                 // href is pre-rendered server-side; navigation is handled by the <a> tag itself
             };

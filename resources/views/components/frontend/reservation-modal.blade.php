@@ -33,22 +33,36 @@
 
         {{-- Contact channels --}}
         <div class="res-modal__actions">
-            
-            {{-- 1. WhatsApp Video CTA (Primary) --}}
-            <a id="res-modal-whatsapp" href="https://wa.me/48514153204" target="_blank" rel="noopener noreferrer" class="res-action-btn res-action-btn--whatsapp" onclick="if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'whatsapp', cat_name: window.__currentReservationCat?.name || 'Ogólne' }); }">
+            {{-- 1. Facebook Messenger CTA (Primary Champagne Gold #C5A059) --}}
+            <a id="res-modal-messenger" href="https://m.me/61580668026948" target="_blank" rel="noopener noreferrer" class="res-action-btn res-action-btn--messenger" data-messenger-cta="1" onclick="if(typeof fbq === 'function'){ fbq('track', 'Contact', { content_name: window.__currentReservationCat?.name || 'Ogólne', method: 'Messenger' }); } if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'messenger', method: 'messenger', cat_name: window.__currentReservationCat?.name || 'Ogólne' }); }">
+                <span class="res-action-btn__icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2C6.48 2 2 6.03 2 11c0 2.87 1.5 5.43 3.84 7.07L5 22l4.13-1.81C10.05 20.35 11 20.48 12 20.48c5.52 0 10-4.03 10-9s-4.48-9.48-10-9.48z"></path>
+                        <path d="M7.5 13.5l3-3.2 2 2 3-3.2-3 3.2-2-2-3 3.2z" fill="currentColor"></path>
+                    </svg>
+                </span>
+                <span class="res-action-btn__text">
+                    <strong>💬 Napisz na Messengerze</strong>
+                    <small>Odpowiemy na profilu hodowli i prześlemy filmik</small>
+                </span>
+                <span class="res-action-btn__arrow">→</span>
+            </a>
+
+            {{-- 2. WhatsApp CTA (Obsidian #111111 & Cream #FAF8F5 alternative) --}}
+            <a id="res-modal-whatsapp" href="https://wa.me/48514153204" target="_blank" rel="noopener noreferrer" class="res-action-btn res-action-btn--whatsapp" data-whatsapp-cta="1" onclick="if(typeof fbq === 'function'){ fbq('track', 'Contact', { content_name: window.__currentReservationCat?.name || 'Ogólne', method: 'WhatsApp' }); } if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'whatsapp', method: 'whatsapp', cat_name: window.__currentReservationCat?.name || 'Ogólne' }); }">
                 <span class="res-action-btn__icon">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
                     </svg>
                 </span>
                 <span class="res-action-btn__text">
-                    <strong>Wideo-wizyta przez WhatsApp</strong>
-                    <small>Połącz się z hodowlą lub napisz wiadomość</small>
+                    <strong>📱 Napisz na WhatsApp (Szybki kontakt / Filmik)</strong>
+                    <small>Połącz się z hodowlą (+48 514 153 204) bez logowania</small>
                 </span>
                 <span class="res-action-btn__arrow">→</span>
             </a>
 
-            {{-- 2. Direct Phone Call CTA --}}
+            {{-- 3. Direct Phone Call CTA (untouched) --}}
             <a id="res-modal-phone" href="tel:+48514153204" class="res-action-btn res-action-btn--phone" onclick="if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'phone', cat_name: window.__currentReservationCat?.name || 'Ogólne' }); }">
                 <span class="res-action-btn__icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -58,21 +72,6 @@
                 <span class="res-action-btn__text">
                     <strong>Zadzwoń teraz: +48 514 153 204</strong>
                     <small>Rozmowa bezpośrednio z hodowcą (9:00 – 21:00)</small>
-                </span>
-                <span class="res-action-btn__arrow">→</span>
-            </a>
-
-            {{-- 3. Facebook Messenger CTA --}}
-            <a id="res-modal-messenger" href="https://m.me/61580668026948" target="_blank" rel="noopener noreferrer" class="res-action-btn res-action-btn--messenger" onclick="if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'messenger', cat_name: window.__currentReservationCat?.name || 'Ogólne' }); }">
-                <span class="res-action-btn__icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 2C6.48 2 2 6.03 2 11c0 2.87 1.5 5.43 3.84 7.07L5 22l4.13-1.81C10.05 20.35 11 20.48 12 20.48c5.52 0 10-4.03 10-9s-4.48-9.48-10-9.48z"></path>
-                        <path d="M7.5 13.5l3-3.2 2 2 3-3.2-3 3.2-2-2-3 3.2z" fill="currentColor"></path>
-                    </svg>
-                </span>
-                <span class="res-action-btn__text">
-                    <strong>Napisz na Facebook Messenger</strong>
-                    <small>Odpowiemy na profilu hodowli</small>
                 </span>
                 <span class="res-action-btn__arrow">→</span>
             </a>

@@ -172,4 +172,22 @@ class AnalyticsAndAttributionTest extends TestCase
         $this->assertStringContainsString("trackFunnelStep('callback_submitted'", $modalJs);
         $this->assertStringContainsString('if (!response.ok)', $modalJs);
     }
+
+    public function test_ios_messenger_redirect_and_contact_method_tracking_are_configured(): void
+    {
+        $redirectJs = file_get_contents(resource_path('js/messenger-redirect.js'));
+        $this->assertStringContainsString('fb-messenger://user-thread/61580668026948', $redirectJs);
+        $this->assertStringContainsString('https://m.me/', $redirectJs);
+        $this->assertStringContainsString('/iPhone|iPad|iPod/', $redirectJs);
+        $this->assertStringContainsString("removeAttribute('target')", $redirectJs);
+
+        $analyticsJs = file_get_contents(resource_path('js/analytics.js'));
+        $this->assertStringContainsString('cleanParams.method = cleanParams.channel', $analyticsJs);
+        $this->assertStringContainsString("method: 'whatsapp'", $analyticsJs);
+        $this->assertStringContainsString("method: 'messenger'", $analyticsJs);
+        $this->assertStringContainsString("window.fbq('track', 'Contact'", $analyticsJs);
+
+        $stickyHtml = $this->get(route('quiz'))->getContent();
+        $this->assertDoesNotMatchRegularExpression('/<a[^>]*id="mobileStickyMessengerBtn"[^>]*target="_blank"/s', $stickyHtml);
+    }
 }

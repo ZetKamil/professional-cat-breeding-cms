@@ -17,6 +17,19 @@
 
     $scrollEligible = $isAnimalsCatalog || $isAnimalShow || $isBlogShow;
     $shouldRender = $scrollEligible || $isQuiz;
+
+    $routeAnimal = request()->route('animal');
+    $stickyKittenName = $routeAnimal instanceof \App\Models\Animal ? $routeAnimal->name : null;
+
+    $stickyWhatsappMessage = $stickyKittenName
+        ? "Dzień dobry! Piszę w sprawie kociaka {$stickyKittenName} z hodowli Mazowiecka Szwajcaria. Czy mogę prosić o więcej informacji i filmik?"
+        : 'Dzień dobry! Piszę w sprawie kociąt z hodowli Mazowiecka Szwajcaria. Czy mogę prosić o więcej informacji i filmik?';
+    $stickyWhatsappUrl = 'https://wa.me/48514153204?text=' . rawurlencode($stickyWhatsappMessage);
+
+    $stickyMessengerMessage = $stickyKittenName
+        ? "Dzień dobry! Piszę w sprawie kociaka {$stickyKittenName} z hodowli Mazowiecka Szwajcaria. Czy mogę prosić o więcej informacji i filmik?"
+        : 'Dzień dobry! Chciał(a)bym zapytać o kociaki lub aktualne filmiki.';
+    $stickyMessengerUrl = 'https://m.me/61580668026948?text=' . rawurlencode($stickyMessengerMessage);
 @endphp
 
 @if($shouldRender)
@@ -24,27 +37,39 @@
     id="mobileStickyMessengerBar" 
     class="mobile-sticky-bar" 
     role="toolbar" 
-    aria-label="Szybki kontakt Messenger"
+    aria-label="Szybki kontakt Messenger i WhatsApp"
     data-scroll-eligible="{{ $scrollEligible ? '1' : '0' }}"
     data-is-quiz="{{ $isQuiz ? '1' : '0' }}"
 >
     <div class="mobile-sticky-bar__inner">
-        {{-- Left text (Cream / White) --}}
+        {{-- Top/left text (Cream / White) --}}
         <div class="mobile-sticky-bar__text">
             Pytanie o kociaka lub filmik?
         </div>
 
-        {{-- Right button (Solid Champagne Gold #C5A059, dark bold text) --}}
-        <a 
-            href="https://m.me/61580668026948" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            class="mobile-sticky-bar__messenger-btn"
-            id="mobileStickyMessengerBtn"
-            onclick="window.handleStickyMessengerClick(event)"
-        >
-            💬 Messenger →
-        </a>
+        {{-- Dual Quiet Luxury Action Buttons: Messenger (#C5A059) & WhatsApp (#111111 + #FAF8F5) --}}
+        <div class="mobile-sticky-bar__actions">
+            <a 
+                href="{{ $stickyMessengerUrl }}" 
+                class="mobile-sticky-bar__messenger-btn"
+                id="mobileStickyMessengerBtn"
+                data-messenger-cta="1"
+                onclick="window.handleStickyMessengerClick(event)"
+            >
+                💬 Messenger →
+            </a>
+            <a 
+                href="{{ $stickyWhatsappUrl }}" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                class="mobile-sticky-bar__whatsapp-btn"
+                id="mobileStickyWhatsappBtn"
+                data-whatsapp-cta="1"
+                onclick="window.handleStickyWhatsappClick(event)"
+            >
+                📱 WhatsApp
+            </a>
+        </div>
     </div>
 </aside>
 
@@ -55,7 +80,9 @@
         if (typeof window.trackFunnelStep === 'function') {
             window.trackFunnelStep('contact_cta_click', {
                 channel: 'messenger',
+                method: 'messenger',
                 location: 'sticky_mobile_bar',
+                cat_name: @js($stickyKittenName ?: 'General'),
             });
         }
 
@@ -63,7 +90,7 @@
         if (typeof window.fbq === 'function') {
             try {
                 window.fbq('track', 'Contact', {
-                    content_name: 'sticky_mobile_messenger',
+                    content_name: @js($stickyKittenName ? "sticky_mobile_messenger_{$stickyKittenName}" : 'sticky_mobile_messenger'),
                     channel: 'Messenger',
                     method: 'Messenger'
                 });
@@ -71,8 +98,31 @@
         }
 
         const btn = document.getElementById('mobileStickyMessengerBtn');
-        if (btn) {
-            btn.href = 'https://m.me/61580668026948?text=' + encodeURIComponent('Dzień dobry! Chciał(a)bym zapytać o kociaki lub aktualne filmiki.');
+        if (btn && !btn.href.includes('?text=')) {
+            btn.href = @js($stickyMessengerUrl);
+        }
+    };
+
+    window.handleStickyWhatsappClick = function(e) {
+        // 1. Funnel analytics tracking: contact_cta_click (GA4 + Meta Pixel)
+        if (typeof window.trackFunnelStep === 'function') {
+            window.trackFunnelStep('contact_cta_click', {
+                channel: 'whatsapp',
+                method: 'whatsapp',
+                location: 'sticky_mobile_bar',
+                cat_name: @js($stickyKittenName ?: 'General'),
+            });
+        }
+
+        // 2. Meta Pixel Contact event
+        if (typeof window.fbq === 'function') {
+            try {
+                window.fbq('track', 'Contact', {
+                    content_name: @js($stickyKittenName ? "sticky_mobile_whatsapp_{$stickyKittenName}" : 'sticky_mobile_whatsapp'),
+                    channel: 'WhatsApp',
+                    method: 'WhatsApp'
+                });
+            } catch(err) {}
         }
     };
 

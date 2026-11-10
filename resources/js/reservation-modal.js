@@ -79,11 +79,9 @@ window.openReservationModal = function (catName, catBreed, statusLabel) {
         let messageText = '';
 
         if (catName) {
-            messageText = `Dzień dobry! Chciał(a)bym porozmawiać o kotku ${catName}` +
-                (catBreed ? ` (${catBreed})` : '') +
-                ` i umówić wideo-wizytę na żywo.`;
+            messageText = `Dzień dobry! Piszę w sprawie kociaka ${catName} z hodowli Mazowiecka Szwajcaria. Czy mogę prosić o więcej informacji i filmik?`;
         } else {
-            messageText = 'Dzień dobry! Chciał(a)bym zapytać o dostępne kocięta i umówić wideo-wizytę na żywo.';
+            messageText = 'Dzień dobry! Piszę w sprawie kociąt z hodowli Mazowiecka Szwajcaria. Czy mogę prosić o więcej informacji i filmik?';
         }
 
         whatsappBtn.href = `https://wa.me/48514153204?text=${encodeURIComponent(messageText)}`;
@@ -91,7 +89,14 @@ window.openReservationModal = function (catName, catBreed, statusLabel) {
 
     // Dynamic Facebook Messenger link
     if (messengerBtn) {
-        messengerBtn.href = 'https://m.me/61580668026948';
+        const mMsg = catName
+            ? `Dzień dobry! Piszę w sprawie kociaka ${catName} z hodowli Mazowiecka Szwajcaria. Czy mogę prosić o więcej informacji i filmik?`
+            : 'Dzień dobry! Chciał(a)bym zapytać o dostępne kocięta i filmiki.';
+        messengerBtn.href = `https://m.me/61580668026948?text=${encodeURIComponent(mMsg)}`;
+    }
+
+    if (typeof window.sanitizeMobileMessengerLinks === 'function') {
+        window.sanitizeMobileMessengerLinks(backdrop);
     }
 
     // Analytics event - modal opened

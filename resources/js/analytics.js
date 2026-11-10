@@ -269,6 +269,10 @@ export function trackFunnelStep(eventName, params) {
         const cleanParams = sanitizeAnalyticsParams(params);
         cleanParams.traffic_source = getTrafficSourceLabel();
 
+        if (eventName === 'contact_cta_click' && !cleanParams.method && cleanParams.channel) {
+            cleanParams.method = cleanParams.channel;
+        }
+
         // 1. Google Analytics 4 (Safe Execution)
         if (typeof window.gtag === 'function') {
             try {
@@ -286,6 +290,7 @@ export function trackFunnelStep(eventName, params) {
                     window.fbq('track', 'Contact', {
                         content_name: 'contact_cta_click',
                         channel: cleanParams.channel || 'general',
+                        method: cleanParams.method || cleanParams.channel || 'general',
                         cat_name: cleanParams.cat_name || 'General',
                     });
                 } 
@@ -406,6 +411,7 @@ function bindGlobalClickDelegation() {
         if (waLink && !waLink.id.includes('res-modal')) {
             trackFunnelStep('contact_cta_click', {
                 channel: 'whatsapp',
+                method: 'whatsapp',
                 link_type: 'direct_link',
             });
             return;
@@ -416,6 +422,7 @@ function bindGlobalClickDelegation() {
         if (fbLink && !fbLink.id.includes('res-modal')) {
             trackFunnelStep('contact_cta_click', {
                 channel: 'messenger',
+                method: 'messenger',
                 link_type: 'direct_link',
             });
         }

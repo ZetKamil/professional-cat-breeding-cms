@@ -206,7 +206,8 @@ if (document.readyState === 'loading') {
 }
 
 // ==========================================================================
-// GA4 ANALYTICS EVENTS & CRO RESERVATION
+// GA4 ANALYTICS EVENTS, MOBILE MESSENGER REDIRECT & CRO RESERVATION
 // ==========================================================================
 import './analytics';
+import './messenger-redirect';
 import './reservation-modal';

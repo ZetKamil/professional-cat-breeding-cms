@@ -217,20 +217,24 @@
     opacity: 1;
 }
 
-/* WhatsApp Variant (Primary) */
+/* WhatsApp Variant (Quiet Luxury Obsidian #111111 + Cream #FAF8F5 + Gold border) */
 .res-action-btn--whatsapp {
-    background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
-    color: #ffffff;
-    box-shadow: 0 8px 20px -4px rgba(37, 211, 102, 0.35);
+    background: #111111;
+    border: 1px solid rgba(197, 160, 89, 0.55);
+    color: #FAF8F5;
+    box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.45);
 }
 
 .res-action-btn--whatsapp .res-action-btn__icon {
-    background: rgba(0, 0, 0, 0.15);
+    background: rgba(197, 160, 89, 0.16);
+    color: #C5A059;
 }
 
 .res-action-btn--whatsapp:hover {
-    box-shadow: 0 10px 24px -2px rgba(37, 211, 102, 0.45);
-    filter: brightness(1.05);
+    background: #1a1a1d;
+    border-color: #C5A059;
+    color: #FAF8F5;
+    box-shadow: 0 10px 24px -2px rgba(197, 160, 89, 0.25);
 }
 
 /* Phone Call Variant */
@@ -251,22 +255,24 @@
     color: #ffffff;
 }
 
-/* Messenger Variant */
+/* Messenger Variant (Quiet Luxury Champagne Gold #C5A059 + #111111 Ink) */
 .res-action-btn--messenger {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    color: #e5e5ea;
+    background: #C5A059;
+    border: 1px solid #C5A059;
+    color: #111111;
+    box-shadow: 0 8px 20px -4px rgba(197, 160, 89, 0.35);
 }
 
 .res-action-btn--messenger .res-action-btn__icon {
-    background: rgba(0, 132, 255, 0.18);
-    color: #0084ff;
+    background: rgba(17, 17, 17, 0.14);
+    color: #111111;
 }
 
 .res-action-btn--messenger:hover {
-    background: rgba(255, 255, 255, 0.09);
-    border-color: rgba(255, 255, 255, 0.2);
-    color: #ffffff;
+    background: #d4b068;
+    border-color: #d4b068;
+    color: #111111;
+    box-shadow: 0 10px 24px -2px rgba(197, 160, 89, 0.45);
 }
 
 /* Quick 1-field phone callback */

@@ -294,6 +294,22 @@
     {{-- Mobile Sticky Action Bar --}}
     <x-frontend.mobile-sticky-bar />
 
+    {{-- Strip target="_blank" from Messenger links immediately on mobile viewports/UAs before Vite module hydration --}}
+    <script>
+        (function() {
+            var ua = navigator.userAgent || '';
+            var isTouchIpad = navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
+            if (/iPhone|iPad|iPod|Android|Mobile|Tablet/i.test(ua) || isTouchIpad || window.innerWidth < 768) {
+                var links = document.querySelectorAll('a[href*="m.me/"]');
+                for (var i = 0; i < links.length; i++) {
+                    if (links[i].getAttribute('target') === '_blank') {
+                        links[i].removeAttribute('target');
+                    }
+                }
+            }
+        })();
+    </script>
+
     {{-- Scripts slot and stack for page-specific JS --}}
     {{ $scripts ?? '' }}
     @stack('scripts')

@@ -438,31 +438,36 @@
                     @php
                         if ($isBreeding) {
                             $inquiryMsg = "Dzień dobry! Piszę w sprawie kota hodowlanego: {$animal->name}. Kiedy planujecie najbliższe mioty po tym rodzicu?";
-                            $messengerBtnText = "💬 Zapytaj o planowane mioty (Messenger)";
-                            $whatsappBtnText = "WhatsApp (+48 514 153 204)";
+                            $whatsappInquiryMsg = "Dzień dobry! Piszę w sprawie kota hodowlanego {$animal->name} z hodowli Mazowiecka Szwajcaria. Kiedy planujecie najbliższe mioty po tym rodzicu?";
+                            $messengerBtnText = '💬 Zapytaj o planowane mioty (Messenger)';
+                            $whatsappBtnText = '📱 Napisz na WhatsApp (Szybki kontakt / Filmik)';
                         } elseif ($animal->status === \App\Enums\AnimalStatus::Reserved) {
                             $inquiryMsg = "Dzień dobry! Widzę, że kociak {$animal->name} jest zarezerwowany. Czy macie podobne wolne kocięta lub kiedy planujecie kolejny miot?";
-                            $messengerBtnText = "💬 Zapytaj o podobne kocięta (Messenger)";
-                            $whatsappBtnText = "WhatsApp (+48 514 153 204)";
+                            $whatsappInquiryMsg = "Dzień dobry! Widzę, że kociak {$animal->name} z hodowli Mazowiecka Szwajcaria jest zarezerwowany. Czy mogę prosić o informacje o podobnych kociętach i filmik?";
+                            $messengerBtnText = '💬 Zapytaj o podobne kocięta (Messenger)';
+                            $whatsappBtnText = '📱 Napisz na WhatsApp (Szybki kontakt / Filmik)';
                         } elseif ($animal->status === \App\Enums\AnimalStatus::Sold || $animal->status === \App\Enums\AnimalStatus::Retired) {
                             $inquiryMsg = "Dzień dobry! Widzę profil kotka {$animal->name}. Chciał(a)bym zapytać o aktualnie wolne kocięta w hodowli.";
-                            $messengerBtnText = "💬 Zapytaj o wolne kocięta (Messenger)";
-                            $whatsappBtnText = "WhatsApp (+48 514 153 204)";
+                            $whatsappInquiryMsg = "Dzień dobry! Piszę w sprawie dostępnych kociąt podobnych do {$animal->name} z hodowli Mazowiecka Szwajcaria. Czy mogę prosić o więcej informacji i filmik?";
+                            $messengerBtnText = '💬 Zapytaj o wolne kocięta (Messenger)';
+                            $whatsappBtnText = '📱 Napisz na WhatsApp (Szybki kontakt / Filmik)';
                         } else {
                             $inquiryMsg = "Dzień dobry! Piszę w sprawie kociaka: {$animal->name}. Czy jest aktualnie wolny?";
-                            $messengerBtnText = "💬 Zapytaj o tego kociaka na Messengerze";
-                            $whatsappBtnText = "WhatsApp (+48 514 153 204)";
+                            $whatsappInquiryMsg = "Dzień dobry! Piszę w sprawie kociaka {$animal->name} z hodowli Mazowiecka Szwajcaria. Czy mogę prosić o więcej informacji i filmik?";
+                            $messengerBtnText = '💬 Napisz na Messengerze';
+                            $whatsappBtnText = '📱 Napisz na WhatsApp (Szybki kontakt / Filmik)';
                         }
                         $messengerInquiryUrl = 'https://m.me/61580668026948?text=' . urlencode($inquiryMsg);
-                        $whatsappInquiryUrl = 'https://wa.me/48514153204?text=' . urlencode($inquiryMsg);
+                        $whatsappInquiryUrl = 'https://wa.me/48514153204?text=' . rawurlencode($whatsappInquiryMsg);
                     @endphp
 
-                    {{-- Actions: Messenger-First, WhatsApp Secondary (Above the fold for high conversion) --}}
+                    {{-- Actions: Messenger & WhatsApp side-by-side/stacked in Quiet Luxury style --}}
                     <div class="animal-profile__actions">
                         <a href="{{ $messengerInquiryUrl }}"
                            target="_blank"
                            rel="noopener noreferrer"
                            class="animal-profile__btn--messenger"
+                           data-messenger-cta="1"
                            onclick="if(typeof fbq === 'function'){ fbq('track', 'Contact', { content_name: @js($animal->name), method: 'Messenger' }); } if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'messenger', origin: 'animal_profile', cat_name: @js($animal->name) }); }">
                             {{ $messengerBtnText }}
                         </a>
@@ -471,6 +476,7 @@
                            target="_blank"
                            rel="noopener noreferrer"
                            class="animal-profile__btn--whatsapp"
+                           data-whatsapp-cta="1"
                            onclick="if(typeof fbq === 'function'){ fbq('track', 'Contact', { content_name: @js($animal->name), method: 'WhatsApp' }); } if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'whatsapp', origin: 'animal_profile', cat_name: @js($animal->name) }); }">
                             {{ $whatsappBtnText }}
                         </a>
