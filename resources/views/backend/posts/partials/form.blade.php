@@ -167,6 +167,7 @@
         <label class="form-label fw-bold">Zdjęcie okładkowe (Featured Image)</label>
         
         <input type="hidden" name="featured_media_id" id="postFeaturedMediaId" value="{{ old('featured_media_id', $post?->media?->id) }}">
+        <input type="hidden" name="remove_featured_media" id="postRemoveFeaturedMedia" value="0">
 
         <div class="card bg-light border p-3">
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
@@ -992,8 +993,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         const previewTitle = document.getElementById('postFeaturedPreviewTitle');
                         const fileInput = document.getElementById('postFeaturedFileInput');
                         const currentCover = document.getElementById('postCurrentCoverWrapper');
+                        const removeCoverInput = document.getElementById('postRemoveFeaturedMedia');
 
                         if (mediaIdInput) mediaIdInput.value = item.id;
+                        if (removeCoverInput) removeCoverInput.value = '0';
                         if (previewImg) previewImg.src = item.url;
                         if (previewTitle) previewTitle.textContent = item.title || item.filename;
                         if (previewWrapper) previewWrapper.classList.remove('d-none');
@@ -1056,7 +1059,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const mediaIdInput = document.getElementById('postFeaturedMediaId');
         const previewWrapper = document.getElementById('postFeaturedPreviewWrapper');
         const currentCover = document.getElementById('postCurrentCoverWrapper');
+        const removeCoverInput = document.getElementById('postRemoveFeaturedMedia');
         if (mediaIdInput) mediaIdInput.value = '';
+        if (removeCoverInput) removeCoverInput.value = '0';
         if (previewWrapper) previewWrapper.classList.add('d-none');
         if (currentCover) currentCover.classList.remove('d-none');
     });
@@ -1064,7 +1069,9 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('postClearCurrentCoverBtn')?.addEventListener('click', function () {
         const mediaIdInput = document.getElementById('postFeaturedMediaId');
         const currentCover = document.getElementById('postCurrentCoverWrapper');
+        const removeCoverInput = document.getElementById('postRemoveFeaturedMedia');
         if (mediaIdInput) mediaIdInput.value = '';
+        if (removeCoverInput) removeCoverInput.value = '1';
         if (currentCover) currentCover.classList.add('d-none');
     });
 
@@ -1073,7 +1080,9 @@ document.addEventListener('DOMContentLoaded', function () {
             const mediaIdInput = document.getElementById('postFeaturedMediaId');
             const previewWrapper = document.getElementById('postFeaturedPreviewWrapper');
             const currentCover = document.getElementById('postCurrentCoverWrapper');
+            const removeCoverInput = document.getElementById('postRemoveFeaturedMedia');
             if (mediaIdInput) mediaIdInput.value = '';
+            if (removeCoverInput) removeCoverInput.value = '0';
             if (previewWrapper) previewWrapper.classList.add('d-none');
             if (currentCover) currentCover.classList.add('d-none');
         }

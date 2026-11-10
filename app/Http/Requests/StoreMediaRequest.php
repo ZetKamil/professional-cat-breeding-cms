@@ -39,10 +39,10 @@ class StoreMediaRequest extends FormRequest
     {
         return [
             'parent_type' => ['nullable', 'string'],
-            'parent_id' => ['nullable', 'integer', 'min:1'],
+            'parent_id' => ['nullable', 'string', 'max:36'],
 
             'mediable_type' => ['nullable', 'string'],
-            'mediable_id' => ['nullable', 'integer', 'min:1'],
+            'mediable_id' => ['nullable', 'string', 'max:36'],
 
             'upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,gif,svg', 'max:10240'],
             'uploads' => ['nullable', 'array', 'max:20'],

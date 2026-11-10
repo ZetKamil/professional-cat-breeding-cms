@@ -153,6 +153,26 @@ class AnimalController extends Controller
         return back()->with('success', "Cena kota '{$animal->name}' została zaktualizowana: {$formatted}.");
     }
 
+    public function storeGalleryMedia(Request $request, Animal $animal, \App\Services\MediaService $mediaService): RedirectResponse
+    {
+        $this->authorize('update', $animal);
+
+        $validated = $request->validate([
+            'gallery' => ['required', 'array', 'min:1', 'max:50'],
+            'gallery.*' => ['required', 'image', 'mimes:jpg,jpeg,png,webp,jfif', 'max:20480'],
+        ]);
+
+        DB::transaction(function () use ($animal, $validated, $mediaService) {
+            foreach ($validated['gallery'] as $galleryFile) {
+                $mediaService->upload($animal, $galleryFile, 'animals');
+            }
+        });
+
+        $count = count($validated['gallery']);
+
+        return back()->with('success', "Dodano {$count} zdjęć do galerii kota '{$animal->name}'.");
+    }
+
     public function setFeaturedMedia(Animal $animal, Media $media): RedirectResponse
     {
         $this->authorize('update', $animal);

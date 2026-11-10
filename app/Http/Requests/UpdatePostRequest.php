@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Post;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -41,7 +42,7 @@ class UpdatePostRequest extends FormRequest
         // Regenerate body from sections for backward compat (RSS feeds, search index)
         $body = $this->input('body', '');
         if ($sections) {
-            $body = $this->sectionsToBody($sections);
+            $body = Post::sectionsToMarkdown($sections);
         }
 
         $this->merge([
@@ -54,6 +55,7 @@ class UpdatePostRequest extends FormRequest
             'body' => $body,
             'featured_animal_ids' => $this->input('featured_animal_ids', []),
             'featured_media_id' => $this->input('featured_media_id') ?: null,
+            'remove_featured_media' => $this->boolean('remove_featured_media'),
         ]);
     }
 
@@ -76,7 +78,9 @@ class UpdatePostRequest extends FormRequest
             'sections' => ['nullable', 'array'],
             'sections.*.heading' => ['nullable', 'string'],
             'sections.*.body' => ['nullable', 'string'],
+            'sections.*.tip' => ['nullable', 'string'],
             'sections.*.image_url' => ['nullable', 'string'],
+            'sections.*.image_prompt' => ['nullable', 'string'],
             'sections_json' => ['nullable', 'string'],
             'is_published' => ['required', 'boolean'],
             'published_at' => ['nullable', 'date'],
@@ -84,30 +88,9 @@ class UpdatePostRequest extends FormRequest
             'categories.*' => ['integer', Rule::exists('categories', 'id')],
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
             'featured_media_id' => ['nullable', 'integer', Rule::exists('media', 'id')],
+            'remove_featured_media' => ['nullable', 'boolean'],
             'featured_animal_ids' => ['nullable', 'array'],
             'featured_animal_ids.*' => ['string', Rule::exists('animals', 'id')],
         ];
-    }
-
-    /**
-     * Convert sections array to a plain-text body for backward compatibility.
-     */
-    private function sectionsToBody(array $sections): string
-    {
-        return collect($sections)->map(function (array $s) {
-            $parts = [];
-            if (! empty($s['heading'])) {
-                $parts[] = '## '.$s['heading'];
-            }
-            if (! empty($s['body'])) {
-                $parts[] = $s['body'];
-            }
-            if (! empty($s['image_url'])) {
-                $alt = ! empty($s['heading']) ? $s['heading'] : 'Zdjęcie do sekcji';
-                $parts[] = '!['.$alt.']('.$s['image_url'].')';
-            }
-
-            return implode("\n\n", $parts);
-        })->implode("\n\n");
     }
 }

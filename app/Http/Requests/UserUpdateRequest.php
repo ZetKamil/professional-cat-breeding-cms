@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 
 class UserUpdateRequest extends FormRequest
 {
@@ -24,28 +26,25 @@ class UserUpdateRequest extends FormRequest
          * - view blijft simpel (checkbox)
          */
         $this->merge([
+            'verified' => $this->boolean('verified'),
             'email_verified_at' => $this->boolean('verified') ? now() : null,
         ]);
     }
 
     public function rules(): array
     {
-        /**
-         * We halen de huidige user id uit de route.
-         * Bij resource routes is de parameter meestal {user}.
-         * Laravel geeft via route model binding een User instance,
-         * maar hier nemen we enkel de id nodig voor unique except.
-         */
-        $userId = $this->route('user')?->id;
+        $routeUser = $this->route('user');
+        $userId = $routeUser instanceof \App\Models\User ? $routeUser->id : $routeUser;
 
         return [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email,'.$this->user->id],
+            'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($userId)],
             'role_id' => ['required', 'exists:roles,id'],
             'is_active' => ['required', 'boolean'],
             'verified' => ['required', 'boolean'],
+            'email_verified_at' => ['nullable', 'date'],
 
-            'password' => ['nullable', 'confirmed', 'min:8'],
+            'password' => ['nullable', 'confirmed', 'min:8', Password::defaults()],
 
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ];

@@ -106,4 +106,62 @@ class AnimalGalleryUploadTest extends TestCase
 
         expect($animal->media)->not->toBeNull();
     }
+
+    public function test_quick_gallery_upload_on_animal_show_preserves_existing_animal_fields(): void
+    {
+        Storage::fake('public');
+
+        $adminRole = Role::firstOrCreate(['name' => 'admin']);
+        $admin = User::factory()->create(['role_id' => $adminRole->id]);
+
+        $mother = Animal::factory()->create(['name' => 'Mama', 'gender' => 'female', 'status' => 'breeding']);
+
+        $animal = Animal::factory()->create([
+            'name' => 'Leo Luxury',
+            'slug' => 'leo-luxury',
+            'breed' => 'Kot Bengalski',
+            'color' => 'BEN n 24',
+            'description' => 'Pełny opis charakteru kociaka.',
+            'short_description' => 'Krótki opis testowy.',
+            'price' => 3500,
+            'date_of_birth' => '2026-06-01',
+            'earliest_pickup_date' => '2026-09-10',
+            'mother_id' => $mother->id,
+            'meta_title' => 'Leo Luxury SEO',
+            'meta_description' => 'Meta opis kociaka.',
+        ]);
+
+        // Show page renders dedicated gallery upload endpoint
+        $showResponse = $this->actingAs($admin)->get(route('backend.animals.show', $animal));
+        $showResponse->assertOk();
+        $showResponse->assertSee(route('backend.animals.media.store', $animal), false);
+
+        // Quick upload adds photos without modifying any animal attributes
+        $uploadResponse = $this->actingAs($admin)
+            ->from(route('backend.animals.show', $animal))
+            ->post(route('backend.animals.media.store', $animal), [
+                'gallery' => [
+                    UploadedFile::fake()->image('quick1.jpg', 800, 600),
+                    UploadedFile::fake()->image('quick2.png', 800, 600),
+                ],
+            ]);
+
+        $uploadResponse->assertSessionHasNoErrors();
+        $uploadResponse->assertRedirect(route('backend.animals.show', $animal));
+
+        $animal->refresh();
+        $animal->load('gallery');
+
+        expect($animal->gallery->count())->toBe(2)
+            ->and($animal->slug)->toBe('leo-luxury')
+            ->and($animal->color)->toBe('BEN n 24')
+            ->and($animal->description)->toBe('Pełny opis charakteru kociaka.')
+            ->and($animal->short_description)->toBe('Krótki opis testowy.')
+            ->and($animal->price)->toBe(3500)
+            ->and($animal->date_of_birth?->toDateString())->toBe('2026-06-01')
+            ->and($animal->earliest_pickup_date?->toDateString())->toBe('2026-09-10')
+            ->and($animal->mother_id)->toBe($mother->id)
+            ->and($animal->meta_title)->toBe('Leo Luxury SEO')
+            ->and($animal->meta_description)->toBe('Meta opis kociaka.');
+    }
 }

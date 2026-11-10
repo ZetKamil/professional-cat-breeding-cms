@@ -17,6 +17,7 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Throwable;
 
@@ -93,7 +94,7 @@ class MediaController extends Controller
             'users' => $users,
             'animals' => $animals,
             'prefillType' => request('parent_type'),
-            'prefillId' => (int) request('parent_id') ?: null,
+            'prefillId' => request('parent_id') ? (string) request('parent_id') : null,
         ]);
     }
 
@@ -158,16 +159,30 @@ class MediaController extends Controller
         if ($request->hasFile('upload')) {
             $this->replaceMediaAction->handle($medium, $request->file('upload'), $data);
         } else {
-            $medium->update([
-                'mediable_type' => $data['mediable_type'] ?? null,
-                'mediable_id' => $data['mediable_id'] ?? null,
-                'title' => $data['title'] ?? $medium->title,
-                'alt_text' => $data['alt_text'] ?? null,
-                'caption' => $data['caption'] ?? null,
-                'copyright' => $data['copyright'] ?? null,
-                'sort_order' => (int) ($data['sort_order'] ?? $medium->sort_order),
-                'is_featured' => (bool) ($data['is_featured'] ?? $medium->is_featured),
-            ]);
+            DB::transaction(function () use ($medium, $data): void {
+                $targetType = $data['mediable_type'] ?? null;
+                $targetId = $data['mediable_id'] ?? null;
+                $isFeatured = (bool) ($data['is_featured'] ?? $medium->is_featured);
+
+                if ($isFeatured && $targetType && $targetId) {
+                    Media::query()
+                        ->where('mediable_type', $targetType)
+                        ->where('mediable_id', (string) $targetId)
+                        ->where('id', '!=', $medium->id)
+                        ->update(['is_featured' => false]);
+                }
+
+                $medium->update([
+                    'mediable_type' => $targetType,
+                    'mediable_id' => $targetId,
+                    'title' => $data['title'] ?? $medium->title,
+                    'alt_text' => $data['alt_text'] ?? null,
+                    'caption' => $data['caption'] ?? null,
+                    'copyright' => $data['copyright'] ?? null,
+                    'sort_order' => (int) ($data['sort_order'] ?? $medium->sort_order),
+                    'is_featured' => $isFeatured,
+                ]);
+            });
         }
 
         return redirect()

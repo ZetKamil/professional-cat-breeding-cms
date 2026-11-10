@@ -89,6 +89,8 @@ class PostService
                 );
             } elseif (! empty($data['featured_media_id'])) {
                 $this->attachFeaturedMediaFromLibrary($post, (int) $data['featured_media_id']);
+            } elseif (! empty($data['remove_featured_media']) && $post->media) {
+                $this->mediaService->delete($post->media);
             }
 
             PostUpdated::dispatch($post);

@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Exceptions\GeminiServiceUnavailableException;
 use App\Models\Animal;
+use App\Models\Post;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -397,27 +398,11 @@ class AiBlogGeneratorService
      * Convert sections array to a plain-text body string for backward compatibility
      * (full-text search index, RSS feeds, legacy posts without sections).
      *
-     * @param  array<int, array{heading: string, body: string, image_url: string}>  $sections
+     * @param  array<int, array{heading?: string, body?: string, tip?: string, image_url?: string, image_prompt?: string}>  $sections
      */
     public function sectionsToBody(array $sections): string
     {
-        return collect($sections)->map(function (array $s) {
-            $parts = [];
-            if (!empty($s['heading'])) {
-                $parts[] = '## ' . $s['heading'];
-            }
-            if (!empty($s['body'])) {
-                $parts[] = $s['body'];
-            }
-            if (!empty($s['tip'])) {
-                $parts[] = '> 💡 **Wskazówka hodowcy:** ' . $s['tip'];
-            }
-            if (!empty($s['image_url'])) {
-                $alt = !empty($s['heading']) ? $s['heading'] : 'Zdjęcie sekcji';
-                $parts[] = '![' . $alt . '](' . $s['image_url'] . ')';
-            }
-            return implode("\n\n", $parts);
-        })->implode("\n\n");
+        return Post::sectionsToMarkdown($sections);
     }
 
     /**

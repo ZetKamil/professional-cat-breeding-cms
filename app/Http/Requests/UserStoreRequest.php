@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Password;
 
 class UserStoreRequest extends FormRequest
 {
@@ -28,6 +29,7 @@ class UserStoreRequest extends FormRequest
          * - view simpel blijft
          */
         $this->merge([
+            'verified' => $this->boolean('verified'),
             'email_verified_at' => $this->boolean('verified') ? now() : null,
         ]);
     }
@@ -45,8 +47,9 @@ class UserStoreRequest extends FormRequest
             'role_id' => ['required', 'exists:roles,id'],
             'is_active' => ['required', 'boolean'],
             'verified' => ['required', 'boolean'],
+            'email_verified_at' => ['nullable', 'date'],
 
-            'password' => ['required', 'confirmed', 'min:8'],
+            'password' => ['required', 'confirmed', 'min:8', Password::defaults()],
 
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ];

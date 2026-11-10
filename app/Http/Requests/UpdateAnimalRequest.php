@@ -31,28 +31,33 @@ class UpdateAnimalRequest extends FormRequest
             $dataPos = strpos($cropped, ',');
             if ($dataPos !== false) {
                 $base64Data = substr($cropped, $dataPos + 1);
-                $decoded = base64_decode($base64Data);
+                $decoded = base64_decode($base64Data, true);
                 if ($decoded !== false) {
                     $tmpFilePath = tempnam(sys_get_temp_dir(), 'crop_img_');
-                    file_put_contents($tmpFilePath, $decoded);
+                    if ($tmpFilePath !== false) {
+                        file_put_contents($tmpFilePath, $decoded);
+                        register_shutdown_function(static function () use ($tmpFilePath): void {
+                            @unlink($tmpFilePath);
+                        });
 
-                    preg_match('/^data:(image\/[a-zA-Z0-9\+\-]+);base64/', $cropped, $matches);
-                    $mimeType = $matches[1] ?? 'image/jpeg';
-                    $ext = match ($mimeType) {
-                        'image/png' => 'png',
-                        'image/webp' => 'webp',
-                        default => 'jpg',
-                    };
+                        preg_match('/^data:(image\/[a-zA-Z0-9\+\-]+);base64/', $cropped, $matches);
+                        $mimeType = $matches[1] ?? 'image/jpeg';
+                        $ext = match ($mimeType) {
+                            'image/png' => 'png',
+                            'image/webp' => 'webp',
+                            default => 'jpg',
+                        };
 
-                    $file = new \Illuminate\Http\UploadedFile(
-                        $tmpFilePath,
-                        'cropped_'.uniqid().'.'.$ext,
-                        $mimeType,
-                        null,
-                        true
-                    );
+                        $file = new \Illuminate\Http\UploadedFile(
+                            $tmpFilePath,
+                            'cropped_'.uniqid().'.'.$ext,
+                            $mimeType,
+                            null,
+                            true
+                        );
 
-                    $this->files->set('image', $file);
+                        $this->files->set('image', $file);
+                    }
                 }
             }
         }

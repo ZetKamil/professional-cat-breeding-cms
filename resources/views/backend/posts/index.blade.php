@@ -85,13 +85,10 @@
                     </a>
 
                     @can('create', \App\Models\Post::class)
-                        <form method="POST" action="{{ route('backend.posts.importSeo') }}" class="d-inline ms-auto" onsubmit="return confirm('Czy na pewno chcesz zaimportować/zaktualizować 19 artykułów SEO z katalogu BLOG/ z niedzielnym harmonogramem?');">
-                            @csrf
-                            <button type="submit" class="btn btn-warning fw-bold">
-                                <i class="fas fa-file-import me-1"></i>
-                                🚀 Importuj Artykuły SEO (19)
-                            </button>
-                        </form>
+                        <button type="submit" form="importSeoPostsForm" class="btn btn-warning fw-bold ms-auto">
+                            <i class="fas fa-file-import me-1"></i>
+                            🚀 Importuj Artykuły SEO (19)
+                        </button>
                         <a href="{{ route('backend.blog-cta.edit') }}" class="btn btn-outline-warning text-dark fw-bold ms-2">
                             <i class="fas fa-bullhorn me-1"></i>
                             Oferta pod artykułami
@@ -104,6 +101,12 @@
                 </div>
             </div>
         </form>
+
+        @can('create', \App\Models\Post::class)
+            <form id="importSeoPostsForm" method="POST" action="{{ route('backend.posts.importSeo') }}" class="d-none" onsubmit="return confirm('Czy na pewno chcesz zaimportować/zaktualizować 19 artykułów SEO z katalogu BLOG/ z niedzielnym harmonogramem?');">
+                @csrf
+            </form>
+        @endcan
 
         @php
             $sortUrl = function (string $col) use ($filters) {

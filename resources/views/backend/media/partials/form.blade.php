@@ -231,6 +231,38 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        const parentTypeSelect = document.getElementById('parentTypeSelect');
+        const parentIdSelect = document.getElementById('parentIdSelect');
+        const parentOptionsByType = {
+            animal: @json(($animals ?? collect())->map(fn ($a) => ['id' => (string) $a->id, 'label' => "Kot #{$a->id} - {$a->name}"])->values()),
+            post: @json(($posts ?? collect())->map(fn ($p) => ['id' => (string) $p->id, 'label' => "Wpis #{$p->id} - {$p->title}"])->values()),
+            user: @json(($users ?? collect())->map(fn ($u) => ['id' => (string) $u->id, 'label' => "Użytkownik #{$u->id} - {$u->name}"])->values()),
+        };
+
+        if (parentTypeSelect && parentIdSelect) {
+            parentTypeSelect.addEventListener('change', function () {
+                const selectedType = this.value;
+                const prevValue = parentIdSelect.value;
+                const items = parentOptionsByType[selectedType] || [];
+
+                parentIdSelect.innerHTML = '';
+                const emptyOption = document.createElement('option');
+                emptyOption.value = '';
+                emptyOption.textContent = 'Brak powiązania';
+                parentIdSelect.appendChild(emptyOption);
+
+                items.forEach(item => {
+                    const opt = document.createElement('option');
+                    opt.value = item.id;
+                    opt.textContent = item.label;
+                    if (prevValue && String(prevValue) === String(item.id)) {
+                        opt.selected = true;
+                    }
+                    parentIdSelect.appendChild(opt);
+                });
+            });
+        }
+
         const dropzone = document.getElementById('mediaDropzone');
         const fileInput = document.getElementById('mediaFileInput');
         const previewContainer = document.getElementById('dropzonePreview');

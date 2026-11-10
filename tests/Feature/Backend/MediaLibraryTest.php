@@ -143,3 +143,53 @@ test('admin can delete media and physical file is removed from disk', function (
     expect(Media::find($media->id))->toBeNull();
     Storage::disk('public')->assertMissing($path);
 });
+
+test('admin can attach media to an animal with ULID and demote sibling featured flag', function () {
+    $this->actingAs($this->admin);
+
+    $animal = Animal::factory()->create(['name' => 'Baltazar Test']);
+    $existingFeatured = Media::create([
+        'disk' => 'public',
+        'directory' => 'media/animals',
+        'filename' => 'existing.jpg',
+        'mediable_type' => Animal::class,
+        'mediable_id' => $animal->id,
+        'is_featured' => true,
+    ]);
+
+    // Prefill create page keeps string ULID intact
+    $createResp = $this->get(route('backend.media.create', ['parent_type' => 'animal', 'parent_id' => $animal->id]));
+    $createResp->assertOk();
+    $createResp->assertSee($animal->id, false);
+
+    // Storing media attached to Animal ULID succeeds
+    $file = UploadedFile::fake()->image('attached.jpg', 600, 600);
+    $storeResp = $this->post(route('backend.media.store'), [
+        'upload' => $file,
+        'parent_type' => 'animal',
+        'parent_id' => $animal->id,
+        'title' => 'Baltazar Portrait',
+        'is_featured' => 1,
+    ]);
+
+    $storeResp->assertSessionHasNoErrors();
+    $storeResp->assertRedirect(route('backend.media.index'));
+
+    $newMedia = Media::where('title', 'Baltazar Portrait')->first();
+    expect($newMedia)->not->toBeNull()
+        ->and($newMedia->mediable_type)->toBe(Animal::class)
+        ->and((string) $newMedia->mediable_id)->toBe((string) $animal->id)
+        ->and($newMedia->is_featured)->toBeTrue();
+
+    // Updating existing media back to is_featured=1 demotes sibling
+    $updateResp = $this->patch(route('backend.media.update', $existingFeatured), [
+        'parent_type' => 'animal',
+        'parent_id' => $animal->id,
+        'title' => 'Re-featured',
+        'is_featured' => 1,
+    ]);
+
+    $updateResp->assertSessionHasNoErrors();
+    expect($existingFeatured->fresh()->is_featured)->toBeTrue()
+        ->and($newMedia->fresh()->is_featured)->toBeFalse();
+});

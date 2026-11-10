@@ -587,6 +587,8 @@ Route::middleware(['auth', 'verified', 'active'])
 
         Route::patch('animals/{animal}/quick-price', [\App\Http\Controllers\Backend\AnimalController::class, 'updateQuickPrice'])
             ->name('animals.quick-price');
+        Route::post('animals/{animal}/media', [\App\Http\Controllers\Backend\AnimalController::class, 'storeGalleryMedia'])
+            ->name('animals.media.store');
         Route::patch('animals/{animal}/media/{media}/set-featured', [\App\Http\Controllers\Backend\AnimalController::class, 'setFeaturedMedia'])
             ->name('animals.media.set-featured');
         Route::patch('animals/{animal}/media/reorder', [\App\Http\Controllers\Backend\AnimalController::class, 'reorderGalleryMedia'])

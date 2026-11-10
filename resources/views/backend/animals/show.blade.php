@@ -68,19 +68,10 @@
                             <p class="text-muted small mb-3 text-center py-2">Brak dodatkowych zdjęć w galerii.</p>
                         @endif
 
-                        {{-- Quick Upload Form directly on Show Page --}}
+                        {{-- Quick Upload Form directly on Show Page (dedicated endpoint preserves all animal attributes) --}}
                         <div class="border-top pt-3">
-                            <form method="POST" action="{{ route('backend.animals.update', $animal) }}" enctype="multipart/form-data">
+                            <form method="POST" action="{{ route('backend.animals.media.store', $animal) }}" enctype="multipart/form-data">
                                 @csrf
-                                @method('PATCH')
-                                {{-- Pass existing fields to prevent overwriting --}}
-                                <input type="hidden" name="name" value="{{ $animal->name }}">
-                                <input type="hidden" name="breed" value="{{ $animal->breed }}">
-                                <input type="hidden" name="gender" value="{{ $animal->gender->value }}">
-                                <input type="hidden" name="status" value="{{ $animal->status->value }}">
-                                <input type="hidden" name="type" value="{{ $animal->type->value }}">
-                                <input type="hidden" name="is_published" value="{{ $animal->is_published ? '1' : '0' }}">
-                                <input type="hidden" name="is_featured" value="{{ $animal->is_featured ? '1' : '0' }}">
 
                                 <label class="form-label small fw-bold text-muted mb-1">➕ Dodaj nowe zdjęcia do galerii</label>
                                 <div class="input-group input-group-sm">

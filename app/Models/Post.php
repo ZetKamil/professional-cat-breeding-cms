@@ -342,6 +342,33 @@ class Post extends Model
     }
 
     /**
+     * Konwertuje tablicę sekcji JSON z powrotem na tekst Markdown (zachowując nagłówki, treść, wskazówki i zdjęcia).
+     *
+     * @param  array<int, array<string, mixed>>  $sections
+     */
+    public static function sectionsToMarkdown(array $sections): string
+    {
+        return collect($sections)->map(function (array $s): string {
+            $parts = [];
+            if (! empty($s['heading'])) {
+                $parts[] = '## '.$s['heading'];
+            }
+            if (! empty($s['body'])) {
+                $parts[] = $s['body'];
+            }
+            if (! empty($s['tip'])) {
+                $parts[] = '> 💡 **Wskazówka hodowcy:** '.$s['tip'];
+            }
+            if (! empty($s['image_url'])) {
+                $alt = ! empty($s['heading']) ? $s['heading'] : 'Zdjęcie sekcji';
+                $parts[] = '!['.$alt.']('.$s['image_url'].')';
+            }
+
+            return implode("\n\n", $parts);
+        })->implode("\n\n");
+    }
+
+    /**
      * Konwertuje ciało Markdown starego artykułu na tablicę sekcji (H2 + tekst + zdjęcia).
      */
     public static function parseBodyToSections(?string $body): array
