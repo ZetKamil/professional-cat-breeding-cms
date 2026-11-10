@@ -428,48 +428,6 @@ class AiBlogStudio extends Component
         ])->values()->toArray();
     }
 
-    private function injectAnimalPhotos(string $body): string
-    {
-        if (empty($this->selectedAnimalIds)) {
-            return $body;
-        }
-
-        $animals = \App\Models\Animal::published()
-            ->with(['media', 'gallery'])
-            ->whereIn('id', $this->selectedAnimalIds)
-            ->get();
-
-        if ($animals->isEmpty()) {
-            return $body;
-        }
-
-        $galleryHtml = '<div class="ai-article-gallery row g-3 my-4">';
-
-        foreach ($animals as $animal) {
-            // Get gallery photos or fall back to primary featured media
-            $photos = $animal->gallery->isNotEmpty()
-                ? $animal->gallery->take(2)
-                : collect([$animal->media])->filter();
-
-            foreach ($photos as $photo) {
-                $url = $photo->url();
-                $alt = e($animal->name . ' — ' . $animal->breed);
-                $galleryHtml .= <<<HTML
-                    <div class="col-12 col-md-6">
-                        <figure class="figure w-100">
-                            <img src="{$url}" alt="{$alt}" class="figure-img img-fluid rounded" loading="lazy">
-                            <figcaption class="figure-caption text-center">{$animal->name} — {$animal->breed}</figcaption>
-                        </figure>
-                    </div>
-                HTML;
-            }
-        }
-
-        $galleryHtml .= '</div>';
-
-        return preg_replace('/<\/p>/', '</p>' . $galleryHtml, $body, 1) ?? $body . $galleryHtml;
-    }
-
     /**
      * Attach a high-resolution photo from the selected cattery animal as the Post's Featured Image.
      * Ensures the post ALWAYS has a featured cover image, even when AI image generation (Imagen) is unavailable.

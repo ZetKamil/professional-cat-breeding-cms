@@ -7,6 +7,7 @@ use App\Http\Requests\StoreRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
 use App\Models\Role;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class RoleController extends Controller
@@ -130,6 +131,7 @@ class RoleController extends Controller
                 ->with('success', "Role '{$role->name}' updated successfully.");
         } catch (Throwable $e) {
             DB::rollBack();
+            Log::error('Role update failed', ['role_id' => $role->id, 'exception_class' => get_class($e), 'message' => $e->getMessage()]);
 
             return back()
                 ->withInput()
@@ -151,6 +153,8 @@ class RoleController extends Controller
                 ->route('backend.roles.index')
                 ->with('success', "Role '{$role->name}' deleted successfully.");
         } catch (Throwable $e) {
+            Log::error('Role delete failed', ['role_id' => $role->id, 'exception_class' => get_class($e), 'message' => $e->getMessage()]);
+
             return back()
                 ->with('error', 'Role could not be deleted.');
         }
@@ -158,17 +162,19 @@ class RoleController extends Controller
 
     public function restore(int $id)
     {
+        $role = Role::withTrashed()->findOrFail($id);
+
+        $this->authorize('restore', $role);
+
         try {
-            $role = Role::withTrashed()->findOrFail($id);
-
-            $this->authorize('restore', $role);
-
             $role->restore();
 
             return redirect()
                 ->route('backend.roles.index')
                 ->with('success', "Role '{$role->name}' restored successfully.");
         } catch (Throwable $e) {
+            Log::error('Role restore failed', ['role_id' => $id, 'exception_class' => get_class($e), 'message' => $e->getMessage()]);
+
             return back()
                 ->with('error', 'Role could not be restored.');
         }
@@ -176,15 +182,15 @@ class RoleController extends Controller
 
     public function forceDelete(int $id)
     {
+        $role = Role::withTrashed()->findOrFail($id);
+
+        $this->authorize('forceDelete', $role);
+
+        if ($role->users()->exists()) {
+            return back()->with('error', 'Role cannot be permanently deleted because users are still linked to it.');
+        }
+
         try {
-            $role = Role::withTrashed()->findOrFail($id);
-
-            $this->authorize('forceDelete', $role);
-
-            if ($role->users()->exists()) {
-                return back()->with('error', 'Role cannot be permanently deleted because users are still linked to it.');
-            }
-
             $name = $role->name;
 
             $role->forceDelete();
@@ -193,6 +199,8 @@ class RoleController extends Controller
                 ->route('backend.roles.index')
                 ->with('success', "Role '{$name}' permanently deleted.");
         } catch (Throwable $e) {
+            Log::error('Role forceDelete failed', ['role_id' => $id, 'exception_class' => get_class($e), 'message' => $e->getMessage()]);
+
             return back()
                 ->with('error', 'Role could not be permanently deleted.');
         }

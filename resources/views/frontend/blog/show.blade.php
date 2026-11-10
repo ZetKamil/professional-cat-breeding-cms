@@ -172,76 +172,120 @@
                      UNIFIED QUIET LUXURY CTA CARD AT THE BOTTOM OF THE ARTICLE
                      Strictly Black (#141414) / Champagne Gold (#C5A059) Quiet Luxury
                      ============================================================ --}}
-                <aside class="article-luxury-cta-card" aria-label="Kontakt z hodowlą">
-                    <div class="article-luxury-cta-card__badge">
-                        <span>🐾 DOMOWA HODOWLA KOTÓW Z MAZOWIECKIEJ SZWAJCARII</span>
-                    </div>
-
-                    @if($post->slug === 'kot-bengalski-w-domu-mity-zalety-odchowanych-kociat' || str_contains($post->slug, 'odchowanych-kociat') || str_contains($post->slug, 'bengal'))
-                        <h3 class="article-luxury-cta-card__heading">
-                            Chcesz zobaczyć naszą trójkę odchowanych bengali na żywo lub zapytać o szczegóły?
-                        </h3>
-                        <p class="article-luxury-cta-card__subtext">
-                            Napisz do nas na Messengerze – chętnie prześlemy dzisiejsze filmiki z Baronem, Cyprianem i Carlosem lub połączymy się na krótką wideo-wizytę.
-                        </p>
-
-                        <div class="article-luxury-cta-card__buttons">
-                            <a href="https://m.me/61580668026948?text={{ urlencode('Dzień dobry! Chciał(a)bym zapytać o kociaki bengalskie i filmiki.') }}"
-                               target="_blank"
-                               rel="noopener noreferrer"
-                               class="article-luxury-cta-btn article-luxury-cta-btn--primary"
-                               onclick="try{if(typeof fbq==='function'){fbq('track','Contact',{method:'Messenger',content_name:'Odchowane kocięta bengalskie'});}}catch(e){} if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'messenger', origin: 'blog_post_bengal', post_title: @js($post->title) }); }">
-                                💬 Napisz na Messengerze (Zapytaj o kociaki i filmik)
-                            </a>
-
-                            <a href="https://wa.me/48514153204?text={{ urlencode('Dzień dobry! Chciał(a)bym zapytać o kociaki bengalskie i filmiki.') }}"
-                               target="_blank"
-                               rel="noopener noreferrer"
-                               class="article-luxury-cta-btn article-luxury-cta-btn--secondary"
-                               onclick="try{if(typeof fbq==='function'){fbq('track','Contact',{method:'WhatsApp',content_name:'Odchowane kocięta bengalskie'});}}catch(e){} if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'whatsapp', origin: 'blog_post_bengal', post_title: @js($post->title) }); }">
-                                WhatsApp (+48 514 153 204)
-                            </a>
+                @if($globalCta['is_enabled'] ?? true)
+                    @php
+                        $ctaBadgeRaw = trim((string) ($globalCta['badge'] ?? ''));
+                        $ctaBadgeText = ($ctaBadgeRaw !== '' && $ctaBadgeRaw !== 'Hodowla Kotów z Mazowieckiej Szwajcarii')
+                            ? $ctaBadgeRaw
+                            : 'DOMOWA HODOWLA KOTÓW Z MAZOWIECKIEJ SZWAJCARII';
+                        $ctaBodyRaw = trim((string) ($globalCta['body'] ?? ''));
+                        $ctaImageUrl = trim((string) ($globalCta['image_url'] ?? ''));
+                        $hasSafeCtaImage = $ctaImageUrl !== '' && (str_starts_with($ctaImageUrl, '/') || preg_match('/^https?:\/\//i', $ctaImageUrl));
+                        $ctaButtonText = trim((string) ($globalCta['button_text'] ?? ''));
+                        $ctaButtonUrl = trim((string) ($globalCta['button_url'] ?? ''));
+                        $hasSafeCtaButton = $ctaButtonText !== '' && $ctaButtonUrl !== '' && (str_starts_with($ctaButtonUrl, '/') || preg_match('/^https?:\/\//i', $ctaButtonUrl));
+                        $ctaFbText = trim((string) ($globalCta['facebook_text'] ?? ''));
+                        $ctaFbUrl = trim((string) ($globalCta['facebook_url'] ?? ''));
+                        $hasSafeFbLink = $ctaFbText !== '' && $ctaFbUrl !== '' && preg_match('/^https?:\/\//i', $ctaFbUrl);
+                    @endphp
+                    <aside class="article-luxury-cta-card" aria-label="Kontakt z hodowlą">
+                        <div class="article-luxury-cta-card__badge">
+                            <span>🐾 {{ $ctaBadgeText }}</span>
                         </div>
 
-                        <div class="article-luxury-cta-card__quiz">
-                            <a href="{{ route('quiz') }}" class="article-luxury-cta-card__quiz-link">
-                                ✨ Nie wiesz, czy Bengal pasuje do Twojego domu? Rozwiąż 45-sekundowy Quiz →
-                            </a>
-                        </div>
-                    @else
-                        {{-- Generic / Breed-Adaptive Luxury Card for all other articles --}}
-                        <h3 class="article-luxury-cta-card__heading">
-                            {{ $globalCta['heading'] ?? 'Szukasz wymarzonego, rodowodowego kociaka?' }}
-                        </h3>
-                        <p class="article-luxury-cta-card__subtext">
-                            Napisz do nas na Messengerze – z przyjemnością opowiemy o naszych miotach, warunkach domowego wychowania i prześlemy aktualne materiały wideo.
-                        </p>
+                        @if($post->slug === 'kot-bengalski-w-domu-mity-zalety-odchowanych-kociat' || str_contains($post->slug, 'odchowanych-kociat') || str_contains($post->slug, 'bengal'))
+                            <h3 class="article-luxury-cta-card__heading">
+                                Chcesz zobaczyć naszą trójkę odchowanych bengali na żywo lub zapytać o szczegóły?
+                            </h3>
+                            <p class="article-luxury-cta-card__subtext">
+                                Napisz do nas na Messengerze – chętnie prześlemy dzisiejsze filmiki z Baronem, Cyprianem i Carlosem lub połączymy się na krótką wideo-wizytę.
+                            </p>
 
-                        <div class="article-luxury-cta-card__buttons">
-                            <a href="https://m.me/61580668026948?text={{ urlencode('Dzień dobry! Chciał(a)bym zapytać o dostępne kocięta.') }}"
-                               target="_blank"
-                               rel="noopener noreferrer"
-                               class="article-luxury-cta-btn article-luxury-cta-btn--primary"
-                               onclick="try{if(typeof fbq==='function'){fbq('track','Contact',{method:'Messenger',content_name: @js($post->title) });}}catch(e){} if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'messenger', origin: 'blog_post', post_title: @js($post->title) }); }">
-                                💬 Napisz na Messengerze (Zapytaj o kocięta)
-                            </a>
+                            <div class="article-luxury-cta-card__buttons">
+                                <a href="https://m.me/61580668026948?text={{ urlencode('Dzień dobry! Chciał(a)bym zapytać o kociaki bengalskie i filmiki.') }}"
+                                   target="_blank"
+                                   rel="noopener noreferrer"
+                                   class="article-luxury-cta-btn article-luxury-cta-btn--primary"
+                                   onclick="try{if(typeof fbq==='function'){fbq('track','Contact',{method:'Messenger',content_name:'Odchowane kocięta bengalskie'});}}catch(e){} if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'messenger', origin: 'blog_post_bengal', post_title: @js($post->title) }); }">
+                                    💬 Napisz na Messengerze (Zapytaj o kociaki i filmik)
+                                </a>
 
-                            <a href="https://wa.me/48514153204?text={{ urlencode('Dzień dobry! Chciał(a)bym zapytać o dostępne kocięta.') }}"
-                               target="_blank"
-                               rel="noopener noreferrer"
-                               class="article-luxury-cta-btn article-luxury-cta-btn--secondary"
-                               onclick="try{if(typeof fbq==='function'){fbq('track','Contact',{method:'WhatsApp',content_name: @js($post->title) });}}catch(e){} if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'whatsapp', origin: 'blog_post', post_title: @js($post->title) }); }">
-                                WhatsApp (+48 514 153 204)
-                            </a>
-                        </div>
+                                <a href="https://wa.me/48514153204?text={{ urlencode('Dzień dobry! Chciał(a)bym zapytać o kociaki bengalskie i filmiki.') }}"
+                                   target="_blank"
+                                   rel="noopener noreferrer"
+                                   class="article-luxury-cta-btn article-luxury-cta-btn--secondary"
+                                   onclick="try{if(typeof fbq==='function'){fbq('track','Contact',{method:'WhatsApp',content_name:'Odchowane kocięta bengalskie'});}}catch(e){} if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'whatsapp', origin: 'blog_post_bengal', post_title: @js($post->title) }); }">
+                                    WhatsApp (+48 514 153 204)
+                                </a>
+                            </div>
 
-                        <div class="article-luxury-cta-card__quiz">
-                            <a href="{{ route('quiz') }}" class="article-luxury-cta-card__quiz-link">
-                                ✨ Nie wiesz, która rasa najlepiej pasuje do Ciebie? Rozwiąż 45-sekundowy Quiz →
-                            </a>
-                        </div>
-                    @endif
-                </aside>
+                            <div class="article-luxury-cta-card__quiz">
+                                <a href="{{ route('quiz') }}" class="article-luxury-cta-card__quiz-link">
+                                    ✨ Nie wiesz, czy Bengal pasuje do Twojego domu? Rozwiąż 45-sekundowy Quiz →
+                                </a>
+                            </div>
+                        @else
+                            {{-- Generic / CMS-Configurable Luxury Card --}}
+                            <h3 class="article-luxury-cta-card__heading">
+                                {{ $globalCta['heading'] ?? 'Szukasz wymarzonego, rodowodowego kociaka?' }}
+                            </h3>
+
+                            @if($ctaBodyRaw !== '')
+                                <div class="article-luxury-cta-card__subtext">
+                                    {!! \Illuminate\Support\Str::markdown($ctaBodyRaw, ['html_input' => 'strip', 'allow_unsafe_links' => false]) !!}
+                                </div>
+                            @else
+                                <p class="article-luxury-cta-card__subtext">
+                                    Napisz do nas na Messengerze – z przyjemnością opowiemy o naszych miotach, warunkach domowego wychowania i prześlemy aktualne materiały wideo.
+                                </p>
+                            @endif
+
+                            @if($hasSafeCtaImage)
+                                <div style="margin: 1rem 0 1.25rem;">
+                                    <img src="{{ $ctaImageUrl }}" alt="{{ $globalCta['heading'] ?? 'Oferta hodowli' }}" loading="lazy" style="width: 100%; max-height: 220px; object-fit: cover; border-radius: 12px; border: 1px solid rgba(197, 160, 89, 0.25);">
+                                </div>
+                            @endif
+
+                            <div class="article-luxury-cta-card__buttons">
+                                <a href="https://m.me/61580668026948?text={{ urlencode('Dzień dobry! Chciał(a)bym zapytać o dostępne kocięta.') }}"
+                                   target="_blank"
+                                   rel="noopener noreferrer"
+                                   class="article-luxury-cta-btn article-luxury-cta-btn--primary"
+                                   onclick="try{if(typeof fbq==='function'){fbq('track','Contact',{method:'Messenger',content_name: @js($post->title) });}}catch(e){} if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'messenger', origin: 'blog_post', post_title: @js($post->title) }); }">
+                                    💬 Napisz na Messengerze (Zapytaj o kocięta)
+                                </a>
+
+                                <a href="https://wa.me/48514153204?text={{ urlencode('Dzień dobry! Chciał(a)bym zapytać o dostępne kocięta.') }}"
+                                   target="_blank"
+                                   rel="noopener noreferrer"
+                                   class="article-luxury-cta-btn article-luxury-cta-btn--secondary"
+                                   onclick="try{if(typeof fbq==='function'){fbq('track','Contact',{method:'WhatsApp',content_name: @js($post->title) });}}catch(e){} if(window.trackFunnelStep){ window.trackFunnelStep('contact_cta_click', { channel: 'whatsapp', origin: 'blog_post', post_title: @js($post->title) }); }">
+                                    WhatsApp (+48 514 153 204)
+                                </a>
+                            </div>
+
+                            <div class="article-luxury-cta-card__quiz">
+                                <a href="{{ route('quiz') }}" class="article-luxury-cta-card__quiz-link">
+                                    ✨ Nie wiesz, która rasa najlepiej pasuje do Ciebie? Rozwiąż 45-sekundowy Quiz →
+                                </a>
+                                @if($hasSafeCtaButton && ($ctaButtonUrl !== '/koty' || $ctaButtonText !== 'Zobacz dostępne koty'))
+                                    <div style="margin-top: 0.5rem;">
+                                        <a href="{{ $ctaButtonUrl }}" class="article-luxury-cta-card__quiz-link">
+                                            {{ $ctaButtonText }} →
+                                        </a>
+                                    </div>
+                                @endif
+                                @if($hasSafeFbLink && $ctaBodyRaw !== '')
+                                    <div style="margin-top: 0.35rem;">
+                                        <a href="{{ $ctaFbUrl }}" target="_blank" rel="noopener noreferrer" class="article-luxury-cta-card__quiz-link">
+                                            {{ $ctaFbText }} →
+                                        </a>
+                                    </div>
+                                @endif
+                            </div>
+                        @endif
+                    </aside>
+                @endif
 
             </article>
         </div>

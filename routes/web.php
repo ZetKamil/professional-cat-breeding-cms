@@ -157,14 +157,26 @@ Route::get('/storage/{path}', function ($path) {
     abort(404);
 })->where('path', '.*');
 
-// Diagnostic route to inspect media status on hosting (auth & admin required)
+$renderAdminPostConfirm = static function (string $title, string $description, string $buttonLabel, string $actionUrl, string $accentColor = '#d1ab58', string $textColor = '#181816'): string {
+    return "<div style='font-family:sans-serif; padding:30px; max-width:650px; margin:40px auto; background:#fff; border:1px solid #e5e7eb; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.06); color:#1f2937;'>"
+        ."<h2 style='margin-top:0;'>".e($title).'</h2>'
+        ."<p style='color:#4b5563; line-height:1.6;'>".e($description).'</p>'
+        ."<form method='POST' action='".e($actionUrl)."' style='margin-top:20px; display:flex; gap:12px; align-items:center;'>"
+        ."<input type='hidden' name='_token' value='".csrf_token()."'>"
+        ."<button type='submit' style='background:{$accentColor}; color:{$textColor}; border:none; padding:12px 22px; border-radius:8px; font-weight:bold; cursor:pointer;'>".e($buttonLabel).'</button>'
+        ."<a href='".url('/dashboard')."' style='color:#4b5563; text-decoration:none; font-weight:500;'>← Wróć do Panelu</a>"
+        .'</form>'
+        .'</div>';
+};
+
+// Diagnostic route to inspect media status on hosting (auth & admin required; mutations require POST + CSRF)
 Route::match(['get', 'post'], '/check-media', function (\Illuminate\Http\Request $request) {
     if (auth()->user()?->role?->name !== 'admin') {
         abort(403, 'Tylko administrator moze uruchomic diagnostyke bazy i zdjec.');
     }
 
     $migrateOutput = null;
-    if ($request->has('run_migrate') || $request->input('run_migrate') === '1') {
+    if ($request->isMethod('post') && ($request->has('run_migrate') || $request->input('run_migrate') === '1')) {
         try {
             \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
             \Illuminate\Support\Facades\Artisan::call('optimize:clear');
@@ -174,44 +186,46 @@ Route::match(['get', 'post'], '/check-media', function (\Illuminate\Http\Request
         }
     }
 
-    // Auto-sync physical storage files into public/storage so Apache can serve them directly
-    $pubStorage = public_path('storage');
-    if (is_link($pubStorage)) {
-        @unlink($pubStorage);
-    }
-    if (! \Illuminate\Support\Facades\File::isDirectory($pubStorage)) {
-        \Illuminate\Support\Facades\File::makeDirectory($pubStorage, 0755, true, true);
-    }
-
-    $sourceDirs = [
-        storage_path('app/public'),
-    ];
-
+    // Auto-sync physical storage files into public/storage only on explicit POST + CSRF
     $syncedCount = 0;
-    foreach ($sourceDirs as $sDir) {
-        if (\Illuminate\Support\Facades\File::isDirectory($sDir)) {
-            foreach (\Illuminate\Support\Facades\File::allFiles($sDir) as $file) {
-                $rel = str_replace('\\', '/', substr($file->getPathname(), strlen($sDir) + 1));
-                $target = public_path('storage/'.$rel);
-                $targetDir = dirname($target);
-                if (! \Illuminate\Support\Facades\File::isDirectory($targetDir)) {
-                    \Illuminate\Support\Facades\File::makeDirectory($targetDir, 0755, true, true);
-                }
-                if (! \Illuminate\Support\Facades\File::exists($target) || \Illuminate\Support\Facades\File::size($target) !== $file->getSize()) {
-                    @\Illuminate\Support\Facades\File::copy($file->getPathname(), $target);
-                    @chmod($target, 0644);
-                    $syncedCount++;
-                }
+    if ($request->isMethod('post')) {
+        $pubStorage = public_path('storage');
+        if (is_link($pubStorage)) {
+            @unlink($pubStorage);
+        }
+        if (! \Illuminate\Support\Facades\File::isDirectory($pubStorage)) {
+            \Illuminate\Support\Facades\File::makeDirectory($pubStorage, 0755, true, true);
+        }
 
-                // Also copy to public/storage/media/<filename> as flat fallback
-                $flatTarget = public_path('storage/media/'.$file->getFilename());
-                $flatDir = dirname($flatTarget);
-                if (! \Illuminate\Support\Facades\File::isDirectory($flatDir)) {
-                    \Illuminate\Support\Facades\File::makeDirectory($flatDir, 0755, true, true);
-                }
-                if (! \Illuminate\Support\Facades\File::exists($flatTarget)) {
-                    @\Illuminate\Support\Facades\File::copy($file->getPathname(), $flatTarget);
-                    @chmod($flatTarget, 0644);
+        $sourceDirs = [
+            storage_path('app/public'),
+        ];
+
+        foreach ($sourceDirs as $sDir) {
+            if (\Illuminate\Support\Facades\File::isDirectory($sDir)) {
+                foreach (\Illuminate\Support\Facades\File::allFiles($sDir) as $file) {
+                    $rel = str_replace('\\', '/', substr($file->getPathname(), strlen($sDir) + 1));
+                    $target = public_path('storage/'.$rel);
+                    $targetDir = dirname($target);
+                    if (! \Illuminate\Support\Facades\File::isDirectory($targetDir)) {
+                        \Illuminate\Support\Facades\File::makeDirectory($targetDir, 0755, true, true);
+                    }
+                    if (! \Illuminate\Support\Facades\File::exists($target) || \Illuminate\Support\Facades\File::size($target) !== $file->getSize()) {
+                        @\Illuminate\Support\Facades\File::copy($file->getPathname(), $target);
+                        @chmod($target, 0644);
+                        $syncedCount++;
+                    }
+
+                    // Also copy to public/storage/media/<filename> as flat fallback
+                    $flatTarget = public_path('storage/media/'.$file->getFilename());
+                    $flatDir = dirname($flatTarget);
+                    if (! \Illuminate\Support\Facades\File::isDirectory($flatDir)) {
+                        \Illuminate\Support\Facades\File::makeDirectory($flatDir, 0755, true, true);
+                    }
+                    if (! \Illuminate\Support\Facades\File::exists($flatTarget)) {
+                        @\Illuminate\Support\Facades\File::copy($file->getPathname(), $flatTarget);
+                        @chmod($flatTarget, 0644);
+                    }
                 }
             }
         }
@@ -225,11 +239,15 @@ Route::match(['get', 'post'], '/check-media', function (\Illuminate\Http\Request
         $output .= "<div style='background:#f0fdf4; border:1px solid #10b981; color:#065f46; padding:14px; border-radius:8px; margin-bottom:20px;'>{$migrateOutput}</div>";
     }
 
-    $output .= "<div style='margin-bottom:20px; display:flex; gap:10px;'>";
+    $output .= "<div style='margin-bottom:20px; display:flex; gap:10px; flex-wrap:wrap;'>";
     $output .= "<form method='POST' action='".url('/check-media')."'>";
     $output .= "<input type='hidden' name='_token' value='".csrf_token()."'>";
     $output .= "<input type='hidden' name='run_migrate' value='1'>";
     $output .= "<button type='submit' style='background:#10b981; color:#fff; border:none; padding:10px 18px; border-radius:6px; font-weight:bold; cursor:pointer;'>🚀 Uruchom Migracje Bazy (Dodaj nowe kociaki: Candy, Carlos, Carmen, Cyprian)</button>";
+    $output .= '</form>';
+    $output .= "<form method='POST' action='".url('/check-media')."'>";
+    $output .= "<input type='hidden' name='_token' value='".csrf_token()."'>";
+    $output .= "<button type='submit' style='background:#0284c7; color:#fff; border:none; padding:10px 18px; border-radius:6px; font-weight:bold; cursor:pointer;'>🔄 Synchronizuj pliki do public/storage ({$syncedCount})</button>";
     $output .= '</form>';
     $output .= '</div>';
 
@@ -278,10 +296,21 @@ Route::match(['get', 'post'], '/check-media', function (\Illuminate\Http\Request
     return $output;
 })->middleware(['auth', 'verified', 'active']);
 
-// One-shot sync endpoint for blog articles & media on hosting (admin only)
-Route::get('/sync-blog-articles', function () {
+// One-shot sync endpoint for blog articles & media on hosting (admin only; GET confirms, POST executes)
+Route::match(['get', 'post'], '/sync-blog-articles', function (\Illuminate\Http\Request $request) use ($renderAdminPostConfirm) {
     if (auth()->user()?->role?->name !== 'admin') {
         abort(403, 'Tylko administrator moze uruchomic synchronizacje artykulow bloga.');
+    }
+
+    if ($request->isMethod('get')) {
+        return response($renderAdminPostConfirm(
+            'Synchronizacja Artykułów Bloga SEO',
+            'Skopiuje pliki graficzne z katalogu BLOG/ do public/storage/blog/ oraz uruchomi polecenie seo:import-articles --force-now i optimize:clear.',
+            '🚀 Uruchom synchronizację bloga',
+            url('/sync-blog-articles'),
+            '#0284c7',
+            '#ffffff'
+        ));
     }
 
     try {
@@ -332,13 +361,13 @@ Route::match(['get', 'post'], '/check-mail', function (\Illuminate\Http\Request 
     $testResult = null;
     $testError = null;
 
-    if ($request->has('clear_cache')) {
+    if ($request->isMethod('post') && $request->has('clear_cache')) {
         \Illuminate\Support\Facades\Artisan::call('optimize:clear');
 
         return redirect('/check-mail')->with('status_msg', 'Pamięć podręczna konfiguracji została wyczyszczona (optimize:clear)!');
     }
 
-    if ($request->has('send_test')) {
+    if ($request->isMethod('post') && $request->has('send_test')) {
         $targetEmail = $request->input('target_email', config('mail.from.address') ?: auth()->user()->email);
         try {
             \Illuminate\Support\Facades\Mail::raw('To jest testowa wiadomosc z systemu Hodowli Kotow wyslana o '.now()->toDateTimeString(), function ($msg) use ($targetEmail) {
@@ -412,11 +441,22 @@ Route::match(['get', 'post'], '/check-mail', function (\Illuminate\Http\Request 
     return $html;
 })->middleware(['auth', 'verified', 'active']);
 
-// Utility route to trigger storage link & seed real cat images on hosting without SSH (admin only)
-Route::get('/fix-storage', function () {
+// Utility route to trigger storage setup & seed real cat images on hosting without SSH (admin only; GET confirms, POST executes)
+Route::match(['get', 'post'], '/fix-storage', function (\Illuminate\Http\Request $request) use ($renderAdminPostConfirm) {
     // SECURITY: Restrict to admin role only — this route seeds data and must not be accessible to editors/users
     if (auth()->user()?->role?->name !== 'admin') {
         abort(403, 'Tylko administrator moze uruchomic te operacje.');
+    }
+
+    if ($request->isMethod('get')) {
+        return response($renderAdminPostConfirm(
+            'Naprawa Katalogów Storage i Zasilenie Zdjęć',
+            'Usunie błędne symlinki public/storage (blokowane na OVH), przygotuje katalogi fizyczne oraz uruchomi RealKittensAndParentsSeeder i poprawi uprawnienia plików.',
+            '🔧 Uruchom naprawę storage',
+            url('/fix-storage'),
+            '#166534',
+            '#ffffff'
+        ));
     }
 
     try {
@@ -483,7 +523,7 @@ Route::get('/fix-storage', function () {
             ."<p style='margin-bottom:0;'><a href='".url('/')."' style='display: inline-block; padding: 10px 20px; background: #166534; color: #fff; text-decoration: none; border-radius: 6px; font-weight: bold;'>Wróć na stronę główną i sprawdź zdjęcia</a></p>"
             .'</div>';
     } catch (\Throwable $e) {
-        Log::error('Fix-storage execution error: '.$e->getMessage(), ['exception' => $e]);
+        Log::error('Fix-storage execution error: '.$e->getMessage(), ['exception_class' => get_class($e)]);
 
         return "<div style='font-family: sans-serif; padding: 30px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 12px; color: #991b1b; max-width: 600px; margin: 40px auto;'>"
             ."<h1 style='margin-top:0;'>Blad Wykonania</h1>"
@@ -492,10 +532,21 @@ Route::get('/fix-storage', function () {
     }
 })->middleware(['auth', 'verified', 'active']);
 
-// One-click Auto Deploy & Sync Route for hosting (triggers git pull & seo article import - admin only)
-Route::match(['get', 'post'], '/deploy-now', function () {
+// One-click Auto Deploy & Sync Route for hosting (triggers git pull & seo article import - admin only; GET confirms, POST executes)
+Route::match(['get', 'post'], '/deploy-now', function (\Illuminate\Http\Request $request) use ($renderAdminPostConfirm) {
     if (auth()->user()?->role?->name !== 'admin') {
         abort(403, 'Tylko administrator moze uruchomic aktualizacje hostingu.');
+    }
+
+    if ($request->isMethod('get')) {
+        return response($renderAdminPostConfirm(
+            'Wdrożenie Aktualizacji z GitHub (/deploy-now)',
+            'Wykona git pull origin main, uruchomi import artykułów seo:import-articles oraz wyczyści cache poleceniem optimize:clear.',
+            '🚀 Wdróż teraz z GitHub',
+            url('/deploy-now'),
+            '#059669',
+            '#ffffff'
+        ));
     }
 
     try {
@@ -594,10 +645,21 @@ Route::middleware(['auth', 'verified', 'active'])
         Route::resource('media', MediaController::class);
     });
 
-// Deployment sync route: pulls latest code from git, runs migrations & clears cache via browser (admin only)
-Route::get('/deploy-sync', function (\Illuminate\Http\Request $request) {
+// Deployment sync route: pulls latest code from git, runs migrations & clears cache via browser (admin only; GET confirms, POST executes)
+Route::match(['get', 'post'], '/deploy-sync', function (\Illuminate\Http\Request $request) use ($renderAdminPostConfirm) {
     if (auth()->user()?->role?->name !== 'admin') {
         abort(403, 'Tylko administrator moze uruchomic te operacje.');
+    }
+
+    if ($request->isMethod('get')) {
+        return response($renderAdminPostConfirm(
+            'Pełna Synchronizacja Wdrożenia (/deploy-sync)',
+            'Wykona git pull origin main, migrate --force, skopiuje obrazki z BLOG/, uruchomi seo:import-articles oraz wyczyści cache poleceniem optimize:clear.',
+            '🔄 Synchronizuj kod i bazę',
+            url('/deploy-sync'),
+            '#059669',
+            '#ffffff'
+        ));
     }
 
     try {

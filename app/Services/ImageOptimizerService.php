@@ -25,17 +25,17 @@ class ImageOptimizerService
      * - Proportionally downscales images exceeding $maxDimension
      * - Re-compresses the image to significantly reduce file size without visible degradation
      *
-     * @param string $filePath Absolute path to the image file
+     * @param  string  $filePath  Absolute path to the image file
      * @return array{width: int, height: int, size: int}
      */
     public function optimize(string $filePath): array
     {
-        if (!file_exists($filePath) || !is_file($filePath)) {
+        if (! file_exists($filePath) || ! is_file($filePath)) {
             return ['width' => 0, 'height' => 0, 'size' => 0];
         }
 
         $imageInfo = @getimagesize($filePath);
-        if (!$imageInfo) {
+        if (! $imageInfo) {
             return [
                 'width' => 0,
                 'height' => 0,
@@ -56,7 +56,7 @@ class ImageOptimizerService
                 default => false,
             };
 
-            if (!$image) {
+            if (! $image) {
                 return [
                     'width' => $width,
                     'height' => $height,
@@ -67,14 +67,20 @@ class ImageOptimizerService
             // 2. Fix orientation using EXIF (JPEG only)
             if (in_array($mime, ['image/jpeg', 'image/jpg', 'image/pjpeg'], true) && function_exists('exif_read_data')) {
                 $exif = @exif_read_data($filePath);
-                if (!empty($exif['Orientation'])) {
+                if (! empty($exif['Orientation'])) {
                     $orientation = (int) $exif['Orientation'];
-                    $image = match ($orientation) {
-                        3 => imagerotate($image, 180, 0),
-                        6 => imagerotate($image, -90, 0),
-                        8 => imagerotate($image, 90, 0),
+                    $rotated = match ($orientation) {
+                        3 => @imagerotate($image, 180, 0),
+                        6 => @imagerotate($image, -90, 0),
+                        8 => @imagerotate($image, 90, 0),
                         default => $image,
                     };
+                    if ($rotated instanceof \GdImage) {
+                        if ($rotated !== $image) {
+                            imagedestroy($image);
+                        }
+                        $image = $rotated;
+                    }
                     $width = imagesx($image);
                     $height = imagesy($image);
                 }

@@ -13,7 +13,7 @@ class UploadMediaAction
     public function __construct(
         protected ?\App\Services\ImageOptimizerService $imageOptimizerService = null
     ) {
-        $this->imageOptimizerService = $this->imageOptimizerService ?? new \App\Services\ImageOptimizerService();
+        $this->imageOptimizerService = $this->imageOptimizerService ?? new \App\Services\ImageOptimizerService;
     }
 
     /**
@@ -35,10 +35,13 @@ class UploadMediaAction
                 }
 
                 $disk = 'public';
-                $directory = $this->resolveDirectory($data['mediable_type'] ?? null);
+                $directory = $this->resolveDirectory(
+                    $data['mediable_type'] ?? null,
+                    isset($data['directory']) ? (string) $data['directory'] : null
+                );
 
                 // Ensure target storage directory exists
-                $storageDir = storage_path('app/public/' . $directory);
+                $storageDir = storage_path('app/public/'.$directory);
                 if (! \Illuminate\Support\Facades\File::isDirectory($storageDir)) {
                     \Illuminate\Support\Facades\File::makeDirectory($storageDir, 0755, true, true);
                     @chmod($storageDir, 0755);
@@ -46,7 +49,7 @@ class UploadMediaAction
 
                 $storedPath = $file->store($directory, $disk);
 
-                $storageFullPath = storage_path('app/public/' . $storedPath);
+                $storageFullPath = storage_path('app/public/'.$storedPath);
                 $fileSize = $file->getSize();
 
                 if (\Illuminate\Support\Facades\File::exists($storageFullPath)) {
@@ -58,7 +61,7 @@ class UploadMediaAction
 
                     @chmod($storageFullPath, 0644);
 
-                    $publicTarget = public_path('storage/' . $storedPath);
+                    $publicTarget = public_path('storage/'.$storedPath);
                     $publicTargetDir = dirname($publicTarget);
                     if (! \Illuminate\Support\Facades\File::isDirectory($publicTargetDir)) {
                         \Illuminate\Support\Facades\File::makeDirectory($publicTargetDir, 0755, true, true);
@@ -103,8 +106,15 @@ class UploadMediaAction
         });
     }
 
-    protected function resolveDirectory(?string $mediableType): string
+    protected function resolveDirectory(?string $mediableType, ?string $preferredDirectory = null): string
     {
+        if ($preferredDirectory !== null) {
+            $clean = trim(str_replace('\\', '/', $preferredDirectory), '/');
+            if ($clean !== '') {
+                return str_starts_with($clean, 'media/') ? $clean : 'media/'.$clean;
+            }
+        }
+
         if (! $mediableType) {
             return 'media/library';
         }

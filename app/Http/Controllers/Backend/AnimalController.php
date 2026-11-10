@@ -17,6 +17,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class AnimalController extends Controller
@@ -229,6 +230,8 @@ class AnimalController extends Controller
                 ->route('backend.animals.index')
                 ->with('success', "Animal '{$animal->name}' deleted successfully.");
         } catch (Throwable $e) {
+            Log::error('Animal delete failed', ['animal_id' => $animal->id, 'exception_class' => get_class($e), 'message' => $e->getMessage()]);
+
             return back()
                 ->with('error', 'Animal could not be deleted.');
         }
@@ -236,17 +239,19 @@ class AnimalController extends Controller
 
     public function restore(string $id)
     {
+        $animal = Animal::withTrashed()->findOrFail($id);
+
+        $this->authorize('restore', $animal);
+
         try {
-            $animal = Animal::withTrashed()->findOrFail($id);
-
-            $this->authorize('restore', $animal);
-
             $animal->restore();
 
             return redirect()
                 ->route('backend.animals.index')
                 ->with('success', "Animal '{$animal->name}' restored successfully.");
         } catch (Throwable $e) {
+            Log::error('Animal restore failed', ['animal_id' => $id, 'exception_class' => get_class($e), 'message' => $e->getMessage()]);
+
             return back()
                 ->with('error', 'Animal could not be restored.');
         }
@@ -254,11 +259,11 @@ class AnimalController extends Controller
 
     public function forceDelete(string $id)
     {
+        $animal = Animal::withTrashed()->findOrFail($id);
+
+        $this->authorize('forceDelete', $animal);
+
         try {
-            $animal = Animal::withTrashed()->findOrFail($id);
-
-            $this->authorize('forceDelete', $animal);
-
             $name = $animal->name;
 
             $animal->forceDelete();
@@ -267,6 +272,8 @@ class AnimalController extends Controller
                 ->route('backend.animals.index')
                 ->with('success', "Animal '{$name}' permanently deleted.");
         } catch (Throwable $e) {
+            Log::error('Animal forceDelete failed', ['animal_id' => $id, 'exception_class' => get_class($e), 'message' => $e->getMessage()]);
+
             return back()
                 ->with('error', 'Animal could not be permanently deleted.');
         }

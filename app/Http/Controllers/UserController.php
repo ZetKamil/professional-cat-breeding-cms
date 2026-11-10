@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Services\MediaService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class UserController extends Controller
@@ -195,6 +196,7 @@ class UserController extends Controller
                 ->with('success', "User '{$user->name}' updated successfully.");
         } catch (Throwable $e) {
             DB::rollBack();
+            Log::error('User update failed', ['user_id' => $user->id, 'exception_class' => get_class($e), 'message' => $e->getMessage()]);
 
             return back()
                 ->withInput()
@@ -221,6 +223,8 @@ class UserController extends Controller
                 ->route('backend.users.index')
                 ->with('success', "User '{$user->name}' deleted successfully.");
         } catch (Throwable $e) {
+            Log::error('User delete failed', ['user_id' => $user->id, 'exception_class' => get_class($e), 'message' => $e->getMessage()]);
+
             return back()
                 ->with('error', 'User could not be deleted.');
         }
@@ -228,17 +232,19 @@ class UserController extends Controller
 
     public function restore(int $id)
     {
+        $user = User::withTrashed()->findOrFail($id);
+
+        $this->authorize('restore', $user);
+
         try {
-            $user = User::withTrashed()->findOrFail($id);
-
-            $this->authorize('restore', $user);
-
             $user->restore();
 
             return redirect()
                 ->route('backend.users.index')
                 ->with('success', "User '{$user->name}' restored successfully.");
         } catch (Throwable $e) {
+            Log::error('User restore failed', ['user_id' => $id, 'exception_class' => get_class($e), 'message' => $e->getMessage()]);
+
             return back()
                 ->with('error', 'User could not be restored.');
         }
@@ -246,16 +252,16 @@ class UserController extends Controller
 
     public function forceDelete(int $id)
     {
+        $user = User::withTrashed()->findOrFail($id);
+
+        $this->authorize('forceDelete', $user);
+
+        if ((int) auth()->id() === (int) $user->id) {
+            return back()
+                ->with('error', 'Nie możesz trwale usunąć własnego konta.');
+        }
+
         try {
-            $user = User::withTrashed()->findOrFail($id);
-
-            $this->authorize('forceDelete', $user);
-
-            if ((int) auth()->id() === (int) $user->id) {
-                return back()
-                    ->with('error', 'Nie możesz trwale usunąć własnego konta.');
-            }
-
             $name = $user->name;
 
             $user->forceDelete();
@@ -264,6 +270,8 @@ class UserController extends Controller
                 ->route('backend.users.index')
                 ->with('success', "User '{$name}' permanently deleted.");
         } catch (Throwable $e) {
+            Log::error('User forceDelete failed', ['user_id' => $id, 'exception_class' => get_class($e), 'message' => $e->getMessage()]);
+
             return back()
                 ->with('error', 'User could not be permanently deleted.');
         }

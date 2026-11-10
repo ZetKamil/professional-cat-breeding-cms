@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
 use App\Services\PostService;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class PostController extends Controller
@@ -89,9 +90,9 @@ class PostController extends Controller
             ->get(['id', 'name', 'breed', 'status']);
 
         return view('backend.posts.create', [
-            'authors'    => $authors,
+            'authors' => $authors,
             'categories' => $categories,
-            'animals'    => $animals,
+            'animals' => $animals,
         ]);
     }
 
@@ -150,10 +151,10 @@ class PostController extends Controller
             ->get(['id', 'name', 'breed', 'status']);
 
         return view('backend.posts.edit', [
-            'post'       => $post,
-            'authors'    => $authors,
+            'post' => $post,
+            'authors' => $authors,
             'categories' => $categories,
-            'animals'    => $animals,
+            'animals' => $animals,
         ]);
     }
 
@@ -185,6 +186,8 @@ class PostController extends Controller
                 ->route('backend.posts.index')
                 ->with('success', "Post '{$post->title}' deleted successfully.");
         } catch (Throwable $e) {
+            Log::error('Post delete failed', ['post_id' => $post->id, 'exception_class' => get_class($e), 'message' => $e->getMessage()]);
+
             return back()
                 ->with('error', 'Post could not be deleted.');
         }
@@ -195,17 +198,19 @@ class PostController extends Controller
      */
     public function restore(int $id)
     {
+        $post = Post::withTrashed()->findOrFail($id);
+
+        $this->authorize('restore', $post);
+
         try {
-            $post = Post::withTrashed()->findOrFail($id);
-
-            $this->authorize('restore', $post);
-
             $post->restore();
 
             return redirect()
                 ->route('backend.posts.index')
                 ->with('success', "Post '{$post->title}' restored successfully.");
         } catch (Throwable $e) {
+            Log::error('Post restore failed', ['post_id' => $id, 'exception_class' => get_class($e), 'message' => $e->getMessage()]);
+
             return back()
                 ->with('error', 'Post could not be restored.');
         }
@@ -216,11 +221,11 @@ class PostController extends Controller
      */
     public function forceDelete(int $id)
     {
+        $post = Post::withTrashed()->findOrFail($id);
+
+        $this->authorize('forceDelete', $post);
+
         try {
-            $post = Post::withTrashed()->findOrFail($id);
-
-            $this->authorize('forceDelete', $post);
-
             $title = $post->title;
 
             $post->forceDelete();
@@ -229,6 +234,8 @@ class PostController extends Controller
                 ->route('backend.posts.index')
                 ->with('success', "Post '{$title}' permanently deleted.");
         } catch (Throwable $e) {
+            Log::error('Post forceDelete failed', ['post_id' => $id, 'exception_class' => get_class($e), 'message' => $e->getMessage()]);
+
             return back()
                 ->with('error', 'Post could not be permanently deleted.');
         }
@@ -244,11 +251,11 @@ class PostController extends Controller
 
             return redirect()
                 ->route('backend.posts.index')
-                ->with('success', 'Pomyślnie zaimportowano artykuły SEO z katalogu BLOG/! ' . trim($output));
+                ->with('success', 'Pomyślnie zaimportowano artykuły SEO z katalogu BLOG/! '.trim($output));
         } catch (\Throwable $e) {
             return redirect()
                 ->route('backend.posts.index')
-                ->with('error', 'Błąd podczas importu artykułów SEO: ' . $e->getMessage());
+                ->with('error', 'Błąd podczas importu artykułów SEO: '.$e->getMessage());
         }
     }
 

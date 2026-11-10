@@ -2,11 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserSeeder extends Seeder
 {
@@ -15,16 +16,24 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('users')->updateOrInsert(
+        $adminRole = Role::firstOrCreate(
+            ['name' => 'admin'],
+            ['description' => 'Full system administrator']
+        );
+
+        $seedPassword = (string) env('ADMIN_SEED_PASSWORD', '');
+        if ($seedPassword === '') {
+            $seedPassword = Str::random(32);
+        }
+
+        User::firstOrCreate(
             ['email' => 'kamil.ziemkiewicz.97@gmail.com'],
             [
                 'name' => 'Kamil Ziemkiewicz',
-                'role_id' => 1,
-                'is_active' => 1,
+                'role_id' => $adminRole->id,
+                'is_active' => true,
                 'email_verified_at' => Carbon::now(),
-                'password' => Hash::make('KamilZiemkiewicz'),
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
+                'password' => Hash::make($seedPassword),
             ]
         );
 

@@ -7,6 +7,7 @@ use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class CategoryController extends Controller
@@ -128,6 +129,7 @@ class CategoryController extends Controller
                 ->with('success', "Category '{$category->name}' updated successfully.");
         } catch (Throwable $e) {
             DB::rollBack();
+            Log::error('Category update failed', ['category_id' => $category->id, 'exception_class' => get_class($e), 'message' => $e->getMessage()]);
 
             return back()
                 ->withInput()
@@ -149,6 +151,8 @@ class CategoryController extends Controller
                 ->route('backend.categories.index')
                 ->with('success', "Category '{$category->name}' deleted successfully.");
         } catch (Throwable $e) {
+            Log::error('Category delete failed', ['category_id' => $category->id, 'exception_class' => get_class($e), 'message' => $e->getMessage()]);
+
             return back()
                 ->with('error', 'Category could not be deleted.');
         }
@@ -156,17 +160,19 @@ class CategoryController extends Controller
 
     public function restore(int $id)
     {
+        $category = Category::withTrashed()->findOrFail($id);
+
+        $this->authorize('restore', $category);
+
         try {
-            $category = Category::withTrashed()->findOrFail($id);
-
-            $this->authorize('restore', $category);
-
             $category->restore();
 
             return redirect()
                 ->route('backend.categories.index')
                 ->with('success', "Category '{$category->name}' restored successfully.");
         } catch (Throwable $e) {
+            Log::error('Category restore failed', ['category_id' => $id, 'exception_class' => get_class($e), 'message' => $e->getMessage()]);
+
             return back()
                 ->with('error', 'Category could not be restored.');
         }
@@ -174,15 +180,15 @@ class CategoryController extends Controller
 
     public function forceDelete(int $id)
     {
+        $category = Category::withTrashed()->findOrFail($id);
+
+        $this->authorize('forceDelete', $category);
+
+        if ($category->posts()->exists()) {
+            return back()->with('error', 'Category cannot be permanently deleted because posts are still linked to it.');
+        }
+
         try {
-            $category = Category::withTrashed()->findOrFail($id);
-
-            $this->authorize('forceDelete', $category);
-
-            if ($category->posts()->exists()) {
-                return back()->with('error', 'Category cannot be permanently deleted because posts are still linked to it.');
-            }
-
             $name = $category->name;
 
             $category->forceDelete();
@@ -191,6 +197,8 @@ class CategoryController extends Controller
                 ->route('backend.categories.index')
                 ->with('success', "Category '{$name}' permanently deleted.");
         } catch (Throwable $e) {
+            Log::error('Category forceDelete failed', ['category_id' => $id, 'exception_class' => get_class($e), 'message' => $e->getMessage()]);
+
             return back()
                 ->with('error', 'Category could not be permanently deleted.');
         }

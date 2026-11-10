@@ -76,8 +76,10 @@ class OptimizeImages extends Command
         $failed    = 0;
         $savedBytes = 0;
 
+        $normalizedBasePath = rtrim(str_replace('\\', '/', $basePath), '/') . '/';
+
         foreach ($files as $srcPath) {
-            $relPath = str_replace($basePath . DIRECTORY_SEPARATOR, '', $srcPath);
+            $relPath = str_replace($normalizedBasePath, '', str_replace('\\', '/', $srcPath));
             $this->line("<fg=cyan>Processing:</> {$relPath}");
 
             [$src, $origW, $origH] = $this->loadImage($srcPath);
@@ -185,7 +187,7 @@ class OptimizeImages extends Command
                 continue;
             }
 
-            $files[] = $file->getRealPath();
+            $files[] = $file->getRealPath() ?: $file->getPathname();
         }
 
         sort($files);

@@ -26,6 +26,7 @@ class MediaService
             'mediable_type' => $model ? $model::class : null,
             'mediable_id' => $model ? $model->getKey() : null,
             'is_featured' => $isFeatured,
+            'directory' => $directory,
         ];
 
         $media = $this->uploadAction->handle($data, $file);
@@ -65,4 +66,3 @@ class MediaService
         $this->deleteAction->handle($media);
     }
 }
-
