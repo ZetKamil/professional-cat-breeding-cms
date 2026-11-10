@@ -50,12 +50,23 @@ Respond ONLY with a valid JSON array of 6 objects:
 PROMPT;
 
         $userPrompt = "Fetch 6 Google search trends for {$breedName} for {$monthYear} in Poland.";
+        $animalsContext = $args['animals_context'] ?? [];
+        if (is_array($animalsContext) && ! empty($animalsContext)) {
+            $animalNames = collect($animalsContext)
+                ->map(fn ($animal) => trim((string) ($animal['name'] ?? '') . ' (' . (string) ($animal['status'] ?? '') . ')'))
+                ->filter()
+                ->take(8)
+                ->implode(', ');
+            if ($animalNames !== '') {
+                $userPrompt .= " Cattery context animals currently in cattery: {$animalNames}.";
+            }
+        }
 
         $raw = $this->gemini->generateText($systemPrompt, $userPrompt);
-        $parsed = json_decode($raw, true);
+        $topics = GeminiService::decodeTopicSuggestions($raw);
 
-        if (is_array($parsed) && count($parsed) > 0) {
-            return array_slice($parsed, 0, 6);
+        if (! empty($topics)) {
+            return $topics;
         }
 
         throw new \RuntimeException("Nie udało się sparsować wyników trendów z API Gemini.");

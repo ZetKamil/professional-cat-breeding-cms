@@ -173,10 +173,12 @@ class AiBlogGeneratorService
         $heroImagePrompt = $parsed['hero_image_prompt']
             ?? $this->fallbackHeroPrompt($breed);
 
+        $resolvedTitle = Str::limit((string) ($parsed['h1'] ?? $topic), 255, '');
+
         return [
             // Post fields — passed directly to PostService::create()
-            'title'       => $parsed['h1'] ?? $topic,
-            'slug'        => Str::slug($parsed['h1'] ?? $topic),
+            'title'       => $resolvedTitle,
+            'slug'        => Str::slug($resolvedTitle),
             'excerpt'     => $parsed['excerpt'] ?? ($sections[0]['body'] ?? ''),
             'sections'    => $sections,
             // body is auto-generated from sections in PostRequest, but set here for fallback
@@ -185,8 +187,8 @@ class AiBlogGeneratorService
             'published_at' => null,
 
             // SEO metadata (stored separately from post body)
-            'meta_title'       => $parsed['meta_title'] ?? Str::limit($parsed['h1'] ?? $topic, 60),
-            'meta_description' => $parsed['meta_description'] ?? Str::limit($parsed['excerpt'] ?? '', 155),
+            'meta_title'       => Str::limit((string) ($parsed['meta_title'] ?? Str::limit($resolvedTitle, 60)), 255, ''),
+            'meta_description' => Str::limit((string) ($parsed['meta_description'] ?? Str::limit($parsed['excerpt'] ?? '', 155)), 500, ''),
 
             // Passed back to Livewire to offer image generation
             'hero_image_prompt' => $heroImagePrompt,

@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Enums\AnimalGender;
 use App\Enums\AnimalStatus;
 use App\Enums\AnimalType;
+use App\Services\MediaService;
 use Database\Factories\AnimalFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
@@ -441,6 +442,12 @@ class Animal extends Model
                 $animal->slug = Str::slug($animal->name);
             }
         });
+
+        static::forceDeleted(function (Animal $animal) {
+            $mediaService = app(MediaService::class);
+            $animal->gallery()->get()->each(fn (Media $media) => $mediaService->delete($media));
+            $animal->posts()->detach();
+        });
     }
 
     // ─── Computed Helpers & Pickup Rules ─────────────────────────────
@@ -678,9 +685,7 @@ class Animal extends Model
             return $target->gt($window['end']->copy()->endOfDay());
         }
 
-        $age = $this->ageInWeeks($targetDate);
-
-        return $age !== null && $age > 14;
+        return false;
     }
 
     /**

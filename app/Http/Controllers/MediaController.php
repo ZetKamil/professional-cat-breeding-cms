@@ -19,7 +19,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
-use Throwable;
 
 class MediaController extends Controller
 {
@@ -33,9 +32,12 @@ class MediaController extends Controller
     {
         $this->authorize('viewAny', Media::class);
 
+        $rawSearch = $request->input('q');
+        $rawType = $request->input('type');
+
         $media = Media::query()
-            ->search($request->input('q'))
-            ->typeFilter($request->input('type'))
+            ->search(is_scalar($rawSearch) ? (string) $rawSearch : null)
+            ->typeFilter(is_scalar($rawType) ? (string) $rawType : null)
             ->latest()
             ->paginate(24);
 

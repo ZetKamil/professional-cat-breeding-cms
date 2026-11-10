@@ -136,27 +136,15 @@ PROMPT;
         $userPrompt = "Suggest 6 search-trending blog post topics for breed '{$breedName}' for {$currentMonthYear} in Poland.";
 
         $rawResponse = $this->gemini->generateText($systemPrompt, $userPrompt);
-        $parsed      = json_decode($rawResponse, true);
+        $clean       = GeminiService::decodeTopicSuggestions($rawResponse);
 
-        if (is_array($parsed) && count($parsed) >= 1) {
-            $clean = [];
-            foreach ($parsed as $item) {
-                if (isset($item['title'], $item['keyword'])) {
-                    $clean[] = [
-                        'title'   => (string) $item['title'],
-                        'keyword' => (string) $item['keyword'],
-                        'intent'  => (string) ($item['intent'] ?? 'informational'),
-                    ];
-                }
-            }
+        if (! empty($clean)) {
+            Log::info('TopicSuggesterService: fetched fresh trends from Gemini API', [
+                'breed' => $breedKey,
+                'count' => count($clean),
+            ]);
 
-            if (! empty($clean)) {
-                Log::info('TopicSuggesterService: fetched fresh trends from Gemini API', [
-                    'breed' => $breedKey,
-                    'count' => count($clean),
-                ]);
-                return array_slice($clean, 0, 6);
-            }
+            return $clean;
         }
 
         return [];

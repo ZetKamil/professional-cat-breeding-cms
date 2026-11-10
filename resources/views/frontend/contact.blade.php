@@ -451,7 +451,11 @@
                     if (successBox) successBox.style.display = 'block';
                     document.getElementById('contactQuickForm').style.display = 'none';
                     if (typeof window.trackFunnelStep === 'function') {
-                        window.trackFunnelStep('contact_quick_callback_submitted', { phone: phoneVal });
+                        window.trackFunnelStep('callback_submitted', {
+                            channel: 'quick_callback_page',
+                            origin: 'contact_page',
+                            cat_name: breedInput ? breedInput.value : 'Wszystkie rasy'
+                        });
                     }
                 } else {
                     alert(data.message || 'Wystąpił błąd podczas wysyłania zgłoszenia. Spróbuj zadzwonić bezpośrednio: +48 514 153 204');

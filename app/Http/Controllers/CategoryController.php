@@ -21,7 +21,7 @@ class CategoryController extends Controller
         $filters = $request->defaults();
 
         $categories = Category::query()
-//            ->withCount('posts')
+            ->withCount('posts')
             ->search($filters['q'])
             ->trashedFilter($filters['trashed'])
             ->sortBySafe($filters['sort'], $filters['dir'])
@@ -84,7 +84,7 @@ class CategoryController extends Controller
     {
         $this->authorize('view', $category);
 
-        //        $category->loadCount('posts');
+        $category->loadCount('posts');
 
         return view('backend.categories.show', [
             'category' => $category,

@@ -175,7 +175,9 @@ window.handleQuickCallbackSubmit = function (event) {
         submitBtn.innerHTML = '<span>Wysyłanie...</span>';
     }
 
-    fetch('/api/quick-callback', {
+    const callbackEndpoint = form.getAttribute('action') || '/api/quick-callback';
+
+    fetch(callbackEndpoint, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

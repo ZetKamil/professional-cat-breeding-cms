@@ -194,4 +194,11 @@ class BlogTest extends TestCase
         $this->actingAs($inactiveEditor)->get(route('frontend.blog.show', $draftPost))->assertNotFound();
         $this->actingAs($activeEditor)->get(route('frontend.blog.show', $draftPost))->assertOk()->assertSee('Tajny Szkic Redakcyjny');
     }
+
+    public function test_array_query_parameters_on_blog_index_do_not_throw_type_error(): void
+    {
+        $response = $this->get('/blog?q[]=test&category[]=bengal');
+
+        $response->assertOk();
+    }
 }

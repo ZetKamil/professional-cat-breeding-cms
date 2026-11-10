@@ -193,3 +193,34 @@ test('admin can attach media to an animal with ULID and demote sibling featured 
     expect($existingFeatured->fresh()->is_featured)->toBeTrue()
         ->and($newMedia->fresh()->is_featured)->toBeFalse();
 });
+
+test('replace media preserves old physical file when database update fails', function () {
+    $oldFile = UploadedFile::fake()->image('keep-old.jpg', 400, 400);
+    $storedOldPath = $oldFile->store('media/library', 'public');
+
+    $media = Media::create([
+        'disk' => 'public',
+        'directory' => 'media/library',
+        'filename' => basename($storedOldPath),
+        'mime_type' => 'image/jpeg',
+        'size' => 1024,
+        'title' => 'Original Title',
+    ]);
+
+    $newFile = UploadedFile::fake()->image('bad-new.jpg', 500, 500);
+    $shouldThrow = true;
+    Media::updating(function () use (&$shouldThrow) {
+        if ($shouldThrow) {
+            $shouldThrow = false;
+            throw new \RuntimeException('Simulated DB failure');
+        }
+    });
+
+    $action = app(\App\Actions\Media\ReplaceMediaAction::class);
+
+    expect(fn () => $action->handle($media, $newFile, ['title' => 'Will Fail']))
+        ->toThrow(\RuntimeException::class, 'Simulated DB failure');
+
+    Storage::disk('public')->assertExists($storedOldPath);
+    expect($media->fresh()->filename)->toBe(basename($storedOldPath));
+});

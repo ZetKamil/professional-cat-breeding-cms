@@ -189,5 +189,12 @@ class AnalyticsAndAttributionTest extends TestCase
 
         $stickyHtml = $this->get(route('quiz'))->getContent();
         $this->assertDoesNotMatchRegularExpression('/<a[^>]*id="mobileStickyMessengerBtn"[^>]*target="_blank"/s', $stickyHtml);
+
+        $contactHtml = $this->get(route('contact'))->getContent();
+        $this->assertStringContainsString("trackFunnelStep('callback_submitted'", $contactHtml);
+        $this->assertStringNotContainsString('contact_quick_callback_submitted', $contactHtml);
+        $this->assertStringNotContainsString('{ phone: phoneVal }', $contactHtml);
+        $this->assertStringContainsString('id="res-modal-callback-form" action="', $contactHtml);
+        $this->assertStringContainsString("form.getAttribute('action')", file_get_contents(resource_path('js/reservation-modal.js')));
     }
 }

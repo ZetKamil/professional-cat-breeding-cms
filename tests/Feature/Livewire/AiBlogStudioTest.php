@@ -119,9 +119,37 @@ test('saveDraft creates post with structured sections and tip', function () {
     $post = \App\Models\Post::where('slug', 'jak-karmic-kota-bengalskiego')->first();
     expect($post)->not->toBeNull();
     expect($post->is_published)->toBeFalse();
+    expect($post->published_at)->toBeNull();
     expect($post->sections)->toBeArray();
     expect($post->sections[0]['tip'])->toBe('Zawsze dodawaj taurynę.');
     expect($post->categories->pluck('slug')->all())->toContain('zywienie-holistyczne');
+});
+
+test('saveDraft deduplicates colliding slug and filters missing animal ids', function () {
+    \Illuminate\Support\Facades\Storage::fake('public');
+    \Illuminate\Support\Facades\Http::fake();
+
+    \App\Models\Post::factory()->create([
+        'slug' => 'powielony-artykul',
+    ]);
+
+    $component = Livewire::test(AiBlogStudio::class);
+    $component->set('selectedAnimalIds', ['01ZZZZZZZZZZZZZZZZZZZZZZZZ']);
+    $component->set('generatedDraft', [
+        'title' => 'Powielony artykuł',
+        'slug' => 'powielony-artykul',
+        'excerpt' => 'Krótki opis',
+        'sections' => [],
+        'body' => 'Treść',
+        'hero_image_prompt' => '',
+    ]);
+
+    $component->call('saveDraft', false);
+
+    $created = \App\Models\Post::where('slug', 'powielony-artykul-2')->first();
+    expect($created)->not->toBeNull()
+        ->and($created->published_at)->toBeNull()
+        ->and($created->animals)->toHaveCount(0);
 });
 
 test('saveDraft with publishNow true immediately publishes post', function () {

@@ -84,7 +84,7 @@
                 <small>Nie możesz teraz rozmawiać? Oddzwonimy lub napiszemy na WhatsApp w dogodnej chwili.</small>
             </div>
 
-            <form id="res-modal-callback-form" onsubmit="window.handleQuickCallbackSubmit(event)">
+            <form id="res-modal-callback-form" action="{{ url('/api/quick-callback') }}" onsubmit="window.handleQuickCallbackSubmit(event)">
                 @csrf
                 {{-- Anti-bot honeypot field --}}
                 <div style="display:none;" aria-hidden="true">

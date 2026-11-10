@@ -6,15 +6,17 @@ namespace App\Livewire\Admin;
 
 use App\Exceptions\GeminiApiKeyMissingException;
 use App\Exceptions\GeminiServiceUnavailableException;
+use App\Models\Animal;
 use App\Models\Category;
+use App\Models\Post;
 use App\Services\AiAgent\BlogContentAgent;
 use App\Services\AiBlogGeneratorService;
 use App\Services\PostService;
 use App\Services\TopicSuggesterService;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 /**
@@ -302,8 +304,20 @@ class AiBlogStudio extends Component
             $draft = $this->generatedDraft;
 
             $draft['is_published'] = $publishNow;
-            $draft['published_at'] = now();
+            $draft['published_at'] = $publishNow ? now() : null;
             $draft['user_id']      = Auth::id();
+
+            $baseSlug = Str::slug((string) ($draft['slug'] ?: ($draft['title'] ?? 'artykul'))) ?: 'artykul-' . Str::lower(Str::random(6));
+            $uniqueSlug = $baseSlug;
+            $suffix = 2;
+            while (Post::withTrashed()->where('slug', $uniqueSlug)->exists()) {
+                $uniqueSlug = $baseSlug . '-' . $suffix++;
+            }
+
+            $validAnimalIds = Animal::query()
+                ->whereIn('id', array_filter((array) ($this->selectedAnimalIds ?? [])))
+                ->pluck('id')
+                ->all();
 
             $sections = $draft['sections'] ?? [];
             $topicForCategory = trim($this->customTopic) ?: trim($this->selectedTopic);
@@ -311,14 +325,14 @@ class AiBlogStudio extends Component
 
             $post = $postService->create([
                 'user_id'             => $draft['user_id'],
-                'title'               => $draft['title'],
-                'slug'                => $draft['slug'],
-                'excerpt'             => $draft['excerpt'],
+                'title'               => Str::limit((string) ($draft['title'] ?? ''), 255, ''),
+                'slug'                => $uniqueSlug,
+                'excerpt'             => $draft['excerpt'] ?? null,
                 'sections'            => $sections,
                 'body'                => !empty($sections) ? $blogService->sectionsToBody($sections) : ($draft['body'] ?? ''),
-                'featured_animal_ids' => $this->selectedAnimalIds ?? [],
-                'meta_title'          => $draft['meta_title'] ?? null,
-                'meta_description'    => $draft['meta_description'] ?? null,
+                'featured_animal_ids' => $validAnimalIds,
+                'meta_title'          => isset($draft['meta_title']) ? Str::limit((string) $draft['meta_title'], 255, '') : null,
+                'meta_description'    => isset($draft['meta_description']) ? Str::limit((string) $draft['meta_description'], 500, '') : null,
                 'is_published'        => $publishNow,
                 'published_at'        => $draft['published_at'],
                 'categories'          => $assignedCategories,

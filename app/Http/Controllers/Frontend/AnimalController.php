@@ -33,11 +33,19 @@ class AnimalController extends Controller
      */
     public function index(Request $request): View
     {
+        $scalarInput = static fn (string $key): string => is_scalar($val = $request->input($key))
+            ? trim((string) $val)
+            : '';
+
+        $breedInput = $scalarInput('breed');
+        $statusInput = $scalarInput('status');
+        $genderInput = $scalarInput('gender');
+        $searchInput = $scalarInput('q');
+
         $query = Animal::query()
             ->published()
             ->with('media')
-            ->when($request->filled('breed'), function ($q) use ($request) {
-                $breedInput = $request->string('breed')->toString();
+            ->when($breedInput !== '', function ($q) use ($breedInput) {
                 $breedMap = [
                     'bengal' => 'Kot Bengalski',
                     'bengalskie' => 'Kot Bengalski',
@@ -50,14 +58,14 @@ class AnimalController extends Controller
                 $breed = $breedMap[$breedInput] ?? $breedInput;
                 $q->where('breed', '=', $breed);
             })
-            ->when($request->filled('status'), function ($q) use ($request) {
-                $q->statusFilter($request->string('status')->toString());
+            ->when($statusInput !== '', function ($q) use ($statusInput) {
+                $q->statusFilter($statusInput);
             })
-            ->when($request->filled('gender'), function ($q) use ($request) {
-                $q->genderFilter($request->string('gender')->toString());
+            ->when($genderInput !== '', function ($q) use ($genderInput) {
+                $q->genderFilter($genderInput);
             })
-            ->when($request->filled('q'), function ($q) use ($request) {
-                $q->search($request->string('q')->toString());
+            ->when($searchInput !== '', function ($q) use ($searchInput) {
+                $q->search($searchInput);
             })
             ->orderedByStatus();
 
@@ -66,10 +74,10 @@ class AnimalController extends Controller
         return view('frontend.animals.index', [
             'animals' => $animals,
             'breeds' => self::BREEDS,
-            'currentBreed' => $request->string('breed')->toString(),
-            'currentStatus' => $request->string('status')->toString(),
-            'currentGender' => $request->string('gender')->toString(),
-            'searchQuery' => $request->string('q')->toString(),
+            'currentBreed' => $breedInput,
+            'currentStatus' => $statusInput,
+            'currentGender' => $genderInput,
+            'searchQuery' => $searchInput,
             'statuses' => AnimalStatus::cases(),
             'genders' => AnimalGender::cases(),
         ]);

@@ -99,6 +99,7 @@ class BlogContentAgent
         try {
             $liveTopics = $this->tools['fetch_google_trends']->execute([
                 'breed_name' => $breedLabel,
+                'animals_context' => $animalsContext,
             ]);
 
             if (empty($liveTopics)) {

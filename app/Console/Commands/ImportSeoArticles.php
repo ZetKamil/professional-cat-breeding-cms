@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Models\Category;
+use App\Models\Media;
 use App\Models\Post;
 use App\Models\User;
+use App\Services\MediaService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ImportSeoArticles extends Command
@@ -103,15 +106,21 @@ class ImportSeoArticles extends Command
                 $scheduledDate = Carbon::parse($metaData['publish_date']);
             }
 
-            // Copy images to public storage
-            $storagePublicDir = public_path("storage/blog/{$folderName}");
+            // Copy images to public disk + public/storage/blog mirror
+            $blogRelativeDir = "blog/{$folderName}";
+            $storagePublicDir = public_path("storage/{$blogRelativeDir}");
             File::ensureDirectoryExists($storagePublicDir);
+            Storage::disk('public')->makeDirectory($blogRelativeDir);
 
             $imageFiles = File::files($dirPath);
             foreach ($imageFiles as $file) {
                 $ext = strtolower($file->getExtension());
                 if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'jfif'], true)) {
                     File::copy($file->getPathname(), $storagePublicDir . '/' . $file->getFilename());
+                    Storage::disk('public')->put(
+                        "{$blogRelativeDir}/" . $file->getFilename(),
+                        File::get($file->getPathname())
+                    );
                 }
             }
 
@@ -151,10 +160,15 @@ class ImportSeoArticles extends Command
 
             $publishedAt = $forceNow ? now() : $scheduledDate;
 
-            // Check if Post already exists in database (CMS)
-            $existingPost = Post::where('slug', $slug)->first();
+            // Check if Post already exists in database (including soft-deleted records to avoid UNIQUE(slug) collision)
+            $existingPost = Post::withTrashed()->where('slug', $slug)->first();
 
             if ($existingPost && ! $forceSync) {
+                if ($existingPost->trashed()) {
+                    $this->info("Skipped trashed Post ID {$existingPost->id}: {$title} [Wpis w koszu CMS — użyj --force-sync, aby przywrócić]");
+                    continue;
+                }
+
                 // Ensure published_at has its scheduled Sunday date if missing
                 if (! $existingPost->published_at) {
                     $existingPost->update([
@@ -167,24 +181,34 @@ class ImportSeoArticles extends Command
                 continue;
             }
 
-            // Create or Update Post
-            $post = Post::updateOrCreate(
-                ['slug' => $slug],
-                [
-                    'user_id' => $user->id,
-                    'title' => $title,
-                    'excerpt' => $excerpt,
-                    'body' => $processedBody,
-                    'sections' => Post::parseBodyToSections($processedBody),
-                    'meta_title' => $metaData['meta_title'] ?? ($metaData['meta']['title'] ?? null),
-                    'meta_description' => $metaData['meta_description'] ?? ($metaData['meta']['description'] ?? $excerpt),
-                    'is_published' => true,
-                    'published_at' => $publishedAt,
-                ]
-            );
+            $postAttributes = [
+                'user_id' => $user->id,
+                'title' => $title,
+                'slug' => $slug,
+                'excerpt' => $excerpt,
+                'body' => $processedBody,
+                'sections' => Post::parseBodyToSections($processedBody),
+                'meta_title' => $metaData['meta_title'] ?? ($metaData['meta']['title'] ?? null),
+                'meta_description' => $metaData['meta_description'] ?? ($metaData['meta']['description'] ?? $excerpt),
+                'is_published' => true,
+                'published_at' => $publishedAt,
+            ];
+
+            if ($existingPost) {
+                if ($existingPost->trashed()) {
+                    $existingPost->restore();
+                }
+                $existingPost->update($postAttributes);
+                $post = $existingPost;
+            } else {
+                $post = Post::create($postAttributes);
+            }
 
             // Attach Category
             $categoryNames = $metaData['categories'] ?? ['Odmiany i Rasy'];
+            if (! is_array($categoryNames)) {
+                $categoryNames = [$categoryNames];
+            }
             $categoryIds = Category::query()
                 ->whereIn('name', $categoryNames)
                 ->pluck('id')
@@ -199,24 +223,37 @@ class ImportSeoArticles extends Command
 
             $post->categories()->sync($categoryIds);
 
-            // Attach Hero Media (Hero image 02_hero_v2.jpg or 02_hero.jpg)
+            // Attach Hero Media (Hero image 02_hero_v2.jpg, 02_hero.jpg, or first image in package)
             $heroFilename = File::exists($storagePublicDir . '/02_hero_v2.jpg') ? '02_hero_v2.jpg' : '02_hero.jpg';
-            $heroUrl = "/storage/blog/{$folderName}/{$heroFilename}";
             if (! File::exists($storagePublicDir . '/' . $heroFilename)) {
-                $anyJpg = collect(File::files($storagePublicDir))->first(fn($f) => in_array(strtolower($f->getExtension()), ['jpg', 'jpeg', 'webp', 'jfif']));
-                if ($anyJpg) {
-                    $heroUrl = "/storage/blog/{$folderName}/" . $anyJpg->getFilename();
+                $anyImage = collect(File::files($storagePublicDir))
+                    ->first(fn ($f) => in_array(strtolower($f->getExtension()), ['jpg', 'jpeg', 'png', 'webp', 'jfif'], true));
+                if ($anyImage) {
+                    $heroFilename = $anyImage->getFilename();
                 }
             }
 
-            $post->media()->delete();
+            $mediaService = app(MediaService::class);
+            $post->media()->get()->each(function (Media $oldMedia) use ($mediaService, $blogRelativeDir) {
+                if ($oldMedia->directory !== $blogRelativeDir) {
+                    $mediaService->delete($oldMedia);
+                } else {
+                    $oldMedia->delete();
+                }
+            });
+
+            $heroFullPath = $storagePublicDir . '/' . $heroFilename;
+            $heroMime = File::exists($heroFullPath) ? (@mime_content_type($heroFullPath) ?: 'image/jpeg') : 'image/jpeg';
+            $heroSize = File::exists($heroFullPath) ? (int) (File::size($heroFullPath) ?: 0) : 0;
+
             $post->media()->create([
                 'disk' => 'public',
-                'filename' => $heroUrl,
-                'mime_type' => 'image/jpeg',
-                'size' => 102400,
+                'directory' => $blogRelativeDir,
+                'filename' => $heroFilename,
+                'mime_type' => $heroMime,
+                'size' => $heroSize,
                 'title' => $title,
-                'alt_text' => $title,
+                'alt_text' => $metaData['hero_image']['alt'] ?? $title,
                 'is_featured' => true,
             ]);
 
@@ -232,28 +269,69 @@ class ImportSeoArticles extends Command
     /**
      * Simple parser for key-value and scalar arrays from yml metadata.
      */
+    /**
+     * Parser for top-level keys, nested maps (e.g. meta.title), and list items in yml metadata.
+     */
     private function parseSimpleYaml(string $content): array
     {
         $data = [];
-        $lines = explode("\n", $content);
+        $lines = preg_split('/\R/', $content) ?: [];
         $currentKey = null;
 
-        foreach ($lines as $line) {
-            $line = rtrim($line);
-            if (empty($line) || Str::startsWith(trim($line), '#')) {
+        $unquote = static function (string $value): string {
+            $trimmed = trim($value);
+            if ($trimmed === '') {
+                return '';
+            }
+            if ((str_starts_with($trimmed, '"') && str_ends_with($trimmed, '"'))
+                || (str_starts_with($trimmed, "'") && str_ends_with($trimmed, "'"))) {
+                $trimmed = substr($trimmed, 1, -1);
+            }
+
+            return str_replace(['\"', "\\'"], ['"', "'"], $trimmed);
+        };
+
+        foreach ($lines as $rawLine) {
+            $line = rtrim($rawLine);
+            $trimmed = trim($line);
+
+            if ($trimmed === '' || Str::startsWith($trimmed, '#')) {
                 continue;
             }
 
-            if (preg_match('/^([a-z0-9_]+):\s*"?(.*?)"?$/i', trim($line), $m)) {
+            $indent = strlen($line) - strlen(ltrim($line, " \t"));
+
+            if ($indent === 0 && preg_match('/^([a-z0-9_]+):(.*)$/i', $trimmed, $m)) {
                 $key = $m[1];
-                $val = trim($m[2]);
+                $val = $unquote($m[2]);
                 if ($val !== '') {
                     $data[$key] = $val;
+                    $currentKey = null;
                 } else {
                     $currentKey = $key;
+                    if (! isset($data[$currentKey]) || ! is_array($data[$currentKey])) {
+                        $data[$currentKey] = [];
+                    }
                 }
-            } elseif (preg_match('/^\s+-\s*"?(.*?)"?$/', $line, $m) && $currentKey) {
-                $data[$currentKey][] = trim($m[1]);
+            } elseif ($indent > 0 && $currentKey !== null) {
+                if (! is_array($data[$currentKey] ?? null)) {
+                    $data[$currentKey] = [];
+                }
+
+                if (preg_match('/^-\s+([a-z0-9_]+):(.*)$/i', $trimmed, $m)) {
+                    $data[$currentKey][] = [$m[1] => $unquote($m[2])];
+                } elseif (preg_match('/^-\s*(.*)$/', $trimmed, $m)) {
+                    $data[$currentKey][] = $unquote($m[1]);
+                } elseif (preg_match('/^([a-z0-9_]+):(.*)$/i', $trimmed, $m)) {
+                    $subKey = $m[1];
+                    $subVal = $unquote($m[2]);
+                    $lastIdx = array_key_last($data[$currentKey]);
+                    if ($lastIdx !== null && is_int($lastIdx) && is_array($data[$currentKey][$lastIdx])) {
+                        $data[$currentKey][$lastIdx][$subKey] = $subVal;
+                    } else {
+                        $data[$currentKey][$subKey] = $subVal;
+                    }
+                }
             }
         }
 

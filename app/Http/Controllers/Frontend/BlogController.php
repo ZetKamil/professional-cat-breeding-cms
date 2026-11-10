@@ -22,14 +22,18 @@ class BlogController extends Controller
             ->with(['user', 'categories', 'media']);
 
         // Filtr po kategorii (slug)
-        if ($categorySlug = $request->get('category')) {
+        $rawCategory = $request->input('category');
+        $categorySlug = is_scalar($rawCategory) ? trim((string) $rawCategory) : '';
+        if ($categorySlug !== '') {
             $query->whereHas('categories', function ($q) use ($categorySlug) {
                 $q->where('categories.slug', $categorySlug);
             });
         }
 
         // Wyszukiwanie tekstowe
-        if ($search = $request->get('q')) {
+        $rawSearch = $request->input('q');
+        $search = is_scalar($rawSearch) ? trim((string) $rawSearch) : '';
+        if ($search !== '') {
             $query->search($search);
         }
 
@@ -44,7 +48,7 @@ class BlogController extends Controller
                     $q->where('is_published', true)
                         ->whereNotNull('published_at')
                         ->where('published_at', '<=', now());
-                }
+                },
             ])
             ->orderBy('name')
             ->get();
@@ -52,8 +56,8 @@ class BlogController extends Controller
         return view('frontend.blog.index', [
             'posts' => $posts,
             'categories' => $categories,
-            'selectedCategory' => $request->get('category'),
-            'searchQuery' => $request->get('q'),
+            'selectedCategory' => $categorySlug !== '' ? $categorySlug : null,
+            'searchQuery' => $search !== '' ? $search : null,
         ]);
     }
 
@@ -67,7 +71,7 @@ class BlogController extends Controller
             && $authUser->is_active
             && in_array($authUser->role?->name, ['admin', 'editor'], true);
 
-        if ((!$post->is_published || !$post->published_at || $post->published_at->isFuture()) && !$isStaff) {
+        if ((! $post->is_published || ! $post->published_at || $post->published_at->isFuture()) && ! $isStaff) {
             abort(404);
         }
 
@@ -98,7 +102,7 @@ class BlogController extends Controller
         // Prioritize available kittens of the breed mentioned in the article (max 3).
         $articleAnimals = $post->animals->where('status', \App\Enums\AnimalStatus::Available);
 
-        $postText = mb_strtolower($post->slug . ' ' . $post->title);
+        $postText = mb_strtolower($post->slug.' '.$post->title);
         if (str_contains($postText, 'bengal')) {
             $bengalAnimals = \App\Models\Animal::query()
                 ->where('breed', 'Kot Bengalski')

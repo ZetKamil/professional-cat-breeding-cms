@@ -13,6 +13,7 @@ class CategoryAuthorizationTest extends TestCase
     use RefreshDatabase;
 
     protected User $admin;
+
     protected User $regularUser;
 
     protected function setUp(): void
@@ -85,5 +86,21 @@ class CategoryAuthorizationTest extends TestCase
             ->assertRedirect(route('backend.categories.index'));
 
         $this->assertSoftDeleted('categories', ['id' => $category->id]);
+    }
+
+    public function test_category_index_and_show_include_posts_count(): void
+    {
+        $category = Category::factory()->create(['name' => 'Genetyka', 'slug' => 'genetyka']);
+        $posts = \App\Models\Post::factory()->count(2)->create(['user_id' => $this->admin->id]);
+        $category->posts()->attach($posts->pluck('id'));
+
+        $indexResponse = $this->actingAs($this->admin)->get(route('backend.categories.index'));
+        $indexResponse->assertOk();
+        $listedCategory = $indexResponse->viewData('categories')->firstWhere('id', $category->id);
+        $this->assertSame(2, $listedCategory->posts_count);
+
+        $showResponse = $this->actingAs($this->admin)->get(route('backend.categories.show', $category));
+        $showResponse->assertOk();
+        $this->assertSame(2, $showResponse->viewData('category')->posts_count);
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Services;
 
+use App\Services\AiAgent\Tools\FetchGoogleTrendsTool;
 use App\Services\GeminiService;
 use App\Services\TopicSuggesterService;
 use Mockery\MockInterface;
@@ -62,5 +63,34 @@ class TopicSuggesterServiceTest extends TestCase
         $this->expectExceptionMessageMatches('/503|nie udało|trendów/i');
 
         $service->suggest('bengalski');
+    }
+
+    public function test_parses_fenced_json_in_trend_tool_and_topic_suggester_and_checks_placeholder_keys(): void
+    {
+        $fenced = "Oto propozycje:\n```json\n" . json_encode([
+            ['title' => 'Kot bengalski w bloku', 'keyword' => 'kot bengalski mieszkanie', 'intent' => 'informational'],
+            ['invalid' => 'brak-pol'],
+        ]) . "\n```";
+
+        $this->mock(GeminiService::class, function (MockInterface $mock) use ($fenced) {
+            $mock->shouldReceive('generateText')->twice()->andReturn($fenced);
+        });
+
+        $topics = app(TopicSuggesterService::class)->suggest('bengalski');
+        $this->assertCount(1, $topics);
+        $this->assertSame('Kot bengalski w bloku', $topics[0]['title']);
+
+        $toolTopics = app(FetchGoogleTrendsTool::class)->execute([
+            'breed_name' => 'Kot Bengalski',
+            'animals_context' => [['name' => 'Simba', 'status' => 'available']],
+        ]);
+        $this->assertCount(1, $toolTopics);
+        $this->assertSame('kot bengalski mieszkanie', $toolTopics[0]['keyword']);
+
+        config(['services.gemini.api_key' => 'YOUR_API_KEY']);
+        $this->assertFalse((new GeminiService())->isAvailable());
+
+        config(['services.gemini.api_key' => '?']);
+        $this->assertFalse((new GeminiService())->isAvailable());
     }
 }

@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Cache;
 
 class Setting extends Model
 {
+    private const MISSING_SENTINEL = '__APP_SETTING_MISSING__';
+
     protected $fillable = [
         'key',
         'value',
@@ -17,15 +19,18 @@ class Setting extends Model
      */
     public static function get(string $key, mixed $default = null): mixed
     {
-        return Cache::remember("app_setting.{$key}", 3600, function () use ($key, $default) {
+        $cached = Cache::remember("app_setting.{$key}", 3600, function () use ($key) {
             $record = static::where('key', $key)->first();
             if (! $record || $record->value === null) {
-                return $default;
+                return self::MISSING_SENTINEL;
             }
 
             $decoded = json_decode($record->value, true);
+
             return (json_last_error() === JSON_ERROR_NONE) ? $decoded : $record->value;
         });
+
+        return $cached === self::MISSING_SENTINEL ? $default : $cached;
     }
 
     /**
@@ -33,9 +38,11 @@ class Setting extends Model
      */
     public static function set(string $key, mixed $value): static
     {
-        $serialized = is_array($value) || is_object($value)
-            ? json_encode($value, JSON_UNESCAPED_UNICODE)
-            : (string) $value;
+        $serialized = match (true) {
+            is_bool($value), is_array($value), is_object($value) => json_encode($value, JSON_UNESCAPED_UNICODE),
+            $value === null => null,
+            default => (string) $value,
+        };
 
         $record = static::updateOrCreate(
             ['key' => $key],
@@ -53,16 +60,16 @@ class Setting extends Model
     public static function getBlogCta(): array
     {
         $defaults = [
-            'is_enabled'    => true,
-            'badge'         => 'Hodowla Kotów z Mazowieckiej Szwajcarii',
-            'heading'       => '🐾 Dostępne kocięta w naszej hodowli',
-            'body'          => '',
-            'image_url'     => '',
-            'button_text'   => 'Zobacz dostępne koty',
-            'button_url'    => '/koty',
+            'is_enabled' => true,
+            'badge' => 'Hodowla Kotów z Mazowieckiej Szwajcarii',
+            'heading' => '🐾 Dostępne kocięta w naszej hodowli',
+            'body' => '',
+            'image_url' => '',
+            'button_text' => 'Zobacz dostępne koty',
+            'button_url' => '/koty',
             'facebook_info' => 'Zapraszamy również na nasz profil na Facebooku — publikujemy tam bieżące relacje, codzienne życie kociąt oraz nowe zdjęcia i filmy!',
             'facebook_text' => 'Odwiedź nas na Facebooku',
-            'facebook_url'  => 'https://www.facebook.com/profile.php?id=61580668026948',
+            'facebook_url' => 'https://www.facebook.com/profile.php?id=61580668026948',
         ];
 
         $data = static::get('blog_closing_cta', []);

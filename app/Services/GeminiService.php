@@ -28,8 +28,7 @@ class GeminiService
     private readonly string $imageModel;
     private readonly int    $timeout;
 
-    private const BASE_URL       = 'https://generativelanguage.googleapis.com/v1beta/models/';
-    private const IMAGEN_API_URL = 'https://us-central1-aiplatform.googleapis.com/v1/projects/';
+    private const BASE_URL = 'https://generativelanguage.googleapis.com/v1beta/models/';
 
     public function __construct()
     {
@@ -72,6 +71,13 @@ class GeminiService
         $this->timeout    = (int) config('services.gemini.timeout', 60);
     }
 
+    private function hasValidApiKey(): bool
+    {
+        return ! blank($this->apiKey)
+            && $this->apiKey !== '?'
+            && ! str_contains($this->apiKey, 'YOUR_API_KEY');
+    }
+
     /**
      * Assert API key is present before any network call.
      *
@@ -79,7 +85,7 @@ class GeminiService
      */
     private function assertKeyConfigured(): void
     {
-        if (blank($this->apiKey) || $this->apiKey === '?' || str_contains($this->apiKey, 'YOUR_API_KEY')) {
+        if (! $this->hasValidApiKey()) {
             throw GeminiApiKeyMissingException::notConfigured();
         }
     }
@@ -293,16 +299,74 @@ class GeminiService
     /**
      * Quick health / availability check.
      *
-     * Returns false when the API key is missing or on any network error.
+     * Returns false when the API key is missing or contains an unconfigured placeholder.
      * Used by the Livewire component to disable the Generate button early.
      */
     public function isAvailable(): bool
     {
-        if (blank(config('services.gemini.api_key'))) {
-            return false;
+        return $this->hasValidApiKey();
+    }
+
+    /**
+     * Extract and decode a JSON array returned by an LLM (stripping optional markdown fences).
+     */
+    public static function decodeJsonArray(string $raw): ?array
+    {
+        $cleaned = trim($raw);
+        $cleaned = preg_replace('/^```(?:json)?\s*/i', '', $cleaned) ?? $cleaned;
+        $cleaned = preg_replace('/\s*```$/', '', $cleaned) ?? $cleaned;
+        $cleaned = trim($cleaned);
+
+        $decoded = json_decode($cleaned, true);
+        if (is_array($decoded)) {
+            return $decoded;
         }
 
-        // We trust the config; no live ping here to avoid quota usage.
-        return true;
+        $start = strpos($cleaned, '[');
+        $end = strrpos($cleaned, ']');
+        if ($start !== false && $end !== false && $end > $start) {
+            $slice = substr($cleaned, $start, $end - $start + 1);
+            $decoded = json_decode($slice, true);
+            if (is_array($decoded)) {
+                return $decoded;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Decode and validate up to 6 SEO blog topic suggestions returned by Gemini.
+     *
+     * @return array<int, array{title: string, keyword: string, intent: string}>
+     */
+    public static function decodeTopicSuggestions(string $raw): array
+    {
+        $parsed = self::decodeJsonArray($raw);
+        if (! is_array($parsed)) {
+            return [];
+        }
+
+        $clean = [];
+        foreach ($parsed as $item) {
+            if (! is_array($item)) {
+                continue;
+            }
+            $title = trim((string) ($item['title'] ?? ''));
+            $keyword = trim((string) ($item['keyword'] ?? ''));
+            if ($title === '' || $keyword === '') {
+                continue;
+            }
+            $clean[] = [
+                'title' => $title,
+                'keyword' => $keyword,
+                'intent' => trim((string) ($item['intent'] ?? 'informational')) ?: 'informational',
+            ];
+            if (count($clean) >= 6) {
+                break;
+            }
+        }
+
+        return $clean;
     }
 }
