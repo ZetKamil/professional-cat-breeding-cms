@@ -27,6 +27,7 @@ class GeminiService
     private readonly string $textModel;
     private readonly string $imageModel;
     private readonly int    $timeout;
+    private readonly int    $wallTimeout;
 
     private const BASE_URL = 'https://generativelanguage.googleapis.com/v1beta/models/';
 
@@ -67,8 +68,9 @@ class GeminiService
             $this->textModel = $normalized;
         }
 
-        $this->imageModel = (string) config('services.gemini.image_model', 'imagen-3.0-generate-002');
-        $this->timeout    = (int) config('services.gemini.timeout', 60);
+        $this->imageModel  = (string) config('services.gemini.image_model', 'imagen-3.0-generate-002');
+        $this->timeout     = (int) config('services.gemini.timeout', 20);
+        $this->wallTimeout = max(10, (int) config('services.gemini.wall_timeout', 24));
     }
 
     private function hasValidApiKey(): bool
@@ -115,14 +117,15 @@ class GeminiService
         while ($attempt < $maxAttempts) {
             $attempt++;
             try {
-                $response = Http::timeout($effectiveTimeout)
+                $response = Http::connectTimeout(min(5, $effectiveTimeout))
+                    ->timeout($effectiveTimeout)
                     ->withHeaders($headers)
                     ->post($url, $payload);
 
                 // Retry on transient server errors (503 high demand, 502, 504)
                 if ($attempt < $maxAttempts && in_array($response->status(), [503, 502, 504], true)) {
-                    $backoffUs = (int) (1200000 * pow(2, $attempt - 1)); // 1.2s, 2.4s
-                    Log::warning("GeminiService: HTTP {$response->status()} on attempt {$attempt}/{$maxAttempts}. Backing off for " . ($backoffUs / 1000000) . "s before retrying...", [
+                    $backoffUs = 400000;
+                    Log::warning("GeminiService: HTTP {$response->status()} on attempt {$attempt}/{$maxAttempts}. Backing off briefly before retrying...", [
                         'url' => $url,
                     ]);
                     usleep($backoffUs);
@@ -133,7 +136,7 @@ class GeminiService
             } catch (ConnectionException $e) {
                 if ($attempt < $maxAttempts) {
                     Log::warning("GeminiService: Connection error on attempt {$attempt}/{$maxAttempts}. Retrying...");
-                    usleep(500000);
+                    usleep(300000);
                     continue;
                 }
 
@@ -157,30 +160,24 @@ class GeminiService
     {
         $this->assertKeyConfigured();
 
-        // Text timeout: generous enough for free-tier Gemini, but within PHP max_execution_time.
-        $textTimeout = min($this->timeout, 30);
+        $currentMaxExec = (int) ini_get('max_execution_time');
+        $desiredMaxExec = $this->wallTimeout + 30;
+        if ($currentMaxExec > 0 && $currentMaxExec < $desiredMaxExec) {
+            @set_time_limit($desiredMaxExec);
+        }
 
-        // Cascade of models to try if the primary fails (503/404/500/timeout):
-        // 1. Configured text model
-        // 2. gemini-flash-latest (Google's official rolling alias)
-        // 3. gemini-2.5-flash-lite (Flash-Lite models have dedicated, separate capacity pools)
-        // 4. gemini-2.5-flash (stable production flash)
-        // 5. gemini-3.8-flash (current generation flash)
-        // 6. gemini-3.7-flash
-        // 7. gemini-3.5-flash
-        // 8. gemini-3.5-flash-lite
+        // Total wall-clock budget keeps synchronous Livewire requests under OVH/Apache gateway timeouts.
+        $textTimeout = min($this->timeout, 18);
+        $deadline = microtime(true) + $this->wallTimeout;
+
         $modelsToTry = array_values(array_unique(array_filter([
             $this->textModel,
             'gemini-flash-latest',
-            'gemini-2.5-flash-lite',
             'gemini-2.5-flash',
-            'gemini-3.8-flash',
-            'gemini-3.7-flash',
-            'gemini-3.5-flash',
-            'gemini-3.5-flash-lite',
+            'gemini-2.5-flash-lite',
         ])));
 
-        $payload = [
+        $basePayload = [
             'system_instruction' => [
                 'parts' => [['text' => $systemPrompt]],
             ],
@@ -188,8 +185,8 @@ class GeminiService
                 ['parts' => [['text' => $userPrompt]]],
             ],
             'generationConfig' => [
-                'temperature'     => 0.7,
-                'maxOutputTokens' => 4096,
+                'temperature'      => 0.7,
+                'maxOutputTokens'  => 3500,
                 'responseMimeType' => 'application/json',
             ],
         ];
@@ -198,11 +195,38 @@ class GeminiService
         $lastErrorDetails = '';
 
         foreach ($modelsToTry as $model) {
+            $remaining = (int) floor($deadline - microtime(true));
+            if ($remaining < 4) {
+                Log::warning('GeminiService: wall-clock budget exhausted before trying fallback model', [
+                    'model' => $model,
+                    'wall_timeout' => $this->wallTimeout,
+                ]);
+                break;
+            }
+
             $url = self::BASE_URL . $model . ':generateContent';
+            $payload = $basePayload;
+
+            // Disable hidden chain-of-thought latency on Flash 2.5/latest models so drafts finish in seconds.
+            $supportsZeroThinking = str_contains($model, 'flash');
+            if ($supportsZeroThinking) {
+                $payload['generationConfig']['thinkingConfig'] = ['thinkingBudget' => 0];
+            }
+
+            $attemptTimeout = min($textTimeout, max(6, $remaining));
+            $maxAttempts = $remaining >= 14 ? 2 : 1;
 
             try {
-                // 3 attempts with exponential backoff on transient errors (503 high demand)
-                $response = $this->sendPostRequest($url, $payload, maxAttempts: 3, timeout: $textTimeout);
+                $response = $this->sendPostRequest($url, $payload, maxAttempts: $maxAttempts, timeout: $attemptTimeout);
+
+                // Fallback transparently if model rejects thinkingConfig with HTTP 400
+                if ($response->status() === 400 && isset($payload['generationConfig']['thinkingConfig'])) {
+                    unset($payload['generationConfig']['thinkingConfig']);
+                    $retryRemaining = (int) floor($deadline - microtime(true));
+                    if ($retryRemaining >= 4) {
+                        $response = $this->sendPostRequest($url, $payload, maxAttempts: 1, timeout: min($textTimeout, $retryRemaining));
+                    }
+                }
             } catch (ConnectionException) {
                 Log::warning('GeminiService: connection timeout', ['model' => $model]);
                 continue;
@@ -267,7 +291,7 @@ class GeminiService
         ];
 
         try {
-            $response = $this->sendPostRequest($url, $payload);
+            $response = $this->sendPostRequest($url, $payload, maxAttempts: 1, timeout: 10);
         } catch (ConnectionException) {
             Log::warning('GeminiService: image generation timeout');
             throw GeminiServiceUnavailableException::timeout();

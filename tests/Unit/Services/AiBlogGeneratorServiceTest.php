@@ -249,4 +249,34 @@ class AiBlogGeneratorServiceTest extends TestCase
         $body = $service->sectionsToBody($normalized);
         $this->assertStringContainsString('💡 **Wskazówka hodowcy:** Praktyczny tip o zdrowiu', $body);
     }
+
+    public function test_gemini_service_sets_zero_thinking_budget_on_flash_and_falls_back_on_400(): void
+    {
+        Config::set('services.gemini.api_key', 'test-key-123');
+        Config::set('services.gemini.text_model', 'gemini-flash-latest');
+        Config::set('services.gemini.wall_timeout', 24);
+
+        $requests = [];
+        \Illuminate\Support\Facades\Http::fake(function ($request) use (&$requests) {
+            $requests[] = $request->data();
+            if (count($requests) === 1) {
+                return \Illuminate\Support\Facades\Http::response([
+                    'error' => ['message' => 'Unknown field thinkingConfig'],
+                ], 400);
+            }
+
+            return \Illuminate\Support\Facades\Http::response([
+                'candidates' => [[
+                    'content' => ['parts' => [['text' => '{"h1":"OK"}']]],
+                ]],
+            ], 200);
+        });
+
+        $result = (new GeminiService())->generateText('sys', 'usr');
+
+        $this->assertSame('{"h1":"OK"}', $result);
+        $this->assertCount(2, $requests);
+        $this->assertSame(0, $requests[0]['generationConfig']['thinkingConfig']['thinkingBudget'] ?? null);
+        $this->assertArrayNotHasKey('thinkingConfig', $requests[1]['generationConfig']);
+    }
 }

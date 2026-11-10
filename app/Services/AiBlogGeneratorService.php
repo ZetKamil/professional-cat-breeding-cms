@@ -125,7 +125,8 @@ class AiBlogGeneratorService
         $url = "https://image.pollinations.ai/prompt/{$encoded}?width={$width}&height={$height}&nologo=true&enhance=true";
 
         try {
-            $response = \Illuminate\Support\Facades\Http::timeout(25)
+            $response = \Illuminate\Support\Facades\Http::connectTimeout(4)
+                ->timeout(10)
                 ->get($url);
 
             if ($response->successful() && strlen($response->body()) > 5000) {

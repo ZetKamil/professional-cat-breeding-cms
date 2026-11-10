@@ -622,35 +622,53 @@ class AiBlogStudio extends Component
     }
 
     /**
-     * Download remote section images and persist them to local storage to guarantee permanent availability.
+     * Download remote section images in parallel and persist them to local storage to guarantee permanent availability.
      */
     private function persistRemoteSectionImages(array $sections, int $postId): array
     {
-        foreach ($sections as $idx => &$sec) {
+        $remoteUrls = [];
+        foreach ($sections as $idx => $sec) {
             $url = $sec['image_url'] ?? '';
             if (str_starts_with($url, 'https://image.pollinations.ai/') || str_starts_with($url, 'https://images.unsplash.com/')) {
-                try {
-                    $response = \Illuminate\Support\Facades\Http::timeout(15)->get($url);
-                    if ($response->successful() && strlen($response->body()) > 4000) {
-                        $dir = 'posts';
-                        $filename = "sec_{$postId}_{$idx}_" . uniqid() . '.jpg';
-                        \Illuminate\Support\Facades\Storage::disk('public')->put("{$dir}/{$filename}", $response->body());
+                $remoteUrls[$idx] = $url;
+            }
+        }
 
-                        // Copy to public/storage if not symlinked
-                        $targetPath = public_path("storage/{$dir}/{$filename}");
-                        if (!\Illuminate\Support\Facades\File::isDirectory(dirname($targetPath))) {
-                            \Illuminate\Support\Facades\File::makeDirectory(dirname($targetPath), 0755, true, true);
-                        }
-                        \Illuminate\Support\Facades\File::put($targetPath, $response->body());
+        if (empty($remoteUrls)) {
+            return $sections;
+        }
 
-                        $sec['image_url'] = asset("storage/{$dir}/{$filename}");
+        try {
+            $responses = \Illuminate\Support\Facades\Http::pool(function (\Illuminate\Http\Client\Pool $pool) use ($remoteUrls) {
+                $reqs = [];
+                foreach ($remoteUrls as $idx => $url) {
+                    $reqs[$idx] = $pool->as((string) $idx)->connectTimeout(4)->timeout(8)->get($url);
+                }
+
+                return $reqs;
+            });
+
+            foreach ($remoteUrls as $idx => $url) {
+                $response = $responses[(string) $idx] ?? null;
+                if ($response instanceof \Illuminate\Http\Client\Response && $response->successful() && strlen($response->body()) > 4000) {
+                    $dir = 'posts';
+                    $filename = "sec_{$postId}_{$idx}_" . uniqid() . '.jpg';
+                    \Illuminate\Support\Facades\Storage::disk('public')->put("{$dir}/{$filename}", $response->body());
+
+                    // Copy to public/storage if not symlinked
+                    $targetPath = public_path("storage/{$dir}/{$filename}");
+                    if (!\Illuminate\Support\Facades\File::isDirectory(dirname($targetPath))) {
+                        \Illuminate\Support\Facades\File::makeDirectory(dirname($targetPath), 0755, true, true);
                     }
-                } catch (\Throwable $e) {
-                    \Illuminate\Support\Facades\Log::warning('AI Blog Studio: could not persist remote section image locally', [
-                        'error' => $e->getMessage(),
-                    ]);
+                    \Illuminate\Support\Facades\File::put($targetPath, $response->body());
+
+                    $sections[$idx]['image_url'] = asset("storage/{$dir}/{$filename}");
                 }
             }
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('AI Blog Studio: could not persist remote section image locally', [
+                'error' => $e->getMessage(),
+            ]);
         }
 
         return $sections;

@@ -181,3 +181,35 @@ test('saveDraft with publishNow true immediately publishes post', function () {
     expect($post->is_published)->toBeTrue();
 });
 
+test('goToStep3 generates article draft and recovers cleanly on gemini timeout', function () {
+    \Illuminate\Support\Facades\Config::set('services.gemini.api_key', 'test-key-123');
+    \Illuminate\Support\Facades\Config::set('services.gemini.wall_timeout', 15);
+
+    \Illuminate\Support\Facades\Http::fake([
+        'generativelanguage.googleapis.com/*' => \Illuminate\Support\Facades\Http::response([
+            'candidates' => [[
+                'content' => ['parts' => [[
+                    'text' => json_encode([
+                        'h1' => 'Szybko wygenerowany artykuł',
+                        'meta_title' => 'Tytuł SEO',
+                        'meta_description' => 'Opis SEO',
+                        'excerpt' => 'Krótki wstęp.',
+                        'sections' => [
+                            ['heading' => '', 'body' => 'Akapit wprowadzający.', 'tip' => 'Wskazówka', 'image_prompt' => 'Bengal cat'],
+                        ],
+                        'hero_image_prompt' => 'Luxury bengal cat',
+                    ]),
+                ]]],
+            ]],
+        ], 200),
+    ]);
+
+    $component = Livewire::test(AiBlogStudio::class)
+        ->set('customTopic', 'Temperament kota bengalskiego')
+        ->call('goToStep3');
+
+    $component->assertSet('currentStep', 3)
+        ->assertSet('isGenerating', false)
+        ->assertSet('generatedDraft.title', 'Szybko wygenerowany artykuł');
+});
+
