@@ -1,6 +1,6 @@
 @props([
-    'title' => 'Domowa Hodowla Kotów Rasowych z Rodowodem – Bengalskie, Brytyjskie i Syjamskie | Mazowiecka Szwajcaria',
-    'metaDescription' => 'Domowa hodowla kotów rasowych z rodowodem SHiOZ ZOOLANDIA (Certyfikat 58/CW/2025, Rej. 58/P/2025). Koty bengalskie, brytyjskie i syjamskie w Sikorzu k. Płocka (Mazowsze).',
+    'title' => 'Hodowla Kotów z Rodowodem Płock – Bengalskie, Brytyjskie, Syjamskie',
+    'metaDescription' => 'Hodowla kotów rasowych z rodowodem – Płock / Sikorz (SHiOZ ZOOLANDIA). Kocięta bengalskie, brytyjskie i syjamskie z rodowodem, mikroczipem i kompletem szczepień.',
     'ogTitle' => null,
     'ogDescription' => null,
     'ogImage' => null,

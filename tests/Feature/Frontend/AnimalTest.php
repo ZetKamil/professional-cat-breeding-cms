@@ -24,6 +24,7 @@ class AnimalTest extends TestCase
         $response = $this->get('/koty');
 
         $response->assertOk();
+        $response->assertSee('Kocięta i Koty z Rodowodem');
         $response->assertSee('Nasze Koty');
         $response->assertSee('Kot Bengalski');
         $response->assertSee('Kot Brytyjski');
@@ -50,6 +51,7 @@ class AnimalTest extends TestCase
         $response = $this->get('/koty?breed=Kot+Bengalski');
 
         $response->assertOk();
+        $response->assertSee('Koty Bengalskie z Rodowodem');
         $response->assertSee('BengalCat');
         $response->assertDontSee('BritishCat');
     }

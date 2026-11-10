@@ -1,10 +1,10 @@
-<x-frontend.shell title="O Domowej Hodowli — Standardy, Filozofia i Kodeks Zaufania | Mazowiecka Szwajcaria"
-    meta-description="Poznaj standardy domowej hodowli kotów z Mazowieckiej Szwajcarii (SHiOZ ZOOLANDIA). Badania kardiologiczne i genetyczne rodziców, etyczna domowa socjalizacja i jasny proces zakupu kocięcia."
+<x-frontend.shell title="Hodowla Kotów z Rodowodem Płock / Sikorz — Standardy SHiOZ | Mazowiecka Szwajcaria"
+    meta-description="Poznaj standardy hodowli kotów z rodowodem SHiOZ ZOOLANDIA (Płock / Sikorz). Badania kardiologiczne i genetyczne rodziców, etyczna domowa socjalizacja i jasny proces zakupu kocięcia."
     og-image="{{ asset('og-cattery.jpg') }}">
     {{-- ============================================================
     1. HERO — Editorial, photography-first
     ============================================================ --}}
-    <x-frontend.hero eyebrow="Felinologia i Standardy Domowe" title="O Domowej Hodowli.<br>Bezkompromisowa Etyka i Ciepło."
+    <x-frontend.hero eyebrow="Felinologia i Standardy Hodowli" title="Hodowla Kotów z Rodowodem.<br>Etyka, Badania i Domowe Ciepło."
         lead="Poznaj naszą filozofię opieki, Kodeks Zaufania oraz jasny, przejrzysty proces zakupu i dołączenia kocięcia do Twojego domu."
         image-url="{{ asset('image/cattery/hero_bg.jpg') }}"
         image-position="center 90%"
@@ -76,6 +76,8 @@
                 </div>
             </div>
         </div>
+
+        <x-frontend.entity-summary-box />
     </x-frontend.section>
 
     {{-- ============================================================

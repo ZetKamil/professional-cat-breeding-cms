@@ -1,5 +1,5 @@
-<x-frontend.shell title="Domowa Hodowla Kotów Rasowych z Rodowodem – Bengalskie, Brytyjskie, Syjamskie | Mazowiecka Szwajcaria"
-    meta-description="Domowa hodowla kotów rasowych z rodowodem SHiOZ ZOOLANDIA (Certyfikat 58/CW/2025, Rej. 58/P/2025). Koty bengalskie, brytyjskie i syjamskie w Sikorzu k. Płocka (Mazowsze). Sprawdź dostępne kocięta!"
+<x-frontend.shell title="Hodowla Kotów z Rodowodem Płock – Bengalskie, Brytyjskie, Syjamskie"
+    meta-description="Hodowla kotów rasowych z rodowodem – Płock / Sikorz (SHiOZ ZOOLANDIA). Kocięta bengalskie, brytyjskie i syjamskie z rodowodem, mikroczipem i kompletem szczepień."
     og-image="{{ asset('og-default.jpg') }}">
     {{-- ============================================================
     1. CINEMATIC ASYMMETRIC HERO — ROLLS ROYCE / APPLE STYLE
@@ -30,12 +30,12 @@
                             <span class="hero-split__eyebrow--desktop">SHiOZ ZOOLANDIA • MAZOWIECKA SZWAJCARIA • SIKÓRZ K. PŁOCKA</span>
                         </span>
                         <h1 class="hero-split__title">
-                            <span class="hero-split__title--mobile">Domowa hodowla kotów:<br>Bengalskie, Brytyjskie i Syjamskie.</span>
-                            <span class="hero-split__title--desktop">Domowa Hodowla Kotów<br>Rasowych z Rodowodem.<br>Bengalskie, Brytyjskie i Syjamskie.</span>
+                            <span class="hero-split__title--mobile">Hodowla kotów z rodowodem (Płock):<br>Bengalskie, Brytyjskie i Syjamskie.</span>
+                            <span class="hero-split__title--desktop">Hodowla Kotów z Rodowodem.<br>Bengalskie, Brytyjskie i Syjamskie — Płock.</span>
                         </h1>
                         <p class="hero-split__lead">
                             <span class="hero-split__lead--mobile">Badania genetyczne rodziców (HCM/PKD), pełne wsparcie i chów w sercu rodziny.</span>
-                            <span class="hero-split__lead--desktop">Hodowla kotów z Mazowieckiej Szwajcarii, oficjalny członek <strong>SHiOZ ZOOLANDIA</strong> (Certyfikat: 58/CW/2025, Rejestracja: 58/P/2025). Nasze koty rozwijają się w bezpiecznych, pełnych miłości warunkach, z regularną kontrolą kardiologiczną (echo serca) i badaniami genetycznymi rodziców dobranymi do danej rasy.</span>
+                            <span class="hero-split__lead--desktop">Hodowla kotów rasowych z Mazowieckiej Szwajcarii (Sikórz k. Płocka), oficjalny członek <strong>SHiOZ ZOOLANDIA</strong> (Certyfikat: 58/CW/2025, Rejestracja: 58/P/2025). Nasze koty rozwijają się w bezpiecznych, domowych warunkach, z regularną kontrolą kardiologiczną (echo serca) i badaniami genetycznymi rodziców dobranymi do danej rasy.</span>
                         </p>
                         <div class="hero-split__actions">
                             {{-- Mobile Compact Actions --}}
@@ -115,8 +115,8 @@
     2. CURATED KITTENS & SELECTION ASSURANCE (PRIORITIZED FOR CRO)
     ============================================================ --}}
     <x-frontend.section id="nasze-koty" tile="parchment" class="reveal-up home-section--nasze-koty">
-        <x-frontend.section-header eyebrow="Selekcja 2026" headline="Dostępne Kocięta i Mioty"
-            description="Lista kociąt gotowych do rezerwacji. Wszystkie nasze kocięta opuszczają hodowlę z aktualną książeczką zdrowia z dwoma szczepieniami, dwukrotnym odrobaczeniem, microchipem oraz rodowodem SHiOZ ZOOLANDIA." />
+        <x-frontend.section-header eyebrow="Selekcja 2026" headline="Dostępne Kocięta z Rodowodem"
+            description="Lista kociąt gotowych do rezerwacji. Wszystkie nasze kocięta opuszczają hodowlę z aktualną książeczką zdrowia z dwoma szczepieniami, dwukrotnym odrobaczeniem, microchipem oraz wielopokoleniowym rodowodem SHiOZ ZOOLANDIA." />
 
         <div class="animals-grid">
             @forelse($featuredAnimals as $animal)
@@ -249,6 +249,8 @@
                 </div>
             </div>
         </div>
+
+        <x-frontend.entity-summary-box :show-cattery-link="true" />
     </x-frontend.section>
 
     {{-- ============================================================
@@ -257,29 +259,66 @@
     <x-frontend.conversion-cta source-context="Strona główna" />
 
     @push('schema')
+    @php
+        $homeSchema = [
+            '@context' => 'https://schema.org',
+            '@type' => ['LocalBusiness', 'Organization'],
+            '@id' => 'https://kotyzmazowieckiejszwajcarii.pl/#cattery',
+            'name' => 'Hodowla Kotów z Mazowieckiej Szwajcarii – Płock',
+            'alternateName' => 'Domowa Hodowla Kotów z Mazowieckiej Szwajcarii',
+            'description' => 'Hodowla kotów rasowych z rodowodem – Płock / Sikorz (SHiOZ ZOOLANDIA, Certyfikat: 58/CW/2025, Rejestracja: 58/P/2025). Kocięta bengalskie, brytyjskie i syjamskie z rodowodem, mikroczipem i kompletem szczepień.',
+            'knowsAbout' => [
+                'Koty rasowe z rodowodem',
+                'Kot Bengalski z rodowodem',
+                'Kot Brytyjski z rodowodem',
+                'Kot Syjamski z rodowodem',
+                'Rodowód SHiOZ ZOOLANDIA',
+            ],
+            'image' => asset('image/hero/bars_studio.jpg'),
+            'logo' => asset('logo.png'),
+            'url' => 'https://kotyzmazowieckiejszwajcarii.pl/',
+            'telephone' => '+48514153204',
+            'email' => 'biuro@kotyzmazowieckiejszwajcarii.pl',
+            'address' => [
+                '@type' => 'PostalAddress',
+                'streetAddress' => 'Sikórz 56A',
+                'addressLocality' => 'Płock / Sikorz',
+                'postalCode' => '09-413',
+                'addressRegion' => 'Mazowieckie',
+                'addressCountry' => 'PL',
+            ],
+            'geo' => [
+                '@type' => 'GeoCoordinates',
+                'latitude' => 52.6074,
+                'longitude' => 19.5786,
+            ],
+            'areaServed' => [
+                ['@type' => 'City', 'name' => 'Płock'],
+                ['@type' => 'City', 'name' => 'Warszawa'],
+                ['@type' => 'City', 'name' => 'Łódź'],
+                ['@type' => 'City', 'name' => 'Toruń'],
+                ['@type' => 'City', 'name' => 'Bydgoszcz'],
+                ['@type' => 'City', 'name' => 'Poznań'],
+            ],
+            'openingHoursSpecification' => [
+                [
+                    '@type' => 'OpeningHoursSpecification',
+                    'dayOfWeek' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+                    'opens' => '09:00',
+                    'closes' => '20:00',
+                ],
+            ],
+            'memberOf' => [
+                '@type' => 'Organization',
+                'name' => 'SHiOZ ZOOLANDIA',
+            ],
+            'sameAs' => [
+                'https://www.facebook.com/profile.php?id=61580668026948',
+            ],
+        ];
+    @endphp
     <script type="application/ld+json">
-    {
-      "@@context": "https://schema.org",
-      "@@type": "LocalBusiness",
-      "name": "Domowa Hodowla Kotów z Mazowieckiej Szwajcarii",
-      "description": "Domowa hodowla kotów rasowych z Mazowieckiej Szwajcarii (Sikórz k. Płocka). Członek SHiOZ ZOOLANDIA (Certyfikat: 58/CW/2025, Rejestracja: 58/P/2025). Koty bengalskie, brytyjskie i syjamskie z rodowodem, po przebadanych rodzicach.",
-      "image": "{{ asset('image/hero/bars_studio.jpg') }}",
-      "logo": "{{ asset('logo.png') }}",
-      "url": "https://kotyzmazowieckiejszwajcarii.pl/",
-      "telephone": "+48514153204",
-      "email": "biuro@kotyzmazowieckiejszwajcarii.pl",
-      "address": {
-        "@@type": "PostalAddress",
-        "streetAddress": "Sikórz 56A",
-        "addressLocality": "Sikórz",
-        "postalCode": "09-413",
-        "addressRegion": "mazowieckie",
-        "addressCountry": "PL"
-      },
-      "sameAs": [
-        "https://www.facebook.com/profile.php?id=61580668026948"
-      ]
-    }
+    {!! json_encode($homeSchema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}
     </script>
     @endpush
 </x-frontend.shell>

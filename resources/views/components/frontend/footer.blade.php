@@ -70,8 +70,8 @@ Calm, minimal, trust-building
                     <h3 class="footer-heading">Szybka Nawigacja</h3>
                     <ul class="footer-links" role="list">
                         <li><a href="{{ route('home') }}" class="footer-link">Strona Główna</a></li>
-                        <li><a href="{{ route('frontend.animals.index') }}" class="footer-link">Nasze Koty</a></li>
-                        <li><a href="{{ route('cattery') }}" class="footer-link">O Domowej Hodowli</a></li>
+                        <li><a href="{{ route('frontend.animals.index') }}" class="footer-link">Kocięta z rodowodem</a></li>
+                        <li><a href="{{ route('cattery') }}" class="footer-link">Hodowla z rodowodem</a></li>
                         <li><a href="{{ route('quiz') }}" class="footer-link" style="color: var(--color-gold, #c89d5c); font-weight: 600;">✨ Dobierz Rasę (Quiz)</a></li>
                         <li><a href="{{ route('frontend.blog.index') }}" class="footer-link">Baza Wiedzy</a></li>
                         <li><a href="{{ route('contact') }}" class="footer-link">Kontakt</a></li>
@@ -94,33 +94,35 @@ Calm, minimal, trust-building
                 {{-- Location & Visits --}}
                 <div class="footer-col footer-col--newsletter">
                     <h3 class="footer-heading">Lokalizacja & Odwiedziny w domowej hodowli</h3>
-                    <p class="footer-newsletter__desc text-body" style="line-height: 1.6;">
-                        <strong>Sikórz k. Płocka</strong><br>
-                        woj. mazowieckie<br><br>
+                    <p class="footer-newsletter__desc text-body footer-location-line">
+                        📍 Lokalizacja: Sikorz k. Płocka (10 km od centrum Płocka, dogodny dojazd z Warszawy, Łodzi i Torunia)
+                    </p>
+                    <p class="footer-newsletter__desc text-body">
                         Odwiedziny w domowej hodowli po wcześniejszym uzgodnieniu terminu.<br>
                         <strong>9:00 – 20:00</strong>
                     </p>
-                    <div style="margin-top: 12px;">
-                        <a href="{{ route('contact') }}" class="footer-link"
-                            style="color: var(--color-primary); font-weight: 600;">
-                            Umów spotkanie w domowej hodowli →
+                    <div class="footer-location-cta">
+                        <a href="{{ route('contact') }}" class="footer-link footer-link--accent">
+                            Umów spotkanie w hodowli pod Płockiem (Sikórz) →
                         </a>
                     </div>
                 </div>
             </div>
 
             {{-- Local SEO Regional Strip --}}
-            <div class="footer-regional-links" style="border-top: 1px solid var(--color-hairline, rgba(0,0,0,0.08)); padding: 18px 0 6px; margin-top: 24px; font-size: 0.82rem; color: var(--color-ink-muted-80);">
-                <span style="font-weight: 600; margin-right: 8px;">Hodowla dla opiekunów z regionu:</span>
-                <a href="{{ route('seo.warszawa') }}" class="footer-link">Warszawa</a>
+            <div class="footer-regional-links">
+                <span class="footer-regional-links__label">Hodowla kotów dla opiekunów z regionu:</span>
+                <a href="{{ route('cattery') }}" class="footer-link">Hodowla kotów Płock / Sikórz</a>
                 <span class="footer-legal__sep" aria-hidden="true">·</span>
-                <a href="{{ route('seo.lodz') }}" class="footer-link">Łódź</a>
+                <a href="{{ route('seo.warszawa') }}" class="footer-link">Hodowla kotów Warszawa</a>
                 <span class="footer-legal__sep" aria-hidden="true">·</span>
-                <a href="{{ route('seo.torun') }}" class="footer-link">Toruń</a>
+                <a href="{{ route('seo.lodz') }}" class="footer-link">Hodowla kotów Łódź</a>
                 <span class="footer-legal__sep" aria-hidden="true">·</span>
-                <a href="{{ route('seo.wloclawek') }}" class="footer-link">Włocławek</a>
+                <a href="{{ route('seo.torun') }}" class="footer-link">Hodowla kotów Toruń</a>
                 <span class="footer-legal__sep" aria-hidden="true">·</span>
-                <a href="{{ route('seo.bydgoszcz') }}" class="footer-link">Bydgoszcz</a>
+                <a href="{{ route('seo.wloclawek') }}" class="footer-link">Hodowla kotów Włocławek</a>
+                <span class="footer-legal__sep" aria-hidden="true">·</span>
+                <a href="{{ route('seo.bydgoszcz') }}" class="footer-link">Hodowla kotów Bydgoszcz</a>
             </div>
 
             {{-- Bottom Bar --}}

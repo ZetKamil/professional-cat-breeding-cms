@@ -12,6 +12,7 @@
 @import './components/animals.css';
 @import './components/testimonials.css';
 @import './components/trust.css';
+@import './components/entity-summary.css';
 @import './components/articles.css';
 @import './components/skeleton.css';
 @import './components/reservation-modal.css';

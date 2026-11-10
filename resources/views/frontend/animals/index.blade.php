@@ -1,15 +1,27 @@
 @php
     $breedTitles = [
-        'Kot Bengalski' => 'Koty Bengalskie — Kocięta z Rodowodem | Domowa Hodowla Kotów z Mazowieckiej Szwajcarii',
-        'bengal' => 'Koty Bengalskie — Kocięta z Rodowodem | Domowa Hodowla Kotów z Mazowieckiej Szwajcarii',
-        'bengalskie' => 'Koty Bengalskie — Kocięta z Rodowodem | Domowa Hodowla Kotów z Mazowieckiej Szwajcarii',
-        'Kot Brytyjski' => 'Koty Brytyjskie — Kocięta z Rodowodem | Domowa Hodowla Kotów z Mazowieckiej Szwajcarii',
-        'british' => 'Koty Brytyjskie — Kocięta z Rodowodem | Domowa Hodowla Kotów z Mazowieckiej Szwajcarii',
-        'brytyjskie' => 'Koty Brytyjskie — Kocięta z Rodowodem | Domowa Hodowla Kotów z Mazowieckiej Szwajcarii',
-        'brytyjczyki' => 'Koty Brytyjskie — Kocięta z Rodowodem | Domowa Hodowla Kotów z Mazowieckiej Szwajcarii',
-        'Kot Syjamski' => 'Koty Syjamskie — Kocięta z Rodowodem | Domowa Hodowla Kotów z Mazowieckiej Szwajcarii',
-        'siamese' => 'Koty Syjamskie — Kocięta z Rodowodem | Domowa Hodowla Kotów z Mazowieckiej Szwajcarii',
-        'syjamskie' => 'Koty Syjamskie — Kocięta z Rodowodem | Domowa Hodowla Kotów z Mazowieckiej Szwajcarii',
+        'Kot Bengalski' => 'Koty Bengalskie z Rodowodem — Kocięta | Hodowla Kotów Płock',
+        'bengal' => 'Koty Bengalskie z Rodowodem — Kocięta | Hodowla Kotów Płock',
+        'bengalskie' => 'Koty Bengalskie z Rodowodem — Kocięta | Hodowla Kotów Płock',
+        'Kot Brytyjski' => 'Koty Brytyjskie z Rodowodem — Kocięta | Hodowla Kotów Płock',
+        'british' => 'Koty Brytyjskie z Rodowodem — Kocięta | Hodowla Kotów Płock',
+        'brytyjskie' => 'Koty Brytyjskie z Rodowodem — Kocięta | Hodowla Kotów Płock',
+        'brytyjczyki' => 'Koty Brytyjskie z Rodowodem — Kocięta | Hodowla Kotów Płock',
+        'Kot Syjamski' => 'Koty Syjamskie z Rodowodem — Kocięta | Hodowla Kotów Płock',
+        'siamese' => 'Koty Syjamskie z Rodowodem — Kocięta | Hodowla Kotów Płock',
+        'syjamskie' => 'Koty Syjamskie z Rodowodem — Kocięta | Hodowla Kotów Płock',
+    ];
+    $breedHeadings = [
+        'Kot Bengalski' => 'Koty Bengalskie z Rodowodem',
+        'bengal' => 'Koty Bengalskie z Rodowodem',
+        'bengalskie' => 'Koty Bengalskie z Rodowodem',
+        'Kot Brytyjski' => 'Koty Brytyjskie z Rodowodem',
+        'british' => 'Koty Brytyjskie z Rodowodem',
+        'brytyjskie' => 'Koty Brytyjskie z Rodowodem',
+        'brytyjczyki' => 'Koty Brytyjskie z Rodowodem',
+        'Kot Syjamski' => 'Koty Syjamskie z Rodowodem',
+        'siamese' => 'Koty Syjamskie z Rodowodem',
+        'syjamskie' => 'Koty Syjamskie z Rodowodem',
     ];
     $breedOgImages = [
         'Kot Bengalski' => asset('og-bengal.jpg'),
@@ -25,16 +37,19 @@
     ];
     $pageTitle = ($currentBreed && isset($breedTitles[$currentBreed]))
         ? $breedTitles[$currentBreed]
-        : 'Nasze Koty — Kocięta z Domowej Hodowli | Koty Bengalskie, Brytyjskie i Syjamskie';
+        : 'Kocięta i Koty z Rodowodem – Płock | Bengalskie, Brytyjskie, Syjamskie';
+    $pageHeading = ($currentBreed && isset($breedHeadings[$currentBreed]))
+        ? $breedHeadings[$currentBreed]
+        : 'Kocięta i Koty z Rodowodem';
     $pageOgImage = ($currentBreed && isset($breedOgImages[$currentBreed]))
         ? $breedOgImages[$currentBreed]
         : asset('og-default.jpg');
 @endphp
 
 <x-frontend.shell :title="$pageTitle"
-    meta-description="Przeglądaj koty dorosłe i dostępne kocięta w naszej domowej hodowli. Zdrowe linie genetyczne, komplet badań rodziców dedykowanych rasie, rodowód SHiOZ ZOOLANDIA i pełna domowa socjalizacja."
+    meta-description="Przeglądaj dostępne kocięta i koty z rodowodem SHiOZ ZOOLANDIA w hodowli Płock / Sikorz. Zdrowe linie genetyczne, komplet badań rodziców i pełna domowa socjalizacja."
     :og-title="$pageTitle"
-    og-description="Przeglądaj koty dorosłe i dostępne kocięta w naszej domowej hodowli. Zdrowe linie genetyczne, komplet badań rodziców dedykowanych rasie, rodowód SHiOZ ZOOLANDIA i pełna domowa socjalizacja."
+    og-description="Przeglądaj dostępne kocięta i koty z rodowodem SHiOZ ZOOLANDIA w hodowli Płock / Sikorz. Zdrowe linie genetyczne, komplet badań rodziców i pełna domowa socjalizacja."
     :og-image="$pageOgImage" og-image-width="1200" og-image-height="630" og-image-type="image/jpeg">
     {{-- ============================================================
     1. CATALOG HERO
@@ -42,13 +57,13 @@
     <section class="animals-catalog-hero" aria-label="Nasze koty">
         <div class="section-inner">
             <span class="text-eyebrow animals-catalog-hero__eyebrow">
-                Domowa Hodowla & Dostępne Kocięta
+                Hodowla Kotów z Rodowodem SHiOZ ZOOLANDIA • Płock / Sikorz
             </span>
             <h1 class="text-hero-display animals-catalog-hero__title">
-                Nasze Koty
+                {{ $pageHeading }}
             </h1>
             <p class="text-lead-airy animals-catalog-hero__lead">
-                Poznaj nasze koty hodowlane i dostępne kocięta wychowywane w sercu naszego domu. Hodujemy trzy wyjątkowe rasy:
+                Poznaj nasze koty hodowlane i dostępne kocięta z rodowodem wychowywane w sercu naszego domu. Hodujemy trzy wyjątkowe rasy:
                 Bengalskie, Brytyjskie oraz Syjamskie — z dbałością o najwyższe standardy zdrowotne i troskliwą domową
                 socjalizację.
             </p>
@@ -115,7 +130,7 @@
                     <div class="animals-catalog-group">
                         <div class="animals-section-header">
                             <span class="text-eyebrow">Wychowanie Domowe & Wczesna Rezerwacja</span>
-                            <h2 class="animals-section-title">Dostępne Kocięta i Mioty</h2>
+                            <h2 class="animals-section-title">Dostępne Kocięta z Rodowodem</h2>
                             <p class="animals-section-lead">
                                 Kocięta z naszej domowej hodowli gotowe do odbioru lub wczesnej rezerwacji. Wszystkie maluchy
                                 posiadają wielopokoleniowy rodowód, komplet szczepień i odrobaczeń oraz microchip.
