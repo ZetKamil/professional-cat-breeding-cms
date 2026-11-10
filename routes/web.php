@@ -450,12 +450,10 @@ Route::get('/fix-storage', function () {
         }
 
         // Run seeder to import real cat data and photos
-        $seederRan = false;
         \Illuminate\Support\Facades\Artisan::call('db:seed', [
             '--class' => 'Database\\Seeders\\RealKittensAndParentsSeeder',
             '--force' => true,
         ]);
-        $seederRan = true;
 
         // Fix Linux permissions for Web Server (Apache/Nginx)
         $dirsToFix = [
@@ -482,9 +480,7 @@ Route::get('/fix-storage', function () {
 
         $mediaCount = \App\Models\Media::where('mediable_type', \App\Models\Animal::class)->count();
         $publicMediaCount = count($publicFiles);
-        $seederStatus = $seederRan
-            ? 'Seeder uruchomiony - zaimportowano dane kotow.'
-            : "Seeder pominieto - baza zawiera juz {$existingAnimalsCount} rekordow kotow (idempotent, bezpieczne).";
+        $seederStatus = 'Seeder uruchomiony - zaimportowano dane kotow.';
 
         return "<div style='font-family: sans-serif; padding: 30px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; color: #166534; max-width: 600px; margin: 40px auto;'>"
             ."<h1 style='margin-top:0;'>Sukces Naprawy Zdjec!</h1>"
