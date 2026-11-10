@@ -279,4 +279,34 @@ class AiBlogGeneratorServiceTest extends TestCase
         $this->assertSame(0, $requests[0]['generationConfig']['thinkingConfig']['thinkingBudget'] ?? null);
         $this->assertArrayNotHasKey('thinkingConfig', $requests[1]['generationConfig']);
     }
+
+    public function test_gemini_service_immediately_pivots_on_503_to_distinct_model_pool(): void
+    {
+        Config::set('services.gemini.api_key', 'test-key-123');
+        Config::set('services.gemini.text_model', 'gemini-flash-latest');
+        Config::set('services.gemini.wall_timeout', 24);
+
+        $urls = [];
+        \Illuminate\Support\Facades\Http::fake(function ($request) use (&$urls) {
+            $urls[] = $request->url();
+            if (str_contains($request->url(), 'gemini-flash-latest')) {
+                return \Illuminate\Support\Facades\Http::response([
+                    'error' => ['message' => 'This model is currently experiencing high demand.'],
+                ], 503);
+            }
+
+            return \Illuminate\Support\Facades\Http::response([
+                'candidates' => [[
+                    'content' => ['parts' => [['text' => '{"h1":"Fallback Flash Lite OK"}']]],
+                ]],
+            ], 200);
+        });
+
+        $result = (new GeminiService())->generateText('sys', 'usr');
+
+        $this->assertSame('{"h1":"Fallback Flash Lite OK"}', $result);
+        $this->assertCount(2, $urls);
+        $this->assertStringContainsString('gemini-flash-latest:generateContent', $urls[0]);
+        $this->assertStringContainsString('gemini-2.5-flash-lite:generateContent', $urls[1]);
+    }
 }

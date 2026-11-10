@@ -122,8 +122,8 @@ class GeminiService
                     ->withHeaders($headers)
                     ->post($url, $payload);
 
-                // Retry on transient server errors (503 high demand, 502, 504)
-                if ($attempt < $maxAttempts && in_array($response->status(), [503, 502, 504], true)) {
+                // Retry ONLY on gateway/network glitches (502, 504); on 503/429/404 return immediately so generateText can pivot to another model pool.
+                if ($attempt < $maxAttempts && in_array($response->status(), [502, 504], true)) {
                     $backoffUs = 400000;
                     Log::warning("GeminiService: HTTP {$response->status()} on attempt {$attempt}/{$maxAttempts}. Backing off briefly before retrying...", [
                         'url' => $url,
@@ -170,11 +170,13 @@ class GeminiService
         $textTimeout = min($this->timeout, 18);
         $deadline = microtime(true) + $this->wallTimeout;
 
+        // Distinct capacity pools so a 503 spike on one Flash tier pivots immediately to separate pools.
         $modelsToTry = array_values(array_unique(array_filter([
             $this->textModel,
-            'gemini-flash-latest',
-            'gemini-2.5-flash',
             'gemini-2.5-flash-lite',
+            'gemini-flash-lite-latest',
+            $this->textModel === 'gemini-flash-latest' ? null : 'gemini-2.5-flash',
+            'gemini-2.5-pro',
         ])));
 
         $basePayload = [
@@ -193,6 +195,7 @@ class GeminiService
 
         $lastStatus       = 500;
         $lastErrorDetails = '';
+        $attemptTrace     = [];
 
         foreach ($modelsToTry as $model) {
             $remaining = (int) floor($deadline - microtime(true));
@@ -200,6 +203,7 @@ class GeminiService
                 Log::warning('GeminiService: wall-clock budget exhausted before trying fallback model', [
                     'model' => $model,
                     'wall_timeout' => $this->wallTimeout,
+                    'trace' => $attemptTrace,
                 ]);
                 break;
             }
@@ -208,8 +212,7 @@ class GeminiService
             $payload = $basePayload;
 
             // Disable hidden chain-of-thought latency on Flash 2.5/latest models so drafts finish in seconds.
-            $supportsZeroThinking = str_contains($model, 'flash');
-            if ($supportsZeroThinking) {
+            if (str_contains($model, 'flash')) {
                 $payload['generationConfig']['thinkingConfig'] = ['thinkingBudget' => 0];
             }
 
@@ -228,6 +231,7 @@ class GeminiService
                     }
                 }
             } catch (ConnectionException) {
+                $attemptTrace[] = "{$model}:timeout";
                 Log::warning('GeminiService: connection timeout', ['model' => $model]);
                 continue;
             }
@@ -235,6 +239,7 @@ class GeminiService
             $lastStatus = $response->status();
 
             if ($response->status() === 429) {
+                $attemptTrace[] = "{$model}:429";
                 Log::warning("GeminiService: model {$model} rate limited");
                 continue;
             }
@@ -242,6 +247,7 @@ class GeminiService
             if (! $response->successful()) {
                 $body             = $response->json();
                 $lastErrorDetails = $body['error']['message'] ?? $response->body();
+                $attemptTrace[]   = "{$model}:{$lastStatus}";
                 Log::warning("GeminiService: model {$model} returned HTTP {$lastStatus}, trying fallback if available...", [
                     'error' => $lastErrorDetails,
                 ]);
@@ -254,13 +260,16 @@ class GeminiService
             if (! empty($text)) {
                 return $text;
             }
+
+            $attemptTrace[] = "{$model}:empty";
         }
 
         if ($lastStatus === 429) {
             throw GeminiServiceUnavailableException::rateLimited();
         }
 
-        throw GeminiServiceUnavailableException::serverError($lastStatus, $lastErrorDetails);
+        $traceSummary = ! empty($attemptTrace) ? '[' . implode(', ', $attemptTrace) . '] ' : '';
+        throw GeminiServiceUnavailableException::serverError($lastStatus, $traceSummary . $lastErrorDetails);
     }
 
     /**
