@@ -149,7 +149,6 @@ class ProductionSmokeTest extends TestCase
     public function test_polish_url_aliases_redirect_301(): void
     {
         $redirects = [
-            '/contact' => '/kontakt',
             '/about' => '/o-nas',
             '/kocieta' => '/koty',
             '/galeria' => '/koty',
@@ -162,5 +161,8 @@ class ProductionSmokeTest extends TestCase
             $response->assertRedirect($to);
             $response->assertStatus(301);
         }
+
+        // Legacy /contact alias was intentionally removed
+        $this->get('/contact')->assertNotFound();
     }
 }

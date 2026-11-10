@@ -41,7 +41,6 @@ Route::view('/polityka-prywatnosci', 'frontend.privacy')->name('privacy');
 Route::view('/regulamin', 'frontend.terms')->name('terms');
 
 // Polish URL canonical structure & 301 redirects from legacy English queries
-Route::redirect('/contact', '/kontakt', 301);
 Route::redirect('/about', '/o-nas', 301);
 Route::redirect('/kocieta', '/koty', 301);
 Route::redirect('/galeria', '/koty', 301);

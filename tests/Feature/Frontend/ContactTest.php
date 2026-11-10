@@ -25,12 +25,11 @@ class ContactTest extends TestCase
         $response->assertSee('Porozmawiajmy');
     }
 
-    public function test_legacy_contact_url_redirects_to_canonical_kontakt(): void
+    public function test_removed_legacy_contact_url_returns_404(): void
     {
         $response = $this->get('/contact');
 
-        $response->assertRedirect('/kontakt');
-        $response->assertStatus(301);
+        $response->assertNotFound();
     }
 
     // ─── POST /contact — valid payload ────────────────────────────────────────
