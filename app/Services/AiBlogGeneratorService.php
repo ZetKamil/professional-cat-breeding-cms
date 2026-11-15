@@ -53,18 +53,82 @@ class AiBlogGeneratorService
     }
 
     /**
-     * Build a wide-composition Pollinations URL with headroom framing so cat ears/heads stay inside hero crops.
+     * Strict felinological breed phenotypes for high-fidelity photorealistic AI generation.
      */
-    public static function buildPollinationsUrl(string $prompt, int $width = 1200, int $height = 675, ?int $seed = null): string
+    public const BREED_PHENOTYPES = [
+        'bengalski' => 'Authentic purebred Bengal cat, wild leopard rosette markings with distinct dark outlines, marble patterns, warm golden shimmering pelt with distinct glitter effect, athletic sleek muscular physique, intense almond-shaped emerald-green or gold eyes, short dense pelt, alert ears',
+        'brytyjski' => 'Authentic purebred British Shorthair cat, solid dense plush blue-grey coat with crisp texture, perfectly rounded chubby cheeks with prominent jowls, large expressive circular copper-amber eyes, stocky muscular cobby body, short rounded ears, sweet calm noble expression',
+        'syjamski'  => 'Authentic purebred modern Siamese cat, sleek athletic tubular elongated body, creamy pale fawn coat with contrasting deep seal-point markings on ears, facial mask, paws and tail, striking vivid deep sapphire-blue almond eyes, large open triangular ears, aristocratic noble profile',
+    ];
+
+    /**
+     * Resolve the strict breed phenotype anchor.
+     */
+    public static function resolveBreedAnchor(?string $breedKeyOrLabel): string
     {
+        $key = mb_strtolower(trim((string) $breedKeyOrLabel));
+
+        return match (true) {
+            str_contains($key, 'bengal') => self::BREED_PHENOTYPES['bengalski'],
+            str_contains($key, 'brytyj') => self::BREED_PHENOTYPES['brytyjski'],
+            str_contains($key, 'syjam')  => self::BREED_PHENOTYPES['syjamski'],
+            default                      => 'Magnificent pedigreed purebred cat with noble posture, glossy healthy coat, expressive natural eyes, alert ears',
+        };
+    }
+
+    /**
+     * Semantic English Scene Matrix — maps article topics and headings to English photographic descriptions.
+     * Guarantees ZERO Polish words are ever sent to Pollinations / Flux.
+     */
+    public static function getThematicEnglishScene(string $topic, string $heading = ''): string
+    {
+        $combined = mb_strtolower($topic . ' ' . $heading);
+
+        return match (true) {
+            str_contains($combined, 'karm') || str_contains($combined, 'diet') || str_contains($combined, 'żywien') || str_contains($combined, 'barf') || str_contains($combined, 'mięs')
+                => 'Pedigreed cat delicately dining from a minimalist ceramic bowl in a luxury sunlit Scandinavian kitchen, clean serene atmosphere',
+
+            str_contains($combined, 'socjalizac') || str_contains($combined, 'wychowan') || str_contains($combined, 'zabaw') || str_contains($combined, 'drapak')
+                => 'Playful pedigreed kitten gracefully interacting with a natural organic feather wand on a warm wool rug, energetic joyful motion',
+
+            str_contains($combined, 'zdrow') || str_contains($combined, 'badani') || str_contains($combined, 'genetyk') || str_contains($combined, 'pielęgnac') || str_contains($combined, 'szczotk')
+                => 'Serene pedigreed cat resting calmly on a linen cushion during gentle grooming with a luxury wooden brush, peaceful regal demeanor',
+
+            str_contains($combined, 'mieszkan') || str_contains($combined, 'dom') || str_contains($combined, 'ogród') || str_contains($combined, 'balkon')
+                => 'Contented pedigreed cat gracefully perched on a minimalist oak cat tree near a bright sunlit panoramic window looking out at a peaceful garden',
+
+            default
+                => 'Majestic pedigreed cat resting gracefully in full posture on an elegant velvet chaise lounge in a calm Japandi living room, warm morning ambiance',
+        };
+    }
+
+    /**
+     * Build an editorial Pollinations Flux URL with breed phenotype, headroom framing, and negative prompts.
+     */
+    public static function buildPollinationsUrl(
+        string $prompt,
+        int $width = 1200,
+        int $height = 675,
+        ?int $seed = null,
+        ?string $breed = null
+    ): string {
         $cleanPrompt = trim($prompt);
-        if (blank($cleanPrompt)) {
-            $cleanPrompt = 'Magnificent pedigreed cat in a warm luxury interior, natural sunlight, editorial photography';
+
+        // If prompt contains Polish non-ASCII characters or is blank, substitute with high-end semantic English scene
+        if (preg_match('/[ąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/u', $cleanPrompt) || blank($cleanPrompt)) {
+            $cleanPrompt = self::getThematicEnglishScene($cleanPrompt);
+        } else {
+            $cleanPrompt = preg_replace('/[^\x20-\x7E]/', '', $cleanPrompt);
         }
 
-        $framedPrompt = $cleanPrompt
-            . ', wide horizontal editorial photography, full cat head and ears completely in frame with generous headroom above, natural eyes, warm luxury interior background, crisp focus';
-        $encoded = urlencode($framedPrompt);
+        $breedAnchor = self::resolveBreedAnchor($breed);
+
+        $cinematicDirectives = 'award-winning editorial pet photography, medium environmental shot, rule of thirds, subject centered with generous negative space and wide headroom above ears, entire cat silhouette and ears completely inside frame, 35mm f/2.8 lens, natural soft morning sunlight streaming through sheer curtains, luxury Japandi interior background, shot on Hasselblad H6D-100c, photorealistic, 8k resolution, crisp eyes';
+
+        $negativeAnchors = '--no cartoon, 3d render, illustration, deformed eyes, extra paws, cut off ears, cropped head, macro close-up, blurry fur, watermark, text, signature';
+
+        $finalPrompt = "{$breedAnchor}, {$cleanPrompt}, {$cinematicDirectives} {$negativeAnchors}";
+        $encoded = urlencode(trim($finalPrompt));
         $resolvedSeed = $seed ?? random_int(1, 999999);
 
         return "https://image.pollinations.ai/prompt/{$encoded}?width={$width}&height={$height}&model=flux&nologo=true&seed={$resolvedSeed}";
@@ -314,7 +378,7 @@ class AiBlogGeneratorService
         - The FIRST section MUST have an empty heading ("") — it is the intro paragraph.
         - All other sections MUST have a non-empty heading (H2 level).
         - tip: A concise, highly professional practical advice from the breeder (1-2 sentences) highlighting responsible care, health, or socialization.
-        - image_prompt: A vivid English prompt describing a photo that fits this specific section (e.g. "British Shorthair kitten playing on a carpet, warm sunlight, photorealistic 8k").
+        - image_prompt: A vivid ENGLISH-ONLY photographic prompt for this section. Always specify the full cat head and ears in frame with generous headroom above, luxury sunlit interior, 35mm photography, natural lighting. NEVER use Polish words in image_prompt.
         - body is plain text only. No HTML tags.
         - DO NOT generate a contact/closing cattery offer section (e.g. "Dostępne kocięta", "Kontakt z hodowlą"). The website dynamically appends the live cattery offer and contact card at the bottom of every article. Focus 100% on high-quality educational knowledge and advice for the reader.
         PROMPT;
@@ -426,9 +490,9 @@ class AiBlogGeneratorService
 
     private function fallbackHeroPrompt(string $breed): string
     {
-        return "Elegant minimalist illustration of a {$breed} cat, warm natural lighting, "
-            . "luxury interior background, soft bokeh, professional photography style, "
-            . "warm amber tones, premium lifestyle aesthetic";
+        $anchor = self::resolveBreedAnchor($breed);
+
+        return "{$anchor}, resting gracefully on an elegant velvet chaise lounge in a warm luxury interior, soft morning sunlight, wide horizontal editorial photography, generous headroom above ears";
     }
 
     /**

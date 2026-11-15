@@ -7,9 +7,10 @@
     <x-frontend.hero eyebrow="Felinologia i Standardy Hodowli" title="Hodowla Kotów z Rodowodem.<br>Etyka, Badania i Domowe Ciepło."
         lead="Poznaj naszą filozofię opieki, Kodeks Zaufania oraz jasny, przejrzysty proces zakupu i dołączenia kocięcia do Twojego domu."
         image-url="{{ asset('image/cattery/hero_bg.jpg') }}"
-        image-position="center 90%"
+        image-position="right 75%"
         image-alt="Arystokratyczny kot brytyjski długowłosy w eleganckim wnętrzu domowej hodowli" scroll-target="#filozofia" size="large"
         class="hero--cattery"
+        :fade-to-canvas="true"
         data-nav-theme="dark" />
 
     {{-- ============================================================

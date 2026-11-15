@@ -98,6 +98,23 @@
     );
 }
 
+/* Seamless transition layer into the next section (eliminates chopped black rectangle) */
+.hero__bottom-fade {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: clamp(60px, 14vh, 140px);
+    background: linear-gradient(
+        to bottom,
+        rgba(10, 10, 12, 0) 0%,
+        rgba(10, 10, 12, 0.35) 30%,
+        var(--hero-fade-color, var(--color-canvas, #ffffff)) 100%
+    );
+    z-index: 1;
+    pointer-events: none;
+}
+
 /* --------------------------------------------------------------------------
    2. CONTENT LAYOUT & TYPOGRAPHY
    -------------------------------------------------------------------------- */
@@ -313,10 +330,22 @@
 
 @media (max-width: 640px) {
     .hero {
-        min-height: 90vh;
-        min-height: 90dvh;
-        /* Reduce padding-top so headline lands in the first fold */
-        padding-top: clamp(90px, 14vh, 120px);
+        min-height: clamp(520px, 75vh, 680px);
+        min-height: clamp(520px, 75dvh, 680px);
+        /* Balanced padding so headline lands naturally without massive bottom dead zone */
+        padding-top: clamp(84px, 12vh, 110px);
+        padding-bottom: clamp(36px, 6vh, 64px);
+    }
+
+    /* Lighten mobile overlay to avoid muddy dark box */
+    .hero__overlay {
+        background: linear-gradient(
+            to bottom,
+            rgba(10, 10, 12, 0.40) 0%,
+            rgba(10, 10, 12, 0.18) 45%,
+            rgba(10, 10, 12, 0.48) 80%,
+            rgba(10, 10, 12, 0.68) 100%
+        );
     }
 
     .hero__lead {

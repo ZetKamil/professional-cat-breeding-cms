@@ -264,6 +264,15 @@
                                 <div class="card-body p-2 text-center">
                                     <h6 class="card-title mb-1 fw-bold">{{ $animal['name'] }}</h6>
                                     <span class="badge bg-secondary mb-1" style="font-size: 0.65rem;">{{ $animal['color'] }}</span>
+                                    @if(!empty($animal['photo_url']))
+                                        @php
+                                            $aGeo = \App\Support\ImageGeometry::analyze($animal['photo_url']);
+                                        @endphp
+                                        <span class="badge {{ $aGeo['is_portrait'] ? 'bg-info bg-opacity-25 text-dark' : 'bg-light text-secondary border' }} d-block mx-auto mb-1" style="font-size: 0.62rem; width: fit-content;">
+                                            <i class="fas {{ $aGeo['is_portrait'] ? 'fa-mobile-screen' : 'fa-image' }} me-1"></i>
+                                            {{ $aGeo['is_portrait'] ? '3:4 Portret' : ($aGeo['is_square'] ? '1:1 Awatar' : '16:9 Poziome') }}
+                                        </span>
+                                    @endif
                                     <div class="form-check d-flex justify-content-center mt-1">
                                         <input class="form-check-input" type="checkbox"
                                                value="{{ $animal['id'] }}"
@@ -303,49 +312,108 @@
                     <p class="text-muted">Generuję nagłówki, treść SEO oraz prompty graficzne.</p>
                 </div>
             @elseif($generatedDraft)
-                {{-- Cover Image & Header Preview --}}
+                {{-- Editorial Cover & Header Preview (Magazine / Split Hero) --}}
                 @if(!empty($generatedDraft['hero_image_preview_url']))
-                    <div class="card mb-4 border-0 shadow-sm overflow-hidden" style="border-radius: 12px;">
-                        <div class="position-relative" style="aspect-ratio: 16 / 9; min-height: 300px; max-height: 440px; overflow: hidden; background: #141414;">
-                            <img src="{{ $generatedDraft['hero_image_preview_url'] }}"
-                                 wire:key="hero-preview-{{ md5($generatedDraft['hero_image_preview_url']) }}"
-                                 alt="Okładka artykułu"
-                                 class="w-100 h-100"
-                                 style="object-fit: cover; object-position: center 25%; opacity: 0.9;">
-                            <div class="position-absolute bottom-0 start-0 w-100 p-4 text-white"
-                                 style="background: linear-gradient(0deg, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.45) 60%, transparent 100%);">
-                                <span class="badge bg-warning text-dark fw-bold mb-2">
-                                    <i class="fas {{ $selectedHeroAnimalId !== '' ? 'fa-paw' : 'fa-magic' }} me-1"></i>
-                                    {{ $selectedHeroAnimalId !== '' ? 'Zdjęcie okładkowe (Wybrany kot z hodowli)' : 'Zdjęcie okładkowe (AI Hero Cover)' }}
-                                </span>
-                                <h3 class="fw-bold mb-1 text-white">{{ $generatedDraft['title'] ?? 'Tytuł wpisu' }}</h3>
-                                <p class="mb-0 text-white-50 small text-truncate" style="max-width: 800px;">
+                    @php
+                        $heroLayout = $generatedDraft['hero_layout'] ?? 'split';
+                        $heroAnimals = collect($animals)
+                            ->filter(fn ($a) => !empty($a['photo_url']))
+                            ->sortByDesc(fn ($a) => in_array($a['id'], $selectedAnimalIds, true))
+                            ->take(5);
+                    @endphp
+
+                    <div class="card mb-4 border-0 shadow-sm overflow-hidden" style="border-radius: 16px; background: #faf8f5; border: 1px solid rgba(197, 160, 89, 0.3) !important;">
+                        @if($heroLayout === 'split')
+                            {{-- Editorial Split Hero (Kinfolk / Apple Newsroom Magazine style) --}}
+                            <div class="row g-0 align-items-center">
+                                <div class="col-12 col-lg-7 p-4 p-md-5">
+                                    <div class="d-flex align-items-center gap-2 mb-3 flex-wrap">
+                                        <span class="badge bg-warning text-dark fw-bold">
+                                            <i class="fas {{ $selectedHeroAnimalId !== '' ? 'fa-paw' : 'fa-magic' }} me-1"></i>
+                                            {{ $selectedHeroAnimalId !== '' ? 'Wybrany kot z hodowli' : 'AI Editorial Hero' }}
+                                        </span>
+                                        <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">
+                                            <i class="fas fa-columns me-1"></i>Układ: Editorial Split (3:4 Portret — 0% uciętych pikseli)
+                                        </span>
+                                    </div>
+                                    <h2 class="fw-bold mb-3" style="color: #1e293b; font-size: clamp(1.4rem, 2.5vw, 2.1rem); line-height: 1.25;">
+                                        {{ $generatedDraft['title'] ?? 'Tytuł wpisu' }}
+                                    </h2>
+                                    <p class="text-secondary mb-3" style="font-size: 1.05rem; line-height: 1.6;">
+                                        {{ $generatedDraft['excerpt'] ?? '' }}
+                                    </p>
+                                    <div class="d-flex align-items-center gap-3 text-muted small">
+                                        <span><i class="fas fa-feather me-1 text-warning"></i>Hodowla z Mazowieckiej Szwajcarii</span>
+                                        <span>•</span>
+                                        <span><i class="fas fa-clock me-1 text-primary"></i>~4 min czytania</span>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-5 p-3 p-md-4 text-center">
+                                    <div class="position-relative d-inline-block shadow-sm" style="border-radius: 14px; overflow: hidden; border: 2px solid rgba(197, 160, 89, 0.4); max-height: 380px; aspect-ratio: 3 / 4; background: #ffffff;">
+                                        <img src="{{ $generatedDraft['hero_image_preview_url'] }}"
+                                             wire:key="hero-preview-{{ md5($generatedDraft['hero_image_preview_url']) }}"
+                                             alt="Okładka artykułu"
+                                             style="height: 100%; width: 100%; object-fit: cover; object-position: center 20%;">
+                                        <span class="position-absolute bottom-0 start-0 w-100 py-1 px-2 text-white small text-center"
+                                              style="background: rgba(0,0,0,0.65); font-size: 0.72rem;">
+                                            <i class="fas fa-check-circle text-success me-1"></i>Pełna sylwetka kota bez przycinania (3:4)
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        @else
+                            {{-- Grand Magazine Frame (Panoramic 16:9) --}}
+                            <div class="p-4 p-md-5">
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <span class="badge bg-warning text-dark fw-bold">
+                                        <i class="fas {{ $selectedHeroAnimalId !== '' ? 'fa-paw' : 'fa-magic' }} me-1"></i>
+                                        {{ $selectedHeroAnimalId !== '' ? 'Wybrany kot z hodowli' : 'AI Hero Cover' }}
+                                    </span>
+                                    <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25">
+                                        <i class="fas fa-image me-1"></i>Układ: Grand Magazine (16:9 Panorama)
+                                    </span>
+                                </div>
+                                <h2 class="fw-bold mb-3" style="color: #1e293b; font-size: clamp(1.4rem, 2.5vw, 2.1rem); line-height: 1.25;">
+                                    {{ $generatedDraft['title'] ?? 'Tytuł wpisu' }}
+                                </h2>
+                                <p class="text-secondary mb-4" style="font-size: 1.05rem; line-height: 1.6; max-width: 900px;">
                                     {{ $generatedDraft['excerpt'] ?? '' }}
                                 </p>
+                                <div class="position-relative shadow-sm" style="border-radius: 14px; overflow: hidden; max-height: 420px; aspect-ratio: 16 / 9; border: 2px solid rgba(197, 160, 89, 0.4); background: #141414;">
+                                    <img src="{{ $generatedDraft['hero_image_preview_url'] }}"
+                                         wire:key="hero-preview-{{ md5($generatedDraft['hero_image_preview_url']) }}"
+                                         alt="Okładka artykułu"
+                                         style="height: 100%; width: 100%; object-fit: cover; object-position: center 25%;">
+                                </div>
                             </div>
-                        </div>
+                        @endif
 
-                        @php
-                            $heroAnimals = collect($animals)
-                                ->filter(fn ($a) => !empty($a['photo_url']))
-                                ->sortByDesc(fn ($a) => in_array($a['id'], $selectedAnimalIds, true))
-                                ->take(5);
-                        @endphp
-                        <div class="card-footer bg-white border-top py-2 px-3 d-flex flex-wrap align-items-center gap-2">
-                            <span class="small fw-semibold text-muted me-1">Zmień zdjęcie w tle:</span>
-                            <button type="button"
-                                    wire:click="regenerateAiHero"
-                                    class="btn btn-sm {{ $selectedHeroAnimalId === '' ? 'btn-primary' : 'btn-outline-secondary' }}">
-                                <i class="fas fa-sync-alt me-1"></i> Nowe tło AI
-                            </button>
-                            @foreach($heroAnimals as $hAnimal)
-                                <button type="button"
-                                        wire:key="hero-animal-btn-{{ $hAnimal['id'] }}"
-                                        wire:click="selectHeroFromAnimal('{{ $hAnimal['id'] }}')"
-                                        class="btn btn-sm {{ $selectedHeroAnimalId === $hAnimal['id'] ? 'btn-warning text-dark fw-semibold' : 'btn-outline-dark' }}">
-                                    🐾 {{ $hAnimal['name'] }}
+                        <div class="card-footer bg-white border-top py-2 px-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="small fw-semibold text-muted">Układ okładki:</span>
+                                <button type="button" wire:click="setHeroLayout('split')"
+                                        class="btn btn-sm {{ $heroLayout === 'split' ? 'btn-primary fw-bold' : 'btn-outline-secondary' }}">
+                                    <i class="fas fa-columns me-1"></i>Split Editorial (3:4 Portret)
                                 </button>
-                            @endforeach
+                                <button type="button" wire:click="setHeroLayout('magazine')"
+                                        class="btn btn-sm {{ $heroLayout === 'magazine' ? 'btn-primary fw-bold' : 'btn-outline-secondary' }}">
+                                    <i class="fas fa-image me-1"></i>Grand Magazine (16:9 Panorama)
+                                </button>
+                            </div>
+                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                                <span class="small fw-semibold text-muted">Zmień zdjęcie:</span>
+                                <button type="button" wire:click="regenerateAiHero" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-sync-alt me-1"></i>Nowe tło AI
+                                </button>
+                                @foreach($heroAnimals as $hAnimal)
+                                    <button type="button"
+                                            wire:key="hero-animal-btn-{{ $hAnimal['id'] }}"
+                                            wire:click="selectHeroFromAnimal('{{ $hAnimal['id'] }}')"
+                                            class="btn btn-sm {{ $selectedHeroAnimalId === $hAnimal['id'] ? 'btn-warning text-dark fw-semibold' : 'btn-outline-dark' }}">
+                                        🐾 {{ $hAnimal['name'] }}
+                                    </button>
+                                @endforeach
+                            </div>
                         </div>
                     </div>
                 @endif
@@ -383,15 +451,54 @@
                         @if(!empty($generatedDraft['sections']))
                             <div class="structured-sections-preview">
                                 @foreach($generatedDraft['sections'] as $sIdx => $sec)
-                                    <div class="p-3 mb-3 rounded border bg-white shadow-sm" style="border-left: 4px solid #3b82f6 !important;">
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <span class="badge bg-secondary text-white" style="font-size: 0.72rem;">
-                                                {{ $sIdx === 0 ? 'Sekcja 1 (Wprowadzenie)' : 'Sekcja ' . ($sIdx + 1) }}
-                                            </span>
-                                            @if(!empty($sec['image_url']))
-                                                <span class="badge bg-success text-white" style="font-size: 0.7rem;">
-                                                    <i class="fas fa-check-circle me-1"></i> Zdjęcie przypisane
+                                    @php
+                                        $secLayout = $sec['layout'] ?? (($sec['orientation'] ?? '') === 'portrait' ? 'portrait' : 'landscape');
+                                        $hasImage1 = !empty($sec['image_url']);
+                                        $hasImage2 = !empty($sec['image_url_2']);
+                                        $isDuo = $secLayout === 'duo' && $hasImage1 && $hasImage2;
+                                    @endphp
+                                    <div class="p-3 mb-4 rounded border bg-white shadow-sm" style="border-left: 4px solid #3b82f6 !important;">
+                                        <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="badge bg-secondary text-white" style="font-size: 0.72rem;">
+                                                    {{ $sIdx === 0 ? 'Sekcja 1 (Wprowadzenie)' : 'Sekcja ' . ($sIdx + 1) }}
                                                 </span>
+                                                @if($isDuo)
+                                                    <span class="badge bg-primary text-white" style="font-size: 0.7rem;">
+                                                        <i class="fas fa-clone me-1"></i>Smartfonowy Duet (Side-by-Side 3:4)
+                                                    </span>
+                                                @elseif($secLayout === 'portrait' || ($sec['orientation'] ?? '') === 'portrait')
+                                                    <span class="badge bg-info text-dark" style="font-size: 0.7rem;">
+                                                        <i class="fas fa-portrait me-1"></i>Kadr Portretowy (3:4)
+                                                    </span>
+                                                @elseif($hasImage1)
+                                                    <span class="badge bg-secondary text-white" style="font-size: 0.7rem;">
+                                                        <i class="fas fa-image me-1"></i>Panorama (16:9)
+                                                    </span>
+                                                @endif
+                                            </div>
+
+                                            {{-- Layout Switcher for section --}}
+                                            @if($hasImage1)
+                                                <div class="btn-group btn-group-sm" role="group">
+                                                    @if($hasImage2)
+                                                        <button type="button" wire:click="setSectionLayout({{ $sIdx }}, 'duo')"
+                                                                class="btn btn-xs py-0 px-2 {{ $secLayout === 'duo' ? 'btn-primary' : 'btn-outline-secondary' }}"
+                                                                title="Duet dwóch pionowych zdjęć 3:4">
+                                                            Duet 3:4
+                                                        </button>
+                                                    @endif
+                                                    <button type="button" wire:click="setSectionLayout({{ $sIdx }}, 'portrait')"
+                                                            class="btn btn-xs py-0 px-2 {{ $secLayout === 'portrait' ? 'btn-primary' : 'btn-outline-secondary' }}"
+                                                            title="Portret 3:4 obok tekstu">
+                                                        Portret 3:4
+                                                    </button>
+                                                    <button type="button" wire:click="setSectionLayout({{ $sIdx }}, 'landscape')"
+                                                            class="btn btn-xs py-0 px-2 {{ $secLayout === 'landscape' ? 'btn-primary' : 'btn-outline-secondary' }}"
+                                                            title="Szeroka panorama 16:9">
+                                                        Panorama 16:9
+                                                    </button>
+                                                </div>
                                             @endif
                                         </div>
 
@@ -401,15 +508,16 @@
                                             </h4>
                                         @endif
 
-                                        <div class="row g-3">
-                                            <div class="{{ !empty($sec['image_url']) ? 'col-12 col-md-8' : 'col-12' }}">
+                                        {{-- Content and Images display according to layout --}}
+                                        @if($isDuo)
+                                            {{-- Duo Layout: Full text + Pro-tip, then 2 vertical photos side-by-side --}}
+                                            <div class="mb-3">
                                                 @foreach(explode("\n", $sec['body'] ?? '') as $p)
                                                     @if(trim($p) !== '')
                                                         <p class="text-muted mb-2" style="line-height: 1.6;">{{ trim($p) }}</p>
                                                     @endif
                                                 @endforeach
 
-                                                {{-- Breeder Pro-Tip Callout --}}
                                                 @if(!empty($sec['tip']))
                                                     <div class="p-2 px-3 mt-3 rounded bg-warning bg-opacity-10 border border-warning border-opacity-50 small">
                                                         <strong class="text-warning-emphasis d-block mb-1">
@@ -419,18 +527,83 @@
                                                     </div>
                                                 @endif
                                             </div>
-                                            @if(!empty($sec['image_url']))
-                                                <div class="col-12 col-md-4 text-center">
-                                                    <img src="{{ $sec['image_url'] }}"
-                                                         class="img-fluid rounded border shadow-sm"
-                                                         style="max-height: 160px; object-fit: cover; width: 100%;"
-                                                         alt="Zdjęcie sekcji">
-                                                    <small class="text-muted d-block mt-1" style="font-size: 0.75rem;">
-                                                        <i class="fas fa-camera text-secondary me-1"></i>Zdjęcie przypisane do sekcji
+
+                                            <div class="row g-2 mt-2 pt-2 border-top">
+                                                <div class="col-6 text-center">
+                                                    <div class="position-relative shadow-sm rounded overflow-hidden" style="border: 2px solid rgba(197, 160, 89, 0.35); aspect-ratio: 3 / 4; max-height: 240px; background: #faf8f5;">
+                                                        <img src="{{ $sec['image_url'] }}"
+                                                             class="w-100 h-100"
+                                                             style="object-fit: cover; object-position: center 20%;"
+                                                             alt="{{ $sec['image_caption'] ?? 'Kadr 1' }}">
+                                                    </div>
+                                                    <small class="text-muted d-block mt-1 font-monospace" style="font-size: 0.72rem;">
+                                                        🐾 {{ $sec['image_caption'] ?? 'Kadr 1 (3:4)' }}
                                                     </small>
                                                 </div>
-                                            @endif
-                                        </div>
+                                                <div class="col-6 text-center">
+                                                    <div class="position-relative shadow-sm rounded overflow-hidden" style="border: 2px solid rgba(197, 160, 89, 0.35); aspect-ratio: 3 / 4; max-height: 240px; background: #faf8f5;">
+                                                        <img src="{{ $sec['image_url_2'] }}"
+                                                             class="w-100 h-100"
+                                                             style="object-fit: cover; object-position: center 20%;"
+                                                             alt="{{ $sec['image_caption_2'] ?? 'Kadr 2' }}">
+                                                    </div>
+                                                    <small class="text-muted d-block mt-1 font-monospace" style="font-size: 0.72rem;">
+                                                        🐾 {{ $sec['image_caption_2'] ?? 'Kadr 2 (3:4)' }}
+                                                    </small>
+                                                </div>
+                                            </div>
+
+                                        @elseif($hasImage1)
+                                            {{-- Single Image Layout (Portrait or Landscape) --}}
+                                            <div class="row g-3">
+                                                <div class="col-12 col-md-8">
+                                                    @foreach(explode("\n", $sec['body'] ?? '') as $p)
+                                                        @if(trim($p) !== '')
+                                                            <p class="text-muted mb-2" style="line-height: 1.6;">{{ trim($p) }}</p>
+                                                        @endif
+                                                    @endforeach
+
+                                                    @if(!empty($sec['tip']))
+                                                        <div class="p-2 px-3 mt-3 rounded bg-warning bg-opacity-10 border border-warning border-opacity-50 small">
+                                                            <strong class="text-warning-emphasis d-block mb-1">
+                                                                <i class="fas fa-lightbulb text-warning me-1"></i> Wskazówka hodowcy:
+                                                            </strong>
+                                                            <span class="fst-italic text-dark">{{ $sec['tip'] }}</span>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                                <div class="col-12 col-md-4 text-center">
+                                                    <div class="position-relative shadow-sm rounded overflow-hidden mx-auto"
+                                                         style="{{ $secLayout === 'portrait' ? 'aspect-ratio: 3 / 4; max-height: 230px;' : 'aspect-ratio: 16 / 9; max-height: 180px;' }} border: 1px solid rgba(197, 160, 89, 0.3); background: #faf8f5;">
+                                                        <img src="{{ $sec['image_url'] }}"
+                                                             class="w-100 h-100"
+                                                             style="object-fit: cover; object-position: center 20%;"
+                                                             alt="Zdjęcie sekcji">
+                                                    </div>
+                                                    <small class="text-muted d-block mt-1 font-monospace" style="font-size: 0.72rem;">
+                                                        <i class="fas fa-camera text-secondary me-1"></i>{{ $sec['image_caption'] ?? ($secLayout === 'portrait' ? 'Kadr portretowy 3:4' : 'Panorama 16:9') }}
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        @else
+                                            {{-- No Image Layout --}}
+                                            <div class="col-12">
+                                                @foreach(explode("\n", $sec['body'] ?? '') as $p)
+                                                    @if(trim($p) !== '')
+                                                        <p class="text-muted mb-2" style="line-height: 1.6;">{{ trim($p) }}</p>
+                                                    @endif
+                                                @endforeach
+
+                                                @if(!empty($sec['tip']))
+                                                    <div class="p-2 px-3 mt-3 rounded bg-warning bg-opacity-10 border border-warning border-opacity-50 small">
+                                                        <strong class="text-warning-emphasis d-block mb-1">
+                                                            <i class="fas fa-lightbulb text-warning me-1"></i> Wskazówka hodowcy:
+                                                        </strong>
+                                                        <span class="fst-italic text-dark">{{ $sec['tip'] }}</span>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        @endif
                                     </div>
                                 @endforeach
                             </div>

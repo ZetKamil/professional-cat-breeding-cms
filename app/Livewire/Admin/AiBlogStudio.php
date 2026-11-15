@@ -13,6 +13,7 @@ use App\Services\AiAgent\BlogContentAgent;
 use App\Services\AiBlogGeneratorService;
 use App\Services\PostService;
 use App\Services\TopicSuggesterService;
+use App\Support\ImageGeometry;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -269,8 +270,16 @@ class AiBlogStudio extends Component
 
             // Set wide-framed hero image preview URL
             if (!empty($draft['hero_image_prompt'])) {
-                $draft['hero_image_preview_url'] = AiBlogGeneratorService::buildPollinationsUrl((string) $draft['hero_image_prompt']);
+                $draft['hero_image_preview_url'] = AiBlogGeneratorService::buildPollinationsUrl(
+                    (string) $draft['hero_image_prompt'],
+                    breed: $this->selectedBreed
+                );
             }
+
+            // Auto-detect initial hero layout: Split Hero for portrait/square photos, Magazine Frame for landscape
+            $heroUrl = (string) ($draft['hero_image_preview_url'] ?? '');
+            $geo = ImageGeometry::analyze($heroUrl);
+            $draft['hero_layout'] = $geo['is_portrait'] ? 'split' : 'magazine';
 
             $this->generatedDraft = $draft;
         } catch (GeminiApiKeyMissingException $e) {
@@ -295,7 +304,12 @@ class AiBlogStudio extends Component
 
         $this->selectedHeroAnimalId = '';
         $prompt = (string) ($this->generatedDraft['hero_image_prompt'] ?? ($this->generatedDraft['title'] ?? ''));
-        $this->generatedDraft['hero_image_preview_url'] = AiBlogGeneratorService::buildPollinationsUrl($prompt, seed: random_int(1, 999999));
+        $this->generatedDraft['hero_image_preview_url'] = AiBlogGeneratorService::buildPollinationsUrl(
+            $prompt,
+            seed: random_int(1, 999999),
+            breed: $this->selectedBreed
+        );
+        $this->generatedDraft['hero_layout'] = 'magazine';
     }
 
     public function selectHeroFromAnimal(string $animalId): void
@@ -316,6 +330,24 @@ class AiBlogStudio extends Component
 
         $this->selectedHeroAnimalId = (string) $animal->id;
         $this->generatedDraft['hero_image_preview_url'] = $photoUrl;
+
+        // Auto-assign Split Hero if animal photo is vertical / square to prevent awkward stretching
+        $geo = ImageGeometry::analyze($photoUrl);
+        $this->generatedDraft['hero_layout'] = $geo['is_portrait'] ? 'split' : 'magazine';
+    }
+
+    public function setHeroLayout(string $layout): void
+    {
+        if ($this->generatedDraft) {
+            $this->generatedDraft['hero_layout'] = in_array($layout, ['split', 'magazine', 'auto'], true) ? $layout : 'split';
+        }
+    }
+
+    public function setSectionLayout(int $index, string $layout): void
+    {
+        if (isset($this->generatedDraft['sections'][$index])) {
+            $this->generatedDraft['sections'][$index]['layout'] = in_array($layout, ['duo', 'portrait', 'landscape', 'auto'], true) ? $layout : 'auto';
+        }
     }
 
     // ─── Step 3: Save Draft / Publish ────────────────────────────────
@@ -362,6 +394,7 @@ class AiBlogStudio extends Component
                 'slug'                => $uniqueSlug,
                 'excerpt'             => $draft['excerpt'] ?? null,
                 'sections'            => $sections,
+                'hero_layout'         => $draft['hero_layout'] ?? 'split',
                 'body'                => !empty($sections) ? $blogService->sectionsToBody($sections) : ($draft['body'] ?? ''),
                 'featured_animal_ids' => $validAnimalIds,
                 'meta_title'          => isset($draft['meta_title']) ? Str::limit((string) $draft['meta_title'], 255, '') : null,
@@ -564,79 +597,133 @@ class AiBlogStudio extends Component
 
     /**
      * Przypisuje zdjęcia wybranych kotów z hodowli bezpośrednio do sekcji artykułu (round-robin między wybranymi kotami).
+     * Bada geometrię (ImageGeometry) i jeśli w puli pozostają dodatkowe zdjęcia pionowe, łączy je w Smartfonowy Duet (duo).
      */
     private function distributeAnimalPhotosToSections(array $sections, array $animalIds): array
     {
-        $perAnimalUrls = [];
+        $perAnimalPhotos = [];
 
         if (!empty($animalIds)) {
-            $animals = \App\Models\Animal::whereIn('id', $animalIds)
+            $animals = Animal::whereIn('id', $animalIds)
                 ->with(['media', 'gallery'])
                 ->get();
 
             foreach ($animals as $animal) {
-                $catUrls = [];
+                $catPhotos = [];
                 if ($animal->media) {
-                    $catUrls[] = $animal->media->url();
+                    $catPhotos[] = [
+                        'url'     => $animal->media->url(),
+                        'caption' => "{$animal->name} ({$animal->breed})",
+                    ];
                 }
                 if ($animal->gallery->isNotEmpty()) {
                     foreach ($animal->gallery as $photo) {
-                        $catUrls[] = $photo->url();
+                        $catPhotos[] = [
+                            'url'     => $photo->url(),
+                            'caption' => "{$animal->name} ({$animal->breed})",
+                        ];
                     }
                 }
-                $catUrls = array_values(array_unique(array_filter($catUrls)));
-                if (! empty($catUrls)) {
-                    $perAnimalUrls[] = $catUrls;
+
+                // Unikalne zdjęcia dla danego kota
+                $unique = [];
+                foreach ($catPhotos as $cp) {
+                    $unique[$cp['url']] = $cp;
+                }
+                if (!empty($unique)) {
+                    $perAnimalPhotos[] = array_values($unique);
                 }
             }
         }
 
-        // Round-robin: first 1 photo from each selected cat, then 2nd photo from each, etc.
-        $urls = [];
-        $maxGalleryDepth = ! empty($perAnimalUrls) ? max(array_map('count', $perAnimalUrls)) : 0;
-        for ($round = 0; $round < $maxGalleryDepth; $round++) {
-            foreach ($perAnimalUrls as $catUrls) {
-                if (isset($catUrls[$round])) {
-                    $urls[] = $catUrls[$round];
+        // Round-robin: najpierw po 1 zdjęciu z każdego kota, potem drugie, etc.
+        $orderedPhotos = [];
+        $maxDepth = !empty($perAnimalPhotos) ? max(array_map('count', $perAnimalPhotos)) : 0;
+        for ($round = 0; $round < $maxDepth; $round++) {
+            foreach ($perAnimalPhotos as $catPhotos) {
+                if (isset($catPhotos[$round])) {
+                    $orderedPhotos[] = $catPhotos[$round];
                 }
             }
         }
 
-        // Jeśli nadal brakuje zdjęć, dopełnij zdjęciami innych kotów danej rasy z hodowli
-        if (count($urls) < count($sections)) {
+        // Jeśli brakuje zdjęć, dopełnij zdjęciami innych kotów danej rasy
+        if (count($orderedPhotos) < count($sections)) {
             $breedLabel = $this->breeds[$this->selectedBreed] ?? null;
             if ($breedLabel) {
-                $otherAnimals = \App\Models\Animal::published()
+                $otherAnimals = Animal::published()
                     ->where('breed', 'like', "%{$breedLabel}%")
                     ->whereNotIn('id', $animalIds)
                     ->with(['media', 'gallery'])
                     ->take(3)
                     ->get();
 
-                foreach ($otherAnimals as $animal) {
-                    if ($animal->media) {
-                        $urls[] = $animal->media->url();
+                foreach ($otherAnimals as $other) {
+                    if ($other->media) {
+                        $orderedPhotos[] = [
+                            'url'     => $other->media->url(),
+                            'caption' => "{$other->name} ({$other->breed})",
+                        ];
                     }
-                    if ($animal->gallery->isNotEmpty()) {
-                        foreach ($animal->gallery as $photo) {
-                            $urls[] = $photo->url();
+                    if ($other->gallery->isNotEmpty()) {
+                        foreach ($other->gallery as $photo) {
+                            $orderedPhotos[] = [
+                                'url'     => $photo->url(),
+                                'caption' => "{$other->name} ({$other->breed})",
+                            ];
                         }
                     }
                 }
             }
         }
 
-        $urls = array_values(array_unique(array_filter($urls)));
+        // Unikalne zdjęcia w kolejce
+        $uniqueOrdered = [];
+        foreach ($orderedPhotos as $op) {
+            $uniqueOrdered[$op['url']] = $op;
+        }
+        $orderedPhotos = array_values($uniqueOrdered);
 
-        if (empty($urls)) {
+        if (empty($orderedPhotos)) {
             return $sections;
         }
 
+        // 1. Przypisanie głównego zdjęcia do każdej sekcji (gwarantuje round-robin między kotami)
         $photoIndex = 0;
-        foreach ($sections as &$sec) {
-            if (empty($sec['image_url']) && isset($urls[$photoIndex])) {
-                $sec['image_url'] = $urls[$photoIndex];
-                $photoIndex++;
+        foreach ($sections as $sIdx => &$sec) {
+            if (empty($sec['image_url']) && isset($orderedPhotos[$photoIndex])) {
+                $p = $orderedPhotos[$photoIndex++];
+                $sec['image_url']     = $p['url'];
+                $sec['image_caption'] = $p['caption'];
+
+                $geo = ImageGeometry::analyze($p['url']);
+                $sec['orientation']   = $geo['orientation'];
+                $sec['layout']        = $geo['is_portrait'] ? 'portrait' : 'landscape';
+            }
+        }
+
+        // 2. Jeśli w puli pozostały dodatkowe zdjęcia pionowe ze smartfona, sparuj je w sekcje DUO
+        while ($photoIndex < count($orderedPhotos)) {
+            $leftover = $orderedPhotos[$photoIndex++];
+            $leftGeo = ImageGeometry::analyze($leftover['url']);
+
+            $paired = false;
+            foreach ($sections as $sIdx => &$sec) {
+                // Nie paruj sekcji 0 (intro), tylko kolejne sekcje
+                if ($sIdx > 0 && !empty($sec['image_url']) && empty($sec['image_url_2'])) {
+                    $secGeo = ImageGeometry::analyze($sec['image_url']);
+                    if ($secGeo['is_portrait'] && $leftGeo['is_portrait']) {
+                        $sec['layout']          = 'duo';
+                        $sec['image_url_2']     = $leftover['url'];
+                        $sec['image_caption_2'] = $leftover['caption'];
+                        $paired = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!$paired) {
+                break;
             }
         }
 
@@ -676,16 +763,25 @@ class AiBlogStudio extends Component
 
     /**
      * Auto-assign thematic AI photo URLs to any sections that still lack images.
+     * Uses English semantic topic translation and strict breed phenotypes.
      */
     private function assignAiPhotosToEmptySections(array $sections, string $breedLabel, string $topic): array
     {
         foreach ($sections as $idx => &$sec) {
             if (empty($sec['image_url'])) {
-                $prompt = !empty($sec['image_prompt'])
-                    ? $sec['image_prompt']
-                    : (!empty($sec['heading']) ? "{$sec['heading']}, {$breedLabel} cat" : "{$topic}, {$breedLabel} kitten");
+                $rawPrompt = !empty($sec['image_prompt']) ? (string) $sec['image_prompt'] : '';
+                if (blank($rawPrompt) || preg_match('/[ąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/u', $rawPrompt)) {
+                    $rawPrompt = AiBlogGeneratorService::getThematicEnglishScene($topic, (string) ($sec['heading'] ?? ''));
+                }
 
-                $sec['image_url'] = AiBlogGeneratorService::buildPollinationsUrl($prompt, 800, 500);
+                $sec['image_url']   = AiBlogGeneratorService::buildPollinationsUrl(
+                    $rawPrompt,
+                    width: 1200,
+                    height: 675,
+                    breed: $breedLabel
+                );
+                $sec['layout']      = $sec['layout'] ?? 'landscape';
+                $sec['orientation'] = 'landscape';
             }
         }
 
@@ -694,14 +790,19 @@ class AiBlogStudio extends Component
 
     /**
      * Download remote section images in parallel and persist them to local storage to guarantee permanent availability.
+     * Persists both image_url and image_url_2 (for Duo layouts).
      */
     private function persistRemoteSectionImages(array $sections, int $postId): array
     {
         $remoteUrls = [];
         foreach ($sections as $idx => $sec) {
-            $url = $sec['image_url'] ?? '';
-            if (str_starts_with($url, 'https://image.pollinations.ai/') || str_starts_with($url, 'https://images.unsplash.com/')) {
-                $remoteUrls[$idx] = $url;
+            $url1 = $sec['image_url'] ?? '';
+            if (str_starts_with($url1, 'https://image.pollinations.ai/') || str_starts_with($url1, 'https://images.unsplash.com/')) {
+                $remoteUrls["{$idx}_1"] = $url1;
+            }
+            $url2 = $sec['image_url_2'] ?? '';
+            if (str_starts_with($url2, 'https://image.pollinations.ai/') || str_starts_with($url2, 'https://images.unsplash.com/')) {
+                $remoteUrls["{$idx}_2"] = $url2;
             }
         }
 
@@ -712,18 +813,20 @@ class AiBlogStudio extends Component
         try {
             $responses = \Illuminate\Support\Facades\Http::pool(function (\Illuminate\Http\Client\Pool $pool) use ($remoteUrls) {
                 $reqs = [];
-                foreach ($remoteUrls as $idx => $url) {
-                    $reqs[$idx] = $pool->as((string) $idx)->connectTimeout(4)->timeout(8)->get($url);
+                foreach ($remoteUrls as $key => $url) {
+                    $reqs[$key] = $pool->as((string) $key)->connectTimeout(4)->timeout(8)->get($url);
                 }
 
                 return $reqs;
             });
 
-            foreach ($remoteUrls as $idx => $url) {
-                $response = $responses[(string) $idx] ?? null;
+            foreach ($remoteUrls as $key => $url) {
+                $response = $responses[(string) $key] ?? null;
                 if ($response instanceof \Illuminate\Http\Client\Response && $response->successful() && strlen($response->body()) > 4000) {
+                    [$idx, $slot] = explode('_', (string) $key);
+                    $idx = (int) $idx;
                     $dir = 'posts';
-                    $filename = "sec_{$postId}_{$idx}_" . uniqid() . '.jpg';
+                    $filename = "sec_{$postId}_{$idx}_{$slot}_" . uniqid() . '.jpg';
                     \Illuminate\Support\Facades\Storage::disk('public')->put("{$dir}/{$filename}", $response->body());
 
                     // Copy to public/storage if not symlinked
@@ -733,7 +836,11 @@ class AiBlogStudio extends Component
                     }
                     \Illuminate\Support\Facades\File::put($targetPath, $response->body());
 
-                    $sections[$idx]['image_url'] = asset("storage/{$dir}/{$filename}");
+                    if ($slot === '1') {
+                        $sections[$idx]['image_url'] = asset("storage/{$dir}/{$filename}");
+                    } else {
+                        $sections[$idx]['image_url_2'] = asset("storage/{$dir}/{$filename}");
+                    }
                 }
             }
         } catch (\Throwable $e) {

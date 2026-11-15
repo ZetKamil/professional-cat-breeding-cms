@@ -294,6 +294,67 @@ class Post extends Model
     }
 
     /**
+     * Determines whether the hero should render as 'split' (portrait / square / modern magazine)
+     * or 'grand' (wide landscape panoramic).
+     *
+     * Automatically inspects the cover image geometry so EVERY existing and future post
+     * with a portrait or square cover photo automatically renders as an elegant Split Hero!
+     */
+    public function heroLayout(): string
+    {
+        // 1. Explicit layout saved in sections metadata or post attribute
+        $sections = $this->sections;
+        if (!empty($sections) && is_array($sections) && !empty($sections[0]['hero_layout'])) {
+            return $sections[0]['hero_layout'];
+        }
+
+        if (!empty($this->attributes['hero_layout'])) {
+            return $this->attributes['hero_layout'];
+        }
+
+        // 2. Inspect cover image geometry
+        $coverUrl = $this->coverImageUrl();
+        $localPath = null;
+
+        if (str_contains($coverUrl, '/storage/')) {
+            $rel = Str::after($coverUrl, '/storage/');
+            $candidatePublic = public_path('storage/' . $rel);
+            $candidateStorage = storage_path('app/public/' . $rel);
+
+            if (file_exists($candidatePublic)) {
+                $localPath = $candidatePublic;
+            } elseif (file_exists($candidateStorage)) {
+                $localPath = $candidateStorage;
+            }
+        } elseif (str_starts_with($coverUrl, '/') && file_exists(public_path(ltrim($coverUrl, '/')))) {
+            $localPath = public_path(ltrim($coverUrl, '/'));
+        }
+
+        if ($localPath && file_exists($localPath)) {
+            $info = @getimagesize($localPath);
+            if ($info && $info[0] > 0 && $info[1] > 0) {
+                $ratio = $info[0] / $info[1];
+                // Portrait (< 0.95) or Square (0.95 - 1.15): use Split Hero
+                if ($ratio < 1.15) {
+                    return 'split';
+                }
+                return 'grand';
+            }
+        }
+
+        // 3. Fallback: For animal blog posts, Split Hero is our luxury signature
+        return 'split';
+    }
+
+    /**
+     * Helper to check if the cover image is portrait / vertical.
+     */
+    public function coverIsPortrait(): bool
+    {
+        return $this->heroLayout() === 'split';
+    }
+
+    /**
      * Clean plain-text excerpt for cards and listings.
      * Strips Markdown images, links, headers, technical prompt strings and HTML, prioritizing the curated excerpt field.
      */

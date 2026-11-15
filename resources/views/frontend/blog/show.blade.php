@@ -13,32 +13,64 @@
     @endphp
 
     {{-- ============================================================
-         1. EDITORIAL ARTICLE COVER HERO (Title over Image)
+         1. EDITORIAL ARTICLE HERO (Quiet Luxury Apple / Kinfolk style)
          ============================================================ --}}
-    <section class="article-cover-hero" style="background-image: url('{{ $post->coverImageUrl() }}');" aria-label="Nagłówek artykułu">
-        <div class="article-cover-hero__overlay"></div>
-        <div class="section-inner article-cover-hero__inner">
-            <nav class="article-breadcrumb" aria-label="Nawigacja okruszkowa">
-                <a href="{{ route('home') }}" class="article-breadcrumb__link">Strona Główna</a>
-                <span class="article-breadcrumb__sep" aria-hidden="true">/</span>
-                <a href="{{ route('frontend.blog.index') }}" class="article-breadcrumb__link">Blog</a>
-            </nav>
+    @php
+        $heroLayout = $post->heroLayout();
+        $isGrandHero = $heroLayout === 'grand';
+        $coverUrl = $post->coverImageUrl();
+    @endphp
 
-            <h1 class="article-cover-hero__title">
-                {{ $post->title }}
-            </h1>
+    <section class="article-cover-hero" data-layout="{{ $isGrandHero ? 'grand' : 'split' }}" aria-label="Nagłówek artykułu" data-nav-theme="dark">
+        <div class="article-editorial-hero__ambient" aria-hidden="true"></div>
 
-            <div class="article-author-bar">
-                <div class="article-author-bar__info">
-                    <span class="article-author-bar__name">{{ config('app.name') }}</span>
-                    <span class="article-author-bar__role">Certyfikowana Domowa Hodowla Kotów Rasowych</span>
+        <div class="section-inner article-editorial-hero__inner">
+            <div class="article-editorial-hero__grid">
+                {{-- LEWA KOLUMNA (lub góra w Grand): Czysta Typografia i Metadane --}}
+                <div class="article-editorial-hero__text">
+                    <nav class="article-breadcrumb" aria-label="Nawigacja okruszkowa">
+                        <a href="{{ route('home') }}" class="article-breadcrumb__link">Strona Główna</a>
+                        <span class="article-breadcrumb__sep" aria-hidden="true">/</span>
+                        <a href="{{ route('frontend.blog.index') }}" class="article-breadcrumb__link">Blog</a>
+                        @if($category)
+                            <span class="article-breadcrumb__sep" aria-hidden="true">/</span>
+                            <span class="article-breadcrumb__current">{{ $category->name }}</span>
+                        @endif
+                    </nav>
+
+                    <h1 class="article-editorial-hero__title">
+                        {{ $post->title }}
+                    </h1>
+
+                    <div class="article-author-bar">
+                        <div class="article-author-bar__info">
+                            <span class="article-author-bar__name">{{ config('app.name') }}</span>
+                            <span class="article-author-bar__role">Domowa Hodowla Kotów Rasowych</span>
+                        </div>
+                        <div class="article-author-bar__meta">
+                            <time datetime="{{ $post->published_at?->toIso8601String() }}">
+                                {{ $post->published_at?->format('d.m.Y') }}
+                            </time>
+                            <span aria-hidden="true">·</span>
+                            <span>{{ $readTime }} min czytania</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="article-author-bar__meta">
-                    <time datetime="{{ $post->published_at?->toIso8601String() }}">
-                        {{ $post->published_at?->format('d.m.Y') }}
-                    </time>
-                    <span aria-hidden="true">·</span>
-                    <span>{{ $readTime }} min czytania</span>
+
+                {{-- PRAWA KOLUMNA (lub dół w Grand): Luksusowo wyeksponowana fotografia kota --}}
+                <div class="article-editorial-hero__media">
+                    <figure class="article-hero-frame">
+                        <img
+                            src="{{ $coverUrl }}"
+                            alt="{{ $post->title }}"
+                            class="article-hero-frame__img"
+                            loading="eager"
+                            fetchpriority="high"
+                        >
+                        <div class="article-hero-frame__badge">
+                            <span>🐾 Hodowla Kotów z Mazowieckiej Szwajcarii</span>
+                        </div>
+                    </figure>
                 </div>
             </div>
         </div>
@@ -95,7 +127,15 @@
                             $sectionHeading = trim($section['heading'] ?? '');
                             $sectionTip = trim($section['tip'] ?? '');
                             $sectionImage = trim($section['image_url'] ?? '');
+                            $sectionImage2 = trim($section['image_url_2'] ?? '');
+                            $sectionLayout = $section['layout'] ?? ($sectionImage2 ? 'duo' : 'auto');
                             $isIntro = $i === 0;
+
+                            // Protect against repeating the hero image right under the hero
+                            $isHeroDuplicate = !empty($sectionImage) && (
+                                $sectionImage === $coverUrl ||
+                                (isset($post->media) && str_contains($sectionImage, basename($post->media->file_path)))
+                            );
                         @endphp
 
                         @if($isIntro)
@@ -114,8 +154,17 @@
                                     <p class="article-tip-box__text">{{ $sectionTip }}</p>
                                 </aside>
                             @endif
-                            @if($sectionImage)
-                                <figure class="article-section-figure article-section-figure--full">
+                            @if(!empty($sectionImage2))
+                                <div class="article-media-duo">
+                                    <figure class="article-media-duo__item">
+                                        <img src="{{ $sectionImage }}" alt="Fotografia 1 do artykułu" loading="lazy">
+                                    </figure>
+                                    <figure class="article-media-duo__item">
+                                        <img src="{{ $sectionImage2 }}" alt="Fotografia 2 do artykułu" loading="lazy">
+                                    </figure>
+                                </div>
+                            @elseif($sectionImage && !$isHeroDuplicate)
+                                <figure class="article-section-figure {{ $sectionLayout === 'portrait' ? 'article-media-portrait' : 'article-section-figure--full' }}">
                                     <img
                                         src="{{ $sectionImage }}"
                                         alt="Zdjęcie do artykułu"
@@ -125,7 +174,7 @@
                                 </figure>
                             @endif
                         @else
-                            {{-- Regular section: optional H2 + body + tip + image --}}
+                            {{-- Regular section: optional H2 + body + tip + images --}}
                             <div class="article-section-block">
                                 @if($sectionHeading)
                                     <h2>{{ $sectionHeading }}</h2>
@@ -144,8 +193,25 @@
                                         <p class="article-tip-box__text">{{ $sectionTip }}</p>
                                     </aside>
                                 @endif
-                                @if($sectionImage)
-                                    <figure class="article-section-figure">
+                                @if(!empty($sectionImage2))
+                                    {{-- Smartfonowy Duet: 2 zdjęcia pionowe 3:4 tworzące naturalny blok 3:2 --}}
+                                    <div class="article-media-duo">
+                                        <figure class="article-media-duo__item">
+                                            <img src="{{ $sectionImage }}" alt="{{ $sectionHeading ?: 'Fotografia 1' }}" loading="lazy">
+                                        </figure>
+                                        <figure class="article-media-duo__item">
+                                            <img src="{{ $sectionImage2 }}" alt="{{ $sectionHeading ?: 'Fotografia 2' }}" loading="lazy">
+                                        </figure>
+                                    </div>
+                                @elseif($sectionImage)
+                                    @php
+                                        $figClass = match($sectionLayout) {
+                                            'portrait' => 'article-section-figure article-media-portrait',
+                                            'landscape' => 'article-section-figure article-section-figure--landscape',
+                                            default => 'article-section-figure',
+                                        };
+                                    @endphp
+                                    <figure class="{{ $figClass }}">
                                         <img
                                             src="{{ $sectionImage }}"
                                             alt="{{ $sectionHeading ?: 'Zdjęcie sekcji' }}"

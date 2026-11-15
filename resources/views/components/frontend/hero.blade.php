@@ -21,6 +21,8 @@
     'scrollTarget' => '#o-nas',
     'align' => 'left',
     'size' => 'full',
+    'fadeToCanvas' => true,
+    'fadeColor' => null,
 ])
 
 @php
@@ -46,6 +48,11 @@
         <div class="hero__overlay" aria-hidden="true"></div>
         <div class="hero__vignette" aria-hidden="true"></div>
     </div>
+
+    {{-- Seamless transition layer into next section (eliminates hard black cut) --}}
+    @if($fadeToCanvas)
+        <div class="hero__bottom-fade" aria-hidden="true" @if($fadeColor) style="--hero-fade-color: {{ $fadeColor }};" @endif></div>
+    @endif
 
     {{-- Editorial Content Block --}}
     <div class="hero__content">

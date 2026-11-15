@@ -174,14 +174,17 @@
                         <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 bg-light p-2 rounded border">
                             {{-- Aspect Ratio Presets --}}
                             <div class="btn-group btn-group-sm cropper-ratio-btn-group" id="{{ $id }}RatioBtnGroup" role="group" aria-label="Proporcje kadru">
-                                <button type="button" class="btn btn-outline-secondary cropper-ratio-btn active" data-ratio="1" title="Kwadrat 1:1 (Wizytówka kota / Profilowe)">
-                                    <i class="fas fa-square me-1"></i>1:1 (Karta)
+                                <button type="button" class="btn btn-outline-secondary cropper-ratio-btn" data-ratio="1.7777777778" title="Format panoramiczny 16:9 (Artykuł / Okładka)">
+                                    16:9
                                 </button>
-                                <button type="button" class="btn btn-outline-secondary cropper-ratio-btn" data-ratio="1.3333333333" title="Portret 4:3 (Galeria)">
+                                <button type="button" class="btn btn-outline-secondary cropper-ratio-btn" data-ratio="1.6" title="Format 16:10 (Karta bloga)">
+                                    16:10
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary cropper-ratio-btn" data-ratio="1.3333333333" title="Format portretowy/galeryjny 4:3">
                                     4:3
                                 </button>
-                                <button type="button" class="btn btn-outline-secondary cropper-ratio-btn" data-ratio="1.7777777778" title="Format panoramiczny 16:9 (Baner / Blog)">
-                                    16:9
+                                <button type="button" class="btn btn-outline-secondary cropper-ratio-btn active" data-ratio="1" title="Kwadrat 1:1 (Wizytówka kota / Profilowe)">
+                                    <i class="fas fa-square me-1"></i>1:1
                                 </button>
                                 <button type="button" class="btn btn-outline-secondary cropper-ratio-btn" data-ratio="NaN" title="Swobodny kadr bez ograniczeń">
                                     Swobodny
@@ -189,7 +192,7 @@
                             </div>
                             <div class="d-none align-items-center" id="{{ $id }}RatioLockBadge">
                                 <span class="badge bg-primary text-white py-1 px-2 fw-semibold" style="font-size: 11px;">
-                                    <i class="fas fa-lock me-1"></i>Format wizytówki: 1:1 (Kwadrat)
+                                    <i class="fas fa-lock me-1"></i>Format zablokowany
                                 </span>
                             </div>
 
@@ -220,27 +223,27 @@
                     {{-- Right Column: Live Previews and Tips --}}
                     <div class="col-12 col-lg-4 d-flex flex-column justify-content-between">
                         <div>
-                            <div class="text-uppercase text-muted fw-bold mb-2" style="font-size: 11px; letter-spacing: 0.05em;">
-                                <i class="fas fa-eye me-1"></i> Podgląd na wizytówce
+                            <div class="text-uppercase text-muted fw-bold mb-2" id="{{ $id }}PreviewLabel" style="font-size: 11px; letter-spacing: 0.05em;">
+                                <i class="fas fa-eye me-1"></i> Podgląd kadru
                             </div>
 
-                            {{-- Live Square Card Preview Container with Safe Zone --}}
+                            {{-- Live Card Preview Container with Safe Zone --}}
                             <div class="image-cropper-preview-card-wrap">
                                 <div class="image-cropper-preview-card" id="{{ $id }}PreviewCard">
                                     {{-- Cropper will render live preview here --}}
                                 </div>
-                                <div class="image-cropper-safezone-guide" title="Strefa bezpieczna: upewnij się, że uszy, pyszczek i istotne detale kota mieszczą się w tej ramce.">
+                                <div class="image-cropper-safezone-guide" id="{{ $id }}SafezoneGuide" title="Strefa bezpieczna: upewnij się, że uszy, pyszczek i istotne detale kota mieszczą się w tej ramce.">
                                     <span class="image-cropper-safezone-badge"><i class="fas fa-shield-alt me-1"></i>Bezpieczny kadr</span>
                                 </div>
                             </div>
 
                             <div class="d-flex align-items-center justify-content-between mb-3 px-1">
-                                <span class="small text-muted" style="font-size: 11px;">Format wizytówki</span>
+                                <span class="small text-muted" id="{{ $id }}FormatLabel" style="font-size: 11px;">Wymiary kadru</span>
                                 <span class="badge bg-light text-dark border" id="{{ $id }}Dimensions">1200 &times; 1200 px</span>
                             </div>
 
-                            {{-- Avatar Circle Preview --}}
-                            <div class="mb-3 text-center">
+                            {{-- Avatar Circle Preview (hidden in blog mode) --}}
+                            <div class="mb-3 text-center" id="{{ $id }}PreviewCircleWrap">
                                 <div class="text-uppercase text-muted fw-bold mb-1" style="font-size: 10px;">
                                     Format awatara / miniatury
                                 </div>
@@ -249,7 +252,7 @@
                         </div>
 
                         {{-- Quality Note / Breeder Tip --}}
-                        <div class="alert alert-info py-2 px-3 small mb-0 border-0 bg-opacity-10 bg-info" style="font-size: 11.5px; line-height: 1.45;">
+                        <div class="alert alert-info py-2 px-3 small mb-0 border-0 bg-opacity-10 bg-info" id="{{ $id }}TipBox" style="font-size: 11.5px; line-height: 1.45;">
                             <div class="fw-bold mb-1 text-primary">
                                 <i class="fas fa-lightbulb me-1"></i> Wskazówka hodowcy (Złota zasada kadru):
                             </div>
@@ -394,13 +397,79 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const ratioGroup = document.getElementById('{{ $id }}RatioBtnGroup');
         const ratioLockBadge = document.getElementById('{{ $id }}RatioLockBadge');
+        const previewCard = document.getElementById('{{ $id }}PreviewCard');
+        const previewCircleWrap = document.getElementById('{{ $id }}PreviewCircleWrap');
+        const previewLabel = document.getElementById('{{ $id }}PreviewLabel');
+        const formatLabel = document.getElementById('{{ $id }}FormatLabel');
+        const tipBox = document.getElementById('{{ $id }}TipBox');
+        const safezoneGuide = document.getElementById('{{ $id }}SafezoneGuide');
 
+        // Context-aware UI customization
+        const ctx = currentOptions.context || (currentOptions.aspectRatio > 1.2 ? 'blog_cover' : 'animal');
+        if (ctx === 'blog_cover') {
+            if (previewCircleWrap) previewCircleWrap.classList.add('d-none');
+            if (previewLabel) previewLabel.innerHTML = '<i class="fas fa-newspaper me-1"></i> Podgląd okładki artykułu (16:9)';
+            if (formatLabel) formatLabel.textContent = 'Format okładki';
+            if (dimBadge) dimBadge.textContent = '1920 × 1080 px';
+            if (safezoneGuide) safezoneGuide.classList.add('d-none'); // No golden animal badge for blog
+            if (tipBox) {
+                tipBox.innerHTML = `
+                    <div class="fw-bold mb-1 text-primary">
+                        <i class="fas fa-lightbulb me-1"></i> Wskazówka redakcyjna (Okładka):
+                    </div>
+                    Okładka artykułu ma format panoramiczny <strong>16:9</strong>. Ustaw sylwetkę kota w centrum lub z prawej strony, by nie kolidowała z tytułem artykułu.
+                `;
+            }
+            if (previewCard) previewCard.style.aspectRatio = '16 / 9';
+        } else if (ctx === 'blog_section') {
+            if (previewCircleWrap) previewCircleWrap.classList.add('d-none');
+            if (previewLabel) previewLabel.innerHTML = '<i class="fas fa-image me-1"></i> Podgląd zdjęcia w treści';
+            if (formatLabel) formatLabel.textContent = 'Format sekcji';
+            if (dimBadge) dimBadge.textContent = '1200 × 675 px';
+            if (safezoneGuide) safezoneGuide.classList.add('d-none');
+            if (tipBox) {
+                tipBox.innerHTML = `
+                    <div class="fw-bold mb-1 text-primary">
+                        <i class="fas fa-lightbulb me-1"></i> Wskazówka redakcyjna (Zdjęcie w treści):
+                    </div>
+                    Zdjęcia sekcji wyświetlają się w proporcjach <strong>16:9</strong> lub <strong>4:3</strong>. Upewnij się, że uszy i pyszczek kota są w całości widoczne w kadrze.
+                `;
+            }
+            if (previewCard) previewCard.style.aspectRatio = isNaN(currentOptions.aspectRatio) ? '16 / 9' : currentOptions.aspectRatio;
+        } else {
+            // Animal default mode
+            if (previewCircleWrap) previewCircleWrap.classList.remove('d-none');
+            if (previewLabel) previewLabel.innerHTML = '<i class="fas fa-eye me-1"></i> Podgląd na wizytówce';
+            if (formatLabel) formatLabel.textContent = 'Format wizytówki';
+            if (dimBadge) dimBadge.textContent = '1200 × 1200 px';
+            if (safezoneGuide) safezoneGuide.classList.remove('d-none');
+            if (tipBox) {
+                tipBox.innerHTML = `
+                    <div class="fw-bold mb-1 text-primary">
+                        <i class="fas fa-lightbulb me-1"></i> Wskazówka hodowcy (Złota zasada kadru):
+                    </div>
+                    Wizytówki kotów mają format <strong>1:1 (Kwadrat)</strong>. Trzymaj uszy i pyszczek kota wewnątrz złotej ramki bezpieczeństwa. Spojrzenie kota wprost w obiektyw najbardziej przyciąga kupujących!
+                `;
+            }
+            if (previewCard) previewCard.style.aspectRatio = '1 / 1';
+        }
+
+        // Lock ratio handling (BUG FIX: preserve given aspectRatio!)
         if (currentOptions.lockRatio) {
-            currentOptions.aspectRatio = 1;
+            if (typeof currentOptions.aspectRatio !== 'number' || isNaN(currentOptions.aspectRatio)) {
+                currentOptions.aspectRatio = 1;
+            }
             if (ratioGroup) ratioGroup.classList.add('d-none');
             if (ratioLockBadge) {
                 ratioLockBadge.classList.remove('d-none');
                 ratioLockBadge.classList.add('d-flex');
+                let lockName = 'Zablokowany: ' + Math.round(currentOptions.aspectRatio * 100) / 100;
+                if (Math.abs(currentOptions.aspectRatio - (16/9)) < 0.05) lockName = 'Format 16:9 (Artykuł / Panorama)';
+                else if (Math.abs(currentOptions.aspectRatio - 1.6) < 0.05) lockName = 'Format 16:10 (Karta)';
+                else if (Math.abs(currentOptions.aspectRatio - (4/3)) < 0.05) lockName = 'Format 4:3';
+                else if (Math.abs(currentOptions.aspectRatio - 1) < 0.05) lockName = 'Format 1:1 (Wizytówka)';
+                const badgeSpan = ratioLockBadge.querySelector('span');
+                if (badgeSpan) badgeSpan.innerHTML = `<i class="fas fa-lock me-1"></i>${lockName}`;
             }
         } else {
             if (ratioGroup) ratioGroup.classList.remove('d-none');
@@ -492,6 +561,10 @@ document.addEventListener('DOMContentLoaded', function() {
             this.classList.add('active');
             const ratio = parseFloat(this.dataset.ratio);
             cropperInstance.setAspectRatio(isNaN(ratio) ? NaN : ratio);
+            const previewCard = document.getElementById('{{ $id }}PreviewCard');
+            if (previewCard) {
+                previewCard.style.aspectRatio = isNaN(ratio) ? '16 / 9' : String(ratio);
+            }
         });
     });
 

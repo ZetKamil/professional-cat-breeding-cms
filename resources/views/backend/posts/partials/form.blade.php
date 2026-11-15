@@ -168,6 +168,7 @@
         
         <input type="hidden" name="featured_media_id" id="postFeaturedMediaId" value="{{ old('featured_media_id', $post?->media?->id) }}">
         <input type="hidden" name="remove_featured_media" id="postRemoveFeaturedMedia" value="0">
+        <input type="hidden" name="cropped_image" id="postCroppedImage" value="">
 
         <div class="card bg-light border p-3">
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
@@ -182,14 +183,19 @@
             </div>
 
             <div class="mb-2">
-                <label class="form-label small fw-semibold text-secondary mb-1">Lub wgraj nowy plik z komputera:</label>
-                <input
-                    type="file"
-                    name="image"
-                    id="postFeaturedFileInput"
-                    class="form-control @error('image') is-invalid @enderror"
-                    accept=".jpg,.jpeg,.png,.webp"
-                >
+                <label class="form-label small fw-semibold text-secondary mb-1">Lub wgraj nowy plik z komputera / telefonu (obsługuje drag & drop):</label>
+                <div class="input-group">
+                    <input
+                        type="file"
+                        name="image"
+                        id="postFeaturedFileInput"
+                        class="form-control @error('image') is-invalid @enderror"
+                        accept=".jpg,.jpeg,.png,.webp"
+                    >
+                    <button type="button" class="btn btn-outline-secondary d-none" id="postCropNewFileBtn">
+                        <i class="fas fa-crop-alt me-1"></i> Przytnij kadr (opcjonalnie)
+                    </button>
+                </div>
                 @error('image')
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
@@ -199,9 +205,35 @@
                 <div class="form-text small">Dozwolone formaty: jpg, jpeg, png, webp (max 4MB)</div>
             </div>
 
+            {{-- Hero Layout Selector --}}
+            <div class="row g-2 align-items-center mt-3 pt-2 border-top">
+                <div class="col-12 col-md-5">
+                    <label class="form-label small fw-bold mb-0" for="postHeroLayout">
+                        <i class="fas fa-layer-group text-primary me-1"></i> Układ nagłówka (Editorial Hero):
+                    </label>
+                    <div class="text-muted" style="font-size: 11px;">Jak nagłówek artykułu prezentuje się na stronie</div>
+                </div>
+                <div class="col-12 col-md-7">
+                    <select name="hero_layout" id="postHeroLayout" class="form-select form-select-sm">
+                        <option value="auto" @selected(old('hero_layout', $post?->hero_layout ?? 'auto') === 'auto')>
+                            ✨ Automatyczny (Dla zdjęć pionowych Split Editorial, dla poziomych Magazyn)
+                        </option>
+                        <option value="split" @selected(old('hero_layout', $post?->hero_layout ?? '') === 'split')>
+                            📖 Split Editorial (Tytuł i lead obok pełnej fotografii kota — 0% obciętych pikseli)
+                        </option>
+                        <option value="magazine" @selected(old('hero_layout', $post?->hero_layout ?? '') === 'magazine')>
+                            🖼️ Grand Magazine (Szeroka fotografia w ramce pod nagłówkiem)
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            {{-- Real-time Orientation & Framing Alert --}}
+            <div id="heroOrientationAlert" class="d-none mt-2 p-2 rounded small"></div>
+
             {{-- Dynamic Preview for Selected Library Media --}}
             <div id="postFeaturedPreviewWrapper" class="d-none mt-2 p-2 bg-white border rounded">
-                <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
                     <div class="d-flex align-items-center gap-3">
                         <img id="postFeaturedPreviewImg" src="" class="img-thumbnail" style="width: 100px; height: 75px; object-fit: cover;" alt="Podgląd">
                         <div>
@@ -209,31 +241,63 @@
                             <div class="small fw-bold text-truncate" id="postFeaturedPreviewTitle" style="max-width: 250px;"></div>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-outline-danger btn-sm" id="postRemoveFeaturedBtn">
-                        <i class="fas fa-times me-1"></i> Usuń wybór
-                    </button>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-outline-primary btn-sm" id="postCropLibraryCoverBtn">
+                            <i class="fas fa-crop-alt me-1"></i> Dopasuj kadr (opcjonalnie)
+                        </button>
+                        <button type="button" class="btn btn-outline-danger btn-sm" id="postRemoveFeaturedBtn">
+                            <i class="fas fa-times me-1"></i> Usuń wybór
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Dynamic Preview for Cropped Result --}}
+            <div id="postCroppedPreviewWrapper" class="d-none mt-2 p-2 bg-white border rounded">
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                    <div class="d-flex align-items-center gap-3">
+                        <img id="postCroppedPreviewImg" src="" class="img-thumbnail" style="width: 120px; height: 75px; object-fit: cover;" alt="Wykadrowana okładka">
+                        <div>
+                            <span class="badge bg-primary mb-1"><i class="fas fa-crop me-1"></i>Zatwierdzony kadr</span>
+                            <div class="small text-muted" id="postCroppedPreviewInfo">Kadr gotowy do zapisu</div>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-outline-primary btn-sm" id="postRecropCoverBtn">
+                            <i class="fas fa-crop-alt me-1"></i> Zmień kadr
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm" id="postCancelCropCoverBtn">
+                            <i class="fas fa-undo me-1"></i> Przywróć oryginał
+                        </button>
+                    </div>
                 </div>
             </div>
 
             {{-- Current Existing Cover --}}
             @if($post?->media)
                 <div id="postCurrentCoverWrapper" class="mt-2 p-2 bg-white border rounded">
-                    <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
                         <div class="d-flex align-items-center gap-3">
                             <img
                                 src="{{ $post->media->url() }}"
                                 class="img-thumbnail"
                                 style="width: 100px; height: 75px; object-fit: cover;"
                                 alt="Okładka artykułu"
+                                id="postCurrentCoverImg"
                             >
                             <div>
                                 <span class="badge bg-secondary mb-1">Bieżąca okładka artykułu</span>
                                 <div class="small text-muted">{{ $post->media->filename }}</div>
                             </div>
                         </div>
-                        <button type="button" class="btn btn-outline-secondary btn-sm" id="postClearCurrentCoverBtn" title="Zmień lub odłącz okładkę">
-                            <i class="fas fa-times me-1"></i> Odłącz
-                        </button>
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-outline-primary btn-sm" id="postCropCurrentCoverBtn">
+                                <i class="fas fa-crop-alt me-1"></i> Dopasuj kadr (opcjonalnie)
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" id="postClearCurrentCoverBtn" title="Zmień lub odłącz okładkę">
+                                <i class="fas fa-times me-1"></i> Odłącz
+                            </button>
+                        </div>
                     </div>
                 </div>
             @endif
@@ -587,6 +651,45 @@
     border-radius: 6px;
     border: 1px solid #dee2e6;
 }
+
+/* In-place dropzone & slots styling */
+.section-slot-box {
+    border: 2px dashed #cbd5e1;
+    border-radius: 8px;
+    padding: 10px;
+    background: #f8fafc;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+.section-slot-box:hover, .section-slot-box.dragover {
+    border-color: #0d6efd;
+    background: #eff6ff;
+}
+.section-duo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+@media (max-width: 576px) {
+    .section-duo-grid {
+        grid-template-columns: 1fr;
+    }
+}
+.section-slot-thumb {
+    width: 100%;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #dee2e6;
+}
+.section-slot-thumb.portrait {
+    aspect-ratio: 3 / 4;
+    height: 130px;
+    width: auto;
+    max-width: 100%;
+    margin: 0 auto;
+    display: block;
+}
 </style>
 
 <script>
@@ -726,6 +829,49 @@ document.addEventListener('DOMContentLoaded', function () {
             ? '<i class="fas fa-paragraph text-primary me-1"></i> Sekcja wprowadzająca (intro)'
             : `<i class="fas fa-heading text-secondary me-1"></i> Sekcja ${idx + 1}`;
 
+        const layout = sec.layout || 'auto';
+        const isDuo = layout === 'duo';
+
+        // Helper to render one image slot (dropzone + controls)
+        const renderSlotHtml = (slotKey, slotLabel, imgUrl) => `
+            <div class="section-slot-box mb-2" data-slot="${slotKey}" data-idx="${idx}">
+                <input type="file" class="d-none section-file-input" data-slot="${slotKey}" data-idx="${idx}" accept=".jpg,.jpeg,.png,.webp">
+                ${imgUrl ? `
+                    <div class="position-relative mb-2">
+                        <img src="${escHtml(imgUrl)}" class="section-slot-thumb" alt="${slotLabel}">
+                    </div>
+                    <div class="d-flex flex-wrap gap-1 justify-content-center">
+                        <button type="button" class="btn btn-xs btn-outline-secondary section-change-file" data-slot="${slotKey}" data-idx="${idx}" title="Wgraj z dysku/smartfona">
+                            <i class="fas fa-upload"></i> Z dysku
+                        </button>
+                        <button type="button" class="btn btn-xs btn-outline-primary section-pick-lib" data-slot="${slotKey}" data-idx="${idx}" title="Wybierz z biblioteki">
+                            <i class="fas fa-images"></i> Biblioteka
+                        </button>
+                        <button type="button" class="btn btn-xs btn-outline-success section-crop-btn" data-slot="${slotKey}" data-idx="${idx}" title="Dopasuj kadr">
+                            <i class="fas fa-crop-alt"></i> Kadruj
+                        </button>
+                        <button type="button" class="btn btn-xs btn-outline-danger section-remove-btn" data-slot="${slotKey}" data-idx="${idx}" title="Usuń zdjęcie">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                ` : `
+                    <div class="py-2 text-muted section-drop-target" style="cursor:pointer;" data-slot="${slotKey}" data-idx="${idx}">
+                        <i class="fas fa-cloud-upload-alt fa-2x mb-1 text-secondary"></i>
+                        <div class="small fw-semibold">${slotLabel}</div>
+                        <div class="text-muted" style="font-size:10px;">Przeciągnij plik tutaj lub kliknij</div>
+                    </div>
+                    <div class="d-flex gap-1 justify-content-center mt-2">
+                        <button type="button" class="btn btn-xs btn-outline-primary section-pick-lib" data-slot="${slotKey}" data-idx="${idx}">
+                            <i class="fas fa-images me-1"></i> Z biblioteki
+                        </button>
+                        <button type="button" class="btn btn-xs btn-outline-secondary section-browse-file" data-slot="${slotKey}" data-idx="${idx}">
+                            <i class="fas fa-upload me-1"></i> Z dysku
+                        </button>
+                    </div>
+                `}
+            </div>
+        `;
+
         card.innerHTML = `
             <div class="section-card-header">
                 <span class="drag-handle text-muted me-1" title="Kolejność sekcji">
@@ -734,7 +880,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 ${headingLabel}
                 <span class="ms-auto">
                     ${regularSections.length > 1 ? `
-                    <button type="button" class="btn btn-sm btn-outline-danger section-remove-btn" data-idx="${idx}" title="Usuń sekcję">
+                    <button type="button" class="btn btn-sm btn-outline-danger section-delete-btn" data-idx="${idx}" title="Usuń sekcję">
                         <i class="fas fa-trash"></i>
                     </button>
                     ` : ''}
@@ -742,7 +888,7 @@ document.addEventListener('DOMContentLoaded', function () {
             </div>
             <div class="section-card-body">
                 <div class="row g-3">
-                    <div class="col-12 col-md-8">
+                    <div class="col-12 col-md-7">
                         ${isIntro ? '' : `
                         <div class="mb-2">
                             <label class="form-label small fw-semibold">Podtytuł H2 <span class="text-muted fw-normal">(opcjonalny)</span></label>
@@ -762,7 +908,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             <textarea
                                 class="form-control section-body"
                                 data-idx="${idx}"
-                                rows="5"
+                                rows="6"
                                 placeholder="${isIntro ? 'Wprowadź tekst wstępny artykułu...' : 'Treść tej sekcji...'}"
                             >${escHtml(sec.body || '')}</textarea>
                         </div>
@@ -779,67 +925,174 @@ document.addEventListener('DOMContentLoaded', function () {
                             >
                         </div>
                     </div>
-                    <div class="col-12 col-md-4">
-                        <label class="form-label small fw-semibold">Zdjęcie sekcji <span class="text-muted fw-normal">(opcjonalne)</span></label>
-                        <div class="section-image-area" data-idx="${idx}">
-                            ${sec.image_url
-                                ? `<img src="${escHtml(sec.image_url)}" class="section-card-image-preview mb-2" alt="Zdjęcie sekcji">`
-                                : `<div class="d-flex align-items-center justify-content-center bg-light border rounded mb-2" style="height:120px;"><i class="fas fa-image fa-2x text-muted"></i></div>`
-                            }
-                            <div class="d-flex gap-1">
-                                <button type="button" class="btn btn-sm btn-outline-primary section-pick-image flex-grow-1" data-idx="${idx}">
-                                    <i class="fas fa-folder-open me-1"></i>
-                                    ${sec.image_url ? 'Zmień' : 'Wybierz zdjęcie'}
-                                </button>
-                                ${sec.image_url
-                                    ? `<button type="button" class="btn btn-sm btn-outline-danger section-remove-image" data-idx="${idx}" title="Usuń zdjęcie"><i class="fas fa-times"></i></button>`
-                                    : ''
-                                }
+                    <div class="col-12 col-md-5">
+                        <div class="mb-2">
+                            <label class="form-label small fw-bold mb-1">
+                                <i class="fas fa-th-large text-primary me-1"></i> Układ zdjęć w sekcji:
+                            </label>
+                            <select class="form-select form-select-sm section-layout-select" data-idx="${idx}">
+                                <option value="auto" ${layout === 'auto' ? 'selected' : ''}>✨ Auto-Adaptive (Pojedynczy kadr)</option>
+                                <option value="duo" ${layout === 'duo' ? 'selected' : ''}>👥 Smartfonowy Duet (2 zdjęcia 3:4 obok siebie = idealne 3:2!)</option>
+                                <option value="split" ${layout === 'split' ? 'selected' : ''}>📖 Split 50/50 (Tekst i pełny portret kota)</option>
+                                <option value="full" ${layout === 'full' ? 'selected' : ''}>🖼️ Szeroki kadr magazynowy</option>
+                            </select>
+                        </div>
+
+                        ${isDuo ? `
+                            <div class="section-duo-grid">
+                                ${renderSlotHtml('image_url', 'Zdjęcie 1 (Lewe 3:4)', sec.image_url)}
+                                ${renderSlotHtml('image_url_2', 'Zdjęcie 2 (Prawe 3:4)', sec.image_url_2)}
                             </div>
+                            <div class="small text-muted fst-italic text-center mb-2" style="font-size:10.5px;">
+                                <i class="fas fa-magic text-warning me-1"></i>Dwa pionowe zdjęcia z telefonu (3:4) połączą się na stronie w harmonijny format 3:2 bez obcinania kota!
+                            </div>
+                        ` : `
+                            ${renderSlotHtml('image_url', 'Zdjęcie sekcji', sec.image_url)}
+                        `}
+
+                        <div class="mt-2">
+                            <label class="form-label small text-muted mb-0" style="font-size:11px;">Podpis pod zdjęciem <span class="fw-normal">(opcjonalny)</span>:</label>
+                            <input
+                                type="text"
+                                class="form-control form-control-sm section-caption"
+                                data-idx="${idx}"
+                                value="${escHtml(sec.image_caption || '')}"
+                                placeholder="Np. Kocięta w wieku 8 tygodni podczas zabawy"
+                            >
                         </div>
                     </div>
                 </div>
             </div>
         `;
 
-        // Remove section
-        card.querySelector('.section-remove-btn')?.addEventListener('click', function () {
+        // ── Event Handlers for this Card ─────────────────────────────
+        card.querySelector('.section-delete-btn')?.addEventListener('click', function () {
             if (regularSections.length > 1 && confirm('Usunąć tę sekcję?')) {
                 regularSections.splice(idx, 1);
                 renderRegularSections();
             }
         });
 
-        // Heading input
         card.querySelector('.section-heading')?.addEventListener('input', function () {
             regularSections[idx].heading = this.value;
             saveToInput();
         });
 
-        // Body textarea
         card.querySelector('.section-body')?.addEventListener('input', function () {
             regularSections[idx].body = this.value;
             saveToInput();
         });
 
-        // Tip input
         card.querySelector('.section-tip')?.addEventListener('input', function () {
             regularSections[idx].tip = this.value;
             saveToInput();
         });
 
-        // Pick image from library
-        card.querySelector('.section-pick-image')?.addEventListener('click', function () {
-            openSectionMediaPicker(idx);
+        card.querySelector('.section-caption')?.addEventListener('input', function () {
+            regularSections[idx].image_caption = this.value;
+            saveToInput();
         });
 
-        // Remove image
-        card.querySelector('.section-remove-image')?.addEventListener('click', function () {
-            regularSections[idx].image_url = '';
+        card.querySelector('.section-layout-select')?.addEventListener('change', function () {
+            regularSections[idx].layout = this.value;
             renderRegularSections();
+            saveToInput();
+        });
+
+        // Slot buttons: Pick from library
+        card.querySelectorAll('.section-pick-lib').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const slot = this.dataset.slot || 'image_url';
+                openSectionMediaPicker(idx, slot);
+            });
+        });
+
+        // Slot buttons: Browse local file
+        card.querySelectorAll('.section-browse-file, .section-change-file, .section-drop-target').forEach(el => {
+            el.addEventListener('click', function () {
+                const slot = this.dataset.slot || 'image_url';
+                const fileInput = card.querySelector(`input.section-file-input[data-slot="${slot}"]`);
+                fileInput?.click();
+            });
+        });
+
+        // Slot file input change
+        card.querySelectorAll('input.section-file-input').forEach(input => {
+            input.addEventListener('change', function () {
+                if (this.files && this.files.length > 0) {
+                    const slot = this.dataset.slot || 'image_url';
+                    handleSectionFileLoad(this.files[0], idx, slot);
+                }
+            });
+        });
+
+        // Slot drag & drop
+        card.querySelectorAll('.section-slot-box').forEach(box => {
+            box.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                box.classList.add('dragover');
+            });
+            box.addEventListener('dragleave', () => box.classList.remove('dragover'));
+            box.addEventListener('drop', (e) => {
+                e.preventDefault();
+                box.classList.remove('dragover');
+                const slot = box.dataset.slot || 'image_url';
+                if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                    handleSectionFileLoad(e.dataTransfer.files[0], idx, slot);
+                }
+            });
+        });
+
+        // Slot Crop button
+        card.querySelectorAll('.section-crop-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const slot = this.dataset.slot || 'image_url';
+                openSectionCropper(idx, slot);
+            });
+        });
+
+        // Slot Remove image
+        card.querySelectorAll('.section-remove-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const slot = this.dataset.slot || 'image_url';
+                regularSections[idx][slot] = '';
+                renderRegularSections();
+                saveToInput();
+            });
         });
 
         return card;
+    }
+
+    function handleSectionFileLoad(file, secIdx, slotKey) {
+        if (!file || !file.type.startsWith('image/')) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const dataUrl = e.target.result;
+            regularSections[secIdx][slotKey] = dataUrl;
+            renderRegularSections();
+            saveToInput();
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function openSectionCropper(secIdx, slotKey) {
+        const src = regularSections[secIdx]?.[slotKey];
+        if (!src) return;
+        const isDuo = regularSections[secIdx]?.layout === 'duo';
+        if (typeof window.openImageCropper === 'function') {
+            window.openImageCropper({
+                imageSrc: src,
+                title: isDuo ? 'Dopasuj kadr zdjęcia w duecie (Portret 3:4)' : 'Dopasuj kadr zdjęcia sekcji (16:9)',
+                context: 'blog_section',
+                aspectRatio: isDuo ? 3/4 : 16/9,
+                onCrop: function(blob, dataUrl) {
+                    regularSections[secIdx][slotKey] = dataUrl;
+                    renderRegularSections();
+                    saveToInput();
+                }
+            });
+        }
     }
 
     function saveToInput() {
@@ -924,11 +1177,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const smpType = document.getElementById('smpType');
     const smpPagination = document.getElementById('smpPagination');
     let smpTargetIdx = null;
+    let smpTargetSlot = 'image_url';
     let smpCurrentPage = 1;
     let smpSearchTimeout;
 
-    function openSectionMediaPicker(target) {
+    function openSectionMediaPicker(target, slot = 'image_url') {
         smpTargetIdx = target;
+        smpTargetSlot = slot;
         loadSmpMedia(1);
         if (typeof bootstrap !== 'undefined' && bootstrap.Modal && smpModal) {
             bootstrap.Modal.getOrCreateInstance(smpModal).show();
@@ -1002,12 +1257,13 @@ document.addEventListener('DOMContentLoaded', function () {
                         if (previewWrapper) previewWrapper.classList.remove('d-none');
                         if (fileInput) fileInput.value = '';
                         if (currentCover) currentCover.classList.add('d-none');
+                        inspectHeroImageOrientation(item.url);
                     } else if (smpTargetIdx === 'closing') {
                         closingSection.image_url = item.url;
                         renderClosingImage();
                         saveToInput();
                     } else if (typeof smpTargetIdx === 'number' && regularSections[smpTargetIdx]) {
-                        regularSections[smpTargetIdx].image_url = item.url;
+                        regularSections[smpTargetIdx][smpTargetSlot || 'image_url'] = item.url;
                         renderRegularSections();
                     }
                     if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
@@ -1040,6 +1296,52 @@ document.addEventListener('DOMContentLoaded', function () {
     // ── Helpers ──────────────────────────────────────────────────────
     function escHtml(str) {
         return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function inspectHeroImageOrientation(url) {
+        const alertBox = document.getElementById('heroOrientationAlert');
+        if (!alertBox || !url) return;
+        const img = new Image();
+        img.onload = function() {
+            const ratio = this.naturalWidth / this.naturalHeight;
+            alertBox.className = 'mt-2 p-2 rounded small';
+            if (ratio < 0.88) {
+                alertBox.classList.add('bg-info', 'bg-opacity-25', 'text-dark', 'border', 'border-info');
+                alertBox.innerHTML = '<i class="fas fa-mobile-alt text-primary me-1"></i> <strong>Wykryto kadr pionowy (smartfon 3:4):</strong> Artykuł automatycznie wyświetli pełną sylwetkę kota w układzie <em>Split Editorial</em> — bez obcinania uszu i łap!';
+            } else if (ratio > 1.15) {
+                alertBox.classList.add('bg-success', 'bg-opacity-25', 'text-dark', 'border', 'border-success');
+                alertBox.innerHTML = '<i class="fas fa-image text-success me-1"></i> <strong>Wykryto kadr poziomy:</strong> Pięknie wypełni układ magazynowy.';
+            } else {
+                alertBox.classList.add('bg-secondary', 'bg-opacity-25', 'text-dark', 'border', 'border-secondary');
+                alertBox.innerHTML = '<i class="fas fa-square text-secondary me-1"></i> <strong>Wykryto kadr kwadratowy (1:1):</strong> Prezentowany w ramce bez ucinania.';
+            }
+            alertBox.classList.remove('d-none');
+        };
+        img.src = url;
+    }
+
+    function triggerCoverCropper(src) {
+        if (!src || typeof window.openImageCropper !== 'function') return;
+        window.openImageCropper({
+            imageSrc: src,
+            title: 'Kadrowanie okładki artykułu (16:9)',
+            context: 'blog_cover',
+            aspectRatio: 16/9,
+            onCrop: function(blob, dataUrl) {
+                const croppedInput = document.getElementById('postCroppedImage');
+                if (croppedInput) croppedInput.value = dataUrl;
+
+                const previewWrapper = document.getElementById('postCroppedPreviewWrapper');
+                const previewImg = document.getElementById('postCroppedPreviewImg');
+                if (previewWrapper && previewImg) {
+                    previewImg.src = dataUrl;
+                    previewWrapper.classList.remove('d-none');
+                }
+                document.getElementById('postFeaturedPreviewWrapper')?.classList.add('d-none');
+                document.getElementById('postCurrentCoverWrapper')?.classList.add('d-none');
+                inspectHeroImageOrientation(dataUrl);
+            }
+        });
     }
 
     // ── Form submit listener: ensure latest sections are serialized ────
@@ -1075,8 +1377,18 @@ document.addEventListener('DOMContentLoaded', function () {
         if (currentCover) currentCover.classList.add('d-none');
     });
 
+    let newUploadedCoverDataUrl = null;
     document.getElementById('postFeaturedFileInput')?.addEventListener('change', function () {
         if (this.files && this.files.length > 0) {
+            const file = this.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                newUploadedCoverDataUrl = e.target.result;
+                document.getElementById('postCropNewFileBtn')?.classList.remove('d-none');
+                inspectHeroImageOrientation(newUploadedCoverDataUrl);
+            };
+            reader.readAsDataURL(file);
+
             const mediaIdInput = document.getElementById('postFeaturedMediaId');
             const previewWrapper = document.getElementById('postFeaturedPreviewWrapper');
             const currentCover = document.getElementById('postCurrentCoverWrapper');
@@ -1088,9 +1400,51 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    // Cover Cropper Triggers
+    document.getElementById('postCropCurrentCoverBtn')?.addEventListener('click', function () {
+        const img = document.getElementById('postCurrentCoverImg');
+        if (img && img.src) triggerCoverCropper(img.src);
+    });
+
+    document.getElementById('postCropLibraryCoverBtn')?.addEventListener('click', function () {
+        const img = document.getElementById('postFeaturedPreviewImg');
+        if (img && img.src) triggerCoverCropper(img.src);
+    });
+
+    document.getElementById('postCropNewFileBtn')?.addEventListener('click', function () {
+        if (newUploadedCoverDataUrl) triggerCoverCropper(newUploadedCoverDataUrl);
+    });
+
+    document.getElementById('postRecropCoverBtn')?.addEventListener('click', function () {
+        const img = document.getElementById('postCroppedPreviewImg');
+        if (img && img.src) triggerCoverCropper(img.src);
+    });
+
+    document.getElementById('postCancelCropCoverBtn')?.addEventListener('click', function () {
+        const croppedInput = document.getElementById('postCroppedImage');
+        if (croppedInput) croppedInput.value = '';
+        document.getElementById('postCroppedPreviewWrapper')?.classList.add('d-none');
+        const currentCover = document.getElementById('postCurrentCoverWrapper');
+        const previewWrapper = document.getElementById('postFeaturedPreviewWrapper');
+        if (previewWrapper && !previewWrapper.classList.contains('d-none')) {
+            // Already visible
+        } else if (currentCover) {
+            currentCover.classList.remove('d-none');
+        }
+    });
+
     // ── Init ─────────────────────────────────────────────────────────
     updateClosingUI();
     updateClosingMode();
     renderRegularSections();
+
+    // Inspect existing cover orientation on page load
+    const initialCover = document.getElementById('postCurrentCoverImg');
+    if (initialCover && initialCover.src) {
+        inspectHeroImageOrientation(initialCover.src);
+    }
 });
 </script>
+
+{{-- Reusable Cropper Modal Component for Blog Posts --}}
+<x-backend.image-cropper id="postImageCropper" />
